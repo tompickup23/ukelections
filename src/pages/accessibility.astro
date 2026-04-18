@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Accessibility - UK Demographics"
+  description="Accessibility statement for ukdemographics.co.uk. What we have done and known limitations."
+>
+  <article class="legal-page shell">
+    <h1>Accessibility</h1>
+    <p class="legal-updated">Last reviewed: 11 April 2026</p>
+
+    <p class="legal-intro">
+      I want this site to be usable by as many people as possible.
+    </p>
+
+    <section class="legal-section">
+      <h2>What I have done</h2>
+      <ul>
+        <li>The site uses semantic HTML with proper heading hierarchy</li>
+        <li>All charts include text descriptions of key findings</li>
+        <li>Colour contrast meets WCAG 2.1 Level AA for body text</li>
+        <li>The site works without JavaScript for core content</li>
+        <li>A "skip to main content" link is provided on every page</li>
+        <li>Font sizes use relative units and the site works at 200% zoom</li>
+        <li>All interactive elements are keyboard accessible</li>
+        <li>Focus indicators are visible on all interactive elements</li>
+        <li>The site respects prefers-reduced-motion for animations</li>
+      </ul>
+    </section>
+
+    <section class="legal-section">
+      <h2>Known limitations</h2>
+      <ul>
+        <li>Some complex data tables may be difficult to navigate with screen readers. I am working to improve table markup.</li>
+        <li>Chart SVGs may not convey all data points to assistive technology. Text summaries are provided alongside charts where possible.</li>
+        <li>Some text in chart components may be smaller than ideal on very small screens.</li>
+      </ul>
+    </section>
+
+    <section class="legal-section">
+      <h2>Feedback</h2>
+      <p>
+        This site is a personal project and has not been professionally audited
+        for accessibility. If you have difficulty using any part of the site,
+        please contact me and I will do my best to help.
+      </p>
+      <p>
+        Tom Pickup<br>
+        Burnley, Lancashire
+      </p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 720px;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+  }
+  .legal-page h1 {
+    font-family: "Sora", sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+  }
+  .legal-updated {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0.25rem 0 1.5rem;
+  }
+  .legal-intro {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .legal-section {
+    margin-bottom: 2rem;
+  }
+  .legal-section h2 {
+    font-family: "Sora", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+  }
+  .legal-section p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+  }
+  .legal-section ul {
+    padding-left: 1.25rem;
+    margin: 0.5rem 0 0.75rem;
+  }
+  .legal-section li {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 0.35rem;
+  }
+</style>

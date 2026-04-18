@@ -1,0 +1,139 @@
+---
+interface Tab {
+  id: string;
+  label: string;
+  icon?: string;
+}
+
+interface Props {
+  tabs: Tab[];
+  defaultTab?: string;
+}
+
+const { tabs, defaultTab } = Astro.props;
+const activeDefault = defaultTab || tabs[0]?.id;
+---
+
+<div class="tab-group" data-tab-group>
+  <div class="tab-bar" role="tablist">
+    {tabs.map((tab) => (
+      <button
+        role="tab"
+        type="button"
+        class="tab-btn"
+        aria-selected={tab.id === activeDefault ? "true" : "false"}
+        aria-controls={`tabpanel-${tab.id}`}
+        data-tab={tab.id}
+      >
+        {tab.icon && <span class="tab-icon" set:html={tab.icon} />}
+        {tab.label}
+      </button>
+    ))}
+  </div>
+
+  {tabs.map((tab) => (
+    <div
+      id={`tabpanel-${tab.id}`}
+      role="tabpanel"
+      class="tab-panel"
+      data-tab-panel={tab.id}
+      hidden={tab.id !== activeDefault}
+    >
+      <slot name={tab.id} />
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll("[data-tab-group]").forEach((group) => {
+    const buttons = group.querySelectorAll<HTMLButtonElement>("[data-tab]");
+    const panels = group.querySelectorAll<HTMLElement>("[data-tab-panel]");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+        buttons.forEach((b) => b.setAttribute("aria-selected", "false"));
+        panels.forEach((p) => (p.hidden = true));
+        btn.setAttribute("aria-selected", "true");
+        const panel = group.querySelector(`[data-tab-panel="${target}"]`);
+        if (panel) (panel as HTMLElement).hidden = false;
+      });
+    });
+
+    // Keyboard navigation
+    const btnArr = Array.from(buttons);
+    btnArr.forEach((btn, i) => {
+      btn.addEventListener("keydown", (e: KeyboardEvent) => {
+        let next: number | null = null;
+        if (e.key === "ArrowRight") next = (i + 1) % btnArr.length;
+        else if (e.key === "ArrowLeft") next = (i - 1 + btnArr.length) % btnArr.length;
+        else if (e.key === "Home") next = 0;
+        else if (e.key === "End") next = btnArr.length - 1;
+        if (next !== null) {
+          e.preventDefault();
+          btnArr[next].focus();
+          btnArr[next].click();
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: "Sora", sans-serif;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 180ms, border-color 180ms;
+  }
+  .tab-btn:hover {
+    color: var(--ink-soft);
+  }
+  .tab-btn[aria-selected="true"] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-icon {
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+  }
+  .tab-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .tab-panel {
+    animation: tab-fade 200ms ease;
+  }
+  @keyframes tab-fade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (max-width: 640px) {
+    .tab-btn {
+      padding: 0.55rem 0.85rem;
+      font-size: 0.82rem;
+    }
+  }
+</style>

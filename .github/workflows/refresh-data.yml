@@ -1,0 +1,19 @@
+name: Refresh data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Placeholder until election ETL lands
+        run: |
+          echo "UK Elections ETL is not wired yet."
+          echo "Add Democracy Club / historic results ingestion before enabling a schedule."

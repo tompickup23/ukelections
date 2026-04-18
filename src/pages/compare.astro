@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPublicPlaceAreas, slugifyAreaName } from "../lib/site";
+import { getEthnicProjection, getShiftShareData, getDiversityIndex } from "../lib/ethnic-projections";
+
+const areas = getPublicPlaceAreas();
+const sortedAreas = [...areas].sort((a, b) => a.areaName.localeCompare(b.areaName));
+---
+
+<BaseLayout
+  title="Compare areas"
+  description={`Compare demographic projections across ${areas.length} local authorities. Side-by-side ethnic composition, shift-share, and diversity.`}
+>
+  <h1>Compare areas</h1>
+  <p class="desc">Select up to 4 areas to compare demographic projections side-by-side.</p>
+
+  <div class="compare-controls">
+    <select id="compare-select" multiple>
+      {sortedAreas.map((area) => (
+        <option value={area.areaCode}>{area.areaName} ({area.regionName})</option>
+      ))}
+    </select>
+    <p class="hint">Hold Ctrl/Cmd to select multiple areas. Then scroll down to see the comparison.</p>
+  </div>
+
+  <div id="compare-results" class="compare-results">
+    <p class="empty-state">Select areas above to start comparing.</p>
+  </div>
+</BaseLayout>
+
+<style>
+  h1 { font-family: "Sora", sans-serif; font-size: 1.8rem; font-weight: 800; margin: 0 0 0.5rem; }
+  .desc { color: var(--muted); font-size: 0.92rem; margin: 0 0 1.5rem; }
+  .compare-controls { margin-bottom: 2rem; }
+  .compare-controls select {
+    width: 100%; max-width: 500px; min-height: 200px; padding: 0.5rem;
+    font-family: "Manrope", sans-serif; font-size: 0.88rem; color: var(--ink);
+    background: var(--bg-soft); border: 2px solid var(--border-strong); border-radius: 8px;
+  }
+  .hint { font-size: 0.82rem; color: var(--muted); margin-top: 0.5rem; }
+  .compare-results { min-height: 200px; }
+  .empty-state { color: var(--muted); font-style: italic; }
+</style>

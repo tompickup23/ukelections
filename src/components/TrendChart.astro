@@ -1,0 +1,140 @@
+---
+interface Point {
+  label: string;
+  value: number;
+}
+
+interface Annotation {
+  label: string;
+  pointLabel: string;
+  color?: string;
+}
+
+interface Props {
+  points: Point[];
+  title: string;
+  description?: string;
+  tone?: "accent" | "teal" | "warm";
+  valueSuffix?: string;
+  annotations?: Annotation[];
+}
+
+const { points, title, description, tone = "accent", valueSuffix = "", annotations = [] } = Astro.props;
+
+const width = 560;
+const height = 230;
+const padding = { top: 18, right: 20, bottom: 38, left: 18 };
+const usableWidth = width - padding.left - padding.right;
+const usableHeight = height - padding.top - padding.bottom;
+const values = points.map((point) => point.value);
+const maxValue = Math.max(...values, 1);
+const minValue = Math.min(...values, 0);
+const range = Math.max(maxValue - minValue, 1);
+const tickValues = Array.from({ length: 4 }, (_, index) => minValue + (range / 3) * index).reverse();
+
+function getX(index: number): number {
+  if (points.length <= 1) {
+    return padding.left + usableWidth / 2;
+  }
+
+  return padding.left + (usableWidth / (points.length - 1)) * index;
+}
+
+function getY(value: number): number {
+  const scaled = (value - minValue) / range;
+  return padding.top + usableHeight - scaled * usableHeight;
+}
+
+function formatValue(value: number): string {
+  return `${value.toLocaleString()}${valueSuffix}`;
+}
+
+const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${getX(index)} ${getY(point.value)}`).join(" ");
+const areaPath = `${linePath} L ${getX(points.length - 1)} ${padding.top + usableHeight} L ${getX(0)} ${padding.top + usableHeight} Z`;
+const peak = points.reduce((current, point) => (point.value > current.value ? point : current), points[0]);
+const peakIndex = points.findIndex((point) => point === peak);
+const colors =
+  tone === "teal"
+    ? {
+        stroke: "#4EE4C3",
+        fill: "rgba(78, 228, 195, 0.18)",
+        marker: "#C6FFF4"
+      }
+    : tone === "warm"
+      ? {
+          stroke: "#FF8B61",
+          fill: "rgba(255, 139, 97, 0.18)",
+          marker: "#FFD5C6"
+        }
+      : {
+          stroke: "#7DD3FC",
+          fill: "rgba(125, 211, 252, 0.18)",
+          marker: "#D9F5FF"
+        };
+---
+
+<figure class={`viz-card tone-${tone}`}>
+  <div class="viz-head">
+    <div>
+      <h3>{title}</h3>
+      {description && <p class="tiny">{description}</p>}
+    </div>
+    <span class="chip">{formatValue(points[points.length - 1]?.value ?? 0)}</span>
+  </div>
+  <svg class="trend-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
+    {tickValues.map((tick) => (
+      <>
+        <line
+          x1={padding.left}
+          y1={getY(tick)}
+          x2={width - padding.right}
+          y2={getY(tick)}
+          stroke="rgba(255,255,255,0.08)"
+          stroke-width="1"
+          stroke-dasharray="4 6"
+        />
+        <text x={width - padding.right} y={getY(tick) - 6} text-anchor="end" class="trend-tick">
+          {formatValue(Math.round(tick))}
+        </text>
+      </>
+    ))}
+    <path d={areaPath} fill={colors.fill}></path>
+    <path d={linePath} fill="none" stroke={colors.stroke} stroke-width="4" stroke-linejoin="round" stroke-linecap="round"></path>
+    {points.map((point, index) => (
+      <circle
+        cx={getX(index)}
+        cy={getY(point.value)}
+        r={index === points.length - 1 || index === peakIndex ? 5 : 3}
+        fill={index === points.length - 1 || index === peakIndex ? colors.marker : colors.stroke}
+      />
+    ))}
+    <text x={getX(0)} y={height - 10} class="trend-label">
+      {points[0]?.label}
+    </text>
+    <text x={getX(points.length - 1)} y={height - 10} text-anchor="end" class="trend-label">
+      {points[points.length - 1]?.label}
+    </text>
+    {peak && (
+      <text x={getX(peakIndex)} y={Math.max(16, getY(peak.value) - 12)} text-anchor="middle" class="trend-annotation">
+        Peak {peak.label}
+      </text>
+    )}
+    {/* Policy event annotations - staggered vertically to avoid overlap */}
+    {annotations.map((ann, annIdx) => {
+      const matchIndex = points.findIndex((p) => p.label === ann.pointLabel);
+      if (matchIndex < 0) return null;
+      const ax = getX(matchIndex);
+      const staggerY = padding.top + 10 + (annIdx % 4) * 14;
+      return (
+        <>
+          <line x1={ax} y1={staggerY - 2} x2={ax} y2={padding.top + usableHeight}
+                stroke={ann.color ?? "rgba(245,158,11,0.25)"} stroke-width="1" stroke-dasharray="2 4" />
+          <text x={ax + 3} y={staggerY} class="trend-event-label"
+                fill={ann.color ?? "rgba(245,158,11,0.6)"}>
+            {ann.label}
+          </text>
+        </>
+      );
+    })}
+  </svg>
+</figure>

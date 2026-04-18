@@ -1,0 +1,175 @@
+---
+interface KeyVote {
+  bill: string;
+  vote: "aye" | "no" | "absent" | "teller_aye" | "teller_no";
+}
+
+interface Props {
+  name: string;
+  party: string;
+  constituency: string;
+  photoUrl?: string;
+  majority?: number;
+  keyVotes?: KeyVote[];
+}
+
+const { name, party, constituency, photoUrl, majority, keyVotes } = Astro.props;
+
+const partyColors: Record<string, string> = {
+  "Conservative": "#0087dc",
+  "Labour": "#dc241f",
+  "Liberal Democrats": "#faa61a",
+  "Reform UK": "#12b6cf",
+  "Green": "#6ab023",
+  "SNP": "#ffff00",
+  "Plaid Cymru": "#008142",
+  "Independent": "#800080",
+};
+
+const color = partyColors[party] || "#8e8e93";
+
+function voteLabel(vote: string): string {
+  if (vote === "aye" || vote === "teller_aye") return "Aye";
+  if (vote === "no" || vote === "teller_no") return "No";
+  return "Absent";
+}
+function voteClass(vote: string): string {
+  if (vote === "aye" || vote === "teller_aye") return "vote-aye";
+  if (vote === "no" || vote === "teller_no") return "vote-no";
+  return "vote-absent";
+}
+---
+
+<div class="mp-card" style={`--party-color: ${color}`}>
+  <div class="mp-top">
+    {photoUrl ? (
+      <img src={photoUrl} alt={name} class="mp-photo" width="56" height="56" loading="lazy" />
+    ) : (
+      <div class="mp-photo mp-photo-placeholder">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
+      </div>
+    )}
+    <div class="mp-info">
+      <span class="mp-name">{name}</span>
+      <span class="mp-meta">
+        <span class="mp-party-dot" style={`background: ${color}`}></span>
+        {party} · {constituency}
+      </span>
+      {majority !== undefined && (
+        <span class="mp-majority">Majority: {majority.toLocaleString()}</span>
+      )}
+    </div>
+  </div>
+  {keyVotes && keyVotes.length > 0 && (
+    <div class="mp-votes">
+      <span class="mp-votes-label">Key immigration votes</span>
+      <div class="mp-vote-list">
+        {keyVotes.map((v) => (
+          <span class={`mp-vote ${voteClass(v.vote)}`}>
+            <span class="mp-vote-bill">{v.bill}</span>
+            <span class="mp-vote-result">{voteLabel(v.vote)}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .mp-card {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--party-color);
+    background: var(--panel);
+  }
+  .mp-top {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .mp-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .mp-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel-soft);
+    color: var(--muted);
+  }
+  .mp-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  .mp-name {
+    font-family: "Sora", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mp-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .mp-party-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .mp-majority {
+    font-size: 0.78rem;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+  .mp-votes {
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .mp-votes-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .mp-vote-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .mp-vote {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    border: 1px solid var(--border);
+  }
+  .mp-vote-bill {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .mp-vote-result { font-weight: 700; }
+  .vote-aye .mp-vote-result { color: var(--accent-2); }
+  .vote-no .mp-vote-result { color: var(--coral); }
+  .vote-absent .mp-vote-result { color: var(--muted); opacity: 0.5; }
+</style>

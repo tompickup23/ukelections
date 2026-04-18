@@ -1,0 +1,300 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ShareButton from "../../components/ShareButton.astro";
+import { getCollection, render } from "astro:content";
+import { buildAbsoluteUrl } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const findings = await getCollection("findings");
+  return findings.map((finding) => {
+    const slug = finding.id.replace(/\.md$/, "");
+    return {
+      params: { slug },
+      props: { finding }
+    };
+  });
+}
+
+const { finding } = Astro.props;
+const { Content } = await render(finding);
+const findingSlug = finding.id.replace(/\.md$/, "");
+const ogImage = `/og/findings/${findingSlug}.png`;
+const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
+
+// Get related findings (same category)
+const allFindings = await getCollection("findings");
+const relatedFindings = allFindings
+  .filter((f) => f.data.category === finding.data.category && f.id !== finding.id)
+  .slice(0, 3);
+
+const verdictColor: Record<string, string> = {
+  alert: "#f59e0b",
+  critical: "#ef4444",
+  resolved: "#10b981",
+  info: "var(--accent)"
+};
+const verdictLabel: Record<string, string> = {
+  alert: "Finding",
+  critical: "Investigation",
+  resolved: "Resolved",
+  info: "Analysis"
+};
+---
+
+<BaseLayout
+  title={`${finding.data.headline} - UK Demographics`}
+  description={finding.data.summary}
+  image={ogImage}
+  structuredData={[{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": finding.data.headline,
+    "description": finding.data.summary,
+    "url": pageUrl,
+    "image": `https://ukdemographics.co.uk${ogImage}`,
+    "datePublished": finding.data.date,
+    "author": { "@type": "Person", "name": "Tom Pickup" },
+    "publisher": { "@type": "Organization", "name": "UK Demographics", "url": "https://ukdemographics.co.uk" }
+  }]}
+>
+  <Breadcrumbs items={[
+    { label: "Findings", href: "/findings/" },
+    { label: finding.data.headline }
+  ]} />
+
+  <article class="finding-detail shell">
+    <div class="finding-detail-meta">
+      <span
+        class="finding-verdict-badge"
+        style={`background: ${verdictColor[finding.data.verdict]}20; color: ${verdictColor[finding.data.verdict]};`}
+      >
+        {verdictLabel[finding.data.verdict]}
+      </span>
+      <span class="finding-detail-date">{finding.data.date}</span>
+      <ShareButton
+        url={pageUrl}
+        title={finding.data.headline}
+        text={`${finding.data.stat_value} - ${finding.data.headline}. Source: ${finding.data.source_label}. ${pageUrl}`}
+        compact
+      />
+    </div>
+
+    <h1 class="finding-detail-headline">{finding.data.headline}</h1>
+
+    <div class="finding-detail-stat">
+      <span class="fds-value" style={`color: ${verdictColor[finding.data.verdict]};`}>
+        {finding.data.stat_value}
+      </span>
+      <span class="fds-label">{finding.data.stat_label}</span>
+    </div>
+
+    <div class="finding-detail-body">
+      <Content />
+    </div>
+
+    <!-- VIDEO (if exists) -->
+    {finding.data.video_url && (
+      <div class="finding-video">
+        <video controls preload="metadata" poster={finding.data.video_poster ?? `/cards/${findingSlug}_og.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
+          <source src={finding.data.video_url} type="video/mp4" />
+        </video>
+        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Short video summary - share on social media.</p>
+      </div>
+    )}
+
+    <!-- SHARE CARD -->
+    <div class="finding-share-card">
+      <img src={`/cards/${findingSlug}_square.png`} alt={finding.data.headline} width="540" height="540" loading="lazy" />
+      <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Share this finding - right-click to save the image.</p>
+    </div>
+
+    <!-- SHARE -->
+    <div class="finding-share-actions">
+      <h3>Share this finding</h3>
+      <ShareButton
+        url={pageUrl}
+        title={finding.data.headline}
+        text={`${finding.data.stat_value} - ${finding.data.headline}. See the data: ${pageUrl}`}
+      />
+    </div>
+
+    <footer class="finding-detail-footer">
+      <a href={finding.data.source_url} target="_blank" rel="noopener" class="finding-detail-source">
+        {finding.data.source_label} - verify this yourself &rarr;
+      </a>
+      <a href="/findings/" class="finding-back">&larr; All findings</a>
+    </footer>
+
+    <!-- RELATED -->
+    {relatedFindings.length > 0 && (
+      <div class="finding-related">
+        <h3>Related findings</h3>
+        <div class="finding-related-grid">
+          {relatedFindings.map((related) => (
+            <a href={`/findings/${related.id.replace(/\.md$/, "")}/`} class="finding-related-card">
+              <span class="frc-stat" style={`color: ${verdictColor[related.data.verdict]}`}>{related.data.stat_value}</span>
+              <span class="frc-headline">{related.data.headline}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .finding-detail {
+    max-width: 720px;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .finding-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .finding-verdict-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+  }
+  .finding-detail-date {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .finding-detail-headline {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+  }
+
+  .finding-detail-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .fds-value {
+    font-family: "Sora", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .fds-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .finding-detail-body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .finding-detail-body :global(strong) {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .finding-detail-body :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .finding-detail-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .finding-detail-source {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .finding-detail-source:hover { text-decoration: underline; }
+  .finding-back {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .finding-back:hover { color: var(--ink); }
+  .finding-share-card {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .finding-share-card img {
+    width: 100%;
+    max-width: 540px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .finding-share-actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .finding-share-actions h3 {
+    font-family: "Sora", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+  }
+  .finding-related {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .finding-related h3 {
+    font-family: "Sora", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+  }
+  .finding-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .finding-related-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition: border-color 180ms;
+  }
+  .finding-related-card:hover { border-color: var(--accent); }
+  .frc-stat {
+    font-family: "Sora", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .frc-headline {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+</style>

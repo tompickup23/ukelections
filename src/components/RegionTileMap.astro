@@ -1,0 +1,1311 @@
+---
+import { buildPublicPlaceRegionPath } from "../lib/site";
+import type { RegionMapSummary, RegionMapValue } from "../lib/region-map-explorer";
+import {
+  REGION_MAP_DRAW_ORDER,
+  REGION_MAP_HEIGHT,
+  REGION_MAP_WIDTH,
+  getRegionMapGeometry
+} from "../lib/region-map";
+
+interface Props {
+  items: RegionMapValue[];
+  title: string;
+  description?: string;
+  valueLabel: string;
+  highlightRegion?: string;
+  highlightRegions?: string[];
+  summaries?: Record<string, RegionMapSummary>;
+  tone?: "accent" | "teal" | "warm";
+  compact?: boolean;
+  labelMode?: "all" | "essential" | "selected";
+  interactionMode?: "navigate" | "select";
+  showSummary?: boolean;
+  summaryMode?: "side" | "overlay";
+  fitMode?: "fill-width" | "contain";
+}
+
+const {
+  items,
+  title,
+  description,
+  valueLabel,
+  highlightRegion,
+  highlightRegions = [],
+  summaries = {},
+  tone = "accent",
+  compact = false,
+  labelMode = compact ? "essential" : "all",
+  interactionMode = "navigate",
+  showSummary = true,
+  summaryMode = "side",
+  fitMode = "fill-width"
+} = Astro.props;
+const essentialLabelRegions = new Set(["Scotland", "Wales", "Northern Ireland", "London"]);
+
+const itemByRegion = new Map(items.map((item) => [item.regionName, item]));
+const renderedRegions = REGION_MAP_DRAW_ORDER.flatMap((regionName) => {
+  const geometry = getRegionMapGeometry(regionName);
+  const item = itemByRegion.get(regionName);
+
+  if (!geometry || !item) {
+    return [];
+  }
+
+  return [{ geometry, item }];
+});
+const values = items.map((item) => item.value);
+const minValue = Math.min(...values, 0);
+const maxValue = Math.max(...values, 1);
+const range = Math.max(maxValue - minValue, 1);
+const activeRegions = new Set([highlightRegion, ...highlightRegions].filter(Boolean));
+const orderedItems = renderedRegions.map(({ item }) => item);
+const compactInsetGroups = [
+  {
+    id: "south-east-cluster",
+    kicker: "Inset map",
+    title: "South and east",
+    regions: ["South East", "East of England"]
+  },
+  {
+    id: "london-midlands-cluster",
+    kicker: "Inset map",
+    title: "London and Midlands",
+    regions: ["London", "East Midlands", "West Midlands"]
+  }
+] as const;
+const showSupportChrome = !compact || interactionMode !== "select" || showSummary;
+const initialRegionName =
+  interactionMode === "select" && fitMode === "contain" ? null : highlightRegion ?? orderedItems[0]?.regionName ?? null;
+
+function formatValue(value: number): string {
+  return new Intl.NumberFormat("en-GB", {
+    minimumFractionDigits: Number.isInteger(value) ? 0 : 1,
+    maximumFractionDigits: Number.isInteger(value) ? 0 : 2
+  }).format(value);
+}
+
+function getFill(value: number): string {
+  const ratio = (value - minValue) / range;
+
+  if (tone === "teal") {
+    return `rgba(78, 228, 195, ${0.18 + ratio * 0.56})`;
+  }
+
+  if (tone === "warm") {
+    return `rgba(255, 139, 97, ${0.18 + ratio * 0.56})`;
+  }
+
+  return `rgba(125, 211, 252, ${0.18 + ratio * 0.56})`;
+}
+
+function buildDefaultSummary(item: RegionMapValue): RegionMapSummary {
+  return {
+    title: item.regionName,
+    body: item.note ?? `${formatValue(item.value)} ${valueLabel} in this regional view.`,
+    href: buildPublicPlaceRegionPath(item.regionName),
+    cta: "Open region page",
+    chips: [valueLabel]
+  };
+}
+
+const summaryByRegion = Object.fromEntries(
+  orderedItems.map((item) => [
+    item.regionName,
+    {
+      ...buildDefaultSummary(item),
+      ...(summaries[item.regionName] ?? {})
+    }
+  ])
+) as Record<string, RegionMapSummary>;
+const renderedRegionByName = new Map(renderedRegions.map((entry) => [entry.item.regionName, entry]));
+const overlayShortcutGroups =
+  compact && interactionMode === "select" && fitMode === "contain"
+    ? compactInsetGroups.flatMap((group) => {
+          const items = group.regions.flatMap((regionName) => {
+            const entry = renderedRegionByName.get(regionName);
+            return entry ? [entry] : [];
+          });
+
+          if (!items.length) {
+            return [];
+          }
+
+          const labelXs = items.map(({ geometry }) => geometry.labelX);
+          const labelYs = items.map(({ geometry }) => geometry.labelY);
+          const minLabelX = Math.min(...labelXs);
+          const maxLabelX = Math.max(...labelXs);
+          const minLabelY = Math.min(...labelYs);
+          const maxLabelY = Math.max(...labelYs);
+          const labelWidth = Math.max(maxLabelX - minLabelX, 1);
+          const labelHeight = Math.max(maxLabelY - minLabelY, 1);
+
+          return [
+            {
+              ...group,
+              items: items.map((entry) => ({
+                ...entry,
+                insetLeft: `${22 + ((entry.geometry.labelX - minLabelX) / labelWidth) * 56}%`,
+                insetTop: `${24 + ((entry.geometry.labelY - minLabelY) / labelHeight) * 42}%`
+              }))
+            }
+          ];
+        })
+    : [];
+const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ?? null : null;
+const mapInteractionCaption =
+  interactionMode === "select"
+    ? "Select a region on the map to update the panel. Use the action button there to open the region page."
+    : "Select a region on the map to open its region page.";
+---
+
+  <figure
+  class:list={[
+    `viz-card tone-${tone}`,
+    compact && "viz-card-compact",
+    overlayShortcutGroups.length > 0 && "has-region-map-shortcuts"
+  ]}
+  data-region-map-root
+  data-initial-region={initialRegionName ?? undefined}
+  data-region-map-tone={tone}
+  data-region-map-link-mode={interactionMode}
+  data-region-map-fit-mode={fitMode}
+  data-region-map-shortcuts={overlayShortcutGroups.length > 0 ? "cluster-insets" : undefined}
+  data-region-map-width={REGION_MAP_WIDTH}
+  data-region-map-height={REGION_MAP_HEIGHT}
+  data-region-map-value-label={valueLabel}
+>
+  {!compact && (
+    <div class="viz-head">
+      <div>
+        <h3>{title}</h3>
+        {description && <p class="tiny">{description}</p>}
+      </div>
+      <span class="chip">{valueLabel}</span>
+    </div>
+  )}
+  <div
+    class:list={[
+      "region-map-stage",
+      compact && "is-compact",
+      !showSummary && "is-summaryless",
+      showSummary && summaryMode === "overlay" && "is-summary-overlay"
+    ]}
+  >
+    <div class:list={["region-map-canvas", summaryMode === "overlay" && "has-summary-overlay"]}>
+      <svg
+        class="region-map"
+        viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`}
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label={title}
+      >
+        <g class="region-map-base" aria-hidden="true">
+          {renderedRegions.map(({ geometry }) => (
+            <path class="region-map-base-region" d={geometry.path}></path>
+          ))}
+        </g>
+        {renderedRegions.map(({ geometry, item }) => {
+          const active = activeRegions.has(item.regionName);
+          const selected = item.regionName === initialRegionName;
+          const href = buildPublicPlaceRegionPath(item.regionName);
+          const valueLabelText = formatValue(item.value);
+          const minimalLabels = labelMode !== "all";
+          const essentialLabel = labelMode === "essential" && essentialLabelRegions.has(item.regionName);
+
+          return (
+            <g class:list={["region-map-region-entry", active && "is-active", selected && "is-selected"]}>
+              <a
+                href={href}
+                class:list={["region-map-link", active && "is-active", selected && "is-selected"]}
+                aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. ${interactionMode === "select" ? "Select this region." : "Open region page."}`}
+                data-region-map-region={item.regionName}
+                data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
+              >
+                <title>{`${item.regionName}: ${valueLabelText} ${valueLabel}${item.note ? `. ${item.note}` : ""}`}</title>
+                <path class="region-map-hit-area" d={geometry.path}></path>
+                <path
+                  class="region-map-region"
+                  d={geometry.path}
+                  fill={getFill(item.value)}
+                  stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
+                  stroke-width={active ? "3" : "1.4"}
+                ></path>
+                {interactionMode === "select" && (
+                  <g class="region-map-hotspot" aria-hidden="true">
+                    <circle class="region-map-hotspot-ring" cx={geometry.labelX} cy={geometry.labelY + 4} r="19"></circle>
+                    <circle class="region-map-hotspot-core" cx={geometry.labelX} cy={geometry.labelY + 4} r="7.5"></circle>
+                  </g>
+                )}
+              </a>
+              {geometry.calloutPath && (
+                <path
+                  class:list={[
+                    "region-map-callout",
+                    minimalLabels && "is-minimal",
+                    essentialLabel && "is-essential"
+                  ]}
+                  d={geometry.calloutPath}
+                  aria-hidden="true"
+                ></path>
+              )}
+              <text
+                x={geometry.labelX}
+                y={geometry.labelY}
+                text-anchor={geometry.labelAnchor ?? "middle"}
+                class:list={[
+                  "region-map-label",
+                  active && "is-active",
+                  selected && "is-selected",
+                  minimalLabels && "is-minimal",
+                  essentialLabel && "is-essential"
+                ]}
+                aria-hidden="true"
+              >
+                {geometry.labelLines.map((line, index) => (
+                  <tspan x={geometry.labelX} dy={index === 0 ? 0 : 14}>
+                    {line}
+                  </tspan>
+                ))}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      {overlayShortcutGroups.length > 0 && (
+        <section class="region-map-insets" aria-label="Dense region inset controls">
+          {overlayShortcutGroups.map((group) => (
+            <article class="region-map-inset-cluster" data-region-map-inset={group.id}>
+              <div class="region-map-inset-head">
+                <span class="tiny">{group.kicker}</span>
+                <strong>{group.title}</strong>
+              </div>
+              <div class="region-map-inset-map">
+                {group.items.map(({ item, insetLeft, insetTop }) => {
+                  const summary = summaryByRegion[item.regionName] ?? buildDefaultSummary(item);
+                  const selected = item.regionName === initialRegionName;
+                  return (
+                    <button
+                      type="button"
+                      class:list={["region-map-overlay-control", "region-map-inset-node", selected && "is-selected"]}
+                      data-region-map-overlay-control={item.regionName}
+                      aria-pressed={selected ? "true" : "false"}
+                      style={`left:${insetLeft};top:${insetTop};`}
+                    >
+                      <span class="region-map-inset-node-pin" aria-hidden="true"></span>
+                      <strong>{item.regionName}</strong>
+                      <span class="tiny">{summary.stats?.[0]?.value ?? summary.chips?.[0] ?? valueLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
+      <figcaption class="tiny region-map-caption">
+        {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
+        {mapInteractionCaption} Darker fills indicate higher values in the active map mode.
+      </figcaption>
+
+      {showSupportChrome && (
+        <section class="region-map-hud" data-region-map-hud>
+          <article class="region-map-hud-card">
+            <span class="tiny" data-region-map-hud-label-1>Region</span>
+            <strong data-region-map-hud-value-1>{initialSummary?.title ?? initialRegionName ?? "Britain"}</strong>
+            <p data-region-map-hud-meta-1>{(initialSummary?.chips ?? [valueLabel])[0] ?? valueLabel}</p>
+          </article>
+          <article class="region-map-hud-card">
+            <span class="tiny" data-region-map-hud-label-2>
+              {initialSummary?.stats?.[0]?.label ?? "Current signal"}
+            </span>
+            <strong data-region-map-hud-value-2>{initialSummary?.stats?.[0]?.value ?? valueLabel}</strong>
+            <p data-region-map-hud-meta-2>{initialSummary?.stats?.[1]?.value ?? initialSummary?.body ?? ""}</p>
+          </article>
+          <article class="region-map-hud-card">
+            <span class="tiny" data-region-map-hud-label-3>
+              {initialSummary?.links?.length ? "Open next" : "Reading note"}
+            </span>
+            <strong data-region-map-hud-value-3>
+              {initialSummary?.links?.[0]?.label ?? initialSummary?.cta ?? "Open region page"}
+            </strong>
+            <p data-region-map-hud-meta-3>{initialSummary?.note ?? initialSummary?.body ?? ""}</p>
+          </article>
+        </section>
+      )}
+
+      {showSupportChrome && (
+        <section class="region-map-shortlist" data-region-map-shortlist>
+          <div class="region-map-shortlist-head">
+            <span class="tiny">Quick shortlist</span>
+            <strong data-region-map-shortlist-title>Top regions in this view</strong>
+          </div>
+          <div class="region-map-shortlist-links" data-region-map-shortlist-links></div>
+        </section>
+      )}
+
+      {showSummary && summaryMode === "overlay" && (
+        <article class="region-map-summary is-overlay" data-region-map-summary-panel aria-live="polite">
+          <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
+            {(initialSummary?.chips ?? []).map((chip, index) => (
+              <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
+            ))}
+          </div>
+          <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
+          <p class="lede" data-region-map-summary-body>
+            {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
+          </p>
+
+          <div
+            class="region-map-summary-stats"
+            data-region-map-summary-stats
+            hidden={!initialSummary?.stats?.length}
+          >
+            {(initialSummary?.stats ?? []).map((stat) => (
+              <div class="region-map-summary-stat">
+                <span class="tiny">{stat.label}</span>
+                <strong>{stat.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <section
+            class="region-map-summary-links-section"
+            data-region-map-summary-links-section
+            hidden={!initialSummary?.links?.length}
+          >
+            <span class="tiny region-map-summary-label">Open these next</span>
+            <div class="region-map-summary-links" data-region-map-summary-links>
+              {(initialSummary?.links ?? []).map((link) =>
+                interactionMode === "select" && link.scopeId ? (
+                  <article class="region-map-summary-link region-map-summary-link-action">
+                    <div class="region-map-summary-link-copy">
+                      <strong>{link.label}</strong>
+                      {link.meta && <span class="tiny">{link.meta}</span>}
+                    </div>
+                    <div class="region-map-summary-link-actions">
+                      <button
+                        type="button"
+                        class="chip accent"
+                        data-region-map-preview
+                        data-region-map-scope-id={link.scopeId}
+                        data-region-map-scope-label={link.label}
+                        data-region-map-scope-href={link.href}
+                      >
+                        {link.actionLabel ?? "Preview authority"}
+                      </button>
+                      <a class="chip" href={link.href}>Open page</a>
+                    </div>
+                  </article>
+                ) : (
+                  <a class="region-map-summary-link" href={link.href}>
+                    <strong>{link.label}</strong>
+                    {link.meta && <span class="tiny">{link.meta}</span>}
+                  </a>
+                )
+              )}
+            </div>
+          </section>
+
+          <p
+            class="tiny region-map-summary-note"
+            data-region-map-summary-note
+            hidden={!initialSummary?.note}
+          >
+            {initialSummary?.note}
+          </p>
+
+          <p class="tiny">
+            <a
+              class="source-pill"
+              data-region-map-summary-link
+              href={initialSummary?.href ?? "/places/"}
+              hidden={!initialSummary?.href}
+            >
+              {initialSummary?.cta ?? "Open region page"}
+            </a>
+          </p>
+        </article>
+      )}
+    </div>
+
+    {showSummary && summaryMode !== "overlay" && (
+      <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
+        <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
+          {(initialSummary?.chips ?? []).map((chip, index) => (
+            <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
+          ))}
+        </div>
+        <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
+        <p class="lede" data-region-map-summary-body>
+          {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
+        </p>
+
+        <div
+          class="region-map-summary-stats"
+          data-region-map-summary-stats
+          hidden={!initialSummary?.stats?.length}
+        >
+          {(initialSummary?.stats ?? []).map((stat) => (
+            <div class="region-map-summary-stat">
+              <span class="tiny">{stat.label}</span>
+              <strong>{stat.value}</strong>
+            </div>
+          ))}
+        </div>
+
+        <section
+          class="region-map-summary-links-section"
+          data-region-map-summary-links-section
+          hidden={!initialSummary?.links?.length}
+        >
+          <span class="tiny region-map-summary-label">Open these next</span>
+          <div class="region-map-summary-links" data-region-map-summary-links>
+            {(initialSummary?.links ?? []).map((link) =>
+              interactionMode === "select" && link.scopeId ? (
+                <article class="region-map-summary-link region-map-summary-link-action">
+                  <div class="region-map-summary-link-copy">
+                    <strong>{link.label}</strong>
+                    {link.meta && <span class="tiny">{link.meta}</span>}
+                  </div>
+                  <div class="region-map-summary-link-actions">
+                    <button
+                      type="button"
+                      class="chip accent"
+                      data-region-map-preview
+                      data-region-map-scope-id={link.scopeId}
+                      data-region-map-scope-label={link.label}
+                      data-region-map-scope-href={link.href}
+                    >
+                      {link.actionLabel ?? "Preview authority"}
+                    </button>
+                    <a class="chip" href={link.href}>Open page</a>
+                  </div>
+                </article>
+              ) : (
+                <a class="region-map-summary-link" href={link.href}>
+                  <strong>{link.label}</strong>
+                  {link.meta && <span class="tiny">{link.meta}</span>}
+                </a>
+              )
+            )}
+          </div>
+        </section>
+
+        <p
+          class="tiny region-map-summary-note"
+          data-region-map-summary-note
+          hidden={!initialSummary?.note}
+        >
+          {initialSummary?.note}
+        </p>
+
+        <p class="tiny">
+          <a
+            class="source-pill"
+            data-region-map-summary-link
+            href={initialSummary?.href ?? "/places/"}
+            hidden={!initialSummary?.href}
+          >
+            {initialSummary?.cta ?? "Open region page"}
+          </a>
+        </p>
+      </article>
+    )}
+  </div>
+</figure>
+
+<script>
+  type RegionMapRootElement = HTMLElement & {
+    __updateRegionMapSummary?: (regionName?: string, trigger?: string) => void;
+    __fitRegionMap?: () => void;
+  };
+  type RegionMapSummaryPayload = {
+    title?: string;
+    body?: string;
+    href?: string;
+    cta?: string;
+    chips?: string[];
+    stats?: { label: string; value: string }[];
+    links?: { label: string; href: string; meta?: string; scopeId?: string; actionLabel?: string }[];
+    note?: string;
+  };
+  type RegionMapViewBox = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  type FocusTrigger = "hover" | "focus" | "click" | "program";
+
+  const windowWithRegionMapFlag = window as Window & { __ukdRegionMapInit?: boolean };
+
+  if (!windowWithRegionMapFlag.__ukdRegionMapInit) {
+    windowWithRegionMapFlag.__ukdRegionMapInit = true;
+    const REGION_MAP_WIDTH = 620;
+    const REGION_MAP_HEIGHT = 760;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const regionMapAnimations = new WeakMap<SVGSVGElement, number>();
+
+    const parseViewBox = (raw: string): RegionMapViewBox => {
+      const parts = raw.split(" ").map((piece) => Number.parseFloat(piece));
+
+      return {
+        x: Number.isFinite(parts[0] ?? NaN) ? parts[0] : 0,
+        y: Number.isFinite(parts[1] ?? NaN) ? parts[1] : 0,
+        width: Number.isFinite(parts[2] ?? NaN) ? parts[2] : REGION_MAP_WIDTH,
+        height: Number.isFinite(parts[3] ?? NaN) ? parts[3] : REGION_MAP_HEIGHT
+      };
+    };
+
+    const parseSummaryPayload = (value: string | undefined): RegionMapSummaryPayload => {
+      if (!value) {
+        return {};
+      }
+
+      try {
+        return JSON.parse(value) as RegionMapSummaryPayload;
+      } catch {
+        return {};
+      }
+    };
+
+    const clamp = (value: number, minimum: number, maximum: number) => Math.max(minimum, Math.min(maximum, value));
+
+    const easeOutCubic = (value: number) => 1 - Math.pow(1 - value, 3);
+
+    const getCurrentViewBox = (svg: SVGSVGElement): RegionMapViewBox => {
+      const viewBox = svg.viewBox.baseVal;
+
+      if (viewBox?.width > 0 && viewBox?.height > 0) {
+        return {
+          x: viewBox.x,
+          y: viewBox.y,
+          width: viewBox.width,
+          height: viewBox.height
+        };
+      }
+
+      return parseViewBox(svg.getAttribute("viewBox") ?? `0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`);
+    };
+
+    const buildMapFocusViewBox = (
+      root: RegionMapRootElement,
+      svg: SVGSVGElement,
+      regionPath: SVGPathElement
+    ): RegionMapViewBox | null => {
+      const bounds = regionPath.getBBox();
+
+      if (!(bounds.width > 0) || !(bounds.height > 0)) {
+        return null;
+      }
+
+      const mapWidth = Number.parseFloat(root.dataset.regionMapWidth ?? `${svg.viewBox.baseVal.width}`) || REGION_MAP_WIDTH;
+      const mapHeight = Number.parseFloat(root.dataset.regionMapHeight ?? `${svg.viewBox.baseVal.height}`) || REGION_MAP_HEIGHT;
+      const aspect = mapWidth / mapHeight;
+
+      const basePadding = clamp(Math.min(bounds.width, bounds.height) * 0.42, 12, 54);
+      let focusWidth = bounds.width + basePadding * 2;
+      let focusHeight = bounds.height + basePadding * 2;
+
+      if (focusWidth / focusHeight > aspect) {
+        focusHeight = focusWidth / aspect;
+      } else {
+        focusWidth = focusHeight * aspect;
+      }
+
+      const minSpan = Math.min(mapWidth, mapHeight) * 0.2;
+      const maxSpanX = mapWidth * 0.98;
+      const maxSpanY = mapHeight * 0.98;
+      focusWidth = clamp(focusWidth, minSpan, maxSpanX);
+      focusHeight = clamp(focusHeight, minSpan, maxSpanY);
+
+      if (focusWidth / focusHeight > aspect) {
+        focusWidth = focusHeight * aspect;
+      } else {
+        focusHeight = focusWidth / aspect;
+      }
+
+      const centerX = bounds.x + bounds.width / 2;
+      const centerY = bounds.y + bounds.height / 2;
+      const x = clamp(centerX - focusWidth / 2, 0, Math.max(0, mapWidth - focusWidth));
+      const y = clamp(centerY - focusHeight / 2, 0, Math.max(0, mapHeight - focusHeight));
+
+      return {
+        x,
+        y,
+        width: focusWidth,
+        height: focusHeight
+      };
+    };
+
+    const animateRegionMapViewBox = (svg: SVGSVGElement, target: RegionMapViewBox, durationMs: number) => {
+      if (durationMs <= 0 || prefersReducedMotion) {
+        svg.setAttribute("viewBox", `${target.x} ${target.y} ${target.width} ${target.height}`);
+        return;
+      }
+
+      const active = regionMapAnimations.get(svg);
+
+      if (active !== undefined) {
+        window.cancelAnimationFrame(active);
+      }
+
+      const start = getCurrentViewBox(svg);
+      const deltaX = target.x - start.x;
+      const deltaY = target.y - start.y;
+      const deltaWidth = target.width - start.width;
+      const deltaHeight = target.height - start.height;
+      const startTime = performance.now();
+
+      const tick = (time: number) => {
+        const progress = Math.min(1, (time - startTime) / durationMs);
+        const eased = easeOutCubic(progress);
+
+        svg.setAttribute(
+          "viewBox",
+          `${(start.x + deltaX * eased).toFixed(3)} ${(start.y + deltaY * eased).toFixed(3)} ${
+            (start.width + deltaWidth * eased).toFixed(3)
+          } ${(start.height + deltaHeight * eased).toFixed(3)}`
+        );
+
+        if (progress < 1) {
+          const frame = window.requestAnimationFrame(tick);
+          regionMapAnimations.set(svg, frame);
+          return;
+        }
+
+        regionMapAnimations.delete(svg);
+      };
+
+      const first = window.requestAnimationFrame(tick);
+      regionMapAnimations.set(svg, first);
+    };
+
+    const setRegionMapFocus = (
+      root: RegionMapRootElement,
+      regionName: string,
+      trigger: FocusTrigger
+    ) => {
+      const svg = root.querySelector<SVGSVGElement>(".region-map");
+      const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const selectedLink = links.find((link) => link.dataset.regionMapRegion === regionName) ?? links[0];
+
+      if (!svg || !selectedLink) {
+        return;
+      }
+
+      const regionPath = selectedLink.querySelector<SVGPathElement>(".region-map-region");
+
+      if (!regionPath) {
+        return;
+      }
+
+      for (const link of links) {
+        link.classList.toggle("is-selected", link === selectedLink);
+        link.classList.toggle("is-focused", link === selectedLink);
+      }
+
+      const focusBox = buildMapFocusViewBox(root, svg, regionPath);
+
+      if (!focusBox) {
+        return;
+      }
+
+      const duration = trigger === "click" ? 420 : 220;
+      animateRegionMapViewBox(svg, focusBox, duration);
+      root.dataset.regionMapSelectedRegion = selectedLink.dataset.regionMapRegion ?? regionName;
+    };
+
+    const updateRegionMapSummary = (root: RegionMapRootElement, regionName?: string, trigger = "program") => {
+      const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const overlayControls = Array.from(
+        root.querySelectorAll<HTMLButtonElement>("[data-region-map-overlay-control]")
+      );
+      const selectedLink = regionName ? links.find((link) => link.dataset.regionMapRegion === regionName) ?? null : null;
+      const syncOverlayControls = (selectedRegionName?: string) => {
+        for (const control of overlayControls) {
+          const isSelected = !!selectedRegionName && control.dataset.regionMapOverlayControl === selectedRegionName;
+          control.classList.toggle("is-selected", isSelected);
+          control.setAttribute("aria-pressed", isSelected ? "true" : "false");
+        }
+      };
+
+      if (!selectedLink) {
+        const titleElement = root.querySelector<HTMLElement>("[data-region-map-summary-title]");
+        const bodyElement = root.querySelector<HTMLElement>("[data-region-map-summary-body]");
+        const chipsElement = root.querySelector<HTMLElement>("[data-region-map-summary-chips]");
+        const statsElement = root.querySelector<HTMLElement>("[data-region-map-summary-stats]");
+        const linksSection = root.querySelector<HTMLElement>("[data-region-map-summary-links-section]");
+        const linksElement = root.querySelector<HTMLElement>("[data-region-map-summary-links]");
+        const noteElement = root.querySelector<HTMLElement>("[data-region-map-summary-note]");
+        const linkElement = root.querySelector<HTMLAnchorElement>("[data-region-map-summary-link]");
+        const hudLabelOne = root.querySelector<HTMLElement>("[data-region-map-hud-label-1]");
+        const hudValueOne = root.querySelector<HTMLElement>("[data-region-map-hud-value-1]");
+        const hudMetaOne = root.querySelector<HTMLElement>("[data-region-map-hud-meta-1]");
+        const hudLabelTwo = root.querySelector<HTMLElement>("[data-region-map-hud-label-2]");
+        const hudValueTwo = root.querySelector<HTMLElement>("[data-region-map-hud-value-2]");
+        const hudMetaTwo = root.querySelector<HTMLElement>("[data-region-map-hud-meta-2]");
+        const hudLabelThree = root.querySelector<HTMLElement>("[data-region-map-hud-label-3]");
+        const hudValueThree = root.querySelector<HTMLElement>("[data-region-map-hud-value-3]");
+        const hudMetaThree = root.querySelector<HTMLElement>("[data-region-map-hud-meta-3]");
+        const shortlistTitle = root.querySelector<HTMLElement>("[data-region-map-shortlist-title]");
+        const shortlistLinks = root.querySelector<HTMLElement>("[data-region-map-shortlist-links]");
+        const svg = root.querySelector<SVGSVGElement>(".region-map");
+        const mapValueLabel = root.dataset.regionMapValueLabel ?? "Regional signal";
+
+        for (const link of links) {
+          link.classList.remove("is-selected", "is-focused");
+        }
+        syncOverlayControls();
+
+        if (titleElement) {
+          titleElement.textContent = "Britain";
+        }
+
+        if (bodyElement) {
+          bodyElement.textContent = "Use the Britain map to open one region before narrowing to one authority.";
+        }
+
+        if (chipsElement) {
+          chipsElement.innerHTML = "";
+        }
+
+        if (statsElement) {
+          statsElement.innerHTML = "";
+          statsElement.hidden = true;
+        }
+
+        if (linksSection && linksElement) {
+          linksElement.innerHTML = "";
+          linksSection.hidden = true;
+        }
+
+        if (noteElement) {
+          noteElement.hidden = true;
+          noteElement.textContent = "";
+        }
+
+        if (linkElement) {
+          linkElement.hidden = true;
+        }
+
+        if (hudLabelOne && hudValueOne && hudMetaOne) {
+          hudLabelOne.textContent = "Scope";
+          hudValueOne.textContent = "Britain";
+          hudMetaOne.textContent = mapValueLabel;
+        }
+
+        if (hudLabelTwo && hudValueTwo && hudMetaTwo) {
+          hudLabelTwo.textContent = "How to use";
+          hudValueTwo.textContent = "Pick one region";
+          hudMetaTwo.textContent = "The right panel narrows from Britain to one region to one authority.";
+        }
+
+        if (hudLabelThree && hudValueThree && hudMetaThree) {
+          hudLabelThree.textContent = "Open next";
+          hudValueThree.textContent = links[0]?.dataset.regionMapRegion ?? "Region";
+          hudMetaThree.textContent = "Use the map or shortlist to focus one region.";
+        }
+
+        if (shortlistTitle) {
+          shortlistTitle.textContent = root.dataset.regionMapLinkMode === "select" ? "Browse by region" : "Open one region next";
+        }
+
+        if (shortlistLinks) {
+          shortlistLinks.innerHTML = "";
+
+          for (const link of links.slice(0, 3)) {
+            const region = link.dataset.regionMapRegion ?? "";
+            const summary = parseSummaryPayload(link.dataset.regionMapSummary);
+            const button = document.createElement(root.dataset.regionMapLinkMode === "select" ? "button" : "a");
+
+            if (button instanceof HTMLButtonElement) {
+              button.type = "button";
+              button.className = "region-map-shortlist-link";
+              button.addEventListener("click", () => updateRegionMapSummary(root, region, "click"));
+            } else {
+              button.className = "region-map-shortlist-link";
+              button.href = link.getAttribute("href") ?? "#";
+            }
+
+            const titleNode = document.createElement("strong");
+            titleNode.textContent = region;
+
+            const metaNode = document.createElement("span");
+            metaNode.className = "tiny";
+            metaNode.textContent = summary.stats?.[0]?.value ?? summary.chips?.[0] ?? mapValueLabel;
+
+            button.append(titleNode, metaNode);
+            shortlistLinks.append(button);
+          }
+        }
+
+        if (svg) {
+          const mapWidth = Number.parseFloat(root.dataset.regionMapWidth ?? "0") || REGION_MAP_WIDTH;
+          const mapHeight = Number.parseFloat(root.dataset.regionMapHeight ?? "0") || REGION_MAP_HEIGHT;
+          animateRegionMapViewBox(
+            svg,
+            { x: 0, y: 0, width: mapWidth, height: mapHeight },
+            trigger === "click" ? 360 : 0
+          );
+        }
+
+        root.dataset.regionMapSelectedRegion = "";
+        root.dispatchEvent(
+          new CustomEvent("region-map-change", {
+            bubbles: true,
+            detail: {
+              regionName: undefined,
+              summary: {},
+              trigger,
+              tone: root.dataset.regionMapTone ?? "accent"
+            }
+          })
+        );
+        return;
+      }
+
+      const summary = parseSummaryPayload(selectedLink.dataset.regionMapSummary);
+      syncOverlayControls(selectedLink.dataset.regionMapRegion ?? regionName);
+      const titleElement = root.querySelector<HTMLElement>("[data-region-map-summary-title]");
+      const bodyElement = root.querySelector<HTMLElement>("[data-region-map-summary-body]");
+      const chipsElement = root.querySelector<HTMLElement>("[data-region-map-summary-chips]");
+      const statsElement = root.querySelector<HTMLElement>("[data-region-map-summary-stats]");
+      const linksSection = root.querySelector<HTMLElement>("[data-region-map-summary-links-section]");
+      const linksElement = root.querySelector<HTMLElement>("[data-region-map-summary-links]");
+      const noteElement = root.querySelector<HTMLElement>("[data-region-map-summary-note]");
+      const linkElement = root.querySelector<HTMLAnchorElement>("[data-region-map-summary-link]");
+      const mapValueLabel = root.dataset.regionMapValueLabel ?? "Regional signal";
+      const hudLabelOne = root.querySelector<HTMLElement>("[data-region-map-hud-label-1]");
+      const hudValueOne = root.querySelector<HTMLElement>("[data-region-map-hud-value-1]");
+      const hudMetaOne = root.querySelector<HTMLElement>("[data-region-map-hud-meta-1]");
+      const hudLabelTwo = root.querySelector<HTMLElement>("[data-region-map-hud-label-2]");
+      const hudValueTwo = root.querySelector<HTMLElement>("[data-region-map-hud-value-2]");
+      const hudMetaTwo = root.querySelector<HTMLElement>("[data-region-map-hud-meta-2]");
+      const hudLabelThree = root.querySelector<HTMLElement>("[data-region-map-hud-label-3]");
+      const hudValueThree = root.querySelector<HTMLElement>("[data-region-map-hud-value-3]");
+      const hudMetaThree = root.querySelector<HTMLElement>("[data-region-map-hud-meta-3]");
+      const shortlistTitle = root.querySelector<HTMLElement>("[data-region-map-shortlist-title]");
+      const shortlistLinks = root.querySelector<HTMLElement>("[data-region-map-shortlist-links]");
+
+      const setHudCard = (
+        labelNode: HTMLElement | null,
+        valueNode: HTMLElement | null,
+        metaNode: HTMLElement | null,
+        labelText: string,
+        valueText: string,
+        metaText: string
+      ) => {
+        if (!labelNode || !valueNode || !metaNode) {
+          return;
+        }
+
+        labelNode.textContent = labelText;
+        valueNode.textContent = valueText;
+        metaNode.textContent = metaText;
+      };
+
+      const renderShortlist = (selectedRegionName: string) => {
+        if (!shortlistLinks || !shortlistTitle) {
+          return;
+        }
+
+        shortlistLinks.innerHTML = "";
+        shortlistTitle.textContent = root.dataset.regionMapLinkMode === "select" ? "Preview one region here" : "Open one region next";
+
+        const rankedLinks = links
+          .map((link) => ({
+            link,
+            regionName: link.dataset.regionMapRegion ?? "",
+            summary: parseSummaryPayload(link.dataset.regionMapSummary)
+          }))
+          .slice(0, 3);
+
+        for (const item of rankedLinks) {
+          if (!item.regionName) {
+            continue;
+          }
+
+          if (root.dataset.regionMapLinkMode === "select") {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = `region-map-shortlist-link${item.regionName === selectedRegionName ? " is-active" : ""}`;
+            button.setAttribute("aria-pressed", item.regionName === selectedRegionName ? "true" : "false");
+
+            const titleNode = document.createElement("strong");
+            titleNode.textContent = item.regionName;
+
+            const metaNode = document.createElement("span");
+            metaNode.className = "tiny";
+            metaNode.textContent = item.summary.stats?.[0]?.value ?? item.summary.chips?.[0] ?? mapValueLabel;
+
+            button.append(titleNode, metaNode);
+            button.addEventListener("click", () => updateRegionMapSummary(root, item.regionName, "click"));
+            shortlistLinks.append(button);
+            continue;
+          }
+
+          const anchor = document.createElement("a");
+          anchor.className = `region-map-shortlist-link${item.regionName === selectedRegionName ? " is-active" : ""}`;
+          anchor.href = item.link.getAttribute("href") ?? "#";
+
+          const titleNode = document.createElement("strong");
+          titleNode.textContent = item.regionName;
+
+          const metaNode = document.createElement("span");
+          metaNode.className = "tiny";
+          metaNode.textContent = item.summary.stats?.[0]?.value ?? item.summary.chips?.[0] ?? mapValueLabel;
+
+          anchor.append(titleNode, metaNode);
+          shortlistLinks.append(anchor);
+        }
+      };
+
+      const appendSummaryLink = (
+        container: HTMLElement,
+        item: NonNullable<RegionMapSummaryPayload["links"]>[number]
+      ) => {
+        if (root.dataset.regionMapLinkMode === "select" && item.scopeId) {
+          const card = document.createElement("article");
+          card.className = "region-map-summary-link region-map-summary-link-action";
+
+          const copyNode = document.createElement("div");
+          copyNode.className = "region-map-summary-link-copy";
+
+          const titleNode = document.createElement("strong");
+          titleNode.textContent = item.label;
+          copyNode.append(titleNode);
+
+          if (item.meta) {
+            const metaNode = document.createElement("span");
+            metaNode.className = "tiny";
+            metaNode.textContent = item.meta;
+            copyNode.append(metaNode);
+          }
+
+          const actionsNode = document.createElement("div");
+          actionsNode.className = "region-map-summary-link-actions";
+
+          const previewButton = document.createElement("button");
+          previewButton.type = "button";
+          previewButton.className = "chip accent";
+          previewButton.dataset.regionMapPreview = "";
+          previewButton.dataset.regionMapScopeId = item.scopeId;
+          previewButton.dataset.regionMapScopeLabel = item.label;
+          previewButton.dataset.regionMapScopeHref = item.href;
+          previewButton.textContent = item.actionLabel ?? "Preview authority";
+
+          const openLink = document.createElement("a");
+          openLink.className = "chip";
+          openLink.href = item.href;
+          openLink.textContent = "Open page";
+
+          actionsNode.append(previewButton, openLink);
+          card.append(copyNode, actionsNode);
+          container.append(card);
+          return;
+        }
+
+        const linkNode = document.createElement("a");
+        linkNode.className = "region-map-summary-link";
+        linkNode.href = item.href;
+
+        const titleNode = document.createElement("strong");
+        titleNode.textContent = item.label;
+        linkNode.append(titleNode);
+
+        if (item.meta) {
+          const metaNode = document.createElement("span");
+          metaNode.className = "tiny";
+          metaNode.textContent = item.meta;
+          linkNode.append(metaNode);
+        }
+
+        container.append(linkNode);
+      };
+
+      const safeRegionName = regionName ?? "Britain";
+
+      if (titleElement) {
+        titleElement.textContent = summary.title ?? safeRegionName;
+      }
+
+      if (bodyElement) {
+        bodyElement.textContent =
+          summary.body ?? "Use the regional map to open a region page and see the first local authorities worth reading.";
+      }
+
+      if (chipsElement) {
+        chipsElement.innerHTML = "";
+
+        for (const chip of summary.chips ?? []) {
+          const chipNode = document.createElement("span");
+          chipNode.className = "chip";
+
+          if (chipsElement.childElementCount === 0) {
+            chipNode.classList.add(root.dataset.regionMapTone ?? "accent");
+          }
+
+          chipNode.textContent = chip;
+          chipsElement.append(chipNode);
+        }
+      }
+
+      if (statsElement) {
+        statsElement.innerHTML = "";
+        statsElement.hidden = !(summary.stats?.length);
+
+        for (const stat of summary.stats ?? []) {
+          const statNode = document.createElement("div");
+          statNode.className = "region-map-summary-stat";
+
+          const labelNode = document.createElement("span");
+          labelNode.className = "tiny";
+          labelNode.textContent = stat.label;
+
+          const valueNode = document.createElement("strong");
+          valueNode.textContent = stat.value;
+
+          statNode.append(labelNode, valueNode);
+          statsElement.append(statNode);
+        }
+      }
+
+      if (linksSection && linksElement) {
+        linksElement.innerHTML = "";
+        linksSection.hidden = !(summary.links?.length);
+
+        for (const item of summary.links ?? []) {
+          appendSummaryLink(linksElement, item);
+        }
+      }
+
+      if (noteElement) {
+        noteElement.hidden = !summary.note;
+        noteElement.textContent = summary.note ?? "";
+      }
+
+      if (linkElement) {
+        if (summary.href) {
+          linkElement.hidden = false;
+          linkElement.href = summary.href;
+          linkElement.textContent = summary.cta ?? "Open region page";
+        } else {
+          linkElement.hidden = true;
+        }
+      }
+
+      setHudCard(
+        hudLabelOne,
+        hudValueOne,
+        hudMetaOne,
+        "Region",
+        summary.title ?? safeRegionName,
+        summary.chips?.[0] ?? mapValueLabel
+      );
+      setHudCard(
+        hudLabelTwo,
+        hudValueTwo,
+        hudMetaTwo,
+        summary.stats?.[0]?.label ?? "Current signal",
+        summary.stats?.[0]?.value ?? mapValueLabel,
+        summary.stats?.[1]?.value ?? summary.body ?? ""
+      );
+      setHudCard(
+        hudLabelThree,
+        hudValueThree,
+        hudMetaThree,
+        summary.links?.length ? "Open next" : "Reading note",
+        summary.links?.[0]?.label ?? summary.cta ?? "Open region page",
+        summary.note ?? summary.body ?? ""
+      );
+
+      root.dataset.regionMapSelectedRegion = selectedLink.dataset.regionMapRegion ?? safeRegionName;
+      setRegionMapFocus(root, root.dataset.regionMapSelectedRegion ?? safeRegionName, trigger as FocusTrigger);
+      renderShortlist(root.dataset.regionMapSelectedRegion ?? safeRegionName);
+      root.dispatchEvent(
+        new CustomEvent("region-map-change", {
+          bubbles: true,
+          detail: {
+            regionName: root.dataset.regionMapSelectedRegion,
+            summary,
+            trigger,
+            tone: root.dataset.regionMapTone ?? "accent"
+          }
+        })
+      );
+    };
+
+    const fitRegionMap = (root: RegionMapRootElement) => {
+      if (root.dataset.regionMapFitMode !== "contain") {
+        return;
+      }
+
+      const canvas = root.querySelector<HTMLElement>(".region-map-canvas");
+      const svg = root.querySelector<SVGSVGElement>(".region-map");
+
+      if (!canvas || !svg) {
+        return;
+      }
+
+      const canvasStyles = window.getComputedStyle(canvas);
+      const paddingX = Number.parseFloat(canvasStyles.paddingLeft) + Number.parseFloat(canvasStyles.paddingRight);
+      const paddingY = Number.parseFloat(canvasStyles.paddingTop) + Number.parseFloat(canvasStyles.paddingBottom);
+      const availableWidth = Math.max(canvas.clientWidth - paddingX, 0);
+      const availableHeight = Math.max(canvas.clientHeight - paddingY, 0);
+      const mapWidth = Number.parseFloat(root.dataset.regionMapWidth ?? "0") || svg.viewBox.baseVal.width || 1;
+      const mapHeight = Number.parseFloat(root.dataset.regionMapHeight ?? "0") || svg.viewBox.baseVal.height || 1;
+      const aspectRatio = mapWidth / mapHeight;
+
+      if (!(availableWidth > 0) || !(availableHeight > 0) || !(aspectRatio > 0)) {
+        svg.style.removeProperty("width");
+        svg.style.removeProperty("height");
+        return;
+      }
+
+      let targetWidth = availableWidth;
+      let targetHeight = targetWidth / aspectRatio;
+
+      if (targetHeight > availableHeight) {
+        targetHeight = availableHeight;
+        targetWidth = targetHeight * aspectRatio;
+      }
+
+      svg.style.width = `${targetWidth}px`;
+      svg.style.height = `${targetHeight}px`;
+    };
+
+      for (const root of document.querySelectorAll<RegionMapRootElement>("[data-region-map-root]")) {
+      if (root.dataset.regionMapReady === "true") {
+        continue;
+      }
+
+      root.dataset.regionMapReady = "true";
+      root.__updateRegionMapSummary = (regionName?: string, trigger = "program") =>
+        updateRegionMapSummary(root, regionName, trigger);
+      root.__fitRegionMap = () => fitRegionMap(root);
+      const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const resizeObserver =
+        typeof ResizeObserver === "undefined"
+          ? null
+          : new ResizeObserver(() => {
+              fitRegionMap(root);
+              const selectedRegion = root.dataset.regionMapSelectedRegion;
+
+              if (selectedRegion) {
+                setRegionMapFocus(root, selectedRegion, "program");
+              }
+            });
+
+      resizeObserver?.observe(root);
+      const promoteScopeSelection = (scopeId: string, trigger: "focus" | "click") => {
+        if (root.dataset.regionMapLinkMode !== "select") {
+          return;
+        }
+
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              trigger: trigger === "focus" ? "map-focus" : "map-click"
+            }
+          })
+        );
+
+        root
+          .closest<HTMLElement>("[data-home-map-stage]")
+          ?.dispatchEvent(new CustomEvent("home-map-set-scope", { bubbles: true, detail: { scopeId } }));
+      };
+
+      root.addEventListener("click", (event) => {
+        const previewButton = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[data-region-map-preview]");
+
+        if (!previewButton) {
+          const overlayControl = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>(
+            "[data-region-map-overlay-control]"
+          );
+
+          if (!overlayControl) {
+            return;
+          }
+
+          const regionName = overlayControl.dataset.regionMapOverlayControl;
+
+          if (!regionName) {
+            return;
+          }
+
+          updateRegionMapSummary(root, regionName, "click");
+          promoteScopeSelection(regionName, "click");
+          return;
+        }
+
+        const scopeId = previewButton.dataset.regionMapScopeId;
+
+        if (!scopeId) {
+          return;
+        }
+
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              label: previewButton.dataset.regionMapScopeLabel,
+              href: previewButton.dataset.regionMapScopeHref,
+              trigger: "preview"
+            }
+          })
+        );
+      });
+      root.addEventListener("focusin", (event) => {
+        const overlayControl = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>(
+          "[data-region-map-overlay-control]"
+        );
+
+        if (!overlayControl) {
+          return;
+        }
+
+        const regionName = overlayControl.dataset.regionMapOverlayControl;
+
+        if (!regionName) {
+          return;
+        }
+
+        updateRegionMapSummary(root, regionName, "focus");
+        promoteScopeSelection(regionName, "focus");
+      });
+
+      for (const link of links) {
+        const regionName = link.dataset.regionMapRegion;
+
+        if (!regionName) {
+          continue;
+        }
+
+        link.addEventListener("focus", () => {
+          updateRegionMapSummary(root, regionName, "focus");
+          promoteScopeSelection(regionName, "focus");
+        });
+        link.addEventListener("click", (event) => {
+          if (root.dataset.regionMapLinkMode === "select") {
+            event.preventDefault();
+          }
+
+          updateRegionMapSummary(root, regionName, "click");
+          promoteScopeSelection(regionName, "click");
+        });
+      }
+
+      const initial = root.dataset.initialRegion ?? "";
+      updateRegionMapSummary(root, initial || undefined);
+      fitRegionMap(root);
+      if (initial) {
+        setRegionMapFocus(root, initial, "program");
+      }
+    }
+  }
+</script>

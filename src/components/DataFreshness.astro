@@ -1,0 +1,70 @@
+---
+interface Props {
+  updated: string;
+  nextUpdate?: string;
+  source: string;
+  sourceUrl?: string;
+}
+
+const { updated, nextUpdate, source, sourceUrl } = Astro.props;
+
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+function daysAgo(iso: string): number {
+  return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+}
+
+const age = daysAgo(updated);
+const freshness = age <= 30 ? "fresh" : age <= 90 ? "recent" : age <= 180 ? "aging" : "stale";
+---
+
+<span class={`freshness-badge freshness-${freshness}`}>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  <span>Updated {formatDate(updated)}</span>
+  {nextUpdate && <span class="freshness-next"> · Next: {formatDate(nextUpdate)}</span>}
+  <span class="freshness-sep"> · </span>
+  {sourceUrl ? (
+    <a href={sourceUrl} target="_blank" rel="noopener" class="freshness-source">{source}</a>
+  ) : (
+    <span class="freshness-source">{source}</span>
+  )}
+</span>
+
+<style>
+  .freshness-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel-soft);
+    white-space: nowrap;
+    flex-wrap: wrap;
+  }
+  .freshness-fresh { border-color: rgba(16, 185, 129, 0.3); color: #10b981; }
+  .freshness-fresh svg { stroke: #10b981; }
+  .freshness-recent { border-color: rgba(6, 182, 212, 0.3); color: var(--accent); }
+  .freshness-recent svg { stroke: var(--accent); }
+  .freshness-aging { border-color: rgba(245, 158, 11, 0.3); color: #f59e0b; }
+  .freshness-aging svg { stroke: #f59e0b; }
+  .freshness-stale { border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+  .freshness-stale svg { stroke: #ef4444; }
+  .freshness-next { opacity: 0.7; }
+  .freshness-sep { opacity: 0.4; }
+  .freshness-source {
+    text-decoration: underline;
+    text-decoration-color: rgba(125, 211, 252, 0.3);
+    text-underline-offset: 2px;
+  }
+  a.freshness-source:hover { color: var(--ink); }
+  @media (max-width: 640px) {
+    .freshness-badge { font-size: 0.78rem; }
+    .freshness-next, .freshness-sep { display: none; }
+  }
+</style>

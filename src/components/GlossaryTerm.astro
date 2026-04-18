@@ -1,0 +1,73 @@
+---
+interface Props {
+  term: string;
+  definition: string;
+}
+
+const { term, definition } = Astro.props;
+const slug = term.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+---
+
+<a href={`/glossary/#${slug}`} class="glossary-term" tabindex="0" title={definition} data-glossary>
+  <slot>{term}</slot><span class="glossary-q" aria-hidden="true">?</span>
+</a>
+
+<style>
+  .glossary-term {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: rgba(6, 182, 212, 0.4);
+    text-underline-offset: 3px;
+    cursor: help;
+    position: relative;
+    color: inherit;
+  }
+  .glossary-q {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 50%;
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--accent);
+    margin-left: 2px;
+    vertical-align: super;
+    line-height: 1;
+  }
+  .glossary-term:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+  /* Tooltip on hover (desktop) */
+  @media (hover: hover) {
+    .glossary-term::after {
+      content: attr(title);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--ink-soft);
+      white-space: normal;
+      width: max-content;
+      max-width: 280px;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms;
+      box-shadow: var(--shadow-soft);
+    }
+    .glossary-term:hover::after,
+    .glossary-term:focus-visible::after {
+      opacity: 1;
+    }
+  }
+</style>

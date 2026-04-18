@@ -1,0 +1,93 @@
+---
+interface Props {
+  label: string;
+  description?: string;
+  value: number;
+  min: number;
+  median: number;
+  p90: number;
+  max: number;
+  valueLabel?: string;
+  tone?: "accent" | "teal" | "warm";
+}
+
+const { label, description, value, min, median, p90, max, valueLabel, tone = "accent" } = Astro.props;
+
+const width = 460;
+const height = 92;
+const padding = { left: 18, right: 18, top: 26, bottom: 24 };
+const range = Math.max(max - min, 1);
+const clampedValue = Math.min(Math.max(value, min), max);
+
+function positionFor(input: number): number {
+  return padding.left + ((input - min) / range) * (width - padding.left - padding.right);
+}
+
+const palette =
+  tone === "teal"
+    ? { accent: "#4EE4C3", soft: "rgba(78, 228, 195, 0.24)" }
+    : tone === "warm"
+      ? { accent: "#FF8B61", soft: "rgba(255, 139, 97, 0.24)" }
+      : { accent: "#7DD3FC", soft: "rgba(125, 211, 252, 0.24)" };
+---
+
+<article class={`benchmark-card tone-${tone}`}>
+  <div class="benchmark-copy">
+    <div>
+      <span class="tiny">{label}</span>
+      {description && <p class="tiny">{description}</p>}
+    </div>
+    <strong>{valueLabel ?? value.toLocaleString()}</strong>
+  </div>
+  <svg class="benchmark-strip" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label}>
+    <line
+      x1={padding.left}
+      y1={height / 2}
+      x2={width - padding.right}
+      y2={height / 2}
+      stroke="rgba(255,255,255,0.12)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <line
+      x1={positionFor(min)}
+      y1={height / 2}
+      x2={positionFor(p90)}
+      y2={height / 2}
+      stroke={palette.soft}
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <line
+      x1={positionFor(median)}
+      y1={height / 2 - 16}
+      x2={positionFor(median)}
+      y2={height / 2 + 16}
+      stroke="rgba(255,255,255,0.5)"
+      stroke-dasharray="4 4"
+      stroke-width="2"
+    />
+    <line
+      x1={positionFor(p90)}
+      y1={height / 2 - 16}
+      x2={positionFor(p90)}
+      y2={height / 2 + 16}
+      stroke={palette.accent}
+      stroke-dasharray="4 4"
+      stroke-width="2"
+    />
+    <circle cx={positionFor(clampedValue)} cy={height / 2} r="9" fill={palette.accent}></circle>
+    <text x={positionFor(min)} y={height - 8} class="benchmark-label">
+      low
+    </text>
+    <text x={positionFor(median)} y={height - 8} text-anchor="middle" class="benchmark-label">
+      median
+    </text>
+    <text x={positionFor(p90)} y={height - 8} text-anchor="middle" class="benchmark-label">
+      top 10%
+    </text>
+    <text x={positionFor(max)} y={height - 8} text-anchor="end" class="benchmark-label">
+      high
+    </text>
+  </svg>
+</article>

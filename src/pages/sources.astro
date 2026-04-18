@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import sourceScope from "../data/live/source-scope.json";
+---
+
+<BaseLayout title="Sources" description="Data sources used by UK Demographics. Census, ONS, DfE, NHS Digital, and Home Office publications.">
+  <h1>Sources</h1>
+  <p class="desc">Every figure on this site links to a published government source. This page lists the primary datasets.</p>
+
+  <section class="source-section">
+    <h2>Primary data sources</h2>
+    <div class="source-grid">
+      <div class="source-card">
+        <h3>Census 2021</h3>
+        <p>Single year of age by ethnic group by sex. Custom dataset from ONS. 292 local authorities, 116MB.</p>
+        <a href="https://www.ons.gov.uk/census" target="_blank" rel="noopener">ons.gov.uk/census</a>
+      </div>
+      <div class="source-card">
+        <h3>Census 2011</h3>
+        <p>18-group ethnicity by age by sex via NOMIS API. Used as baseline for CCR computation.</p>
+        <a href="https://www.nomisweb.co.uk/" target="_blank" rel="noopener">nomisweb.co.uk</a>
+      </div>
+      <div class="source-card">
+        <h3>ONS SNPP 2022</h3>
+        <p>Subnational Population Projections. Used as total population envelope constraint for the HP model.</p>
+        <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections" target="_blank" rel="noopener">ons.gov.uk</a>
+      </div>
+      <div class="source-card">
+        <h3>DfE School Census</h3>
+        <p>Pupil ethnicity by school and local authority, 2014/15 to 2024/25. Independent validation for ages 0-15.</p>
+        <a href="https://explore-education-statistics.service.gov.uk/" target="_blank" rel="noopener">explore-education-statistics.service.gov.uk</a>
+      </div>
+      <div class="source-card">
+        <h3>ONS Births Table 8</h3>
+        <p>Age-specific fertility rates by ethnicity and IMD decile. Used for empirical ethnic-specific TFRs.</p>
+        <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths" target="_blank" rel="noopener">ons.gov.uk</a>
+      </div>
+      <div class="source-card">
+        <h3>Home Office Immigration Statistics</h3>
+        <p>Asylum support by local authority, grant rates by nationality, detention and returns data.</p>
+        <a href="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables" target="_blank" rel="noopener">gov.uk</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h1 { font-family: "Sora", sans-serif; font-size: 1.8rem; font-weight: 800; margin: 0 0 0.5rem; }
+  .desc { color: var(--muted); font-size: 0.92rem; margin: 0 0 1.5rem; max-width: 700px; }
+  .source-section { margin-top: 1.5rem; }
+  .source-section h2 { font-family: "Sora", sans-serif; font-size: 1.15rem; font-weight: 800; margin: 0 0 1rem; }
+  .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem; }
+  .source-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  .source-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin: 0; }
+  .source-card p { font-size: 0.85rem; color: var(--muted); margin: 0; line-height: 1.4; }
+  .source-card a { font-size: 0.82rem; color: var(--accent); text-decoration: none; margin-top: auto; }
+  .source-card a:hover { text-decoration: underline; }
+</style>

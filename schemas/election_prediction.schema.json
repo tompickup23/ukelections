@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/election_prediction.schema.json",
+  "title": "Election prediction",
+  "type": "object",
+  "required": [
+    "prediction_id",
+    "model_version",
+    "contest_id",
+    "party_name",
+    "p10",
+    "p50",
+    "p90",
+    "win_probability",
+    "generated_at",
+    "input_snapshot_id"
+  ],
+  "properties": {
+    "prediction_id": { "type": "string", "minLength": 1 },
+    "model_version": { "type": "string", "minLength": 1 },
+    "contest_id": { "type": "string", "minLength": 1 },
+    "party_name": { "type": "string", "minLength": 1 },
+    "p10": { "type": "number", "minimum": 0, "maximum": 1 },
+    "p50": { "type": "number", "minimum": 0, "maximum": 1 },
+    "p90": { "type": "number", "minimum": 0, "maximum": 1 },
+    "win_probability": { "type": "number", "minimum": 0, "maximum": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "input_snapshot_id": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": true
+}

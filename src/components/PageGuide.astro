@@ -1,0 +1,45 @@
+---
+interface GuideItem {
+  eyebrow?: string;
+  title: string;
+  body: string;
+  href?: string;
+  cta?: string;
+  tone?: string;
+}
+
+interface Props {
+  id?: string;
+  kicker?: string;
+  title: string;
+  intro: string;
+  items: GuideItem[];
+}
+
+const { id, kicker = "Use this page", title, intro, items } = Astro.props;
+---
+
+<section id={id} class="section section-anchor page-guide">
+  <div class="section-head">
+    <div>
+      <span class="tiny">{kicker}</span>
+      <h2>{title}</h2>
+      <p class="lede">{intro}</p>
+    </div>
+  </div>
+  <div class="guide-grid page-guide-grid">
+    {items.map((item, index) => (
+      <article class:list={["guide-card", "page-guide-card", item.tone ?? ""]}>
+        <span class="page-guide-step">{String(index + 1).padStart(2, "0")}</span>
+        {item.eyebrow && <span class="chip">{item.eyebrow}</span>}
+        <h3>{item.title}</h3>
+        <p>{item.body}</p>
+        {item.href && item.cta && (
+          <p class="tiny">
+            <a class="source-pill" href={item.href}>{item.cta}</a>
+          </p>
+        )}
+      </article>
+    ))}
+  </div>
+</section>

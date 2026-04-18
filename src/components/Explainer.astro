@@ -1,0 +1,86 @@
+---
+interface Props {
+  headline: string;
+  body: string;
+  stat?: string;
+  statLabel?: string;
+  icon?: "money" | "people" | "clock" | "chart" | "shield";
+}
+
+const { headline, body, stat, statLabel, icon = "chart" } = Astro.props;
+
+const svgIcons: Record<string, string> = {
+  money: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/><line x1="6" y1="5" x2="7" y2="5"/><line x1="6" y1="19" x2="7" y2="19"/></svg>`,
+  people: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>`,
+  clock: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  chart: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  shield: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`
+};
+---
+
+<div class="explainer-card">
+  <div class="explainer-icon" set:html={svgIcons[icon]} />
+  {stat && (
+    <div class="explainer-stat">
+      <span class="explainer-stat-value">{stat}</span>
+      {statLabel && <span class="explainer-stat-label">{statLabel}</span>}
+    </div>
+  )}
+  <h3 class="explainer-headline">{headline}</h3>
+  <p class="explainer-body">{body}</p>
+</div>
+
+<style>
+  .explainer-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    text-align: center;
+  }
+  .explainer-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .explainer-stat {
+    margin-bottom: 0.5rem;
+  }
+  .explainer-stat-value {
+    display: block;
+    font-family: "Sora", sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .explainer-stat-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .explainer-headline {
+    font-family: "Sora", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 0.35rem;
+    line-height: 1.3;
+  }
+  .explainer-body {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  @media (max-width: 640px) {
+    .explainer-card { padding: 1.25rem 1rem; }
+    .explainer-stat-value { font-size: 1.5rem; }
+  }
+</style>

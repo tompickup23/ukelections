@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DataFreshness from "../components/DataFreshness.astro";
+import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+import rawProjections from "../data/live/ethnic-projections.json";
+import { getPublicPlaceAreas, slugifyAreaName } from "../lib/site";
+
+const projData = rawProjections as any;
+const areas = getPublicPlaceAreas();
+const shifts2051 = getSignificantDemographicShifts(2051);
+const shifts2061 = getSignificantDemographicShifts(2061);
+
+const allAreaCodes = Object.keys(projData.areas);
+const muslimMajority = allAreaCodes.filter(c => projData.areas[c]?.muslimPct2051 > 50).length;
+
+// Top 20 fastest declining WBI
+const fastestDecline = [...areas]
+  .filter(a => a.wbiPct2021 != null && a.wbiPct2041 != null)
+  .sort((a, b) => (a.wbiPct2041! - a.wbiPct2021!) - (b.wbiPct2041! - b.wbiPct2021!))
+  .slice(0, 20);
+---
+
+<BaseLayout
+  title="National demographic outlook"
+  description={`England's ethnic composition is transforming. ${shifts2051.length} areas projected White British under 50% by 2051. Hamilton-Perry model, Census-verified.`}
+>
+  <h1>National demographic outlook</h1>
+  <p class="desc">England-wide projections from Census 2021 to 2061. Hamilton-Perry CCR model with 1,000 Monte Carlo simulations.</p>
+
+  <DataFreshness updated={projData.lastUpdated ?? "2026-04-14"} source="Census 2021, ONS SNPP" sourceUrl="https://www.ons.gov.uk/census" />
+
+  <section class="stats-grid">
+    <div class="stat-card"><span class="stat-value">{areas.length}</span><span class="stat-label">Local authorities modelled</span></div>
+    <div class="stat-card"><span class="stat-value" style="color:var(--coral)">{shifts2051.length}</span><span class="stat-label">WBI under 50% by 2051</span></div>
+    <div class="stat-card"><span class="stat-value" style="color:var(--accent-3)">{shifts2061.length}</span><span class="stat-label">WBI under 50% by 2061</span></div>
+    <div class="stat-card"><span class="stat-value" style="color:var(--accent)">{muslimMajority}</span><span class="stat-label">Muslim majority by 2051</span></div>
+  </section>
+
+  <section class="table-section">
+    <h2>Fastest WBI decline: 2021 → 2041</h2>
+    <div class="area-table">
+      <div class="area-table-header"><span>#</span><span>Area</span><span>2021</span><span>2041</span><span>Change</span></div>
+      {fastestDecline.map((a, i) => (
+        <a href={`/places/${slugifyAreaName(a.areaName)}/`} class="area-row">
+          <span class="rank">{i+1}</span>
+          <span class="name">{a.areaName}</span>
+          <span class="val">{a.wbiPct2021?.toFixed(1)}%</span>
+          <span class="val proj">{a.wbiPct2041?.toFixed(1)}%</span>
+          <span class="val change">{((a.wbiPct2041 ?? 0) - (a.wbiPct2021 ?? 0)).toFixed(1)}pp</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h1 { font-family: "Sora", sans-serif; font-size: 1.8rem; font-weight: 800; margin: 0 0 0.5rem; }
+  .desc { color: var(--muted); font-size: 0.92rem; margin: 0 0 1.5rem; max-width: 700px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+  .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; }
+  .stat-value { font-family: "Sora", sans-serif; font-size: 1.75rem; font-weight: 800; line-height: 1; color: var(--ink); }
+  .stat-label { font-size: 0.85rem; color: var(--muted); }
+  .table-section { margin-top: 2rem; }
+  .table-section h2 { font-family: "Sora", sans-serif; font-size: 1.15rem; font-weight: 800; margin: 0 0 0.75rem; }
+  .area-table { max-width: 700px; }
+  .area-table-header { display: grid; grid-template-columns: 32px 1fr 70px 70px 70px; padding: 0.5rem 0.75rem; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border-strong); }
+  .area-row { display: grid; grid-template-columns: 32px 1fr 70px 70px 70px; align-items: center; padding: 0.5rem 0.75rem; text-decoration: none; color: var(--ink); border-bottom: 1px solid var(--border); transition: background 120ms; }
+  .area-row:hover { background: rgba(79, 70, 229, 0.06); }
+  .rank { font-size: 0.82rem; color: var(--muted); font-weight: 700; }
+  .name { font-weight: 600; font-size: 0.88rem; }
+  .val { font-family: "Sora", sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--accent); }
+  .val.proj { color: var(--coral); }
+  .val.change { color: var(--muted); }
+</style>

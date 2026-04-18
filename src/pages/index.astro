@@ -1,0 +1,852 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DataFreshness from "../components/DataFreshness.astro";
+import ShareButton from "../components/ShareButton.astro";
+import SisterSiteTeaser from "../components/SisterSiteTeaser.astro";
+import { getSignificantDemographicShifts, getEthnicProjection } from "../lib/ethnic-projections";
+import rawProjections from "../data/live/ethnic-projections.json";
+import { slugifyAreaName, SITE_URL, getPublicPlaceAreas } from "../lib/site";
+import { getCollection } from "astro:content";
+
+const projData = rawProjections as any;
+const publicAreas = getPublicPlaceAreas();
+const totalAreas = publicAreas.length;
+
+function fmtInt(n: number) { return n.toLocaleString("en-GB"); }
+
+// Demographic modelling data
+const demographicShifts = getSignificantDemographicShifts(2051);
+const areasBelow50 = demographicShifts.length;
+const demographicShifts2061 = getSignificantDemographicShifts(2061);
+const areasBelow50by2061 = demographicShifts2061.length;
+
+// Dynamic demographic counts
+const allAreaCodes = Object.keys(projData.areas);
+const muslimMajority2051 = allAreaCodes.filter(code => {
+  const mp = projData.areas[code]?.muslimPct2051;
+  return mp && mp > 50;
+}).length;
+const foreignBornMajority2051 = allAreaCodes.filter(code => {
+  const fb = projData.areas[code]?.nativity?.["2051"]?.foreignBornPct;
+  return fb && fb > 50;
+}).length;
+
+// Regional summary
+const regionCounts = new Map<string, { count: number; avgWbi2021: number; sumPop: number }>();
+for (const area of publicAreas) {
+  const r = regionCounts.get(area.regionName) ?? { count: 0, avgWbi2021: 0, sumPop: 0 };
+  r.count++;
+  r.avgWbi2021 += (area.wbiPct2021 ?? 0) * (area.population ?? 0);
+  r.sumPop += area.population ?? 0;
+  regionCounts.set(area.regionName, r);
+}
+const topRegions = [...regionCounts.entries()]
+  .map(([name, r]) => ({ name, count: r.count, avgWbi: r.sumPop > 0 ? (r.avgWbi2021 / r.sumPop) : 0, pop: r.sumPop }))
+  .filter(r => r.name !== "Unknown")
+  .sort((a, b) => a.avgWbi - b.avgWbi)
+  .slice(0, 6);
+
+// Top areas by fastest WBI decline
+const topChangingAreas = publicAreas
+  .filter(a => a.wbiPct2021 != null && a.wbiPct2041 != null)
+  .sort((a, b) => ((a.wbiPct2041! - a.wbiPct2021!) - (b.wbiPct2041! - b.wbiPct2021!)))
+  .slice(0, 10);
+
+// Get latest findings
+const allFindings = await getCollection("findings");
+const topFindings = allFindings
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+function findingLabel(verdict: string): string {
+  const labels: Record<string, string> = {
+    critical: "INVESTIGATION",
+    alert: "FINDING",
+    info: "ANALYSIS",
+    resolved: "RESOLVED",
+  };
+  return labels[verdict] ?? "FINDING";
+}
+
+function findingColor(verdict: string): string {
+  const colors: Record<string, string> = {
+    critical: "var(--coral)",
+    alert: "var(--accent-3)",
+    info: "var(--accent)",
+    resolved: "var(--accent-2)",
+  };
+  return colors[verdict] ?? "var(--accent)";
+}
+---
+
+<BaseLayout
+  title="UK Demographics — population projections for every community"
+  description={`${fmtInt(totalAreas)} local authorities. Ethnic projections to 2061. Census 2021 to the future. Every figure sourced from ONS data.`}
+>
+  <!-- ═══ HERO ═══ -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Census 2021 to 2061 — Hamilton-Perry projections</div>
+      <h1 class="hero-headline">
+        <span class="hero-stat">{fmtInt(totalAreas)}</span>
+        <span class="hero-label">local authorities. Every community mapped.</span>
+      </h1>
+      <p class="hero-subline">
+        The most detailed publicly available ethnic composition projections for England.
+        20 ethnic groups. Census-direct methodology. 1,000 Monte Carlo simulations.
+        From 2021 observed data to 2061 projections.
+      </p>
+      <a class="hero-source" href="/methodology/">
+        Hamilton-Perry CCR model &middot; MAE 1.72pp &middot; Full methodology &rarr;
+      </a>
+
+      <!-- Search in hero -->
+      <div class="hero-search">
+        <input
+          type="search"
+          id="area-search"
+          placeholder="Enter your postcode or area name..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search for a local authority"
+        />
+        <div class="lookup-results" id="area-results" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TOP FINDINGS ═══ -->
+  {topFindings.length > 0 && (
+    <section class="findings-strip shell">
+      <h2 class="strip-title">Latest research</h2>
+      <div class="findings-row">
+        {topFindings.map((finding) => (
+          <a href={`/findings/${finding.slug}/`} class="finding-strip-card">
+            <span class="fsc-verdict" style={`color: ${findingColor(finding.data.verdict)}`}>{findingLabel(finding.data.verdict)}</span>
+            <span class="fsc-stat" style={`color: ${findingColor(finding.data.verdict)}`}>{finding.data.stat_value}</span>
+            <span class="fsc-headline">{finding.data.headline}</span>
+            <span class="fsc-cta">Read more &rarr;</span>
+          </a>
+        ))}
+      </div>
+      <a href="/findings/" class="cta-link">All {allFindings.length} findings &rarr;</a>
+    </section>
+  )}
+
+  <!-- ═══ IMPACT STRIP ═══ -->
+  <section class="impact-strip shell" aria-label="Headline demographic impact">
+    <div class="impact-strip-inner">
+      <div class="impact-item impact-item--hero">
+        <span class="impact-number">73.3% &rarr; 48.7%</span>
+        <span class="impact-label">White British share, 2021 &rarr; 2051</span>
+        <span class="impact-context">Population-weighted across {fmtInt(totalAreas)} local authorities. Observed Census 2021 → Hamilton-Perry projection.</span>
+        <span class="impact-calc">Illustrative 2061: 40.2%. Full trajectory in the model below.</span>
+      </div>
+      <div class="impact-item">
+        <span class="impact-number">{areasBelow50}</span>
+        <span class="impact-label">areas below 50% WB by 2051</span>
+        <span class="impact-context">{areasBelow50by2061} by 2061. Click any area for its 2011&ndash;2061 trajectory.</span>
+      </div>
+      <div class="impact-item">
+        <span class="impact-number">{foreignBornMajority2051}</span>
+        <span class="impact-label">areas projected foreign-born majority by 2051</span>
+        <span class="impact-context">{muslimMajority2051} projected Muslim majority by 2051.</span>
+      </div>
+    </div>
+    <p class="impact-source">Census 2011 and 2021 observed. 2051 and 2061 projected by Hamilton-Perry CCR model, 1,000 Monte Carlo simulations, MAE 1.72pp against 2021 observed. <a href="/methodology/">Full methodology &rarr;</a></p>
+  </section>
+
+  <!-- ═══ DEMOGRAPHIC PROJECTIONS ═══ -->
+  <section class="demo-section shell" id="demographics">
+    <div class="demo-inner">
+      <span class="chip accent" style="margin-bottom: 0.75rem;">Hamilton-Perry model, Census-verified</span>
+      <h2 class="section-title">National ethnic composition trajectory</h2>
+      <p class="section-desc" style="max-width: 700px;">
+        The ONS does not project ethnic composition at local authority level. This model does.
+        {fmtInt(totalAreas)} local authorities. Census 2011 and 2021 observed data. Hamilton-Perry CCR methodology.
+        1,000 Monte Carlo simulations. Every ratio traced to Census observations.
+      </p>
+
+      <!-- National trajectory -->
+      <div class="demo-national">
+        <div class="demo-trajectory">
+          <span class="demo-traj-label">White British share (population-weighted, {fmtInt(totalAreas)} local authorities)</span>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment" style="width: 100%;">
+              <span class="demo-traj-year">2011 Census</span>
+              <span class="demo-traj-pct">80.5%</span>
+            </div>
+          </div>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment demo-traj-current" style="width: 73.3%;">
+              <span class="demo-traj-year">2021 Census</span>
+              <span class="demo-traj-pct">73.3%</span>
+            </div>
+          </div>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment demo-traj-proj" style="width: 48.7%;">
+              <span class="demo-traj-year">2051 projected</span>
+              <span class="demo-traj-pct">48.7%</span>
+            </div>
+          </div>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment demo-traj-proj demo-traj-illustrative" style="width: 40.2%;">
+              <span class="demo-traj-year">2061 illustrative</span>
+              <span class="demo-traj-pct">40.2%</span>
+            </div>
+          </div>
+        </div>
+        <span class="demo-traj-note">Census figures observed. 2051/2061 projected by Hamilton-Perry CCR model. 2061 is illustrative only. <a href="/methodology/">Full methodology</a></span>
+      </div>
+
+      <!-- Key stats grid -->
+      <div class="demo-key-stats">
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--coral);">{areasBelow50}</span>
+          <span class="demo-key-label">areas WBI under 50% by 2051</span>
+        </div>
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--accent-3);">{areasBelow50by2061}</span>
+          <span class="demo-key-label">areas WBI under 50% by 2061</span>
+        </div>
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--accent-3);">{muslimMajority2051}</span>
+          <span class="demo-key-label">areas projected Muslim majority by 2051</span>
+        </div>
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--accent);">{foreignBornMajority2051}</span>
+          <span class="demo-key-label">areas projected foreign-born majority by 2051</span>
+        </div>
+      </div>
+
+      <!-- Top areas bar chart -->
+      <div class="demo-bar-section">
+        <h3 class="demo-bar-title">Fastest transformation: White British % change 2021 → 2041</h3>
+        <div class="demo-bar-visual">
+          {topChangingAreas.map((area) => (
+            <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="demo-bar-row">
+              <span class="demo-bar-name">{area.areaName}</span>
+              <span class="demo-bar-track">
+                <span class="demo-bar-fill" style={`width: ${area.wbiPct2021}%`}></span>
+              </span>
+              <span class="demo-bar-pct">{area.wbiPct2021?.toFixed(0)}%</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="chip-row" style="margin-top: 1.5rem;">
+        <a href="/findings/" class="cta-btn cta-btn--primary">See the research</a>
+        <a href="/national/" class="cta-btn cta-btn--secondary">National demographic outlook</a>
+        <a href="/methodology/" class="cta-btn cta-btn--ghost">Methodology</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ YOUR AREA IN 2051 ═══ -->
+  <section class="future-section shell" id="your-area">
+    <div class="future-inner">
+      <span class="chip accent" style="margin-bottom: 0.5rem;">Explore the data</span>
+      <h2 class="section-title">What does YOUR area look like in 2051?</h2>
+      <p class="section-desc" style="max-width: 600px;">
+        {fmtInt(totalAreas)} local authority profiles. Demographic projections to 2061, religion, nativity, shift-share analysis, school data, economic profiles. All sourced. All free.
+      </p>
+      <div class="future-search">
+        <input
+          type="search"
+          id="future-search"
+          placeholder="Type your council name..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search for your area"
+        />
+        <div class="future-results" id="future-results" hidden></div>
+      </div>
+      <div class="future-preview" id="future-preview" hidden>
+        <div class="future-card">
+          <h3 id="future-area-name"></h3>
+          <div class="future-stats">
+            <div class="future-stat">
+              <span class="future-stat-label">Population</span>
+              <span class="future-stat-value" id="future-pop"></span>
+            </div>
+            <div class="future-stat">
+              <span class="future-stat-label">White British 2021</span>
+              <span class="future-stat-value" id="future-wb-now"></span>
+            </div>
+            <div class="future-stat">
+              <span class="future-stat-label">White British 2051</span>
+              <span class="future-stat-value" id="future-wb-2051"></span>
+            </div>
+          </div>
+          <a class="cta-btn cta-btn--primary" id="future-link" href="/places/">See the full profile &rarr;</a>
+        </div>
+      </div>
+      <a href="/places/" class="cta-link" style="margin-top: 1rem;">Browse all {fmtInt(totalAreas)} areas &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ═══ REGIONAL OVERVIEW ═══ -->
+  {topRegions.length > 0 && (
+    <section class="pressure-section shell" id="regional">
+      <h2 class="section-title">Most diverse regions</h2>
+      <p class="section-desc">
+        Regional variation in ethnic composition. Sorted by lowest population-weighted White British share.
+      </p>
+      <div class="region-grid">
+        {topRegions.map((region) => (
+          <div class="region-card">
+            <span class="region-name">{region.name}</span>
+            <span class="region-stat">{region.avgWbi.toFixed(1)}%</span>
+            <span class="region-rate">WBI (pop-weighted) &middot; {region.count} areas</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- ═══ SISTER SITE (asylumstats) ═══ -->
+  <SisterSiteTeaser />
+
+  <!-- ═══ CTA STRIP ═══ -->
+  <section class="cta-section shell">
+    <div class="cta-inner">
+      <h2>Every projection sourced. Every figure checked.</h2>
+      <p>Census 2021 observed data. Hamilton-Perry methodology. Click any figure and trace it back to the ONS. Then decide for yourself.</p>
+      <div class="cta-buttons">
+        <a href="/places/" class="cta-btn cta-btn--primary">Look up your area</a>
+        <a href="/findings/" class="cta-btn cta-btn--secondary">Read the research</a>
+        <a href="/sources/" class="cta-btn cta-btn--ghost">Check the sources</a>
+      </div>
+      <div style="margin-top: 1rem;">
+        <ShareButton
+          url={SITE_URL}
+          title="UK Demographics — population projections for every community"
+          text={`${fmtInt(totalAreas)} local authorities. Ethnic projections to 2061. See the data: ${SITE_URL}`}
+          compact
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const searchInput = document.getElementById("area-search") as HTMLInputElement | null;
+  const resultsContainer = document.getElementById("area-results");
+
+  if (searchInput && resultsContainer) {
+    let areas: Array<{ areaCode: string; areaName: string; regionName: string; wbiPct2021?: number; population?: number }> = [];
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          areas = data;
+        } else if (data.areas) {
+          areas = data.areas;
+        }
+      })
+      .catch(() => {});
+
+    const postcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+    const partialPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d/i;
+    let postcodeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    function slugify(name: string) {
+      return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function showPostcodeResult(areaName: string, laCode: string, postcode: string) {
+      resultsContainer!.innerHTML = "";
+      resultsContainer!.hidden = false;
+      const matchedArea = areas.find((a) => a.areaCode === laCode);
+      const link = document.createElement("a");
+      link.href = `/places/${slugify(areaName)}/`;
+      link.className = "lookup-result";
+      const strong = document.createElement("strong");
+      strong.textContent = `${postcode.toUpperCase()} → ${areaName}`;
+      const span = document.createElement("span");
+      span.textContent = matchedArea
+        ? `${matchedArea.regionName} · View demographic projections`
+        : "View demographic projections";
+      link.appendChild(strong);
+      link.appendChild(span);
+      resultsContainer!.appendChild(link);
+    }
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim();
+      const queryLower = query.toLowerCase();
+      resultsContainer!.innerHTML = "";
+
+      if (query.length < 2) {
+        resultsContainer!.hidden = true;
+        return;
+      }
+
+      if (postcodeRegex.test(query) || (partialPostcodeRegex.test(query) && query.length >= 5)) {
+        resultsContainer!.hidden = false;
+        resultsContainer!.innerHTML = '<div class="lookup-result" style="opacity:0.5">Looking up postcode...</div>';
+
+        if (postcodeTimeout) clearTimeout(postcodeTimeout);
+        postcodeTimeout = setTimeout(() => {
+          const clean = query.replace(/\s+/g, "").toUpperCase();
+          fetch(`https://api.postcodes.io/postcodes/${clean}`)
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.status === 200 && data.result) {
+                const adminDistrict = data.result.admin_district;
+                const laCode = data.result.codes?.admin_district;
+                if (adminDistrict) {
+                  showPostcodeResult(adminDistrict, laCode, query);
+                }
+              } else {
+                resultsContainer!.innerHTML = '<div class="lookup-result" style="opacity:0.5">Postcode not found — try an area name</div>';
+              }
+            })
+            .catch(() => {
+              resultsContainer!.innerHTML = '<div class="lookup-result" style="opacity:0.5">Could not look up postcode</div>';
+            });
+        }, 300);
+        return;
+      }
+
+      const matches = areas
+        .filter((a) => a.areaName.toLowerCase().includes(queryLower))
+        .slice(0, 8);
+
+      if (matches.length === 0) {
+        resultsContainer!.hidden = true;
+        return;
+      }
+
+      resultsContainer!.hidden = false;
+      for (const area of matches) {
+        const link = document.createElement("a");
+        link.href = `/places/${slugify(area.areaName)}/`;
+        link.className = "lookup-result";
+        const strong = document.createElement("strong");
+        strong.textContent = area.areaName;
+        const span = document.createElement("span");
+        span.textContent = `${area.regionName} · View projections`;
+        link.appendChild(strong);
+        link.appendChild(span);
+        resultsContainer!.appendChild(link);
+      }
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        resultsContainer!.hidden = true;
+        searchInput.value = "";
+      }
+    });
+  }
+
+  // Future area search + preview
+  const futureInput = document.getElementById("future-search") as HTMLInputElement | null;
+  const futureResults = document.getElementById("future-results");
+  const futurePreview = document.getElementById("future-preview");
+
+  if (futureInput && futureResults && futurePreview) {
+    let futureAreas: any[] = [];
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data) => {
+        futureAreas = Array.isArray(data) ? data : data.areas ?? [];
+      })
+      .catch(() => {});
+
+    futureInput.addEventListener("input", () => {
+      const query = futureInput.value.trim().toLowerCase();
+      futureResults.textContent = "";
+      futurePreview.hidden = true;
+
+      if (query.length < 2) {
+        futureResults.hidden = true;
+        return;
+      }
+
+      const matches = futureAreas
+        .filter((a: any) => a.areaName.toLowerCase().includes(query))
+        .slice(0, 6);
+
+      if (matches.length === 0) {
+        futureResults.hidden = true;
+        return;
+      }
+
+      futureResults.hidden = false;
+      for (const area of matches) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "future-result-btn";
+        btn.textContent = `${area.areaName} (${area.regionName})`;
+        btn.addEventListener("click", () => {
+          futureInput.value = area.areaName;
+          futureResults.hidden = true;
+          showFuturePreview(area);
+        });
+        futureResults.appendChild(btn);
+      }
+    });
+
+    function showFuturePreview(area: any): void {
+      if (!futurePreview) return;
+      const nameEl = document.getElementById("future-area-name");
+      const popEl = document.getElementById("future-pop");
+      const wbNowEl = document.getElementById("future-wb-now");
+      const wb2051El = document.getElementById("future-wb-2051");
+      const linkEl = document.getElementById("future-link") as HTMLAnchorElement;
+
+      if (nameEl) nameEl.textContent = area.areaName;
+      if (popEl) popEl.textContent = area.population ? area.population.toLocaleString() : "n/a";
+      if (wbNowEl) wbNowEl.textContent = area.wbiNow ? `${area.wbiNow}%` : (area.wbiPct2021 ? `${area.wbiPct2021}%` : "n/a");
+      if (wb2051El) wb2051El.textContent = area.wbi2051 ? `${area.wbi2051}%` : "n/a";
+      if (linkEl) linkEl.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
+
+      futurePreview.hidden = false;
+    }
+  }
+</script>
+
+<style>
+  /* ═══ HERO ═══ */
+  .hero-section {
+    padding: 4rem 1.5rem 3rem;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(79, 70, 229, 0.08) 0%, transparent 60%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translateX(-50%);
+    background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(79, 70, 229, 0.06) 30deg, transparent 60deg);
+    animation: radar-sweep 8s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes radar-sweep {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-section::before { animation: none; opacity: 0; }
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: "Sora", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .hero-headline {
+    margin: 0;
+    line-height: 1.1;
+  }
+  .hero-stat {
+    display: block;
+    font-family: "Sora", sans-serif;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .hero-label {
+    display: block;
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 0.25rem;
+  }
+  .hero-subline {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 1.25rem auto 0;
+    line-height: 1.6;
+  }
+  .hero-source {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 180ms;
+  }
+  .hero-source:hover { opacity: 1; }
+
+  /* Search in hero */
+  .hero-search {
+    max-width: 560px;
+    margin: 2rem auto 0;
+    position: relative;
+    text-align: left;
+  }
+  .hero-search input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    font-family: "Manrope", sans-serif;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 180ms, box-shadow 180ms;
+  }
+  .hero-search input::placeholder { color: var(--muted); opacity: 0.7; }
+  .hero-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .hero-search .lookup-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 50;
+  }
+  .hero-search .lookup-results[hidden] { display: none; }
+  .hero-search :global(.lookup-result) {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms;
+  }
+  .hero-search :global(.lookup-result:hover) { background: rgba(79, 70, 229, 0.08); }
+  .hero-search :global(.lookup-result strong) { font-size: 0.95rem; }
+  .hero-search :global(.lookup-result span) { font-size: 0.82rem; color: var(--muted); }
+
+  /* ═══ FINDINGS STRIP ═══ */
+  .findings-strip { margin-top: 3rem; }
+  .strip-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+  .findings-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+  .finding-strip-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-decoration: none;
+    transition: border-color 180ms, box-shadow 180ms, transform 180ms;
+  }
+  .finding-strip-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+  .fsc-verdict { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+  .fsc-stat { font-family: "Sora", sans-serif; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .fsc-headline { font-size: 0.88rem; font-weight: 600; color: var(--ink-soft); line-height: 1.4; }
+  .fsc-cta { font-size: 0.82rem; color: var(--accent); margin-top: auto; }
+
+  /* ═══ SECTIONS ═══ */
+  .section-title {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.02em;
+  }
+  .section-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 1.5rem;
+    max-width: 600px;
+  }
+
+  /* ═══ DEMOGRAPHICS ═══ */
+  .demo-section { margin-top: 3rem; padding: 2.5rem 0; border-top: 1px solid var(--border); }
+  .demo-inner { max-width: 900px; }
+  .demo-national { margin-top: 1.5rem; padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--panel); }
+  .demo-traj-label { display: block; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.75rem; }
+  .demo-traj-bar { margin-bottom: 0.5rem; }
+  .demo-traj-segment {
+    display: flex; justify-content: space-between; align-items: center;
+    height: 36px; padding: 0 0.75rem; border-radius: 6px;
+    background: linear-gradient(90deg, var(--accent), rgba(79, 70, 229, 0.3));
+    transition: width 600ms ease;
+  }
+  .demo-traj-current { background: linear-gradient(90deg, var(--accent-3), rgba(6, 182, 212, 0.3)); }
+  .demo-traj-proj { background: linear-gradient(90deg, var(--coral), rgba(239, 68, 68, 0.2)); }
+  .demo-traj-illustrative { opacity: 0.6; border: 1px dashed rgba(239, 68, 68, 0.4); background: linear-gradient(90deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1)); }
+  .demo-traj-year { font-family: "Sora", sans-serif; font-size: 0.82rem; font-weight: 700; color: rgba(0, 0, 0, 0.7); }
+  .demo-traj-pct { font-family: "Sora", sans-serif; font-size: 0.92rem; font-weight: 800; color: rgba(0, 0, 0, 0.8); }
+  .demo-traj-note { display: block; font-size: 0.75rem; color: var(--muted); opacity: 0.6; margin-top: 0.5rem; line-height: 1.4; }
+  .demo-traj-note a { color: var(--accent); }
+  .demo-key-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1.5rem; }
+  .demo-key-stat { text-align: center; padding: 1rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--panel); }
+  .demo-key-number { display: block; font-family: "Sora", sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+  .demo-key-label { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.3; }
+  .demo-bar-section { margin-top: 1.5rem; }
+  .demo-bar-title { font-family: "Sora", sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--ink-soft); margin: 0 0 0.75rem; }
+  .demo-bar-visual { display: flex; flex-direction: column; gap: 0.35rem; }
+  .demo-bar-row { display: grid; grid-template-columns: 120px 1fr 42px; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--ink); padding: 0.3rem 0; transition: opacity 180ms; }
+  .demo-bar-row:hover { opacity: 0.8; }
+  .demo-bar-name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .demo-bar-track { display: block; height: 20px; background: rgba(239, 68, 68, 0.15); border-radius: 4px; overflow: hidden; }
+  .demo-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), rgba(79, 70, 229, 0.4)); border-radius: 4px; min-width: 4px; }
+  .demo-bar-pct { font-family: "Sora", sans-serif; font-size: 0.82rem; font-weight: 700; text-align: right; color: var(--muted); }
+  .chip-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  /* ═══ REGIONS ═══ */
+  .pressure-section { margin-top: 3rem; }
+  .region-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+  .region-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none;
+    transition: border-color 180ms, box-shadow 180ms;
+  }
+  .region-card:hover { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
+  .region-name { font-weight: 700; font-size: 0.92rem; color: var(--ink); }
+  .region-stat { font-family: "Sora", sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+  .region-rate { font-size: 0.82rem; color: var(--muted); }
+
+  /* ═══ FUTURE AREA ═══ */
+  .future-section { margin-top: 3rem; padding: 2.5rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: center; }
+  .future-inner { max-width: 640px; margin: 0 auto; }
+  .future-search { position: relative; max-width: 480px; margin: 1.25rem auto 0; text-align: left; }
+  .future-search input { width: 100%; padding: 0.85rem 1rem; font-size: 1rem; font-family: "Manrope", sans-serif; color: var(--ink); background: var(--bg-soft); border: 2px solid var(--border-strong); border-radius: var(--radius-sm); outline: none; transition: border-color 180ms; }
+  .future-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+  .future-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--bg-soft); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); z-index: 50; max-height: 240px; overflow-y: auto; }
+  .future-results[hidden] { display: none; }
+  .future-result-btn { display: block; width: 100%; padding: 0.65rem 1rem; text-align: left; font-size: 0.92rem; color: var(--ink); background: none; border: none; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 120ms; }
+  .future-result-btn:hover { background: rgba(79, 70, 229, 0.08); }
+  .future-preview { margin-top: 1.25rem; }
+  .future-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.5rem; text-align: left; }
+  .future-card h3 { font-family: "Sora", sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--ink); margin: 0 0 1rem; }
+  .future-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+  .future-stat-label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.2rem; }
+  .future-stat-value { font-family: "Sora", sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--accent); }
+
+  /* ═══ CTAs ═══ */
+  .cta-link { display: inline-block; margin-top: 1.25rem; font-size: 0.92rem; font-weight: 700; color: var(--accent); text-decoration: none; }
+  .cta-link:hover { text-decoration: underline; }
+  .cta-section { margin-top: 4rem; padding: 3rem 0 4rem; text-align: center; border-top: 1px solid var(--border); }
+  .cta-inner h2 { font-family: "Sora", sans-serif; font-size: 1.8rem; font-weight: 800; margin: 0; }
+  .cta-inner p { color: var(--muted); margin: 0.75rem auto 1.5rem; max-width: 500px; }
+  .cta-buttons { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ═══ IMPACT STRIP ═══ */
+  .impact-strip {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(79, 70, 229, 0.05) 0%, transparent 100%);
+  }
+  .impact-strip-inner {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .impact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0 0.5rem;
+  }
+  .impact-item--hero { position: relative; }
+  .impact-item--hero::after {
+    content: "";
+    position: absolute;
+    right: -0.75rem;
+    top: 10%;
+    bottom: 10%;
+    width: 1px;
+    background: var(--border);
+  }
+  .impact-number {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 800;
+    color: var(--coral);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .impact-item:not(.impact-item--hero) .impact-number { color: var(--accent); }
+  .impact-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 0.3rem;
+  }
+  .impact-context {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .impact-calc {
+    font-size: 0.72rem;
+    color: var(--muted);
+    opacity: 0.65;
+    margin-top: 0.25rem;
+    font-family: "Sora", sans-serif;
+  }
+  .impact-source {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+  .impact-source a { color: var(--accent); }
+
+  /* ═══ MOBILE ═══ */
+  @media (max-width: 640px) {
+    .hero-section { padding: 2.5rem 1rem 2rem; }
+    .impact-strip-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+    .impact-item--hero::after { display: none; }
+    .impact-number { font-size: 1.8rem; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .findings-row { grid-template-columns: 1fr; }
+    .fsc-stat { font-size: 1.4rem; }
+    .demo-key-stats { grid-template-columns: repeat(2, 1fr); }
+    .demo-key-number { font-size: 1.5rem; }
+    .demo-bar-row { grid-template-columns: 100px 1fr 36px; }
+    .demo-bar-name { font-size: 0.78rem; }
+    .demo-traj-segment { height: 30px; }
+    .demo-traj-pct { font-size: 0.82rem; }
+    .future-stats { grid-template-columns: 1fr; gap: 0.5rem; }
+    .future-stat-value { font-size: 1.15rem; }
+  }
+</style>

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/election_contest.schema.json",
+  "title": "Election contest",
+  "type": "object",
+  "required": [
+    "contest_id",
+    "area_id",
+    "election_date",
+    "election_type",
+    "voting_system",
+    "seats_available",
+    "source_url"
+  ],
+  "properties": {
+    "contest_id": { "type": "string", "minLength": 1 },
+    "area_id": { "type": "string", "minLength": 1 },
+    "election_date": { "type": "string", "format": "date" },
+    "election_type": {
+      "type": "string",
+      "enum": [
+        "general",
+        "local",
+        "mayoral",
+        "pcc",
+        "scottish_parliament",
+        "senedd",
+        "assembly",
+        "by_election"
+      ]
+    },
+    "voting_system": {
+      "type": "string",
+      "enum": ["fptp", "ams", "closed_list_pr", "stv"]
+    },
+    "seats_available": { "type": "integer", "minimum": 1 },
+    "source_url": { "type": "string", "format": "uri" }
+  },
+  "additionalProperties": true
+}

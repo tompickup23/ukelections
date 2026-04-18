@@ -1,0 +1,6142 @@
+{
+  "source": "Composite scoring from ethnic-projections.json, local-route-latest.json",
+  "methodology": "Service demand pressure score (0-100) from 5 components: ethnic change rate, asylum concentration, school diversity pressure, language demand, housing pressure. Each component contributes up to 20 points.",
+  "lastUpdated": "2026-04-14",
+  "totalAreas": 320,
+  "highPressureAreas": 17,
+  "moderatePressureAreas": 99,
+  "top10": [
+    {
+      "code": "E06000018",
+      "name": "Nottingham",
+      "score": 78
+    },
+    {
+      "code": "E06000038",
+      "name": "Reading",
+      "score": 78
+    },
+    {
+      "code": "E08000031",
+      "name": "Wolverhampton",
+      "score": 77
+    },
+    {
+      "code": "E08000026",
+      "name": "Coventry",
+      "score": 74
+    },
+    {
+      "code": "E08000028",
+      "name": "Sandwell",
+      "score": 74
+    },
+    {
+      "code": "E06000015",
+      "name": "Derby",
+      "score": 74
+    },
+    {
+      "code": "E06000008",
+      "name": "Blackburn with Darwen",
+      "score": 74
+    },
+    {
+      "code": "E06000002",
+      "name": "Middlesbrough",
+      "score": 74
+    },
+    {
+      "code": "E09000017",
+      "name": "Hillingdon",
+      "score": 73
+    },
+    {
+      "code": "E08000003",
+      "name": "Manchester",
+      "score": 73
+    }
+  ],
+  "areas": {
+    "E08000025": {
+      "areaName": "Birmingham",
+      "population": 1144922,
+      "serviceDemandPressureScore": 67,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 114,
+      "wbiChange2021to2041": -22.7,
+      "asylumRate": 22.28,
+      "diversityIndex": 0.79,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 18,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 20
+    },
+    "E08000012": {
+      "areaName": "Liverpool",
+      "population": 486088,
+      "serviceDemandPressureScore": 67,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 132,
+      "wbiChange2021to2041": -26.5,
+      "asylumRate": 43.01,
+      "diversityIndex": 0.5,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 21
+    },
+    "E09000017": {
+      "areaName": "Hillingdon",
+      "population": 305907,
+      "serviceDemandPressureScore": 73,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 118,
+      "wbiChange2021to2041": -23.6,
+      "asylumRate": 64.8,
+      "diversityIndex": 0.83,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 9
+    },
+    "E08000003": {
+      "areaName": "Manchester",
+      "population": 551938,
+      "serviceDemandPressureScore": 73,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 112,
+      "wbiChange2021to2041": -22.5,
+      "asylumRate": 31.31,
+      "diversityIndex": 0.81,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 16,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 10
+    },
+    "E08000035": {
+      "areaName": "Leeds",
+      "population": 811953,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 123,
+      "wbiChange2021to2041": -24.7,
+      "asylumRate": 20.97,
+      "diversityIndex": 0.55,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 10,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 37
+    },
+    "E09000018": {
+      "areaName": "Hounslow",
+      "population": 288181,
+      "serviceDemandPressureScore": 70,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 79,
+      "wbiChange2021to2041": -15.7,
+      "asylumRate": 57.44,
+      "diversityIndex": 0.86,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 15
+    },
+    "E08000026": {
+      "areaName": "Coventry",
+      "population": 345321,
+      "serviceDemandPressureScore": 74,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 138,
+      "wbiChange2021to2041": -27.6,
+      "asylumRate": 46.58,
+      "diversityIndex": 0.74,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 16,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 4
+    },
+    "E06000018": {
+      "areaName": "Nottingham",
+      "population": 323635,
+      "serviceDemandPressureScore": 78,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 120,
+      "wbiChange2021to2041": -24.1,
+      "asylumRate": 48.48,
+      "diversityIndex": 0.74,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 20,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 1
+    },
+    "E08000028": {
+      "areaName": "Sandwell",
+      "population": 341832,
+      "serviceDemandPressureScore": 74,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 147,
+      "wbiChange2021to2041": -29.4,
+      "asylumRate": 45.07,
+      "diversityIndex": 0.74,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 5
+    },
+    "E06000016": {
+      "areaName": "Leicester",
+      "population": 368571,
+      "serviceDemandPressureScore": 70,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 94,
+      "wbiChange2021to2041": -18.9,
+      "asylumRate": 38.93,
+      "diversityIndex": 0.77,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 19,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 16
+    },
+    "E09000008": {
+      "areaName": "Croydon",
+      "population": 390724,
+      "serviceDemandPressureScore": 71,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 93,
+      "wbiChange2021to2041": -18.7,
+      "asylumRate": 36.23,
+      "diversityIndex": 0.88,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 18,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 13
+    },
+    "W06000015": {
+      "areaName": "Cardiff",
+      "population": 362310,
+      "serviceDemandPressureScore": 53,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 62,
+      "wbiChange2021to2041": -12.4,
+      "asylumRate": 36.93,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 19,
+        "asylumConcentration": 18,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 77
+    },
+    "E09000003": {
+      "areaName": "Barnet",
+      "population": 389344,
+      "serviceDemandPressureScore": 65,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 89,
+      "wbiChange2021to2041": -17.8,
+      "asylumRate": 34.39,
+      "diversityIndex": 0.89,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 17,
+        "schoolPressure": 10,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 26
+    },
+    "E08000032": {
+      "areaName": "Bradford",
+      "population": 546412,
+      "serviceDemandPressureScore": 67,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 84,
+      "wbiChange2021to2041": -16.8,
+      "asylumRate": 24.27,
+      "diversityIndex": 0.6,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 12,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 22
+    },
+    "E08000031": {
+      "areaName": "Wolverhampton",
+      "population": 263726,
+      "serviceDemandPressureScore": 77,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 125,
+      "wbiChange2021to2041": -25.1,
+      "asylumRate": 46.86,
+      "diversityIndex": 0.74,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 3
+    },
+    "E06000021": {
+      "areaName": "Stoke-on-Trent",
+      "population": 258369,
+      "serviceDemandPressureScore": 73,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 140,
+      "wbiChange2021to2041": -28.1,
+      "asylumRate": 47.3,
+      "diversityIndex": 0.46,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 11
+    },
+    "E09000009": {
+      "areaName": "Ealing",
+      "population": 367116,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 55,
+      "wbiChange2021to2041": -10.9,
+      "asylumRate": 32.36,
+      "diversityIndex": 0.92,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 16,
+        "schoolPressure": 11,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 38
+    },
+    "E06000015": {
+      "areaName": "Derby",
+      "population": 261364,
+      "serviceDemandPressureScore": 74,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 122,
+      "wbiChange2021to2041": -24.4,
+      "asylumRate": 44.32,
+      "diversityIndex": 0.62,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 6
+    },
+    "E08000010": {
+      "areaName": "Wigan",
+      "population": 329330,
+      "serviceDemandPressureScore": 52,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 56,
+      "wbiChange2021to2041": -11.1,
+      "asylumRate": 34.47,
+      "diversityIndex": 0.23,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 17,
+        "asylumConcentration": 17,
+        "schoolPressure": 9,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 83
+    },
+    "E09000025": {
+      "areaName": "Newham",
+      "population": 351030,
+      "serviceDemandPressureScore": 46,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 21,
+      "wbiChange2021to2041": -4.1,
+      "asylumRate": 30.44,
+      "diversityIndex": 0.86,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 15,
+        "schoolPressure": 10,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 106
+    },
+    "E08000021": {
+      "areaName": "Newcastle upon Tyne",
+      "population": 300127,
+      "serviceDemandPressureScore": 69,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 119,
+      "wbiChange2021to2041": -23.8,
+      "asylumRate": 35.18,
+      "diversityIndex": 0.52,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 18,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 18
+    },
+    "E06000023": {
+      "areaName": "Bristol, City of",
+      "population": 472467,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 89,
+      "wbiChange2021to2041": -17.8,
+      "asylumRate": 22.41,
+      "diversityIndex": 0.57,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 94
+    },
+    "E08000001": {
+      "areaName": "Bolton",
+      "population": 295960,
+      "serviceDemandPressureScore": 71,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 163,
+      "wbiChange2021to2041": -32.7,
+      "asylumRate": 34.41,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 17,
+        "schoolPressure": 18,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 14
+    },
+    "E09000005": {
+      "areaName": "Brent",
+      "population": 339821,
+      "serviceDemandPressureScore": 42,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 25,
+      "wbiChange2021to2041": -5,
+      "asylumRate": 29.01,
+      "diversityIndex": 0.92,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 15,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 130
+    },
+    "E08000007": {
+      "areaName": "Stockport",
+      "population": 294770,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 79,
+      "wbiChange2021to2041": -15.9,
+      "asylumRate": 27.44,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 14,
+        "schoolPressure": 9,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 39
+    },
+    "E06000004": {
+      "areaName": "Stockton-on-Tees",
+      "population": 196593,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 38,
+      "wbiChange2021to2041": -7.5,
+      "asylumRate": 40.23,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 11,
+        "asylumConcentration": 20,
+        "schoolPressure": 8,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 70
+    },
+    "E08000024": {
+      "areaName": "Sunderland",
+      "population": 274173,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 33,
+      "wbiChange2021to2041": -6.5,
+      "asylumRate": 28.79,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 14,
+        "schoolPressure": 9,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 144
+    },
+    "E08000004": {
+      "areaName": "Oldham",
+      "population": 242087,
+      "serviceDemandPressureScore": 69,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 139,
+      "wbiChange2021to2041": -27.8,
+      "asylumRate": 31.64,
+      "diversityIndex": 0.55,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 16,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 19
+    },
+    "E08000015": {
+      "areaName": "Wirral",
+      "population": 320199,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 27,
+      "wbiChange2021to2041": -5.4,
+      "asylumRate": 23.99,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 12,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 176
+    },
+    "E06000010": {
+      "areaName": "Kingston upon Hull, City of",
+      "population": 267013,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 113,
+      "wbiChange2021to2041": -22.6,
+      "asylumRate": 27.81,
+      "diversityIndex": 0.37,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 14,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 95
+    },
+    "E06000008": {
+      "areaName": "Blackburn with Darwen",
+      "population": 154741,
+      "serviceDemandPressureScore": 74,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 103,
+      "wbiChange2021to2041": -20.6,
+      "asylumRate": 46.7,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 7
+    },
+    "E06000044": {
+      "areaName": "Portsmouth",
+      "population": 208001,
+      "serviceDemandPressureScore": 65,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 99,
+      "wbiChange2021to2041": -19.7,
+      "asylumRate": 34.62,
+      "diversityIndex": 0.48,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 17,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 27
+    },
+    "E06000038": {
+      "areaName": "Reading",
+      "population": 174223,
+      "serviceDemandPressureScore": 78,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 123,
+      "wbiChange2021to2041": -24.6,
+      "asylumRate": 40.02,
+      "diversityIndex": 0.76,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 20,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 2
+    },
+    "E08000034": {
+      "areaName": "Kirklees",
+      "population": 433213,
+      "serviceDemandPressureScore": 59,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 92,
+      "wbiChange2021to2041": -18.3,
+      "asylumRate": 16.12,
+      "diversityIndex": 0.52,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 46
+    },
+    "E08000005": {
+      "areaName": "Rochdale",
+      "population": 223771,
+      "serviceDemandPressureScore": 67,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 121,
+      "wbiChange2021to2041": -24.1,
+      "asylumRate": 30.52,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 15,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 23
+    },
+    "E08000027": {
+      "areaName": "Dudley",
+      "population": 323488,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 94,
+      "wbiChange2021to2041": -18.9,
+      "asylumRate": 21.48,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 71
+    },
+    "E08000036": {
+      "areaName": "Wakefield",
+      "population": 353370,
+      "serviceDemandPressureScore": 49,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 76,
+      "wbiChange2021to2041": -15.2,
+      "asylumRate": 19.39,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 10,
+        "schoolPressure": 9,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 91
+    },
+    "E06000032": {
+      "areaName": "Luton",
+      "population": 225261,
+      "serviceDemandPressureScore": 70,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 104,
+      "wbiChange2021to2041": -20.7,
+      "asylumRate": 29.7,
+      "diversityIndex": 0.83,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 15,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 17
+    },
+    "E06000020": {
+      "areaName": "Telford and Wrekin",
+      "population": 185543,
+      "serviceDemandPressureScore": 73,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 110,
+      "wbiChange2021to2041": -22,
+      "asylumRate": 36.23,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 18,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 12
+    },
+    "E08000006": {
+      "areaName": "Salford",
+      "population": 269922,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 165,
+      "wbiChange2021to2041": -32.9,
+      "asylumRate": 23.99,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 12,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 40
+    },
+    "W06000011": {
+      "areaName": "Swansea",
+      "population": 238491,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 60,
+      "wbiChange2021to2041": -12,
+      "asylumRate": 27.89,
+      "diversityIndex": 0.31,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 18,
+        "asylumConcentration": 14,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 123
+    },
+    "E06000002": {
+      "areaName": "Middlesbrough",
+      "population": 143922,
+      "serviceDemandPressureScore": 74,
+      "category": "High Pressure",
+      "demographicChangeVelocity": 84,
+      "wbiChange2021to2041": -16.8,
+      "asylumRate": 44.76,
+      "diversityIndex": 0.44,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 8
+    },
+    "E07000067": {
+      "areaName": "Braintree",
+      "population": 155265,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 19,
+      "wbiChange2021to2041": -3.9,
+      "asylumRate": 42.06,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 20,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 135
+    },
+    "E06000057": {
+      "areaName": "Northumberland",
+      "population": 320566,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 79,
+      "wbiChange2021to2041": -15.8,
+      "asylumRate": 20.85,
+      "diversityIndex": 0.12,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 10,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 5
+      },
+      "pressureRank": 145
+    },
+    "E08000030": {
+      "areaName": "Walsall",
+      "population": 284126,
+      "serviceDemandPressureScore": 63,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 147,
+      "wbiChange2021to2041": -29.4,
+      "asylumRate": 23.37,
+      "diversityIndex": 0.58,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 12,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 28
+    },
+    "E08000013": {
+      "areaName": "St Helens",
+      "population": 183248,
+      "serviceDemandPressureScore": 47,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 39,
+      "wbiChange2021to2041": -7.8,
+      "asylumRate": 35.37,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 18,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 101
+    },
+    "E06000050": {
+      "areaName": "Cheshire West and Chester",
+      "population": 357149,
+      "serviceDemandPressureScore": 37,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 43,
+      "wbiChange2021to2041": -8.5,
+      "asylumRate": 17.7,
+      "diversityIndex": 0.23,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 9,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 163
+    },
+    "E08000017": {
+      "areaName": "Doncaster",
+      "population": 308104,
+      "serviceDemandPressureScore": 53,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 91,
+      "wbiChange2021to2041": -18.3,
+      "asylumRate": 20.58,
+      "diversityIndex": 0.32,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 10,
+        "schoolPressure": 10,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 78
+    },
+    "E08000037": {
+      "areaName": "Gateshead",
+      "population": 196149,
+      "serviceDemandPressureScore": 62,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 82,
+      "wbiChange2021to2041": -16.5,
+      "asylumRate": 31.71,
+      "diversityIndex": 0.26,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 16,
+        "schoolPressure": 10,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 33
+    },
+    "E08000023": {
+      "areaName": "South Tyneside",
+      "population": 147777,
+      "serviceDemandPressureScore": 42,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.4,
+      "asylumRate": 41.28,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 20,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 131
+    },
+    "E08000033": {
+      "areaName": "Calderdale",
+      "population": 206631,
+      "serviceDemandPressureScore": 51,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 41,
+      "wbiChange2021to2041": -8.3,
+      "asylumRate": 28.82,
+      "diversityIndex": 0.37,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 14,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 84
+    },
+    "E06000006": {
+      "areaName": "Halton",
+      "population": 128478,
+      "serviceDemandPressureScore": 45,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 31,
+      "wbiChange2021to2041": -6.1,
+      "asylumRate": 45.69,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 20,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 112
+    },
+    "E06000061": {
+      "areaName": "North Northamptonshire",
+      "population": 359523,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 83,
+      "wbiChange2021to2041": -16.5,
+      "asylumRate": 15.83,
+      "diversityIndex": 0.42,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 136
+    },
+    "E09000012": {
+      "areaName": "Hackney",
+      "population": 259147,
+      "serviceDemandPressureScore": 51,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 21,
+      "wbiChange2021to2041": -4.1,
+      "asylumRate": 22.08,
+      "diversityIndex": 0.92,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 11,
+        "schoolPressure": 16,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 85
+    },
+    "E06000009": {
+      "areaName": "Blackpool",
+      "population": 141039,
+      "serviceDemandPressureScore": 57,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 41,
+      "wbiChange2021to2041": -8.3,
+      "asylumRate": 40.02,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 20,
+        "schoolPressure": 8,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 60
+    },
+    "E06000047": {
+      "areaName": "County Durham",
+      "population": 522067,
+      "serviceDemandPressureScore": 21,
+      "category": "Stable",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.4,
+      "asylumRate": 10.52,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 5,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 270
+    },
+    "E07000220": {
+      "areaName": "Rugby",
+      "population": 114363,
+      "serviceDemandPressureScore": 56,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 107,
+      "wbiChange2021to2041": -21.3,
+      "asylumRate": 46.17,
+      "diversityIndex": 0.5,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 63
+    },
+    "E06000030": {
+      "areaName": "Swindon",
+      "population": 233411,
+      "serviceDemandPressureScore": 62,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 156,
+      "wbiChange2021to2041": -31.2,
+      "asylumRate": 23.04,
+      "diversityIndex": 0.51,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 12,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 34
+    },
+    "E06000058": {
+      "areaName": "Bournemouth, Christchurch and Poole",
+      "population": 400195,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 91,
+      "wbiChange2021to2041": -18.2,
+      "asylumRate": 13.57,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 227
+    },
+    "E09000028": {
+      "areaName": "Southwark",
+      "population": 307640,
+      "serviceDemandPressureScore": 57,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 53,
+      "wbiChange2021to2041": -10.7,
+      "asylumRate": 16.9,
+      "diversityIndex": 0.89,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 8,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 61
+    },
+    "E06000063": {
+      "areaName": "Cumberland",
+      "population": 273254,
+      "serviceDemandPressureScore": 28,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 49,
+      "wbiChange2021to2041": -9.8,
+      "asylumRate": 18.36,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 9,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 222
+    },
+    "E06000026": {
+      "areaName": "Plymouth",
+      "population": 264695,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 44,
+      "wbiChange2021to2041": -8.7,
+      "asylumRate": 18.86,
+      "diversityIndex": 0.27,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 9,
+        "schoolPressure": 7,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 137
+    },
+    "E09000026": {
+      "areaName": "Redbridge",
+      "population": 310261,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 76,
+      "wbiChange2021to2041": -15.3,
+      "asylumRate": 15.91,
+      "diversityIndex": 0.8,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 52
+    },
+    "E06000031": {
+      "areaName": "Peterborough",
+      "population": 215670,
+      "serviceDemandPressureScore": 67,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 135,
+      "wbiChange2021to2041": -27,
+      "asylumRate": 22.71,
+      "diversityIndex": 0.68,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 24
+    },
+    "E08000008": {
+      "areaName": "Tameside",
+      "population": 231070,
+      "serviceDemandPressureScore": 55,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 101,
+      "wbiChange2021to2041": -20.2,
+      "asylumRate": 21.2,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 67
+    },
+    "E09000030": {
+      "areaName": "Tower Hamlets",
+      "population": 310306,
+      "serviceDemandPressureScore": 56,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 55,
+      "wbiChange2021to2041": -11,
+      "asylumRate": 14.88,
+      "diversityIndex": 0.82,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 17,
+        "asylumConcentration": 7,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 64
+    },
+    "E06000062": {
+      "areaName": "West Northamptonshire",
+      "population": 425723,
+      "serviceDemandPressureScore": 39,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 86,
+      "wbiChange2021to2041": -17.3,
+      "asylumRate": 10.89,
+      "diversityIndex": 0.5,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 5,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 155
+    },
+    "E06000065": {
+      "areaName": "North Yorkshire",
+      "population": 615490,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 54,
+      "wbiChange2021to2041": -10.8,
+      "asylumRate": 7.45,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 4,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 236
+    },
+    "E06000049": {
+      "areaName": "Cheshire East",
+      "population": 398772,
+      "serviceDemandPressureScore": 39,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10,
+      "asylumRate": 11.04,
+      "diversityIndex": 0.27,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 6,
+        "schoolPressure": 8,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 156
+    },
+    "E07000096": {
+      "areaName": "Dacorum",
+      "population": 155081,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 86,
+      "wbiChange2021to2041": -17.3,
+      "asylumRate": 28.74,
+      "diversityIndex": 0.46,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 14,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 72
+    },
+    "E07000117": {
+      "areaName": "Burnley",
+      "population": 94651,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 112,
+      "wbiChange2021to2041": -22.4,
+      "asylumRate": 46.46,
+      "diversityIndex": 0.42,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 41
+    },
+    "E06000007": {
+      "areaName": "Warrington",
+      "population": 210973,
+      "serviceDemandPressureScore": 53,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 67,
+      "wbiChange2021to2041": -13.3,
+      "asylumRate": 21.17,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 11,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 79
+    },
+    "E07000228": {
+      "areaName": "Mid Sussex",
+      "population": 152566,
+      "serviceDemandPressureScore": 37,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 33,
+      "wbiChange2021to2041": -6.7,
+      "asylumRate": 27.82,
+      "diversityIndex": 0.33,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 14,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 164
+    },
+    "E07000122": {
+      "areaName": "Pendle",
+      "population": 95758,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 125,
+      "wbiChange2021to2041": -25.1,
+      "asylumRate": 44.9,
+      "diversityIndex": 0.49,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 42
+    },
+    "E08000018": {
+      "areaName": "Rotherham",
+      "population": 265806,
+      "serviceDemandPressureScore": 42,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9,
+      "asylumRate": 16.09,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 8,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 132
+    },
+    "E08000022": {
+      "areaName": "North Tyneside",
+      "population": 208968,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 23,
+      "wbiChange2021to2041": -4.7,
+      "asylumRate": 20.65,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 7,
+        "asylumConcentration": 10,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 203
+    },
+    "E07000222": {
+      "areaName": "Warwick",
+      "population": 148454,
+      "serviceDemandPressureScore": 50,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 89,
+      "wbiChange2021to2041": -17.9,
+      "asylumRate": 28.08,
+      "diversityIndex": 0.49,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 14,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 86
+    },
+    "E08000014": {
+      "areaName": "Sefton",
+      "population": 279233,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 39,
+      "wbiChange2021to2041": -7.8,
+      "asylumRate": 15.16,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 8,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 186
+    },
+    "E07000123": {
+      "areaName": "Preston",
+      "population": 147834,
+      "serviceDemandPressureScore": 50,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 109,
+      "wbiChange2021to2041": -21.9,
+      "asylumRate": 26.34,
+      "diversityIndex": 0.58,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 13,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 87
+    },
+    "E09000022": {
+      "areaName": "Lambeth",
+      "population": 317650,
+      "serviceDemandPressureScore": 62,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 59,
+      "wbiChange2021to2041": -11.9,
+      "asylumRate": 13.5,
+      "diversityIndex": 0.88,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 18,
+        "asylumConcentration": 7,
+        "schoolPressure": 20,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 35
+    },
+    "E07000120": {
+      "areaName": "Hyndburn",
+      "population": 82237,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 70,
+      "wbiChange2021to2041": -13.9,
+      "asylumRate": 48.22,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 20,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 53
+    },
+    "E07000127": {
+      "areaName": "West Lancashire",
+      "population": 117429,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 34,
+      "wbiChange2021to2041": -6.7,
+      "asylumRate": 33.53,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 17,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 138
+    },
+    "E08000009": {
+      "areaName": "Trafford",
+      "population": 235053,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 119,
+      "wbiChange2021to2041": -23.7,
+      "asylumRate": 16.89,
+      "diversityIndex": 0.55,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 43
+    },
+    "E06000001": {
+      "areaName": "Hartlepool",
+      "population": 92338,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 10,
+      "wbiChange2021to2041": -2,
+      "asylumRate": 41.25,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 20,
+        "schoolPressure": 7,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 146
+    },
+    "E08000002": {
+      "areaName": "Bury",
+      "population": 193851,
+      "serviceDemandPressureScore": 63,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 108,
+      "wbiChange2021to2041": -21.6,
+      "asylumRate": 20.31,
+      "diversityIndex": 0.46,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 10,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 29
+    },
+    "E07000226": {
+      "areaName": "Crawley",
+      "population": 118492,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 104,
+      "wbiChange2021to2041": -20.8,
+      "asylumRate": 32.5,
+      "diversityIndex": 0.67,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 16,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 73
+    },
+    "E09000010": {
+      "areaName": "Enfield",
+      "population": 329985,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 92,
+      "wbiChange2021to2041": -18.4,
+      "asylumRate": 11.91,
+      "diversityIndex": 0.93,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 54
+    },
+    "E07000081": {
+      "areaName": "Gloucester",
+      "population": 132414,
+      "serviceDemandPressureScore": 49,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 73,
+      "wbiChange2021to2041": -14.5,
+      "asylumRate": 27.99,
+      "diversityIndex": 0.48,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 14,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 92
+    },
+    "E06000042": {
+      "areaName": "Milton Keynes",
+      "population": 287060,
+      "serviceDemandPressureScore": 63,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 136,
+      "wbiChange2021to2041": -27.2,
+      "asylumRate": 12.65,
+      "diversityIndex": 0.68,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 18,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 30
+    },
+    "E06000039": {
+      "areaName": "Slough",
+      "population": 158500,
+      "serviceDemandPressureScore": 63,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 71,
+      "wbiChange2021to2041": -14.3,
+      "asylumRate": 22.77,
+      "diversityIndex": 0.8,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 31
+    },
+    "E07000126": {
+      "areaName": "South Ribble",
+      "population": 111035,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 19,
+      "wbiChange2021to2041": -3.8,
+      "asylumRate": 32.47,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 16,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 177
+    },
+    "E06000040": {
+      "areaName": "Windsor and Maidenhead",
+      "population": 153497,
+      "serviceDemandPressureScore": 66,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 90,
+      "wbiChange2021to2041": -18,
+      "asylumRate": 23.72,
+      "diversityIndex": 0.57,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 12,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 25
+    },
+    "E07000070": {
+      "areaName": "Chelmsford",
+      "population": 181523,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 106,
+      "wbiChange2021to2041": -21.1,
+      "asylumRate": 19.49,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 10,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 124
+    },
+    "E06000066": {
+      "areaName": "Somerset",
+      "population": 571547,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 57,
+      "wbiChange2021to2041": -11.4,
+      "asylumRate": 6.2,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 17,
+        "asylumConcentration": 3,
+        "schoolPressure": 7,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 228
+    },
+    "E09000013": {
+      "areaName": "Hammersmith and Fulham",
+      "population": 183156,
+      "serviceDemandPressureScore": 61,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 63,
+      "wbiChange2021to2041": -12.6,
+      "asylumRate": 19.29,
+      "diversityIndex": 0.88,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 19,
+        "asylumConcentration": 10,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 36
+    },
+    "E07000128": {
+      "areaName": "Wyre",
+      "population": 111946,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 5,
+      "wbiChange2021to2041": -1.1,
+      "asylumRate": 30.65,
+      "diversityIndex": 0.13,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 2,
+        "asylumConcentration": 15,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 229
+    },
+    "E07000095": {
+      "areaName": "Broxbourne",
+      "population": 99007,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 156,
+      "wbiChange2021to2041": -31.2,
+      "asylumRate": 35.43,
+      "diversityIndex": 0.61,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 18,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 55
+    },
+    "E09000015": {
+      "areaName": "Harrow",
+      "population": 261205,
+      "serviceDemandPressureScore": 56,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 73,
+      "wbiChange2021to2041": -14.7,
+      "asylumRate": 13.15,
+      "diversityIndex": 0.83,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 65
+    },
+    "E07000148": {
+      "areaName": "Norwich",
+      "population": 143924,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 76,
+      "wbiChange2021to2041": -15.1,
+      "asylumRate": 23.85,
+      "diversityIndex": 0.48,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 12,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 96
+    },
+    "W06000022": {
+      "areaName": "Newport",
+      "population": 159592,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 64,
+      "wbiChange2021to2041": -12.8,
+      "asylumRate": 20.79,
+      "diversityIndex": 0.43,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 19,
+        "asylumConcentration": 10,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 125
+    },
+    "E06000045": {
+      "areaName": "Southampton",
+      "population": 248920,
+      "serviceDemandPressureScore": 59,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 126,
+      "wbiChange2021to2041": -25.3,
+      "asylumRate": 13.18,
+      "diversityIndex": 0.6,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 47
+    },
+    "E07000211": {
+      "areaName": "Reigate and Banstead",
+      "population": 150846,
+      "serviceDemandPressureScore": 46,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 91,
+      "wbiChange2021to2041": -18.2,
+      "asylumRate": 21.3,
+      "diversityIndex": 0.49,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 107
+    },
+    "E07000066": {
+      "areaName": "Basildon",
+      "population": 187567,
+      "serviceDemandPressureScore": 42,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 108,
+      "wbiChange2021to2041": -21.5,
+      "asylumRate": 17.46,
+      "diversityIndex": 0.41,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 9,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 133
+    },
+    "E07000243": {
+      "areaName": "Stevenage",
+      "population": 89498,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 68,
+      "wbiChange2021to2041": -13.6,
+      "asylumRate": 35.09,
+      "diversityIndex": 0.51,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 18,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 56
+    },
+    "E08000011": {
+      "areaName": "Knowsley",
+      "population": 154518,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 48,
+      "wbiChange2021to2041": -9.7,
+      "asylumRate": 19.68,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 10,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 126
+    },
+    "E07000071": {
+      "areaName": "Colchester",
+      "population": 192716,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 94,
+      "wbiChange2021to2041": -18.7,
+      "asylumRate": 15.78,
+      "diversityIndex": 0.44,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 97
+    },
+    "E09000024": {
+      "areaName": "Merton",
+      "population": 215187,
+      "serviceDemandPressureScore": 57,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 90,
+      "wbiChange2021to2041": -17.9,
+      "asylumRate": 13.82,
+      "diversityIndex": 0.86,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 62
+    },
+    "E09000002": {
+      "areaName": "Barking and Dagenham",
+      "population": 218871,
+      "serviceDemandPressureScore": 59,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 118,
+      "wbiChange2021to2041": -23.7,
+      "asylumRate": 12.93,
+      "diversityIndex": 0.88,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 48
+    },
+    "E07000219": {
+      "areaName": "Nuneaton and Bedworth",
+      "population": 134198,
+      "serviceDemandPressureScore": 50,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 99,
+      "wbiChange2021to2041": -19.7,
+      "asylumRate": 21.26,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 88
+    },
+    "E08000029": {
+      "areaName": "Solihull",
+      "population": 216240,
+      "serviceDemandPressureScore": 53,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 111,
+      "wbiChange2021to2041": -22.2,
+      "asylumRate": 13.56,
+      "diversityIndex": 0.46,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 80
+    },
+    "E06000012": {
+      "areaName": "North East Lincolnshire",
+      "population": 156967,
+      "serviceDemandPressureScore": 44,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 48,
+      "wbiChange2021to2041": -9.7,
+      "asylumRate": 17.32,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 9,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 117
+    },
+    "E07000178": {
+      "areaName": "Oxford",
+      "population": 162040,
+      "serviceDemandPressureScore": 46,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 117,
+      "wbiChange2021to2041": -23.3,
+      "asylumRate": 16.68,
+      "diversityIndex": 0.75,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 108
+    },
+    "E06000014": {
+      "areaName": "York",
+      "population": 202821,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.7,
+      "asylumRate": 13,
+      "diversityIndex": 0.31,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 7,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 187
+    },
+    "E06000003": {
+      "areaName": "Redcar and Cleveland",
+      "population": 136530,
+      "serviceDemandPressureScore": 24,
+      "category": "Stable",
+      "demographicChangeVelocity": 7,
+      "wbiChange2021to2041": -1.3,
+      "asylumRate": 18.67,
+      "diversityIndex": 0.11,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 2,
+        "asylumConcentration": 9,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 254
+    },
+    "E09000020": {
+      "areaName": "Kensington and Chelsea",
+      "population": 143373,
+      "serviceDemandPressureScore": 56,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 61,
+      "wbiChange2021to2041": -12.1,
+      "asylumRate": 17.85,
+      "diversityIndex": 0.89,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 18,
+        "asylumConcentration": 9,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 66
+    },
+    "E09000023": {
+      "areaName": "Lewisham",
+      "population": 300553,
+      "serviceDemandPressureScore": 50,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 53,
+      "wbiChange2021to2041": -10.6,
+      "asylumRate": 8.56,
+      "diversityIndex": 0.87,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 4,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 89
+    },
+    "E06000035": {
+      "areaName": "Medway",
+      "population": 279773,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 120,
+      "wbiChange2021to2041": -24,
+      "asylumRate": 8.61,
+      "diversityIndex": 0.47,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 4,
+        "schoolPressure": 16,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 74
+    },
+    "E06000033": {
+      "areaName": "Southend-on-Sea",
+      "population": 180685,
+      "serviceDemandPressureScore": 59,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 65,
+      "wbiChange2021to2041": -13.1,
+      "asylumRate": 13.39,
+      "diversityIndex": 0.42,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 49
+    },
+    "E07000121": {
+      "areaName": "Lancaster",
+      "population": 142939,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 18,
+      "wbiChange2021to2041": -3.7,
+      "asylumRate": 16.9,
+      "diversityIndex": 0.3,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 194
+    },
+    "E07000125": {
+      "areaName": "Rossendale",
+      "population": 70868,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.3,
+      "asylumRate": 33.27,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 17,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 178
+    },
+    "E07000130": {
+      "areaName": "Charnwood",
+      "population": 183970,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 66,
+      "wbiChange2021to2041": -13.2,
+      "asylumRate": 12.63,
+      "diversityIndex": 0.45,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 147
+    },
+    "E06000064": {
+      "areaName": "Westmorland and Furness",
+      "population": 226593,
+      "serviceDemandPressureScore": 24,
+      "category": "Stable",
+      "demographicChangeVelocity": 53,
+      "wbiChange2021to2041": -10.5,
+      "asylumRate": 10.12,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 5,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 255
+    },
+    "E09000007": {
+      "areaName": "Camden",
+      "population": 210136,
+      "serviceDemandPressureScore": 55,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 80,
+      "wbiChange2021to2041": -16,
+      "asylumRate": 10.6,
+      "diversityIndex": 0.89,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 5,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 68
+    },
+    "E07000118": {
+      "areaName": "Chorley",
+      "population": 117733,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 15,
+      "wbiChange2021to2041": -2.9,
+      "asylumRate": 18.95,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 9,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 237
+    },
+    "E07000106": {
+      "areaName": "Canterbury",
+      "population": 157429,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 33,
+      "wbiChange2021to2041": -6.5,
+      "asylumRate": 14,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 204
+    },
+    "E06000005": {
+      "areaName": "Darlington",
+      "population": 107796,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 39,
+      "wbiChange2021to2041": -7.9,
+      "asylumRate": 20.09,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 10,
+        "schoolPressure": 10,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 98
+    },
+    "E07000040": {
+      "areaName": "East Devon",
+      "population": 150823,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 15,
+      "wbiChange2021to2041": -3.1,
+      "asylumRate": 14.16,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 238
+    },
+    "E06000055": {
+      "areaName": "Bedford",
+      "population": 185224,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 82,
+      "wbiChange2021to2041": -16.5,
+      "asylumRate": 11.23,
+      "diversityIndex": 0.65,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 16,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 57
+    },
+    "E06000041": {
+      "areaName": "Wokingham",
+      "population": 177502,
+      "serviceDemandPressureScore": 63,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 126,
+      "wbiChange2021to2041": -25.2,
+      "asylumRate": 11.7,
+      "diversityIndex": 0.53,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 32
+    },
+    "E07000141": {
+      "areaName": "South Kesteven",
+      "population": 143405,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.6,
+      "asylumRate": 14.61,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 230
+    },
+    "E07000199": {
+      "areaName": "Tamworth",
+      "population": 78642,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9,
+      "asylumRate": 25.64,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 13,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 139
+    },
+    "E06000054": {
+      "areaName": "Wiltshire",
+      "population": 510333,
+      "serviceDemandPressureScore": 36,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 48,
+      "wbiChange2021to2041": -9.6,
+      "asylumRate": 3.97,
+      "diversityIndex": 0.26,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 2,
+        "schoolPressure": 7,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 167
+    },
+    "E06000056": {
+      "areaName": "Central Bedfordshire",
+      "population": 294251,
+      "serviceDemandPressureScore": 45,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 84,
+      "wbiChange2021to2041": -16.7,
+      "asylumRate": 6.43,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 3,
+        "schoolPressure": 10,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 113
+    },
+    "E07000241": {
+      "areaName": "Welwyn Hatfield",
+      "population": 119835,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 85,
+      "wbiChange2021to2041": -16.9,
+      "asylumRate": 16.2,
+      "diversityIndex": 0.62,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 99
+    },
+    "E07000076": {
+      "areaName": "Tendring",
+      "population": 148293,
+      "serviceDemandPressureScore": 22,
+      "category": "Stable",
+      "demographicChangeVelocity": 10,
+      "wbiChange2021to2041": -2,
+      "asylumRate": 12.63,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 266
+    },
+    "E06000060": {
+      "areaName": "Buckinghamshire",
+      "population": 553078,
+      "serviceDemandPressureScore": 39,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 86,
+      "wbiChange2021to2041": -17.1,
+      "asylumRate": 3.35,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 18,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 157
+    },
+    "E07000171": {
+      "areaName": "Bassetlaw",
+      "population": 117803,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 32,
+      "wbiChange2021to2041": -6.4,
+      "asylumRate": 15.37,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 195
+    },
+    "E09000031": {
+      "areaName": "Waltham Forest",
+      "population": 278428,
+      "serviceDemandPressureScore": 44,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 31,
+      "wbiChange2021to2041": -6.2,
+      "asylumRate": 6.61,
+      "diversityIndex": 0.91,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 3,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 118
+    },
+    "E09000014": {
+      "areaName": "Haringey",
+      "population": 264238,
+      "serviceDemandPressureScore": 47,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10.1,
+      "asylumRate": 6.82,
+      "diversityIndex": 0.92,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 3,
+        "schoolPressure": 12,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 102
+    },
+    "E07000225": {
+      "areaName": "Chichester",
+      "population": 124071,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 23,
+      "wbiChange2021to2041": -4.5,
+      "asylumRate": 13.88,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 7,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 196
+    },
+    "E09000016": {
+      "areaName": "Havering",
+      "population": 262052,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 216,
+      "wbiChange2021to2041": -43.2,
+      "asylumRate": 6.44,
+      "diversityIndex": 0.63,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 3,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 58
+    },
+    "E09000006": {
+      "areaName": "Bromley",
+      "population": 329991,
+      "serviceDemandPressureScore": 55,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 134,
+      "wbiChange2021to2041": -26.7,
+      "asylumRate": 5.22,
+      "diversityIndex": 0.64,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 3,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 69
+    },
+    "E06000034": {
+      "areaName": "Thurrock",
+      "population": 175993,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 173,
+      "wbiChange2021to2041": -34.6,
+      "asylumRate": 9.67,
+      "diversityIndex": 0.62,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 5,
+        "schoolPressure": 18,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 44
+    },
+    "E07000172": {
+      "areaName": "Broxtowe",
+      "population": 110940,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10,
+      "asylumRate": 15.19,
+      "diversityIndex": 0.37,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 140
+    },
+    "E07000072": {
+      "areaName": "Epping Forest",
+      "population": 134980,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 110,
+      "wbiChange2021to2041": -22,
+      "asylumRate": 12.59,
+      "diversityIndex": 0.51,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 141
+    },
+    "E07000174": {
+      "areaName": "Mansfield",
+      "population": 110482,
+      "serviceDemandPressureScore": 47,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 76,
+      "wbiChange2021to2041": -15.1,
+      "asylumRate": 15.03,
+      "diversityIndex": 0.3,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 103
+    },
+    "E07000105": {
+      "areaName": "Ashford",
+      "population": 132747,
+      "serviceDemandPressureScore": 46,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 76,
+      "wbiChange2021to2041": -15.2,
+      "asylumRate": 11.92,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 109
+    },
+    "E07000078": {
+      "areaName": "Cheltenham",
+      "population": 118836,
+      "serviceDemandPressureScore": 37,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10.1,
+      "asylumRate": 13.31,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 165
+    },
+    "E07000195": {
+      "areaName": "Newcastle-under-Lyme",
+      "population": 123299,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 32,
+      "wbiChange2021to2041": -6.3,
+      "asylumRate": 12.61,
+      "diversityIndex": 0.26,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 247
+    },
+    "E07000099": {
+      "areaName": "North Hertfordshire",
+      "population": 133210,
+      "serviceDemandPressureScore": 35,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 30,
+      "wbiChange2021to2041": -6.1,
+      "asylumRate": 11.52,
+      "diversityIndex": 0.42,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 172
+    },
+    "E07000092": {
+      "areaName": "Rushmoor",
+      "population": 99759,
+      "serviceDemandPressureScore": 47,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 96,
+      "wbiChange2021to2041": -19.1,
+      "asylumRate": 14.66,
+      "diversityIndex": 0.55,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 104
+    },
+    "W06000016": {
+      "areaName": "Rhondda Cynon Taf",
+      "population": 237653,
+      "serviceDemandPressureScore": 23,
+      "category": "Stable",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9.1,
+      "asylumRate": 6.26,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 6
+      },
+      "pressureRank": 260
+    },
+    "E07000221": {
+      "areaName": "Stratford-on-Avon",
+      "population": 134724,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 29,
+      "wbiChange2021to2041": -5.8,
+      "asylumRate": 10.12,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 5,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 205
+    },
+    "E07000170": {
+      "areaName": "Ashfield",
+      "population": 126299,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -9.9,
+      "asylumRate": 11.35,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 179
+    },
+    "E07000237": {
+      "areaName": "Worcester",
+      "population": 103869,
+      "serviceDemandPressureScore": 47,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 83,
+      "wbiChange2021to2041": -16.7,
+      "asylumRate": 13.78,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 105
+    },
+    "E07000177": {
+      "areaName": "Cherwell",
+      "population": 161015,
+      "serviceDemandPressureScore": 44,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 100,
+      "wbiChange2021to2041": -19.9,
+      "asylumRate": 8.57,
+      "diversityIndex": 0.46,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 119
+    },
+    "E07000036": {
+      "areaName": "Erewash",
+      "population": 112908,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.6,
+      "asylumRate": 12.6,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 231
+    },
+    "E09000011": {
+      "areaName": "Greenwich",
+      "population": 289065,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 102,
+      "wbiChange2021to2041": -20.4,
+      "asylumRate": 4.81,
+      "diversityIndex": 0.86,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 13,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 75
+    },
+    "E06000025": {
+      "areaName": "South Gloucestershire",
+      "population": 290424,
+      "serviceDemandPressureScore": 46,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 87,
+      "wbiChange2021to2041": -17.4,
+      "asylumRate": 4.7,
+      "diversityIndex": 0.34,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 11,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 110
+    },
+    "E07000193": {
+      "areaName": "East Staffordshire",
+      "population": 124021,
+      "serviceDemandPressureScore": 45,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 108,
+      "wbiChange2021to2041": -21.7,
+      "asylumRate": 10.72,
+      "diversityIndex": 0.45,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 5,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 114
+    },
+    "E07000109": {
+      "areaName": "Gravesham",
+      "population": 106902,
+      "serviceDemandPressureScore": 46,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 113,
+      "wbiChange2021to2041": -22.6,
+      "asylumRate": 12.29,
+      "diversityIndex": 0.61,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 111
+    },
+    "E07000033": {
+      "areaName": "Bolsover",
+      "population": 80270,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 37,
+      "wbiChange2021to2041": -7.4,
+      "asylumRate": 15.52,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 11,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 197
+    },
+    "W06000006": {
+      "areaName": "Wrexham",
+      "population": 135122,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 54,
+      "wbiChange2021to2041": -10.7,
+      "asylumRate": 9.26,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 5,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 206
+    },
+    "E07000181": {
+      "areaName": "West Oxfordshire",
+      "population": 114236,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 31,
+      "wbiChange2021to2041": -6.2,
+      "asylumRate": 10.17,
+      "diversityIndex": 0.27,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 5,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 188
+    },
+    "E07000114": {
+      "areaName": "Thanet",
+      "population": 140587,
+      "serviceDemandPressureScore": 28,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.3,
+      "asylumRate": 8.55,
+      "diversityIndex": 0.31,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 223
+    },
+    "E07000136": {
+      "areaName": "Boston",
+      "population": 70505,
+      "serviceDemandPressureScore": 48,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 112,
+      "wbiChange2021to2041": -22.4,
+      "asylumRate": 16.88,
+      "diversityIndex": 0.43,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 8,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 100
+    },
+    "E07000075": {
+      "areaName": "Rochford",
+      "population": 85662,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 9,
+      "wbiChange2021to2041": -1.9,
+      "asylumRate": 13.14,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 7,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 276
+    },
+    "E07000202": {
+      "areaName": "Ipswich",
+      "population": 139643,
+      "serviceDemandPressureScore": 44,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 113,
+      "wbiChange2021to2041": -22.6,
+      "asylumRate": 8.27,
+      "diversityIndex": 0.53,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 120
+    },
+    "E07000238": {
+      "areaName": "Wychavon",
+      "population": 132495,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 44,
+      "wbiChange2021to2041": -8.9,
+      "asylumRate": 8.19,
+      "diversityIndex": 0.23,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 180
+    },
+    "E07000137": {
+      "areaName": "East Lindsey",
+      "population": 142295,
+      "serviceDemandPressureScore": 16,
+      "category": "Stable",
+      "demographicChangeVelocity": 7,
+      "wbiChange2021to2041": -1.3,
+      "asylumRate": 7.16,
+      "diversityIndex": 0.13,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 2,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 308
+    },
+    "E09000004": {
+      "areaName": "Bexley",
+      "population": 246475,
+      "serviceDemandPressureScore": 58,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 160,
+      "wbiChange2021to2041": -32.1,
+      "asylumRate": 4.02,
+      "diversityIndex": 0.65,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 19,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 59
+    },
+    "E06000043": {
+      "areaName": "Brighton and Hove",
+      "population": 277103,
+      "serviceDemandPressureScore": 45,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 97,
+      "wbiChange2021to2041": -19.5,
+      "asylumRate": 3.56,
+      "diversityIndex": 0.53,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 115
+    },
+    "E07000134": {
+      "areaName": "North West Leicestershire",
+      "population": 104707,
+      "serviceDemandPressureScore": 28,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 31,
+      "wbiChange2021to2041": -6.1,
+      "asylumRate": 8.58,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 224
+    },
+    "W06000018": {
+      "areaName": "Caerphilly",
+      "population": 175955,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 43,
+      "wbiChange2021to2041": -8.5,
+      "asylumRate": 5.31,
+      "diversityIndex": 0.12,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 5
+      },
+      "pressureRank": 277
+    },
+    "E07000180": {
+      "areaName": "Vale of White Horse",
+      "population": 138913,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 51,
+      "wbiChange2021to2041": -10.3,
+      "asylumRate": 6.29,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 189
+    },
+    "E07000227": {
+      "areaName": "Horsham",
+      "population": 146776,
+      "serviceDemandPressureScore": 24,
+      "category": "Stable",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.7,
+      "asylumRate": 6.14,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 256
+    },
+    "E07000213": {
+      "areaName": "Spelthorne",
+      "population": 102960,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 125,
+      "wbiChange2021to2041": -25,
+      "asylumRate": 8.13,
+      "diversityIndex": 0.58,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 142
+    },
+    "E07000214": {
+      "areaName": "Surrey Heath",
+      "population": 90456,
+      "serviceDemandPressureScore": 45,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 70,
+      "wbiChange2021to2041": -14,
+      "asylumRate": 9.21,
+      "diversityIndex": 0.47,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 5,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 116
+    },
+    "E07000032": {
+      "areaName": "Amber Valley",
+      "population": 126204,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 12,
+      "wbiChange2021to2041": -2.4,
+      "asylumRate": 6.36,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 299
+    },
+    "E06000024": {
+      "areaName": "North Somerset",
+      "population": 216729,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 43,
+      "wbiChange2021to2041": -8.5,
+      "asylumRate": 3.7,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 2,
+        "schoolPressure": 7,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 190
+    },
+    "E07000196": {
+      "areaName": "South Staffordshire",
+      "population": 110475,
+      "serviceDemandPressureScore": 18,
+      "category": "Stable",
+      "demographicChangeVelocity": 19,
+      "wbiChange2021to2041": -3.8,
+      "asylumRate": 7.08,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 295
+    },
+    "E06000013": {
+      "areaName": "North Lincolnshire",
+      "population": 169684,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10.1,
+      "asylumRate": 4.67,
+      "diversityIndex": 0.28,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 2,
+        "schoolPressure": 8,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 127
+    },
+    "E07000034": {
+      "areaName": "Chesterfield",
+      "population": 103568,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 13,
+      "wbiChange2021to2041": -2.5,
+      "asylumRate": 7.45,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 278
+    },
+    "E07000140": {
+      "areaName": "South Holland",
+      "population": 95122,
+      "serviceDemandPressureScore": 44,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 72,
+      "wbiChange2021to2041": -14.3,
+      "asylumRate": 7.55,
+      "diversityIndex": 0.32,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 121
+    },
+    "W06000004": {
+      "areaName": "Denbighshire",
+      "population": 95820,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 49,
+      "wbiChange2021to2041": -9.8,
+      "asylumRate": 7.43,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 248
+    },
+    "E07000119": {
+      "areaName": "Fylde",
+      "population": 81375,
+      "serviceDemandPressureScore": 21,
+      "category": "Stable",
+      "demographicChangeVelocity": 9,
+      "wbiChange2021to2041": -1.7,
+      "asylumRate": 8.54,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 271
+    },
+    "E07000175": {
+      "areaName": "Newark and Sherwood",
+      "population": 122959,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9,
+      "asylumRate": 5.71,
+      "diversityIndex": 0.23,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 198
+    },
+    "E09000021": {
+      "areaName": "Kingston upon Thames",
+      "population": 168065,
+      "serviceDemandPressureScore": 54,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 115,
+      "wbiChange2021to2041": -22.9,
+      "asylumRate": 4,
+      "diversityIndex": 0.75,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 76
+    },
+    "E09000032": {
+      "areaName": "Wandsworth",
+      "population": 327506,
+      "serviceDemandPressureScore": 59,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 68,
+      "wbiChange2021to2041": -13.7,
+      "asylumRate": 2.04,
+      "diversityIndex": 0.82,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 20,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 50
+    },
+    "E07000094": {
+      "areaName": "Winchester",
+      "population": 127444,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 35,
+      "wbiChange2021to2041": -6.9,
+      "asylumRate": 5.01,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 199
+    },
+    "E07000108": {
+      "areaName": "Dover",
+      "population": 116411,
+      "serviceDemandPressureScore": 24,
+      "category": "Stable",
+      "demographicChangeVelocity": 14,
+      "wbiChange2021to2041": -2.8,
+      "asylumRate": 5.59,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 257
+    },
+    "E07000073": {
+      "areaName": "Harlow",
+      "population": 93330,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 119,
+      "wbiChange2021to2041": -23.8,
+      "asylumRate": 6.82,
+      "diversityIndex": 0.55,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 128
+    },
+    "E07000132": {
+      "areaName": "Hinckley and Bosworth",
+      "population": 113641,
+      "serviceDemandPressureScore": 29,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 39,
+      "wbiChange2021to2041": -7.8,
+      "asylumRate": 5.66,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 217
+    },
+    "W06000012": {
+      "areaName": "Neath Port Talbot",
+      "population": 142290,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 46,
+      "wbiChange2021to2041": -9.2,
+      "asylumRate": 4.61,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 239
+    },
+    "E07000173": {
+      "areaName": "Gedling",
+      "population": 117264,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 51,
+      "wbiChange2021to2041": -10.2,
+      "asylumRate": 5.24,
+      "diversityIndex": 0.35,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 181
+    },
+    "E07000113": {
+      "areaName": "Swale",
+      "population": 151677,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 43,
+      "wbiChange2021to2041": -8.7,
+      "asylumRate": 3.85,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 207
+    },
+    "W06000005": {
+      "areaName": "Flintshire",
+      "population": 154960,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10.1,
+      "asylumRate": 3.85,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 240
+    },
+    "E07000077": {
+      "areaName": "Uttlesford",
+      "population": 91344,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.5,
+      "asylumRate": 6.31,
+      "diversityIndex": 0.28,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 241
+    },
+    "E07000062": {
+      "areaName": "Hastings",
+      "population": 90995,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 38,
+      "wbiChange2021to2041": -7.6,
+      "asylumRate": 6.47,
+      "diversityIndex": 0.36,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 11,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 182
+    },
+    "W06000010": {
+      "areaName": "Carmarthenshire",
+      "population": 187898,
+      "serviceDemandPressureScore": 24,
+      "category": "Stable",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10,
+      "asylumRate": 3.04,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 258
+    },
+    "E06000027": {
+      "areaName": "Torbay",
+      "population": 139324,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.5,
+      "asylumRate": 4,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 2,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 200
+    },
+    "E07000038": {
+      "areaName": "North East Derbyshire",
+      "population": 102003,
+      "serviceDemandPressureScore": 14,
+      "category": "Stable",
+      "demographicChangeVelocity": 8,
+      "wbiChange2021to2041": -1.6,
+      "asylumRate": 5.06,
+      "diversityIndex": 0.13,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 2,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 313
+    },
+    "E06000011": {
+      "areaName": "East Riding of Yorkshire",
+      "population": 342215,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 15,
+      "wbiChange2021to2041": -3.1,
+      "asylumRate": 1.49,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 1,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 300
+    },
+    "E07000240": {
+      "areaName": "St Albans",
+      "population": 148169,
+      "serviceDemandPressureScore": 42,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 78,
+      "wbiChange2021to2041": -15.6,
+      "asylumRate": 3.51,
+      "diversityIndex": 0.53,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 134
+    },
+    "E07000218": {
+      "areaName": "North Warwickshire",
+      "population": 65036,
+      "serviceDemandPressureScore": 19,
+      "category": "Stable",
+      "demographicChangeVelocity": 13,
+      "wbiChange2021to2041": -2.6,
+      "asylumRate": 7.15,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 4,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 289
+    },
+    "W06000002": {
+      "areaName": "Gwynedd",
+      "population": 117392,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 51,
+      "wbiChange2021to2041": -10.2,
+      "asylumRate": 3.89,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 249
+    },
+    "E09000019": {
+      "areaName": "Islington",
+      "population": 216590,
+      "serviceDemandPressureScore": 53,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 79,
+      "wbiChange2021to2041": -15.9,
+      "asylumRate": 2.11,
+      "diversityIndex": 0.88,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 15,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 81
+    },
+    "E07000098": {
+      "areaName": "Hertsmere",
+      "population": 107827,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 140,
+      "wbiChange2021to2041": -28.1,
+      "asylumRate": 4.08,
+      "diversityIndex": 0.67,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 148
+    },
+    "E07000239": {
+      "areaName": "Wyre Forest",
+      "population": 101609,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 18,
+      "wbiChange2021to2041": -3.6,
+      "asylumRate": 4.14,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 279
+    },
+    "W06000019": {
+      "areaName": "Blaenau Gwent",
+      "population": 66903,
+      "serviceDemandPressureScore": 22,
+      "category": "Stable",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9,
+      "asylumRate": 6.19,
+      "diversityIndex": 0.13,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 5
+      },
+      "pressureRank": 267
+    },
+    "E07000110": {
+      "areaName": "Maidstone",
+      "population": 175781,
+      "serviceDemandPressureScore": 41,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 82,
+      "wbiChange2021to2041": -16.5,
+      "asylumRate": 2.24,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 143
+    },
+    "W06000013": {
+      "areaName": "Bridgend",
+      "population": 145490,
+      "serviceDemandPressureScore": 21,
+      "category": "Stable",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9.1,
+      "asylumRate": 2.78,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 6
+      },
+      "pressureRank": 272
+    },
+    "E07000142": {
+      "areaName": "West Lindsey",
+      "population": 95153,
+      "serviceDemandPressureScore": 18,
+      "category": "Stable",
+      "demographicChangeVelocity": 11,
+      "wbiChange2021to2041": -2.2,
+      "asylumRate": 4.13,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 296
+    },
+    "E07000045": {
+      "areaName": "Teignbridge",
+      "population": 134802,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 9,
+      "wbiChange2021to2041": -1.8,
+      "asylumRate": 2.89,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 301
+    },
+    "E07000244": {
+      "areaName": "East Suffolk",
+      "population": 246060,
+      "serviceDemandPressureScore": 21,
+      "category": "Stable",
+      "demographicChangeVelocity": 85,
+      "wbiChange2021to2041": -16.9,
+      "asylumRate": 1.56,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 273
+    },
+    "E07000061": {
+      "areaName": "Eastbourne",
+      "population": 101680,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 41,
+      "wbiChange2021to2041": -8.3,
+      "asylumRate": 3.74,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 183
+    },
+    "E07000176": {
+      "areaName": "Rushcliffe",
+      "population": 119077,
+      "serviceDemandPressureScore": 29,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 36,
+      "wbiChange2021to2041": -7.2,
+      "asylumRate": 3.08,
+      "diversityIndex": 0.33,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 11,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 218
+    },
+    "E06000037": {
+      "areaName": "West Berkshire",
+      "population": 161447,
+      "serviceDemandPressureScore": 44,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 46,
+      "wbiChange2021to2041": -9.2,
+      "asylumRate": 2.24,
+      "diversityIndex": 0.34,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 1,
+        "schoolPressure": 9,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 122
+    },
+    "E07000135": {
+      "areaName": "Oadby and Wigston",
+      "population": 57747,
+      "serviceDemandPressureScore": 43,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 100,
+      "wbiChange2021to2041": -20,
+      "asylumRate": 5.67,
+      "diversityIndex": 0.61,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 129
+    },
+    "E07000129": {
+      "areaName": "Blaby",
+      "population": 102924,
+      "serviceDemandPressureScore": 38,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 61,
+      "wbiChange2021to2041": -12.2,
+      "asylumRate": 3.05,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 18,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 160
+    },
+    "W06000024": {
+      "areaName": "Merthyr Tydfil",
+      "population": 58839,
+      "serviceDemandPressureScore": 29,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 47,
+      "wbiChange2021to2041": -9.4,
+      "asylumRate": 5.6,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 3,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 219
+    },
+    "E09000033": {
+      "areaName": "Westminster",
+      "population": 204236,
+      "serviceDemandPressureScore": 50,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 58,
+      "wbiChange2021to2041": -11.6,
+      "asylumRate": 1.52,
+      "diversityIndex": 0.93,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 17,
+        "asylumConcentration": 1,
+        "schoolPressure": 17,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 90
+    },
+    "E07000192": {
+      "areaName": "Cannock Chase",
+      "population": 100523,
+      "serviceDemandPressureScore": 16,
+      "category": "Stable",
+      "demographicChangeVelocity": 15,
+      "wbiChange2021to2041": -3,
+      "asylumRate": 2.98,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 309
+    },
+    "E07000112": {
+      "areaName": "Shepway",
+      "population": 109759,
+      "serviceDemandPressureScore": 19,
+      "category": "Stable",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.4,
+      "asylumRate": 2.76,
+      "diversityIndex": 0.3,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 290
+    },
+    "E07000124": {
+      "areaName": "Ribble Valley",
+      "population": 61565,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 81,
+      "wbiChange2021to2041": -16.3,
+      "asylumRate": 4.71,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 191
+    },
+    "E07000197": {
+      "areaName": "Stafford",
+      "population": 136870,
+      "serviceDemandPressureScore": 19,
+      "category": "Stable",
+      "demographicChangeVelocity": 26,
+      "wbiChange2021to2041": -5.2,
+      "asylumRate": 2.05,
+      "diversityIndex": 0.26,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 291
+    },
+    "E07000087": {
+      "areaName": "Fareham",
+      "population": 114512,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 14,
+      "wbiChange2021to2041": -2.8,
+      "asylumRate": 2.43,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 280
+    },
+    "E07000198": {
+      "areaName": "Staffordshire Moorlands",
+      "population": 95844,
+      "serviceDemandPressureScore": 29,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 78,
+      "wbiChange2021to2041": -15.6,
+      "asylumRate": 2.9,
+      "diversityIndex": 0.11,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 220
+    },
+    "E09000029": {
+      "areaName": "Sutton",
+      "population": 209636,
+      "serviceDemandPressureScore": 59,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 155,
+      "wbiChange2021to2041": -31,
+      "asylumRate": 1.26,
+      "diversityIndex": 0.72,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 20,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 51
+    },
+    "W06000001": {
+      "areaName": "Isle of Anglesey",
+      "population": 68879,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 45,
+      "wbiChange2021to2041": -9.1,
+      "asylumRate": 3.76,
+      "diversityIndex": 0.12,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 2,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 5
+      },
+      "pressureRank": 281
+    },
+    "E06000051": {
+      "areaName": "Shropshire",
+      "population": 323607,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 20,
+      "wbiChange2021to2041": -4.1,
+      "asylumRate": 0.78,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 0,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 282
+    },
+    "E07000069": {
+      "areaName": "Castle Point",
+      "population": 89582,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 14,
+      "wbiChange2021to2041": -2.7,
+      "asylumRate": 2.76,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 302
+    },
+    "E07000207": {
+      "areaName": "Elmbridge",
+      "population": 138755,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 46,
+      "wbiChange2021to2041": -9.2,
+      "asylumRate": 1.76,
+      "diversityIndex": 0.51,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 201
+    },
+    "E07000143": {
+      "areaName": "Breckland",
+      "population": 141477,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 20,
+      "wbiChange2021to2041": -4,
+      "asylumRate": 1.64,
+      "diversityIndex": 0.26,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 242
+    },
+    "E07000068": {
+      "areaName": "Brentwood",
+      "population": 77048,
+      "serviceDemandPressureScore": 30,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 53,
+      "wbiChange2021to2041": -10.5,
+      "asylumRate": 2.9,
+      "diversityIndex": 0.4,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 212
+    },
+    "E07000203": {
+      "areaName": "Mid Suffolk",
+      "population": 102701,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 10,
+      "wbiChange2021to2041": -2,
+      "asylumRate": 1.99,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 303
+    },
+    "E07000179": {
+      "areaName": "South Oxfordshire",
+      "population": 149088,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 39,
+      "wbiChange2021to2041": -7.9,
+      "asylumRate": 1.41,
+      "diversityIndex": 0.33,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 243
+    },
+    "E07000088": {
+      "areaName": "Gosport",
+      "population": 81949,
+      "serviceDemandPressureScore": 22,
+      "category": "Stable",
+      "demographicChangeVelocity": 19,
+      "wbiChange2021to2041": -3.7,
+      "asylumRate": 2.53,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 268
+    },
+    "E07000084": {
+      "areaName": "Basingstoke and Deane",
+      "population": 185154,
+      "serviceDemandPressureScore": 35,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 71,
+      "wbiChange2021to2041": -14.3,
+      "asylumRate": 1.04,
+      "diversityIndex": 0.41,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 173
+    },
+    "W06000003": {
+      "areaName": "Conwy",
+      "population": 114743,
+      "serviceDemandPressureScore": 23,
+      "category": "Stable",
+      "demographicChangeVelocity": 50,
+      "wbiChange2021to2041": -10.1,
+      "asylumRate": 1.74,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 261
+    },
+    "E07000041": {
+      "areaName": "Exeter",
+      "population": 130707,
+      "serviceDemandPressureScore": 30,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 47,
+      "wbiChange2021to2041": -9.5,
+      "asylumRate": 1.45,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 14,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 213
+    },
+    "E06000019": {
+      "areaName": "Herefordshire, County of",
+      "population": 187032,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.6,
+      "asylumRate": 0.99,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 283
+    },
+    "E07000215": {
+      "areaName": "Tandridge",
+      "population": 87877,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 37,
+      "wbiChange2021to2041": -7.3,
+      "asylumRate": 2.1,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 11,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 208
+    },
+    "E06000052": {
+      "areaName": "Cornwall",
+      "population": 570305,
+      "serviceDemandPressureScore": 19,
+      "category": "Stable",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.6,
+      "asylumRate": 0.31,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 3,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 292
+    },
+    "E07000245": {
+      "areaName": "West Suffolk",
+      "population": 179948,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 89,
+      "wbiChange2021to2041": -17.9,
+      "asylumRate": 0.95,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 284
+    },
+    "E07000090": {
+      "areaName": "Havant",
+      "population": 124210,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.5,
+      "asylumRate": 1.34,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 285
+    },
+    "E07000011": {
+      "areaName": "Huntingdonshire",
+      "population": 180832,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 42,
+      "wbiChange2021to2041": -8.4,
+      "asylumRate": 0.89,
+      "diversityIndex": 0.34,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 192
+    },
+    "E07000039": {
+      "areaName": "South Derbyshire",
+      "population": 107206,
+      "serviceDemandPressureScore": 23,
+      "category": "Stable",
+      "demographicChangeVelocity": 29,
+      "wbiChange2021to2041": -5.8,
+      "asylumRate": 1.45,
+      "diversityIndex": 0.26,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 9,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 262
+    },
+    "W06000014": {
+      "areaName": "Vale of Glamorgan",
+      "population": 131939,
+      "serviceDemandPressureScore": 24,
+      "category": "Stable",
+      "demographicChangeVelocity": 49,
+      "wbiChange2021to2041": -9.9,
+      "asylumRate": 1.25,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 259
+    },
+    "E07000107": {
+      "areaName": "Dartford",
+      "population": 116754,
+      "serviceDemandPressureScore": 37,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 170,
+      "wbiChange2021to2041": -33.9,
+      "asylumRate": 1.2,
+      "diversityIndex": 0.62,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 166
+    },
+    "E07000044": {
+      "areaName": "South Hams",
+      "population": 88628,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 7,
+      "wbiChange2021to2041": -1.3,
+      "asylumRate": 1.63,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 2,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 304
+    },
+    "E07000229": {
+      "areaName": "Worthing",
+      "population": 111338,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 40,
+      "wbiChange2021to2041": -8.1,
+      "asylumRate": 1.32,
+      "diversityIndex": 0.35,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 244
+    },
+    "E09000027": {
+      "areaName": "Richmond upon Thames",
+      "population": 195277,
+      "serviceDemandPressureScore": 53,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 95,
+      "wbiChange2021to2041": -18.9,
+      "asylumRate": 0.71,
+      "diversityIndex": 0.65,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 14,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 82
+    },
+    "E07000103": {
+      "areaName": "Watford",
+      "population": 102245,
+      "serviceDemandPressureScore": 39,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 128,
+      "wbiChange2021to2041": -25.7,
+      "asylumRate": 1.31,
+      "diversityIndex": 0.8,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 158
+    },
+    "E07000133": {
+      "areaName": "Melton",
+      "population": 51752,
+      "serviceDemandPressureScore": 35,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 79,
+      "wbiChange2021to2041": -15.9,
+      "asylumRate": 2.41,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 174
+    },
+    "E07000149": {
+      "areaName": "South Norfolk",
+      "population": 141948,
+      "serviceDemandPressureScore": 23,
+      "category": "Stable",
+      "demographicChangeVelocity": 23,
+      "wbiChange2021to2041": -4.6,
+      "asylumRate": 0.88,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 7,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 263
+    },
+    "E07000008": {
+      "areaName": "Cambridge",
+      "population": 145674,
+      "serviceDemandPressureScore": 38,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 108,
+      "wbiChange2021to2041": -21.5,
+      "asylumRate": 0.8,
+      "diversityIndex": 0.73,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 161
+    },
+    "W06000020": {
+      "areaName": "Torfaen",
+      "population": 92276,
+      "serviceDemandPressureScore": 19,
+      "category": "Stable",
+      "demographicChangeVelocity": 44,
+      "wbiChange2021to2041": -8.9,
+      "asylumRate": 1.27,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 6
+      },
+      "pressureRank": 293
+    },
+    "E07000145": {
+      "areaName": "Great Yarmouth",
+      "population": 99750,
+      "serviceDemandPressureScore": 29,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 33,
+      "wbiChange2021to2041": -6.7,
+      "asylumRate": 1.09,
+      "diversityIndex": 0.28,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 1,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 221
+    },
+    "E07000093": {
+      "areaName": "Test Valley",
+      "population": 130491,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 38,
+      "wbiChange2021to2041": -7.7,
+      "asylumRate": 0.81,
+      "diversityIndex": 0.3,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 209
+    },
+    "E06000022": {
+      "areaName": "Bath and North East Somerset",
+      "population": 193409,
+      "serviceDemandPressureScore": 30,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 42,
+      "wbiChange2021to2041": -8.5,
+      "asylumRate": 0.5,
+      "diversityIndex": 0.34,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 13,
+        "asylumConcentration": 0,
+        "schoolPressure": 4,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 214
+    },
+    "E06000036": {
+      "areaName": "Bracknell Forest",
+      "population": 124605,
+      "serviceDemandPressureScore": 49,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 68,
+      "wbiChange2021to2041": -13.6,
+      "asylumRate": 0.76,
+      "diversityIndex": 0.47,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 9,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 93
+    },
+    "W06000023": {
+      "areaName": "Powys",
+      "population": 133169,
+      "serviceDemandPressureScore": 23,
+      "category": "Stable",
+      "demographicChangeVelocity": 52,
+      "wbiChange2021to2041": -10.3,
+      "asylumRate": 0.74,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 264
+    },
+    "E07000144": {
+      "areaName": "Broadland",
+      "population": 131723,
+      "serviceDemandPressureScore": 19,
+      "category": "Stable",
+      "demographicChangeVelocity": 16,
+      "wbiChange2021to2041": -3.3,
+      "asylumRate": 0.65,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 294
+    },
+    "E07000146": {
+      "areaName": "King's Lynn and West Norfolk",
+      "population": 154326,
+      "serviceDemandPressureScore": 28,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.7,
+      "asylumRate": 0.58,
+      "diversityIndex": 0.27,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 225
+    },
+    "E07000139": {
+      "areaName": "North Kesteven",
+      "population": 118072,
+      "serviceDemandPressureScore": 12,
+      "category": "Stable",
+      "demographicChangeVelocity": 11,
+      "wbiChange2021to2041": -2.1,
+      "asylumRate": 0.73,
+      "diversityIndex": 0.16,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 317
+    },
+    "E07000085": {
+      "areaName": "East Hampshire",
+      "population": 125742,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 23,
+      "wbiChange2021to2041": -4.6,
+      "asylumRate": 0.62,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 7,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 250
+    },
+    "E07000208": {
+      "areaName": "Epsom and Ewell",
+      "population": 80937,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 88,
+      "wbiChange2021to2041": -17.6,
+      "asylumRate": 0.96,
+      "diversityIndex": 0.58,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 149
+    },
+    "E07000037": {
+      "areaName": "High Peak",
+      "population": 90935,
+      "serviceDemandPressureScore": 14,
+      "category": "Stable",
+      "demographicChangeVelocity": 11,
+      "wbiChange2021to2041": -2.1,
+      "asylumRate": 0.87,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 314
+    },
+    "E07000082": {
+      "areaName": "Stroud",
+      "population": 121104,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 17,
+      "wbiChange2021to2041": -3.4,
+      "asylumRate": 0.64,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 286
+    },
+    "E07000200": {
+      "areaName": "Babergh",
+      "population": 92342,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 11,
+      "wbiChange2021to2041": -2.2,
+      "asylumRate": 0.62,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 305
+    },
+    "E07000234": {
+      "areaName": "Bromsgrove",
+      "population": 99183,
+      "serviceDemandPressureScore": 18,
+      "category": "Stable",
+      "demographicChangeVelocity": 20,
+      "wbiChange2021to2041": -4,
+      "asylumRate": 0.59,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 297
+    },
+    "E07000080": {
+      "areaName": "Forest of Dean",
+      "population": 87004,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 14,
+      "wbiChange2021to2041": -2.8,
+      "asylumRate": 0.67,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 306
+    },
+    "W06000009": {
+      "areaName": "Pembrokeshire",
+      "population": 123359,
+      "serviceDemandPressureScore": 22,
+      "category": "Stable",
+      "demographicChangeVelocity": 49,
+      "wbiChange2021to2041": -9.8,
+      "asylumRate": 0.48,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 269
+    },
+    "E07000236": {
+      "areaName": "Redditch",
+      "population": 87034,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 66,
+      "wbiChange2021to2041": -13.1,
+      "asylumRate": 0.68,
+      "diversityIndex": 0.39,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 150
+    },
+    "E07000115": {
+      "areaName": "Tonbridge and Malling",
+      "population": 132201,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 27,
+      "wbiChange2021to2041": -5.5,
+      "asylumRate": 0.44,
+      "diversityIndex": 0.29,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 245
+    },
+    "E07000046": {
+      "areaName": "Torridge",
+      "population": 68114,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 81,
+      "wbiChange2021to2041": -16.2,
+      "asylumRate": 0.86,
+      "diversityIndex": 0.12,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 210
+    },
+    "E07000216": {
+      "areaName": "Waverley",
+      "population": 128226,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 24,
+      "wbiChange2021to2041": -4.7,
+      "asylumRate": 0.45,
+      "diversityIndex": 0.31,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 7,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 232
+    },
+    "E06000059": {
+      "areaName": "Dorset",
+      "population": 379580,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 88,
+      "wbiChange2021to2041": -17.5,
+      "asylumRate": 0.13,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 251
+    },
+    "E07000086": {
+      "areaName": "Eastleigh",
+      "population": 136444,
+      "serviceDemandPressureScore": 28,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 32,
+      "wbiChange2021to2041": -6.4,
+      "asylumRate": 0.35,
+      "diversityIndex": 0.3,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 226
+    },
+    "E07000063": {
+      "areaName": "Lewes",
+      "population": 99909,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 26,
+      "wbiChange2021to2041": -5.1,
+      "asylumRate": 0.39,
+      "diversityIndex": 0.28,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 252
+    },
+    "E06000017": {
+      "areaName": "Rutland",
+      "population": 41050,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 87,
+      "wbiChange2021to2041": -17.3,
+      "asylumRate": 0.97,
+      "diversityIndex": 0.24,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 3,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 151
+    },
+    "E07000111": {
+      "areaName": "Sevenoaks",
+      "population": 120515,
+      "serviceDemandPressureScore": 32,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 40,
+      "wbiChange2021to2041": -8,
+      "asylumRate": 0.33,
+      "diversityIndex": 0.34,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 12,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 202
+    },
+    "E07000102": {
+      "areaName": "Three Rivers",
+      "population": 93772,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 118,
+      "wbiChange2021to2041": -23.7,
+      "asylumRate": 0.42,
+      "diversityIndex": 0.58,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 152
+    },
+    "E07000009": {
+      "areaName": "East Cambridgeshire",
+      "population": 87763,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 22,
+      "wbiChange2021to2041": -4.4,
+      "asylumRate": 0.32,
+      "diversityIndex": 0.31,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 7,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 233
+    },
+    "E07000194": {
+      "areaName": "Lichfield",
+      "population": 106436,
+      "serviceDemandPressureScore": 18,
+      "category": "Stable",
+      "demographicChangeVelocity": 20,
+      "wbiChange2021to2041": -4,
+      "asylumRate": 0.27,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 12
+      },
+      "pressureRank": 298
+    },
+    "E07000138": {
+      "areaName": "Lincoln",
+      "population": 103814,
+      "serviceDemandPressureScore": 35,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 73,
+      "wbiChange2021to2041": -14.5,
+      "asylumRate": 0.29,
+      "diversityIndex": 0.38,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 15
+      },
+      "pressureRank": 175
+    },
+    "E07000224": {
+      "areaName": "Arun",
+      "population": 164887,
+      "serviceDemandPressureScore": 21,
+      "category": "Stable",
+      "demographicChangeVelocity": 27,
+      "wbiChange2021to2041": -5.4,
+      "asylumRate": 0.12,
+      "diversityIndex": 0.27,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 274
+    },
+    "E07000010": {
+      "areaName": "Fenland",
+      "population": 102461,
+      "serviceDemandPressureScore": 36,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 52,
+      "wbiChange2021to2041": -10.4,
+      "asylumRate": 0.19,
+      "diversityIndex": 0.31,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 168
+    },
+    "E07000209": {
+      "areaName": "Guildford",
+      "population": 143647,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 68,
+      "wbiChange2021to2041": -13.5,
+      "asylumRate": 0.13,
+      "diversityIndex": 0.47,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 153
+    },
+    "E07000074": {
+      "areaName": "Maldon",
+      "population": 66211,
+      "serviceDemandPressureScore": 8,
+      "category": "Stable",
+      "demographicChangeVelocity": 4,
+      "wbiChange2021to2041": -0.7,
+      "asylumRate": 0.29,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 1,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 319
+    },
+    "E07000091": {
+      "areaName": "New Forest",
+      "population": 175782,
+      "serviceDemandPressureScore": 14,
+      "category": "Stable",
+      "demographicChangeVelocity": 16,
+      "wbiChange2021to2041": -3.2,
+      "asylumRate": 0.11,
+      "diversityIndex": 0.19,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 315
+    },
+    "E07000043": {
+      "areaName": "North Devon",
+      "population": 98612,
+      "serviceDemandPressureScore": 16,
+      "category": "Stable",
+      "demographicChangeVelocity": 11,
+      "wbiChange2021to2041": -2.1,
+      "asylumRate": 0.2,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 310
+    },
+    "E07000223": {
+      "areaName": "Adur",
+      "population": 64543,
+      "serviceDemandPressureScore": 25,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 28,
+      "wbiChange2021to2041": -5.7,
+      "asylumRate": 0.15,
+      "diversityIndex": 0.28,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 17
+      },
+      "pressureRank": 253
+    },
+    "E07000131": {
+      "areaName": "Harborough",
+      "population": 97623,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 62,
+      "wbiChange2021to2041": -12.4,
+      "asylumRate": 0.1,
+      "diversityIndex": 0.3,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 19,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 184
+    },
+    "E07000210": {
+      "areaName": "Mole Valley",
+      "population": 87387,
+      "serviceDemandPressureScore": 30,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 33,
+      "wbiChange2021to2041": -6.6,
+      "asylumRate": 0.11,
+      "diversityIndex": 0.33,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 10,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 215
+    },
+    "E07000064": {
+      "areaName": "Rother",
+      "population": 93114,
+      "serviceDemandPressureScore": 21,
+      "category": "Stable",
+      "demographicChangeVelocity": 15,
+      "wbiChange2021to2041": -3,
+      "asylumRate": 0.1,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 5,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 275
+    },
+    "E07000012": {
+      "areaName": "South Cambridgeshire",
+      "population": 162117,
+      "serviceDemandPressureScore": 36,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 85,
+      "wbiChange2021to2041": -17.1,
+      "asylumRate": 0.06,
+      "diversityIndex": 0.43,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 16
+      },
+      "pressureRank": 169
+    },
+    "E07000065": {
+      "areaName": "Wealden",
+      "population": 160152,
+      "serviceDemandPressureScore": 13,
+      "category": "Stable",
+      "demographicChangeVelocity": 10,
+      "wbiChange2021to2041": -1.9,
+      "asylumRate": 0.06,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 316
+    },
+    "E07000047": {
+      "areaName": "West Devon",
+      "population": 57094,
+      "serviceDemandPressureScore": 33,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 85,
+      "wbiChange2021to2041": -17,
+      "asylumRate": 0.17,
+      "diversityIndex": 0.15,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 13
+      },
+      "pressureRank": 193
+    },
+    "E07000217": {
+      "areaName": "Woking",
+      "population": 103943,
+      "serviceDemandPressureScore": 38,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 77,
+      "wbiChange2021to2041": -15.3,
+      "asylumRate": 0.09,
+      "diversityIndex": 0.59,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 18
+      },
+      "pressureRank": 162
+    },
+    "W06000008": {
+      "areaName": "Ceredigion",
+      "population": 71473,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 58,
+      "wbiChange2021to2041": -11.5,
+      "asylumRate": 0,
+      "diversityIndex": 0.22,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 17,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 234
+    },
+    "E09000001": {
+      "areaName": "City of London",
+      "population": 8584,
+      "serviceDemandPressureScore": 60,
+      "category": "Moderate Pressure",
+      "demographicChangeVelocity": 86,
+      "wbiChange2021to2041": -17.2,
+      "asylumRate": 0,
+      "diversityIndex": 0.8,
+      "diversityLevel": "highly diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 20,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 45
+    },
+    "E07000079": {
+      "areaName": "Cotswold",
+      "population": 90830,
+      "serviceDemandPressureScore": 15,
+      "category": "Stable",
+      "demographicChangeVelocity": 14,
+      "wbiChange2021to2041": -2.8,
+      "asylumRate": 0,
+      "diversityIndex": 0.21,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 312
+    },
+    "E07000035": {
+      "areaName": "Derbyshire Dales",
+      "population": 71535,
+      "serviceDemandPressureScore": 30,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 82,
+      "wbiChange2021to2041": -16.5,
+      "asylumRate": 0,
+      "diversityIndex": 0.14,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 216
+    },
+    "E07000242": {
+      "areaName": "East Hertfordshire",
+      "population": 150159,
+      "serviceDemandPressureScore": 39,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 80,
+      "wbiChange2021to2041": -16.1,
+      "asylumRate": 0,
+      "diversityIndex": 0.35,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 19
+      },
+      "pressureRank": 159
+    },
+    "E07000089": {
+      "areaName": "Hart",
+      "population": 99404,
+      "serviceDemandPressureScore": 27,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 25,
+      "wbiChange2021to2041": -5,
+      "asylumRate": 0,
+      "diversityIndex": 0.32,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 8,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 235
+    },
+    "E06000046": {
+      "areaName": "Isle of Wight",
+      "population": 140459,
+      "serviceDemandPressureScore": 17,
+      "category": "Stable",
+      "demographicChangeVelocity": 11,
+      "wbiChange2021to2041": -2.2,
+      "asylumRate": 0,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 3,
+        "asylumConcentration": 0,
+        "schoolPressure": 5,
+        "languagePressure": 0,
+        "housingPressure": 9
+      },
+      "pressureRank": 307
+    },
+    "E06000053": {
+      "areaName": "Isles of Scilly",
+      "population": 2055,
+      "serviceDemandPressureScore": 36,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 71,
+      "wbiChange2021to2041": -14.2,
+      "asylumRate": 0,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 6,
+        "languagePressure": 0,
+        "housingPressure": 10
+      },
+      "pressureRank": 170
+    },
+    "E07000235": {
+      "areaName": "Malvern Hills",
+      "population": 79487,
+      "serviceDemandPressureScore": 12,
+      "category": "Stable",
+      "demographicChangeVelocity": 12,
+      "wbiChange2021to2041": -2.5,
+      "asylumRate": 0,
+      "diversityIndex": 0.18,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 4,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 318
+    },
+    "E07000042": {
+      "areaName": "Mid Devon",
+      "population": 82853,
+      "serviceDemandPressureScore": 34,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 81,
+      "wbiChange2021to2041": -16.1,
+      "asylumRate": 0,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 14
+      },
+      "pressureRank": 185
+    },
+    "W06000021": {
+      "areaName": "Monmouthshire",
+      "population": 92960,
+      "serviceDemandPressureScore": 23,
+      "category": "Stable",
+      "demographicChangeVelocity": 51,
+      "wbiChange2021to2041": -10.1,
+      "asylumRate": 0,
+      "diversityIndex": 0.17,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 15,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 8
+      },
+      "pressureRank": 265
+    },
+    "E07000147": {
+      "areaName": "North Norfolk",
+      "population": 102978,
+      "serviceDemandPressureScore": 8,
+      "category": "Stable",
+      "demographicChangeVelocity": 5,
+      "wbiChange2021to2041": -0.9,
+      "asylumRate": 0,
+      "diversityIndex": 0.13,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 1,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 7
+      },
+      "pressureRank": 320
+    },
+    "E07000212": {
+      "areaName": "Runnymede",
+      "population": 88079,
+      "serviceDemandPressureScore": 40,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 66,
+      "wbiChange2021to2041": -13.3,
+      "asylumRate": 0,
+      "diversityIndex": 0.54,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 154
+    },
+    "E07000083": {
+      "areaName": "Tewkesbury",
+      "population": 94882,
+      "serviceDemandPressureScore": 16,
+      "category": "Stable",
+      "demographicChangeVelocity": 20,
+      "wbiChange2021to2041": -4,
+      "asylumRate": 0,
+      "diversityIndex": 0.25,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 6,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 11
+      },
+      "pressureRank": 311
+    },
+    "E07000116": {
+      "areaName": "Tunbridge Wells",
+      "population": 115314,
+      "serviceDemandPressureScore": 36,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 53,
+      "wbiChange2021to2041": -10.7,
+      "asylumRate": 0,
+      "diversityIndex": 0.36,
+      "diversityLevel": "moderately diverse",
+      "components": {
+        "ethnicChangeContribution": 16,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 20
+      },
+      "pressureRank": 171
+    },
+    "E08000016": {
+      "areaName": "Barnsley",
+      "population": 244555,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 67,
+      "wbiChange2021to2041": -13.3,
+      "asylumRate": 0,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 287
+    },
+    "E08000019": {
+      "areaName": "Sheffield",
+      "population": 556537,
+      "serviceDemandPressureScore": 20,
+      "category": "Stable",
+      "demographicChangeVelocity": 93,
+      "wbiChange2021to2041": -18.7,
+      "asylumRate": 0,
+      "diversityIndex": 0.53,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 0,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 288
+    },
+    "E08000038": {
+      "areaName": "Barnsley",
+      "population": 244555,
+      "serviceDemandPressureScore": 26,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 75,
+      "wbiChange2021to2041": -15,
+      "asylumRate": 11,
+      "diversityIndex": 0.2,
+      "diversityLevel": "low diversity",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 6,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 246
+    },
+    "E08000039": {
+      "areaName": "Sheffield",
+      "population": 556537,
+      "serviceDemandPressureScore": 31,
+      "category": "Low Pressure",
+      "demographicChangeVelocity": 81,
+      "wbiChange2021to2041": -16.2,
+      "asylumRate": 21.7,
+      "diversityIndex": 0.53,
+      "diversityLevel": "diverse",
+      "components": {
+        "ethnicChangeContribution": 20,
+        "asylumConcentration": 11,
+        "schoolPressure": 0,
+        "languagePressure": 0,
+        "housingPressure": 0
+      },
+      "pressureRank": 211
+    }
+  }
+}

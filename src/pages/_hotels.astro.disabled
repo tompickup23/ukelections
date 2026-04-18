@@ -1,0 +1,999 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DataDrawer from "../components/DataDrawer.astro";
+import PageContents from "../components/PageContents.astro";
+import PageGuide from "../components/PageGuide.astro";
+import RegionTileMap from "../components/RegionTileMap.astro";
+import { getEntityProfileByReference } from "../lib/entities";
+import { loadHotelEntityLedger } from "../lib/hotel-data";
+import { getSiteInvestigationTrailMap } from "../lib/investigations";
+import { loadMoneyLedger } from "../lib/money-data";
+import {
+  getHotelCoverageSummary,
+  getHotelRegionVisibilitySummaries,
+  getHotelVisibilityAreas,
+  getHotelWatchlist
+} from "../lib/hotel-analytics";
+import { loadLocalRouteLatest } from "../lib/route-data";
+
+const hotelLedger = loadHotelEntityLedger();
+const localRouteLatest = loadLocalRouteLatest();
+const moneyLedger = loadMoneyLedger();
+const namedCurrent = hotelLedger.sites.filter((site) => site.status === "current");
+const namedHistorical = hotelLedger.sites.filter((site) => site.status === "historical");
+const parliamentaryReferences = hotelLedger.sites.filter(
+  (site) => site.evidenceClass === "parliamentary_reference"
+);
+const unnamedOnlyAreas = hotelLedger.areas.filter((area) => area.visibilityClass === "all_unnamed");
+const summaryCards = [
+  {
+    label: "Named current sites",
+    value: hotelLedger.summary.currentNamedSites.toLocaleString(),
+    detail: "Current named hotels in the public starter ledger."
+  },
+  {
+    label: "Current sites with entity links",
+    value: hotelLedger.summary.currentNamedSitesWithAnyEntityLinks.toLocaleString(),
+    detail: "At least one owner, group, or operator link with documentary backing."
+  },
+  {
+    label: "Current sites still unresolved",
+    value: hotelLedger.summary.currentNamedSitesUnresolved.toLocaleString(),
+    detail: "Publicly named current hotels where the ledger still lacks a publishable owner or operator match."
+  },
+  {
+    label: "Areas with unnamed hotel counts",
+    value: hotelLedger.summary.unnamedOnlyAreaCount.toLocaleString(),
+    detail: "Places where public authorities acknowledge hotels but do not publish site names."
+  }
+];
+const watchlist = getHotelWatchlist(namedCurrent, 4);
+const watchlistHighlights = watchlist.slice(0, 3);
+const coverageSummary = getHotelCoverageSummary(namedCurrent);
+const providerBreakdown = [...hotelLedger.primeProviderBreakdown].sort(
+  (a, b) => b.currentNamedSiteCount - a.currentNamedSiteCount
+);
+const regionVisibility = getHotelRegionVisibilitySummaries(hotelLedger);
+const visibilityAreas = getHotelVisibilityAreas(hotelLedger.areas);
+const hotelFilterRegions = [...new Set([...hotelLedger.sites.map((site) => site.regionName), ...hotelLedger.areas.map((area) => area.regionName)])].sort();
+const hotelFilterStatuses = [...new Set(hotelLedger.sites.map((site) => site.status))].sort();
+const hotelFilterCoverages = [...new Set(hotelLedger.sites.map((site) => site.entityCoverage))].sort();
+const leadUnnamedArea = unnamedOnlyAreas[0];
+const namedRegionLeader = regionVisibility[0];
+const secrecyRegionLeader = [...regionVisibility].sort((a, b) => b.unnamedSiteCount - a.unnamedSiteCount)[0];
+const archiveVerification = hotelLedger.archiveVerification;
+const siteTrailMap = getSiteInvestigationTrailMap(localRouteLatest.areas, hotelLedger, moneyLedger);
+const archiveSummaryCards = [
+  {
+    label: "Archive leads",
+    value: archiveVerification.totalLeadCount.toLocaleString(),
+    detail: "Names recovered from the archived map snapshot."
+  },
+  {
+    label: "Verified overlaps",
+    value: (archiveVerification.linkedExistingCount + archiveVerification.promotedNewCount).toLocaleString(),
+    detail: "Archive leads that now connect to publishable hotel records."
+  },
+  {
+    label: "Held back",
+    value: archiveVerification.heldBackCount.toLocaleString(),
+    detail: "Leads kept out of the public overlap list pending stronger corroboration."
+  },
+  {
+    label: "Pending review",
+    value: archiveVerification.pendingVerificationCount.toLocaleString(),
+    detail: "Unpublished archive leads still waiting for document-backed verification."
+  }
+];
+const hotelReadoutCards = [
+  {
+    title: "Named does not mean resolved",
+    body: `${coverageSummary.partial} of the ${namedCurrent.length} current named sites have only partial owner or operator coverage, and ${coverageSummary.unresolved} remain unresolved. Public naming is only the first step in the chain.`
+  },
+  secrecyRegionLeader
+    ? {
+        title: "The secrecy gap is regional, not abstract",
+        body: `${secrecyRegionLeader.regionName} currently leads the live ledger on unnamed publicly acknowledged sites, showing how councils can confirm hotel use without publishing the full estate.`
+      }
+    : null,
+  namedRegionLeader
+    ? {
+        title: "Visible concentration is already uneven",
+        body: `${namedRegionLeader.regionName} currently has the largest count of named current sites in the starter ledger, which means public hotel scrutiny is already clustering geographically.`
+      }
+    : null
+].filter((card): card is { title: string; body: string } => card !== null);
+
+function buildPresetHref(pathname: string, params: Record<string, string>, hash: string): string {
+  return `${pathname}?${new URLSearchParams(params).toString()}#${hash}`;
+}
+
+const hotelPresetViews = [
+  {
+    title: "Current unresolved sites",
+    body: "Jump straight to current named hotels where public evidence still cannot resolve the owner or operator chain.",
+    href: buildPresetHref(
+      "/hotels/",
+      {
+        hotel_status: "current",
+        hotel_coverage: "unresolved"
+      },
+      "hotel-filters"
+    ),
+    cta: "Open unresolved sites"
+  },
+  {
+    title: "Partial chains in the current estate",
+    body: "Keep only current sites with some entity evidence but an incomplete ownership or operator picture.",
+    href: buildPresetHref(
+      "/hotels/",
+      {
+        hotel_status: "current",
+        hotel_coverage: "partial"
+      },
+      "hotel-filters"
+    ),
+    cta: "Open partial chains"
+  },
+  {
+    title: "Unnamed-only visibility gap",
+    body: "Move directly to areas where public authorities acknowledge hotel use without publishing the site names.",
+    href: buildPresetHref(
+      "/hotels/",
+      {
+        hotel_visibility: "unnamed-only"
+      },
+      "hotel-filters"
+    ),
+    cta: "Open unnamed-only areas"
+  },
+  ...(secrecyRegionLeader
+    ? [
+        {
+          title: `${secrecyRegionLeader.regionName} secrecy cluster`,
+          body: `Filter the hotel ledger to ${secrecyRegionLeader.regionName}, where unnamed acknowledged sites currently cluster most heavily in the starter ledger.`,
+          href: buildPresetHref(
+            "/hotels/",
+            {
+              hotel_region: secrecyRegionLeader.regionName,
+              hotel_visibility: "unnamed-only"
+            },
+            "hotel-filters"
+          ),
+          cta: "Open regional secrecy view"
+        }
+      ]
+    : [])
+];
+const hotelGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Read the named-site failures first",
+    body: "Start with the current unresolved chain watchlist. That is where the strongest current evidence and the clearest accountability gaps meet.",
+    href: "#unresolved-watchlist",
+    cta: "Open the watchlist"
+  },
+  {
+    eyebrow: "Then check",
+    title: "Separate named hotels from the hidden estate",
+    body: "Use the secrecy-gap section to distinguish places with publicly named sites from places where councils confirm hotel use without publishing the list.",
+    href: "#secrecy-gap",
+    cta: "Open hidden-site evidence"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Use the explorer and ledgers to verify the story",
+    body: "The region maps, archive queue, filters, and full tables are here to extend or verify the findings, not to be the first thing a reader has to decode.",
+    href: "#hotel-data",
+    cta: "Open the deep data"
+  }
+];
+const hotelSections = [
+  { id: "hotel-findings", label: "Findings" },
+  { id: "hotel-guide", label: "How to use" },
+  { id: "unresolved-watchlist", label: "Watchlist" },
+  { id: "secrecy-gap", label: "Secrecy gap" },
+  { id: "hotel-data", label: "Explorer + ledger" }
+];
+
+function formatReportedPeople(value: number | null): string {
+  return typeof value === "number" ? `${value.toLocaleString()} people reported` : "People total not published";
+}
+
+function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
+  const matches = [
+    ...site.entityLinks.map((link) => getEntityProfileByReference(link.entityName, link.companyNumber)),
+    site.primeProvider ? getEntityProfileByReference(site.primeProvider.provider, null) : null
+  ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
+
+  return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
+}
+---
+
+<BaseLayout
+  title="Hotels | asylumstats"
+  description="Named asylum hotel tracking, ownership and operator links, secrecy-gap evidence, and official hotel-use signals."
+  noIndex={true}
+>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Hotel tracker</span>
+      <h1>Track asylum hotels, hidden sites, and broken chains.</h1>
+      <p>
+        Use this page to separate named current sites, hidden official hotel use, and the owner or operator gaps that
+        still stop the chain from resolving cleanly.
+      </p>
+    </section>
+
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Visible estate snapshot</span>
+        <p class="rail-copy">
+          The current public estate is small, partial, and still strong enough to expose where the secrecy gap lives.
+        </p>
+        <div class="stat-strip">
+          {summaryCards.map((card) => (
+            <article class="stat-tile">
+              <span class="tiny">{card.label}</span>
+              <strong>{card.value}</strong>
+              <p class="tiny">{card.detail}</p>
+            </article>
+          ))}
+        </div>
+      </article>
+
+      {leadUnnamedArea && (
+        <article class="panel panel-pad">
+          <span class="tiny">Secrecy gap signal</span>
+          <h2 class="rail-title">{leadUnnamedArea.areaName}</h2>
+          <p class="rail-copy">
+            {leadUnnamedArea.unnamedSiteCount} unnamed site{leadUnnamedArea.unnamedSiteCount > 1 ? "s" : ""} publicly
+            acknowledged without a publishable hotel list.
+          </p>
+          <div class="chip-row">
+            <span class="chip accent">{leadUnnamedArea.lastPublicDate}</span>
+            <span class="chip">{formatReportedPeople(leadUnnamedArea.peopleHousedReported)}</span>
+          </div>
+        </article>
+      )}
+    </aside>
+  </section>
+
+  <PageContents title="Start here" sections={hotelSections} variant="priority" />
+
+  <section id="hotel-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          {hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still lack a resolved owner or operator chain, and {hotelLedger.summary.unnamedOnlyAreaCount} areas publicly acknowledge hotel use without naming the sites.
+        </p>
+      </div>
+      <a class="source-pill" href="/spending#money-findings">Open the linked money findings</a>
+    </div>
+    <div class="kpi-grid">
+      {summaryCards.map((card) => (
+        <article class="kpi-card">
+          <span class="tiny">{card.label}</span>
+          <strong>{card.value}</strong>
+          <p class="tiny">{card.detail}</p>
+        </article>
+      ))}
+    </div>
+    <div class="story-grid">
+      {hotelReadoutCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <PageGuide
+    id="hotel-guide"
+    title="Use the hotel page in three moves"
+    intro="This page works best when it starts as an investigation surface and only becomes a data table when you need to verify something."
+    items={hotelGuideItems}
+  />
+
+  <section id="unresolved-watchlist" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>Current unresolved chain watchlist</h2>
+        <p class="lede">{watchlist.length} live named sites still break at owner or operator level even though the hotel itself is already public.</p>
+      </div>
+      <span class="chip accent">{watchlist.length} sites on the current watchlist</span>
+    </div>
+    <div class="feature-grid">
+      {watchlistHighlights.map((site) => {
+        const trail = siteTrailMap.get(site.siteId);
+        const entityProfiles = getSiteEntityProfiles(site);
+
+        return (
+          <article class="feature-card accent">
+            <div class="chip-row">
+              <span class="chip accent">{site.entityCoverage}</span>
+              <span class="chip">{site.evidenceClass}</span>
+              <span class="chip teal">{site.confidence}</span>
+            </div>
+            <h3>{site.siteName}</h3>
+            <p class="lede">
+              {site.areaName}, {site.regionName}
+            </p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Owner</span>
+                <span class="data-row-value">{site.ownerName ?? "Not yet resolved"}</span>
+              </div>
+              <div class="data-row">
+                <span>Operator</span>
+                <span class="data-row-value">{site.operatorName ?? "Not yet resolved"}</span>
+              </div>
+              <div class="data-row">
+                <span>Prime provider</span>
+                <span class="data-row-value">{site.primeProvider?.provider ?? "Not yet attached"}</span>
+              </div>
+              {trail?.moneyLeadTitle && (
+                <div class="data-row">
+                  <span>Money lead</span>
+                  <span class="data-row-value">{trail.moneyLeadTitle}</span>
+                </div>
+              )}
+            </div>
+            <p class="tiny">
+              <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
+              {trail && trail.moneyMatchType !== "none" && (
+                <a class="source-pill" href={trail.steps[1].href}>
+                  {trail.moneyMatchType === "direct" ? "Open direct money trail" : "Open provider money trail"}
+                </a>
+              )}
+              {entityProfiles.map((profile) => (
+                <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open {profile.entityName} profile</a>
+              ))}
+              {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/#evidence-chain`}>Open place page</a>}
+            </p>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <section id="secrecy-gap" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>The secrecy gap is already documentable</h2>
+        <p class="lede">{unnamedOnlyAreas.length} areas in the live ledger confirm hotel use without publishing the hotel list.</p>
+      </div>
+      <span class="chip">{unnamedOnlyAreas.length} unnamed-only areas in the live ledger</span>
+    </div>
+    <div class="story-grid">
+      {unnamedOnlyAreas.slice(0, 6).map((area) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">
+              {area.unnamedSiteCount} unnamed site{area.unnamedSiteCount > 1 ? "s" : ""}
+            </span>
+            {area.peopleHousedReported !== null && <span class="chip">{area.peopleHousedReported} people reported</span>}
+          </div>
+          <h3>{area.areaName}</h3>
+          <p class="lede">{area.notes}</p>
+          <p class="tiny">Last public reference: {area.lastPublicDate}</p>
+          <p class="tiny">
+            <a class="source-pill" href={area.sourceUrl}>Source</a>
+            {area.areaCode && <a class="source-pill" href={`/places/${area.areaCode}/`}>Open place page</a>}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <DataDrawer
+    id="hotel-data"
+    label="Deep data"
+    title="Open the region view, archive queue, explorer, and full ledgers"
+    summary="Once the main findings are clear, this is where to verify them, widen them to the full visible estate, and inspect the raw starter records."
+  >
+  <section id="hotel-pressure" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Official hotel pressure</h2>
+        <p class="lede">
+          Official hotel-use signals and public evidence tracking need to sit side by side. Otherwise the visible estate
+          disappears behind national headlines.
+        </p>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      {hotelLedger.hotelFacts.map((fact) => (
+        <article class="kpi-card">
+          <div class="chip-row">
+            <span class="chip accent">route specific</span>
+          </div>
+          <span class="tiny">{fact.label}</span>
+          <strong>{fact.value}</strong>
+          <small>{fact.period}</small>
+          <p class="tiny">{fact.detail}</p>
+          <p class="tiny">
+            <a class="source-pill" href={fact.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="regional-visibility" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Regional visibility pattern</h2>
+        <p class="lede">
+          The hotel ledger is still partial, but it is already regional enough to show where named sites cluster and
+          where unnamed public acknowledgements are doing the hiding.
+        </p>
+      </div>
+      <span class="chip">{regionVisibility.length} regions with live hotel evidence</span>
+    </div>
+    <div class="viz-grid">
+      <RegionTileMap
+        items={regionVisibility.map((region) => ({ regionName: region.regionName, value: region.currentNamedSiteCount }))}
+        title="Current named hotel sites by region"
+        description={
+          namedRegionLeader
+            ? `${namedRegionLeader.regionName} currently leads the starter ledger on named current sites.`
+            : "Named current site coverage is still sparse."
+        }
+        valueLabel="named current sites"
+      />
+      <RegionTileMap
+        items={regionVisibility.map((region) => ({ regionName: region.regionName, value: region.unnamedSiteCount }))}
+        title="Unnamed publicly acknowledged sites by region"
+        description={
+          secrecyRegionLeader
+            ? `${secrecyRegionLeader.regionName} currently leads the live ledger on unnamed site acknowledgements.`
+            : "Unnamed site acknowledgements are not yet present in the live ledger."
+        }
+        valueLabel="unnamed sites"
+        tone="warm"
+      />
+    </div>
+  </section>
+
+  <section id="archive-verification" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Archive-led verification queue</h2>
+        <p class="lede">
+          The archived hotel map is useful as a discovery layer, but it is not a publishable site list on its own.
+          Leads only surface publicly here once they can be linked to an existing documented hotel or promoted with
+          separate public evidence.
+        </p>
+      </div>
+      {archiveVerification.archiveSnapshotUrl && (
+        <a class="source-pill" href={archiveVerification.archiveSnapshotUrl}>Open archive snapshot</a>
+      )}
+    </div>
+    <div class="kpi-grid">
+      {archiveSummaryCards.map((card) => (
+        <article class="kpi-card">
+          <span class="tiny">{card.label}</span>
+          <strong>{card.value}</strong>
+          <p class="tiny">{card.detail}</p>
+        </article>
+      ))}
+    </div>
+    <div class="split section">
+      <div class="panel panel-pad">
+        <h2>Verified archive overlaps</h2>
+        <p class="lede">
+          These rows are safe to show because the site is already publishable in the public ledger. The archive lead is
+          being used as discovery context, not as standalone proof.
+        </p>
+        <div class="story-grid">
+          {archiveVerification.publicArchiveMatches.map((match) => (
+            <article class="story-card">
+              <div class="chip-row">
+                <span class="chip accent">{match.verificationStatus === "promoted_new" ? "Promoted new" : "Linked existing"}</span>
+                <span class="chip">{match.regionName}</span>
+              </div>
+              <h3>{match.siteName}</h3>
+              <p class="lede">Archive lead: {match.leadName}</p>
+              <p class="tiny">{match.notes}</p>
+              <p class="tiny">
+                {match.sourceUrl && <a class="source-pill" href={match.sourceUrl}>Public evidence</a>}
+                {match.areaCode && <a class="source-pill" href={`/places/${match.areaCode}/`}>Open place page</a>}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="panel panel-pad">
+        <h2>Publication rule for archive leads</h2>
+        <div class="signal-list">
+          <article class="signal-card accent">
+            <span class="tiny">Discovery only</span>
+            <h3>Unverified archive names stay out of the public ledger.</h3>
+            <p class="tiny">
+              {archiveVerification.pendingVerificationCount.toLocaleString()} archive leads are still in the queue and
+              are counted here without being published as hotel claims.
+            </p>
+          </article>
+          <article class="signal-card">
+            <span class="tiny">Held back leads</span>
+            <h3>{archiveVerification.heldBackCount.toLocaleString()} leads are explicitly blocked from promotion</h3>
+            <p class="tiny">
+              This lets the site keep doubtful or weakly corroborated names visible to the research workflow without
+              laundering them into the public tracker.
+            </p>
+          </article>
+          <article class="signal-card">
+            <span class="tiny">Review acceleration</span>
+            <h3>{archiveVerification.pendingAutoCandidateCount.toLocaleString()} pending leads already have exact name candidates</h3>
+            <p class="tiny">
+              Exact name matches can guide verification work internally, but they still need independent public
+              evidence before they become publishable rows.
+            </p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Full unresolved chain watchlist</h2>
+        <p class="lede">
+          This expands the opening watchlist into the full current set carried by the page.
+        </p>
+      </div>
+      <span class="chip">{watchlist.length} sites on the current watchlist</span>
+    </div>
+    <div class="feature-grid">
+      {watchlist.map((site) => (
+        (() => {
+          const entityProfiles = getSiteEntityProfiles(site);
+
+          return (
+            <article class="feature-card accent">
+              <div class="chip-row">
+                <span class="chip accent">{site.entityCoverage}</span>
+                <span class="chip">{site.evidenceClass}</span>
+                <span class="chip teal">{site.confidence}</span>
+              </div>
+              <h3>{site.siteName}</h3>
+              <p class="lede">
+                {site.areaName}, {site.regionName}
+              </p>
+              <div class="data-list">
+                <div class="data-row">
+                  <span>Owner</span>
+                  <span class="data-row-value">{site.ownerName ?? "Not yet resolved"}</span>
+                </div>
+                <div class="data-row">
+                  <span>Operator</span>
+                  <span class="data-row-value">{site.operatorName ?? "Not yet resolved"}</span>
+                </div>
+                <div class="data-row">
+                  <span>Prime provider</span>
+                  <span class="data-row-value">{site.primeProvider?.provider ?? "Not yet attached"}</span>
+                </div>
+                <div class="data-row">
+                  <span>Integrity signals</span>
+                  <span class="data-row-value">{site.integritySignalCount.toLocaleString()}</span>
+                </div>
+                <div class="data-row">
+                  <span>People housed</span>
+                  <span class="data-row-value">{formatReportedPeople(site.peopleHousedReported)}</span>
+                </div>
+              </div>
+              {site.integritySignals[0]?.headline && (
+                <article class="signal-card accent">
+                  <span class="tiny">{site.integritySignals[0].severity}</span>
+                  <h3>{site.integritySignals[0].headline}</h3>
+                  {site.integritySignals[0].detail && <p class="tiny">{site.integritySignals[0].detail}</p>}
+                </article>
+              )}
+              <p class="tiny">
+                <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
+                {site.primeProvider && <a class="source-pill" href={site.primeProvider.sourceUrl}>Provider region</a>}
+                {entityProfiles.map((profile) => (
+                  <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open {profile.entityName} profile</a>
+                ))}
+                {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/`}>Open place page</a>}
+              </p>
+            </article>
+          );
+        })()
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Named current sites with entity status</h2>
+      <div class="story-grid">
+        {namedCurrent.map((site) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">{site.evidenceClass}</span>
+              <span class="chip">{site.entityCoverage}</span>
+              <span class="chip teal">{site.confidence}</span>
+            </div>
+            <h3>{site.siteName}</h3>
+            <p class="lede">{site.areaName}</p>
+            <p class="tiny">Owner: {site.ownerName ?? "Not yet resolved"}</p>
+            <p class="tiny">Operator: {site.operatorName ?? "Not yet resolved"}</p>
+            <p class="tiny">Prime provider: {site.primeProvider?.provider ?? "Current regional mapping not attached"}</p>
+            <p class="tiny">Integrity signals: {site.integritySignalCount}</p>
+            <p class="tiny">Last public evidence: {site.lastPublicDate}</p>
+            <p class="tiny">
+              <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
+              {site.primeProvider && <a class="source-pill" href={site.primeProvider.sourceUrl}>Provider region</a>}
+              {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/`}>Open place page</a>}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>Unnamed-area full list</h2>
+      <div class="story-grid">
+        {unnamedOnlyAreas.map((area) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">
+                {area.unnamedSiteCount} unnamed site{area.unnamedSiteCount > 1 ? "s" : ""}
+              </span>
+              {area.peopleHousedReported !== null && <span class="chip">{area.peopleHousedReported} people reported</span>}
+            </div>
+            <h3>{area.areaName}</h3>
+            <p class="lede">{area.notes}</p>
+            <p class="tiny">Last public reference: {area.lastPublicDate}</p>
+            <p class="tiny">
+              <a class="source-pill" href={area.sourceUrl}>Source</a>
+              {area.areaCode && <a class="source-pill" href={`/places/${area.areaCode}/`}>Open place page</a>}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Prime provider exposure in the visible estate</h2>
+      <div class="signal-list">
+        {providerBreakdown.map((provider) => (
+          <article class="signal-card">
+            <div class="chip-row">
+              <span class="chip accent">
+                {provider.currentNamedSiteCount} named current site{provider.currentNamedSiteCount > 1 ? "s" : ""}
+              </span>
+            </div>
+            <h3>{provider.provider}</h3>
+            <p class="tiny">{provider.regions.join(", ")}</p>
+            <p class="tiny">
+              <a class="source-pill" href={provider.sourceUrl}>Contract source</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>Why the wider ledger still matters</h2>
+      <div class="signal-list">
+        {hotelReadoutCards.map((card, index) => (
+          <article class={`signal-card${index === 0 ? " accent" : ""}`}>
+            <h3>{card.title}</h3>
+            <p class="tiny">{card.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="hotel-presets" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Preset views</h2>
+        <p class="lede">
+          These saved hotel views open the strongest evidence slices immediately and preserve the same query-state
+          model as the manual filters below.
+        </p>
+      </div>
+      <span class="chip accent">Deep-link presets</span>
+    </div>
+    <div class="guide-grid">
+      {hotelPresetViews.map((preset) => (
+        <article class="guide-card">
+          <h3>{preset.title}</h3>
+          <p>{preset.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={preset.href}>{preset.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-anchor" id="hotel-filters">
+    <div class="section-head">
+      <div>
+        <h2>Explorer and shareable filters</h2>
+        <p class="lede">
+          These controls apply to the visibility and starter ledgers below, and the filter state stays in the URL so
+          the exact evidence slice can be shared.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="chip" data-hotel-site-summary aria-live="polite">Showing 0 matching site rows</span>
+        <span class="chip teal" data-hotel-area-summary aria-live="polite">Showing 0 matching area rows</span>
+      </div>
+    </div>
+    <form class="filter-panel" data-hotel-form>
+      <div class="filter-grid">
+        <label class="filter-field">
+          <span class="tiny">Search site or area</span>
+          <input type="search" name="hotel_q" placeholder="Search site, area, or region" />
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Region</span>
+          <select name="hotel_region">
+            <option value="all">All regions</option>
+            {hotelFilterRegions.map((region) => (
+              <option value={region}>{region}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Site status</span>
+          <select name="hotel_status">
+            <option value="all">All site statuses</option>
+            {hotelFilterStatuses.map((status) => (
+              <option value={status}>{status}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Entity coverage</span>
+          <select name="hotel_coverage">
+            <option value="all">All coverage states</option>
+            {hotelFilterCoverages.map((coverage) => (
+              <option value={coverage}>{coverage}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Area visibility</span>
+          <select name="hotel_visibility">
+            <option value="all">All visibility states</option>
+            <option value="named-visible">Named visible</option>
+            <option value="mixed">Mixed named and unnamed</option>
+            <option value="unnamed-only">Unnamed only</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-actions">
+        <button type="button" class="source-pill" data-hotel-reset>Reset filters</button>
+        <button type="button" class="source-pill" data-hotel-copy>Copy filtered view</button>
+        <span class="tiny filter-status" data-hotel-copy-status aria-live="polite"></span>
+      </div>
+    </form>
+  </section>
+
+  <section id="hotel-areas" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Area visibility ledger</h2>
+        <p class="lede">
+          This table keeps named sites, unnamed acknowledgements, and the last public reference on one line for each
+          area in the live hotel starter ledger.
+        </p>
+      </div>
+    </div>
+    <div class="table-card">
+      <table>
+        <caption>Area-level visibility ledger showing named current sites, historical references, unnamed public acknowledgements, and latest evidence dates.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Area</th>
+            <th scope="col">Region</th>
+            <th scope="col">Visible named sites</th>
+            <th scope="col">Unnamed acknowledged sites</th>
+            <th scope="col">Last public date</th>
+            <th scope="col">Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          {visibilityAreas.map((area) => (
+            <tr
+              data-hotel-area-row
+              data-area-name={area.areaName}
+              data-region={area.regionName}
+              data-visibility={
+                area.currentNamedSiteCount > 0 && area.unnamedSiteCount > 0
+                  ? "mixed"
+                  : area.currentNamedSiteCount > 0
+                    ? "named-visible"
+                    : "unnamed-only"
+              }
+            >
+              <th scope="row">
+                <strong>{area.areaName}</strong>
+                {area.areaCode && (
+                  <div class="tiny">
+                    <a class="source-pill" href={`/places/${area.areaCode}/`}>Open place page</a>
+                  </div>
+                )}
+              </th>
+              <td>{area.regionName}</td>
+              <td>
+                <div class="tiny">Current named: {area.currentNamedSiteCount}</div>
+                <div class="tiny">Historical named: {area.historicalNamedSiteCount}</div>
+                <div class="tiny">Parliamentary refs: {area.parliamentaryReferenceCount}</div>
+              </td>
+              <td>
+                <div class="tiny">{area.unnamedSiteCount} site{area.unnamedSiteCount === 1 ? "" : "s"}</div>
+                <div class="tiny">{formatReportedPeople(area.peopleHousedReported)}</div>
+              </td>
+              <td>{area.lastPublicDate}</td>
+              <td>
+                <a class="source-pill" href={area.sourceUrl}>Source</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <article class="editor-note" data-hotel-area-empty hidden>
+      <h3>No area rows match these filters</h3>
+      <p>Reset the filters or widen the region and visibility scope to bring area evidence back into view.</p>
+    </article>
+  </section>
+
+  <section id="hotel-ledger" class="section section-anchor">
+    <h2>Full starter ledger</h2>
+    <div class="table-card">
+      <table>
+        <caption>Named current, historical, and parliamentary-reference hotel sites with coverage status, linked entities, and integrity signals.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Site</th>
+            <th scope="col">Status</th>
+            <th scope="col">Area</th>
+            <th scope="col">Coverage</th>
+            <th scope="col">Linked entities</th>
+            <th scope="col">Signals</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...namedCurrent, ...namedHistorical, ...parliamentaryReferences].map((site) => (
+            (() => {
+              const entityProfiles = getSiteEntityProfiles(site);
+
+              return (
+                <tr
+                  data-hotel-site-row
+                  data-site-name={site.siteName}
+                  data-area-name={site.areaName}
+                  data-region={site.regionName}
+                  data-status={site.status}
+                  data-coverage={site.entityCoverage}
+                >
+                  <th scope="row">
+                    <strong>{site.siteName}</strong>
+                    <div class="tiny">
+                      <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
+                    </div>
+                  </th>
+                  <td>{site.status}</td>
+                  <td>
+                    {site.areaName}
+                    <div class="tiny">{site.regionName}</div>
+                    {site.areaCode && (
+                      <div class="tiny">
+                        <a href={`/places/${site.areaCode}/`}>Place page</a>
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <div class="chip-row">
+                      <span class="chip">{site.entityCoverage}</span>
+                      <span class="chip">{site.evidenceClass}</span>
+                    </div>
+                    {site.primeProvider && (
+                      <div class="tiny">
+                        Prime: {site.primeProvider.provider}
+                        {getEntityProfileByReference(site.primeProvider.provider, null) && (
+                          <>
+                            {" "}
+                            <a href={`/entities/${getEntityProfileByReference(site.primeProvider.provider, null)!.entityId}/`}>
+                              profile
+                            </a>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    {site.entityLinks.length > 0 ? (
+                      site.entityLinks.map((link) => {
+                        const profile = getEntityProfileByReference(link.entityName, link.companyNumber);
+
+                        return (
+                          <div class="tiny" style="margin-bottom: 0.5rem;">
+                            <strong>{link.entityName}</strong> | {link.linkRole} | {link.confidence}
+                            {link.companyNumber && <div>{link.companyNumber}</div>}
+                            {profile && (
+                              <div>
+                                <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                    ) : entityProfiles.length > 0 ? (
+                      entityProfiles.map((profile) => (
+                        <div class="tiny" style="margin-bottom: 0.5rem;">
+                          <strong>{profile.entityName}</strong>
+                          <div>
+                            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <span class="tiny">No publishable owner or operator link yet.</span>
+                    )}
+                  </td>
+                  <td>
+                    {site.integritySignals.length > 0 ? (
+                      site.integritySignals.map((signal) => (
+                        <div class="tiny" style="margin-bottom: 0.5rem;">
+                          <strong>{signal.severity}</strong> | {signal.headline}
+                        </div>
+                      ))
+                    ) : (
+                      <span class="tiny">No live integrity signal in starter ledger.</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })()
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <article class="editor-note" data-hotel-site-empty hidden>
+      <h3>No site rows match these filters</h3>
+      <p>Reset the filters or widen the site status and coverage scope to bring starter-ledger rows back into view.</p>
+    </article>
+  </section>
+
+  <section id="hotel-limits" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Current limitations</h2>
+        <p class="lede">
+          The estate is still only partly visible. These are the main reasons the hotel picture remains incomplete.
+        </p>
+      </div>
+    </div>
+    <div class="story-grid">
+      {hotelLedger.limitations.map((item) => (
+        <article class="story-card">
+          <p class="lede">{item}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+  </DataDrawer>
+
+  <script>
+    import { initHotelFilters } from "../scripts/hotel-filters";
+
+    initHotelFilters();
+  </script>
+</BaseLayout>

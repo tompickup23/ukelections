@@ -1,0 +1,46 @@
+{
+  "name": "ukelections",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "fetch:lancashirecc": "node scripts/fetch/fetch-lancashire-cc.mjs",
+    "transform:lancashirecc": "node scripts/transform/transform-lancashire-cc.mjs",
+    "ingest:lancashirecc": "npm run fetch:lancashirecc && npm run transform:lancashirecc",
+    "fetch:routes": "node scripts/fetch/fetch-routes.mjs",
+    "transform:routes": "node scripts/transform/transform-routes.mjs",
+    "ingest:routes": "npm run fetch:routes && npm run transform:routes",
+    "fetch:regionalsources": "node scripts/fetch/fetch-regional-sources.mjs",
+    "transform:regionalsources": "node scripts/transform/transform-regional-sources.mjs",
+    "ingest:regionalsources": "npm run fetch:regionalsources && npm run transform:regionalsources",
+    "fetch:hotels": "node scripts/fetch/fetch-hotel-archive-leads.mjs",
+    "transform:hotels": "node scripts/transform/transform-hotel-entities.mjs",
+    "ingest:hotels": "npm run fetch:hotels && npm run transform:hotels",
+    "transform:money": "node scripts/transform/transform-money-ledger.mjs",
+    "ingest:money": "npm run transform:money",
+    "test": "vitest run",
+    "test:mobile": "playwright test tests/mobile-layout.spec.ts --project=mobile-chromium",
+    "test:desktop": "playwright test tests/desktop-layout.spec.ts --project=desktop-chromium",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "^5.2.8",
+    "@fontsource-variable/sora": "^5.2.8",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^5.0.0",
+    "satori": "^0.26.0",
+    "sharp": "^0.34.5",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

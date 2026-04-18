@@ -1,0 +1,1977 @@
+---
+import RegionMapExplorer from "./RegionMapExplorer.astro";
+import type { PlaceDirectory } from "../lib/place-directory";
+import { buildPlaceSubregions } from "../lib/place-subregions";
+import type { RegionMapView } from "../lib/region-map-explorer";
+
+interface Props {
+  id?: string;
+  placeDirectory: PlaceDirectory;
+  snapshotDate: string;
+  views: RegionMapView[];
+}
+
+type HomeMapScopeMeta = {
+  scopeId: string;
+  scopeKind: "national" | "region" | "subregion" | "place";
+  regionName?: string;
+  countryName?: string;
+  subregionScopeId?: string;
+  subregionName?: string;
+  eyebrow: string;
+  title: string;
+  note: string;
+};
+
+const { id, placeDirectory, snapshotDate, views } = Astro.props;
+
+const scopeMeta: Record<string, HomeMapScopeMeta> = {
+  national: {
+    scopeId: "national",
+    scopeKind: "national",
+    eyebrow: "Place-led asylum accountability",
+    title: "Britain first. Then narrow.",
+    note: "Pick one region on the map. The deck narrows from Britain to one region to one local authority."
+  }
+};
+
+const regionPayload = placeDirectory.regions.map((region) => {
+  const subregions = buildPlaceSubregions(region);
+  const subregionByAreaCode = new Map(
+    subregions.flatMap((subregion) => subregion.areaCodes.map((areaCode) => [areaCode, subregion] as const))
+  );
+
+  scopeMeta[region.regionName] = {
+    scopeId: region.regionName,
+    scopeKind: "region",
+    regionName: region.regionName,
+    countryName: region.countryName,
+    eyebrow: `${region.countryName} region`,
+    title: region.regionName,
+    note: "Choose one authority in this region."
+  };
+
+  subregions.forEach((subregion) => {
+    scopeMeta[subregion.scopeId] = {
+      scopeId: subregion.scopeId,
+      scopeKind: "subregion",
+      regionName: region.regionName,
+      countryName: region.countryName,
+      subregionScopeId: subregion.scopeId,
+      subregionName: subregion.label,
+      eyebrow: `${region.regionName} cluster`,
+      title: subregion.label,
+      note: `Choose one authority inside ${subregion.label}.`
+    };
+  });
+
+  const areas = region.areas.map((row) => {
+    const subregion = subregionByAreaCode.get(row.area.areaCode);
+
+    scopeMeta[row.area.areaCode] = {
+      scopeId: row.area.areaCode,
+      scopeKind: "place",
+      regionName: region.regionName,
+      countryName: region.countryName,
+      subregionScopeId: subregion?.scopeId,
+      subregionName: subregion?.label,
+      eyebrow: `${region.regionName} local preview`,
+      title: row.area.areaName,
+      note: "Local preview."
+    };
+
+    return {
+      areaCode: row.area.areaCode,
+      areaName: row.area.areaName,
+      subregionScopeId: subregion?.scopeId ?? null,
+      subregionName: subregion?.label ?? null,
+      supportedAsylum: row.area.supportedAsylum,
+      supportedAsylumRate: row.area.supportedAsylumRate,
+      contingencyAccommodation: row.area.contingencyAccommodation,
+      hotelSignalValue: row.hotelSignal === "named" ? 2 : row.hotelSignal === "unnamed" ? 1 : 0,
+      hotelSignalLabel:
+        row.hotelSignal === "named"
+          ? `${row.namedCurrentSiteCount} named current hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"}`
+          : row.hotelSignal === "unnamed"
+            ? `${row.unnamedSiteCount} unnamed acknowledged hotel site${row.unnamedSiteCount === 1 ? "" : "s"}`
+            : "No named current hotel site visible"
+    };
+  });
+
+  return {
+    regionName: region.regionName,
+    countryName: region.countryName,
+    regionPath: region.regionPath,
+    subregions: subregions.map((subregion) => ({
+      scopeId: subregion.scopeId,
+      label: subregion.label,
+      supportedAsylum: subregion.supportedAsylum,
+      supportedAsylumRate: subregion.supportedAsylumRate,
+      contingencyAccommodation: subregion.contingencyAccommodation,
+      hotelSignalValue: subregion.hotelSignalValue,
+      hotelSignalLabel: subregion.hotelSignalLabel,
+      publicPlaceCount: subregion.publicPlaceCount,
+      namedCurrentSiteCount: subregion.namedCurrentSiteCount,
+      unnamedSiteCount: subregion.unnamedSiteCount,
+      leadAreaCode: subregion.leadArea?.area.areaCode ?? null,
+      leadAreaName: subregion.leadArea?.area.areaName ?? null,
+      areaCodes: subregion.areaCodes
+    })),
+    areas
+  };
+});
+
+const payload = JSON.stringify({
+  boundariesUrl: "/place-boundaries.json",
+  initialScopeId: "national",
+  publicPlaceCount: placeDirectory.publicPlaceCount,
+  hotelLinkedPlaceCount: placeDirectory.hotelLinkedPlaceCount,
+  scopeMeta,
+  regions: regionPayload
+});
+---
+
+<section class="home-map-stage" data-home-map-stage data-home-map-depth="national" id={id}>
+  <script type="application/json" data-home-map-data set:html={payload} is:inline></script>
+
+  <div class="home-map-intro">
+    <div class="home-map-topline">
+      <div class="chip-row home-map-path">
+        <button type="button" class="chip accent" data-home-map-path-root data-home-map-scope-button="national">
+          Britain
+        </button>
+        <button type="button" class="chip" data-home-map-path-region data-home-map-scope-button="" hidden></button>
+        <button type="button" class="chip warm" data-home-map-path-group data-home-map-scope-button="" hidden></button>
+        <button type="button" class="chip teal" data-home-map-path-area data-home-map-scope-button="" hidden></button>
+      </div>
+      <div class="home-map-nav">
+        <button type="button" class="chip" data-home-map-back disabled aria-label="Zoom out to the previous map view">
+          Zoom out
+        </button>
+        <button type="button" class="chip" data-home-map-forward disabled aria-label="Zoom in to the next map view">
+          Zoom in
+        </button>
+        <span class="chip warm home-map-depth-chip" data-home-map-depth-chip>National lens</span>
+      </div>
+    </div>
+    <div class="home-map-copy">
+      <span class="kicker" data-home-map-eyebrow>{scopeMeta.national.eyebrow}</span>
+      <h1 data-home-map-title>{scopeMeta.national.title}</h1>
+      <p data-home-map-note>{scopeMeta.national.note}</p>
+    </div>
+    <div class="chip-row home-map-meta" hidden>
+      <span class="chip">{snapshotDate} local snapshot</span>
+      <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
+      <span class="chip accent">
+        {placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence
+      </span>
+    </div>
+  </div>
+
+  <div class="home-map-pane is-active" data-home-map-pane="national">
+    <RegionMapExplorer
+      id="homepage-region-map"
+      title="Britain map"
+      intro="Select a region to narrow the fixed homepage stage from Britain into one regional authority map."
+      views={views}
+      compact={true}
+      labelMode="selected"
+      interactionMode="select"
+      showSummary={false}
+      legendMode="overlay"
+      fitMode="contain"
+    />
+  </div>
+
+  <section class="home-authority-stage" data-home-authority-stage hidden>
+    <article class="region-map-legend is-overlay home-authority-legend" data-home-authority-legend>
+      <div class="region-map-legend-top">
+        <div class="chip-row">
+          <span class="chip accent">Authority map</span>
+        </div>
+        <div class="region-map-controls" role="toolbar" aria-label="Regional authority map metric">
+          <button type="button" class="chip accent is-active" data-home-authority-view="total">
+            Total
+          </button>
+          <button type="button" class="chip" data-home-authority-view="rate">
+            Rate
+          </button>
+          <button type="button" class="chip" data-home-authority-view="hotel">
+            Hotel visibility
+          </button>
+        </div>
+      </div>
+      <div class="region-map-legend-swatch" data-home-authority-swatch data-tone="accent">
+        <span>Lower</span>
+        <span>Higher</span>
+      </div>
+      <div class="region-map-legend-copy">
+        <strong data-home-authority-legend-title>Scale first</strong>
+        <p class="tiny" data-home-authority-legend-body>
+          Use total to see where the largest supported-asylum stock sits before you narrow into one authority.
+        </p>
+      </div>
+    </article>
+
+    <div class="home-authority-canvas">
+      <svg
+        class="region-map home-authority-map"
+        data-home-authority-svg
+        viewBox="0 0 620 760"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Regional authority map"
+      ></svg>
+      <figcaption class="tiny region-map-caption home-authority-caption" data-home-authority-caption>
+        Select one authority to update the right-hand deck without leaving the homepage.
+      </figcaption>
+    </div>
+
+    <section class="home-map-signal-band" data-home-map-signal-band>
+      <article class="home-map-signal-card">
+        <span class="tiny" data-home-map-signal-label-1>Regions</span>
+        <strong data-home-map-signal-value-1>{placeDirectory.regions.length.toLocaleString()}</strong>
+        <p data-home-map-signal-meta-1>available for drilldown</p>
+      </article>
+      <article class="home-map-signal-card">
+        <span class="tiny" data-home-map-signal-label-2>Public place pages</span>
+        <strong data-home-map-signal-value-2>{placeDirectory.publicPlaceCount.toLocaleString()}</strong>
+        <p data-home-map-signal-meta-2>live in the place layer</p>
+      </article>
+      <article class="home-map-signal-card">
+        <span class="tiny" data-home-map-signal-label-3>Hotel-linked places</span>
+        <strong data-home-map-signal-value-3>{placeDirectory.hotelLinkedPlaceCount.toLocaleString()}</strong>
+        <p data-home-map-signal-meta-3>already carrying hotel evidence</p>
+      </article>
+    </section>
+
+    <section class="home-map-quick-panel" data-home-map-quick-panel hidden>
+      <div class="home-map-quick-head">
+        <span class="tiny">Quick picks</span>
+        <strong data-home-map-quick-title>Open the highest-pressure authorities next</strong>
+      </div>
+      <div class="home-map-quick-grid" data-home-map-quick-grid></div>
+    </section>
+
+    <aside class="home-map-focus-card" data-home-authority-focus hidden>
+      <p class="tiny home-map-focus-kicker" data-home-authority-focus-kicker></p>
+      <strong data-home-authority-focus-title></strong>
+      <p data-home-authority-focus-body></p>
+      <div class="chip-row home-map-focus-meta">
+        <span class="chip" data-home-authority-focus-primary hidden></span>
+        <span class="chip" data-home-authority-focus-secondary hidden></span>
+        <a class="chip accent" data-home-authority-focus-link hidden></a>
+      </div>
+    </aside>
+  </section>
+</section>
+
+<script>
+  type HomeMapScopeMeta = {
+    scopeId: string;
+    scopeKind: "national" | "region" | "subregion" | "place";
+    regionName?: string;
+    countryName?: string;
+    subregionScopeId?: string;
+    subregionName?: string;
+    eyebrow: string;
+    title: string;
+    note: string;
+  };
+
+  type HomeMapSubregionPayload = {
+    scopeId: string;
+    label: string;
+    supportedAsylum: number;
+    supportedAsylumRate: number | null;
+    contingencyAccommodation: number;
+    hotelSignalValue: number;
+    hotelSignalLabel: string;
+    publicPlaceCount: number;
+    namedCurrentSiteCount: number;
+    unnamedSiteCount: number;
+    leadAreaCode: string | null;
+    leadAreaName: string | null;
+    areaCodes: string[];
+  };
+
+  type HomeMapAreaPayload = {
+    areaCode: string;
+    areaName: string;
+    subregionScopeId: string | null;
+    subregionName: string | null;
+    supportedAsylum: number;
+    supportedAsylumRate: number | null;
+    contingencyAccommodation: number;
+    hotelSignalValue: number;
+    hotelSignalLabel: string;
+  };
+
+  type HomeMapRegionPayload = {
+    regionName: string;
+    countryName: string;
+    regionPath: string;
+    subregions: HomeMapSubregionPayload[];
+    areas: HomeMapAreaPayload[];
+  };
+
+  type HomeMapPayload = {
+    boundariesUrl: string;
+    initialScopeId: string;
+    publicPlaceCount: number;
+    hotelLinkedPlaceCount: number;
+    scopeMeta: Record<string, HomeMapScopeMeta>;
+    regions: HomeMapRegionPayload[];
+  };
+
+  type BoundaryArea = {
+    areaCode: string;
+    areaName: string;
+    path: string;
+    labelX: number;
+    labelY: number;
+  };
+
+  type BoundaryPayload = {
+    width: number;
+    height: number;
+    regions: Record<string, { countryName: string; areaCount: number; areas: BoundaryArea[] }>;
+  };
+
+  type RegionMapChangeDetail = {
+    regionName?: string;
+    trigger?: string;
+  };
+
+  type AuthorityMetricId = "total" | "rate" | "hotel";
+
+  const windowWithHomeMapFlag = window as Window & { __ukdHomeMapInit?: boolean };
+
+  if (!windowWithHomeMapFlag.__ukdHomeMapInit) {
+    windowWithHomeMapFlag.__ukdHomeMapInit = true;
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const metricConfig: Record<
+      AuthorityMetricId,
+      { label: string; tone: "accent" | "teal" | "warm"; body: string; title: string }
+    > = {
+      total: {
+        label: "Total",
+        tone: "accent",
+        title: "Scale first",
+        body: "Use total to see where the largest supported-asylum stock sits before you narrow into one authority."
+      },
+      rate: {
+        label: "Rate",
+        tone: "teal",
+        title: "Intensity first",
+        body: "Use rate to find where supported asylum is biting harder relative to the resident population."
+      },
+      hotel: {
+        label: "Hotel visibility",
+        tone: "warm",
+        title: "Visibility first",
+        body: "Use hotel visibility to find where named or acknowledged hotel evidence is already on the public record."
+      }
+    };
+
+    const formatInteger = (value: number) => value.toLocaleString("en-GB");
+    const formatNumber = (value: number) =>
+      new Intl.NumberFormat("en-GB", {
+        minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+        maximumFractionDigits: Number.isInteger(value) ? 0 : 2
+      }).format(value);
+
+    const clampOpacity = (ratio: number) => Math.max(0.18, Math.min(0.84, 0.18 + ratio * 0.58));
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const authorityViewBoxAnimations = new WeakMap<SVGSVGElement, number>();
+
+    type ViewBox = {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+
+    type Bounds = ViewBox;
+
+    const parseViewBox = (raw: string): ViewBox => {
+      const parts = raw.split(" ").map((value) => Number.parseFloat(value));
+
+      return {
+        x: Number.isFinite(parts[0] ?? NaN) ? parts[0] : 0,
+        y: Number.isFinite(parts[1] ?? NaN) ? parts[1] : 0,
+        width: Number.isFinite(parts[2] ?? NaN) ? parts[2] : 0,
+        height: Number.isFinite(parts[3] ?? NaN) ? parts[3] : 0
+      };
+    };
+
+    const getCurrentAuthorityViewBox = (svg: SVGSVGElement): ViewBox => {
+      const viewBox = svg.viewBox.baseVal;
+
+      if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
+        return {
+          x: viewBox.x,
+          y: viewBox.y,
+          width: viewBox.width,
+          height: viewBox.height
+        };
+      }
+
+      return parseViewBox(svg.getAttribute("viewBox") ?? "0 0 620 760");
+    };
+
+    const setAuthorityViewBox = (svg: SVGSVGElement, target: ViewBox, durationMs = 0) => {
+      if (durationMs <= 0 || prefersReducedMotion) {
+        svg.setAttribute("viewBox", `${target.x} ${target.y} ${target.width} ${target.height}`);
+        return;
+      }
+
+      const activeFrame = authorityViewBoxAnimations.get(svg);
+
+      if (activeFrame !== undefined) {
+        window.cancelAnimationFrame(activeFrame);
+      }
+
+      const start = getCurrentAuthorityViewBox(svg);
+      const deltaX = target.x - start.x;
+      const deltaY = target.y - start.y;
+      const deltaWidth = target.width - start.width;
+      const deltaHeight = target.height - start.height;
+      const startTime = performance.now();
+
+      const easeOutCubic = (value: number) => 1 - Math.pow(1 - value, 3);
+
+      const step = (time: number) => {
+        const progress = Math.min(1, (time - startTime) / durationMs);
+        const eased = easeOutCubic(progress);
+        const x = start.x + deltaX * eased;
+        const y = start.y + deltaY * eased;
+        const width = start.width + deltaWidth * eased;
+        const height = start.height + deltaHeight * eased;
+
+        svg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
+
+        if (progress < 1) {
+          const nextFrame = window.requestAnimationFrame(step);
+          authorityViewBoxAnimations.set(svg, nextFrame);
+          return;
+        }
+
+        authorityViewBoxAnimations.delete(svg);
+      };
+
+      const firstFrame = window.requestAnimationFrame(step);
+      authorityViewBoxAnimations.set(svg, firstFrame);
+    };
+
+    const getFill = (value: number, minValue: number, maxValue: number, tone: "accent" | "teal" | "warm") => {
+      const range = Math.max(maxValue - minValue, 1);
+      const ratio = (value - minValue) / range;
+      const alpha = clampOpacity(ratio);
+
+      if (tone === "teal") {
+        return `rgba(78, 228, 195, ${alpha})`;
+      }
+
+      if (tone === "warm") {
+        return `rgba(255, 139, 97, ${alpha})`;
+      }
+
+      return `rgba(125, 211, 252, ${alpha})`;
+    };
+
+    const clampNumber = (value: number, minimum: number, maximum: number) =>
+      Math.max(minimum, Math.min(maximum, value));
+
+    type AuthorityFocusProfile = {
+      biasX?: number;
+      biasY?: number;
+      maxSpanRatio?: number;
+      minSpanRatio?: number;
+      paddingMax?: number;
+      paddingMin?: number;
+      paddingScale?: number;
+    };
+
+    type SubregionRenderProfile = {
+      labelBiasX?: number;
+      labelBiasY?: number;
+      labelLines?: string[];
+      focusBiasX?: number;
+      focusBiasY?: number;
+      maxSpanRatio?: number;
+      minSpanRatio?: number;
+      paddingScale?: number;
+    };
+
+    const regionalAuthorityFocusProfiles: Record<string, AuthorityFocusProfile> = {
+      "East Midlands": { minSpanRatio: 0.14, paddingScale: 0.24 },
+      "East of England": { biasX: 0.04, minSpanRatio: 0.15, paddingScale: 0.24 },
+      London: { minSpanRatio: 0.1, paddingScale: 0.2 },
+      "North East": { biasY: -0.03, minSpanRatio: 0.14, paddingScale: 0.22 },
+      "North West": { biasY: -0.04, minSpanRatio: 0.15, paddingScale: 0.26 },
+      "Northern Ireland": { minSpanRatio: 0.12, paddingScale: 0.2 },
+      Scotland: { biasY: -0.08, minSpanRatio: 0.14, paddingScale: 0.22 },
+      "South East": { biasX: 0.02, minSpanRatio: 0.14, paddingScale: 0.23 },
+      "South West": { biasX: -0.06, biasY: -0.02, minSpanRatio: 0.16, paddingScale: 0.24 },
+      Wales: { biasX: -0.04, minSpanRatio: 0.14, paddingScale: 0.24 },
+      "West Midlands": { minSpanRatio: 0.12, paddingScale: 0.22 },
+      "Yorkshire and The Humber": { minSpanRatio: 0.15, paddingScale: 0.25 }
+    };
+
+    const authorityFocusProfiles: Record<string, AuthorityFocusProfile> = {
+      E06000063: { biasY: -0.03, minSpanRatio: 0.17, paddingScale: 0.2 },
+      E06000064: { biasY: -0.04, minSpanRatio: 0.17, paddingScale: 0.2 },
+      E06000065: { biasY: -0.06, minSpanRatio: 0.18, paddingScale: 0.18 },
+      E07000117: { biasY: -0.03, minSpanRatio: 0.12, paddingScale: 0.22 },
+      E08000003: { minSpanRatio: 0.12, paddingScale: 0.2 },
+      E08000012: { biasX: -0.02, minSpanRatio: 0.14, paddingScale: 0.2 },
+      E08000025: { minSpanRatio: 0.12, paddingScale: 0.2 },
+      N09000003: { minSpanRatio: 0.11, paddingScale: 0.18 }
+    };
+
+    const subregionRenderProfiles: Record<string, Record<string, SubregionRenderProfile>> = {
+      "East Midlands": {
+        Nottinghamshire: { labelBiasX: 0.04, labelBiasY: -0.06, focusBiasY: -0.03, minSpanRatio: 0.15, paddingScale: 0.22 },
+        Leicestershire: { labelBiasX: -0.02, labelBiasY: 0.1, focusBiasY: 0.05, minSpanRatio: 0.15, paddingScale: 0.21 },
+        Derbyshire: { labelBiasX: -0.14, labelBiasY: -0.04, focusBiasX: -0.07, minSpanRatio: 0.14, paddingScale: 0.2 },
+        Northamptonshire: { labelBiasX: 0.16, labelBiasY: 0.14, focusBiasX: 0.08, focusBiasY: 0.07, minSpanRatio: 0.15, paddingScale: 0.22 },
+        Lincolnshire: { labelBiasX: 0.16, labelBiasY: -0.12, focusBiasX: 0.08, focusBiasY: -0.05, minSpanRatio: 0.14, paddingScale: 0.21 }
+      },
+      "East of England": {
+        Essex: { labelBiasX: 0.1, labelBiasY: 0.08, focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.18, paddingScale: 0.24 },
+        Hertfordshire: { labelBiasX: -0.1, labelBiasY: -0.06, focusBiasX: -0.03, minSpanRatio: 0.16, paddingScale: 0.22 },
+        "Beds and Luton": {
+          labelBiasX: -0.14,
+          labelBiasY: 0.04,
+          labelLines: ["Beds and", "Luton"],
+          focusBiasX: -0.06,
+          minSpanRatio: 0.16,
+          paddingScale: 0.22
+        },
+        "East Anglia": { labelBiasX: 0.08, labelBiasY: -0.12, focusBiasX: 0.05, focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.24 }
+      },
+      London: {
+        "West London": { labelBiasX: -0.16, labelBiasY: -0.08, focusBiasX: -0.08, minSpanRatio: 0.13, paddingScale: 0.18, labelLines: ["West", "London"] },
+        "North London": { labelBiasX: 0.04, labelBiasY: -0.16, focusBiasY: -0.08, minSpanRatio: 0.12, paddingScale: 0.18, labelLines: ["North", "London"] },
+        "East London": { labelBiasX: 0.16, labelBiasY: 0.02, focusBiasX: 0.08, minSpanRatio: 0.12, paddingScale: 0.18, labelLines: ["East", "London"] },
+        "South London": { labelBiasX: 0.02, labelBiasY: 0.18, focusBiasY: 0.08, minSpanRatio: 0.12, paddingScale: 0.18, labelLines: ["South", "London"] }
+      },
+      "North East": {
+        "Tyne and Wear": { labelBiasX: 0.04, labelBiasY: -0.08, focusBiasY: -0.04, minSpanRatio: 0.15, paddingScale: 0.21, labelLines: ["Tyne and", "Wear"] },
+        "Tees Valley": { labelBiasX: 0.12, labelBiasY: 0.14, focusBiasY: 0.07, minSpanRatio: 0.15, paddingScale: 0.21 },
+        "Northumberland and Durham": {
+          labelBiasX: -0.08,
+          labelBiasY: -0.12,
+          labelLines: ["Northumberland", "and Durham"],
+          focusBiasY: -0.06,
+          minSpanRatio: 0.18,
+          paddingScale: 0.23
+        }
+      },
+      "North West": {
+        Cumbria: { labelBiasX: -0.04, labelBiasY: -0.14, focusBiasY: -0.08, minSpanRatio: 0.2, paddingScale: 0.24 },
+        Lancashire: { labelBiasX: -0.03, labelBiasY: 0.05, focusBiasY: 0.04, minSpanRatio: 0.19, paddingScale: 0.24 },
+        "Greater Manchester": {
+          labelBiasX: 0.12,
+          labelBiasY: 0.03,
+          labelLines: ["Greater", "Manchester"],
+          focusBiasX: 0.06,
+          minSpanRatio: 0.18,
+          paddingScale: 0.22
+        },
+        Merseyside: { labelBiasX: -0.14, labelBiasY: -0.02, focusBiasX: -0.08, minSpanRatio: 0.17, paddingScale: 0.22 },
+        "Cheshire corridor": {
+          labelBiasX: 0.12,
+          labelBiasY: 0.18,
+          labelLines: ["Cheshire", "corridor"],
+          focusBiasX: 0.08,
+          focusBiasY: 0.08,
+          minSpanRatio: 0.18,
+          paddingScale: 0.23
+        }
+      },
+      "Northern Ireland": {
+        "Belfast metro": { labelBiasX: 0.08, labelBiasY: 0.06, focusBiasY: 0.02, minSpanRatio: 0.13, paddingScale: 0.18, labelLines: ["Belfast", "metro"] },
+        "North west": { labelBiasX: -0.12, labelBiasY: -0.04, focusBiasX: -0.06, minSpanRatio: 0.14, paddingScale: 0.19, labelLines: ["North", "west"] }
+      },
+      Scotland: {
+        "Glasgow and west": { labelBiasX: -0.18, labelBiasY: 0.18, focusBiasX: -0.09, focusBiasY: 0.08, minSpanRatio: 0.14, paddingScale: 0.2, labelLines: ["Glasgow", "and west"] },
+        "North east": { labelBiasX: 0.1, labelBiasY: -0.14, focusBiasY: -0.06, minSpanRatio: 0.16, paddingScale: 0.23, labelLines: ["North", "east"] },
+        "Edinburgh and east": {
+          labelBiasX: 0.16,
+          labelBiasY: 0.1,
+          labelLines: ["Edinburgh", "and east"],
+          focusBiasX: 0.08,
+          focusBiasY: 0.04,
+          minSpanRatio: 0.15,
+          paddingScale: 0.22
+        }
+      },
+      "South East": {
+        "Thames Valley": { labelBiasX: -0.02, labelBiasY: -0.08, labelLines: ["Thames", "Valley"], focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
+        "South Coast": { labelBiasX: 0.08, labelBiasY: 0.18, labelLines: ["South", "Coast"], focusBiasY: 0.08, minSpanRatio: 0.17, paddingScale: 0.23 },
+        "Sussex and Surrey": { labelBiasX: 0.04, labelBiasY: 0.06, labelLines: ["Sussex", "and Surrey"], focusBiasX: 0.04, minSpanRatio: 0.17, paddingScale: 0.22 },
+        Kent: { labelBiasX: 0.16, labelBiasY: 0.02, focusBiasX: 0.08, minSpanRatio: 0.17, paddingScale: 0.22 }
+      },
+      "South West": {
+        "West of England": { labelBiasX: 0.02, labelBiasY: -0.04, labelLines: ["West of", "England"], focusBiasX: 0.02, minSpanRatio: 0.17, paddingScale: 0.22 },
+        Devon: { labelBiasX: -0.02, labelBiasY: 0.08, focusBiasY: 0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
+        "South coast": { labelBiasX: 0.08, labelBiasY: 0.16, labelLines: ["South", "coast"], focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.16, paddingScale: 0.22 },
+        Somerset: { labelBiasX: 0.06, labelBiasY: -0.08, focusBiasY: -0.02, minSpanRatio: 0.16, paddingScale: 0.21 }
+      },
+      Wales: {
+        "South east Wales": { labelBiasX: 0.04, labelBiasY: 0.1, focusBiasY: 0.05, minSpanRatio: 0.15, paddingScale: 0.22, labelLines: ["South east", "Wales"] },
+        "South west Wales": { labelBiasX: -0.06, labelBiasY: 0.02, focusBiasX: -0.03, minSpanRatio: 0.15, paddingScale: 0.22, labelLines: ["South west", "Wales"] }
+      },
+      "West Midlands": {
+        "West Midlands core": { labelBiasX: 0.02, labelBiasY: 0.04, focusBiasX: 0.02, minSpanRatio: 0.14, paddingScale: 0.21, labelLines: ["West Midlands", "core"] },
+        "Staffordshire edge": {
+          labelBiasX: -0.08,
+          labelBiasY: -0.14,
+          labelLines: ["Staffordshire", "edge"],
+          focusBiasX: -0.04,
+          focusBiasY: -0.06,
+          minSpanRatio: 0.15,
+          paddingScale: 0.22
+        },
+        "Warwickshire belt": {
+          labelBiasX: 0.12,
+          labelBiasY: 0.16,
+          labelLines: ["Warwickshire", "belt"],
+          focusBiasX: 0.06,
+          focusBiasY: 0.08,
+          minSpanRatio: 0.14,
+          paddingScale: 0.21
+        }
+      },
+      "Yorkshire and The Humber": {
+        "West Yorkshire": { labelBiasX: -0.06, labelBiasY: 0.02, focusBiasX: -0.03, minSpanRatio: 0.16, paddingScale: 0.22, labelLines: ["West", "Yorkshire"] },
+        "South Yorkshire": { labelBiasX: 0.06, labelBiasY: 0.14, focusBiasY: 0.06, minSpanRatio: 0.15, paddingScale: 0.21, labelLines: ["South", "Yorkshire"] },
+        Humber: { labelBiasX: 0.18, labelBiasY: 0.01, focusBiasX: 0.08, minSpanRatio: 0.14, paddingScale: 0.2 },
+        "North Yorkshire": { labelBiasX: 0.02, labelBiasY: -0.14, focusBiasY: -0.06, minSpanRatio: 0.17, paddingScale: 0.24, labelLines: ["North", "Yorkshire"] }
+      }
+    };
+
+    const getAuthorityFocusProfile = (regionName: string, areaCode: string | null): AuthorityFocusProfile => ({
+      ...(regionalAuthorityFocusProfiles[regionName] ?? {}),
+      ...(areaCode ? authorityFocusProfiles[areaCode] ?? {} : {})
+    });
+
+    const getSubregionRenderProfile = (regionName: string, subregionLabel: string): SubregionRenderProfile =>
+      subregionRenderProfiles[regionName]?.[subregionLabel] ?? {};
+
+    const getSubregionLabelLines = (subregionLabel: string, profile: SubregionRenderProfile) =>
+      profile.labelLines?.length ? profile.labelLines : [subregionLabel];
+
+    const buildAuthorityViewBox = (
+      bounds: DOMRect,
+      payloadWidth: number,
+      payloadHeight: number,
+      focusProfile: AuthorityFocusProfile = {}
+    ): ViewBox => {
+      const width = Math.max(payloadWidth, 1);
+      const height = Math.max(payloadHeight, 1);
+      const mapAspect = width / height;
+
+      const minimumFocusWidth = width * (focusProfile.minSpanRatio ?? 0.18);
+      const minimumFocusHeight = height * (focusProfile.minSpanRatio ?? 0.18);
+      const basePadding = clampNumber(
+        Math.min(bounds.width, bounds.height) * (focusProfile.paddingScale ?? 0.32),
+        focusProfile.paddingMin ?? 10,
+        focusProfile.paddingMax ?? 34
+      );
+      let focusWidth = Math.max(bounds.width + basePadding * 2, minimumFocusWidth);
+      let focusHeight = Math.max(bounds.height + basePadding * 2, minimumFocusHeight);
+
+      if (focusWidth / focusHeight > mapAspect) {
+        focusHeight = focusWidth / mapAspect;
+      } else {
+        focusWidth = focusHeight * mapAspect;
+      }
+
+      focusWidth = clampNumber(focusWidth, minimumFocusWidth, width * (focusProfile.maxSpanRatio ?? 0.98));
+      focusHeight = clampNumber(focusHeight, minimumFocusHeight, height * (focusProfile.maxSpanRatio ?? 0.98));
+
+      if (focusWidth / focusHeight > mapAspect) {
+        focusWidth = focusHeight * mapAspect;
+      } else {
+        focusHeight = focusWidth / mapAspect;
+      }
+
+      const centerX = bounds.x + bounds.width / 2 + bounds.width * (focusProfile.biasX ?? 0);
+      const centerY = bounds.y + bounds.height / 2 + bounds.height * (focusProfile.biasY ?? 0);
+      const viewX = clampNumber(centerX - focusWidth / 2, 0, Math.max(0, width - focusWidth));
+      const viewY = clampNumber(centerY - focusHeight / 2, 0, Math.max(0, height - focusHeight));
+
+      return { x: viewX, y: viewY, width: focusWidth, height: focusHeight };
+    };
+
+    const slugify = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const buildAreaHref = (areaCode: string, areaName?: string) => `/places/${areaName ? slugify(areaName) : areaCode}/`;
+
+    const loadBoundaryPayload = (() => {
+      let promise: Promise<BoundaryPayload> | null = null;
+
+      return (url: string) => {
+        if (!promise) {
+          promise = fetch(url, { headers: { accept: "application/json" } }).then((response) => {
+            if (!response.ok) {
+              throw new Error(`Boundary payload failed with ${response.status}`);
+            }
+
+            return response.json() as Promise<BoundaryPayload>;
+          });
+        }
+
+        return promise;
+      };
+    })();
+
+    for (const root of document.querySelectorAll<HTMLElement>("[data-home-map-stage]")) {
+      if (root.dataset.homeMapReady === "true") {
+        continue;
+      }
+
+      root.dataset.homeMapReady = "true";
+      const dataNode = root.querySelector<HTMLScriptElement>("[data-home-map-data]");
+
+      if (!dataNode?.textContent) {
+        continue;
+      }
+
+      const payload = JSON.parse(dataNode.textContent) as HomeMapPayload;
+      const nationalPane = root.querySelector<HTMLElement>('[data-home-map-pane="national"]');
+      const authorityStage = root.querySelector<HTMLElement>("[data-home-authority-stage]");
+      const nationalRegionMap = nationalPane?.querySelector<HTMLElement>("[data-region-map-root]") as
+        | (HTMLElement & { __updateRegionMapSummary?: (regionName?: string, trigger?: string) => void })
+        | null;
+      const authoritySvg = root.querySelector<SVGSVGElement>("[data-home-authority-svg]");
+      const eyebrow = root.querySelector<HTMLElement>("[data-home-map-eyebrow]");
+      const title = root.querySelector<HTMLElement>("[data-home-map-title]");
+      const note = root.querySelector<HTMLElement>("[data-home-map-note]");
+      const legendTitle = root.querySelector<HTMLElement>("[data-home-authority-legend-title]");
+      const legendBody = root.querySelector<HTMLElement>("[data-home-authority-legend-body]");
+      const legendSwatch = root.querySelector<HTMLElement>("[data-home-authority-swatch]");
+      const caption = root.querySelector<HTMLElement>("[data-home-authority-caption]");
+      const pathRoot = root.querySelector<HTMLButtonElement>("[data-home-map-path-root]");
+      const pathRegion = root.querySelector<HTMLButtonElement>("[data-home-map-path-region]");
+      const pathGroup = root.querySelector<HTMLButtonElement>("[data-home-map-path-group]");
+      const pathArea = root.querySelector<HTMLButtonElement>("[data-home-map-path-area]");
+      const backButton = root.querySelector<HTMLButtonElement>("[data-home-map-back]");
+      const forwardButton = root.querySelector<HTMLButtonElement>("[data-home-map-forward]");
+      const depthChip = root.querySelector<HTMLElement>("[data-home-map-depth-chip]");
+      const focusCard = root.querySelector<HTMLElement>("[data-home-authority-focus]");
+      const focusKicker = root.querySelector<HTMLElement>("[data-home-authority-focus-kicker]");
+      const focusTitle = root.querySelector<HTMLElement>("[data-home-authority-focus-title]");
+      const focusBody = root.querySelector<HTMLElement>("[data-home-authority-focus-body]");
+      const focusPrimary = root.querySelector<HTMLElement>("[data-home-authority-focus-primary]");
+      const focusSecondary = root.querySelector<HTMLElement>("[data-home-authority-focus-secondary]");
+      const focusLink = root.querySelector<HTMLAnchorElement>("[data-home-authority-focus-link]");
+      const signalLabelOne = root.querySelector<HTMLElement>("[data-home-map-signal-label-1]");
+      const signalValueOne = root.querySelector<HTMLElement>("[data-home-map-signal-value-1]");
+      const signalMetaOne = root.querySelector<HTMLElement>("[data-home-map-signal-meta-1]");
+      const signalLabelTwo = root.querySelector<HTMLElement>("[data-home-map-signal-label-2]");
+      const signalValueTwo = root.querySelector<HTMLElement>("[data-home-map-signal-value-2]");
+      const signalMetaTwo = root.querySelector<HTMLElement>("[data-home-map-signal-meta-2]");
+      const signalLabelThree = root.querySelector<HTMLElement>("[data-home-map-signal-label-3]");
+      const signalValueThree = root.querySelector<HTMLElement>("[data-home-map-signal-value-3]");
+      const signalMetaThree = root.querySelector<HTMLElement>("[data-home-map-signal-meta-3]");
+      const quickPanel = root.querySelector<HTMLElement>("[data-home-map-quick-panel]");
+      const quickTitle = root.querySelector<HTMLElement>("[data-home-map-quick-title]");
+      const quickGrid = root.querySelector<HTMLElement>("[data-home-map-quick-grid]");
+
+      if (
+        !nationalPane ||
+        !authorityStage ||
+        !authoritySvg ||
+        !eyebrow ||
+        !title ||
+        !note ||
+        !legendTitle ||
+        !legendBody ||
+        !legendSwatch ||
+        !caption ||
+        !pathRoot ||
+        !pathRegion ||
+        !pathGroup ||
+        !pathArea ||
+        !backButton ||
+        !forwardButton ||
+        !depthChip ||
+        !focusCard ||
+        !focusKicker ||
+        !focusTitle ||
+        !focusBody ||
+        !focusPrimary ||
+        !focusSecondary ||
+        !focusLink ||
+        !signalLabelOne ||
+        !signalValueOne ||
+        !signalMetaOne ||
+        !signalLabelTwo ||
+        !signalValueTwo ||
+        !signalMetaTwo ||
+        !signalLabelThree ||
+        !signalValueThree ||
+        !signalMetaThree ||
+        !quickPanel ||
+        !quickTitle ||
+        !quickGrid
+      ) {
+        continue;
+      }
+
+      const regionDataByName = new Map(payload.regions.map((region) => [region.regionName, region]));
+      const subregionByScopeId = new Map(
+        payload.regions.flatMap((region) => region.subregions.map((subregion) => [subregion.scopeId, subregion] as const))
+      );
+      const areaRegionLookup = new Map(
+        payload.regions.flatMap((region) => region.areas.map((area) => [area.areaCode, region.regionName] as const))
+      );
+      const areaSubregionLookup = new Map(
+        payload.regions.flatMap((region) => region.areas.map((area) => [area.areaCode, area.subregionScopeId] as const))
+      );
+      let currentMetric: AuthorityMetricId = "total";
+      let currentRegionName: string | null = null;
+      let currentSubregionId: string | null = null;
+      let currentAreaCode: string | null = null;
+      let renderSequence = 0;
+      let scopeHistory = [payload.initialScopeId];
+      let historyIndex = 0;
+
+      const formatRateText = (value: number | null) =>
+        value === null ? "Rate not published" : `${formatNumber(value)} per 10,000`;
+
+      const updateMapNav = () => {
+        const previousScopeId = scopeHistory[historyIndex - 1];
+        const nextScopeId = scopeHistory[historyIndex + 1];
+        backButton.disabled = !previousScopeId;
+        forwardButton.disabled = !nextScopeId;
+        backButton.title = previousScopeId
+          ? `Zoom out to ${payload.scopeMeta[previousScopeId]?.title ?? "the previous view"}`
+          : "No broader saved view";
+        forwardButton.title = nextScopeId
+          ? `Zoom in to ${payload.scopeMeta[nextScopeId]?.title ?? "the next view"}`
+          : "No deeper saved view";
+      };
+
+      const syncDeckScope = (scopeId: string, trigger = "map-nav") => {
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              trigger
+            }
+          })
+        );
+      };
+
+      const rememberScope = (scopeId: string) => {
+        if (scopeHistory[historyIndex] === scopeId) {
+          updateMapNav();
+          return;
+        }
+
+        scopeHistory = scopeHistory.slice(0, historyIndex + 1);
+        scopeHistory.push(scopeId);
+        historyIndex = scopeHistory.length - 1;
+        updateMapNav();
+      };
+
+      const setChip = (node: HTMLElement, text: string | null, tone?: "accent" | "teal" | "warm") => {
+        if (!text) {
+          node.hidden = true;
+          node.textContent = "";
+          node.className = "chip";
+          return;
+        }
+
+        node.hidden = false;
+        node.textContent = text;
+        node.className = tone ? `chip ${tone}` : "chip";
+      };
+
+      const setScopeChip = (node: HTMLButtonElement | HTMLElement, scopeId: string | null, text: string | null, tone?: "accent" | "teal" | "warm") => {
+        setChip(node, text, tone);
+
+        if ("dataset" in node) {
+          if (scopeId) {
+            node.dataset.homeMapScopeButton = scopeId;
+          } else {
+            delete node.dataset.homeMapScopeButton;
+          }
+        }
+      };
+
+      const getSubregionMetricValue = (subregion: HomeMapSubregionPayload) => {
+        if (currentMetric === "rate") {
+          return subregion.supportedAsylumRate ?? -1;
+        }
+
+        if (currentMetric === "hotel") {
+          return subregion.hotelSignalValue;
+        }
+
+        return subregion.supportedAsylum;
+      };
+
+      const formatSubregionMetricValue = (subregion: HomeMapSubregionPayload) => {
+        if (currentMetric === "rate") {
+          return subregion.supportedAsylumRate === null ? "n/a" : formatNumber(subregion.supportedAsylumRate);
+        }
+
+        if (currentMetric === "hotel") {
+          return subregion.hotelSignalValue === 2 ? "Named" : subregion.hotelSignalValue === 1 ? "Flagged" : "None";
+        }
+
+        return formatInteger(subregion.supportedAsylum);
+      };
+
+      const formatSubregionMetricMeta = (subregion: HomeMapSubregionPayload) => {
+        if (currentMetric === "rate") {
+          return "supported asylum per 10,000";
+        }
+
+        if (currentMetric === "hotel") {
+          return subregion.hotelSignalLabel;
+        }
+
+        return `${formatInteger(subregion.publicPlaceCount)} authorities`;
+      };
+
+      const buildSubregionMetricChip = (subregion: HomeMapSubregionPayload) => {
+        if (currentMetric === "rate") {
+          return {
+            text: subregion.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(subregion.supportedAsylumRate)} / 10k`,
+            tone: "teal" as const
+          };
+        }
+
+        if (currentMetric === "hotel") {
+          return {
+            text:
+              subregion.hotelSignalValue === 2
+                ? "Named hotel evidence"
+                : subregion.hotelSignalValue === 1
+                  ? "Unnamed hotel evidence"
+                  : "No named hotel evidence",
+            tone: "warm" as const
+          };
+        }
+
+        return {
+          text: `${formatInteger(subregion.supportedAsylum)} on support`,
+          tone: "accent" as const
+        };
+      };
+
+      const getAreaRowsForScope = (regionPayload: HomeMapRegionPayload, subregionScopeId: string | null) =>
+        subregionScopeId
+          ? regionPayload.areas.filter((area) => area.subregionScopeId === subregionScopeId)
+          : regionPayload.areas;
+
+      const setSignalCard = (
+        labelNode: HTMLElement,
+        valueNode: HTMLElement,
+        metaNode: HTMLElement,
+        labelText: string,
+        valueText: string,
+        metaText: string
+      ) => {
+        labelNode.textContent = labelText;
+        valueNode.textContent = valueText;
+        metaNode.textContent = metaText;
+      };
+
+      const updatePath = (meta: HomeMapScopeMeta) => {
+        depthChip.textContent =
+          meta.scopeKind === "national"
+            ? "National lens"
+            : meta.scopeKind === "region"
+              ? "Regional lens"
+              : meta.scopeKind === "subregion"
+                ? "Subregional lens"
+                : "Authority lens";
+        setScopeChip(pathRoot, payload.initialScopeId, "Britain", "accent");
+        setScopeChip(pathRegion, null, null);
+        setScopeChip(pathGroup, null, null, "warm");
+        setScopeChip(pathArea, null, null, "teal");
+
+        if (meta.scopeKind === "region") {
+          setScopeChip(pathRegion, meta.scopeId, meta.title);
+          return;
+        }
+
+        if (meta.scopeKind === "subregion") {
+          setScopeChip(pathRegion, meta.regionName ?? currentRegionName ?? "Region", meta.regionName ?? currentRegionName ?? "Region");
+          setScopeChip(pathGroup, meta.scopeId, meta.title, "warm");
+          return;
+        }
+
+        if (meta.scopeKind === "place") {
+          setScopeChip(pathRegion, meta.regionName ?? currentRegionName ?? "Region", meta.regionName ?? currentRegionName ?? "Region");
+          setScopeChip(pathGroup, meta.subregionScopeId ?? currentSubregionId, meta.subregionName ?? payload.scopeMeta[currentSubregionId ?? ""]?.title ?? null, "warm");
+          setScopeChip(pathArea, meta.scopeId, meta.title, "teal");
+        }
+      };
+
+      const updateCopy = (scopeId: string) => {
+        const meta = payload.scopeMeta[scopeId] ?? payload.scopeMeta[payload.initialScopeId];
+        eyebrow.textContent = meta.eyebrow;
+        title.textContent = meta.title;
+        note.textContent = meta.note;
+        updatePath(meta);
+      };
+
+      const setStageDepth = (depth: "national" | "region" | "subregion" | "place") => {
+        root.dataset.homeMapDepth = depth;
+      };
+
+      const setMetric = (metricId: AuthorityMetricId) => {
+        currentMetric = metricId;
+
+        for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-authority-view]")) {
+          const active = button.dataset.homeAuthorityView === metricId;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        }
+
+        const config = metricConfig[metricId];
+        legendTitle.textContent = config.title;
+        legendBody.textContent = config.body;
+        legendSwatch.dataset.tone = config.tone;
+        authorityStage.dataset.homeAuthorityMetric = metricId;
+
+        if (currentRegionName) {
+          void renderAuthorityMap(currentRegionName, currentSubregionId, currentAreaCode);
+        }
+      };
+
+      const getMetricValue = (area: HomeMapAreaPayload) => {
+        if (currentMetric === "rate") {
+          return area.supportedAsylumRate ?? -1;
+        }
+
+        if (currentMetric === "hotel") {
+          return area.hotelSignalValue;
+        }
+
+        return area.supportedAsylum;
+      };
+
+      const formatMetricValue = (area: HomeMapAreaPayload) => {
+        if (currentMetric === "rate") {
+          return area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate);
+        }
+
+        if (currentMetric === "hotel") {
+          return area.hotelSignalValue === 2 ? "Named" : area.hotelSignalValue === 1 ? "Flagged" : "None";
+        }
+
+        return formatInteger(area.supportedAsylum);
+      };
+
+      const formatMetricMeta = (area: HomeMapAreaPayload) => {
+        if (currentMetric === "rate") {
+          return "supported asylum per 10,000";
+        }
+
+        if (currentMetric === "hotel") {
+          return area.hotelSignalLabel;
+        }
+
+        return "on support";
+      };
+
+      const renderQuickPicks = (
+        regionName: string | null,
+        selectedSubregionId: string | null,
+        selectedAreaCode: string | null
+      ) => {
+        quickGrid.innerHTML = "";
+
+        if (!regionName) {
+          quickPanel.hidden = true;
+          return;
+        }
+
+        const regionPayload = regionDataByName.get(regionName);
+
+        if (!regionPayload) {
+          quickPanel.hidden = true;
+          return;
+        }
+
+        quickPanel.hidden = false;
+        if (!selectedSubregionId && regionPayload.subregions.length > 0) {
+          quickTitle.textContent = `Start with a cluster inside ${regionName}`;
+
+          const rankedSubregions = [...regionPayload.subregions]
+            .sort(
+              (left, right) =>
+                getSubregionMetricValue(right) - getSubregionMetricValue(left) ||
+                right.supportedAsylum - left.supportedAsylum ||
+                left.label.localeCompare(right.label)
+            )
+            .slice(0, 4);
+
+          for (const subregion of rankedSubregions) {
+            const button = document.createElement("button");
+            const selected = subregion.scopeId === selectedSubregionId;
+            button.type = "button";
+            button.className = `home-map-quick-button${selected ? " is-active" : ""}`;
+            button.setAttribute("aria-pressed", selected ? "true" : "false");
+            button.dataset.scopeKind = "subregion";
+
+            const label = document.createElement("strong");
+            label.textContent = subregion.label;
+
+            const value = document.createElement("span");
+            value.className = "tiny";
+            value.textContent = `${formatSubregionMetricValue(subregion)} ${currentMetric === "rate" ? "/ 10k" : ""}`;
+
+            const meta = document.createElement("p");
+            meta.textContent = `${formatSubregionMetricMeta(subregion)}${subregion.leadAreaName ? ` · lead ${subregion.leadAreaName}` : ""}`;
+
+            button.append(label, value, meta);
+            button.addEventListener("click", () => {
+              currentSubregionId = subregion.scopeId;
+              currentAreaCode = null;
+              updateCopy(subregion.scopeId);
+              syncDeckScope(subregion.scopeId, "quick-pick");
+              void renderAuthorityMap(regionName, subregion.scopeId, null);
+            });
+
+            quickGrid.append(button);
+          }
+
+          return;
+        }
+
+        const selectedSubregion = selectedSubregionId ? subregionByScopeId.get(selectedSubregionId) ?? null : null;
+        quickTitle.textContent =
+          selectedAreaCode && payload.scopeMeta[selectedAreaCode]
+            ? `Compare ${payload.scopeMeta[selectedAreaCode].title} within ${selectedSubregion?.label ?? regionName}`
+            : `Jump straight into ${selectedSubregion?.label ?? regionName}`;
+
+        const rankedAreas = [...getAreaRowsForScope(regionPayload, selectedSubregionId)]
+          .sort(
+            (left, right) =>
+              getMetricValue(right) - getMetricValue(left) ||
+              right.supportedAsylum - left.supportedAsylum ||
+              left.areaName.localeCompare(right.areaName)
+          )
+          .slice(0, 4);
+
+        for (const area of rankedAreas) {
+          const button = document.createElement("button");
+          const selected = area.areaCode === selectedAreaCode;
+          button.type = "button";
+          button.className = `home-map-quick-button${selected ? " is-active" : ""}`;
+          button.setAttribute("aria-pressed", selected ? "true" : "false");
+
+          const label = document.createElement("strong");
+          label.textContent = area.areaName;
+
+          const value = document.createElement("span");
+          value.className = "tiny";
+          value.textContent = `${formatMetricValue(area)} ${currentMetric === "rate" ? "/ 10k" : ""}`;
+
+          const meta = document.createElement("p");
+          meta.textContent = formatMetricMeta(area);
+
+          button.append(label, value, meta);
+          button.addEventListener("click", () => {
+            currentSubregionId = area.subregionScopeId ?? selectedSubregionId;
+            currentAreaCode = area.areaCode;
+            updateCopy(area.areaCode);
+            syncDeckScope(area.areaCode, "quick-pick");
+            void renderAuthorityMap(regionName, currentSubregionId, area.areaCode);
+          });
+
+          quickGrid.append(button);
+        }
+      };
+
+      const updateSignalBand = (
+        regionName: string | null,
+        selectedSubregionId: string | null,
+        selectedAreaCode: string | null
+      ) => {
+        if (!regionName) {
+          setSignalCard(
+            signalLabelOne,
+            signalValueOne,
+            signalMetaOne,
+            "Regions",
+            formatInteger(payload.regions.length),
+            "available for drilldown"
+          );
+          setSignalCard(
+            signalLabelTwo,
+            signalValueTwo,
+            signalMetaTwo,
+            "Public place pages",
+            formatInteger(payload.publicPlaceCount),
+            "live in the place layer"
+          );
+          setSignalCard(
+            signalLabelThree,
+            signalValueThree,
+            signalMetaThree,
+            "Hotel-linked places",
+            formatInteger(payload.hotelLinkedPlaceCount),
+            "already carrying hotel evidence"
+          );
+          return;
+        }
+
+        const regionPayload = regionDataByName.get(regionName);
+
+        if (!regionPayload) {
+          return;
+        }
+
+        if (selectedAreaCode) {
+          const area = regionPayload.areas.find((entry) => entry.areaCode === selectedAreaCode);
+
+          if (!area) {
+            updateSignalBand(regionName, null, null);
+            return;
+          }
+
+          setSignalCard(signalLabelOne, signalValueOne, signalMetaOne, "Selected authority", area.areaName, regionName);
+          setSignalCard(
+            signalLabelTwo,
+            signalValueTwo,
+            signalMetaTwo,
+            "Support",
+            formatInteger(area.supportedAsylum),
+            "people on support"
+          );
+          setSignalCard(
+            signalLabelThree,
+            signalValueThree,
+            signalMetaThree,
+            currentMetric === "hotel" ? "Hotel signal" : "Pressure",
+            currentMetric === "hotel"
+              ? area.hotelSignalValue === 2
+                ? "Named"
+                : area.hotelSignalValue === 1
+                  ? "Flagged"
+                  : "None"
+              : area.supportedAsylumRate === null
+                ? "n/a"
+                : formatNumber(area.supportedAsylumRate),
+            currentMetric === "hotel" ? area.hotelSignalLabel : "per 10,000 residents"
+          );
+          return;
+        }
+
+        if (selectedSubregionId) {
+          const subregion = subregionByScopeId.get(selectedSubregionId);
+
+          if (!subregion) {
+            updateSignalBand(regionName, null, null);
+            return;
+          }
+
+          setSignalCard(
+            signalLabelOne,
+            signalValueOne,
+            signalMetaOne,
+            "Cluster in focus",
+            subregion.label,
+            `${formatInteger(subregion.publicPlaceCount)} authorities`
+          );
+          setSignalCard(
+            signalLabelTwo,
+            signalValueTwo,
+            signalMetaTwo,
+            "Support",
+            formatInteger(subregion.supportedAsylum),
+            "people on support"
+          );
+          setSignalCard(
+            signalLabelThree,
+            signalValueThree,
+            signalMetaThree,
+            currentMetric === "hotel" ? "Hotel signal" : "Pressure",
+            currentMetric === "hotel"
+              ? subregion.hotelSignalValue === 2
+                ? "Named"
+                : subregion.hotelSignalValue === 1
+                  ? "Flagged"
+                  : "None"
+              : subregion.supportedAsylumRate === null
+                ? "n/a"
+                : formatNumber(subregion.supportedAsylumRate),
+            currentMetric === "hotel" ? subregion.hotelSignalLabel : "per 10,000 residents"
+          );
+          return;
+        }
+
+        const metricLeader = regionPayload.areas.reduce<HomeMapAreaPayload | null>(
+          (best, candidate) => (!best || getMetricValue(candidate) > getMetricValue(best) ? candidate : best),
+          null
+        );
+
+        setSignalCard(
+          signalLabelOne,
+          signalValueOne,
+          signalMetaOne,
+          `Lead on ${metricConfig[currentMetric].label.toLowerCase()}`,
+          metricLeader?.areaName ?? "n/a",
+          metricLeader ? formatMetricMeta(metricLeader) : "no leader available"
+        );
+        setSignalCard(
+          signalLabelTwo,
+          signalValueTwo,
+          signalMetaTwo,
+          "Regional stock",
+          formatInteger(regionPayload.areas.reduce((sum, area) => sum + area.supportedAsylum, 0)),
+          "people on support"
+        );
+        setSignalCard(
+          signalLabelThree,
+          signalValueThree,
+          signalMetaThree,
+          regionPayload.subregions.length > 0 ? "Clusters" : "Authorities",
+          formatInteger(regionPayload.subregions.length > 0 ? regionPayload.subregions.length : regionPayload.areas.length),
+          regionPayload.subregions.length > 0 ? "available before authority drilldown" : "available in this drilldown"
+        );
+      };
+
+      const showNationalStage = () => {
+        renderSequence += 1;
+        nationalPane.hidden = false;
+        authorityStage.hidden = true;
+        currentRegionName = null;
+        currentSubregionId = null;
+        currentAreaCode = null;
+        focusCard.hidden = true;
+        setStageDepth("national");
+        updateCopy(payload.initialScopeId);
+        updateSignalBand(null, null, null);
+        renderQuickPicks(null, null, null);
+        nationalRegionMap?.__updateRegionMapSummary?.("", "program");
+      };
+
+      const buildAreaMetricChip = (area: HomeMapAreaPayload) => {
+        if (currentMetric === "rate") {
+          return {
+            text: area.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(area.supportedAsylumRate)} / 10k`,
+            tone: "teal" as const
+          };
+        }
+
+        if (currentMetric === "hotel") {
+          return {
+            text:
+              area.hotelSignalValue === 2
+                ? "Named hotel site"
+                : area.hotelSignalValue === 1
+                  ? "Unnamed hotel evidence"
+                  : "No named hotel site",
+            tone: "warm" as const
+          };
+        }
+
+        return {
+          text: `${formatInteger(area.supportedAsylum)} on support`,
+          tone: "accent" as const
+        };
+      };
+
+      const updateFocusCard = (
+        regionName: string | null,
+        selectedSubregionId: string | null,
+        selectedAreaCode: string | null
+      ) => {
+        if (!regionName) {
+          focusCard.hidden = true;
+          return;
+        }
+
+        const regionPayload = regionDataByName.get(regionName);
+
+        if (!regionPayload) {
+          focusCard.hidden = true;
+          return;
+        }
+
+        if (selectedAreaCode) {
+          const area = regionPayload.areas.find((entry) => entry.areaCode === selectedAreaCode);
+
+          if (!area) {
+            focusCard.hidden = true;
+            return;
+          }
+
+          const primaryMetric = buildAreaMetricChip(area);
+          focusCard.hidden = false;
+          focusCard.dataset.scopeKind = "place";
+          focusKicker.textContent = `${regionName}${area.subregionName ? ` · ${area.subregionName}` : ""}`;
+          focusTitle.textContent = area.areaName;
+          focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
+          setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
+          setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
+          focusLink.hidden = false;
+          focusLink.href = buildAreaHref(area.areaCode);
+          focusLink.textContent = "Open place page";
+          return;
+        }
+
+        if (!selectedSubregionId) {
+          focusCard.hidden = true;
+          return;
+        }
+
+        const subregion = subregionByScopeId.get(selectedSubregionId);
+
+        if (!subregion) {
+          focusCard.hidden = true;
+          return;
+        }
+
+        const primaryMetric = buildSubregionMetricChip(subregion);
+        focusCard.hidden = false;
+        focusCard.dataset.scopeKind = "subregion";
+        focusKicker.textContent = `${regionName} cluster`;
+        focusTitle.textContent = subregion.label;
+        focusBody.textContent = `${formatInteger(subregion.supportedAsylum)} on support across ${formatInteger(subregion.publicPlaceCount)} authorities. ${formatRateText(subregion.supportedAsylumRate)}. ${subregion.hotelSignalLabel}.`;
+        setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
+        setChip(focusSecondary, `${formatInteger(subregion.publicPlaceCount)} authorities`);
+        focusLink.hidden = true;
+        focusLink.removeAttribute("href");
+        focusLink.textContent = "";
+      };
+
+      const getUnionBounds = (codes: string[], pathByCode: Map<string, SVGPathElement>): Bounds | null => {
+        let minX = Number.POSITIVE_INFINITY;
+        let minY = Number.POSITIVE_INFINITY;
+        let maxX = Number.NEGATIVE_INFINITY;
+        let maxY = Number.NEGATIVE_INFINITY;
+
+        for (const code of codes) {
+          const path = pathByCode.get(code);
+
+          if (!path) {
+            continue;
+          }
+
+          const bounds = path.getBBox();
+          minX = Math.min(minX, bounds.x);
+          minY = Math.min(minY, bounds.y);
+          maxX = Math.max(maxX, bounds.x + bounds.width);
+          maxY = Math.max(maxY, bounds.y + bounds.height);
+        }
+
+        if (!Number.isFinite(minX) || !Number.isFinite(minY) || !Number.isFinite(maxX) || !Number.isFinite(maxY)) {
+          return null;
+        }
+
+        return {
+          x: minX,
+          y: minY,
+          width: maxX - minX,
+          height: maxY - minY
+        };
+      };
+
+      const getSubregionLabelPosition = (bounds: Bounds, profile: SubregionRenderProfile) => ({
+        x: bounds.x + bounds.width / 2 + bounds.width * (profile.labelBiasX ?? 0),
+        y: bounds.y + bounds.height / 2 + bounds.height * (profile.labelBiasY ?? 0)
+      });
+
+      const buildSubregionViewBox = (
+        bounds: Bounds,
+        payloadWidth: number,
+        payloadHeight: number,
+        regionName: string,
+        subregionLabel: string
+      ) =>
+        buildAuthorityViewBox(new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height), payloadWidth, payloadHeight, {
+          ...getAuthorityFocusProfile(regionName, null),
+          biasX: getSubregionRenderProfile(regionName, subregionLabel).focusBiasX ?? getAuthorityFocusProfile(regionName, null).biasX,
+          biasY: getSubregionRenderProfile(regionName, subregionLabel).focusBiasY ?? getAuthorityFocusProfile(regionName, null).biasY,
+          minSpanRatio: Math.max(
+            regionalAuthorityFocusProfiles[regionName]?.minSpanRatio ?? 0.18,
+            getSubregionRenderProfile(regionName, subregionLabel).minSpanRatio ?? 0.22
+          ),
+          paddingScale: Math.max(
+            regionalAuthorityFocusProfiles[regionName]?.paddingScale ?? 0.24,
+            getSubregionRenderProfile(regionName, subregionLabel).paddingScale ?? 0.28
+          ),
+          maxSpanRatio: getSubregionRenderProfile(regionName, subregionLabel).maxSpanRatio ?? 0.92
+        });
+
+      const renderAuthorityMap = async (
+        regionName: string,
+        selectedSubregionId: string | null,
+        selectedAreaCode: string | null
+      ) => {
+        const renderId = ++renderSequence;
+        const [boundaryPayload, regionPayload] = await Promise.all([
+          loadBoundaryPayload(payload.boundariesUrl),
+          Promise.resolve(regionDataByName.get(regionName))
+        ]);
+
+        if (renderId !== renderSequence) {
+          return;
+        }
+
+        const boundaryRegion = boundaryPayload.regions[regionName];
+
+        if (!boundaryRegion || !regionPayload) {
+          showNationalStage();
+          return;
+        }
+
+        const metric = metricConfig[currentMetric];
+        const areaMetaByCode = new Map(regionPayload.areas.map((area) => [area.areaCode, area]));
+        const areaPathDataByCode = new Map(boundaryRegion.areas.map((area) => [area.areaCode, area.path] as const));
+        const pathByCode = new Map<string, SVGPathElement>();
+        const values = regionPayload.areas.map((area) => {
+          if (currentMetric === "rate") {
+            return area.supportedAsylumRate ?? 0;
+          }
+
+          if (currentMetric === "hotel") {
+            return area.hotelSignalValue;
+          }
+
+          return area.supportedAsylum;
+        });
+        const minValue = Math.min(...values, 0);
+        const maxValue = Math.max(...values, 1);
+        const baseViewBox = `0 0 ${boundaryPayload.width} ${boundaryPayload.height}`;
+
+        authoritySvg.innerHTML = "";
+        authoritySvg.setAttribute("viewBox", baseViewBox);
+        authoritySvg.setAttribute(
+          "aria-label",
+          selectedSubregionId && subregionByScopeId.get(selectedSubregionId)
+            ? `${subregionByScopeId.get(selectedSubregionId)?.label} authority map within ${regionName}`
+            : `${regionName} authority map`
+        );
+
+        const baseGroup = document.createElementNS(SVG_NS, "g");
+        baseGroup.setAttribute("class", "region-map-base");
+        const subregionShapeLayer = document.createElementNS(SVG_NS, "g");
+        subregionShapeLayer.setAttribute("class", "home-authority-group-shape-layer");
+
+        let selectedAreaPath: SVGPathElement | null = null;
+
+        for (const area of boundaryRegion.areas) {
+          const path = document.createElementNS(SVG_NS, "path");
+          path.setAttribute("class", "region-map-base-region");
+          path.setAttribute("d", area.path);
+          baseGroup.append(path);
+        }
+
+        authoritySvg.append(baseGroup, subregionShapeLayer);
+
+        if (regionPayload.subregions.length > 0) {
+          for (const subregion of regionPayload.subregions) {
+            const compoundPath = subregion.areaCodes
+              .map((areaCode) => areaPathDataByCode.get(areaCode) ?? "")
+              .filter(Boolean)
+              .join(" ");
+
+            if (!compoundPath) {
+              continue;
+            }
+
+            const selected = subregion.scopeId === selectedSubregionId;
+            const containsArea = Boolean(selectedAreaCode && subregion.areaCodes.includes(selectedAreaCode));
+            const surface = document.createElementNS(SVG_NS, "path");
+            surface.setAttribute(
+              "class",
+              `home-authority-group-surface tone-${metric.tone} ${selected ? "is-selected" : ""} ${containsArea ? "has-selected-area" : ""} ${selectedSubregionId && !selected && !containsArea ? "is-muted" : ""}`
+            );
+            surface.setAttribute("d", compoundPath);
+            subregionShapeLayer.append(surface);
+          }
+        }
+
+        for (const boundaryArea of boundaryRegion.areas) {
+          const areaMeta = areaMetaByCode.get(boundaryArea.areaCode);
+
+          if (!areaMeta) {
+            continue;
+          }
+
+          const metricValue =
+            currentMetric === "rate"
+              ? areaMeta.supportedAsylumRate ?? 0
+              : currentMetric === "hotel"
+                ? areaMeta.hotelSignalValue
+                : areaMeta.supportedAsylum;
+          const link = document.createElementNS(SVG_NS, "a");
+          const path = document.createElementNS(SVG_NS, "path");
+          const selected = boundaryArea.areaCode === selectedAreaCode;
+          const areaSubregionId = areaMeta.subregionScopeId;
+          const inSelectedSubregion = Boolean(selectedSubregionId && areaMeta.subregionScopeId === selectedSubregionId);
+          const titleNode = document.createElementNS(SVG_NS, "title");
+          const valueLabel =
+            currentMetric === "rate"
+              ? `${formatNumber(metricValue)} per 10,000`
+              : currentMetric === "hotel"
+                ? areaMeta.hotelSignalLabel
+                : `${formatInteger(metricValue)} on support`;
+          const proxiesToSubregion =
+            Boolean(areaSubregionId) && (!selectedSubregionId || areaSubregionId !== selectedSubregionId);
+
+          link.setAttribute("href", buildAreaHref(boundaryArea.areaCode));
+          link.setAttribute("class", `region-map-link ${selected ? "is-selected" : ""}`);
+          link.dataset.homeAuthorityScope = boundaryArea.areaCode;
+          link.dataset.homeAuthorityRegion = regionName;
+          link.dataset.homeAuthorityLabel = boundaryArea.areaName;
+          link.setAttribute(
+            "aria-label",
+            `${boundaryArea.areaName}: ${valueLabel}. ${
+              proxiesToSubregion && areaMeta.subregionName
+                ? `Select the ${areaMeta.subregionName} cluster first.`
+                : "Select this authority."
+            }`
+          );
+
+          path.setAttribute("class", `home-authority-region ${selected ? "is-selected" : ""}`);
+          path.setAttribute("d", boundaryArea.path);
+          path.setAttribute("fill", getFill(metricValue, minValue, maxValue, metric.tone));
+          path.setAttribute(
+            "stroke",
+            selected ? "#F5F7FB" : inSelectedSubregion ? "rgba(255,255,255,0.44)" : "rgba(255,255,255,0.16)"
+          );
+          path.setAttribute("stroke-width", selected ? "3.2" : inSelectedSubregion ? "1.9" : "1.2");
+          if (selectedSubregionId && !inSelectedSubregion) {
+            path.setAttribute("opacity", "0.45");
+          } else if (!selectedSubregionId && areaSubregionId) {
+            path.setAttribute("opacity", "0.74");
+          }
+
+          titleNode.textContent = `${boundaryArea.areaName}: ${valueLabel}`;
+          link.append(titleNode, path);
+          pathByCode.set(boundaryArea.areaCode, path);
+
+          if (selected) {
+            selectedAreaPath = path;
+          }
+
+          if (selected) {
+            const label = document.createElementNS(SVG_NS, "text");
+            label.setAttribute("x", String(boundaryArea.labelX));
+            label.setAttribute("y", String(boundaryArea.labelY));
+            label.setAttribute("text-anchor", "middle");
+            label.setAttribute("class", "region-map-label is-active home-authority-label");
+            label.textContent = boundaryArea.areaName;
+            link.append(label);
+          }
+
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            if (areaSubregionId && (!selectedSubregionId || areaSubregionId !== selectedSubregionId)) {
+              currentSubregionId = areaSubregionId;
+              currentAreaCode = null;
+              updateCopy(areaSubregionId);
+              syncDeckScope(areaSubregionId, "cluster-proxy");
+              void renderAuthorityMap(regionName, areaSubregionId, null);
+              return;
+            }
+
+            currentSubregionId = areaSubregionId ?? selectedSubregionId;
+            currentAreaCode = boundaryArea.areaCode;
+            updateCopy(boundaryArea.areaCode);
+            syncDeckScope(boundaryArea.areaCode, "click");
+            void renderAuthorityMap(regionName, currentSubregionId, boundaryArea.areaCode);
+          });
+
+          authoritySvg.append(link);
+        }
+
+        if (regionPayload.subregions.length > 0) {
+          const labelLayer = document.createElementNS(SVG_NS, "g");
+          labelLayer.setAttribute("class", "home-authority-group-layer");
+
+          for (const subregion of regionPayload.subregions) {
+            const bounds = getUnionBounds(subregion.areaCodes, pathByCode);
+
+            if (!bounds) {
+              continue;
+            }
+
+            const profile = getSubregionRenderProfile(regionName, subregion.label);
+            const labelLink = document.createElementNS(SVG_NS, "a");
+            const hitRect = document.createElementNS(SVG_NS, "rect");
+            const labelText = document.createElementNS(SVG_NS, "text");
+            const selected = subregion.scopeId === selectedSubregionId;
+            const areaSelectedInside = Boolean(selectedAreaCode && subregion.areaCodes.includes(selectedAreaCode));
+            const position = getSubregionLabelPosition(bounds, profile);
+            const labelLines = getSubregionLabelLines(subregion.label, profile);
+            const lineHeight = labelLines.length > 1 ? 11 : 12;
+            const labelWidth = Math.max(72, Math.max(...labelLines.map((line) => line.length)) * 6.6 + 18);
+            const labelHeight = Math.max(20, labelLines.length * lineHeight + 8);
+            const x = position.x - labelWidth / 2;
+            const y = position.y - labelHeight / 2;
+
+            labelLink.setAttribute("href", regionPayload.regionPath);
+            labelLink.setAttribute(
+              "class",
+              `home-authority-group-link ${selected ? "is-selected" : ""} ${areaSelectedInside ? "has-selected-area" : ""}`
+            );
+            labelLink.setAttribute(
+              "aria-label",
+              `${subregion.label}: ${formatInteger(subregion.publicPlaceCount)} authorities. Select this cluster.`
+            );
+
+            hitRect.setAttribute("x", `${x}`);
+            hitRect.setAttribute("y", `${y}`);
+            hitRect.setAttribute("width", `${labelWidth}`);
+            hitRect.setAttribute("height", `${labelHeight}`);
+            hitRect.setAttribute("rx", "10");
+            hitRect.setAttribute("class", "home-authority-group-hitbox");
+
+            labelText.setAttribute("x", `${position.x}`);
+            labelText.setAttribute("y", `${position.y - ((labelLines.length - 1) * lineHeight) / 2 + 4}`);
+            labelText.setAttribute("text-anchor", "middle");
+            labelText.setAttribute("class", `home-authority-group-text${labelLines.length > 1 ? " is-stacked" : ""}`);
+
+            for (const [index, line] of labelLines.entries()) {
+              const tspan = document.createElementNS(SVG_NS, "tspan");
+              tspan.setAttribute("x", `${position.x}`);
+              tspan.setAttribute("dy", index === 0 ? "0" : `${lineHeight}`);
+              tspan.textContent = line;
+              labelText.append(tspan);
+            }
+
+            labelLink.append(hitRect, labelText);
+            labelLink.addEventListener("click", (event) => {
+              event.preventDefault();
+              currentSubregionId = subregion.scopeId;
+              currentAreaCode = null;
+              updateCopy(subregion.scopeId);
+              syncDeckScope(subregion.scopeId, "click");
+              void renderAuthorityMap(regionName, subregion.scopeId, null);
+            });
+
+            labelLayer.append(labelLink);
+          }
+
+          authoritySvg.append(labelLayer);
+        }
+
+        if (selectedAreaCode && selectedAreaPath) {
+          const selectedBounds = selectedAreaPath.getBBox();
+          setAuthorityViewBox(
+            authoritySvg,
+            buildAuthorityViewBox(
+              selectedBounds,
+              boundaryPayload.width,
+              boundaryPayload.height,
+              getAuthorityFocusProfile(regionName, selectedAreaCode)
+            ),
+            520
+          );
+        } else if (selectedSubregionId) {
+          const subregion = subregionByScopeId.get(selectedSubregionId);
+          const subregionBounds = subregion ? getUnionBounds(subregion.areaCodes, pathByCode) : null;
+
+          if (subregion && subregionBounds) {
+            setAuthorityViewBox(
+              authoritySvg,
+              buildSubregionViewBox(subregionBounds, boundaryPayload.width, boundaryPayload.height, regionName, subregion.label),
+              480
+            );
+          } else {
+            setAuthorityViewBox(authoritySvg, parseViewBox(baseViewBox), currentRegionName ? 420 : 0);
+          }
+        } else {
+          setAuthorityViewBox(authoritySvg, parseViewBox(baseViewBox), currentRegionName ? 420 : 0);
+        }
+
+        const selectedSubregion = selectedSubregionId ? subregionByScopeId.get(selectedSubregionId) ?? null : null;
+        caption.textContent =
+          selectedAreaCode && areaMetaByCode.get(selectedAreaCode)
+            ? `${areaMetaByCode.get(selectedAreaCode)?.areaName} is selected inside ${selectedSubregion?.label ?? regionName}.`
+            : selectedSubregion
+              ? `${selectedSubregion.label} is in focus inside ${regionName}. Select one authority to narrow again.`
+              : `Select one cluster inside ${regionName} to narrow the map before choosing an authority.`;
+        updateFocusCard(regionName, selectedSubregionId, selectedAreaCode);
+        updateSignalBand(regionName, selectedSubregionId, selectedAreaCode);
+        renderQuickPicks(regionName, selectedSubregionId, selectedAreaCode);
+      };
+
+      const showRegionStage = async (
+        regionName: string,
+        selectedSubregionId: string | null = null,
+        selectedAreaCode: string | null = null
+      ) => {
+        currentRegionName = regionName;
+        currentSubregionId = selectedSubregionId;
+        currentAreaCode = selectedAreaCode;
+        nationalPane.hidden = true;
+        authorityStage.hidden = false;
+        setStageDepth(selectedAreaCode ? "place" : selectedSubregionId ? "subregion" : "region");
+        updateCopy(selectedAreaCode ?? selectedSubregionId ?? regionName);
+        await renderAuthorityMap(regionName, selectedSubregionId, selectedAreaCode);
+      };
+
+      const applyScope = async (scopeId: string, remember = true) => {
+        if (!scopeId || scopeId === payload.initialScopeId) {
+          if (remember) {
+            rememberScope(payload.initialScopeId);
+          } else {
+            updateMapNav();
+          }
+
+          showNationalStage();
+          return;
+        }
+
+        const meta = payload.scopeMeta[scopeId];
+
+        if (!meta) {
+          return;
+        }
+
+        if (remember) {
+          rememberScope(scopeId);
+        } else {
+          updateMapNav();
+        }
+
+        if (meta.scopeKind === "region") {
+          setStageDepth("region");
+          await showRegionStage(scopeId);
+          return;
+        }
+
+        const regionName = meta.regionName ?? areaRegionLookup.get(scopeId);
+
+        if (!regionName) {
+          return;
+        }
+
+        if (meta.scopeKind === "subregion") {
+          setStageDepth("subregion");
+          await showRegionStage(regionName, scopeId, null);
+          return;
+        }
+
+        const subregionScopeId = meta.subregionScopeId ?? areaSubregionLookup.get(scopeId) ?? null;
+        setStageDepth("place");
+        await showRegionStage(regionName, subregionScopeId, scopeId);
+      };
+
+      root.addEventListener("region-map-change", (event) => {
+        const detail = (event as CustomEvent<RegionMapChangeDetail>).detail;
+        const regionName = detail?.regionName;
+
+        if (!regionName || !regionDataByName.has(regionName)) {
+          return;
+        }
+
+        if (detail?.trigger !== "click" && detail?.trigger !== "focus") {
+          return;
+        }
+
+        const activeBritainMetric =
+          root.querySelector<HTMLButtonElement>('[data-home-map-pane="national"] [data-region-map-view-button].is-active')
+            ?.dataset.regionMapViewButton ?? "total";
+
+        if (activeBritainMetric === "rate" || activeBritainMetric === "hotel") {
+          setMetric(activeBritainMetric);
+        } else {
+          setMetric("total");
+        }
+
+        void applyScope(regionName);
+        syncDeckScope(regionName, detail.trigger === "focus" ? "map-focus" : "map-click");
+      });
+
+      root.addEventListener("home-map-set-scope", (event) => {
+        const scopeId = (event as CustomEvent<{ scopeId?: string }>).detail?.scopeId;
+        void applyScope(scopeId ?? payload.initialScopeId);
+      });
+
+      backButton.addEventListener("click", () => {
+        if (historyIndex === 0) {
+          return;
+        }
+
+        historyIndex -= 1;
+        const scopeId = scopeHistory[historyIndex] ?? payload.initialScopeId;
+        void applyScope(scopeId, false);
+        syncDeckScope(scopeId, "map-back");
+      });
+
+      forwardButton.addEventListener("click", () => {
+        if (historyIndex >= scopeHistory.length - 1) {
+          return;
+        }
+
+        historyIndex += 1;
+        const scopeId = scopeHistory[historyIndex] ?? payload.initialScopeId;
+        void applyScope(scopeId, false);
+        syncDeckScope(scopeId, "map-forward");
+      });
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-map-scope-button]")) {
+        button.addEventListener("click", () => {
+          const scopeId = button.dataset.homeMapScopeButton;
+
+          if (!scopeId) {
+            return;
+          }
+
+          void applyScope(scopeId);
+          syncDeckScope(scopeId, "map-path");
+        });
+      }
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-authority-view]")) {
+        button.addEventListener("click", () => {
+          const metricId = button.dataset.homeAuthorityView;
+
+          if (metricId === "rate" || metricId === "hotel") {
+            setMetric(metricId);
+            return;
+          }
+
+          setMetric("total");
+        });
+      }
+
+      const syncResponsiveMapFit = () => {
+        const preserveAspectRatio = window.matchMedia("(max-width: 560px)").matches ? "xMidYMin meet" : "xMidYMid meet";
+
+        for (const svg of root.querySelectorAll<SVGSVGElement>(".region-map-canvas svg, [data-home-authority-svg]")) {
+          svg.setAttribute("preserveAspectRatio", preserveAspectRatio);
+        }
+      };
+
+      updateCopy(payload.initialScopeId);
+      setStageDepth("national");
+      setMetric("total");
+      updateMapNav();
+      syncResponsiveMapFit();
+      window.addEventListener("resize", syncResponsiveMapFit, { passive: true });
+
+      const warmup = () => {
+        void loadBoundaryPayload(payload.boundariesUrl).catch(() => {
+          /* noop */
+        });
+      };
+
+      if ("requestIdleCallback" in window) {
+        (window as Window & { requestIdleCallback: (callback: () => void) => number }).requestIdleCallback(warmup);
+      } else {
+        globalThis.setTimeout(warmup, 800);
+      }
+    }
+  }
+</script>
