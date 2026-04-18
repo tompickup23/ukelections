@@ -33,6 +33,12 @@ export const NAV_ITEMS = [
 export const RELEASES: ReleaseEntry[] = [
   {
     date: "2026-04-18",
+    title: "Model input validation",
+    summary: "Added poll aggregate and model feature validation, including asylum route safeguards and area-specific population quality metadata.",
+    sourceUrl: buildAbsoluteUrl("/data-quality/")
+  },
+  {
+    date: "2026-04-18",
     title: "Electoral history quality gates",
     summary: "Added boundary-versioned electoral history coverage for local, Westminster, Senedd, Scottish, and STV elections.",
     sourceUrl: buildAbsoluteUrl("/data-quality/")

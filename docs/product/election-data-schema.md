@@ -158,6 +158,41 @@ Required fields:
 - `party_shares`
 - `source_url`
 
+### `poll_aggregates`
+
+Versioned polling aggregate used by one or more model runs.
+
+Required fields:
+
+- `poll_aggregate_id`
+- `generated_at`
+- `geography`
+- `population`
+- `method`
+- `half_life_days`
+- `poll_count`
+- `aggregate_party_shares`
+- `polls`
+- `review_status`
+
+### `model_feature_snapshots`
+
+Reviewed area-level features used by a model run.
+
+Required fields:
+
+- `feature_snapshot_id`
+- `area_code`
+- `area_name`
+- `boundary_version_id`
+- `model_family`
+- `as_of`
+- `features`
+- `provenance`
+- `review_status`
+
+Population features must include area-specific `method`, `quality_level`, `source_depth`, `geography_fit`, `confidence`, and `limitations`.
+
 ### `predictions`
 
 Model output for one contest.

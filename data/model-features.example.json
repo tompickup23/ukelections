@@ -1,0 +1,60 @@
+[
+  {
+    "feature_snapshot_id": "example-area-features-2026-04-18",
+    "area_code": "E05000000",
+    "area_name": "Example Ward",
+    "boundary_version_id": "ward-example-2024",
+    "model_family": "local_fptp_borough",
+    "as_of": "2026-04-18",
+    "review_status": "quarantined",
+    "features": {
+      "electoral_history": {
+        "previous_contests": 4,
+        "latest_contest_date": "2026-05-07",
+        "baseline_party": "Example Party"
+      },
+      "poll_context": {
+        "poll_aggregate_id": "example-uk-national-2026-04-18",
+        "swing_dampening": 0.65
+      },
+      "asylum_context": {
+        "supported_asylum_stock": 100,
+        "rate_per_10000_population": 25,
+        "unit": "quarter_end_stock",
+        "route_scope": "asylum_support",
+        "precision": "local_authority_context"
+      },
+      "population_projection": {
+        "base_year": 2021,
+        "projection_year": 2026,
+        "scenario": "central",
+        "method": "census_2021_rebased_component",
+        "quality_level": "full_cohort_component",
+        "source_depth": "age_sex_ethnicity_migration",
+        "geography_fit": "exact_area",
+        "confidence": "medium",
+        "limitations": [
+          "Example data only",
+          "Actual area projections must record exact methods and source depth"
+        ],
+        "total_population": 5000,
+        "white_british_pct": 0.70,
+        "asian_pct": 0.15
+      }
+    },
+    "provenance": [
+      {
+        "field": "features.asylum_context",
+        "source_snapshot_id": "example-home-office-asylum-2026-04-18",
+        "source_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
+        "notes": "Home Office local asylum support stock. Not a claims flow."
+      },
+      {
+        "field": "features.population_projection",
+        "source_snapshot_id": "example-population-model-2026-04-18",
+        "source_url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections",
+        "notes": "Population projection context with area-specific method metadata; not a direct electoral effect without backtest."
+      }
+    ]
+  }
+]

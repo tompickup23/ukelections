@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/poll_aggregate.schema.json",
+  "title": "Poll aggregate",
+  "type": "object",
+  "required": [
+    "poll_aggregate_id",
+    "generated_at",
+    "geography",
+    "population",
+    "method",
+    "poll_count",
+    "aggregate_party_shares",
+    "polls",
+    "review_status"
+  ],
+  "properties": {
+    "poll_aggregate_id": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "geography": { "type": "string", "minLength": 1 },
+    "population": { "type": "string", "minLength": 1 },
+    "method": {
+      "type": "string",
+      "enum": ["weighted_poll_average", "mrp_average", "manual_snapshot", "scenario"]
+    },
+    "half_life_days": { "type": "number", "exclusiveMinimum": 0 },
+    "poll_count": { "type": "integer", "minimum": 0 },
+    "aggregate_party_shares": {
+      "type": "object",
+      "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+    },
+    "polls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "poll_id",
+          "pollster",
+          "fieldwork_start",
+          "fieldwork_end",
+          "sample_size",
+          "source_url",
+          "party_shares"
+        ],
+        "properties": {
+          "poll_id": { "type": "string", "minLength": 1 },
+          "pollster": { "type": "string", "minLength": 1 },
+          "client": { "type": "string" },
+          "fieldwork_start": { "type": "string", "format": "date" },
+          "fieldwork_end": { "type": "string", "format": "date" },
+          "sample_size": { "type": "integer", "minimum": 1 },
+          "mode": { "type": "string" },
+          "weight": { "type": "number", "minimum": 0 },
+          "source_url": { "type": "string", "format": "uri" },
+          "party_shares": {
+            "type": "object",
+            "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "reviewed_with_warnings", "quarantined"]
+    }
+  },
+  "additionalProperties": true
+}

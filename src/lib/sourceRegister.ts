@@ -57,6 +57,18 @@ export const SOURCE_REGISTER: SourceRegisterEntry[] = [
     sourceType: "context"
   },
   {
+    name: "Home Office asylum support tables",
+    purpose: "Route-specific local asylum support stock, accommodation type, and local authority context",
+    status: "Review",
+    sourceType: "context"
+  },
+  {
+    name: "Population models",
+    purpose: "ONS/Nomis, Census 2021, NEWETHPOP validation, and area-specific population projections",
+    status: "Review",
+    sourceType: "context"
+  },
+  {
     name: "Parliament and finance APIs",
     purpose: "Members, votes, Hansard, IPSA, Electoral Commission finance, Companies House, and interests data for context pages",
     status: "Later",
