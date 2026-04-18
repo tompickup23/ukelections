@@ -13,7 +13,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run validate:sources
       - name: Placeholder until election ETL lands
         run: |
           echo "UK Elections ETL is not wired yet."
-          echo "Add Democracy Club / historic results ingestion before enabling a schedule."
+          echo "Source snapshot validation is wired. Add reviewed Democracy Club, local results, boundary, and polling ingestion before enabling a schedule."
