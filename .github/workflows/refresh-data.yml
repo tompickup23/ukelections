@@ -14,6 +14,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate:sources
+      - run: npm run validate:history
       - name: Placeholder until election ETL lands
         run: |
           echo "UK Elections ETL is not wired yet."
