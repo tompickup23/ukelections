@@ -1,49 +1,35 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { buildAbsoluteUrl, buildReleaseCollectionStructuredData } from "../lib/site";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_SOCIAL_IMAGE_PATH,
+  RELEASES,
+  buildAbsoluteUrl,
+  buildReleaseCollectionStructuredData
+} from "../lib/site";
 
-const releases = [
-  {
-    date: "2026-04-14",
-    title: "UK Demographics launch",
-    summary: "Initial release: 320 local authority demographic profiles with ethnic projections to 2061.",
-    sourceUrl: "https://ukdemographics.co.uk"
-  }
-];
-
-const pageDescription = "Release diary for UK Demographics covering model updates, data refreshes, and new features.";
-const pageStructuredData = buildReleaseCollectionStructuredData(releases, {
+const description = "Release diary for UK Elections build, data, and model updates.";
+const structuredData = buildReleaseCollectionStructuredData(RELEASES, {
   canonicalUrl: buildAbsoluteUrl("/releases/"),
-  description: pageDescription,
-  socialImageUrl: buildAbsoluteUrl("/og-card.svg")
+  description,
+  socialImageUrl: buildAbsoluteUrl(DEFAULT_SOCIAL_IMAGE_PATH)
 });
 ---
 
-<BaseLayout
-  title="Releases"
-  description={pageDescription}
-  structuredData={pageStructuredData}
->
-  <h1>Releases</h1>
-  <p class="desc">Model updates, data refreshes, and new features.</p>
+<BaseLayout title="Releases" description={description} structuredData={structuredData}>
+  <section class="page-hero">
+    <p class="eyebrow">Releases</p>
+    <h1>Build log and model changes.</h1>
+    <p class="lede">{DEFAULT_DESCRIPTION}</p>
+  </section>
 
-  <div class="release-list">
-    {releases.map((release) => (
-      <article class="release-card">
-        <time class="release-date">{release.date}</time>
-        <h2 class="release-title">{release.title}</h2>
-        <p class="release-summary">{release.summary}</p>
+  <section class="release-list" aria-label="Release diary">
+    {RELEASES.map((release) => (
+      <article>
+        <time datetime={release.date}>{release.date}</time>
+        <h2>{release.title}</h2>
+        <p>{release.summary}</p>
       </article>
     ))}
-  </div>
+  </section>
 </BaseLayout>
-
-<style>
-  h1 { font-family: "Sora", sans-serif; font-size: 1.8rem; font-weight: 800; margin: 0 0 0.5rem; }
-  .desc { color: var(--muted); font-size: 0.92rem; margin: 0 0 1.5rem; }
-  .release-list { max-width: 700px; }
-  .release-card { padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
-  .release-date { font-size: 0.82rem; color: var(--muted); }
-  .release-title { font-family: "Sora", sans-serif; font-size: 1.1rem; font-weight: 700; margin: 0.25rem 0; color: var(--ink); }
-  .release-summary { font-size: 0.92rem; color: var(--ink-soft); margin: 0; }
-</style>

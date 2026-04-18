@@ -1,36 +1,39 @@
 # UK Elections
 
-Static Astro site scaffold for `ukelections.co.uk`.
+Static Astro site for `ukelections.co.uk`, currently deployed as a placeholder while the domain is pending.
 
-The project starts from the proven `ukdemographics` Astro stack and will become a UK-wide election intelligence product: candidates, historical results, boundary-aware forecasts, confidence intervals, demographic context, and published backtests.
+## Status
 
-## Current Status
+- GitHub: `https://github.com/tompickup23/ukelections`
+- Cloudflare Pages: `https://ukelections.pages.dev/`
+- GitHub Pages: `https://tompickup23.github.io/ukelections/`
+- Production domain target: `https://ukelections.co.uk/`
 
-- Local scaffold created at `/Users/tompickup/ukelections`
-- Domain not yet acquired
-- GitHub repository target: `tompickup23/ukelections`
-- Hosting target: Cloudflare Pages once the domain is available
-
-## Build
+## Commands
 
 ```bash
 npm install
-npm run build
 npm test
+npm run check
+npm run build
 ```
 
-## Initial Roadmap
+## Current Scope
 
-1. Data foundation: Democracy Club candidates, House of Commons Library historic results, Andrew Teale/OpenCouncilData ward archive, ALDC results where available, ONSPD and Boundary-Line joins.
-2. Canonical schema: elections, contests, candidates, results, areas, boundary mappings, predictions, and model backtests.
-3. Model build: FPTP, MRP, AMS, Welsh closed-list PR, STV Monte Carlo, mayoral and PCC modules.
-4. Site build: contest pages, national and regional rollups, interactive maps, methodology, sources, and search.
-5. Launch discipline: publish confidence intervals and predicted-vs-actual backtests.
+The live scaffold is deliberately small: home, seats, area lookup, forecasts, methodology, sources, releases, and legal/accessibility pages.
+
+The next product phase is data ingestion, not visual expansion:
+
+1. Democracy Club candidates and election metadata.
+2. House of Commons Library historic results.
+3. Boundary and postcode joins from ONSPD and Boundary-Line.
+4. Canonical schemas for contests, candidates, results, predictions, and backtests.
+5. Forecast publication rules with uncertainty and archived predicted-vs-actual records.
 
 ## Principles
 
-- Every claim needs source provenance.
+- Every public claim needs source provenance.
 - Forecasts must show uncertainty.
-- Boundary changes must be handled explicitly.
-- Backtests are part of the product, not an internal afterthought.
-- The site must stand on public evidence and avoid internal AI DOGE references.
+- Boundary changes must be explicit.
+- Backtests are part of the product.
+- Do not add a custom domain or `CNAME` until `ukelections.co.uk` is acquired.

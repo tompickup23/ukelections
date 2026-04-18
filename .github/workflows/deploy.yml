@@ -10,6 +10,9 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -21,24 +24,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm test
-      # TODO: Phase 2 — restore strict TS check after asylum-specific imports removed from place pages
-      # - run: npm run check
+      - run: npm run check
       - run: npm run build
-      # TODO: Phase 2 — restore Playwright tests after place/region pages rewritten
-      # - run: npx playwright install --with-deps chromium
-      # - run: npm run test:mobile
-      # - run: npm run test:desktop
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-report
+          name: build-diagnostics
           path: |
-            playwright-report
-            test-results
+            dist
+            .astro
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

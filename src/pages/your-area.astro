@@ -1,186 +1,25 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPublicPlaceAreas, slugifyAreaName } from "../lib/site";
-
-const areas = getPublicPlaceAreas();
 ---
 
-<BaseLayout
-  title="Your area — postcode lookup"
-  description="Enter your postcode or area name to see demographic projections for your community. Ethnic composition, housing, schools, and more."
->
-  <section class="lookup-hero">
-    <h1>What does YOUR area look like in 2051?</h1>
-    <p class="desc">{areas.length} local authorities. Ethnic projections to 2061. Enter your postcode or search by name.</p>
-
-    <div class="search-box">
-      <input
-        type="search"
-        id="postcode-input"
-        placeholder="Enter postcode (e.g. B1 1BB) or area name..."
-        autocomplete="off"
-        spellcheck="false"
-        aria-label="Postcode or area name"
-      />
-      <div class="search-results" id="search-results" hidden></div>
-    </div>
-
-    <div class="preview-card" id="preview-card" hidden>
-      <h2 id="preview-name"></h2>
-      <div class="preview-stats">
-        <div class="preview-stat">
-          <span class="preview-label">Population</span>
-          <span class="preview-value" id="preview-pop"></span>
-        </div>
-        <div class="preview-stat">
-          <span class="preview-label">White British 2021</span>
-          <span class="preview-value" id="preview-wbi-now"></span>
-        </div>
-        <div class="preview-stat">
-          <span class="preview-label">WBI 2051 projected</span>
-          <span class="preview-value" id="preview-wbi-2051"></span>
-        </div>
-        <div class="preview-stat">
-          <span class="preview-label">Region</span>
-          <span class="preview-value" id="preview-region"></span>
-        </div>
-      </div>
-      <a class="cta-btn cta-btn--primary" id="preview-link" href="/places/">See the full demographic profile &rarr;</a>
-    </div>
+<BaseLayout title="Your Area" description="Postcode and place lookup plan for routing voters to the right UK election contest.">
+  <section class="page-hero">
+    <p class="eyebrow">Your Area</p>
+    <h1>Lookup starts with constituency routing.</h1>
+    <p class="lede">
+      The live version will accept a postcode or place name, resolve it to the right seat or contest,
+      and show what is known, what is estimated, and what is still missing.
+    </p>
   </section>
 
-  <section class="browse-section">
-    <h2>Or browse by region</h2>
-    <div class="region-links">
-      <a href="/regional/">All regions &rarr;</a>
-      <a href="/places/">All {areas.length} areas &rarr;</a>
-    </div>
+  <section class="lookup-shell" aria-label="Lookup placeholder">
+    <form class="lookup-form">
+      <label for="postcode">Postcode or place</label>
+      <div>
+        <input id="postcode" name="postcode" type="search" placeholder="e.g. SW1A 1AA" disabled />
+        <button type="button" disabled>Lookup coming soon</button>
+      </div>
+      <p>The input is disabled until the boundary lookup and source cache are wired.</p>
+    </form>
   </section>
 </BaseLayout>
-
-<script>
-  const input = document.getElementById("postcode-input") as HTMLInputElement;
-  const results = document.getElementById("search-results")!;
-  const previewCard = document.getElementById("preview-card")!;
-
-  let allAreas: any[] = [];
-
-  fetch("/search-index.json")
-    .then(r => r.json())
-    .then(data => { allAreas = Array.isArray(data) ? data : data.areas ?? []; })
-    .catch(() => {});
-
-  const postcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
-  const partialRegex = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d/i;
-  let timeout: ReturnType<typeof setTimeout> | null = null;
-
-  function slugify(name: string) {
-    return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-  }
-
-  function showPreview(area: any) {
-    const name = document.getElementById("preview-name");
-    const pop = document.getElementById("preview-pop");
-    const wbiNow = document.getElementById("preview-wbi-now");
-    const wbi2051 = document.getElementById("preview-wbi-2051");
-    const region = document.getElementById("preview-region");
-    const link = document.getElementById("preview-link") as HTMLAnchorElement;
-
-    if (name) name.textContent = area.areaName;
-    if (pop) pop.textContent = area.population ? area.population.toLocaleString() : "n/a";
-    if (wbiNow) wbiNow.textContent = area.wbiNow ? `${area.wbiNow}%` : (area.wbiPct2021 ? `${area.wbiPct2021}%` : "n/a");
-    if (wbi2051) wbi2051.textContent = area.wbi2051 ? `${area.wbi2051}%` : "n/a";
-    if (region) region.textContent = area.regionName ?? "Unknown";
-    if (link) link.href = `/places/${slugify(area.areaName)}/`;
-
-    previewCard.hidden = false;
-  }
-
-  input?.addEventListener("input", () => {
-    const q = input.value.trim();
-    results.innerHTML = "";
-    previewCard.hidden = true;
-
-    if (q.length < 2) { results.hidden = true; return; }
-
-    // Postcode lookup
-    if (postcodeRegex.test(q) || (partialRegex.test(q) && q.length >= 5)) {
-      results.hidden = false;
-      results.innerHTML = '<div class="result-item" style="opacity:0.5">Looking up postcode...</div>';
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        const clean = q.replace(/\s+/g, "").toUpperCase();
-        fetch(`https://api.postcodes.io/postcodes/${clean}`)
-          .then(r => r.json())
-          .then(data => {
-            if (data.status === 200 && data.result) {
-              const district = data.result.admin_district;
-              const laCode = data.result.codes?.admin_district;
-              const matched = allAreas.find(a => a.areaCode === laCode);
-              results.innerHTML = "";
-              results.hidden = false;
-              const link = document.createElement("a");
-              link.href = `/places/${slugify(district)}/`;
-              link.className = "result-item";
-              link.innerHTML = `<strong>${q.toUpperCase()} &rarr; ${district}</strong><span>${matched?.regionName ?? ""} · View demographic projections</span>`;
-              link.addEventListener("click", (e) => { if (matched) { e.preventDefault(); showPreview(matched); }});
-              results.appendChild(link);
-              if (matched) showPreview(matched);
-            } else {
-              results.innerHTML = '<div class="result-item" style="opacity:0.5">Postcode not found</div>';
-            }
-          })
-          .catch(() => { results.innerHTML = '<div class="result-item" style="opacity:0.5">Could not look up postcode</div>'; });
-      }, 300);
-      return;
-    }
-
-    // Name search
-    const matches = allAreas.filter(a => a.areaName.toLowerCase().includes(q.toLowerCase())).slice(0, 8);
-    if (!matches.length) { results.hidden = true; return; }
-    results.hidden = false;
-    for (const area of matches) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "result-item";
-      btn.innerHTML = `<strong>${area.areaName}</strong><span>${area.regionName ?? ""}</span>`;
-      btn.addEventListener("click", () => { input.value = area.areaName; results.hidden = true; showPreview(area); });
-      results.appendChild(btn);
-    }
-  });
-
-  input?.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") { results.hidden = true; previewCard.hidden = true; input.value = ""; }
-  });
-</script>
-
-<style>
-  .lookup-hero { text-align: center; padding: 3rem 0; }
-  h1 { font-family: "Sora", sans-serif; font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; margin: 0 0 0.5rem; }
-  .desc { color: var(--muted); font-size: 0.95rem; margin: 0 auto 2rem; max-width: 600px; }
-  .search-box { position: relative; max-width: 560px; margin: 0 auto; text-align: left; }
-  .search-box input { width: 100%; padding: 1.1rem 1.25rem; font-size: 1.05rem; font-family: "Manrope", sans-serif; color: var(--ink); background: var(--bg-soft); border: 2px solid var(--border-strong); border-radius: var(--radius-sm); outline: none; }
-  .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
-  .search-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--bg-soft); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); max-height: 320px; overflow-y: auto; z-index: 50; }
-  .search-results[hidden] { display: none; }
-  :global(.result-item) { display: flex; flex-direction: column; padding: 0.75rem 1.25rem; text-decoration: none; color: var(--ink); border: none; background: none; width: 100%; text-align: left; font-family: inherit; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 120ms; }
-  :global(.result-item:hover) { background: rgba(79, 70, 229, 0.08); }
-  :global(.result-item strong) { font-size: 0.95rem; }
-  :global(.result-item span) { font-size: 0.82rem; color: var(--muted); }
-
-  .preview-card { max-width: 560px; margin: 2rem auto 0; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.5rem; text-align: left; }
-  .preview-card[hidden] { display: none; }
-  .preview-card h2 { font-family: "Sora", sans-serif; font-size: 1.4rem; font-weight: 800; margin: 0 0 1rem; color: var(--ink); }
-  .preview-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
-  .preview-stat { display: flex; flex-direction: column; }
-  .preview-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-  .preview-value { font-family: "Sora", sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--accent); }
-
-  .browse-section { text-align: center; padding: 2rem 0; border-top: 1px solid var(--border); margin-top: 2rem; }
-  .browse-section h2 { font-family: "Sora", sans-serif; font-size: 1.1rem; font-weight: 700; margin: 0 0 1rem; }
-  .region-links { display: flex; gap: 1rem; justify-content: center; }
-  .region-links a { color: var(--accent); font-weight: 600; text-decoration: none; }
-  .region-links a:hover { text-decoration: underline; }
-
-  @media (max-width: 640px) { .preview-stats { grid-template-columns: 1fr; } }
-</style>

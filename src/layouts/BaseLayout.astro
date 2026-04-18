@@ -16,9 +16,7 @@ interface Props {
   image?: string;
   noIndex?: boolean;
   structuredData?: StructuredDataNode[];
-  bodyClass?: string;
   mainClass?: string;
-  hideFooter?: boolean;
 }
 
 const {
@@ -27,23 +25,16 @@ const {
   image = DEFAULT_SOCIAL_IMAGE_PATH,
   noIndex = false,
   structuredData: pageStructuredData = [],
-  bodyClass,
-  mainClass,
-  hideFooter = false
+  mainClass
 } = Astro.props;
+
 const siteOrigin = Astro.site ?? new URL(SITE_URL);
 const pathname = Astro.url.pathname || "/";
 const pageTitle = normalisePageTitle(title);
 const canonicalUrl = new URL(pathname, siteOrigin).toString();
 const socialImageUrl = /^https?:\/\//.test(image) ? image : new URL(image, siteOrigin).toString();
 const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
-const socialImageMime = socialImageUrl.endsWith(".png")
-  ? "image/png"
-  : socialImageUrl.endsWith(".webp")
-    ? "image/webp"
-    : socialImageUrl.endsWith(".svg")
-      ? "image/svg+xml"
-      : undefined;
+const socialImageMime = socialImageUrl.endsWith(".svg") ? "image/svg+xml" : undefined;
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -98,10 +89,8 @@ const structuredData = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="robots" content={robotsContent} />
-    <meta name="theme-color" content="#050812" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#f7f4ef" />
+    <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:type" content="website" />
@@ -115,49 +104,37 @@ const structuredData = [
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={`${pageTitle} - ukelections.co.uk`} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@UKElections" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
-    <meta name="twitter:image:alt" content={`${pageTitle} - ukelections.co.uk`} />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.postcodes.io; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" />
-    <!-- Fonts self-hosted via Fontsource (imported in global.css) -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
     {structuredData.map((item) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
     ))}
   </head>
-  <body class={bodyClass}>
+  <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <SiteHeader />
-    <main id="main-content" class:list={["shell", mainClass]} tabindex="-1">
+    <main id="main-content" class:list={["site-main", mainClass]} tabindex="-1">
       <slot />
     </main>
-    {!hideFooter && (
-      <footer class="shell footer">
-        <div class="footer-main">
-          Every forecast sourced. Every figure checked. Election data you can interrogate. &middot;
-          <a href="/sources/">Sources</a> &middot;
-          <a href="/methodology/">Methodology</a> &middot;
-          <a href="/findings/">Research</a> &middot;
-          <a href="/glossary/">Glossary</a>
-        </div>
-        <div class="footer-legal-links">
-          <a href="/privacy/">Privacy</a> &middot;
-          <a href="/terms/">Terms</a> &middot;
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>
+          UK Elections is an independent election intelligence project by Tom Pickup. It is not affiliated
+          with any political party, council, candidate, or election authority.
+        </p>
+        <nav aria-label="Footer">
+          <a href="/sources/">Sources</a>
+          <a href="/methodology/">Methodology</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/terms/">Terms</a>
           <a href="/accessibility/">Accessibility</a>
-        </div>
-        <div class="footer-cross-site">
-          Demographic context at <a href="https://ukdemographics.co.uk" rel="noopener">ukdemographics.co.uk</a>
-        </div>
-        <div class="footer-legal">
-          ukelections.co.uk is an independent election intelligence project by Tom Pickup. It will use public election results, official candidate data, boundary data, polling, and demographic context.
-          Not affiliated with or endorsed by any political party, council, or candidate. No cookies. No tracking. No personal data collected.
-          &copy; {new Date().getFullYear()} Tom Pickup. Forecasts are probabilistic estimates, not guarantees.
-          <a href="/methodology/">Full methodology &amp; limitations</a>.
-        </div>
-      </footer>
-    )}
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>

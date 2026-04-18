@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Forecasts" description="Forecast publication framework for UK Elections, including uncertainty, backtests, and source snapshots.">
+  <section class="page-hero">
+    <p class="eyebrow">Forecasts</p>
+    <h1>No naked probabilities.</h1>
+    <p class="lede">
+      Forecasts will only publish with model version, input snapshot, uncertainty, source notes,
+      and a backtest record that survives later model changes.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="feature-list">
+      <article>
+        <h2>Intervals</h2>
+        <p>Vote share and seat estimates need P10/P50/P90 or an equivalent interval format, not just a single headline number.</p>
+      </article>
+      <article>
+        <h2>Versioning</h2>
+        <p>Every forecast output is tied to a model id, code revision, source snapshot, and publication timestamp.</p>
+      </article>
+      <article>
+        <h2>Backtests</h2>
+        <p>Past predictions are immutable records used to report calibration, mean absolute error, and missed calls.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

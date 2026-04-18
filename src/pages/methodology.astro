@@ -2,56 +2,24 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Methodology" description="How the UK Demographics projection model works. Hamilton-Perry CCR methodology, Census-direct data, validation against NEWETHPOP.">
-  <h1>Methodology</h1>
-
-  <section id="model">
-    <h2>Hamilton-Perry cohort change ratio model</h2>
-    <p>UK Demographics uses the Hamilton-Perry (HP) method to project ethnic composition at local authority level. The HP method computes cohort change ratios (CCRs) from two Census observations (2011 and 2021), then applies these ratios forward to project future populations by age, sex, and ethnic group.</p>
-    <p>The model covers 320 English local authorities, 20 ethnic groups, single year of age (0-100+), and both sexes. Projections extend to 2061, with 2051 as the primary horizon and 2061 as illustrative.</p>
+<BaseLayout title="Methodology" description="How UK Elections will collect, label, model, and backtest election data.">
+  <section class="page-hero">
+    <p class="eyebrow">Methodology</p>
+    <h1>Separate facts, features, and forecasts.</h1>
+    <p class="lede">
+      The site treats official records as source data, derived indicators as features, and
+      predictions as model outputs. Each layer has its own provenance and review rules.
+    </p>
   </section>
 
-  <section id="data">
-    <h2>Data sources</h2>
-    <ul>
-      <li><strong>Census 2021:</strong> ONS custom dataset — single year of age by ethnic group by sex, 292 LAs (direct observations, no IPF dependency)</li>
-      <li><strong>Census 2011:</strong> 18-group age-sex-ethnicity dataset via NOMIS API</li>
-      <li><strong>ONS SNPP 2022:</strong> Subnational Population Projections used as total population envelope constraint</li>
-      <li><strong>DfE School Census 2024/25:</strong> Independent validation — 10 years of ethnic composition data by school and LA</li>
-      <li><strong>ONS Births Table 8:</strong> Age-specific fertility rates by ethnicity and IMD decile</li>
-    </ul>
-  </section>
+  <section class="section prose-block">
+    <h2>Publication rules</h2>
+    <p>Candidate and result facts must link to a primary or named secondary source. Model features must describe their source data and transformation. Forecast outputs must include uncertainty, a timestamp, and the model version that produced them.</p>
 
-  <section id="validation">
-    <h2>Validation</h2>
-    <p>The model achieves a mean absolute error (MAE) of <strong>1.72 percentage points</strong> when backcasting from 2011 to 2021. This compares favourably with NEWETHPOP (Rees et al.), the previous academic benchmark, which achieves MAE 3.94pp on the same test.</p>
-    <p>School census data provides an independent out-of-sample validation for ages 0-15. School validation MAE: 2.36pp across 121 areas with 10 years of annual data.</p>
-  </section>
+    <h2>Initial model boundary</h2>
+    <p>The first usable model should be deliberately narrow: constituency-level contest probabilities, vote-share intervals, and national seat aggregation. Local, devolved, mayoral, and by-election models can reuse the same schema once the source history is stable.</p>
 
-  <section id="uncertainty">
-    <h2>Uncertainty quantification</h2>
-    <p>1,000 Monte Carlo simulations with stochastic perturbation (sigma = 0.02) generate 80% and 95% confidence intervals for all projections. This captures the range of plausible outcomes, not a single point estimate.</p>
-  </section>
-
-  <section id="limitations">
-    <h2>Known limitations</h2>
-    <ul>
-      <li>No international migration component — CCRs from 2011-2021 capture ~300K net migration pa, but post-2021 net migration peaked at 745K. This means the model likely understates the pace of change in high-migration areas.</li>
-      <li>Per-group confidence intervals not yet computed (national stochastic only).</li>
-      <li>No out-of-sample validation beyond DfE school data.</li>
-      <li>Not peer-reviewed (submission to Demographic Research planned).</li>
-      <li>COVID period (2020-21) may distort the 2021 Census baseline for some groups and areas.</li>
-    </ul>
-  </section>
-
-  <section id="evidence">
-    <h2>Evidence standard</h2>
-    <p>All figures on this site are categorised by evidence quality:</p>
-    <ul>
-      <li><strong>Official:</strong> Published ONS, Census, DfE, or parliamentary data with stable provenance.</li>
-      <li><strong>Derived:</strong> Computed from official sources using documented methods (e.g., CCRs from two Census observations).</li>
-      <li><strong>Modelled:</strong> Output of the projection model — inherently uncertain, always shown with confidence intervals where available.</li>
-      <li><strong>Estimated:</strong> Best available approximation where no direct data exists. Always flagged.</li>
-    </ul>
+    <h2>Backtesting</h2>
+    <p>Backtests are part of the product, not an internal notebook. The public record should show calibration, error distribution, biggest misses, and whether model changes improve the archived result.</p>
   </section>
 </BaseLayout>

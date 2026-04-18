@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Seats" description="Constituency and contest pages planned for candidates, results, boundaries, and local election signals.">
+  <section class="page-hero">
+    <p class="eyebrow">Seats</p>
+    <h1>Constituency records are the core product.</h1>
+    <p class="lede">
+      The first data phase creates stable contest pages before any live forecast is published.
+      Each page will separate official facts, derived features, and model estimates.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="workflow">
+      <article>
+        <span>1</span>
+        <h2>Identity</h2>
+        <p>Constituency code, name, nation, region, boundary generation, predecessor seats, and current election cycle.</p>
+      </article>
+      <article>
+        <span>2</span>
+        <h2>Candidates</h2>
+        <p>Candidate name, party, incumbency, source URL, publication timestamp, and withdrawal or replacement status.</p>
+      </article>
+      <article>
+        <span>3</span>
+        <h2>History</h2>
+        <p>General election, by-election, local, mayoral, and devolved result links where they help explain the contest.</p>
+      </article>
+      <article>
+        <span>4</span>
+        <h2>Signals</h2>
+        <p>Polling, demographics, tactical position, campaign events, and model inputs with provenance and freshness labels.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
