@@ -100,6 +100,46 @@ Required fields:
 - `weight_basis`: `population`, `electorate`, `lsoa_best_fit`, `manual`
 - `source_url`
 
+### `boundary_versions`
+
+Boundary record for a ward, division, constituency, region, or authority during a defined period.
+
+Required fields:
+
+- `boundary_version_id`
+- `area_type`
+- `area_code`
+- `area_name`
+- `valid_from`
+- `valid_to`
+- `predecessor_boundary_version_ids`
+- `successor_boundary_version_ids`
+- `source_snapshot_id`
+- `source_url`
+- `review_status`
+
+### `election_history_records`
+
+Auditable historic result for one contest in the geography used on polling day.
+
+Required fields:
+
+- `history_id`
+- `contest_id`
+- `area_id`
+- `area_code`
+- `area_name`
+- `boundary_version_id`
+- `election_date`
+- `election_type`
+- `voting_system`
+- `source_snapshot_id`
+- `result_rows`
+- `electorate`
+- `turnout_votes`
+- `turnout`
+- `review_status`
+
 ### `polls`
 
 Polling inputs.

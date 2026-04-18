@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/boundary_version.schema.json",
+  "title": "Boundary version",
+  "type": "object",
+  "required": [
+    "boundary_version_id",
+    "area_type",
+    "area_code",
+    "area_name",
+    "valid_from",
+    "source_snapshot_id",
+    "source_url",
+    "review_status"
+  ],
+  "properties": {
+    "boundary_version_id": { "type": "string", "minLength": 1 },
+    "area_type": {
+      "type": "string",
+      "enum": [
+        "westminster_constituency",
+        "senedd_constituency",
+        "senedd_super_constituency",
+        "scottish_parliament_constituency",
+        "scottish_parliament_region",
+        "ward",
+        "county_division",
+        "local_authority",
+        "pcc_area",
+        "mayoral_area"
+      ]
+    },
+    "area_code": { "type": "string", "minLength": 1 },
+    "area_name": { "type": "string", "minLength": 1 },
+    "valid_from": { "type": "string", "format": "date" },
+    "valid_to": { "type": ["string", "null"], "format": "date" },
+    "predecessor_boundary_version_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "successor_boundary_version_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "source_snapshot_id": { "type": "string", "minLength": 1 },
+    "source_url": { "type": "string", "format": "uri" },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "reviewed_with_warnings", "quarantined"]
+    }
+  },
+  "additionalProperties": true
+}

@@ -8,8 +8,11 @@
     "area_id",
     "election_date",
     "election_type",
+    "model_family",
     "voting_system",
+    "election_cycle",
     "seats_available",
+    "boundary_version_id",
     "source_url"
   ],
   "properties": {
@@ -26,14 +29,42 @@
         "scottish_parliament",
         "senedd",
         "assembly",
-        "by_election"
+        "by_election",
+        "westminster_general",
+        "westminster_by_election",
+        "borough",
+        "district",
+        "county",
+        "unitary",
+        "scottish_parliament_constituency",
+        "scottish_parliament_regional_list",
+        "senedd_closed_list",
+        "senedd_by_election",
+        "local_stv"
+      ]
+    },
+    "model_family": {
+      "type": "string",
+      "enum": [
+        "westminster_fptp",
+        "local_fptp_borough",
+        "local_fptp_county",
+        "local_fptp_unitary",
+        "local_stv",
+        "senedd_closed_list_pr",
+        "scottish_ams"
       ]
     },
     "voting_system": {
       "type": "string",
-      "enum": ["fptp", "ams", "closed_list_pr", "stv"]
+      "enum": ["fptp", "ams", "ams_constituency", "ams_regional_list", "closed_list_pr", "stv"]
+    },
+    "election_cycle": {
+      "type": "string",
+      "enum": ["all_out", "thirds", "halves", "single_member", "regional_list"]
     },
     "seats_available": { "type": "integer", "minimum": 1 },
+    "boundary_version_id": { "type": "string", "minLength": 1 },
     "source_url": { "type": "string", "format": "uri" }
   },
   "additionalProperties": true

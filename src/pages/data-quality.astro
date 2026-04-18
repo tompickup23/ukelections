@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ACCURACY_GATES, HISTORY_SCOPES } from "../lib/electoralHistory";
+---
+
+<BaseLayout title="Data Quality" description="Accuracy gates for UK Elections source history, boundary changes, and model inputs.">
+  <section class="page-hero">
+    <p class="eyebrow">Data Quality</p>
+    <h1>History needs the boundary it was fought on.</h1>
+    <p class="lede">
+      Electoral history is stored by contest, source, and geography version. Ward and division
+      changes over time are treated as first-class data, not footnotes.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Accuracy gates</p>
+      <h2>No source, no public claim.</h2>
+    </div>
+    <div class="feature-list">
+      {ACCURACY_GATES.map((gate) => (
+        <article>
+          <h2>{gate.label}</h2>
+          <p>{gate.requirement}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Election history</p>
+      <h2>Every model starts with the right historical unit.</h2>
+    </div>
+    <div class="workflow" aria-label="Electoral history coverage">
+      {HISTORY_SCOPES.map((scope, index) => (
+        <article>
+          <span>{index + 1}</span>
+          <h2>{scope.label}</h2>
+          <p>{scope.geography}. {scope.historyUnit}.</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

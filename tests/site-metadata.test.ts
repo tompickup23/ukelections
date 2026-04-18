@@ -35,6 +35,7 @@ describe("site metadata helpers", () => {
     expect(paths).toContain("/");
     expect(paths).toContain("/seats/");
     expect(paths).toContain("/forecasts/");
+    expect(paths).toContain("/data-quality/");
     expect(paths).toContain("/your-area/");
     expect(paths).not.toContain("/places/");
     expect(paths).not.toContain("/national/");

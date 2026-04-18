@@ -25,11 +25,18 @@ export const NAV_ITEMS = [
   { href: "/seats/", label: "Seats" },
   { href: "/your-area/", label: "Your Area" },
   { href: "/forecasts/", label: "Forecasts" },
+  { href: "/data-quality/", label: "Data Quality" },
   { href: "/methodology/", label: "Methodology" },
   { href: "/sources/", label: "Sources" }
 ] as const;
 
 export const RELEASES: ReleaseEntry[] = [
+  {
+    date: "2026-04-18",
+    title: "Electoral history quality gates",
+    summary: "Added boundary-versioned electoral history coverage for local, Westminster, Senedd, Scottish, and STV elections.",
+    sourceUrl: buildAbsoluteUrl("/data-quality/")
+  },
   {
     date: "2026-04-18",
     title: "Full election model scope",
@@ -49,6 +56,7 @@ const STATIC_PATHS = [
   "/seats/",
   "/your-area/",
   "/forecasts/",
+  "/data-quality/",
   "/methodology/",
   "/sources/",
   "/releases/",
@@ -78,6 +86,13 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Model-family framework, confidence bands, backtests, and publication rules.",
     priority: 90
+  },
+  {
+    href: "/data-quality/",
+    title: "Data Quality",
+    kind: "page",
+    description: "Accuracy gates for source history, boundary changes, and model inputs.",
+    priority: 88
   },
   {
     href: "/methodology/",

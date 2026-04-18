@@ -24,4 +24,6 @@ ssh vps-main 'set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy /tmp/
 
 Attach `ukelections.co.uk` and `www.ukelections.co.uk` to the Cloudflare Pages project, then point the registrar nameservers at the two Cloudflare nameservers assigned to the zone. Cloudflare Pages should create the proxied CNAME records to `ukelections.pages.dev`; do not point production DNS at GitHub Pages unless production hosting is intentionally moved.
 
+Once the registrar nameservers point at Cloudflare, DNS records entered at the registrar or previous DNS host are no longer authoritative. Add or check `www` and apex records in Cloudflare DNS, not Fasthosts or another old DNS panel. The root domain should be served through Cloudflare's Pages custom-domain flow and CNAME flattening.
+
 Keep `astro.config.mjs` set to `https://ukelections.co.uk` so canonical URLs and social metadata are already aligned with the intended production domain.

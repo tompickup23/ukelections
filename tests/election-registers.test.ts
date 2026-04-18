@@ -12,6 +12,7 @@ describe("election model families", () => {
     expect(ids.has("westminster_fptp")).toBe(true);
     expect(ids.has("senedd_closed_list_pr")).toBe(true);
     expect(ids.has("scottish_ams")).toBe(true);
+    expect(ids.has("local_stv")).toBe(true);
   });
 
   it("requires review gates and inputs for every model family", () => {

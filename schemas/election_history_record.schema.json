@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/election_history_record.schema.json",
+  "title": "Election history record",
+  "type": "object",
+  "required": [
+    "history_id",
+    "contest_id",
+    "area_id",
+    "area_code",
+    "area_name",
+    "boundary_version_id",
+    "election_date",
+    "election_type",
+    "voting_system",
+    "source_snapshot_id",
+    "result_rows",
+    "review_status"
+  ],
+  "properties": {
+    "history_id": { "type": "string", "minLength": 1 },
+    "contest_id": { "type": "string", "minLength": 1 },
+    "area_id": { "type": "string", "minLength": 1 },
+    "area_code": { "type": "string", "minLength": 1 },
+    "area_name": { "type": "string", "minLength": 1 },
+    "boundary_version_id": { "type": "string", "minLength": 1 },
+    "election_date": { "type": "string", "format": "date" },
+    "election_type": {
+      "type": "string",
+      "enum": [
+        "westminster_general",
+        "westminster_by_election",
+        "borough",
+        "district",
+        "county",
+        "unitary",
+        "mayoral",
+        "pcc",
+        "scottish_parliament_constituency",
+        "scottish_parliament_regional_list",
+        "senedd_closed_list",
+        "senedd_by_election",
+        "local_stv"
+      ]
+    },
+    "voting_system": {
+      "type": "string",
+      "enum": ["fptp", "ams_constituency", "ams_regional_list", "closed_list_pr", "stv"]
+    },
+    "source_snapshot_id": { "type": "string", "minLength": 1 },
+    "source_url": { "type": "string", "format": "uri" },
+    "electorate": { "type": "integer", "minimum": 0 },
+    "turnout_votes": { "type": "integer", "minimum": 0 },
+    "turnout": { "type": "number", "minimum": 0, "maximum": 1 },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "reviewed_with_warnings", "quarantined"]
+    },
+    "result_rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["candidate_or_party_name", "party_name", "votes", "rank", "elected"],
+        "properties": {
+          "candidate_or_party_name": { "type": "string", "minLength": 1 },
+          "party_name": { "type": "string", "minLength": 1 },
+          "party_id": { "type": "string" },
+          "votes": { "type": "integer", "minimum": 0 },
+          "vote_share": { "type": "number", "minimum": 0, "maximum": 1 },
+          "rank": { "type": "integer", "minimum": 1 },
+          "elected": { "type": "boolean" },
+          "incumbent": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
