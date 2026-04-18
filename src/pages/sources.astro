@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { SOURCE_REGISTER } from "../lib/sourceRegister";
 ---
 
 <BaseLayout title="Sources" description="Primary data sources planned for UK Elections candidate, result, boundary, polling, and demographic context.">
@@ -13,15 +14,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   </section>
 
   <section class="source-table" aria-label="Planned data sources">
-    <div><strong>Democracy Club</strong><span>Candidates, ballot metadata, and candidate result rows where available</span><em>Planned</em></div>
-    <div><strong>Official notices</strong><span>Statements of persons nominated, local authority result pages, and returning officer declarations</span><em>Required</em></div>
-    <div><strong>House of Commons Library</strong><span>Westminster constituency and candidate result files</span><em>Planned</em></div>
-    <div><strong>Local archives</strong><span>Local Elections Archive Project, Open Council Data, DCLEAPIL, and local election handbooks</span><em>Review</em></div>
-    <div><strong>ONSPD, Boundary-Line, ONS Geography</strong><span>Postcode, ward, division, constituency, and authority joins</span><em>Planned</em></div>
-    <div><strong>Boundaries Scotland and Senedd resources</strong><span>Scottish Parliament, Scottish local, and Welsh election geography</span><em>Planned</em></div>
-    <div><strong>UKD, Census, ONS/Nomis, IMD</strong><span>Ward and constituency demographic features with source metadata</span><em>Review</em></div>
-    <div><strong>Polling records</strong><span>Pollster, client, fieldwork dates, sample, mode, geography, and method notes</span><em>Planned</em></div>
-    <div><strong>Parliament and finance APIs</strong><span>Members, votes, Hansard, IPSA, Electoral Commission finance, Companies House, and interests data for context pages</span><em>Later</em></div>
-    <div><strong>AI DOGE and Labour tracker</strong><span>Internal source review for refined local modelling and provenance workflows</span><em>Internal</em></div>
+    {SOURCE_REGISTER.map((source) => (
+      <div>
+        <strong>{source.name}</strong>
+        <span>{source.purpose}</span>
+        <em>{source.status}</em>
+      </div>
+    ))}
   </section>
 </BaseLayout>
