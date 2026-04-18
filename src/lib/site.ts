@@ -32,6 +32,12 @@ export const NAV_ITEMS = [
 export const RELEASES: ReleaseEntry[] = [
   {
     date: "2026-04-18",
+    title: "Full election model scope",
+    summary: "Expanded the modelling plan to cover borough, county, unitary, Westminster, Senedd, and Scottish Parliament election families with source quality gates.",
+    sourceUrl: buildAbsoluteUrl("/forecasts/")
+  },
+  {
+    date: "2026-04-18",
     title: "UK Elections scaffold",
     summary: "Initial public scaffold, GitHub repository, Cloudflare Pages project, and placeholder deployment.",
     sourceUrl: SITE_URL
@@ -63,14 +69,14 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     href: "/your-area/",
     title: "Your Area",
     kind: "page",
-    description: "Postcode and place lookup specification for the first usable constituency search.",
+    description: "Postcode and place lookup specification for routing voters to the right contest.",
     priority: 95
   },
   {
     href: "/forecasts/",
     title: "Forecasts",
     kind: "page",
-    description: "Forecasting framework, confidence bands, backtests, and publication rules.",
+    description: "Model-family framework, confidence bands, backtests, and publication rules.",
     priority: 90
   },
   {
@@ -84,7 +90,7 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     href: "/sources/",
     title: "Sources",
     kind: "page",
-    description: "Planned primary data sources and ingestion status.",
+    description: "Planned primary, secondary, and internal data sources with ingestion status.",
     priority: 80
   }
 ];

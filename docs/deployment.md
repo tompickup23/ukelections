@@ -1,6 +1,6 @@
 # Deployment
 
-UK Elections is currently deployed as a scaffold while `ukelections.co.uk` is pending purchase and DNS setup.
+UK Elections is currently deployed as a scaffold while `ukelections.co.uk` DNS is being connected to Cloudflare Pages.
 
 ## Repositories and environments
 
@@ -8,7 +8,7 @@ UK Elections is currently deployed as a scaffold while `ukelections.co.uk` is pe
 - GitHub Pages placeholder: `https://tompickup23.github.io/ukelections/`
 - Cloudflare Pages project: `ukelections`
 - Cloudflare Pages placeholder: `https://ukelections.pages.dev/`
-- Production domain target: `https://ukelections.co.uk/`
+- Production domain: `https://ukelections.co.uk/`
 
 ## Current deployment path
 
@@ -22,6 +22,6 @@ ssh vps-main 'set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy /tmp/
 
 ## Domain setup
 
-After `ukelections.co.uk` is registered, attach it to the Cloudflare Pages project and point DNS at Cloudflare Pages from the same Cloudflare account used on `vps-main`.
+Attach `ukelections.co.uk` and `www.ukelections.co.uk` to the Cloudflare Pages project, then point the registrar nameservers at the two Cloudflare nameservers assigned to the zone. Cloudflare Pages should create the proxied CNAME records to `ukelections.pages.dev`; do not point production DNS at GitHub Pages unless production hosting is intentionally moved.
 
 Keep `astro.config.mjs` set to `https://ukelections.co.uk` so canonical URLs and social metadata are already aligned with the intended production domain.

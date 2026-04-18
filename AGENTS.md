@@ -8,9 +8,9 @@ UK election intelligence site. The public product direction is candidates, histo
 
 - Astro static site
 - TypeScript helpers and tests
-- Cloudflare Pages placeholder deployment
+- Cloudflare Pages production deployment
 - GitHub Pages fallback deployment
-- Production domain target: `ukelections.co.uk`
+- Production domain: `ukelections.co.uk`
 
 ## Commands
 
@@ -26,7 +26,7 @@ npm run build
 2. Forecasts need uncertainty, model version, input snapshot, and publication timestamp.
 3. Backtests are public product data, not internal notes.
 4. Boundary changes require explicit mapping or a clear caveat.
-5. Do not add custom-domain files or DNS assumptions until `ukelections.co.uk` is acquired.
+5. Keep Cloudflare Pages as the production host unless the deployment plan is deliberately changed.
 
 ## Data Priorities
 
@@ -35,3 +35,4 @@ npm run build
 - Andrew Teale/OpenCouncilData local election archive
 - ONSPD, OS Boundary-Line, and LSOA-to-seat joins
 - Polling records with source, fieldwork dates, sample size, and method notes
+- Separate model families for borough, county, unitary, Westminster, Senedd, and Scottish Parliament contests

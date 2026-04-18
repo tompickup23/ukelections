@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { MODEL_FAMILIES } from "../lib/modelFamilies";
 ---
 
 <BaseLayout title="Forecasts" description="Forecast publication framework for UK Elections, including uncertainty, backtests, and source snapshots.">
@@ -13,19 +14,35 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   </section>
 
   <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Coverage</p>
+      <h2>One output format, different engines.</h2>
+    </div>
     <div class="feature-list">
       <article>
-        <h2>Intervals</h2>
-        <p>Vote share and seat estimates need P10/P50/P90 or an equivalent interval format, not just a single headline number.</p>
+        <h2>Local models</h2>
+        <p>Borough, county, and unitary forecasts are built from their own wards, divisions, candidates, cycles, and local result histories.</p>
       </article>
       <article>
-        <h2>Versioning</h2>
-        <p>Every forecast output is tied to a model id, code revision, source snapshot, and publication timestamp.</p>
+        <h2>Devolved models</h2>
+        <p>Senedd and Scottish Parliament forecasts use the correct list or AMS allocation logic instead of Westminster shortcuts.</p>
       </article>
       <article>
-        <h2>Backtests</h2>
-        <p>Past predictions are immutable records used to report calibration, mean absolute error, and missed calls.</p>
+        <h2>Publication gate</h2>
+        <p>Outputs need intervals, model version, input snapshot, candidate status, boundary generation, and backtest status.</p>
       </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="workflow" aria-label="Forecast model families">
+      {MODEL_FAMILIES.map((family, index) => (
+        <article>
+          <span>{index + 1}</span>
+          <h2>{family.label}</h2>
+          <p>{family.geography}. {family.votingSystem}. First gate: {family.firstGate}.</p>
+        </article>
+      ))}
     </div>
   </section>
 </BaseLayout>

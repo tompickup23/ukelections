@@ -16,8 +16,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <h2>Publication rules</h2>
     <p>Candidate and result facts must link to a primary or named secondary source. Model features must describe their source data and transformation. Forecast outputs must include uncertainty, a timestamp, and the model version that produced them.</p>
 
-    <h2>Initial model boundary</h2>
-    <p>The first usable model should be deliberately narrow: constituency-level contest probabilities, vote-share intervals, and national seat aggregation. Local, devolved, mayoral, and by-election models can reuse the same schema once the source history is stable.</p>
+    <h2>Model families</h2>
+    <p>Borough, county, unitary, Westminster, Senedd, and Scottish Parliament contests need separate model families. A borough election is ward-first and candidate-first; a county election is division-first; Senedd and Scottish Parliament elections need allocation models that match their voting systems.</p>
+
+    <h2>Local election gate</h2>
+    <p>No local forecast should publish until the ward or division boundary, wards up, defending councillor, candidate roster, local result history, and demographic joins have passed source review. County results can inform a borough model, but they cannot replace borough ward evidence.</p>
+
+    <h2>Internal pilots</h2>
+    <p>The AI DOGE Burnley and Lancashire work is a useful internal pilot because it has refined ward-level election history, candidate handling, and UKD demographic features. It still needs source review, licensing checks, and borough-specific validation before any output is treated as public forecast data.</p>
 
     <h2>Backtesting</h2>
     <p>Backtests are part of the product, not an internal notebook. The public record should show calibration, error distribution, biggest misses, and whether model changes improve the archived result.</p>
