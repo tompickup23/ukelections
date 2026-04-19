@@ -98,6 +98,34 @@ function sourceSnapshotPush(target, snapshot) {
   return snapshot;
 }
 
+function normaliseAreaName(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/\bward\b/g, " ")
+    .replace(/[^a-z\s'-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildAreaCodeByName({ demographicsData, projectionData }) {
+  const map = new Map();
+  const add = (name, code) => {
+    if (name && /^[EWSN]\d{8}$/.test(String(code))) {
+      map.set(normaliseAreaName(name), code);
+    }
+  };
+
+  const demographicWards = demographicsData?.wards || {};
+  for (const [code, ward] of Object.entries(demographicWards)) {
+    add(ward?.name || ward?.ward_name, code);
+  }
+  for (const [code, ward] of Object.entries(projectionData?.ward_projections || {})) {
+    add(ward?.name, code);
+  }
+  return map;
+}
+
 function validateOutputs({ sourceSnapshots, boundaries, history, pollAggregates, featureSnapshots, candidateRosters }) {
   const sourceSummary = summariseSourceQuality(validateSourceSnapshots(sourceSnapshots));
   const historySummary = validateHistoryBundle({ boundaries, history });
@@ -200,6 +228,9 @@ for (const councilDir of councilDirs) {
 
   try {
     const electionData = JSON.parse(readFileSync(electionsPath, "utf8"));
+    const demographicsData = readJsonIfExists(demographicsPath);
+    const projectionData = readJsonIfExists(projectionsPath);
+    const areaCodeByName = buildAreaCodeByName({ demographicsData, projectionData });
     const electionSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(
       electionsPath,
       `AI DOGE ${electionData.meta?.council_name || councilId} election history`,
@@ -211,15 +242,14 @@ for (const councilDir of councilDirs) {
       electionData,
       sourceSnapshot: electionSnapshot,
       candidateSourceManifest,
-      candidateSourceSnapshot
+      candidateSourceSnapshot,
+      areaCodeByName
     });
 
     boundaries.push(...imported.boundaries);
     history.push(...imported.history);
     candidateRosters.push(...imported.candidateRosters);
 
-    const demographicsData = readJsonIfExists(demographicsPath);
-    const projectionData = readJsonIfExists(projectionsPath);
     const demographicsSnapshot = demographicsData
       ? sourceSnapshotPush(sourceSnapshots, snapshotFor(demographicsPath, `AI DOGE ${electionData.meta?.council_name || councilId} demographics`, options))
       : null;
@@ -236,6 +266,7 @@ for (const councilDir of councilDirs) {
       projectionData,
       ukdBasePopulation,
       constituencyAsylum,
+      areaCodeByName,
       sourceSnapshots: {
         elections: electionSnapshot,
         demographics: demographicsSnapshot,

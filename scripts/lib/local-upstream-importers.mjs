@@ -65,9 +65,15 @@ function partyId(partyName) {
 function normaliseName(value) {
   return String(value || "")
     .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/\bward\b/g, " ")
     .replace(/[^a-z\s'-]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function codeFromNameMap(map, name) {
+  return map?.get(normaliseName(name)) || null;
 }
 
 function mapElectionType(type, councilTier) {
@@ -266,7 +272,8 @@ export function importAidogeElectionData({
   sourceSnapshot,
   sourceUrl = sourceSnapshot.source_url,
   candidateSourceManifest = [],
-  candidateSourceSnapshot = null
+  candidateSourceSnapshot = null,
+  areaCodeByName = new Map()
 }) {
   const meta = electionData.meta || {};
   const councilId = meta.council_id || "unknown-council";
@@ -279,7 +286,7 @@ export function importAidogeElectionData({
 
   for (const [wardName, ward] of wardEntries(electionData.wards)) {
     const areaName = ward.name || wardName;
-    const areaCode = ward.gss_code || `local:${councilId}:${slug(areaName)}`;
+    const areaCode = ward.gss_code || codeFromNameMap(areaCodeByName, areaName) || `local:${councilId}:${slug(areaName)}`;
     const validFrom = earliestHistoryDate(ward);
     const boundaryVersionId = `ai-doge.${slug(councilId)}.${slug(areaCode)}.${validFrom}`;
     const electionType = mapElectionType(meta.next_election?.type || ward.history?.[0]?.type, councilTier);
@@ -435,7 +442,8 @@ export function buildAidogeFeatureSnapshots({
   ukdBasePopulation = null,
   constituencyAsylum = null,
   sourceSnapshots,
-  asOf
+  asOf,
+  areaCodeByName = new Map()
 }) {
   const meta = electionData.meta || {};
   const councilId = meta.council_id || "unknown-council";
@@ -457,7 +465,7 @@ export function buildAidogeFeatureSnapshots({
 
   return wardEntries(electionData.wards).map(([wardName, ward]) => {
     const areaName = ward.name || wardName;
-    const areaCode = ward.gss_code || `local:${councilId}:${slug(areaName)}`;
+    const areaCode = ward.gss_code || codeFromNameMap(areaCodeByName, areaName) || `local:${councilId}:${slug(areaName)}`;
     const boundary = boundaryByAreaCode.get(areaCode);
     const wardProjection = wardProjectionByCode[areaCode] || wardProjectionByCode[areaName];
     const demographics = demographicWardByCode.get(areaCode);

@@ -132,29 +132,30 @@ function latestFeature(features) {
 function collectReadinessIssues({ gates, coverage, methodology }) {
   const blockers = [];
   const warnings = [];
+  const readinessTasks = [];
   for (const [name, gateValue] of Object.entries(gates)) {
     const optionalContext = name === "asylum_context" || name === "population_method" || name === "poll_context" || name === "backtest";
     if (gateValue.status === "missing") {
-      (optionalContext ? warnings : blockers).push(`${name} is missing`);
+      (optionalContext ? readinessTasks : blockers).push(`${name} is missing`);
     }
     if (gateValue.status === "proxy") {
-      (optionalContext ? warnings : blockers).push(`${name} is proxy-only`);
+      (optionalContext ? readinessTasks : blockers).push(`${name} is proxy-only`);
     }
     if (gateValue.status === "imported_quarantined") {
       if (name === "boundary_versions") {
-        warnings.push(`${name} is not source-reviewed`);
+        readinessTasks.push(`${name} is not source-reviewed`);
         continue;
       }
-      (optionalContext ? warnings : blockers).push(`${name} is not source-reviewed`);
+      (optionalContext ? readinessTasks : blockers).push(`${name} is not source-reviewed`);
     }
   }
   if (coverage.history_records < methodology.minimum_history_contests) {
-    warnings.push(`Need at least ${methodology.minimum_history_contests} historical contests for this model family`);
+    readinessTasks.push(`Need at least ${methodology.minimum_history_contests} historical contests for this model family`);
   }
   if (methodology.backtest_status !== "passed" && !["missing", "not_applicable"].includes(gates.backtest?.status)) {
     blockers.push("Backtest metrics have not passed");
   }
-  return { blockers, warnings };
+  return { blockers, warnings, readinessTasks };
 }
 
 export function buildModelReadinessAreas({
@@ -284,15 +285,15 @@ export function buildModelReadinessAreas({
           })
         : gate("not_applicable", [], "Backtest metrics are not yet available for this area.")
     };
-    const { blockers, warnings } = collectReadinessIssues({ gates, coverage, methodology });
+    const { blockers, warnings, readinessTasks } = collectReadinessIssues({ gates, coverage, methodology });
     if (hasCurrentGssCode(areaCode)) {
-      warnings.push("Historical boundary lineage still needs generated predecessor/successor crosswalks before publication.");
+      readinessTasks.push("Historical boundary lineage still needs generated predecessor/successor crosswalks before publication.");
     }
     if (gates.election_history.status === "not_applicable") {
-      warnings.push("Election history is absent in the current import.");
+      readinessTasks.push("Election history is absent in the current import.");
     }
     if (gates.backtest.status === "not_applicable") {
-      warnings.push("Baseline backtest is not passing or not available for this area.");
+      readinessTasks.push("Baseline backtest is not passing or not available for this area.");
     }
 
     records.push({
@@ -305,13 +306,14 @@ export function buildModelReadinessAreas({
       election_type: familyToElectionType(modelFamily),
       voting_system: familyToVotingSystem(modelFamily),
       next_election_date: areaRosters[0]?.election_date || null,
-      publication_status: blockers.length > 0 ? "internal" : warnings.length > 0 ? "review" : "publishable",
-      review_status: blockers.length > 0 ? "quarantined" : warnings.length > 0 ? "reviewed_with_warnings" : "reviewed",
+      publication_status: blockers.length > 0 ? "internal" : readinessTasks.length > 0 ? "review" : "publishable",
+      review_status: blockers.length > 0 ? "quarantined" : readinessTasks.length > 0 ? "reviewed_with_warnings" : "reviewed",
       source_gates: gates,
       methodology,
       coverage,
       blockers,
-      warnings
+      warnings,
+      readiness_tasks: [...new Set(readinessTasks)]
     });
   }
 

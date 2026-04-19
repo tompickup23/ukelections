@@ -155,6 +155,9 @@ export function validateModelReadinessArea(area) {
     if ((area.blockers || []).length > 0) {
       errors.push(`${area.publication_status} areas cannot have blockers`);
     }
+    if ((area.readiness_tasks || []).length > 0) {
+      errors.push(`${area.publication_status} areas cannot have readiness_tasks`);
+    }
     if (coverage.history_records < (methodology.minimum_history_contests || familyRule?.minHistory || 0)) {
       errors.push(`${area.publication_status} areas need enough historical contests for the model family`);
     }
@@ -196,6 +199,8 @@ export function summariseModelReadiness(areas) {
     publishable: byStatus.publishable || 0,
     published: byStatus.published || 0,
     blocked: areas.filter((area) => (area.blockers || []).length > 0).length,
+    warnings: areas.reduce((sum, area) => sum + (area.warnings || []).length, 0),
+    readinessTasks: areas.reduce((sum, area) => sum + (area.readiness_tasks || []).length, 0),
     review: byStatus.review || 0,
     internal: byStatus.internal || 0
   };

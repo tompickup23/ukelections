@@ -120,6 +120,14 @@ Candidate rosters are now split between active-contest gates and deferred nomina
 
 Asylum and population gaps are non-blocking warnings for baseline forecasts. They remain blocking for any specific asylum-enhanced or population-enhanced claim unless the relevant feature gate is reviewed for that area.
 
+Readiness output now separates three concepts:
+
+- `blockers`: hard failures that prevent an area from reaching review status;
+- `warnings`: validation anomalies that need immediate data-quality attention;
+- `readiness_tasks`: visible remaining work before publication or enhanced-feature claims.
+
+The baseline local model can therefore have zero blockers and zero warnings while still staying in `review` because publication tasks remain. That is deliberate: it prevents source gaps from being hidden, while avoiding false alarm warnings for optional context such as asylum or population-enhanced features.
+
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
 
 - House of Commons Library Westminster result files for 2024 and 1918-2019.
