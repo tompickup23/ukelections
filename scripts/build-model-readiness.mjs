@@ -43,7 +43,8 @@ const areas = buildModelReadinessAreas({
   candidateRosters: readJson(path.join(args.input, "candidate-rosters.json")),
   featureSnapshots: readJson(path.join(args.input, "model-features.json")),
   pollAggregates: readJson(path.join(args.input, "poll-aggregate.json")),
-  backtests: readJson(path.join(args.input, "baseline-backtests.json"))
+  backtests: readJson(path.join(args.input, "baseline-backtests.json")),
+  sourceSnapshots: readJson(path.join(args.input, "source-snapshots.json"))
 });
 const validation = validateModelReadinessAreas(areas);
 if (!validation.ok) {

@@ -106,12 +106,18 @@ describe("model readiness quality", () => {
         method: "previous_contest_party_share_persistence",
         source_history_ids: ["s1"],
         metrics: { winner_accuracy: 1, mean_absolute_error: 0.1 }
+      }],
+      sourceSnapshots: [{
+        snapshot_id: "s1",
+        source_name: "AI DOGE Example election history",
+        upstream_data_sources: ["DCLEAPIL v1.0", "Democracy Club", "Andrew Teale LEAP"]
       }]
     });
     const validation = validateModelReadinessAreas(areas);
 
     expect(validation.ok).toBe(true);
     expect(areas[0].publication_status).toBe("internal");
+    expect(areas[0].source_gates.election_history.status).toBe("reviewed");
     expect(areas[0].source_gates.candidate_rosters.source_basis).toEqual(["statement_of_persons_nominated"]);
     expect(areas[0].source_gates.backtest.status).toBe("reviewed");
   });

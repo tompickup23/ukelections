@@ -205,6 +205,8 @@ for (const councilDir of councilDirs) {
       `AI DOGE ${electionData.meta?.council_name || councilId} election history`,
       options
     ));
+    electionSnapshot.upstream_data_sources = electionData.meta?.data_sources || [];
+    electionSnapshot.upstream_generated = electionData.meta?.generated || null;
     const imported = importAidogeElectionData({
       electionData,
       sourceSnapshot: electionSnapshot,

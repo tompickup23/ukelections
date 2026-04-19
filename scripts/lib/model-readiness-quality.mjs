@@ -195,6 +195,8 @@ export function summariseModelReadiness(areas) {
     byFamily,
     publishable: byStatus.publishable || 0,
     published: byStatus.published || 0,
-    blocked: (byStatus.blocked || 0) + (byStatus.internal || 0) + (byStatus.review || 0)
+    blocked: areas.filter((area) => (area.blockers || []).length > 0).length,
+    review: byStatus.review || 0,
+    internal: byStatus.internal || 0
   };
 }
