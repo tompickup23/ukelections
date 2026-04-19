@@ -52,6 +52,99 @@ describe("model readiness quality", () => {
     expect(result.errors).toContain("publishable areas need passed backtests");
   });
 
+  it("allows publishable baseline areas to defer candidate rosters when no active contest exists", () => {
+    const result = validateModelReadinessArea({
+      ...baseArea,
+      publication_status: "publishable",
+      review_status: "reviewed",
+      source_gates: {
+        ...baseArea.source_gates,
+        boundary_versions: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test", historical_lineage_status: "generated_identity" },
+        election_history: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test" },
+        candidate_rosters: { status: "not_applicable", source_snapshot_ids: [], notes: "No active contest.", active_contest: false },
+        population_method: { status: "reviewed", source_snapshot_ids: ["s3"], notes: "test" },
+        asylum_context: { status: "reviewed", source_snapshot_ids: ["s4"], notes: "test" },
+        backtest: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test" }
+      },
+      methodology: {
+        ...baseArea.methodology,
+        backtest_status: "passed"
+      },
+      blockers: [],
+      warnings: [],
+      readiness_tasks: []
+    });
+
+    expect(result.ok).toBe(true);
+  });
+
+  it("keeps otherwise clean areas in review until backtests are available", () => {
+    const areas = buildModelReadinessAreas({
+      boundaries: [{
+        boundary_version_id: "b1",
+        area_type: "ward",
+        area_code: "E05000000",
+        area_name: "Example Ward",
+        source_snapshot_id: "s1",
+        review_status: "reviewed"
+      }],
+      history: [
+        { area_code: "E05000000", source_snapshot_id: "s1" },
+        { area_code: "E05000000", source_snapshot_id: "s1" },
+        { area_code: "E05000000", source_snapshot_id: "s1" }
+      ],
+      featureSnapshots: [{
+        area_code: "E05000000",
+        area_name: "Example Ward",
+        boundary_version_id: "b1",
+        model_family: "local_fptp_borough",
+        as_of: "2026-04-19",
+        provenance: [{ source_snapshot_id: "s1" }],
+        features: {
+          poll_context: { poll_aggregate_id: "p1" },
+          population_projection: {
+            method: "local_authority_proxy",
+            quality_level: "proxy",
+            geography_fit: "local_authority_proxy",
+            confidence: "low"
+          },
+          asylum_context: {
+            precision: "ward_estimate",
+            route_scope: "asylum_support"
+          }
+        }
+      }],
+      pollAggregates: [{
+        poll_aggregate_id: "p1",
+        provenance: { source_snapshot_id: "s2" }
+      }],
+      boundaryMappings: [{
+        mapping_id: "lineage-1",
+        source_area_id: "b1",
+        source_area_code: "E05000000",
+        target_area_id: "b1",
+        target_area_code: "E05000000",
+        weight: 1,
+        weight_basis: "manual",
+        source_snapshot_id: "s1",
+        source_url: "https://ukelections.co.uk/sources",
+        review_status: "reviewed"
+      }],
+      sourceSnapshots: [{
+        snapshot_id: "s1",
+        source_name: "AI DOGE Example election history",
+        upstream_data_sources: ["DCLEAPIL v1.0", "Democracy Club", "Andrew Teale LEAP"]
+      }]
+    });
+    const validation = validateModelReadinessAreas(areas);
+
+    expect(validation.ok).toBe(true);
+    expect(areas[0].publication_status).toBe("review");
+    expect(areas[0].review_status).toBe("reviewed_with_warnings");
+    expect(areas[0].readiness_tasks).toEqual(["Baseline backtest is not passing or not available for this area."]);
+    expect(areas[0].source_gates.population_method.feature_scope).toBe("baseline_context_only");
+  });
+
   it("builds readiness from imported manifests and keeps it internal while gates are quarantined", () => {
     const areas = buildModelReadinessAreas({
       boundaries: [{

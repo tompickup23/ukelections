@@ -127,13 +127,26 @@ function reviewedLineageMappingsForArea(areaCode, boundaryIds, mappingsByTargetC
 
 function populationGateStatus(population) {
   if (!population) return "missing";
-  if (population.confidence === "low" || population.confidence === "none") return "proxy";
   if (
     population.geography_fit === "exact_area" &&
     ["rebased_partial", "cohort_component", "ons_total_only"].includes(population.quality_level) &&
     ["medium", "high"].includes(population.confidence)
   ) {
     return "reviewed";
+  }
+  if (
+    ["low", "none"].includes(population.confidence) &&
+    population.geography_fit === "exact_area" &&
+    population.quality_level === "ons_total_only"
+  ) {
+    return "accepted";
+  }
+  if (
+    ["low", "none"].includes(population.confidence) &&
+    ["census_baseline_only", "proxy", "unknown"].includes(population.quality_level) &&
+    ["local_authority_proxy", "constituency_proxy", "manual_proxy"].includes(population.geography_fit)
+  ) {
+    return "accepted";
   }
   return "imported_quarantined";
 }
@@ -173,13 +186,32 @@ function collectReadinessIssues({ gates, coverage, methodology }) {
       (optionalContext ? readinessTasks : blockers).push(`${name} is not source-reviewed`);
     }
   }
-  if (coverage.history_records < methodology.minimum_history_contests) {
+  if (coverage.history_records > 0 && coverage.history_records < methodology.minimum_history_contests) {
     readinessTasks.push(`Need at least ${methodology.minimum_history_contests} historical contests for this model family`);
   }
   if (methodology.backtest_status !== "passed" && !["missing", "not_applicable"].includes(gates.backtest?.status)) {
     blockers.push("Backtest metrics have not passed");
   }
   return { blockers, warnings, readinessTasks };
+}
+
+function gateIsPublishable(gateValue) {
+  return gateValue?.status === "reviewed" || gateValue?.status === "accepted";
+}
+
+function candidateGateIsPublishable(gateValue) {
+  return gateIsPublishable(gateValue) || (gateValue?.status === "not_applicable" && gateValue.active_contest === false);
+}
+
+function hasPublishableEvidence({ gates, coverage, methodology }) {
+  for (const gateName of ["boundary_versions", "election_history", "poll_context", "population_method", "backtest"]) {
+    if (!gateIsPublishable(gates[gateName])) return false;
+  }
+  if (!candidateGateIsPublishable(gates.candidate_rosters)) return false;
+  if (methodology.backtest_status !== "passed") return false;
+  if (gates.boundary_versions?.historical_lineage_status === "pending") return false;
+  if (coverage.history_records < methodology.minimum_history_contests) return false;
+  return true;
 }
 
 export function buildModelReadinessAreas({
@@ -307,12 +339,16 @@ export function buildModelReadinessAreas({
           })
         : activeContest
           ? gate("missing", [], "No candidate roster is available for the next contest.")
-          : gate("not_applicable", [], "No active contest is currently identified for this area, so nominations are deferred."),
+          : gate("not_applicable", [], "No active contest is currently identified for this area, so nominations are deferred.", {
+            active_contest: false
+          }),
       poll_context: coverage.poll_aggregates > 0
         ? gate("reviewed", pollSourceIds, "Poll aggregate is available for contextual baseline readiness; model-family translation remains a warning until poll-source method review is complete.")
         : gate("not_applicable", [], "No poll aggregate is required for the baseline historical model."),
       population_method: latestPopulation
-        ? gate(populationGateStatus(latestPopulation), [...sourceSnapshotIds], `Population method: ${latestPopulation.method}; quality: ${latestPopulation.quality_level}; geography fit: ${latestPopulation.geography_fit}; confidence: ${latestPopulation.confidence}.`)
+        ? gate(populationGateStatus(latestPopulation), [...sourceSnapshotIds], `Population method: ${latestPopulation.method}; quality: ${latestPopulation.quality_level}; geography fit: ${latestPopulation.geography_fit}; confidence: ${latestPopulation.confidence}.`, populationGateStatus(latestPopulation) === "accepted"
+          ? { feature_scope: "baseline_context_only" }
+          : {})
         : gate("missing", [], "No population method metadata is attached."),
       asylum_context: latestAsylum
         ? gate(["ward_estimate", "local_authority_context"].includes(latestAsylum.precision) ? "reviewed" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
@@ -331,12 +367,25 @@ export function buildModelReadinessAreas({
     if (gates.election_history.status === "not_applicable") {
       readinessTasks.push("Election history is absent in the current import.");
     }
-    if (gates.candidate_rosters.status === "not_applicable") {
-      readinessTasks.push("Candidate roster is deferred until an active contest is identified.");
-    }
-    if (gates.backtest.status === "not_applicable") {
+    if (
+      gates.backtest.status === "not_applicable" &&
+      methodology.backtest_status !== "passed" &&
+      coverage.history_records >= methodology.minimum_history_contests &&
+      gates.election_history.status !== "not_applicable"
+    ) {
       readinessTasks.push("Baseline backtest is not passing or not available for this area.");
     }
+    const publishableEvidence = hasPublishableEvidence({ gates, coverage, methodology });
+    const publicationStatus = blockers.length > 0
+      ? "internal"
+      : readinessTasks.length > 0 || !publishableEvidence
+        ? "review"
+        : "publishable";
+    const reviewStatus = blockers.length > 0
+      ? "quarantined"
+      : readinessTasks.length > 0 || !publishableEvidence
+        ? "reviewed_with_warnings"
+        : "reviewed";
 
     records.push({
       model_area_id: stableId("readiness", [areaCode, modelFamily, feature.boundary_version_id]),
@@ -348,8 +397,8 @@ export function buildModelReadinessAreas({
       election_type: familyToElectionType(modelFamily),
       voting_system: familyToVotingSystem(modelFamily),
       next_election_date: areaRosters[0]?.election_date || null,
-      publication_status: blockers.length > 0 ? "internal" : readinessTasks.length > 0 ? "review" : "publishable",
-      review_status: blockers.length > 0 ? "quarantined" : readinessTasks.length > 0 ? "reviewed_with_warnings" : "reviewed",
+      publication_status: publicationStatus,
+      review_status: reviewStatus,
       source_gates: gates,
       methodology,
       coverage,

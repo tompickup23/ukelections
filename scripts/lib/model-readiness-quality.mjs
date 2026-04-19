@@ -53,6 +53,10 @@ function gateIsPublishable(gate) {
   return gate?.status === "reviewed" || gate?.status === "accepted";
 }
 
+function candidateGateIsPublishable(gate) {
+  return gateIsPublishable(gate) || (gate?.status === "not_applicable" && gate.active_contest === false);
+}
+
 export function validateModelReadinessArea(area) {
   const errors = [];
   for (const field of [
@@ -144,10 +148,13 @@ export function validateModelReadinessArea(area) {
 
   if (["publishable", "published"].includes(area.publication_status)) {
     const gates = area.source_gates || {};
-    for (const gateName of ["boundary_versions", "election_history", "candidate_rosters", "poll_context", "population_method", "backtest"]) {
+    for (const gateName of ["boundary_versions", "election_history", "poll_context", "population_method", "backtest"]) {
       if (!gateIsPublishable(gates[gateName])) {
         errors.push(`${area.publication_status} areas need reviewed or accepted ${gateName}`);
       }
+    }
+    if (!candidateGateIsPublishable(gates.candidate_rosters)) {
+      errors.push(`${area.publication_status} areas need reviewed, accepted, or not-applicable candidate_rosters`);
     }
     if (methodology.backtest_status !== "passed") {
       errors.push(`${area.publication_status} areas need passed backtests`);
