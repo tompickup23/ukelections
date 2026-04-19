@@ -19,6 +19,10 @@ export function inferRowCount(content, contentType = "", filePath = "") {
   }
 
   if (lowerType.includes("csv") || lowerPath.endsWith(".csv")) {
+    if (content.length > 5_000_000) {
+      const lines = content.split(/\r?\n/).filter((line) => line.trim().length > 0);
+      return Math.max(0, lines.length - 1);
+    }
     return parseCsv(content).length;
   }
 

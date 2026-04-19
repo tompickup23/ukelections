@@ -2,6 +2,15 @@ function winner(record) {
   return [...(record.result_rows || [])].sort((left, right) => left.rank - right.rank)[0]?.party_name || null;
 }
 
+function electedParties(record) {
+  const parties = new Set((record.result_rows || []).filter((row) => row.elected).map((row) => row.party_name));
+  if (parties.size === 0) {
+    const topParty = winner(record);
+    if (topParty) parties.add(topParty);
+  }
+  return parties;
+}
+
 function shares(record) {
   const total = record.turnout_votes || (record.result_rows || []).reduce((sum, row) => sum + (row.votes || 0), 0);
   return Object.fromEntries((record.result_rows || []).map((row) => [row.party_name, total > 0 ? row.votes / total : 0]));
@@ -66,16 +75,27 @@ function evaluate(records) {
 
   const contests = new Set(rows.map((row) => row.contest_id));
   const correctContests = new Set(rows.filter((row) => row.winner_correct).map((row) => row.contest_id));
+  const electedPartyHits = new Set();
+  for (let index = 1; index < records.length; index += 1) {
+    const trainingRecords = records.slice(0, index);
+    const actual = records[index];
+    const predictedShares = rollingAverageShares(trainingRecords, 2);
+    const predictedWinner = Object.entries(predictedShares).sort((left, right) => right[1] - left[1])[0]?.[0] || null;
+    if (predictedWinner && electedParties(actual).has(predictedWinner)) {
+      electedPartyHits.add(actual.contest_id);
+    }
+  }
   return {
     contests: contests.size,
     rows: rows.length,
     mean_absolute_error: rows.length ? rows.reduce((sum, row) => sum + row.absolute_error, 0) / rows.length : null,
-    winner_accuracy: contests.size ? correctContests.size / contests.size : null
+    winner_accuracy: contests.size ? correctContests.size / contests.size : null,
+    elected_party_hit_rate: contests.size ? electedPartyHits.size / contests.size : null
   };
 }
 
 function passes(metrics) {
-  return metrics.contests >= 1 && metrics.mean_absolute_error <= 0.22 && metrics.winner_accuracy >= 0.5;
+  return metrics.contests >= 1 && metrics.mean_absolute_error <= 0.22 && metrics.elected_party_hit_rate >= 0.5;
 }
 
 export function buildBaselineBacktests({ history = [], featureSnapshots = [], generatedAt }) {
@@ -113,6 +133,7 @@ export function buildBaselineBacktests({ history = [], featureSnapshots = [], ge
       metrics,
       thresholds: {
         mean_absolute_error_max: 0.22,
+        elected_party_hit_rate_min: 0.5,
         winner_accuracy_min: 0.5
       }
     };

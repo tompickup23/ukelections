@@ -7,6 +7,8 @@ import {
   importAidogeElectionData,
   importAidogePollAggregate
 } from "./lib/local-upstream-importers.mjs";
+import { importDcleapilSupplementalHistory } from "./lib/dcleapil-supplemental-history.mjs";
+import { importOfficialHistoryRecords } from "./lib/official-history-importer.mjs";
 import { validateSourceSnapshots, summariseSourceQuality } from "./lib/source-quality.mjs";
 import { validateHistoryBundle } from "./lib/history-quality.mjs";
 import { validateModelInputs } from "./lib/model-input-quality.mjs";
@@ -19,6 +21,8 @@ const DEFAULTS = {
   asylumModelRoot: "/Users/tompickup/asylumstats/data/model",
   localAsylumPath: "/Users/tompickup/asylumstats/data/marts/uk_routes/local-route-latest.json",
   constituencyAsylumPath: "/Users/tompickup/clawd/labour-tracker/constituency_asylum.json",
+  dcleapilPath: "/Users/tompickup/clawd/burnley-council/scripts/election_data_cache/dcleapil_results.csv",
+  officialHistoryPath: "data/lancaster-official-election-history.json",
   candidateSourceManifestPath: "data/lancashire-2026-sopn-sources.json",
   output: "/tmp/ukelections-local-upstreams",
   sourceUrl: "https://ukelections.co.uk/sources",
@@ -33,6 +37,8 @@ function parseArgs(argv) {
     else if (arg === "--asylum-model-root") args.asylumModelRoot = argv[++index];
     else if (arg === "--local-asylum") args.localAsylumPath = argv[++index];
     else if (arg === "--constituency-asylum") args.constituencyAsylumPath = argv[++index];
+    else if (arg === "--dcleapil") args.dcleapilPath = argv[++index];
+    else if (arg === "--official-history") args.officialHistoryPath = argv[++index];
     else if (arg === "--candidate-source-manifest") args.candidateSourceManifestPath = argv[++index];
     else if (arg === "--output") args.output = argv[++index];
     else if (arg === "--source-url") args.sourceUrl = argv[++index];
@@ -57,6 +63,8 @@ Options:
   --asylum-model-root <path>     asylumstats/UKD model root
   --local-asylum <path>          asylumstats local route latest JSON
   --constituency-asylum <path>   Labour tracker constituency asylum JSON
+  --dcleapil <path>              DCLEAPIL/LEAP local election results CSV cache
+  --official-history <path>      Manual official ward-result supplement JSON
   --candidate-source-manifest <path>
                                  Lancashire SoPN source URL manifest
   --council <id>                 Import only one council id. Repeatable
@@ -101,6 +109,22 @@ function sourceSnapshotPush(target, snapshot) {
     target.push(snapshot);
   }
   return snapshot;
+}
+
+function alignBoundaryValidFromWithHistory(boundaries, history) {
+  const earliestByBoundaryId = new Map();
+  for (const record of history) {
+    const current = earliestByBoundaryId.get(record.boundary_version_id);
+    if (!current || record.election_date < current) {
+      earliestByBoundaryId.set(record.boundary_version_id, record.election_date);
+    }
+  }
+  for (const boundary of boundaries) {
+    const earliest = earliestByBoundaryId.get(boundary.boundary_version_id);
+    if (earliest && (!boundary.valid_from || earliest < boundary.valid_from)) {
+      boundary.valid_from = earliest;
+    }
+  }
 }
 
 function normaliseAreaName(value) {
@@ -285,6 +309,38 @@ if (localAsylum) {
   localAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.localAsylumPath, "UKD/asylumstats local asylum route context", options));
 }
 
+const officialHistoryData = readJsonIfExists(options.officialHistoryPath);
+let officialHistorySnapshot = null;
+if (officialHistoryData) {
+  officialHistorySnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(
+    options.officialHistoryPath,
+    officialHistoryData.source_name || "Official ward election history supplement",
+    {
+      ...options,
+      sourceUrl: officialHistoryData.source_url || options.sourceUrl,
+      licence: officialHistoryData.licence || options.licence
+    }
+  ));
+  officialHistorySnapshot.upstream_data_sources = [
+    "Official Results",
+    officialHistoryData.source_name || "Official ward election history supplement"
+  ];
+}
+
+let dcleapilSnapshot = null;
+if (existsSync(options.dcleapilPath)) {
+  dcleapilSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(
+    options.dcleapilPath,
+    "DCLEAPIL local election results cache",
+    options
+  ));
+  dcleapilSnapshot.upstream_data_sources = [
+    "Local Elections Archive Project",
+    "Andrew Teale LEAP",
+    "Democracy Club identifiers where supplied"
+  ];
+}
+
 const candidateSourceManifest = readJsonIfExists(options.candidateSourceManifestPath) || [];
 let candidateSourceSnapshot = null;
 if (candidateSourceManifest.length > 0) {
@@ -384,6 +440,27 @@ for (const councilDir of councilDirs) {
   }
 }
 
+const supplementalHistory = dcleapilSnapshot
+  ? await importDcleapilSupplementalHistory({
+    dcleapilPath: options.dcleapilPath,
+    sourceSnapshot: dcleapilSnapshot,
+    boundaries,
+    existingHistory: history,
+    sourceUrl: options.sourceUrl
+  })
+  : [];
+history.push(...supplementalHistory);
+const officialHistory = officialHistorySnapshot
+  ? importOfficialHistoryRecords({
+    officialHistoryData,
+    sourceSnapshot: officialHistorySnapshot,
+    boundaries,
+    existingHistory: history
+  })
+  : [];
+history.push(...officialHistory);
+alignBoundaryValidFromWithHistory(boundaries, history);
+
 const boundaryMappings = buildBoundaryLineageMappings(boundaries);
 const validation = validateOutputs({
   sourceSnapshots,
@@ -411,6 +488,8 @@ writeJson(path.join(options.output, "import-summary.json"), {
     asylum_model_root: options.asylumModelRoot,
     local_asylum_path: options.localAsylumPath,
     constituency_asylum_path: options.constituencyAsylumPath,
+    dcleapil_path: options.dcleapilPath,
+    official_history_path: options.officialHistoryPath,
     candidate_source_manifest_path: options.candidateSourceManifestPath
   },
   counts: {
@@ -420,6 +499,8 @@ writeJson(path.join(options.output, "import-summary.json"), {
     boundaries: boundaries.length,
     boundary_mappings: boundaryMappings.length,
     history_records: history.length,
+    supplemental_history_records: supplementalHistory.length,
+    official_history_records: officialHistory.length,
     candidate_rosters: candidateRosters.length,
     poll_aggregates: pollAggregates.length,
     feature_snapshots: featureSnapshots.length
@@ -440,6 +521,8 @@ console.log(JSON.stringify({
     boundaries: boundaries.length,
     boundary_mappings: boundaryMappings.length,
     history_records: history.length,
+    supplemental_history_records: supplementalHistory.length,
+    official_history_records: officialHistory.length,
     candidate_rosters: candidateRosters.length,
     poll_aggregates: pollAggregates.length,
     feature_snapshots: featureSnapshots.length
