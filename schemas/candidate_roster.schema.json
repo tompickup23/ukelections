@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/candidate_roster.schema.json",
+  "title": "Candidate roster",
+  "type": "object",
+  "required": [
+    "roster_id",
+    "contest_id",
+    "area_code",
+    "election_date",
+    "source_snapshot_id",
+    "statement_of_persons_nominated_url",
+    "candidates",
+    "review_status"
+  ],
+  "properties": {
+    "roster_id": { "type": "string", "minLength": 1 },
+    "contest_id": { "type": "string", "minLength": 1 },
+    "area_code": { "type": "string", "minLength": 1 },
+    "election_date": { "type": "string", "format": "date" },
+    "source_snapshot_id": { "type": "string", "minLength": 1 },
+    "statement_of_persons_nominated_url": { "type": "string", "format": "uri" },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "reviewed_with_warnings", "quarantined"]
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "person_name", "party_name", "party_id", "incumbent", "defending_seat", "status"],
+        "properties": {
+          "candidate_id": { "type": "string", "minLength": 1 },
+          "person_name": { "type": "string", "minLength": 1 },
+          "party_name": { "type": "string", "minLength": 1 },
+          "party_id": { "type": "string", "minLength": 1 },
+          "incumbent": { "type": "boolean" },
+          "defending_seat": { "type": "boolean" },
+          "status": { "type": "string", "enum": ["standing", "withdrawn", "replaced", "unknown"] }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

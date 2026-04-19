@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/model_run.schema.json",
+  "title": "Model run",
+  "type": "object",
+  "required": [
+    "model_run_id",
+    "model_family",
+    "model_version",
+    "generated_at",
+    "code_revision",
+    "source_snapshot_ids",
+    "poll_aggregate_ids",
+    "feature_snapshot_ids",
+    "candidate_roster_ids",
+    "boundary_version_ids",
+    "assumptions",
+    "review_status",
+    "publication_status"
+  ],
+  "properties": {
+    "model_run_id": { "type": "string", "minLength": 1 },
+    "model_family": {
+      "type": "string",
+      "enum": [
+        "westminster_fptp",
+        "local_fptp_borough",
+        "local_fptp_county",
+        "local_fptp_unitary",
+        "local_stv",
+        "senedd_closed_list_pr",
+        "scottish_ams"
+      ]
+    },
+    "model_version": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "code_revision": { "type": "string", "minLength": 1 },
+    "source_snapshot_ids": { "type": "array", "items": { "type": "string" } },
+    "poll_aggregate_ids": { "type": "array", "items": { "type": "string" } },
+    "feature_snapshot_ids": { "type": "array", "items": { "type": "string" } },
+    "candidate_roster_ids": { "type": "array", "items": { "type": "string" } },
+    "boundary_version_ids": { "type": "array", "items": { "type": "string" } },
+    "assumptions": { "type": "object" },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "reviewed_with_warnings", "quarantined"]
+    },
+    "publication_status": {
+      "type": "string",
+      "enum": ["internal", "review", "published", "withdrawn"]
+    }
+  },
+  "additionalProperties": true
+}

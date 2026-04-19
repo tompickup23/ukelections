@@ -13,9 +13,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run validate:sources
-      - run: npm run validate:history
-      - run: npm run validate:model-inputs
+      - run: npm run validate:backend
       - name: Placeholder until election ETL lands
         run: |
           echo "UK Elections ETL is not wired yet."

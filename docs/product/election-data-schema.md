@@ -99,6 +99,8 @@ Required fields:
 - `weight`
 - `weight_basis`: `population`, `electorate`, `lsoa_best_fit`, `manual`
 - `source_url`
+- `source_snapshot_id`
+- `review_status`
 
 ### `boundary_versions`
 
@@ -228,6 +230,26 @@ Required fields:
 - `predicted_vote_share_p50`
 - `absolute_error`
 - `winner_correct`
+
+### `model_runs`
+
+Immutable manifest for a forecast or backtest run.
+
+Required fields:
+
+- `model_run_id`
+- `model_family`
+- `model_version`
+- `generated_at`
+- `code_revision`
+- `source_snapshot_ids`
+- `poll_aggregate_ids`
+- `feature_snapshot_ids`
+- `candidate_roster_ids`
+- `boundary_version_ids`
+- `assumptions`
+- `review_status`
+- `publication_status`
 
 ## Source Rule
 

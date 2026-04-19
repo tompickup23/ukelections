@@ -1,0 +1,24 @@
+[
+  {
+    "model_run_id": "example-run-2026-04-18",
+    "model_family": "local_fptp_borough",
+    "model_version": "model.local_fptp_borough.0.1.0",
+    "generated_at": "2026-04-18T00:00:00Z",
+    "code_revision": "example",
+    "source_snapshot_ids": [
+      "example-election-result-2026-05-07",
+      "example-nominations-2026-04-18",
+      "example-home-office-asylum-2026-04-18"
+    ],
+    "poll_aggregate_ids": ["example-uk-national-2026-04-18"],
+    "feature_snapshot_ids": ["example-area-features-2026-04-18"],
+    "candidate_roster_ids": ["example-roster-2026"],
+    "boundary_version_ids": ["ward-example-2024"],
+    "assumptions": {
+      "national_to_local_dampening": 0.65,
+      "poll_half_life_days": 21
+    },
+    "review_status": "quarantined",
+    "publication_status": "internal"
+  }
+]
