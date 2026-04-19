@@ -97,6 +97,15 @@ describe("model readiness quality", () => {
       pollAggregates: [{
         poll_aggregate_id: "p1",
         provenance: { source_snapshot_id: "s2" }
+      }],
+      backtests: [{
+        area_code: "E05000000",
+        model_family: "local_fptp_borough",
+        backtest_id: "bt1",
+        status: "passed",
+        method: "previous_contest_party_share_persistence",
+        source_history_ids: ["s1"],
+        metrics: { winner_accuracy: 1, mean_absolute_error: 0.1 }
       }]
     });
     const validation = validateModelReadinessAreas(areas);
@@ -104,6 +113,6 @@ describe("model readiness quality", () => {
     expect(validation.ok).toBe(true);
     expect(areas[0].publication_status).toBe("internal");
     expect(areas[0].source_gates.candidate_rosters.source_basis).toEqual(["statement_of_persons_nominated"]);
-    expect(areas[0].blockers).toContain("backtest is missing");
+    expect(areas[0].source_gates.backtest.status).toBe("reviewed");
   });
 });

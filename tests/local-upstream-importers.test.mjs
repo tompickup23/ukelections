@@ -67,6 +67,24 @@ describe("local upstream importers", () => {
     expect(imported.candidateRosters[0].candidates[0].defending_seat).toBe(true);
   });
 
+  it("links Lancashire candidate rosters to official statement sources when supplied", () => {
+    const imported = importAidogeElectionData({
+      electionData,
+      sourceSnapshot,
+      candidateSourceSnapshot: { snapshot_id: "sopn-source-1", source_url: "https://ukelections.co.uk/sources" },
+      candidateSourceManifest: [{
+        council_id: "burnley",
+        official_url: "https://example.com/statement.pdf",
+        official_page_url: "https://example.com/notices",
+        source_basis: "statement_of_persons_nominated"
+      }]
+    });
+
+    expect(imported.candidateRosters[0].source_snapshot_id).toBe("sopn-source-1");
+    expect(imported.candidateRosters[0].statement_of_persons_nominated_url).toBe("https://example.com/statement.pdf");
+    expect(imported.candidateRosters[0].direct_statement_url_attached).toBe(true);
+  });
+
   it("imports AI DOGE polling as a validated aggregate", () => {
     const aggregate = importAidogePollAggregate({
       sourceSnapshot,

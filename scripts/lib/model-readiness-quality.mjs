@@ -22,7 +22,7 @@ const GEOGRAPHY_TYPES = new Set([
 const JURISDICTIONS = new Set(["england", "scotland", "wales", "great_britain", "united_kingdom"]);
 const ELECTION_TYPES = new Set(["borough", "county", "unitary", "westminster", "senedd", "scottish_parliament", "scottish_local"]);
 const VOTING_SYSTEMS = new Set(["fptp", "stv", "closed_list_pr", "ams"]);
-const GATE_STATUSES = new Set(["missing", "proxy", "imported_quarantined", "reviewed", "accepted"]);
+const GATE_STATUSES = new Set(["missing", "proxy", "imported_quarantined", "reviewed", "accepted", "not_applicable"]);
 const BACKTEST_STATUSES = new Set(["missing", "not_applicable", "running", "failed", "passed"]);
 
 const REQUIRED_GATES = [

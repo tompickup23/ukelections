@@ -100,6 +100,7 @@ No model family is publication-grade until:
 - Area feature compiler.
 - Local upstream importer for AI DOGE, UKD/asylumstats, and Labour tracker data.
 - National model readiness validation, so every area can be blocked until source, boundary, candidate, population, poll, and backtest gates pass.
+- Baseline historical-persistence backtests, so missing backtests are replaced by measured passed/failed/missing status.
 
 ## 9. National Readiness Standard
 
@@ -114,6 +115,10 @@ Every model area now needs a readiness record before it can be promoted beyond i
 - backtest status.
 
 `publishable` and `published` records are rejected unless boundary, history, candidates, polling, population, and backtest gates are reviewed or accepted, blockers are empty, and backtests have passed. This is the practical interpretation of 100% accuracy: no forecast is public unless its inputs and method are traceable, current, and reviewed.
+
+Candidate rosters are now split between active-contest gates and deferred nomination gates. A ward or division with no active contest is not blocked for lacking current nominees. Active Lancashire 2026 candidate rosters can be promoted to reviewed when they are linked to official statement-of-persons-nominated URLs.
+
+Asylum and population gaps are non-blocking warnings for baseline forecasts. They remain blocking for any specific asylum-enhanced or population-enhanced claim unless the relevant feature gate is reviewed for that area.
 
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
 

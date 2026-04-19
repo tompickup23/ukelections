@@ -157,6 +157,16 @@ function isLancashireCouncilId(councilId) {
   ]).has(councilId);
 }
 
+function candidateSourceForArea(candidateSourceManifest = [], councilId, areaName) {
+  const source = candidateSourceManifest.find((row) => row.council_id === councilId);
+  if (!source) return null;
+  const wardUrl = source.ward_sources?.[areaName];
+  return {
+    ...source,
+    official_url: wardUrl || source.official_url || source.official_page_url
+  };
+}
+
 function latestProjectionYear(projections, targetYear) {
   const years = Object.keys(projections || {})
     .filter((year) => /^\d{4}$/.test(year))
@@ -251,7 +261,13 @@ export function buildLocalFileSourceSnapshot({
   });
 }
 
-export function importAidogeElectionData({ electionData, sourceSnapshot, sourceUrl = sourceSnapshot.source_url }) {
+export function importAidogeElectionData({
+  electionData,
+  sourceSnapshot,
+  sourceUrl = sourceSnapshot.source_url,
+  candidateSourceManifest = [],
+  candidateSourceSnapshot = null
+}) {
   const meta = electionData.meta || {};
   const councilId = meta.council_id || "unknown-council";
   const councilTier = meta.council_tier || (councilId.endsWith("_cc") ? "county" : "district");
@@ -325,19 +341,23 @@ export function importAidogeElectionData({ electionData, sourceSnapshot, sourceU
       const defender = defenders[areaName];
       const currentHolders = new Set((ward.current_holders || []).map((holder) => normaliseName(holder.name)));
       let defendingAssigned = false;
-      const statementDerived = isLancashireCouncilId(councilId);
+      const statementSource = candidateSourceForArea(candidateSourceManifest, councilId, areaName);
+      const statementDerived = Boolean(statementSource) || isLancashireCouncilId(councilId);
+      const rosterSourceSnapshot = candidateSourceSnapshot || sourceSnapshot;
+      const rosterSourceUrl = statementSource?.official_url || sourceUrl;
       candidateRosters.push({
         roster_id: `ai-doge-roster.${slug(councilId)}.${slug(areaCode)}.${toDate(meta.next_election.date)}`,
         contest_id: `local.${slug(councilId)}.${slug(areaCode)}.${toDate(meta.next_election.date)}`,
         area_code: areaCode,
         election_date: toDate(meta.next_election.date),
-        source_snapshot_id: sourceSnapshot.snapshot_id,
-        statement_of_persons_nominated_url: sourceUrl,
+        source_snapshot_id: rosterSourceSnapshot.snapshot_id,
+        statement_of_persons_nominated_url: rosterSourceUrl,
         source_basis: statementDerived ? "statement_of_persons_nominated" : "upstream_candidate_list",
         source_review_notes: statementDerived
-          ? "AI DOGE Lancashire candidate rows are statement-of-persons-nominated derived; attach the council notice URL before promoting from quarantine."
+          ? "AI DOGE Lancashire candidate rows are statement-of-persons-nominated derived and linked to the official notice source manifest."
           : "Candidate row source basis is not confirmed as a statement of persons nominated.",
-        direct_statement_url_attached: false,
+        official_page_url: statementSource?.official_page_url,
+        direct_statement_url_attached: Boolean(statementSource?.official_url),
         review_status: "quarantined",
         candidates: candidates.map((candidate, index) => {
           const normalised = normaliseName(candidate.name);
@@ -493,6 +513,20 @@ export function buildAidogeFeatureSnapshots({
       populationProjection,
       provenance
     });
-    return { ...snapshot, review_status: "quarantined" };
+    const wardsUp = new Set(meta.next_election?.wards_up || []);
+    return {
+      ...snapshot,
+      review_status: "quarantined",
+      features: {
+        ...snapshot.features,
+        election_context: {
+          next_election_date: meta.next_election?.date || null,
+          election_cycle: meta.election_cycle || null,
+          seats_per_ward: meta.seats_per_ward ?? null,
+          contested_at_next_election: Boolean(meta.next_election?.date && (wardsUp.has(areaName) || (ward.candidates_2026 || []).length > 0)),
+          candidacy_source: meta.next_election?.candidacy_data?.source || null
+        }
+      }
+    };
   });
 }

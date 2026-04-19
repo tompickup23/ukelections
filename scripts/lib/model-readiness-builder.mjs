@@ -114,12 +114,20 @@ function latestFeature(features) {
   return [...features].sort((left, right) => String(right.as_of).localeCompare(String(left.as_of)))[0] || null;
 }
 
-function collectBlockers({ gates, coverage, methodology }) {
+function collectReadinessIssues({ gates, coverage, methodology }) {
   const blockers = [];
+  const warnings = [];
   for (const [name, gateValue] of Object.entries(gates)) {
-    if (gateValue.status === "missing") blockers.push(`${name} is missing`);
-    if (gateValue.status === "proxy") blockers.push(`${name} is proxy-only`);
-    if (gateValue.status === "imported_quarantined") blockers.push(`${name} is not source-reviewed`);
+    const optionalContext = name === "asylum_context" || name === "population_method";
+    if (gateValue.status === "missing") {
+      (optionalContext ? warnings : blockers).push(`${name} is missing`);
+    }
+    if (gateValue.status === "proxy") {
+      (optionalContext ? warnings : blockers).push(`${name} is proxy-only`);
+    }
+    if (gateValue.status === "imported_quarantined") {
+      (optionalContext ? warnings : blockers).push(`${name} is not source-reviewed`);
+    }
   }
   if (coverage.history_records < methodology.minimum_history_contests) {
     blockers.push(`Need at least ${methodology.minimum_history_contests} historical contests for this model family`);
@@ -127,7 +135,7 @@ function collectBlockers({ gates, coverage, methodology }) {
   if (methodology.backtest_status !== "passed" && gates.backtest?.status !== "missing") {
     blockers.push("Backtest metrics have not passed");
   }
-  return blockers;
+  return { blockers, warnings };
 }
 
 export function buildModelReadinessAreas({
@@ -135,12 +143,14 @@ export function buildModelReadinessAreas({
   history = [],
   candidateRosters = [],
   featureSnapshots = [],
-  pollAggregates = []
+  pollAggregates = [],
+  backtests = []
 }) {
   const historyByArea = new Map();
   const rostersByArea = new Map();
   const featuresByAreaFamily = new Map();
   const boundaryByArea = new Map();
+  const backtestByAreaFamily = new Map();
 
   for (const boundary of boundaries) {
     const list = boundaryByArea.get(boundary.area_code) || [];
@@ -162,6 +172,9 @@ export function buildModelReadinessAreas({
     const list = featuresByAreaFamily.get(key) || [];
     list.push(feature);
     featuresByAreaFamily.set(key, list);
+  }
+  for (const backtest of backtests) {
+    backtestByAreaFamily.set(`${backtest.area_code}::${backtest.model_family}`, backtest);
   }
 
   const records = [];
@@ -194,6 +207,17 @@ export function buildModelReadinessAreas({
     };
     const latestPopulation = feature.features?.population_projection;
     const latestAsylum = feature.features?.asylum_context;
+    const electionContext = feature.features?.election_context || {};
+    const activeContest = Boolean(electionContext.contested_at_next_election || areaRosters.length > 0);
+    const allRostersOfficial = areaRosters.length > 0 && areaRosters.every((row) =>
+      row.source_basis === "statement_of_persons_nominated" && row.direct_statement_url_attached
+    );
+    const backtest = backtestByAreaFamily.get(key);
+    if (backtest) {
+      methodology.backtest_status = backtest.status;
+      methodology.backtest_id = backtest.backtest_id;
+      methodology.backtest_metrics = backtest.metrics;
+    }
     const gates = {
       boundary_versions: coverage.boundary_versions > 0
         ? gate(statusFromReview(boundary.review_status), areaBoundaries.map((row) => row.source_snapshot_id), "Boundary version exists but needs official geography lineage review.")
@@ -202,10 +226,14 @@ export function buildModelReadinessAreas({
         ? gate("imported_quarantined", areaHistory.map((row) => row.source_snapshot_id), "Historical contests are present but not promoted to accepted official-result status.")
         : gate("missing", [], "No historical election records are available."),
       candidate_rosters: coverage.candidate_rosters > 0
-        ? gate("imported_quarantined", areaRosters.map((row) => row.source_snapshot_id), "Candidate rosters are present; statement URLs and withdrawals still need review.", {
+        ? gate(allRostersOfficial ? "reviewed" : "imported_quarantined", areaRosters.map((row) => row.source_snapshot_id), allRostersOfficial
+          ? "Candidate rosters are linked to official statements of persons nominated. Withdrawal checks still run as part of refresh."
+          : "Candidate rosters are present; statement URLs and withdrawals still need review.", {
             source_basis: [...new Set(areaRosters.map((row) => row.source_basis).filter(Boolean))]
           })
-        : gate("missing", [], "No candidate roster is available for the next contest."),
+        : activeContest
+          ? gate("missing", [], "No candidate roster is available for the next contest.")
+          : gate("not_applicable", [], "No active contest is currently identified for this area, so nominations are deferred."),
       poll_context: coverage.poll_aggregates > 0
         ? gate("imported_quarantined", pollSourceIds, "Poll aggregate is present but model-family translation is not backtested.")
         : gate("missing", [], "No poll aggregate is attached."),
@@ -215,9 +243,14 @@ export function buildModelReadinessAreas({
       asylum_context: latestAsylum
         ? gate(latestAsylum.precision === "ward_estimate" ? "imported_quarantined" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
         : gate("missing", [], "No asylum context is attached."),
-      backtest: gate("missing", [], "Backtest metrics are required before publication.")
+      backtest: backtest
+        ? gate(backtest.status === "passed" ? "reviewed" : "missing", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
+            backtest_id: backtest.backtest_id,
+            method: backtest.method
+          })
+        : gate("missing", [], "Backtest metrics are required before publication.")
     };
-    const blockers = collectBlockers({ gates, coverage, methodology });
+    const { blockers, warnings } = collectReadinessIssues({ gates, coverage, methodology });
 
     records.push({
       model_area_id: stableId("readiness", [areaCode, modelFamily, feature.boundary_version_id]),
@@ -234,7 +267,8 @@ export function buildModelReadinessAreas({
       source_gates: gates,
       methodology,
       coverage,
-      blockers
+      blockers,
+      warnings
     });
   }
 

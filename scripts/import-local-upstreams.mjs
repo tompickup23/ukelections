@@ -16,6 +16,7 @@ const DEFAULTS = {
   aiDogeRoot: "/Users/tompickup/clawd/burnley-council/data",
   asylumModelRoot: "/Users/tompickup/asylumstats/data/model",
   constituencyAsylumPath: "/Users/tompickup/clawd/labour-tracker/constituency_asylum.json",
+  candidateSourceManifestPath: "data/lancashire-2026-sopn-sources.json",
   output: "/tmp/ukelections-local-upstreams",
   sourceUrl: "https://ukelections.co.uk/sources",
   licence: "Inherited upstream licence; confirm before public release"
@@ -28,6 +29,7 @@ function parseArgs(argv) {
     if (arg === "--ai-doge-root") args.aiDogeRoot = argv[++index];
     else if (arg === "--asylum-model-root") args.asylumModelRoot = argv[++index];
     else if (arg === "--constituency-asylum") args.constituencyAsylumPath = argv[++index];
+    else if (arg === "--candidate-source-manifest") args.candidateSourceManifestPath = argv[++index];
     else if (arg === "--output") args.output = argv[++index];
     else if (arg === "--source-url") args.sourceUrl = argv[++index];
     else if (arg === "--licence") args.licence = argv[++index];
@@ -50,6 +52,8 @@ Options:
   --ai-doge-root <path>          AI DOGE data root containing council folders
   --asylum-model-root <path>     asylumstats/UKD model root
   --constituency-asylum <path>   Labour tracker constituency asylum JSON
+  --candidate-source-manifest <path>
+                                 Lancashire SoPN source URL manifest
   --council <id>                 Import only one council id. Repeatable
   --max-councils <n>             Limit council count for smoke tests
   --source-url <url>             Public audit URL recorded in source snapshots
@@ -173,6 +177,16 @@ if (constituencyAsylum) {
   constituencyAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.constituencyAsylumPath, "Labour tracker constituency asylum context", options));
 }
 
+const candidateSourceManifest = readJsonIfExists(options.candidateSourceManifestPath) || [];
+let candidateSourceSnapshot = null;
+if (candidateSourceManifest.length > 0) {
+  candidateSourceSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(
+    options.candidateSourceManifestPath,
+    "Lancashire 2026 statements of persons nominated source manifest",
+    options
+  ));
+}
+
 let councilDirs = discoverCouncilDirs(options.aiDogeRoot, options.councils);
 if (Number.isInteger(options.maxCouncils) && options.maxCouncils >= 0) {
   councilDirs = councilDirs.slice(0, options.maxCouncils);
@@ -191,7 +205,12 @@ for (const councilDir of councilDirs) {
       `AI DOGE ${electionData.meta?.council_name || councilId} election history`,
       options
     ));
-    const imported = importAidogeElectionData({ electionData, sourceSnapshot: electionSnapshot });
+    const imported = importAidogeElectionData({
+      electionData,
+      sourceSnapshot: electionSnapshot,
+      candidateSourceManifest,
+      candidateSourceSnapshot
+    });
 
     boundaries.push(...imported.boundaries);
     history.push(...imported.history);
@@ -268,7 +287,8 @@ writeJson(path.join(options.output, "import-summary.json"), {
   upstreams: {
     ai_doge_root: options.aiDogeRoot,
     asylum_model_root: options.asylumModelRoot,
-    constituency_asylum_path: options.constituencyAsylumPath
+    constituency_asylum_path: options.constituencyAsylumPath,
+    candidate_source_manifest_path: options.candidateSourceManifestPath
   },
   counts: {
     source_snapshots: sourceSnapshots.length,

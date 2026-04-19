@@ -26,7 +26,8 @@ AI DOGE local election data:
 
 - Ward/division election history from council `elections.json` files.
 - Current candidate rosters from `candidates_2026` where at least two standing parties are present.
-- Lancashire `candidates_2026` rows are treated as statement-of-persons-nominated derived, but the direct council notice URL still needs to be attached before promotion from quarantine.
+- Lancashire `candidates_2026` rows are treated as statement-of-persons-nominated derived when they match `data/lancashire-2026-sopn-sources.json`.
+- The Lancashire source manifest records official council notice URLs for Blackburn with Darwen, Burnley, Chorley, Hyndburn, Pendle, Preston, and West Lancashire.
 - Shared national polling and local model parameters from `shared/polling.json` or `shared/elections_reference.json`.
 - Ward demographic and composition projections from `demographics.json` and `composition_projections.json`.
 
@@ -49,6 +50,7 @@ The importer validates all generated manifests before exiting successfully:
 - Election history rows must link to a boundary version and have internally consistent candidate vote totals.
 - Model feature snapshots must record population method, source depth, geography fit, confidence, and limitations.
 - Candidate rosters must have contested candidates and only one defending-seat marker.
+- Lancashire statement-of-persons-nominated URLs are checked into a source manifest and can be curl-verified separately before each refresh.
 
 Every imported row is marked `quarantined`. This is intentional. The upstream data is valuable for modelling, but public forecast claims need these checks first:
 

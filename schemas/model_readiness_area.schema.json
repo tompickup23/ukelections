@@ -68,7 +68,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["missing", "proxy", "imported_quarantined", "reviewed", "accepted"]
+          "enum": ["missing", "proxy", "imported_quarantined", "reviewed", "accepted", "not_applicable"]
           },
           "source_snapshot_ids": { "type": "array", "items": { "type": "string" } },
           "notes": { "type": "string", "minLength": 1 }
@@ -103,7 +103,8 @@
       },
       "additionalProperties": true
     },
-    "blockers": { "type": "array", "items": { "type": "string" } }
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
   },
   "additionalProperties": true
 }
