@@ -1,0 +1,74 @@
+[
+  {
+    "source_id": "commons-library-ge-2024",
+    "name": "House of Commons Library: General election 2024 results",
+    "url": "https://commonslibrary.parliament.uk/research-briefings/cbp-10009/",
+    "coverage": ["westminster_constituency_results", "candidate_results"],
+    "source_type": "verified_secondary",
+    "licence_review": "required",
+    "notes": "Commons Library publishes constituency-level and candidate-level 2024 result files based on verified official declarations."
+  },
+  {
+    "source_id": "commons-library-ge-1918-2019",
+    "name": "House of Commons Library: General election results 1918 to 2019",
+    "url": "https://commonslibrary.parliament.uk/research-briefings/cbp-8647/",
+    "coverage": ["westminster_historical_results"],
+    "source_type": "verified_secondary",
+    "licence_review": "required",
+    "notes": "Long-run Westminster results by constituency; pre-1974 geography notes require explicit boundary handling."
+  },
+  {
+    "source_id": "democracy-club-data-api",
+    "name": "Democracy Club election data and APIs",
+    "url": "https://democracyclub.org.uk/data_apis/data/",
+    "coverage": ["candidates", "ballots", "fptp_results", "election_ids"],
+    "source_type": "verified_secondary",
+    "licence_review": "required",
+    "notes": "Candidate and results CSV/API coverage is broad but updates quickly during election periods; statements of persons nominated remain the promotion gate."
+  },
+  {
+    "source_id": "electoral-commission-election-api",
+    "name": "Electoral Commission election information API",
+    "url": "https://api.electoralcommission.org.uk/docs/",
+    "coverage": ["upcoming_elections", "candidate_information", "polling_station_context"],
+    "source_type": "verified_secondary",
+    "licence_review": "required",
+    "notes": "Run by Democracy Club on behalf of the Electoral Commission; postcode-based and not a substitute for full area marts."
+  },
+  {
+    "source_id": "ons-small-area-population-methodology",
+    "name": "ONS small-area population estimates methodology",
+    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/methodologies/methodologynoteonproductionofpopulationestimatesbyoutputareaselectoralhealthandothergeographiesenglandandwales",
+    "coverage": ["ward_population_method", "constituency_population_method", "best_fit_geography"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Defines output-area best-fit and ward/constituency population estimate methods; essential for population feature confidence."
+  },
+  {
+    "source_id": "boundaries-scotland-data",
+    "name": "Boundaries Scotland data files",
+    "url": "https://boundaries.scot/boundary-maps/data-files",
+    "coverage": ["scottish_local_wards", "scottish_parliament_constituencies", "scottish_parliament_regions"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Provides current and historic Scottish local government and Scottish Parliament GIS boundaries."
+  },
+  {
+    "source_id": "senedd-2026-boundaries",
+    "name": "Welsh Government DataMapWales: Senedd constituency boundaries 2026",
+    "url": "https://datamap.gov.wales/layers/geonode:senedd_final_2026/metadata_detail",
+    "coverage": ["senedd_2026_constituencies"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Official 16-constituency boundary layer for the 2026 closed-list Senedd system."
+  },
+  {
+    "source_id": "home-office-asylum-regional-la",
+    "name": "Home Office immigration system statistics: regional and local authority data",
+    "url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
+    "coverage": ["asylum_support_stock", "local_authority_context"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Use route-specific quarter-end stock only; do not merge with arrivals, small boats, or wider migration totals."
+  }
+]

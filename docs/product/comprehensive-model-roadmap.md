@@ -98,5 +98,30 @@ No model family is publication-grade until:
 - Backtest metrics runner.
 - Generic source snapshot fetcher.
 - Area feature compiler.
+- Local upstream importer for AI DOGE, UKD/asylumstats, and Labour tracker data.
+- National model readiness validation, so every area can be blocked until source, boundary, candidate, population, poll, and backtest gates pass.
+
+## 9. National Readiness Standard
+
+Every model area now needs a readiness record before it can be promoted beyond internal use. A record has hard gates for:
+
+- boundary versions;
+- election history;
+- candidate rosters;
+- poll context;
+- population method;
+- asylum context;
+- backtest status.
+
+`publishable` and `published` records are rejected unless boundary, history, candidates, polling, population, and backtest gates are reviewed or accepted, blockers are empty, and backtests have passed. This is the practical interpretation of 100% accuracy: no forecast is public unless its inputs and method are traceable, current, and reviewed.
+
+Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
+
+- House of Commons Library Westminster result files for 2024 and 1918-2019.
+- Democracy Club and Electoral Commission election APIs for current election/candidate discovery.
+- Statements of persons nominated as the promotion gate for candidate rosters.
+- ONS small-area population methodology and Census/ONS estimates for demographic features.
+- Boundaries Scotland and DataMapWales/Senedd resources for devolved boundaries.
+- Home Office local asylum support tables for route-specific asylum context.
 
 The remaining work is mainly real data acquisition, crosswalk generation at national scale, and model-family-specific forecast algorithms using these validated marts.

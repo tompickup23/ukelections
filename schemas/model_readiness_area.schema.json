@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ukelections.co.uk/schemas/model_readiness_area.schema.json",
+  "title": "Model readiness area",
+  "type": "object",
+  "required": [
+    "model_area_id",
+    "area_code",
+    "area_name",
+    "geography_type",
+    "jurisdiction",
+    "model_family",
+    "election_type",
+    "voting_system",
+    "publication_status",
+    "review_status",
+    "source_gates",
+    "methodology",
+    "coverage",
+    "blockers"
+  ],
+  "properties": {
+    "model_area_id": { "type": "string", "minLength": 1 },
+    "area_code": { "type": "string", "minLength": 1 },
+    "area_name": { "type": "string", "minLength": 1 },
+    "geography_type": {
+      "type": "string",
+      "enum": ["ward", "county_division", "unitary_ward", "westminster_constituency", "senedd_constituency", "scottish_parliament_constituency", "scottish_parliament_region", "scottish_stv_ward"]
+    },
+    "jurisdiction": {
+      "type": "string",
+      "enum": ["england", "scotland", "wales", "great_britain", "united_kingdom"]
+    },
+    "model_family": {
+      "type": "string",
+      "enum": [
+        "westminster_fptp",
+        "local_fptp_borough",
+        "local_fptp_county",
+        "local_fptp_unitary",
+        "local_stv",
+        "senedd_closed_list_pr",
+        "scottish_ams"
+      ]
+    },
+    "election_type": {
+      "type": "string",
+      "enum": ["borough", "county", "unitary", "westminster", "senedd", "scottish_parliament", "scottish_local"]
+    },
+    "voting_system": {
+      "type": "string",
+      "enum": ["fptp", "stv", "closed_list_pr", "ams"]
+    },
+    "next_election_date": { "type": ["string", "null"], "format": "date" },
+    "publication_status": {
+      "type": "string",
+      "enum": ["internal", "blocked", "review", "publishable", "published"]
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "reviewed_with_warnings", "quarantined"]
+    },
+    "source_gates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "source_snapshot_ids", "notes"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["missing", "proxy", "imported_quarantined", "reviewed", "accepted"]
+          },
+          "source_snapshot_ids": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "methodology": {
+      "type": "object",
+      "required": ["baseline_method", "allocation_method", "uncertainty_method", "backtest_status", "minimum_history_contests"],
+      "properties": {
+        "baseline_method": { "type": "string", "minLength": 1 },
+        "allocation_method": { "type": "string", "minLength": 1 },
+        "uncertainty_method": { "type": "string", "minLength": 1 },
+        "backtest_status": {
+          "type": "string",
+          "enum": ["missing", "not_applicable", "running", "failed", "passed"]
+        },
+        "minimum_history_contests": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["boundary_versions", "history_records", "candidate_rosters", "feature_snapshots", "poll_aggregates"],
+      "properties": {
+        "boundary_versions": { "type": "integer", "minimum": 0 },
+        "history_records": { "type": "integer", "minimum": 0 },
+        "candidate_rosters": { "type": "integer", "minimum": 0 },
+        "feature_snapshots": { "type": "integer", "minimum": 0 },
+        "poll_aggregates": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "blockers": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

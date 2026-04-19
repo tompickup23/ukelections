@@ -137,6 +137,26 @@ function pollSourceUrl(poll, fallback) {
   return fallback;
 }
 
+function isLancashireCouncilId(councilId) {
+  return new Set([
+    "blackburn",
+    "blackpool",
+    "burnley",
+    "chorley",
+    "fylde",
+    "hyndburn",
+    "lancashire_cc",
+    "lancaster",
+    "pendle",
+    "preston",
+    "ribble_valley",
+    "rossendale",
+    "south_ribble",
+    "west_lancashire",
+    "wyre"
+  ]).has(councilId);
+}
+
 function latestProjectionYear(projections, targetYear) {
   const years = Object.keys(projections || {})
     .filter((year) => /^\d{4}$/.test(year))
@@ -305,6 +325,7 @@ export function importAidogeElectionData({ electionData, sourceSnapshot, sourceU
       const defender = defenders[areaName];
       const currentHolders = new Set((ward.current_holders || []).map((holder) => normaliseName(holder.name)));
       let defendingAssigned = false;
+      const statementDerived = isLancashireCouncilId(councilId);
       candidateRosters.push({
         roster_id: `ai-doge-roster.${slug(councilId)}.${slug(areaCode)}.${toDate(meta.next_election.date)}`,
         contest_id: `local.${slug(councilId)}.${slug(areaCode)}.${toDate(meta.next_election.date)}`,
@@ -312,6 +333,11 @@ export function importAidogeElectionData({ electionData, sourceSnapshot, sourceU
         election_date: toDate(meta.next_election.date),
         source_snapshot_id: sourceSnapshot.snapshot_id,
         statement_of_persons_nominated_url: sourceUrl,
+        source_basis: statementDerived ? "statement_of_persons_nominated" : "upstream_candidate_list",
+        source_review_notes: statementDerived
+          ? "AI DOGE Lancashire candidate rows are statement-of-persons-nominated derived; attach the council notice URL before promoting from quarantine."
+          : "Candidate row source basis is not confirmed as a statement of persons nominated.",
+        direct_statement_url_attached: false,
         review_status: "quarantined",
         candidates: candidates.map((candidate, index) => {
           const normalised = normaliseName(candidate.name);

@@ -7,7 +7,8 @@ const commands = [
   ["node", ["scripts/validate-model-inputs.mjs"]],
   ["node", ["scripts/validate-candidate-rosters.mjs"]],
   ["node", ["scripts/validate-boundary-mappings.mjs"]],
-  ["node", ["scripts/validate-model-runs.mjs"]]
+  ["node", ["scripts/validate-model-runs.mjs"]],
+  ["node", ["scripts/validate-model-readiness.mjs"]]
 ];
 
 for (const [command, args] of commands) {

@@ -1,0 +1,70 @@
+[
+  {
+    "model_area_id": "example-borough-ward-readiness",
+    "area_code": "E05000000",
+    "area_name": "Example Ward",
+    "geography_type": "ward",
+    "jurisdiction": "england",
+    "model_family": "local_fptp_borough",
+    "election_type": "borough",
+    "voting_system": "fptp",
+    "next_election_date": "2026-05-07",
+    "publication_status": "internal",
+    "review_status": "quarantined",
+    "source_gates": {
+      "boundary_versions": {
+        "status": "imported_quarantined",
+        "source_snapshot_ids": ["example-boundary-source-2026-04-18"],
+        "notes": "Boundary imported and must be checked against official geography before publication."
+      },
+      "election_history": {
+        "status": "imported_quarantined",
+        "source_snapshot_ids": ["example-election-result-2026-05-07"],
+        "notes": "Historical contests imported but not yet official-source reviewed."
+      },
+      "candidate_rosters": {
+        "status": "imported_quarantined",
+        "source_snapshot_ids": ["example-nominations-2026-04-18"],
+        "notes": "Statement of persons nominated source URL still needs attaching."
+      },
+      "poll_context": {
+        "status": "reviewed",
+        "source_snapshot_ids": ["example-poll-aggregate-2026-04-18"],
+        "notes": "Poll aggregate is available but local translation still needs backtesting."
+      },
+      "population_method": {
+        "status": "proxy",
+        "source_snapshot_ids": ["example-population-model-2026-04-18"],
+        "notes": "Population model is contextual and not publication-grade for this ward until boundary fit is reviewed."
+      },
+      "asylum_context": {
+        "status": "proxy",
+        "source_snapshot_ids": ["example-home-office-asylum-2026-04-18"],
+        "notes": "Asylum support data is route-specific context, not a ward-level estimate."
+      },
+      "backtest": {
+        "status": "missing",
+        "source_snapshot_ids": [],
+        "notes": "Model family needs backtest metrics before publication."
+      }
+    },
+    "methodology": {
+      "baseline_method": "ward_history_with_local_swing",
+      "allocation_method": "fptp_ranked_candidate_vote_share",
+      "uncertainty_method": "not_yet_calibrated",
+      "backtest_status": "missing",
+      "minimum_history_contests": 3
+    },
+    "coverage": {
+      "boundary_versions": 1,
+      "history_records": 4,
+      "candidate_rosters": 1,
+      "feature_snapshots": 1,
+      "poll_aggregates": 1
+    },
+    "blockers": [
+      "Boundary source review not complete",
+      "Backtest metrics missing"
+    ]
+  }
+]

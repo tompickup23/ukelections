@@ -26,6 +26,7 @@ AI DOGE local election data:
 
 - Ward/division election history from council `elections.json` files.
 - Current candidate rosters from `candidates_2026` where at least two standing parties are present.
+- Lancashire `candidates_2026` rows are treated as statement-of-persons-nominated derived, but the direct council notice URL still needs to be attached before promotion from quarantine.
 - Shared national polling and local model parameters from `shared/polling.json` or `shared/elections_reference.json`.
 - Ward demographic and composition projections from `demographics.json` and `composition_projections.json`.
 
