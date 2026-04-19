@@ -4,6 +4,7 @@ import { buildSourceSnapshot, inferRowCount } from "../scripts/lib/source-fetche
 describe("source fetcher helpers", () => {
   it("infers row counts from JSON arrays and CSV", () => {
     expect(inferRowCount("[1,2,3]", "application/json", "data.json")).toBe(3);
+    expect(inferRowCount("{\"areas\":{\"E1\":{},\"E2\":{}}}", "application/json", "data.json")).toBe(2);
     expect(inferRowCount("a,b\n1,2\n3,4\n", "text/csv", "data.csv")).toBe(2);
   });
 

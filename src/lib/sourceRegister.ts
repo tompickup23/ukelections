@@ -76,7 +76,7 @@ export const SOURCE_REGISTER: SourceRegisterEntry[] = [
   },
   {
     name: "AI DOGE and Labour tracker",
-    purpose: "Internal source review for refined local modelling and provenance workflows",
+    purpose: "Local upstream imports for ward histories, nominations, polling context, population features, and constituency asylum context",
     status: "Internal",
     sourceType: "internal"
   }

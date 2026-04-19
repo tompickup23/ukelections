@@ -12,6 +12,8 @@ export function inferRowCount(content, contentType = "", filePath = "") {
     if (Array.isArray(parsed)) return parsed.length;
     if (Array.isArray(parsed?.features)) return parsed.features.length;
     if (Array.isArray(parsed?.areas)) return parsed.areas.length;
+    if (parsed?.areas && typeof parsed.areas === "object") return Object.keys(parsed.areas).length;
+    if (parsed?.constituencies && typeof parsed.constituencies === "object") return Object.keys(parsed.constituencies).length;
     if (parsed && typeof parsed === "object") return Object.keys(parsed).length;
     return 1;
   }
