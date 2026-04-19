@@ -36,6 +36,7 @@ UKD/asylumstats model data:
 
 - 2021 local authority age, sex, and ethnicity base population model.
 - Migration matrix presence is recorded as a source snapshot for method audit.
+- Local route asylum mart from `data/marts/uk_routes/local-route-latest.json`.
 - Area-level UKD matches raise population metadata from static census context to rebased partial model context.
 - Exact-area rebased UKD/AI DOGE ward projections can pass the population-method readiness gate. Low-confidence local-authority proxy projections remain proxy-only.
 
@@ -43,6 +44,7 @@ Labour tracker data:
 
 - Constituency asylum support stock and rate context.
 - Matched by constituency name and local authority `area_name`.
+- Used as fallback where the UKD/asylumstats local route mart does not provide a direct local-authority match.
 - Local-authority matches are contextual area data; constituency-only matches remain proxy-only for ward models.
 
 ## Quality gates
@@ -54,6 +56,7 @@ The importer validates all generated manifests before exiting successfully:
 - Model feature snapshots must record population method, source depth, geography fit, confidence, and limitations.
 - Candidate rosters must have contested candidates and only one defending-seat marker.
 - Boundary lineage mappings are generated only as same-code identities for current-format GSS areas.
+- County division local-authority asylum context is joined from local boundary geometry where the division centroid falls inside a district ward polygon; a small Lancashire locality-name fallback handles imported county divisions missing usable geometry.
 - Lancashire statement-of-persons-nominated URLs are checked into a source manifest and can be curl-verified separately before each refresh.
 
 Every imported row is marked `quarantined`. This is intentional. The upstream data is valuable for modelling, but public forecast claims need these checks first:

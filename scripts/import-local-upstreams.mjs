@@ -17,6 +17,7 @@ import { buildBoundaryLineageMappings } from "./lib/boundary-lineage-builder.mjs
 const DEFAULTS = {
   aiDogeRoot: "/Users/tompickup/clawd/burnley-council/data",
   asylumModelRoot: "/Users/tompickup/asylumstats/data/model",
+  localAsylumPath: "/Users/tompickup/asylumstats/data/marts/uk_routes/local-route-latest.json",
   constituencyAsylumPath: "/Users/tompickup/clawd/labour-tracker/constituency_asylum.json",
   candidateSourceManifestPath: "data/lancashire-2026-sopn-sources.json",
   output: "/tmp/ukelections-local-upstreams",
@@ -30,6 +31,7 @@ function parseArgs(argv) {
     const arg = argv[index];
     if (arg === "--ai-doge-root") args.aiDogeRoot = argv[++index];
     else if (arg === "--asylum-model-root") args.asylumModelRoot = argv[++index];
+    else if (arg === "--local-asylum") args.localAsylumPath = argv[++index];
     else if (arg === "--constituency-asylum") args.constituencyAsylumPath = argv[++index];
     else if (arg === "--candidate-source-manifest") args.candidateSourceManifestPath = argv[++index];
     else if (arg === "--output") args.output = argv[++index];
@@ -53,6 +55,7 @@ Options:
   --output <path>                Output directory. Defaults to /tmp/ukelections-local-upstreams
   --ai-doge-root <path>          AI DOGE data root containing council folders
   --asylum-model-root <path>     asylumstats/UKD model root
+  --local-asylum <path>          asylumstats local route latest JSON
   --constituency-asylum <path>   Labour tracker constituency asylum JSON
   --candidate-source-manifest <path>
                                  Lancashire SoPN source URL manifest
@@ -110,20 +113,83 @@ function normaliseAreaName(value) {
     .trim();
 }
 
-function buildAreaCodeByName({ demographicsData, projectionData }) {
+function compactAreaName(value) {
+  return normaliseAreaName(value)
+    .replace(/\band\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildAreaCodeByName({ boundaryData, demographicsData, projectionData }) {
   const map = new Map();
   const add = (name, code) => {
     if (name && /^[EWSN]\d{8}$/.test(String(code))) {
       map.set(normaliseAreaName(name), code);
+      map.set(compactAreaName(name), code);
     }
   };
 
+  for (const feature of boundaryData?.features || []) {
+    add(feature.properties?.name, feature.properties?.ons_code);
+  }
   const demographicWards = demographicsData?.wards || {};
   for (const [code, ward] of Object.entries(demographicWards)) {
     add(ward?.name || ward?.ward_name, code);
   }
   for (const [code, ward] of Object.entries(projectionData?.ward_projections || {})) {
     add(ward?.name, code);
+  }
+  return map;
+}
+
+function pointInRing(point, ring) {
+  const [x, y] = point;
+  let inside = false;
+  for (let index = 0, prev = ring.length - 1; index < ring.length; prev = index++) {
+    const [xi, yi] = ring[index];
+    const [xj, yj] = ring[prev];
+    const intersects = ((yi > y) !== (yj > y)) && x < ((xj - xi) * (y - yi)) / (yj - yi || Number.EPSILON) + xi;
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInPolygon(point, polygon) {
+  if (!polygon?.length || !pointInRing(point, polygon[0])) return false;
+  return !polygon.slice(1).some((hole) => pointInRing(point, hole));
+}
+
+function pointInGeometry(point, geometry) {
+  if (!point || !geometry) return false;
+  if (geometry.type === "Polygon") return pointInPolygon(point, geometry.coordinates);
+  if (geometry.type === "MultiPolygon") return geometry.coordinates.some((polygon) => pointInPolygon(point, polygon));
+  return false;
+}
+
+function buildLocalAuthorityCodeByAreaCode(aiDogeRoot) {
+  const districtFeatures = [];
+  for (const districtDir of discoverCouncilDirs(aiDogeRoot, [])) {
+    const councilId = path.basename(districtDir);
+    if (councilId.endsWith("_cc")) continue;
+    const boundaryData = readJsonIfExists(path.join(districtDir, "ward_boundaries.json"));
+    const authorityCode = boundaryData?.meta?.ons_code;
+    if (!authorityCode) continue;
+    for (const feature of boundaryData.features || []) {
+      districtFeatures.push({ authorityCode, feature });
+    }
+  }
+
+  const map = new Map();
+  for (const countyDir of discoverCouncilDirs(aiDogeRoot, []).filter((dir) => path.basename(dir).endsWith("_cc"))) {
+    const countyBoundaries = readJsonIfExists(path.join(countyDir, "ward_boundaries.json"));
+    for (const feature of countyBoundaries?.features || []) {
+      const areaCode = feature.properties?.ons_code;
+      const centroid = feature.properties?.centroid;
+      const match = districtFeatures.find((candidate) => pointInGeometry(centroid, candidate.feature.geometry));
+      if (areaCode && match) {
+        map.set(areaCode, match.authorityCode);
+      }
+    }
   }
   return map;
 }
@@ -213,6 +279,12 @@ if (constituencyAsylum) {
   constituencyAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.constituencyAsylumPath, "Labour tracker constituency asylum context", options));
 }
 
+const localAsylum = readJsonIfExists(options.localAsylumPath);
+let localAsylumSnapshot = null;
+if (localAsylum) {
+  localAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.localAsylumPath, "UKD/asylumstats local asylum route context", options));
+}
+
 const candidateSourceManifest = readJsonIfExists(options.candidateSourceManifestPath) || [];
 let candidateSourceSnapshot = null;
 if (candidateSourceManifest.length > 0) {
@@ -227,18 +299,21 @@ let councilDirs = discoverCouncilDirs(options.aiDogeRoot, options.councils);
 if (Number.isInteger(options.maxCouncils) && options.maxCouncils >= 0) {
   councilDirs = councilDirs.slice(0, options.maxCouncils);
 }
+const localAuthorityCodeByAreaCode = buildLocalAuthorityCodeByAreaCode(options.aiDogeRoot);
 
 for (const councilDir of councilDirs) {
   const councilId = path.basename(councilDir);
   const electionsPath = path.join(councilDir, "elections.json");
+  const boundariesPath = path.join(councilDir, "ward_boundaries.json");
   const demographicsPath = path.join(councilDir, "demographics.json");
   const projectionsPath = path.join(councilDir, "composition_projections.json");
 
   try {
     const electionData = JSON.parse(readFileSync(electionsPath, "utf8"));
+    const boundaryData = readJsonIfExists(boundariesPath);
     const demographicsData = readJsonIfExists(demographicsPath);
     const projectionData = readJsonIfExists(projectionsPath);
-    const areaCodeByName = buildAreaCodeByName({ demographicsData, projectionData });
+    const areaCodeByName = buildAreaCodeByName({ boundaryData, demographicsData, projectionData });
     const electionSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(
       electionsPath,
       `AI DOGE ${electionData.meta?.council_name || councilId} election history`,
@@ -273,7 +348,9 @@ for (const councilDir of councilDirs) {
       demographicsData,
       projectionData,
       ukdBasePopulation,
+      localAsylum,
       constituencyAsylum,
+      localAuthorityCodeByAreaCode,
       areaCodeByName,
       sourceSnapshots: {
         elections: electionSnapshot,
@@ -281,6 +358,7 @@ for (const councilDir of councilDirs) {
         projections: projectionSnapshot,
         polling: pollingSnapshot,
         ukdBase: ukdBaseSnapshot,
+        localAsylum: localAsylumSnapshot,
         constituencyAsylum: constituencyAsylumSnapshot
       }
     }));
@@ -331,6 +409,7 @@ writeJson(path.join(options.output, "import-summary.json"), {
   upstreams: {
     ai_doge_root: options.aiDogeRoot,
     asylum_model_root: options.asylumModelRoot,
+    local_asylum_path: options.localAsylumPath,
     constituency_asylum_path: options.constituencyAsylumPath,
     candidate_source_manifest_path: options.candidateSourceManifestPath
   },

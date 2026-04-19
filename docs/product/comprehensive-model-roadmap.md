@@ -132,7 +132,8 @@ Current importer/readiness improvements:
 
 - current-format GSS wards and divisions now get generated identity boundary-lineage mappings, so unchanged imported boundary versions are auditable instead of held on a generic lineage warning;
 - exact-area, medium-confidence UKD/AI DOGE ward population projections are promoted to reviewed method metadata, while local-authority proxy projections remain proxy-only;
-- Labour tracker asylum rows are matched by local authority `area_name` as well as constituency name. Local-authority asylum stock is reviewed as contextual area data; constituency-only matches remain proxy-only;
+- UKD/asylumstats local route asylum rows are imported before Labour tracker fallback rows. Local-authority asylum stock is reviewed as contextual area data; constituency-only matches remain proxy-only;
+- Lancashire county divisions can inherit local-authority asylum context from local boundary geometry, with a locality-name fallback only where imported county division geometry is missing;
 - baseline backtests use a fixed rolling two-contest party-share average in walk-forward testing, replacing single previous-contest persistence where it improves stability without looking ahead.
 
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:

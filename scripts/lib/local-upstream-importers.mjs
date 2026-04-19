@@ -72,8 +72,15 @@ function normaliseName(value) {
     .trim();
 }
 
+function compactName(value) {
+  return normaliseName(value)
+    .replace(/\band\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function codeFromNameMap(map, name) {
-  return map?.get(normaliseName(name)) || null;
+  return map?.get(normaliseName(name)) || map?.get(compactName(name)) || null;
 }
 
 function mapElectionType(type, councilTier) {
@@ -229,6 +236,35 @@ function projectionFeatureFromWard({ wardProjection, demographics, targetYear, u
     ],
     total_population: integerOrUndefined(totalPopulation)
   };
+}
+
+function localAuthorityAsylumContext(councilCode, councilName, localAsylum = {}) {
+  const areas = Array.isArray(localAsylum?.areas) ? localAsylum.areas : [];
+  const normalisedCouncilName = normaliseName(councilName);
+  const match = areas.find((area) => area.areaCode === councilCode) ||
+    areas.find((area) => normaliseName(area.areaName) === normalisedCouncilName);
+  if (!match) return null;
+  return {
+    supported_asylum_stock: integerOrUndefined(match.supportedAsylum) || 0,
+    rate_per_10000_population: numberOrNull(match.supportedAsylumRate) || 0,
+    population: integerOrUndefined(match.population),
+    white_british_pct: undefined,
+    unit: "quarter_end_stock",
+    route_scope: "asylum_support",
+    precision: "local_authority_context",
+    matched_area_code: match.areaCode,
+    matched_area_name: match.areaName,
+    snapshot_date: match.snapshotDate || localAsylum.snapshotDate || null
+  };
+}
+
+function inferLancashireAuthorityCode(areaName) {
+  const text = normaliseName(areaName);
+  const rules = [
+    ["E07000125", ["rossendale", "bacup", "whitworth", "haslingden"]],
+    ["E07000128", ["poulton", "thornton", "hambleton", "fleetwood", "cleveleys", "garstang", "preesall", "pilling"]]
+  ];
+  return rules.find(([, tokens]) => tokens.some((token) => text.includes(token)))?.[0] || null;
 }
 
 function constituencyAsylumContext(councilName, constituencyAsylum = {}) {
@@ -447,6 +483,8 @@ export function buildAidogeFeatureSnapshots({
   projectionData = null,
   ukdBasePopulation = null,
   constituencyAsylum = null,
+  localAsylum = null,
+  localAuthorityCodeByAreaCode = new Map(),
   sourceSnapshots,
   asOf,
   areaCodeByName = new Map()
@@ -460,21 +498,35 @@ export function buildAidogeFeatureSnapshots({
   const targetYear = Number(asOfDate.slice(0, 4));
   const boundaryByAreaCode = new Map(boundaries.map((boundary) => [boundary.area_code, boundary]));
   const wardProjectionByCode = projectionData?.ward_projections || {};
+  const wardProjectionByName = new Map();
   const demographicWardByCode = new Map();
+  const demographicWardByName = new Map();
   const ukdAreaAvailable = Boolean(demographicsData?.meta?.ons_code && ukdBasePopulation?.areas?.[demographicsData.meta.ons_code]);
-  const asylumContext = constituencyAsylumContext(meta.council_name || councilId, constituencyAsylum);
+
+  for (const [code, wardProjection] of Object.entries(wardProjectionByCode)) {
+    wardProjectionByName.set(normaliseName(wardProjection?.name || code), wardProjection);
+  }
 
   for (const [wardName, ward] of wardEntries(demographicsData?.wards || {})) {
     const areaCode = ward.gss_code || ward.code || `local:${councilId}:${slug(ward.name || wardName)}`;
     demographicWardByCode.set(areaCode, ward);
+    demographicWardByName.set(normaliseName(ward.name || ward.ward_name || wardName), ward);
   }
 
   return wardEntries(electionData.wards).map(([wardName, ward]) => {
     const areaName = ward.name || wardName;
     const areaCode = ward.gss_code || codeFromNameMap(areaCodeByName, areaName) || `local:${councilId}:${slug(areaName)}`;
     const boundary = boundaryByAreaCode.get(areaCode);
-    const wardProjection = wardProjectionByCode[areaCode] || wardProjectionByCode[areaName];
-    const demographics = demographicWardByCode.get(areaCode);
+    const directProjection = wardProjectionByCode[areaCode] || wardProjectionByCode[areaName];
+    const directDemographics = demographicWardByCode.get(areaCode);
+    const wardProjection = directProjection || wardProjectionByName.get(normaliseName(areaName));
+    const demographics = directDemographics || demographicWardByName.get(normaliseName(areaName));
+    const asylumAuthorityCode = localAuthorityCodeByAreaCode.get(areaCode) ||
+      (councilId === "lancashire_cc" ? inferLancashireAuthorityCode(areaName) : null) ||
+      demographicsData?.meta?.ons_code;
+    const asylumContext = localAuthorityAsylumContext(asylumAuthorityCode, meta.council_name || councilId, localAsylum) ||
+      constituencyAsylumContext(meta.council_name || councilId, constituencyAsylum);
+    const matchedPopulationByName = Boolean((!directProjection && wardProjection) || (!directDemographics && demographics));
     const populationProjection = projectionFeatureFromWard({
       wardProjection,
       demographics,
@@ -483,9 +535,19 @@ export function buildAidogeFeatureSnapshots({
       limitations: [
         ukdAreaAvailable
           ? `UKD authority base population exists for ${demographicsData.meta.ons_code}; ward projection still needs boundary fit review.`
-          : "No matching UKD authority base population found for this council in the current local model bundle."
-      ]
+          : "No matching UKD authority base population found for this council in the current local model bundle.",
+        matchedPopulationByName
+          ? "Population rows were matched by normalized area name because upstream projection or demographic codes differ from the election boundary code."
+          : null
+      ].filter(Boolean)
     });
+    const usesLocalAsylumSource = Boolean(asylumContext && "matched_area_code" in asylumContext);
+    const asylumSourceSnapshot = usesLocalAsylumSource ? sourceSnapshots.localAsylum : sourceSnapshots.constituencyAsylum;
+    const asylumSourceNote = usesLocalAsylumSource
+      ? "UKD/asylumstats local authority asylum support stock; used as contextual area data, not ward-level claims."
+      : asylumContext?.precision === "local_authority_context"
+        ? "Labour tracker local authority asylum support stock; used as contextual area data, not ward-level claims."
+        : "Labour tracker constituency asylum support stock; used as contextual area proxy, not ward-level claims.";
 
     const provenance = [
       sourceSnapshots.elections && {
@@ -508,13 +570,11 @@ export function buildAidogeFeatureSnapshots({
           ? "AI DOGE ward projection with UKD authority base population present."
           : "AI DOGE ward or census demographic context; lower confidence until UKD area match is confirmed."
       },
-      asylumContext && sourceSnapshots.constituencyAsylum && {
+      asylumContext && asylumSourceSnapshot && {
         field: "features.asylum_context",
-        source_snapshot_id: sourceSnapshots.constituencyAsylum.snapshot_id,
-        source_url: sourceSnapshots.constituencyAsylum.source_url,
-        notes: asylumContext.precision === "local_authority_context"
-          ? "Labour tracker local authority asylum support stock; used as contextual area data, not ward-level claims."
-          : "Labour tracker constituency asylum support stock; used as contextual area proxy, not ward-level claims."
+        source_snapshot_id: asylumSourceSnapshot.snapshot_id,
+        source_url: asylumSourceSnapshot.source_url,
+        notes: asylumSourceNote
       }
     ].filter(Boolean);
 

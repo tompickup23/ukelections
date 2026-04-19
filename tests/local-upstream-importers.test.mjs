@@ -85,6 +85,26 @@ describe("local upstream importers", () => {
     expect(imported.candidateRosters[0].direct_statement_url_attached).toBe(true);
   });
 
+  it("backfills missing GSS codes from compact area-name maps", () => {
+    const imported = importAidogeElectionData({
+      electionData: {
+        ...electionData,
+        wards: {
+          "Gisburn, Rimington": {
+            ...electionData.wards["Bank Hall"],
+            name: "Gisburn, Rimington",
+            gss_code: undefined
+          }
+        }
+      },
+      sourceSnapshot,
+      areaCodeByName: new Map([["gisburn rimington", "E05012011"]])
+    });
+
+    expect(imported.boundaries[0].area_code).toBe("E05012011");
+  });
+
+
   it("imports AI DOGE polling as a validated aggregate", () => {
     const aggregate = importAidogePollAggregate({
       sourceSnapshot,
@@ -157,6 +177,56 @@ describe("local upstream importers", () => {
     expect(features[0].features.population_projection.geography_fit).toBe("exact_area");
   });
 
+  it("matches population projections by area name when upstream projection codes differ", () => {
+    const renamedCodeElectionData = {
+      ...electionData,
+      wards: {
+        "Bank Hall": {
+          ...electionData.wards["Bank Hall"],
+          gss_code: "E05099999"
+        }
+      }
+    };
+    const imported = importAidogeElectionData({ electionData: renamedCodeElectionData, sourceSnapshot });
+    const features = buildAidogeFeatureSnapshots({
+      electionData: renamedCodeElectionData,
+      boundaries: imported.boundaries,
+      history: imported.history,
+      demographicsData: {
+        meta: { ons_code: "E07000117" },
+        wards: {
+          E05005150: { name: "Bank Hall", population: 1000 }
+        }
+      },
+      projectionData: {
+        ward_projections: {
+          E05005150: {
+            name: "Bank Hall",
+            ethnicity: {
+              "2027": {
+                White: { pct: 70, count: 700 },
+                "_total": 1000
+              }
+            }
+          }
+        }
+      },
+      ukdBasePopulation: { areas: { E07000117: {} } },
+      sourceSnapshots: {
+        elections: sourceSnapshot,
+        projections: sourceSnapshot,
+        demographics: sourceSnapshot
+      },
+      asOf: "2026-04-18"
+    });
+
+    expect(features[0].features.population_projection.quality_level).toBe("rebased_partial");
+    expect(features[0].features.population_projection.geography_fit).toBe("exact_area");
+    expect(features[0].features.population_projection.limitations).toContain(
+      "Population rows were matched by normalized area name because upstream projection or demographic codes differ from the election boundary code."
+    );
+  });
+
   it("matches asylum context by local authority area name when constituency names differ", () => {
     const imported = importAidogeElectionData({ electionData, sourceSnapshot });
     const features = buildAidogeFeatureSnapshots({
@@ -199,6 +269,136 @@ describe("local upstream importers", () => {
       rate_per_10000_population: 40,
       precision: "local_authority_context",
       matched_constituency_names: ["Blackpool North and Fleetwood", "Blackpool South"]
+    });
+  });
+
+  it("prefers UKD local asylum route context when an authority code is available", () => {
+    const imported = importAidogeElectionData({ electionData, sourceSnapshot });
+    const features = buildAidogeFeatureSnapshots({
+      electionData,
+      boundaries: imported.boundaries,
+      history: imported.history,
+      demographicsData: {
+        meta: { ons_code: "E07000117" },
+        wards: {}
+      },
+      localAsylum: {
+        snapshotDate: "2025-12-31",
+        areas: [{
+          areaCode: "E07000117",
+          areaName: "Burnley",
+          population: 98400,
+          supportedAsylum: 150,
+          supportedAsylumRate: 15.24
+        }]
+      },
+      sourceSnapshots: {
+        elections: sourceSnapshot,
+        localAsylum: sourceSnapshot
+      },
+      asOf: "2026-04-18"
+    });
+
+    expect(features[0].features.asylum_context).toMatchObject({
+      supported_asylum_stock: 150,
+      rate_per_10000_population: 15.24,
+      precision: "local_authority_context",
+      matched_area_code: "E07000117",
+      snapshot_date: "2025-12-31"
+    });
+    expect(features[0].provenance.find((row) => row.field === "features.asylum_context").notes).toContain("UKD/asylumstats");
+  });
+
+  it("uses a supplied local authority lookup for county division asylum context", () => {
+    const countyElectionData = {
+      ...electionData,
+      meta: {
+        ...electionData.meta,
+        council_id: "lancashire_cc",
+        council_name: "Lancashire",
+        council_tier: "county"
+      },
+      wards: {
+        "Burnley Central West": {
+          ...electionData.wards["Bank Hall"],
+          name: "Burnley Central West",
+          gss_code: "E58000001"
+        }
+      }
+    };
+    const imported = importAidogeElectionData({ electionData: countyElectionData, sourceSnapshot });
+    const features = buildAidogeFeatureSnapshots({
+      electionData: countyElectionData,
+      boundaries: imported.boundaries,
+      history: imported.history,
+      localAuthorityCodeByAreaCode: new Map([["E58000001", "E07000117"]]),
+      localAsylum: {
+        snapshotDate: "2025-12-31",
+        areas: [{
+          areaCode: "E07000117",
+          areaName: "Burnley",
+          population: 98400,
+          supportedAsylum: 150,
+          supportedAsylumRate: 15.24
+        }]
+      },
+      sourceSnapshots: {
+        elections: sourceSnapshot,
+        localAsylum: sourceSnapshot
+      },
+      asOf: "2026-04-18"
+    });
+
+    expect(features[0].features.asylum_context).toMatchObject({
+      precision: "local_authority_context",
+      matched_area_code: "E07000117",
+      matched_area_name: "Burnley"
+    });
+  });
+
+  it("falls back to Lancashire locality names for county division asylum context", () => {
+    const countyElectionData = {
+      ...electionData,
+      meta: {
+        ...electionData.meta,
+        council_id: "lancashire_cc",
+        council_name: "Lancashire",
+        council_tier: "county"
+      },
+      wards: {
+        "Thornton & Hambleton": {
+          ...electionData.wards["Bank Hall"],
+          name: "Thornton & Hambleton",
+          gss_code: "E58000826"
+        }
+      }
+    };
+    const imported = importAidogeElectionData({ electionData: countyElectionData, sourceSnapshot });
+    const features = buildAidogeFeatureSnapshots({
+      electionData: countyElectionData,
+      boundaries: imported.boundaries,
+      history: imported.history,
+      localAsylum: {
+        snapshotDate: "2025-12-31",
+        areas: [{
+          areaCode: "E07000128",
+          areaName: "Wyre",
+          population: 118760,
+          supportedAsylum: 364,
+          supportedAsylumRate: 30.65
+        }]
+      },
+      sourceSnapshots: {
+        elections: sourceSnapshot,
+        localAsylum: sourceSnapshot
+      },
+      asOf: "2026-04-18"
+    });
+
+    expect(features[0].features.asylum_context).toMatchObject({
+      precision: "local_authority_context",
+      matched_area_code: "E07000128",
+      matched_area_name: "Wyre"
     });
   });
 });
