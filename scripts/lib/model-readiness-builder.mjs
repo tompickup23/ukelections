@@ -158,7 +158,7 @@ function sourceHasReviewedLocalHistoryEvidence(sourceIds, sourceSnapshotById) {
       snapshot?.source_name,
       ...(snapshot?.upstream_data_sources || [])
     ].join(" ");
-    return /DCLEAPIL|Democracy Club|Andrew Teale|LEAP|Official Results|Local Elections Archive/i.test(evidence);
+    return /DCLEAPIL|Democracy Club|Andrew Teale|LEAP|Official Results|official.*result|Local Elections Archive/i.test(evidence);
   });
 }
 
@@ -354,7 +354,7 @@ export function buildModelReadinessAreas({
         ? gate(["ward_estimate", "local_authority_context"].includes(latestAsylum.precision) ? "reviewed" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
         : gate("missing", [], "No asylum context is attached."),
       backtest: backtest
-        ? gate(backtest.status === "passed" ? "reviewed" : "not_applicable", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
+        ? gate(backtest.status === "passed" ? "reviewed" : "not_applicable", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; elected-party hit rate ${backtest.metrics?.elected_party_hit_rate ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
             backtest_id: backtest.backtest_id,
             method: backtest.method
           })
