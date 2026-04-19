@@ -84,7 +84,6 @@ No model family is publication-grade until:
 - A persistent local data store, likely DuckDB plus Parquet once data volume grows.
 - Crosswalk generation for wards, divisions, constituencies, LSOAs, local authorities, Senedd areas, and Scottish regions.
 - Candidate roster importer and withdrawal/replacement handling.
-- Area feature compiler.
 - Public result and forecast pages backed by reviewed data.
 
 ## 8. Backend Now Wired
@@ -97,5 +96,7 @@ No model family is publication-grade until:
 - Area model feature validation, including asylum and population safeguards.
 - Model-run manifest validation.
 - Backtest metrics runner.
+- Generic source snapshot fetcher.
+- Area feature compiler.
 
 The remaining work is mainly real data acquisition, crosswalk generation at national scale, and model-family-specific forecast algorithms using these validated marts.

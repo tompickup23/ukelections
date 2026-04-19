@@ -16,6 +16,8 @@
     "validate:backend": "node scripts/validate-backend.mjs",
     "aggregate:polls": "node scripts/build-poll-aggregate.mjs",
     "backtest": "node scripts/run-backtest.mjs",
+    "compile:features": "node scripts/compile-area-features.mjs",
+    "fetch:source": "node scripts/fetch-source-snapshot.mjs",
     "validate:sources": "node scripts/validate-source-snapshots.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
