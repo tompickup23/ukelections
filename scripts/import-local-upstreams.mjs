@@ -11,6 +11,8 @@ import { validateSourceSnapshots, summariseSourceQuality } from "./lib/source-qu
 import { validateHistoryBundle } from "./lib/history-quality.mjs";
 import { validateModelInputs } from "./lib/model-input-quality.mjs";
 import { validateCandidateRosters } from "./lib/candidate-quality.mjs";
+import { validateBoundaryMappings } from "./lib/boundary-mapping-quality.mjs";
+import { buildBoundaryLineageMappings } from "./lib/boundary-lineage-builder.mjs";
 
 const DEFAULTS = {
   aiDogeRoot: "/Users/tompickup/clawd/burnley-council/data",
@@ -126,21 +128,27 @@ function buildAreaCodeByName({ demographicsData, projectionData }) {
   return map;
 }
 
-function validateOutputs({ sourceSnapshots, boundaries, history, pollAggregates, featureSnapshots, candidateRosters }) {
+function validateOutputs({ sourceSnapshots, boundaries, history, boundaryMappings, pollAggregates, featureSnapshots, candidateRosters }) {
   const sourceSummary = summariseSourceQuality(validateSourceSnapshots(sourceSnapshots));
   const historySummary = validateHistoryBundle({ boundaries, history });
+  const boundaryMappingSummary = validateBoundaryMappings(boundaryMappings);
   const modelSummary = validateModelInputs({ pollAggregates, featureSnapshots });
   const candidateSummary = candidateRosters.length > 0
     ? validateCandidateRosters(candidateRosters)
     : { ok: true, results: [], errors: [] };
   return {
-    ok: sourceSummary.failed === 0 && historySummary.ok && modelSummary.ok && candidateSummary.ok,
+    ok: sourceSummary.failed === 0 && historySummary.ok && boundaryMappingSummary.ok && modelSummary.ok && candidateSummary.ok,
     sourceSummary,
     history: {
       ok: historySummary.ok,
       boundaries: historySummary.boundaryResults.length,
       records: historySummary.historyResults.length,
       errors: historySummary.errors
+    },
+    boundaryMappings: {
+      ok: boundaryMappingSummary.ok,
+      mappings: boundaryMappingSummary.results.filter((row) => row.index >= 0).length,
+      errors: boundaryMappingSummary.errors
     },
     modelInputs: {
       ok: modelSummary.ok,
@@ -298,10 +306,12 @@ for (const councilDir of councilDirs) {
   }
 }
 
+const boundaryMappings = buildBoundaryLineageMappings(boundaries);
 const validation = validateOutputs({
   sourceSnapshots,
   boundaries,
   history,
+  boundaryMappings,
   pollAggregates,
   featureSnapshots,
   candidateRosters
@@ -310,6 +320,7 @@ const validation = validateOutputs({
 mkdirSync(options.output, { recursive: true });
 writeJson(path.join(options.output, "source-snapshots.json"), sourceSnapshots);
 writeJson(path.join(options.output, "boundary-versions.json"), boundaries);
+writeJson(path.join(options.output, "boundary-mappings.json"), boundaryMappings);
 writeJson(path.join(options.output, "election-history.json"), history);
 writeJson(path.join(options.output, "candidate-rosters.json"), candidateRosters);
 writeJson(path.join(options.output, "poll-aggregate.json"), pollAggregates);
@@ -328,6 +339,7 @@ writeJson(path.join(options.output, "import-summary.json"), {
     councils: importedCouncils.length,
     skipped_councils: skippedCouncils.length,
     boundaries: boundaries.length,
+    boundary_mappings: boundaryMappings.length,
     history_records: history.length,
     candidate_rosters: candidateRosters.length,
     poll_aggregates: pollAggregates.length,
@@ -347,6 +359,7 @@ console.log(JSON.stringify({
     councils: importedCouncils.length,
     skipped_councils: skippedCouncils.length,
     boundaries: boundaries.length,
+    boundary_mappings: boundaryMappings.length,
     history_records: history.length,
     candidate_rosters: candidateRosters.length,
     poll_aggregates: pollAggregates.length,

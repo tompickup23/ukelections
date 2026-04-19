@@ -44,6 +44,7 @@ const areas = buildModelReadinessAreas({
   featureSnapshots: readJson(path.join(args.input, "model-features.json")),
   pollAggregates: readJson(path.join(args.input, "poll-aggregate.json")),
   backtests: readJson(path.join(args.input, "baseline-backtests.json")),
+  boundaryMappings: readJson(path.join(args.input, "boundary-mappings.json")),
   sourceSnapshots: readJson(path.join(args.input, "source-snapshots.json"))
 });
 const validation = validateModelReadinessAreas(areas);

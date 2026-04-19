@@ -234,8 +234,12 @@ function projectionFeatureFromWard({ wardProjection, demographics, targetYear, u
 function constituencyAsylumContext(councilName, constituencyAsylum = {}) {
   if (!constituencyAsylum) return null;
   const constituencies = constituencyAsylum.constituencies || {};
-  const exact = constituencies[councilName];
+  const normalisedCouncilName = normaliseName(councilName);
+  const directEntry = Object.entries(constituencies).find(([name]) => normaliseName(name) === normalisedCouncilName);
+  const authorityEntries = Object.entries(constituencies).filter(([, row]) => normaliseName(row.area_name) === normalisedCouncilName);
+  const [matchedName, exact] = directEntry || authorityEntries[0] || [];
   if (!exact) return null;
+  const precision = normaliseName(exact.area_name) === normalisedCouncilName ? "local_authority_context" : "constituency_context";
   return {
     supported_asylum_stock: integerOrUndefined(exact.asylum_seekers) || 0,
     rate_per_10000_population: numberOrNull(exact.asylum_rate_per_10k) || 0,
@@ -243,7 +247,9 @@ function constituencyAsylumContext(councilName, constituencyAsylum = {}) {
     white_british_pct: pctToShare(exact.white_british_pct),
     unit: "quarter_end_stock",
     route_scope: "asylum_support",
-    precision: "constituency_context"
+    precision,
+    matched_area_name: exact.area_name,
+    matched_constituency_names: directEntry ? [matchedName] : authorityEntries.map(([name]) => name)
   };
 }
 
@@ -506,7 +512,9 @@ export function buildAidogeFeatureSnapshots({
         field: "features.asylum_context",
         source_snapshot_id: sourceSnapshots.constituencyAsylum.snapshot_id,
         source_url: sourceSnapshots.constituencyAsylum.source_url,
-        notes: "Labour tracker constituency asylum stock; used as contextual area proxy, not ward-level claims."
+        notes: asylumContext.precision === "local_authority_context"
+          ? "Labour tracker local authority asylum support stock; used as contextual area data, not ward-level claims."
+          : "Labour tracker constituency asylum support stock; used as contextual area proxy, not ward-level claims."
       }
     ].filter(Boolean);
 

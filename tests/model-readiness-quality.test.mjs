@@ -98,6 +98,18 @@ describe("model readiness quality", () => {
         poll_aggregate_id: "p1",
         provenance: { source_snapshot_id: "s2" }
       }],
+      boundaryMappings: [{
+        mapping_id: "lineage-1",
+        source_area_id: "b1",
+        source_area_code: "E05000000",
+        target_area_id: "b1",
+        target_area_code: "E05000000",
+        weight: 1,
+        weight_basis: "manual",
+        source_snapshot_id: "s1",
+        source_url: "https://ukelections.co.uk/sources",
+        review_status: "reviewed"
+      }],
       backtests: [{
         area_code: "E05000000",
         model_family: "local_fptp_borough",
@@ -118,6 +130,8 @@ describe("model readiness quality", () => {
     expect(validation.ok).toBe(true);
     expect(areas[0].publication_status).toBe("internal");
     expect(areas[0].source_gates.election_history.status).toBe("reviewed");
+    expect(areas[0].source_gates.boundary_versions.historical_lineage_status).toBe("generated_identity");
+    expect(areas[0].source_gates.population_method.status).toBe("reviewed");
     expect(areas[0].source_gates.candidate_rosters.source_basis).toEqual(["statement_of_persons_nominated"]);
     expect(areas[0].source_gates.backtest.status).toBe("reviewed");
   });

@@ -114,6 +114,30 @@ function hasCurrentGssCode(areaCode) {
   return /^[EWSN]\d{8}$/.test(areaCode);
 }
 
+function reviewedLineageMappingsForArea(areaCode, boundaryIds, mappingsByTargetCode) {
+  const boundaryIdSet = new Set(boundaryIds);
+  return (mappingsByTargetCode.get(areaCode) || []).filter((mapping) =>
+    boundaryIdSet.has(mapping.target_area_id) &&
+    mapping.source_area_code === areaCode &&
+    mapping.target_area_code === areaCode &&
+    mapping.weight === 1 &&
+    ["reviewed", "reviewed_with_warnings"].includes(mapping.review_status)
+  );
+}
+
+function populationGateStatus(population) {
+  if (!population) return "missing";
+  if (population.confidence === "low" || population.confidence === "none") return "proxy";
+  if (
+    population.geography_fit === "exact_area" &&
+    ["rebased_partial", "cohort_component", "ons_total_only"].includes(population.quality_level) &&
+    ["medium", "high"].includes(population.confidence)
+  ) {
+    return "reviewed";
+  }
+  return "imported_quarantined";
+}
+
 function sourceHasReviewedLocalHistoryEvidence(sourceIds, sourceSnapshotById) {
   return sourceIds.some((sourceId) => {
     const snapshot = sourceSnapshotById.get(sourceId);
@@ -165,6 +189,7 @@ export function buildModelReadinessAreas({
   featureSnapshots = [],
   pollAggregates = [],
   backtests = [],
+  boundaryMappings = [],
   sourceSnapshots = []
 }) {
   const historyByArea = new Map();
@@ -172,6 +197,7 @@ export function buildModelReadinessAreas({
   const featuresByAreaFamily = new Map();
   const boundaryByArea = new Map();
   const backtestByAreaFamily = new Map();
+  const mappingsByTargetCode = new Map();
   const sourceSnapshotById = new Map(sourceSnapshots.map((snapshot) => [snapshot.snapshot_id, snapshot]));
 
   for (const boundary of boundaries) {
@@ -198,12 +224,18 @@ export function buildModelReadinessAreas({
   for (const backtest of backtests) {
     backtestByAreaFamily.set(`${backtest.area_code}::${backtest.model_family}`, backtest);
   }
+  for (const mapping of boundaryMappings) {
+    const list = mappingsByTargetCode.get(mapping.target_area_code) || [];
+    list.push(mapping);
+    mappingsByTargetCode.set(mapping.target_area_code, list);
+  }
 
   const records = [];
   for (const [key, features] of featuresByAreaFamily.entries()) {
     const [areaCode, modelFamily] = key.split("::");
     const feature = latestFeature(features);
     const areaBoundaries = boundaryByArea.get(areaCode) || [];
+    const lineageMappings = reviewedLineageMappingsForArea(areaCode, areaBoundaries.map((row) => row.boundary_version_id), mappingsByTargetCode);
     const areaHistory = historyByArea.get(areaCode) || [];
     const areaRosters = rostersByArea.get(areaCode) || [];
     const boundary = areaBoundaries.find((candidate) => candidate.boundary_version_id === feature.boundary_version_id) || areaBoundaries[0];
@@ -225,7 +257,8 @@ export function buildModelReadinessAreas({
       history_records: areaHistory.length,
       candidate_rosters: areaRosters.length,
       feature_snapshots: features.length,
-      poll_aggregates: pollIds.size
+      poll_aggregates: pollIds.size,
+      boundary_mappings: lineageMappings.length
     };
     const latestPopulation = feature.features?.population_projection;
     const latestAsylum = feature.features?.asylum_context;
@@ -242,11 +275,17 @@ export function buildModelReadinessAreas({
     }
     const gates = {
       boundary_versions: coverage.boundary_versions > 0
-        ? gate(hasCurrentGssCode(areaCode) ? "reviewed" : statusFromReview(boundary.review_status), areaBoundaries.map((row) => row.source_snapshot_id), hasCurrentGssCode(areaCode)
-          ? "Area uses a current-format GSS code; ONS Open Geography is the authoritative code and boundary source. Historical lineage remains a warning until boundary-version crosswalks are generated."
+        ? gate(hasCurrentGssCode(areaCode) ? "reviewed" : statusFromReview(boundary.review_status), [
+          ...areaBoundaries.map((row) => row.source_snapshot_id),
+          ...lineageMappings.map((row) => row.source_snapshot_id)
+        ], hasCurrentGssCode(areaCode)
+          ? (lineageMappings.length > 0
+            ? "Area uses a current-format GSS code and has generated same-code boundary lineage mappings for the imported boundary version."
+            : "Area uses a current-format GSS code; ONS Open Geography is the authoritative code and boundary source. Historical lineage remains a task until boundary-version crosswalks are generated.")
           : "Boundary version exists but needs official geography lineage review.", {
             evidence_url: "https://www.ons.gov.uk/methodology/geography/geographicalproducts/namescodesandlookups/namesandcodeslistings/namesandcodesforelectoralgeography",
-            historical_lineage_status: "pending"
+            historical_lineage_status: lineageMappings.length > 0 ? "generated_identity" : "pending",
+            boundary_mapping_ids: lineageMappings.map((row) => row.mapping_id)
           })
         : gate("missing", [], "No boundary version is available."),
       election_history: coverage.history_records > 0
@@ -273,10 +312,10 @@ export function buildModelReadinessAreas({
         ? gate("reviewed", pollSourceIds, "Poll aggregate is available for contextual baseline readiness; model-family translation remains a warning until poll-source method review is complete.")
         : gate("not_applicable", [], "No poll aggregate is required for the baseline historical model."),
       population_method: latestPopulation
-        ? gate(latestPopulation.confidence === "low" || latestPopulation.confidence === "none" ? "proxy" : "imported_quarantined", [...sourceSnapshotIds], `Population method: ${latestPopulation.method}; quality: ${latestPopulation.quality_level}; geography fit: ${latestPopulation.geography_fit}.`)
+        ? gate(populationGateStatus(latestPopulation), [...sourceSnapshotIds], `Population method: ${latestPopulation.method}; quality: ${latestPopulation.quality_level}; geography fit: ${latestPopulation.geography_fit}; confidence: ${latestPopulation.confidence}.`)
         : gate("missing", [], "No population method metadata is attached."),
       asylum_context: latestAsylum
-        ? gate(latestAsylum.precision === "ward_estimate" ? "imported_quarantined" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
+        ? gate(["ward_estimate", "local_authority_context"].includes(latestAsylum.precision) ? "reviewed" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
         : gate("missing", [], "No asylum context is attached."),
       backtest: backtest
         ? gate(backtest.status === "passed" ? "reviewed" : "not_applicable", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
@@ -286,11 +325,14 @@ export function buildModelReadinessAreas({
         : gate("not_applicable", [], "Backtest metrics are not yet available for this area.")
     };
     const { blockers, warnings, readinessTasks } = collectReadinessIssues({ gates, coverage, methodology });
-    if (hasCurrentGssCode(areaCode)) {
+    if (hasCurrentGssCode(areaCode) && lineageMappings.length === 0) {
       readinessTasks.push("Historical boundary lineage still needs generated predecessor/successor crosswalks before publication.");
     }
     if (gates.election_history.status === "not_applicable") {
       readinessTasks.push("Election history is absent in the current import.");
+    }
+    if (gates.candidate_rosters.status === "not_applicable") {
+      readinessTasks.push("Candidate roster is deferred until an active contest is identified.");
     }
     if (gates.backtest.status === "not_applicable") {
       readinessTasks.push("Baseline backtest is not passing or not available for this area.");

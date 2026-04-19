@@ -128,6 +128,13 @@ Readiness output now separates three concepts:
 
 The baseline local model can therefore have zero blockers and zero warnings while still staying in `review` because publication tasks remain. That is deliberate: it prevents source gaps from being hidden, while avoiding false alarm warnings for optional context such as asylum or population-enhanced features.
 
+Current importer/readiness improvements:
+
+- current-format GSS wards and divisions now get generated identity boundary-lineage mappings, so unchanged imported boundary versions are auditable instead of held on a generic lineage warning;
+- exact-area, medium-confidence UKD/AI DOGE ward population projections are promoted to reviewed method metadata, while local-authority proxy projections remain proxy-only;
+- Labour tracker asylum rows are matched by local authority `area_name` as well as constituency name. Local-authority asylum stock is reviewed as contextual area data; constituency-only matches remain proxy-only;
+- baseline backtests use a fixed rolling two-contest party-share average in walk-forward testing, replacing single previous-contest persistence where it improves stability without looking ahead.
+
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
 
 - House of Commons Library Westminster result files for 2024 and 1918-2019.

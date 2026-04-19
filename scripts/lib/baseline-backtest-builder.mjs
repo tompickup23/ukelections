@@ -7,6 +7,15 @@ function shares(record) {
   return Object.fromEntries((record.result_rows || []).map((row) => [row.party_name, total > 0 ? row.votes / total : 0]));
 }
 
+function rollingAverageShares(records, windowSize = 2) {
+  const window = records.slice(-windowSize);
+  const parties = new Set(window.flatMap((record) => Object.keys(shares(record))));
+  return Object.fromEntries([...parties].map((party) => [
+    party,
+    window.reduce((sum, record) => sum + (shares(record)[party] || 0), 0) / window.length
+  ]));
+}
+
 function minHistory(modelFamily) {
   return {
     westminster_fptp: 2,
@@ -34,12 +43,12 @@ function uniqueAreaFamilies(featureSnapshots) {
 function evaluate(records) {
   const rows = [];
   for (let index = 1; index < records.length; index += 1) {
-    const previous = records[index - 1];
+    const trainingRecords = records.slice(0, index);
     const actual = records[index];
-    const predictedShares = shares(previous);
+    const predictedShares = rollingAverageShares(trainingRecords, 2);
     const actualShares = shares(actual);
     const parties = new Set([...Object.keys(predictedShares), ...Object.keys(actualShares)]);
-    const predictedWinner = winner(previous);
+    const predictedWinner = Object.entries(predictedShares).sort((left, right) => right[1] - left[1])[0]?.[0] || null;
     const actualWinner = winner(actual);
     for (const party of parties) {
       rows.push({
@@ -96,7 +105,7 @@ export function buildBaselineBacktests({ history = [], featureSnapshots = [], ge
       area_name: area.area_name,
       model_family: area.model_family,
       generated_at: generatedAt || new Date().toISOString(),
-      method: "previous_contest_party_share_persistence",
+      method: "rolling_two_contest_party_share_average",
       status,
       required_history_records: required,
       history_records: records.length,

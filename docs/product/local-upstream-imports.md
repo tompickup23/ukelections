@@ -12,6 +12,7 @@ The importer writes:
 
 - `source-snapshots.json`
 - `boundary-versions.json`
+- `boundary-mappings.json`
 - `election-history.json`
 - `candidate-rosters.json`
 - `poll-aggregate.json`
@@ -35,12 +36,14 @@ UKD/asylumstats model data:
 
 - 2021 local authority age, sex, and ethnicity base population model.
 - Migration matrix presence is recorded as a source snapshot for method audit.
-- Area-level UKD matches raise population metadata from static census context to rebased partial model context, but ward-level boundary fit still remains quarantined.
+- Area-level UKD matches raise population metadata from static census context to rebased partial model context.
+- Exact-area rebased UKD/AI DOGE ward projections can pass the population-method readiness gate. Low-confidence local-authority proxy projections remain proxy-only.
 
 Labour tracker data:
 
 - Constituency asylum support stock and rate context.
-- Imported only as contextual constituency proxy unless an exact ward or local authority mapping is later supplied.
+- Matched by constituency name and local authority `area_name`.
+- Local-authority matches are contextual area data; constituency-only matches remain proxy-only for ward models.
 
 ## Quality gates
 
@@ -50,6 +53,7 @@ The importer validates all generated manifests before exiting successfully:
 - Election history rows must link to a boundary version and have internally consistent candidate vote totals.
 - Model feature snapshots must record population method, source depth, geography fit, confidence, and limitations.
 - Candidate rosters must have contested candidates and only one defending-seat marker.
+- Boundary lineage mappings are generated only as same-code identities for current-format GSS areas.
 - Lancashire statement-of-persons-nominated URLs are checked into a source manifest and can be curl-verified separately before each refresh.
 
 Every imported row is marked `quarantined`. This is intentional. The upstream data is valuable for modelling, but public forecast claims need these checks first:

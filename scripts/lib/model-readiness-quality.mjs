@@ -152,6 +152,9 @@ export function validateModelReadinessArea(area) {
     if (methodology.backtest_status !== "passed") {
       errors.push(`${area.publication_status} areas need passed backtests`);
     }
+    if (gates.boundary_versions?.historical_lineage_status === "pending") {
+      errors.push(`${area.publication_status} areas need generated boundary lineage`);
+    }
     if ((area.blockers || []).length > 0) {
       errors.push(`${area.publication_status} areas cannot have blockers`);
     }

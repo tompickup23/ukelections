@@ -156,4 +156,49 @@ describe("local upstream importers", () => {
     expect(features[0].features.population_projection.quality_level).toBe("rebased_partial");
     expect(features[0].features.population_projection.geography_fit).toBe("exact_area");
   });
+
+  it("matches asylum context by local authority area name when constituency names differ", () => {
+    const imported = importAidogeElectionData({ electionData, sourceSnapshot });
+    const features = buildAidogeFeatureSnapshots({
+      electionData: {
+        ...electionData,
+        meta: {
+          ...electionData.meta,
+          council_name: "Blackpool"
+        }
+      },
+      boundaries: imported.boundaries,
+      history: imported.history,
+      constituencyAsylum: {
+        constituencies: {
+          "Blackpool North and Fleetwood": {
+            area_name: "Blackpool",
+            asylum_seekers: 577,
+            asylum_rate_per_10k: 40,
+            population: 144191,
+            white_british_pct: 90.4
+          },
+          "Blackpool South": {
+            area_name: "Blackpool",
+            asylum_seekers: 577,
+            asylum_rate_per_10k: 40,
+            population: 144191,
+            white_british_pct: 90.4
+          }
+        }
+      },
+      sourceSnapshots: {
+        elections: sourceSnapshot,
+        constituencyAsylum: sourceSnapshot
+      },
+      asOf: "2026-04-18"
+    });
+
+    expect(features[0].features.asylum_context).toMatchObject({
+      supported_asylum_stock: 577,
+      rate_per_10000_population: 40,
+      precision: "local_authority_context",
+      matched_constituency_names: ["Blackpool North and Fleetwood", "Blackpool South"]
+    });
+  });
 });
