@@ -50,4 +50,27 @@ describe("source fetcher helpers", () => {
     expect(snapshot.raw_file_path).toBe(outputPath);
     expect(snapshot.review_notes).toMatch(/reused an existing raw snapshot/);
   });
+
+  it("can reuse a raw snapshot from an explicit fallback cache directory", async () => {
+    const dir = path.join(os.tmpdir(), `ukelections-source-cache-${Date.now()}-fallback`);
+    const fallbackDir = path.join(dir, "previous");
+    const outputDir = path.join(dir, "current");
+    mkdirSync(fallbackDir, { recursive: true });
+    mkdirSync(outputDir, { recursive: true });
+    const fallbackPath = path.join(fallbackDir, "source.html");
+    const outputPath = path.join(outputDir, "source.html");
+    writeFileSync(fallbackPath, "<h1>Cached official result from previous audit</h1>", "utf8");
+
+    const snapshot = await fetchSourceSnapshot({
+      sourceName: "Fallback Cached Source",
+      sourceUrl: "http://127.0.0.1:9/unavailable",
+      licence: "test",
+      outputPath,
+      fallbackPaths: [fallbackPath]
+    });
+
+    expect(snapshot.snapshot_id).toMatch(/^fallback-cached-source-/);
+    expect(snapshot.raw_file_path).toBe(outputPath);
+    expect(snapshot.review_notes).toContain(fallbackPath);
+  });
 });

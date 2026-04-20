@@ -10,6 +10,7 @@ function parseArgs(argv) {
     output: "/tmp/ukelections-local-upstreams/review-workflow-execution.json",
     markdownOutput: "/tmp/ukelections-local-upstreams/review-workflow-execution.md",
     rawDir: "/tmp/ukelections-local-upstreams/raw-review-sources",
+    fallbackRawDirs: [],
     licence: "Review required before public reuse",
     timeoutMs: 30000
   };
@@ -19,6 +20,7 @@ function parseArgs(argv) {
     else if (arg === "--output") args.output = argv[++index];
     else if (arg === "--markdown-output") args.markdownOutput = argv[++index];
     else if (arg === "--raw-dir") args.rawDir = argv[++index];
+    else if (arg === "--fallback-raw-dir") args.fallbackRawDirs.push(argv[++index]);
     else if (arg === "--licence") args.licence = argv[++index];
     else if (arg === "--timeout-ms") args.timeoutMs = Number(argv[++index]);
     else if (arg === "--help") args.help = true;
@@ -79,12 +81,14 @@ async function fetchWithTimeout(target, args) {
   const timeout = setTimeout(() => controller.abort(), args.timeoutMs);
   try {
     const outputPath = path.join(args.rawDir, `${slug(target.target_id)}.${extensionForTarget(target)}`);
+    const fallbackPaths = args.fallbackRawDirs.map((dir) => path.join(dir, path.basename(outputPath)));
     const snapshot = await fetchSourceSnapshot({
       sourceName: target.source_name,
       sourceUrl: target.url,
       licence: target.licence || args.licence,
       outputPath,
-      signal: controller.signal
+      signal: controller.signal,
+      fallbackPaths
     });
     return {
       ok: true,
@@ -114,7 +118,7 @@ if (args.help) {
   console.log(`Fetch and snapshot all source targets attached to review workflows.
 
 Usage:
-  node scripts/execute-review-workflows.mjs --workflows /tmp/ukelections-local-upstreams/review-workflows.json --output /tmp/ukelections-local-upstreams/review-workflow-execution.json --markdown-output /tmp/ukelections-local-upstreams/review-workflow-execution.md --raw-dir /tmp/ukelections-local-upstreams/raw-review-sources
+  node scripts/execute-review-workflows.mjs --workflows /tmp/ukelections-local-upstreams/review-workflows.json --output /tmp/ukelections-local-upstreams/review-workflow-execution.json --markdown-output /tmp/ukelections-local-upstreams/review-workflow-execution.md --raw-dir /tmp/ukelections-local-upstreams/raw-review-sources --fallback-raw-dir /tmp/previous-audit/raw-review-sources
 `);
   process.exit(0);
 }

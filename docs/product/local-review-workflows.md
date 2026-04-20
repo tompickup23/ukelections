@@ -21,7 +21,8 @@ npm run execute:review-workflows -- \
   --workflows /tmp/ukelections-local-upstreams/review-workflows.json \
   --output /tmp/ukelections-local-upstreams/review-workflow-execution.json \
   --markdown-output /tmp/ukelections-local-upstreams/review-workflow-execution.md \
-  --raw-dir /tmp/ukelections-local-upstreams/raw-review-sources
+  --raw-dir /tmp/ukelections-local-upstreams/raw-review-sources \
+  --fallback-raw-dir /tmp/ukelections-audit/raw-review-sources
 ```
 
 Execution outputs:
@@ -30,6 +31,8 @@ Execution outputs:
 - source snapshots with SHA-256 hashes;
 - per-area evidence status showing whether all source targets were fetched;
 - promotion blockers that remain after acquisition.
+
+Use `--fallback-raw-dir` only with a previous trusted audit cache. The snapshot is copied into the current raw directory and marked as reused/stale in `review_notes`, so it can unblock review workflow rebuilding without pretending the council endpoint was live.
 
 Then verify the fetched and linked evidence against every review area:
 
@@ -65,6 +68,17 @@ Import manifest outputs:
 - the primary source and transformation route for every review area;
 - acceptance checks that must pass before any official history rows are accepted;
 - workflow-specific artifacts still required for promotion, such as notional boundary history, candidate/incumbency features, or a second current-boundary contest.
+
+For review areas whose primary route is `structured_html_table_transcription`, draft the machine-readable transcription artifact:
+
+```bash
+npm run draft:structured-review-imports -- \
+  --manifest /tmp/ukelections-local-upstreams/review-import-manifest.json \
+  --output /tmp/ukelections-local-upstreams/structured-review-official-history.draft.json \
+  --markdown-output /tmp/ukelections-local-upstreams/structured-review-official-history.draft.md
+```
+
+The structured draft is intentionally not wired into `import:local-upstreams`. It is a review artifact for Blackburn with Darwen and Pendle-style official HTML tables. Before copying any row into an accepted official-history supplement, manually confirm the ward heading, candidate rows, party descriptions, elected flags, rejected/spoilt ballots, source snapshot ID, boundary version, and declared-total arithmetic.
 
 ## Workflow Classes
 

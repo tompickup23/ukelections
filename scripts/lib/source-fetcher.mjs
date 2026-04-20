@@ -53,8 +53,13 @@ export function buildSourceSnapshot({ sourceName, sourceUrl, licence, rawFilePat
   };
 }
 
-export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outputPath, retrievedAt, signal }) {
-  const { binary, contentType, cachedRetrievedAt } = await fetchSourceBytes({ sourceUrl, outputPath, signal });
+export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outputPath, retrievedAt, signal, fallbackPaths = [] }) {
+  const { binary, contentType, cachedRetrievedAt, cachedPath } = await fetchSourceBytes({
+    sourceUrl,
+    outputPath,
+    signal,
+    fallbackPaths
+  });
   const isText = /text|json|csv|xml|html|javascript|x-www-form-urlencoded/i.test(contentType);
   const content = isText ? binary.toString("utf8") : binary;
   mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -69,12 +74,26 @@ export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outp
     contentType,
     retrievedAt: retrievedAt || cachedRetrievedAt,
     reviewNotes: cachedRetrievedAt
-      ? "Source was unavailable during this run; reused an existing raw snapshot from the local audit directory. Review source freshness before accepting."
+      ? `Source was unavailable during this run; reused an existing raw snapshot${cachedPath ? ` from ${cachedPath}` : ""}. Review source freshness before accepting.`
       : undefined
   });
 }
 
-async function fetchSourceBytes({ sourceUrl, outputPath, signal }) {
+function readCachedSource(outputPath, fallbackPaths = []) {
+  for (const candidatePath of [outputPath, ...fallbackPaths].filter(Boolean)) {
+    if (existsSync(candidatePath)) {
+      return {
+        contentType: "",
+        binary: readFileSync(candidatePath),
+        cachedRetrievedAt: statSync(candidatePath).mtime.toISOString(),
+        cachedPath: candidatePath
+      };
+    }
+  }
+  return null;
+}
+
+async function fetchSourceBytes({ sourceUrl, outputPath, signal, fallbackPaths = [] }) {
   try {
     const response = await fetch(sourceUrl, {
       signal,
@@ -91,13 +110,8 @@ async function fetchSourceBytes({ sourceUrl, outputPath, signal }) {
       binary: Buffer.from(await response.arrayBuffer())
     };
   } catch (error) {
-    if (signal?.aborted && outputPath && existsSync(outputPath)) {
-      return {
-        contentType: "",
-        binary: readFileSync(outputPath),
-        cachedRetrievedAt: statSync(outputPath).mtime.toISOString()
-      };
-    }
+    const cached = readCachedSource(outputPath, fallbackPaths);
+    if (signal?.aborted && cached) return cached;
     if (signal?.aborted) throw error;
     const curl = spawnSync("curl", [
       "--location",
@@ -114,13 +128,7 @@ async function fetchSourceBytes({ sourceUrl, outputPath, signal }) {
       maxBuffer: 50 * 1024 * 1024
     });
     if (curl.status !== 0) {
-      if (outputPath && existsSync(outputPath)) {
-        return {
-          contentType: "",
-          binary: readFileSync(outputPath),
-          cachedRetrievedAt: statSync(outputPath).mtime.toISOString()
-        };
-      }
+      if (cached) return cached;
       const stderr = curl.stderr?.toString("utf8").trim();
       throw new Error(`${error.message}; curl fallback failed${stderr ? `: ${stderr}` : ""}`);
     }
