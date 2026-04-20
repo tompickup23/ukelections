@@ -29,7 +29,9 @@ export function importOfficialHistoryRecords({
 }) {
   if (!sourceSnapshot) return [];
   const boundaryByCode = new Map(boundaries.map((boundary) => [boundary.area_code, boundary]));
-  const existingContestKeys = new Set(existingHistory.map((record) => `${record.area_code}::${record.election_date}`));
+  const existingContestKeys = new Set(existingHistory
+    .filter((record) => record.review_status !== "quarantined")
+    .map((record) => `${record.area_code}::${record.election_date}`));
   return (officialHistoryData.records || [])
     .filter((record) => boundaryByCode.has(record.area_code))
     .filter((record) => !existingContestKeys.has(`${record.area_code}::${record.election_date}`))
@@ -52,7 +54,7 @@ export function importOfficialHistoryRecords({
         turnout_votes: resultRows.reduce((sum, row) => sum + row.votes, 0),
         turnout: record.turnout,
         seats_contested: integerOrUndefined(record.seats_contested),
-        review_status: "quarantined",
+        review_status: "reviewed",
         upstream: {
           system: officialHistoryData.source_name || "Official election results",
           official_result: true,
@@ -60,6 +62,6 @@ export function importOfficialHistoryRecords({
         },
         result_rows: resultRows
       };
-    });
+    })
+    .filter((record) => record.result_rows.length > 0 && record.turnout_votes > 0);
 }
-

@@ -163,6 +163,56 @@ describe("baseline backtest builder", () => {
     expect(result[0].status).toBe("passed");
   });
 
+  it("excludes quarantined historical rows from backtest evidence", () => {
+    const history = [
+      {
+        history_id: "h0",
+        area_code: "E05000000",
+        election_date: "2021-05-06",
+        contest_id: "c0",
+        review_status: "quarantined",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "B", votes: 80, rank: 1, elected: true },
+          { party_name: "A", votes: 20, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "h1",
+        area_code: "E05000000",
+        election_date: "2022-05-05",
+        contest_id: "c1",
+        review_status: "reviewed_with_warnings",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 60, rank: 1, elected: true },
+          { party_name: "B", votes: 40, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "h2",
+        area_code: "E05000000",
+        election_date: "2023-05-04",
+        contest_id: "c2",
+        review_status: "reviewed_with_warnings",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 58, rank: 1, elected: true },
+          { party_name: "B", votes: 42, rank: 2, elected: false }
+        ]
+      }
+    ];
+
+    const result = buildBaselineBacktests({
+      history,
+      featureSnapshots: [{ area_code: "E05000000", area_name: "Example Ward", model_family: "local_fptp_borough" }],
+      generatedAt: "2026-04-19T00:00:00Z"
+    });
+
+    expect(result[0].history_records).toBe(2);
+    expect(result[0].source_history_ids).toEqual(["h1", "h2"]);
+  });
+
   it("calibrates against same-election swing from other areas without using the target result", () => {
     const target = [
       ["t1", "2022-05-05", 60, 40, 0],
@@ -207,7 +257,7 @@ describe("baseline backtest builder", () => {
     });
 
     const targetBacktest = result.find((row) => row.area_code === "E05000000");
-    expect(targetBacktest.method).toBe("rolling_two_contest_party_share_average_with_leave_one_area_out_election_swing");
+    expect(targetBacktest.method).toBe("rolling_two_contest_party_share_average_with_preferred_same_council_leave_one_area_out_swing");
     expect(targetBacktest.metrics.mean_calibration_area_count).toBe(1);
     expect(targetBacktest.metrics.elected_party_hit_rate).toBe(1);
     expect(targetBacktest.status).toBe("passed");
@@ -335,5 +385,44 @@ describe("baseline backtest builder", () => {
     expect(targetBacktest.pass_reason).toBe("single_contest_elected_party_hit");
     expect(targetBacktest.evidence_tier).toBe("limited");
     expect(targetBacktest.publication_gate).toBe("review_required");
+  });
+
+  it("prefers same-council comparators for cold-start local election backtests", () => {
+    const makeRecord = ({ history_id, area_code, partyAVotes, partyCVotes, council }) => ({
+      history_id,
+      area_code,
+      election_date: "2024-05-02",
+      contest_id: history_id,
+      turnout_votes: partyAVotes + partyCVotes,
+      upstream: { council },
+      result_rows: [
+        { party_name: "A", votes: partyAVotes, rank: partyAVotes > partyCVotes ? 1 : 2, elected: partyAVotes > partyCVotes },
+        { party_name: "C", votes: partyCVotes, rank: partyCVotes > partyAVotes ? 1 : 2, elected: partyCVotes > partyAVotes }
+      ]
+    });
+    const history = [
+      makeRecord({ history_id: "target", area_code: "E05000000", partyAVotes: 30, partyCVotes: 70, council: "Local Borough" }),
+      makeRecord({ history_id: "local-1", area_code: "E05000001", partyAVotes: 25, partyCVotes: 75, council: "Local Borough" }),
+      makeRecord({ history_id: "local-2", area_code: "E05000002", partyAVotes: 35, partyCVotes: 65, council: "Local Borough" }),
+      makeRecord({ history_id: "local-3", area_code: "E05000003", partyAVotes: 30, partyCVotes: 70, council: "Local Borough" }),
+      makeRecord({ history_id: "distant-1", area_code: "E05000004", partyAVotes: 90, partyCVotes: 10, council: "Distant Borough" }),
+      makeRecord({ history_id: "distant-2", area_code: "E05000005", partyAVotes: 90, partyCVotes: 10, council: "Distant Borough" }),
+      makeRecord({ history_id: "distant-3", area_code: "E05000006", partyAVotes: 90, partyCVotes: 10, council: "Distant Borough" })
+    ];
+
+    const result = buildBaselineBacktests({
+      history,
+      featureSnapshots: history.map((record) => ({
+        area_code: record.area_code,
+        area_name: record.area_code,
+        model_family: "local_fptp_borough"
+      })),
+      generatedAt: "2026-04-19T00:00:00Z"
+    });
+
+    const targetBacktest = result.find((row) => row.area_code === "E05000000");
+    expect(targetBacktest.metrics.calibration_scope_counts).toEqual({ local_authority: 1 });
+    expect(targetBacktest.metrics.elected_party_hit_rate).toBe(1);
+    expect(targetBacktest.status).toBe("passed");
   });
 });

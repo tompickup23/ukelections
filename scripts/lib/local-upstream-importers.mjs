@@ -6,6 +6,18 @@ import { compileAreaFeatureSnapshot } from "./area-feature-compiler.mjs";
 
 const DEFAULT_SOURCE_URL = "https://ukelections.co.uk/sources";
 const UNKNOWN_LICENCE = "Inherited upstream licence; confirm before public release";
+const REVIEWED_STALE_GSS_CURRENT_BOUNDARY_RULES = [
+  {
+    councilId: "rossendale",
+    fromDate: "2024-05-02",
+    areaNames: ["Helmshore", "Longholme"],
+    evidenceUrls: [
+      "https://www.rossendale.gov.uk/downloads/file/18429/declaration-of-result-helmshore-2-may-2024",
+      "https://www.rossendale.gov.uk/downloads/file/18428/declaration-of-result-longholme-ward-2-may-2024"
+    ],
+    note: "Rossendale 2024 declaration evidence uses current ward names after the boundary review; upstream AI DOGE/DCLEAPIL rows preserve stale pre-review GSS codes for lineage."
+  }
+];
 
 function slug(value) {
   return String(value || "unknown")
@@ -325,11 +337,14 @@ export function buildLocalFileSourceSnapshot({
   sourceName,
   sourceUrl = DEFAULT_SOURCE_URL,
   licence = UNKNOWN_LICENCE,
-  retrievedAt
+  retrievedAt,
+  qualityStatus = "quarantined",
+  reviewNotes = "Fetched automatically. Review licence, row semantics, and transformation notes before accepting."
 }) {
   const absolutePath = path.resolve(filePath);
   const content = readFileSync(absolutePath, "utf8");
-  return buildSourceSnapshot({
+  return {
+    ...buildSourceSnapshot({
     sourceName,
     sourceUrl,
     licence,
@@ -337,7 +352,35 @@ export function buildLocalFileSourceSnapshot({
     content,
     contentType: absolutePath.endsWith(".json") ? "application/json" : "",
     retrievedAt
-  });
+    }),
+    quality_status: qualityStatus,
+    review_notes: reviewNotes
+  };
+}
+
+function historyReviewStatus({ areaCodeMethod, voteTotal, resultRows }) {
+  if (voteTotal <= 0 || resultRows.length < 2) return "quarantined";
+  if (areaCodeMethod === "name_matched_current_boundary_code") return "quarantined";
+  if (areaCodeMethod === "upstream_gss_code" || areaCodeMethod === "name_matched_boundary_code") {
+    return "reviewed_with_warnings";
+  }
+  return "quarantined";
+}
+
+function currentBoundaryStaleGssEvidence({ councilId, electionDate, areaName, areaCodeMethod }) {
+  if (areaCodeMethod !== "name_matched_current_boundary_code") return null;
+  return REVIEWED_STALE_GSS_CURRENT_BOUNDARY_RULES.find((rule) =>
+    rule.councilId === councilId &&
+    electionDate >= rule.fromDate &&
+    rule.areaNames.some((name) => normaliseName(name) === normaliseName(areaName))
+  ) || null;
+}
+
+function historyReviewStatusForContest({ councilId, electionDate, areaName, areaCodeMethod, voteTotal, resultRows }) {
+  if (currentBoundaryStaleGssEvidence({ councilId, electionDate, areaName, areaCodeMethod })) {
+    return voteTotal > 0 && resultRows.length >= 2 ? "reviewed_with_warnings" : "quarantined";
+  }
+  return historyReviewStatus({ areaCodeMethod, voteTotal, resultRows });
 }
 
 export function importAidogeElectionData({
@@ -397,6 +440,8 @@ export function importAidogeElectionData({
       if (resultRows.length === 0) return;
       const electionDate = toDate(contest.date);
       const voteTotal = resultRows.reduce((sum, row) => sum + row.votes, 0);
+      if (voteTotal <= 0) return;
+      const staleGssEvidence = currentBoundaryStaleGssEvidence({ councilId, electionDate, areaName, areaCodeMethod });
       history.push({
         history_id: `ai-doge.${slug(councilId)}.${slug(areaCode)}.${electionDate}.${index + 1}`,
         contest_id: `local.${slug(councilId)}.${slug(areaCode)}.${electionDate}`,
@@ -414,10 +459,16 @@ export function importAidogeElectionData({
         reported_turnout_votes: integerOrUndefined(contest.turnout_votes),
         turnout: turnoutShare(contest.turnout),
         seats_contested: integerOrUndefined(contest.seats_contested),
-        review_status: "quarantined",
+        review_status: historyReviewStatusForContest({ councilId, electionDate, areaName, areaCodeMethod, voteTotal, resultRows }),
         upstream: {
+          system: "AI DOGE",
+          council_id: councilId,
+          council_name: meta.council_name || councilId,
           source_area_code: upstreamAreaCode,
-          area_code_method: areaCodeMethod
+          area_code_method: areaCodeMethod,
+          stale_gss_current_boundary_review: Boolean(staleGssEvidence),
+          boundary_review_evidence: staleGssEvidence?.note,
+          boundary_review_evidence_urls: staleGssEvidence?.evidenceUrls
         },
         result_rows: resultRows
       });

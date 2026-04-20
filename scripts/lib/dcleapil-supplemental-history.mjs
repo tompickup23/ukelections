@@ -155,7 +155,7 @@ function buildRecord({ key, contest, boundary, sourceSnapshot, sourceUrl }) {
     turnout_votes: turnoutVotes,
     turnout: turnoutShare(contest.rows.find((row) => row.turnout_percentage)?.turnout_percentage),
     seats_contested: integerOrUndefined(contest.rows.find((row) => row.seats_contested_calc)?.seats_contested_calc),
-    review_status: "quarantined",
+    review_status: turnoutVotes > 0 && resultRows.length > 1 ? "reviewed_with_warnings" : "quarantined",
     upstream: {
       system: "DCLEAPIL",
       council: contest.council,
@@ -178,7 +178,9 @@ export async function importDcleapilSupplementalHistory({
   const boundaryByCode = new Map(boundaries
     .filter((boundary) => /^[EWSN]\d{8}$/.test(boundary.area_code))
     .map((boundary) => [boundary.area_code, boundary]));
-  const existingContestKeys = new Set(existingHistory.map((record) => `${record.area_code}::${record.election_date}`));
+  const existingContestKeys = new Set(existingHistory
+    .filter((record) => record.review_status !== "quarantined")
+    .map((record) => `${record.area_code}::${record.election_date}`));
   const contests = new Map();
   let headers = null;
 
@@ -218,6 +220,6 @@ export async function importDcleapilSupplementalHistory({
       sourceSnapshot,
       sourceUrl
     }))
-    .filter((record) => record.result_rows.length > 0)
+    .filter((record) => record.result_rows.length > 0 && record.turnout_votes > 0)
     .sort((left, right) => `${left.area_code}:${left.election_date}`.localeCompare(`${right.area_code}:${right.election_date}`));
 }

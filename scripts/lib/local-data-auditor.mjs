@@ -128,6 +128,7 @@ export function auditLocalDataBundle({
   const sourceSnapshotById = new Map(sourceSnapshots.map((snapshot) => [snapshot.snapshot_id, snapshot]));
   const historyByContest = groupBy(history, (record) => record.contest_id || `${record.area_code}:${record.election_date}`);
   const historyByAreaDate = groupBy(history, (record) => `${record.area_code || "unknown"}:${record.election_date || "unknown"}`);
+  const historyByArea = groupBy(history, (record) => record.area_code || "unknown");
   const boundaryMappingByTarget = groupBy(boundaryMappings, (mapping) => mapping.target_area_code);
   const readinessByAreaFamily = new Map(readiness.map((row) => [`${row.area_code}:${row.model_family}`, row]));
 
@@ -140,6 +141,15 @@ export function auditLocalDataBundle({
   const sourceAreaMismatches = history
     .filter((record) => record.upstream?.source_area_code && record.upstream.source_area_code !== record.area_code)
     .map(compactHistoryRow);
+  const onlyQuarantinedHistoryAreas = [...historyByArea.entries()]
+    .filter(([, records]) => records.length > 0 && records.every((record) => record.review_status === "quarantined"))
+    .map(([areaCode, records]) => ({
+      area_code: areaCode,
+      area_name: records[0]?.area_name,
+      quarantined_history_records: records.length,
+      source_area_codes: [...new Set(records.map((record) => record.upstream?.source_area_code).filter(Boolean))],
+      area_code_methods: [...new Set(records.map((record) => record.upstream?.area_code_method).filter(Boolean))]
+    }));
   const zeroTurnout = history
     .filter((record) => (record.turnout_votes || 0) === 0 || (record.result_rows || []).reduce((sum, row) => sum + (row.votes || 0), 0) === 0)
     .map(compactHistoryRow);
@@ -235,15 +245,21 @@ export function auditLocalDataBundle({
     ),
     issue(
       "history_rows_quarantined",
-      "high",
-      "Historical rows remain quarantined at row level even where readiness infers reviewed evidence from upstream metadata.",
+      "medium",
+      "Historical rows remain quarantined at row level and are excluded from model backtests until source or boundary review is complete.",
       quarantinedHistory
     ),
     issue(
       "history_source_area_code_mismatch",
-      "high",
-      "Historical row was imported onto a current area_code that differs from the upstream/source area code; needs boundary-change evidence before public historical claims.",
+      "medium",
+      "Historical row was imported onto a current area_code that differs from the upstream/source area code; it is excluded from model backtests until boundary-change evidence is added.",
       sourceAreaMismatches
+    ),
+    issue(
+      "area_only_quarantined_history",
+      "high",
+      "Area has historical rows, but every row is quarantined and excluded from model backtests.",
+      onlyQuarantinedHistoryAreas
     ),
     issue(
       "history_zero_turnout_or_votes",

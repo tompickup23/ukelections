@@ -96,11 +96,16 @@ function discoverCouncilDirs(root, councilFilter) {
 }
 
 function snapshotFor(filePath, sourceName, options) {
+  const acceptedFamilies = /AI DOGE|DCLEAPIL|UKD\/asylumstats|Labour tracker|Official|statements of persons nominated/i;
   return buildLocalFileSourceSnapshot({
     filePath,
     sourceName,
     sourceUrl: options.sourceUrl,
-    licence: options.licence
+    licence: options.licence,
+    qualityStatus: acceptedFamilies.test(sourceName) ? "accepted_with_warnings" : "quarantined",
+    reviewNotes: acceptedFamilies.test(sourceName)
+      ? "Local source snapshot is accepted for internal modelling with warnings; licence, upstream semantics, and public-release wording still need final review."
+      : "Fetched automatically. Review licence, row semantics, and transformation notes before accepting."
   });
 }
 
@@ -510,7 +515,7 @@ writeJson(path.join(options.output, "import-summary.json"), {
   imported_councils: importedCouncils,
   skipped_councils: skippedCouncils,
   validation,
-  publication_gate: "All imported data remains quarantined until source licences, ward boundary spans, and area-specific methods are reviewed."
+  publication_gate: "Imported source snapshots are accepted with warnings for internal modelling where provenance is known. Boundary-remapped history, official-result spot checks, licences, and area-specific methods still require review before strong public claims."
 });
 
 console.log(JSON.stringify({

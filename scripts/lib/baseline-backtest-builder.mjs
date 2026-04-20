@@ -7,6 +7,19 @@ function canonicalPartyName(partyName) {
   return partyName;
 }
 
+function key(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function councilKey(record) {
+  const upstream = record?.upstream || {};
+  return key(upstream.council_id || upstream.council || upstream.council_name);
+}
+
 function electedParties(record) {
   const parties = new Set((record.result_rows || []).filter((row) => row.elected).map((row) => canonicalPartyName(row.party_name)));
   if (parties.size === 0) {
@@ -107,7 +120,7 @@ function normaliseShares(sharesByParty, allowedParties = null) {
   return Object.fromEntries(entries.map(([party, value]) => [party, value / total]));
 }
 
-function buildCalibrationIndex(historyByArea, areaFamilyByCode) {
+function buildCalibrationIndex(historyByArea, areaFamilyByCode, areaCouncilByCode) {
   const recordsByArea = new Map();
   for (const [areaCode, areaRecords] of historyByArea.entries()) {
     recordsByArea.set(areaCode, mergeContestRecords(areaRecords)
@@ -116,37 +129,45 @@ function buildCalibrationIndex(historyByArea, areaFamilyByCode) {
   }
 
   return function calibrationFor({ modelFamily, electionDate, targetAreaCode }) {
-    const swingTotals = new Map();
-    const swingCounts = new Map();
-    const sourceAreaCodes = [];
+    const collect = (scope) => {
+      const swingTotals = new Map();
+      const swingCounts = new Map();
+      const sourceAreaCodes = [];
+      const targetCouncilKey = areaCouncilByCode.get(targetAreaCode);
 
-    for (const [areaCode, records] of recordsByArea.entries()) {
-      if (areaCode === targetAreaCode || areaFamilyByCode.get(areaCode) !== modelFamily) continue;
-      const actualIndex = records.findIndex((record) => record.election_date === electionDate);
-      if (actualIndex < 1) continue;
+      for (const [areaCode, records] of recordsByArea.entries()) {
+        if (areaCode === targetAreaCode || areaFamilyByCode.get(areaCode) !== modelFamily) continue;
+        if (scope === "local_authority" && (!targetCouncilKey || areaCouncilByCode.get(areaCode) !== targetCouncilKey)) continue;
+        const actualIndex = records.findIndex((record) => record.election_date === electionDate);
+        if (actualIndex < 1) continue;
 
-      const baselineShares = rollingAverageShares(records.slice(0, actualIndex), 2);
-      const actualShares = shares(records[actualIndex]);
-      const parties = new Set([...Object.keys(baselineShares), ...Object.keys(actualShares)]);
-      for (const party of parties) {
-        swingTotals.set(party, (swingTotals.get(party) || 0) + ((actualShares[party] || 0) - (baselineShares[party] || 0)));
-        swingCounts.set(party, (swingCounts.get(party) || 0) + 1);
+        const baselineShares = rollingAverageShares(records.slice(0, actualIndex), 2);
+        const actualShares = shares(records[actualIndex]);
+        const parties = new Set([...Object.keys(baselineShares), ...Object.keys(actualShares)]);
+        for (const party of parties) {
+          swingTotals.set(party, (swingTotals.get(party) || 0) + ((actualShares[party] || 0) - (baselineShares[party] || 0)));
+          swingCounts.set(party, (swingCounts.get(party) || 0) + 1);
+        }
+        sourceAreaCodes.push(areaCode);
       }
-      sourceAreaCodes.push(areaCode);
-    }
 
-    return {
-      source_area_count: sourceAreaCodes.length,
-      source_area_codes: sourceAreaCodes,
-      swing: Object.fromEntries([...swingTotals.entries()].map(([party, value]) => [
-        party,
-        value / (swingCounts.get(party) || 1)
-      ]))
+      return {
+        source_area_count: sourceAreaCodes.length,
+        source_area_codes: sourceAreaCodes,
+        scope,
+        swing: Object.fromEntries([...swingTotals.entries()].map(([party, value]) => [
+          party,
+          value / (swingCounts.get(party) || 1)
+        ]))
+      };
     };
+
+    const local = collect("local_authority");
+    return local.source_area_count >= 3 ? local : collect("model_family");
   };
 }
 
-function buildSameDatePriorIndex(historyByArea, areaFamilyByCode) {
+function buildSameDatePriorIndex(historyByArea, areaFamilyByCode, areaCouncilByCode) {
   const recordsByArea = new Map();
   for (const [areaCode, areaRecords] of historyByArea.entries()) {
     recordsByArea.set(areaCode, mergeContestRecords(areaRecords)
@@ -155,29 +176,37 @@ function buildSameDatePriorIndex(historyByArea, areaFamilyByCode) {
   }
 
   return function sameDatePriorFor({ modelFamily, electionDate, targetAreaCode }) {
-    const totals = new Map();
-    const counts = new Map();
-    const sourceAreaCodes = [];
+    const collect = (scope) => {
+      const totals = new Map();
+      const counts = new Map();
+      const sourceAreaCodes = [];
+      const targetCouncilKey = areaCouncilByCode.get(targetAreaCode);
 
-    for (const [areaCode, records] of recordsByArea.entries()) {
-      if (areaCode === targetAreaCode || areaFamilyByCode.get(areaCode) !== modelFamily) continue;
-      const actual = records.find((record) => record.election_date === electionDate);
-      if (!actual) continue;
-      for (const [party, value] of Object.entries(shares(actual))) {
-        totals.set(party, (totals.get(party) || 0) + value);
-        counts.set(party, (counts.get(party) || 0) + 1);
+      for (const [areaCode, records] of recordsByArea.entries()) {
+        if (areaCode === targetAreaCode || areaFamilyByCode.get(areaCode) !== modelFamily) continue;
+        if (scope === "local_authority" && (!targetCouncilKey || areaCouncilByCode.get(areaCode) !== targetCouncilKey)) continue;
+        const actual = records.find((record) => record.election_date === electionDate);
+        if (!actual) continue;
+        for (const [party, value] of Object.entries(shares(actual))) {
+          totals.set(party, (totals.get(party) || 0) + value);
+          counts.set(party, (counts.get(party) || 0) + 1);
+        }
+        sourceAreaCodes.push(areaCode);
       }
-      sourceAreaCodes.push(areaCode);
-    }
 
-    return {
-      source_area_count: sourceAreaCodes.length,
-      source_area_codes: sourceAreaCodes,
-      shares: Object.fromEntries([...totals.entries()].map(([party, value]) => [
-        party,
-        value / (counts.get(party) || 1)
-      ]))
+      return {
+        source_area_count: sourceAreaCodes.length,
+        source_area_codes: sourceAreaCodes,
+        scope,
+        shares: Object.fromEntries([...totals.entries()].map(([party, value]) => [
+          party,
+          value / (counts.get(party) || 1)
+        ]))
+      };
     };
+
+    const local = collect("local_authority");
+    return local.source_area_count >= 3 ? local : collect("model_family");
   };
 }
 
@@ -195,6 +224,7 @@ function calibratedShares(records, actual, calibration) {
 function evaluate(records, context) {
   const rows = [];
   const calibrationAreaCounts = [];
+  const calibrationScopes = [];
   const competitivePartyHits = new Set();
   for (let index = 1; index < records.length; index += 1) {
     const trainingRecords = records.slice(0, index);
@@ -205,6 +235,7 @@ function evaluate(records, context) {
       targetAreaCode: context.areaCode
     });
     calibrationAreaCounts.push(calibration.source_area_count);
+    calibrationScopes.push(calibration.scope || "model_family");
     const predictedShares = calibratedShares(trainingRecords, actual, calibration);
     const actualShares = shares(actual);
     const parties = new Set([...Object.keys(predictedShares), ...Object.keys(actualShares)]);
@@ -253,7 +284,11 @@ function evaluate(records, context) {
     competitive_party_hit_rate: contests.size ? competitivePartyHits.size / contests.size : null,
     mean_calibration_area_count: calibrationAreaCounts.length
       ? calibrationAreaCounts.reduce((sum, count) => sum + count, 0) / calibrationAreaCounts.length
-      : 0
+      : 0,
+    calibration_scope_counts: Object.fromEntries(calibrationScopes.map((scope) => [
+      scope,
+      calibrationScopes.filter((entry) => entry === scope).length
+    ]))
   };
 }
 
@@ -286,7 +321,8 @@ function evaluateColdStart(records, context) {
     winner_accuracy: rows.length ? (predictedWinner === winner(actual) ? 1 : 0) : null,
     elected_party_hit_rate: rows.length ? (predictedWinner && electedParties(actual).has(predictedWinner) ? 1 : 0) : null,
     competitive_party_hit_rate: rows.length ? (predictedWinner && competitiveParties(actual).has(predictedWinner) ? 1 : 0) : null,
-    mean_calibration_area_count: prior.source_area_count
+    mean_calibration_area_count: prior.source_area_count,
+    calibration_scope_counts: prior.scope ? { [prior.scope]: 1 } : {}
   };
 }
 
@@ -354,14 +390,18 @@ function assessPass(metrics) {
 
 export function buildBaselineBacktests({ history = [], featureSnapshots = [], generatedAt }) {
   const historyByArea = new Map();
-  for (const record of history) {
+  for (const record of history.filter((row) => row.review_status !== "quarantined")) {
     const list = historyByArea.get(record.area_code) || [];
     list.push(record);
     historyByArea.set(record.area_code, list);
   }
   const areaFamilyByCode = new Map(uniqueAreaFamilies(featureSnapshots).map((area) => [area.area_code, area.model_family]));
-  const calibrationFor = buildCalibrationIndex(historyByArea, areaFamilyByCode);
-  const sameDatePriorFor = buildSameDatePriorIndex(historyByArea, areaFamilyByCode);
+  const areaCouncilByCode = new Map([...historyByArea.entries()].map(([areaCode, records]) => [
+    areaCode,
+    records.map(councilKey).find(Boolean) || null
+  ]));
+  const calibrationFor = buildCalibrationIndex(historyByArea, areaFamilyByCode, areaCouncilByCode);
+  const sameDatePriorFor = buildSameDatePriorIndex(historyByArea, areaFamilyByCode, areaCouncilByCode);
 
   return uniqueAreaFamilies(featureSnapshots).map((area) => {
     const records = mergeContestRecords(historyByArea.get(area.area_code) || [])
@@ -392,7 +432,7 @@ export function buildBaselineBacktests({ history = [], featureSnapshots = [], ge
       area_name: area.area_name,
       model_family: area.model_family,
       generated_at: generatedAt || new Date().toISOString(),
-      method: "rolling_two_contest_party_share_average_with_leave_one_area_out_election_swing",
+      method: "rolling_two_contest_party_share_average_with_preferred_same_council_leave_one_area_out_swing",
       status,
       required_history_records: required,
       history_records: records.length,

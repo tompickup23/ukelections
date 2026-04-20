@@ -273,6 +273,7 @@ export function buildModelReadinessAreas({
     const areaBoundaries = boundaryByArea.get(areaCode) || [];
     const lineageMappings = reviewedLineageMappingsForArea(areaCode, areaBoundaries.map((row) => row.boundary_version_id), mappingsByTargetCode);
     const areaHistory = historyByArea.get(areaCode) || [];
+    const usableAreaHistory = areaHistory.filter((row) => row.review_status !== "quarantined");
     const areaRosters = rostersByArea.get(areaCode) || [];
     const boundary = areaBoundaries.find((candidate) => candidate.boundary_version_id === feature.boundary_version_id) || areaBoundaries[0];
     const methodology = familyToMethodology(modelFamily);
@@ -290,7 +291,9 @@ export function buildModelReadinessAreas({
 
     const coverage = {
       boundary_versions: areaBoundaries.length,
-      history_records: areaHistory.length,
+      history_records: usableAreaHistory.length,
+      raw_history_records: areaHistory.length,
+      quarantined_history_records: areaHistory.length - usableAreaHistory.length,
       candidate_rosters: areaRosters.length,
       feature_snapshots: features.length,
       poll_aggregates: pollIds.size,
@@ -328,7 +331,7 @@ export function buildModelReadinessAreas({
           })
         : gate("missing", [], "No boundary version is available."),
       election_history: coverage.history_records > 0
-        ? gate(sourceHasReviewedLocalHistoryEvidence(areaHistory.map((row) => row.source_snapshot_id), sourceSnapshotById) ? "reviewed" : "imported_quarantined", areaHistory.map((row) => row.source_snapshot_id), sourceHasReviewedLocalHistoryEvidence(areaHistory.map((row) => row.source_snapshot_id), sourceSnapshotById)
+        ? gate(sourceHasReviewedLocalHistoryEvidence(usableAreaHistory.map((row) => row.source_snapshot_id), sourceSnapshotById) ? "reviewed" : "imported_quarantined", usableAreaHistory.map((row) => row.source_snapshot_id), sourceHasReviewedLocalHistoryEvidence(usableAreaHistory.map((row) => row.source_snapshot_id), sourceSnapshotById)
           ? "Historical contests are sourced from reviewed local election archive evidence in the upstream metadata. Official-result row spot checks and boundary lineage remain warnings."
           : "Historical contests are present but not promoted to accepted official-result status.", {
             evidence_urls: [
@@ -336,6 +339,10 @@ export function buildModelReadinessAreas({
               "https://democracyclub.org.uk/data_apis/data/",
               "https://commonslibrary.parliament.uk/2023-local-elections-handbook-and-dataset/"
             ]
+          })
+        : areaHistory.length > 0
+          ? gate("imported_quarantined", areaHistory.map((row) => row.source_snapshot_id), "Historical contests exist only as quarantined rows and are excluded from model backtests until boundary/source review is complete.", {
+            quarantined_history_records: areaHistory.length
           })
         : gate("not_applicable", [], "No historical election records are available in the current upstream import; model is held at review status until history is added."),
       candidate_rosters: coverage.candidate_rosters > 0

@@ -63,8 +63,33 @@ describe("local upstream importers", () => {
     expect(validation.ok).toBe(true);
     expect(candidateValidation.ok).toBe(true);
     expect(imported.boundaries[0].review_status).toBe("quarantined");
+    expect(imported.history[0].review_status).toBe("reviewed_with_warnings");
     expect(imported.history[0].turnout_votes).toBe(900);
     expect(imported.candidateRosters[0].candidates[0].defending_seat).toBe(true);
+  });
+
+  it("drops historical contests with no candidate votes from model history", () => {
+    const imported = importAidogeElectionData({
+      electionData: {
+        ...electionData,
+        wards: {
+          "Bank Hall": {
+            ...electionData.wards["Bank Hall"],
+            history: [{
+              date: "2024-05-02",
+              type: "borough",
+              candidates: [
+                { name: "Jane Holder", party: "Labour", votes: 0, elected: true },
+                { name: "John Challenger", party: "Conservative", votes: 0, elected: false }
+              ]
+            }]
+          }
+        }
+      },
+      sourceSnapshot
+    });
+
+    expect(imported.history).toHaveLength(0);
   });
 
   it("links Lancashire candidate rosters to official statement sources when supplied", () => {
@@ -129,6 +154,71 @@ describe("local upstream importers", () => {
       source_area_code: "E05005225",
       area_code_method: "name_matched_current_boundary_code"
     });
+    expect(imported.history[0].review_status).toBe("quarantined");
+  });
+
+  it("accepts Rossendale 2024 stale-GSS history only when backed by official boundary-review evidence", () => {
+    const imported = importAidogeElectionData({
+      electionData: {
+        ...electionData,
+        meta: {
+          ...electionData.meta,
+          council_id: "rossendale",
+          council_name: "Rossendale"
+        },
+        wards: {
+          Helmshore: {
+            ...electionData.wards["Bank Hall"],
+            name: "Helmshore",
+            gss_code: "E05005324"
+          }
+        }
+      },
+      sourceSnapshot,
+      areaCodeByName: new Map([["helmshore", "E05015823"]])
+    });
+
+    expect(imported.boundaries[0].area_code).toBe("E05015823");
+    expect(imported.history[0].review_status).toBe("reviewed_with_warnings");
+    expect(imported.history[0].upstream).toMatchObject({
+      source_area_code: "E05005324",
+      area_code_method: "name_matched_current_boundary_code",
+      stale_gss_current_boundary_review: true,
+      boundary_review_evidence_urls: [
+        "https://www.rossendale.gov.uk/downloads/file/18429/declaration-of-result-helmshore-2-may-2024",
+        "https://www.rossendale.gov.uk/downloads/file/18428/declaration-of-result-longholme-ward-2-may-2024"
+      ]
+    });
+  });
+
+  it("keeps Rossendale pre-2024 stale-GSS history quarantined", () => {
+    const imported = importAidogeElectionData({
+      electionData: {
+        ...electionData,
+        meta: {
+          ...electionData.meta,
+          council_id: "rossendale",
+          council_name: "Rossendale"
+        },
+        wards: {
+          Helmshore: {
+            ...electionData.wards["Bank Hall"],
+            name: "Helmshore",
+            gss_code: "E05005324",
+            history: [{
+              ...electionData.wards["Bank Hall"].history[0],
+              date: "2023-05-04"
+            }]
+          }
+        }
+      },
+      sourceSnapshot,
+      areaCodeByName: new Map([["helmshore", "E05015823"]])
+    });
+
+    expect(imported.history[0].review_status).toBe("quarantined");
+    expect(imported.history[0].upstream.stale_gss_current_boundary_review).toBe(false);
+    expect(imported.history[0].upstream.boundary_review_evidence_urls).toBeUndefined();
   });
 
 

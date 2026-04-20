@@ -48,8 +48,37 @@ describe("DCLEAPIL supplemental history importer", () => {
     expect(history[0].area_code).toBe("E05000001");
     expect(history[0].election_date).toBe("2022-05-05");
     expect(history[0].turnout_votes).toBe(220);
+    expect(history[0].review_status).toBe("reviewed_with_warnings");
     expect(history[0].result_rows[0].party_name).toBe("Labour");
     expect(history[0].upstream.exact_gss_match).toBe(true);
   });
-});
 
+  it("drops supplemental contests with no candidate votes", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "ukelections-dcleapil-zero-"));
+    const csvPath = path.join(dir, "dcleapil.csv");
+    writeFileSync(csvPath, [
+      "person_name,merge_ballot_paper,year,council,ward,party_name,votes_cast,elected,seats_contested_calc,electorate,turnout_percentage,GSS,LEAP_post_label",
+      "Alice Example,ribble.example.2022-05-05,2022,Ribble Valley,Example,Labour Party,0,t,1,500,0,E05000001,\"Example, Ward\"",
+      "Bob Example,ribble.example.2022-05-05,2022,Ribble Valley,Example,Conservative and Unionist Party,0,f,1,500,0,E05000001,\"Example, Ward\""
+    ].join("\n"), "utf8");
+
+    const history = await importDcleapilSupplementalHistory({
+      dcleapilPath: csvPath,
+      sourceSnapshot,
+      boundaries: [{
+        boundary_version_id: "boundary-1",
+        area_type: "ward",
+        area_code: "E05000001",
+        area_name: "Example Ward",
+        valid_from: "2020-01-01",
+        valid_to: null,
+        source_snapshot_id: "source-1",
+        source_url: "https://ukelections.co.uk/sources",
+        review_status: "reviewed"
+      }],
+      existingHistory: []
+    });
+
+    expect(history).toHaveLength(0);
+  });
+});
