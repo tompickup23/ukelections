@@ -135,6 +135,16 @@ Current importer/readiness improvements:
 - UKD/asylumstats local route asylum rows are imported before Labour tracker fallback rows. Local-authority asylum stock is reviewed as contextual area data; constituency-only matches remain proxy-only;
 - Lancashire county divisions can inherit local-authority asylum context from local boundary geometry, with a locality-name fallback only where imported county division geometry is missing;
 - baseline backtests use a fixed rolling two-contest party-share average in walk-forward testing, replacing single previous-contest persistence where it improves stability without looking ahead.
+- baseline backtests prefer same-council comparators when enough local evidence exists, then fall back to the wider model-family pool.
+- the local audit classifies every review area into a concrete action code, separating post-boundary single-contest gaps, temporal-validation limits, winner-signal failures, and vote-share calibration failures.
+
+The current local audit can be reproduced with:
+
+```bash
+npm run build:local-audit -- --output /tmp/ukelections-local-upstreams
+```
+
+As of the latest local run, the imported Lancashire-focused bundle has 335 model areas, 328 passed baseline backtests, 7 failed backtests, 284 publishable areas, 51 review areas, and no internal blockers. The 51 review areas are deliberately not public-grade: most need another current-boundary contest, official notional history, or a stronger elected-party signal.
 
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
 

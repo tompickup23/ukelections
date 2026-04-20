@@ -32,6 +32,12 @@ export const NAV_ITEMS = [
 
 export const RELEASES: ReleaseEntry[] = [
   {
+    date: "2026-04-20",
+    title: "Review action audit",
+    summary: "Added a reproducible local audit pipeline and review-action classes for post-boundary, temporal-validation, winner-signal, and vote-share calibration gaps.",
+    sourceUrl: buildAbsoluteUrl("/data-quality/")
+  },
+  {
     date: "2026-04-18",
     title: "Model input validation",
     summary: "Added poll aggregate and model feature validation, including asylum route safeguards and area-specific population quality metadata.",

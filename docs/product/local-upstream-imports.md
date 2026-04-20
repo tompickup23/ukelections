@@ -5,10 +5,10 @@ UK Elections can now ingest the local AI DOGE, UKD/asylumstats, and Labour track
 Run:
 
 ```bash
-node scripts/import-local-upstreams.mjs --output /tmp/ukelections-local-upstreams
+npm run build:local-audit -- --output /tmp/ukelections-local-upstreams
 ```
 
-The importer writes:
+The pipeline writes:
 
 - `source-snapshots.json`
 - `boundary-versions.json`
@@ -17,6 +17,9 @@ The importer writes:
 - `candidate-rosters.json`
 - `poll-aggregate.json`
 - `model-features.json`
+- `baseline-backtests.json`
+- `model-readiness.json`
+- `data-audit.json`
 - `import-summary.json`
 
 Generated files should stay outside git until the source review is complete. The default output directory is `/tmp/ukelections-local-upstreams`; `data/imported/` and `data/upstream-cache/` are ignored if a local run writes inside the repo.
@@ -59,7 +62,7 @@ The importer validates all generated manifests before exiting successfully:
 - County division local-authority asylum context is joined from local boundary geometry where the division centroid falls inside a district ward polygon; a small Lancashire locality-name fallback handles imported county divisions missing usable geometry.
 - Lancashire statement-of-persons-nominated URLs are checked into a source manifest and can be curl-verified separately before each refresh.
 
-Every imported row is marked `quarantined`. This is intentional. The upstream data is valuable for modelling, but public forecast claims need these checks first:
+Imported source snapshots are accepted with warnings when their local provenance is known. Historical rows are promoted only when their source and boundary treatment are usable for modelling; stale-GSS or boundary-remapped rows remain quarantined and are excluded from backtests. Public forecast claims still need these checks first:
 
 - Confirm each upstream licence and original data source.
 - Check ward/division boundary spans against ONS Geography, Boundary-Line, Democracy Club, and official council notices.
@@ -67,6 +70,19 @@ Every imported row is marked `quarantined`. This is intentional. The upstream da
 - Verify all candidate rosters against statements of persons nominated.
 - Review each area’s population method: AI DOGE ward projection, UKD rebased model, ONS-only projection, or static Census 2021 context.
 - Confirm asylum data geography and route scope before using it in any area-specific feature.
+
+## Review action taxonomy
+
+`data-audit.json` now includes `review_actions` so every review area has a concrete next action:
+
+- `post_boundary_single_contest`: only one post-boundary contest is usable; older same-name/stale-GSS rows stay quarantined.
+- `single_current_contest`: one current-boundary contest exists and needs another contest or reviewed comparator.
+- `limited_temporal_validation`: the backtest passes, but there is only one leave-one-out temporal validation.
+- `vote_share_only_limited`: calibration is useful, but the elected-party signal is not publishable.
+- `failed_winner_signal`: vote-share/competitive-party signal is plausible but winner/elected-party validation fails.
+- `failed_vote_share_calibration`: baseline vote-share error is too high and needs local-method work.
+
+This prevents the review queue from becoming a flat count. A reduced review count should come from more official history, not from loosening publication gates.
 
 ## Current limitations
 

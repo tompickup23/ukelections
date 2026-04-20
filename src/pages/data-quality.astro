@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { ACCURACY_GATES, HISTORY_SCOPES } from "../lib/electoralHistory";
+import { ACCURACY_GATES, HISTORY_SCOPES, REVIEW_ACTIONS } from "../lib/electoralHistory";
 ---
 
 <BaseLayout title="Data Quality" description="Accuracy gates for UK Elections source history, boundary changes, and model inputs.">
@@ -39,6 +39,22 @@ import { ACCURACY_GATES, HISTORY_SCOPES } from "../lib/electoralHistory";
           <span>{index + 1}</span>
           <h2>{scope.label}</h2>
           <p>{scope.geography}. {scope.historyUnit}.</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Review actions</p>
+      <h2>Review means a named data task, not a vague warning.</h2>
+    </div>
+    <div class="workflow" aria-label="Model review action classes">
+      {REVIEW_ACTIONS.map((action, index) => (
+        <article>
+          <span>{index + 1}</span>
+          <h2>{action.label}</h2>
+          <p>{action.treatment}</p>
         </article>
       ))}
     </div>

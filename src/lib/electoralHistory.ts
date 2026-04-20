@@ -12,6 +12,12 @@ export type HistoryScope = {
   requiredSources: string[];
 };
 
+export type ReviewAction = {
+  id: string;
+  label: string;
+  treatment: string;
+};
+
 export const ACCURACY_GATES: AccuracyGate[] = [
   {
     id: "source",
@@ -89,5 +95,38 @@ export const HISTORY_SCOPES: HistoryScope[] = [
     geography: "Multi-member ward boundaries in force for the election",
     historyUnit: "First-preference results and elected candidates by ward",
     requiredSources: ["Official notices", "Official results", "Boundary sources"]
+  }
+];
+
+export const REVIEW_ACTIONS: ReviewAction[] = [
+  {
+    id: "post_boundary_single_contest",
+    label: "Post-boundary single contest",
+    treatment: "Hold for another current-boundary contest or official notional history before publication."
+  },
+  {
+    id: "single_current_contest",
+    label: "Single current contest",
+    treatment: "Keep in review until there is a second contest or a reviewed local comparator."
+  },
+  {
+    id: "limited_temporal_validation",
+    label: "Limited temporal validation",
+    treatment: "Require another leave-one-out validation or a reviewed notional baseline."
+  },
+  {
+    id: "vote_share_only_limited",
+    label: "Vote-share-only pass",
+    treatment: "Treat as useful calibration, not a publishable elected-party signal."
+  },
+  {
+    id: "failed_winner_signal",
+    label: "Winner signal failed",
+    treatment: "Investigate party/candidate dynamics, local swing, and ward history before promotion."
+  },
+  {
+    id: "failed_vote_share_calibration",
+    label: "Vote-share calibration failed",
+    treatment: "Keep blocked from publication until the baseline error is materially improved."
   }
 ];
