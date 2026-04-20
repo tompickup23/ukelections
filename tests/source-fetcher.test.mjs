@@ -23,4 +23,9 @@ describe("source fetcher helpers", () => {
     expect(snapshot.row_count).toBe(1);
     expect(snapshot.quality_status).toBe("quarantined");
   });
+
+  it("infers one row for non-empty binary sources", () => {
+    expect(inferRowCount(Buffer.from("%PDF-1.7"), "application/pdf", "result.pdf")).toBe(1);
+    expect(inferRowCount(Buffer.alloc(0), "application/pdf", "result.pdf")).toBe(0);
+  });
 });

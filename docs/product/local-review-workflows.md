@@ -14,6 +14,23 @@ Outputs:
 - `/tmp/ukelections-local-upstreams/review-workflows.json`
 - `/tmp/ukelections-local-upstreams/review-workflows.md`
 
+Then execute the source-acquisition pass:
+
+```bash
+npm run execute:review-workflows -- \
+  --workflows /tmp/ukelections-local-upstreams/review-workflows.json \
+  --output /tmp/ukelections-local-upstreams/review-workflow-execution.json \
+  --markdown-output /tmp/ukelections-local-upstreams/review-workflow-execution.md \
+  --raw-dir /tmp/ukelections-local-upstreams/raw-review-sources
+```
+
+Execution outputs:
+
+- immutable raw source files under `/tmp/ukelections-local-upstreams/raw-review-sources`;
+- source snapshots with SHA-256 hashes;
+- per-area evidence status showing whether all source targets were fetched;
+- promotion blockers that remain after acquisition.
+
 ## Workflow Classes
 
 | Workflow | Blocks publication because | Required evidence |
@@ -35,3 +52,5 @@ The latest local run has 51 review areas:
 The source targets file at `data/local-review-source-targets.example.json` maps these workflows to official council pages, LGBCE boundary review evidence, ONS electoral code evidence, and verified secondary discovery sources.
 
 Promotion rule: an area must leave the review workflow, pass through `elected_party_hit_rate`, carry `strong` backtest evidence, have `publication_gate: "publishable"`, and have no blockers or readiness tasks. Do not promote an area just because a vote-share-only or one-contest backtest looks plausible.
+
+Fetching every source target is necessary but not sufficient. The fetched evidence still has to be parsed into reviewed official history, boundary-lineage, candidate, or notional rows before the publishable count can legitimately rise.

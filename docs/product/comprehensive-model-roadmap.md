@@ -146,7 +146,7 @@ npm run build:local-audit -- --output /tmp/ukelections-local-upstreams
 
 As of the latest local run, the imported Lancashire-focused bundle has 335 model areas, 334 passed baseline backtests, 1 failed backtest, 284 publishable areas, 51 review areas, and no internal blockers. The 51 review areas are deliberately not public-grade: most need another current-boundary contest, official notional history, or a stronger elected-party signal.
 
-The same command now emits `review-workflows.json` and `review-workflows.md`, which assign every review area to a named workflow, priority, source target set, and promotion gate. The current source target seed file is `data/local-review-source-targets.example.json`.
+The same command now emits `review-workflows.json` and `review-workflows.md`, which assign every review area to a named workflow, priority, source target set, and promotion gate. The current source target seed file is `data/local-review-source-targets.example.json`. `npm run execute:review-workflows` fetches those targets, stores raw source snapshots with hashes, and reports which review areas have all target evidence acquired.
 
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
 
