@@ -80,6 +80,18 @@ npm run draft:structured-review-imports -- \
 
 The structured draft is intentionally not wired into `import:local-upstreams`. It is a review artifact for Blackburn with Darwen and Pendle-style official HTML tables. Before copying any row into an accepted official-history supplement, manually confirm the ward heading, candidate rows, party descriptions, elected flags, rejected/spoilt ballots, source snapshot ID, boundary version, and declared-total arithmetic.
 
+For review areas whose primary route is `modern_gov_html_transcription`, draft rows from cached linked ModernGov result pages:
+
+```bash
+npm run draft:moderngov-review-imports -- \
+  --manifest /tmp/ukelections-local-upstreams/review-import-manifest.json \
+  --linked-raw-dir /tmp/ukelections-audit/raw-review-linked-sources \
+  --output /tmp/ukelections-local-upstreams/moderngov-review-official-history.draft.json \
+  --markdown-output /tmp/ukelections-local-upstreams/moderngov-review-official-history.draft.md
+```
+
+The ModernGov draft requires linked `mgElectionAreaResults.aspx` pages, not just the election-area index. Missing linked pages remain explicit failures in the draft output; use the source URL in the failure row to fetch the exact page before accepting any official-history row.
+
 ## Workflow Classes
 
 | Workflow | Blocks publication because | Required evidence |
