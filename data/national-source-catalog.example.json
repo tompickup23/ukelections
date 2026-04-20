@@ -36,6 +36,42 @@
     "notes": "Run by Democracy Club on behalf of the Electoral Commission; postcode-based and not a substitute for full area marts."
   },
   {
+    "source_id": "nuffield-local-elections-archive",
+    "name": "Nuffield Elections Unit: Local Elections Archive",
+    "url": "https://politicscentre.nuffield.ox.ac.uk/research/nuffield-elections-unit/local-elections-archive/",
+    "coverage": ["local_election_history", "candidate_results", "incumbency", "turnout"],
+    "source_type": "verified_secondary",
+    "licence_review": "required",
+    "notes": "High-value historical local election source with candidate names, party labels, votes, rank, elected status, incumbency, and turnout. Use to fill older contests, then still cross-check promotion rows against official council declarations where available."
+  },
+  {
+    "source_id": "commons-library-local-handbooks",
+    "name": "House of Commons Library: Local Elections Handbooks and datasets",
+    "url": "https://commonslibrary.parliament.uk/2024-local-elections-handbook-and-dataset/",
+    "coverage": ["local_election_history", "local_authority_results", "turnout"],
+    "source_type": "verified_secondary",
+    "licence_review": "required",
+    "notes": "Useful for annual local election result coverage and authority-level validation. Keep ward/division boundary generation explicit before joining to current model areas."
+  },
+  {
+    "source_id": "ons-electoral-geography-names-codes",
+    "name": "ONS names and codes for electoral geographies",
+    "url": "https://www.ons.gov.uk/methodology/geography/geographicalproducts/namescodesandlookups/namesandcodeslistings/namesandcodesforelectoralgeography",
+    "coverage": ["ward_codes", "division_codes", "constituency_codes", "area_names"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Use as the canonical code/name register for electoral geographies and to detect same-name areas that changed code after boundary reviews."
+  },
+  {
+    "source_id": "lgbce-electoral-reviews",
+    "name": "Local Government Boundary Commission for England: electoral reviews",
+    "url": "https://www.lgbce.org.uk/all-reviews",
+    "coverage": ["ward_boundary_reviews", "division_boundary_reviews", "final_recommendations", "electoral_change_orders"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Use final recommendations, orders, and review dates to version English local wards and county divisions before importing older same-name results."
+  },
+  {
     "source_id": "ons-small-area-population-methodology",
     "name": "ONS small-area population estimates methodology",
     "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/methodologies/methodologynoteonproductionofpopulationestimatesbyoutputareaselectoralhealthandothergeographiesenglandandwales",
@@ -70,6 +106,15 @@
     "source_type": "primary",
     "licence_review": "required",
     "notes": "Use route-specific quarter-end stock only; do not merge with arrivals, small boats, or wider migration totals."
+  },
+  {
+    "source_id": "british-polling-council-disclosure",
+    "name": "British Polling Council disclosure rules",
+    "url": "https://www.britishpollingcouncil.org/rules-of-disclosure/",
+    "coverage": ["poll_metadata", "sample_size", "fieldwork_dates", "mode", "geographic_coverage", "uncertainty_disclosure"],
+    "source_type": "methodology",
+    "licence_review": "required",
+    "notes": "Use as the minimum metadata standard for polling inputs and any constituency or seat-level polling model outputs."
   },
   {
     "source_id": "lancashire-2026-sopn-source-manifest",

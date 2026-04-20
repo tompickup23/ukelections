@@ -195,7 +195,7 @@ function classifyReviewArea(row) {
         rationale: "The historical record is usable, but the backtest currently has only one temporal validation."
       };
     }
-    if (["competitive_party_hit_rate", "local_competitive_party_hit_rate", "high_calibration_vote_share_only", "cold_start_vote_share_only"].includes(passReason)) {
+    if (["competitive_party_hit_rate", "local_competitive_party_hit_rate", "local_vote_share_only", "high_calibration_vote_share_only", "cold_start_vote_share_only"].includes(passReason)) {
       return {
         ...base,
         action_code: "vote_share_only_limited",

@@ -28,6 +28,24 @@ Use this before promoting any source into a public UK Elections mart. It applies
 9. Derived demographic, deprivation, fiscal, or polling fields have transformation notes.
 10. Known gaps and manual edits are listed in `review_notes`.
 
+## Priority Underlying Data
+
+Use these source classes to turn review-gated areas into publication-grade areas. They should be acquired before changing model thresholds.
+
+1. Official council declarations and result pages. These are the first source for vote totals, elected flags, turnout, and candidate names.
+2. Local Elections Archive Project / Nuffield local election archive. Use this as a verified secondary history source, especially for older contests and candidate-level rows.
+3. Democracy Club candidate and election identifiers. Use for contest discovery, ballots, candidates, parties, and stable external identifiers; do not treat candidate feeds as a substitute for official results.
+4. ONS Open Geography / Boundary-Line and LGBCE final recommendations. Use for current ward codes, boundary-review effective dates, and identifying when older same-name rows must stay quarantined.
+5. Official or academic notional results after boundary reviews. Use only where the notional method and boundary basis are documented; otherwise mark the area as post-boundary single-contest.
+6. House of Commons Library local-election handbooks and datasets. Use as a secondary authority-level and ward/division history cross-check where official council pages have moved or disappeared.
+7. British Polling Council disclosure records. Use as the minimum metadata standard for poll inputs before polling aggregates can feed Westminster, Scottish, Welsh, or local-context models.
+
+Current highest-value data gaps:
+
+- Ribble Valley East Whalley, Read and Simonstone: needs official or notional current-boundary history because the 2023 Green gain is not explained by the current baseline.
+- Fylde, Rossendale, Lancaster, and West Lancashire new-ward areas: need either another post-boundary contest or official notional history to promote beyond review.
+- County division review areas: need county-division-specific historical evidence, not borough ward proxy history.
+
 ## AI DOGE And UKD Review
 
 AI DOGE Burnley and Lancashire modelling is useful as the first internal pilot because it already combines ward-level election history, candidate availability, incumbency, UKD demographics, deprivation, and polling assumptions. Do not publish it directly until these points are resolved:

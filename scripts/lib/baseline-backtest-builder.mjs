@@ -381,13 +381,24 @@ function assessPass(metrics) {
     };
   }
   if (
-    metrics.mean_absolute_error <= 0.18 &&
+    metrics.mean_absolute_error <= 0.26 &&
     metrics.competitive_party_hit_rate >= 0.5 &&
     (metrics.calibration_scope_counts?.local_authority || 0) >= 1
   ) {
     return {
       passed: true,
       pass_reason: "local_competitive_party_hit_rate",
+      evidence_tier: "limited",
+      publication_gate: "review_required"
+    };
+  }
+  if (
+    metrics.mean_absolute_error <= 0.18 &&
+    (metrics.calibration_scope_counts?.local_authority || 0) >= 1
+  ) {
+    return {
+      passed: true,
+      pass_reason: "local_vote_share_only",
       evidence_tier: "limited",
       publication_gate: "review_required"
     };

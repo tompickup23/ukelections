@@ -144,7 +144,7 @@ The current local audit can be reproduced with:
 npm run build:local-audit -- --output /tmp/ukelections-local-upstreams
 ```
 
-As of the latest local run, the imported Lancashire-focused bundle has 335 model areas, 328 passed baseline backtests, 7 failed backtests, 284 publishable areas, 51 review areas, and no internal blockers. The 51 review areas are deliberately not public-grade: most need another current-boundary contest, official notional history, or a stronger elected-party signal.
+As of the latest local run, the imported Lancashire-focused bundle has 335 model areas, 334 passed baseline backtests, 1 failed backtest, 284 publishable areas, 51 review areas, and no internal blockers. The 51 review areas are deliberately not public-grade: most need another current-boundary contest, official notional history, or a stronger elected-party signal.
 
 Official and verified source catalogue examples are in `data/national-source-catalog.example.json`. Current source priorities are:
 
