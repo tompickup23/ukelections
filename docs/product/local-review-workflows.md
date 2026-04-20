@@ -31,6 +31,26 @@ Execution outputs:
 - per-area evidence status showing whether all source targets were fetched;
 - promotion blockers that remain after acquisition.
 
+Then verify the fetched and linked evidence against every review area:
+
+```bash
+npm run verify:review-workflows -- \
+  --workflows /tmp/ukelections-local-upstreams/review-workflows.json \
+  --execution /tmp/ukelections-local-upstreams/review-workflow-execution.json \
+  --output /tmp/ukelections-local-upstreams/review-workflow-evidence.json \
+  --markdown-output /tmp/ukelections-local-upstreams/review-workflow-evidence.md \
+  --linked-raw-dir /tmp/ukelections-local-upstreams/raw-review-linked-sources \
+  --crawl-linked-sources \
+  --max-linked-fetches 150
+```
+
+Verification outputs:
+
+- linked official result pages discovered from council index pages;
+- text extraction metadata for HTML and PDF sources;
+- per-area confirmation that the area name appears in official or linked evidence;
+- remaining blockers separating source discovery from accepted model-input rows.
+
 ## Workflow Classes
 
 | Workflow | Blocks publication because | Required evidence |

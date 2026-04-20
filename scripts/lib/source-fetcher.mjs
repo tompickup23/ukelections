@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { parseCsv } from "./csv-parser.mjs";
 
@@ -53,18 +54,7 @@ export function buildSourceSnapshot({ sourceName, sourceUrl, licence, rawFilePat
 }
 
 export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outputPath, retrievedAt, signal }) {
-  const response = await fetch(sourceUrl, {
-    signal,
-    headers: {
-      "user-agent": "UK Elections source snapshot fetcher"
-    }
-  });
-  if (!response.ok) {
-    throw new Error(`Fetch failed: ${response.status} ${response.statusText}`);
-  }
-
-  const contentType = response.headers.get("content-type") || "";
-  const binary = Buffer.from(await response.arrayBuffer());
+  const { binary, contentType } = await fetchSourceBytes({ sourceUrl, signal });
   const isText = /text|json|csv|xml|html|javascript|x-www-form-urlencoded/i.test(contentType);
   const content = isText ? binary.toString("utf8") : binary;
   mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -79,4 +69,47 @@ export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outp
     contentType,
     retrievedAt
   });
+}
+
+async function fetchSourceBytes({ sourceUrl, signal }) {
+  try {
+    const response = await fetch(sourceUrl, {
+      signal,
+      headers: {
+        "user-agent": "UK Elections source snapshot fetcher"
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`Fetch failed: ${response.status} ${response.statusText}`);
+    }
+
+    return {
+      contentType: response.headers.get("content-type") || "",
+      binary: Buffer.from(await response.arrayBuffer())
+    };
+  } catch (error) {
+    if (signal?.aborted) throw error;
+    const curl = spawnSync("curl", [
+      "--location",
+      "--fail",
+      "--silent",
+      "--show-error",
+      "--max-time",
+      "60",
+      "--user-agent",
+      "UK Elections source snapshot fetcher",
+      sourceUrl
+    ], {
+      encoding: "buffer",
+      maxBuffer: 50 * 1024 * 1024
+    });
+    if (curl.status !== 0) {
+      const stderr = curl.stderr?.toString("utf8").trim();
+      throw new Error(`${error.message}; curl fallback failed${stderr ? `: ${stderr}` : ""}`);
+    }
+    return {
+      contentType: "",
+      binary: curl.stdout
+    };
+  }
 }

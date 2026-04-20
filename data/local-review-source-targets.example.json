@@ -2,11 +2,11 @@
   {
     "target_id": "ribble-valley-2023-borough-results",
     "council_name": "Ribble Valley",
-    "source_name": "Ribble Valley Borough Elections 2023 results",
-    "url": "https://www.ribblevalley.gov.uk/borough-elections/borough-elections-2023-results/7",
-    "source_classes": ["official_current_boundary_results", "official_result_declarations"],
-    "applies_to_workflow_codes": ["investigate_vote_share_failure", "repair_winner_signal", "extend_temporal_validation"],
-    "notes": "Official ward result pages include East Whalley, Read and Simonstone and the other 2023 Ribble Valley wards; use to verify votes, elected flags, and party labels before adding notional or predecessor evidence."
+    "source_name": "Ribble Valley election results index",
+    "url": "https://www.ribblevalley.gov.uk/elections-voting/election-results",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
+    "applies_to_workflow_codes": ["investigate_vote_share_failure", "repair_winner_signal", "extend_temporal_validation", "wait_or_add_second_contest"],
+    "notes": "Official election result index covers the 2023 borough result pages, 2019 borough downloads, and uncontested parish/ward notices needed for Ribble Valley review areas such as Bowland and Clayton Le Dale and Salesbury."
   },
   {
     "target_id": "fylde-2023-borough-results",
@@ -47,20 +47,20 @@
   {
     "target_id": "pendle-election-results",
     "council_name": "Pendle",
-    "source_name": "Pendle election results",
-    "url": "https://www.pendle.gov.uk/electionresults",
+    "source_name": "Pendle 2024 borough election results",
+    "url": "https://www.pendle.gov.uk/directory_record/679417/2024_-_borough_election_2_may",
     "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
     "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal"],
-    "notes": "Official Pendle result index for Fence and Higham and Waterside and Horsfield checks."
+    "notes": "Official 2024 borough result page includes Fence and Higham and Waterside and Horsfield rows for Pendle review checks."
   },
   {
     "target_id": "hyndburn-election-results",
     "council_name": "Hyndburn",
-    "source_name": "Hyndburn Borough Council election results 2024 declaration PDF",
-    "url": "https://www.hyndburnbc.gov.uk/download/election-results/?wpdmdl=5752&ind=1750243089085&refresh=441f0a5d&filename=May-2024-HBC-Declaration-of-results.pdf",
+    "source_name": "Hyndburn 2023 declaration of persons elected PDF",
+    "url": "https://democracy.hyndburnbc.gov.uk/documents/s17406/Declaration%20of%20Returning%20Offcier%20-%20Main%20Report.pdf",
     "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
     "applies_to_workflow_codes": ["repair_winner_signal"],
-    "notes": "Official result downloads should be used to verify Huncoat elected-party misses before feature changes."
+    "notes": "Official Hyndburn democracy PDF confirms the 2023 elected candidates and wards, including Huncoat; the full 2023 result PDF is image-only and needs OCR before row-level import."
   },
   {
     "target_id": "lancashire-2025-results-per-division",
@@ -72,13 +72,13 @@
     "notes": "Official county division result PDF for Burnley Central West, Clayton with Whittle, Preston South West, and Rossendale West winner-signal review."
   },
   {
-    "target_id": "blackburn-democracy-club-fallback",
+    "target_id": "blackburn-2024-borough-results",
     "council_name": "Blackburn with Darwen",
-    "source_name": "Democracy Club election data and identifiers",
-    "url": "https://democracyclub.org.uk/data_apis/data/",
-    "source_classes": ["candidate_rosters", "election_identifiers", "verified_secondary_results"],
+    "source_name": "Blackburn with Darwen borough election results 2 May 2024",
+    "url": "https://blackburn.gov.uk/elections-and-voting/borough-election-results-thursday-2-may",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "candidate_rosters"],
     "applies_to_workflow_codes": ["repair_winner_signal"],
-    "notes": "Use as fallback discovery for Darwen East candidates and identifiers until an official Blackburn with Darwen result URL is attached."
+    "notes": "Official Blackburn with Darwen 2024 borough result page includes Darwen East candidate, vote, and elected-flag rows."
   },
   {
     "target_id": "lgbce-all-reviews",
