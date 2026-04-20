@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { parseCsv } from "./csv-parser.mjs";
@@ -37,7 +37,7 @@ export function inferRowCount(content, contentType = "", filePath = "") {
   return text.trim().length ? 1 : 0;
 }
 
-export function buildSourceSnapshot({ sourceName, sourceUrl, licence, rawFilePath, content, contentType = "", retrievedAt }) {
+export function buildSourceSnapshot({ sourceName, sourceUrl, licence, rawFilePath, content, contentType = "", retrievedAt, reviewNotes }) {
   const sha256 = createHash("sha256").update(content).digest("hex");
   return {
     snapshot_id: `${sourceName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${sha256.slice(0, 12)}`,
@@ -49,12 +49,12 @@ export function buildSourceSnapshot({ sourceName, sourceUrl, licence, rawFilePat
     sha256,
     row_count: inferRowCount(content, contentType, rawFilePath),
     quality_status: "quarantined",
-    review_notes: "Fetched automatically. Review licence, row semantics, and transformation notes before accepting."
+    review_notes: reviewNotes || "Fetched automatically. Review licence, row semantics, and transformation notes before accepting."
   };
 }
 
 export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outputPath, retrievedAt, signal }) {
-  const { binary, contentType } = await fetchSourceBytes({ sourceUrl, signal });
+  const { binary, contentType, cachedRetrievedAt } = await fetchSourceBytes({ sourceUrl, outputPath, signal });
   const isText = /text|json|csv|xml|html|javascript|x-www-form-urlencoded/i.test(contentType);
   const content = isText ? binary.toString("utf8") : binary;
   mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -67,11 +67,14 @@ export async function fetchSourceSnapshot({ sourceName, sourceUrl, licence, outp
     rawFilePath: outputPath,
     content,
     contentType,
-    retrievedAt
+    retrievedAt: retrievedAt || cachedRetrievedAt,
+    reviewNotes: cachedRetrievedAt
+      ? "Source was unavailable during this run; reused an existing raw snapshot from the local audit directory. Review source freshness before accepting."
+      : undefined
   });
 }
 
-async function fetchSourceBytes({ sourceUrl, signal }) {
+async function fetchSourceBytes({ sourceUrl, outputPath, signal }) {
   try {
     const response = await fetch(sourceUrl, {
       signal,
@@ -88,6 +91,13 @@ async function fetchSourceBytes({ sourceUrl, signal }) {
       binary: Buffer.from(await response.arrayBuffer())
     };
   } catch (error) {
+    if (signal?.aborted && outputPath && existsSync(outputPath)) {
+      return {
+        contentType: "",
+        binary: readFileSync(outputPath),
+        cachedRetrievedAt: statSync(outputPath).mtime.toISOString()
+      };
+    }
     if (signal?.aborted) throw error;
     const curl = spawnSync("curl", [
       "--location",
@@ -104,6 +114,13 @@ async function fetchSourceBytes({ sourceUrl, signal }) {
       maxBuffer: 50 * 1024 * 1024
     });
     if (curl.status !== 0) {
+      if (outputPath && existsSync(outputPath)) {
+        return {
+          contentType: "",
+          binary: readFileSync(outputPath),
+          cachedRetrievedAt: statSync(outputPath).mtime.toISOString()
+        };
+      }
       const stderr = curl.stderr?.toString("utf8").trim();
       throw new Error(`${error.message}; curl fallback failed${stderr ? `: ${stderr}` : ""}`);
     }

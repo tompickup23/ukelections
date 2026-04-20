@@ -39,9 +39,7 @@ npm run verify:review-workflows -- \
   --execution /tmp/ukelections-local-upstreams/review-workflow-execution.json \
   --output /tmp/ukelections-local-upstreams/review-workflow-evidence.json \
   --markdown-output /tmp/ukelections-local-upstreams/review-workflow-evidence.md \
-  --linked-raw-dir /tmp/ukelections-local-upstreams/raw-review-linked-sources \
-  --crawl-linked-sources \
-  --max-linked-fetches 150
+  --linked-raw-dir /tmp/ukelections-local-upstreams/raw-review-linked-sources
 ```
 
 Verification outputs:
@@ -50,6 +48,23 @@ Verification outputs:
 - text extraction metadata for HTML and PDF sources;
 - per-area confirmation that the area name appears in official or linked evidence;
 - remaining blockers separating source discovery from accepted model-input rows.
+
+Use `--crawl-linked-sources` only when a source target is an index page that cannot be replaced with a deterministic official result URL. Prefer direct official declaration, detailed ward-results, or PDF URLs in `data/local-review-source-targets.example.json` because generic council crawls can be slow and can pick up non-result pages.
+
+Then turn the verified evidence into a row-level import manifest:
+
+```bash
+npm run build:review-import-manifest -- \
+  --evidence /tmp/ukelections-local-upstreams/review-workflow-evidence.json \
+  --output /tmp/ukelections-local-upstreams/review-import-manifest.json \
+  --markdown-output /tmp/ukelections-local-upstreams/review-import-manifest.md
+```
+
+Import manifest outputs:
+
+- the primary source and transformation route for every review area;
+- acceptance checks that must pass before any official history rows are accepted;
+- workflow-specific artifacts still required for promotion, such as notional boundary history, candidate/incumbency features, or a second current-boundary contest.
 
 ## Workflow Classes
 

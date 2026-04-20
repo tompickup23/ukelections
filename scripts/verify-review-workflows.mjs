@@ -113,6 +113,29 @@ function hasAreaTerm(link, areas) {
   });
 }
 
+function linkPriority(link, areas) {
+  const haystack = normaliseForEvidenceSearch(`${link.text} ${link.title} ${link.url}`);
+  const pathname = (() => {
+    try {
+      return new URL(link.url).pathname;
+    } catch {
+      return "";
+    }
+  })();
+  if (hasAreaTerm(link, areas)) return 0;
+  if (/mgElectionAreaResults/i.test(pathname)) return 1;
+  if (/mgElectionElectionAreaResults/i.test(pathname)) return 2;
+  if (/mgElectionResults/i.test(pathname)) return 3;
+  if (/mgManageElectionResults/i.test(pathname)) return 4;
+  if (/\bdeclaration|result|ward|borough election|local election/.test(haystack)) return 5;
+  return 9;
+}
+
+function isNonResultUtilityLink(link) {
+  const url = link.url || "";
+  return /mgFindMember|mgMember|mgCalendar|mgListCommittees|mgPlansHome|mgEPetition|mgRegister|mgParishCouncilDetails|ieDoc|ecCatDisplay/i.test(url);
+}
+
 function shouldFollowLink({ link, target, areas, depth }) {
   let parsed;
   try {
@@ -120,6 +143,7 @@ function shouldFollowLink({ link, target, areas, depth }) {
   } catch {
     return false;
   }
+  if (isNonResultUtilityLink(link)) return false;
   const urlText = normaliseForEvidenceSearch(link.url);
   const linkText = normaliseForEvidenceSearch(`${link.text} ${link.title}`);
   const sourceUrl = target?.url ? new URL(target.url) : null;
@@ -129,9 +153,10 @@ function shouldFollowLink({ link, target, areas, depth }) {
   if (!hasElectionTerm) return false;
 
   if (target?.target_id === "west-lancashire-election-results-archive") {
-    return parsed.hostname === "democracy.westlancs.gov.uk"
-      || parsed.pathname.includes("mgElection")
-      || parsed.pathname.includes("mgManageElectionResults");
+    return parsed.hostname === "democracy.westlancs.gov.uk" && (
+      parsed.pathname.includes("mgElection")
+      || parsed.pathname.includes("mgManageElectionResults")
+    );
   }
 
   if (target?.target_id === "rossendale-2024-borough-results") {
@@ -234,13 +259,14 @@ async function crawlLinkedSources({ workflows, execution, args }) {
     if (!html) continue;
     for (const link of extractLinks(html, snapshot.source_url)) {
       if (shouldFollowLink({ link, target, areas: areaMap.get(snapshot.target_id) || [], depth: 0 })) {
-        queue.push({ link, target, depth: 1 });
+        queue.push({ link, target, depth: 1, priority: linkPriority(link, areaMap.get(snapshot.target_id) || []) });
       }
     }
   }
 
   let index = 1;
   while (queue.length > 0 && sourceRecords.length < args.maxLinkedFetches) {
+    queue.sort((left, right) => left.priority - right.priority);
     const item = queue.shift();
     const normalizedUrl = item.link.url.replace(/#.*$/, "");
     if (seen.has(normalizedUrl)) continue;
@@ -275,7 +301,12 @@ async function crawlLinkedSources({ workflows, execution, args }) {
         areas: areaMap.get(item.target.target_id) || [],
         depth: item.depth
       })) {
-        queue.push({ link, target: item.target, depth: item.depth + 1 });
+        queue.push({
+          link,
+          target: item.target,
+          depth: item.depth + 1,
+          priority: linkPriority(link, areaMap.get(item.target.target_id) || []) + item.depth
+        });
       }
     }
   }

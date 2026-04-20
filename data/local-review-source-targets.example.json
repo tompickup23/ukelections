@@ -21,7 +21,7 @@
     "target_id": "rossendale-2024-borough-results",
     "council_name": "Rossendale",
     "source_name": "Rossendale Borough Council election results 2 May 2024",
-    "url": "https://www.rossendale.gov.uk/elections-voting/election-results/3",
+    "url": "https://www.rossendale.gov.uk/elections-voting/election-results/4",
     "source_classes": ["official_current_boundary_results", "official_result_declarations"],
     "applies_to_workflow_codes": ["build_boundary_notional_history", "wait_or_add_second_contest", "repair_winner_signal"],
     "notes": "Official declaration page covers the post-boundary Rossendale wards and should be paired with LGBCE boundary-review evidence before older rows are reinstated."
@@ -29,11 +29,11 @@
   {
     "target_id": "west-lancashire-election-results-archive",
     "council_name": "West Lancashire",
-    "source_name": "West Lancashire election results archive",
-    "url": "https://www.westlancs.gov.uk/about-the-council/elections-and-voting/election-results.aspx",
+    "source_name": "West Lancashire 2024 detailed ward election results",
+    "url": "https://democracy.westlancs.gov.uk/mgElectionElectionAreaResults.aspx?EID=8&RPID=9270758",
     "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
     "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal"],
-    "notes": "Use the official archive to verify Burscough, Ormskirk, Rural, Skelmersdale, and Tarleton rows before promoting the 2023 boundary generation."
+    "notes": "Official ModernGov detailed ward-results page for the 2024 West Lancashire local election; use to verify Burscough, Ormskirk, Rural, Skelmersdale, and Tarleton current-boundary rows before promoting the 2023 boundary generation."
   },
   {
     "target_id": "lancaster-2023-ward-results",
@@ -52,6 +52,15 @@
     "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
     "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal"],
     "notes": "Official 2024 borough result page includes Fence and Higham and Waterside and Horsfield rows for Pendle review checks."
+  },
+  {
+    "target_id": "ribble-valley-2019-borough-results",
+    "council_name": "Ribble Valley",
+    "source_name": "Ribble Valley borough election results 2019",
+    "url": "https://www.ribblevalley.gov.uk/elections-voting/borough-elections-2019-results/11",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
+    "applies_to_workflow_codes": ["wait_or_add_second_contest"],
+    "notes": "Official 2019 borough result page includes Clayton-le-Dale and Salesbury and related Ribble Valley ward result links for second-contest review."
   },
   {
     "target_id": "hyndburn-election-results",
