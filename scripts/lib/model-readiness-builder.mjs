@@ -304,6 +304,7 @@ export function buildModelReadinessAreas({
       methodology.backtest_status = backtest.status;
       methodology.backtest_id = backtest.backtest_id;
       methodology.backtest_metrics = backtest.metrics;
+      methodology.minimum_history_contests = backtest.required_history_records ?? methodology.minimum_history_contests;
     }
     const gates = {
       boundary_versions: coverage.boundary_versions > 0

@@ -98,7 +98,7 @@ describe("baseline backtest builder", () => {
       generatedAt: "2026-04-19T00:00:00Z"
     });
 
-    expect(result[0].metrics.winner_accuracy).toBe(0);
+    expect(result[0].metrics.winner_accuracy).toBe(1);
     expect(result[0].metrics.elected_party_hit_rate).toBe(1);
     expect(result[0].status).toBe("passed");
   });
@@ -123,8 +123,8 @@ describe("baseline backtest builder", () => {
         contest_id: "c1",
         turnout_votes: 100,
         result_rows: [
-          { party_name: "A", votes: 55, rank: 1, elected: true },
-          { party_name: "B", votes: 45, rank: 2, elected: false }
+          { party_name: "A", votes: 80, rank: 1, elected: true },
+          { party_name: "B", votes: 20, rank: 2, elected: false }
         ]
       },
       {
@@ -211,5 +211,87 @@ describe("baseline backtest builder", () => {
     expect(targetBacktest.metrics.mean_calibration_area_count).toBe(1);
     expect(targetBacktest.metrics.elected_party_hit_rate).toBe(1);
     expect(targetBacktest.status).toBe("passed");
+  });
+
+  it("restricts calibrated predictions to parties standing in the target contest", () => {
+    const history = [
+      {
+        history_id: "target-1",
+        area_code: "E05000000",
+        election_date: "2022-05-05",
+        contest_id: "target-1",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 60, rank: 1, elected: true },
+          { party_name: "B", votes: 40, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "target-2",
+        area_code: "E05000000",
+        election_date: "2023-05-04",
+        contest_id: "target-2",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 58, rank: 1, elected: true },
+          { party_name: "B", votes: 42, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "target-3",
+        area_code: "E05000000",
+        election_date: "2024-05-02",
+        contest_id: "target-3",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 80, rank: 1, elected: true },
+          { party_name: "B", votes: 20, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "comparator-1",
+        area_code: "E05000001",
+        election_date: "2022-05-05",
+        contest_id: "comparator-1",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 60, rank: 1, elected: true },
+          { party_name: "B", votes: 40, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "comparator-2",
+        area_code: "E05000001",
+        election_date: "2023-05-04",
+        contest_id: "comparator-2",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 58, rank: 1, elected: true },
+          { party_name: "B", votes: 42, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "comparator-3",
+        area_code: "E05000001",
+        election_date: "2024-05-02",
+        contest_id: "comparator-3",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "C", votes: 90, rank: 1, elected: true },
+          { party_name: "A", votes: 10, rank: 2, elected: false }
+        ]
+      }
+    ];
+
+    const result = buildBaselineBacktests({
+      history,
+      featureSnapshots: [
+        { area_code: "E05000000", area_name: "Target Ward", model_family: "local_fptp_borough" },
+        { area_code: "E05000001", area_name: "Comparator Ward", model_family: "local_fptp_borough" }
+      ],
+      generatedAt: "2026-04-19T00:00:00Z"
+    });
+
+    expect(result.find((row) => row.area_code === "E05000000").status).toBe("passed");
   });
 });

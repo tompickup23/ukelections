@@ -83,6 +83,37 @@ function codeFromNameMap(map, name) {
   return map?.get(normaliseName(name)) || map?.get(compactName(name)) || null;
 }
 
+function resolveAreaCode(ward, areaName, councilId, areaCodeByName) {
+  const mappedCode = codeFromNameMap(areaCodeByName, areaName);
+  const sameAreaCodeFamily = mappedCode && ward.gss_code && mappedCode.slice(0, 3) === ward.gss_code.slice(0, 3);
+  if (mappedCode && ward.gss_code && mappedCode !== ward.gss_code && sameAreaCodeFamily) {
+    return {
+      areaCode: mappedCode,
+      upstreamAreaCode: ward.gss_code,
+      areaCodeMethod: "name_matched_current_boundary_code"
+    };
+  }
+  if (ward.gss_code) {
+    return {
+      areaCode: ward.gss_code,
+      upstreamAreaCode: ward.gss_code,
+      areaCodeMethod: "upstream_gss_code"
+    };
+  }
+  if (mappedCode) {
+    return {
+      areaCode: mappedCode,
+      upstreamAreaCode: null,
+      areaCodeMethod: "name_matched_boundary_code"
+    };
+  }
+  return {
+    areaCode: `local:${councilId}:${slug(areaName)}`,
+    upstreamAreaCode: null,
+    areaCodeMethod: "local_slug"
+  };
+}
+
 function mapElectionType(type, councilTier) {
   const text = String(type || "").toLowerCase();
   if (text.includes("parliament") || text.includes("westminster")) return "westminster";
@@ -328,7 +359,7 @@ export function importAidogeElectionData({
 
   for (const [wardName, ward] of wardEntries(electionData.wards)) {
     const areaName = ward.name || wardName;
-    const areaCode = ward.gss_code || codeFromNameMap(areaCodeByName, areaName) || `local:${councilId}:${slug(areaName)}`;
+    const { areaCode, upstreamAreaCode, areaCodeMethod } = resolveAreaCode(ward, areaName, councilId, areaCodeByName);
     const validFrom = earliestHistoryDate(ward);
     const boundaryVersionId = `ai-doge.${slug(councilId)}.${slug(areaCode)}.${validFrom}`;
     const electionType = mapElectionType(meta.next_election?.type || ward.history?.[0]?.type, councilTier);
@@ -351,7 +382,11 @@ export function importAidogeElectionData({
         council_id: councilId,
         council_name: meta.council_name || councilId,
         model_family: modelFamily,
-        boundary_note: "Current upstream ward span. Historical boundary-change audit is still required before public claims."
+        upstream_area_code: upstreamAreaCode,
+        area_code_method: areaCodeMethod,
+        boundary_note: areaCodeMethod === "name_matched_current_boundary_code"
+          ? "AI DOGE supplied a different GSS code for this named area; importer uses the ONS boundary-code match and preserves the upstream code for lineage review."
+          : "Current upstream ward span. Historical boundary-change audit is still required before public claims."
       }
     };
     boundaries.push(boundary);
@@ -380,6 +415,10 @@ export function importAidogeElectionData({
         turnout: turnoutShare(contest.turnout),
         seats_contested: integerOrUndefined(contest.seats_contested),
         review_status: "quarantined",
+        upstream: {
+          source_area_code: upstreamAreaCode,
+          area_code_method: areaCodeMethod
+        },
         result_rows: resultRows
       });
     });
@@ -515,7 +554,7 @@ export function buildAidogeFeatureSnapshots({
 
   return wardEntries(electionData.wards).map(([wardName, ward]) => {
     const areaName = ward.name || wardName;
-    const areaCode = ward.gss_code || codeFromNameMap(areaCodeByName, areaName) || `local:${councilId}:${slug(areaName)}`;
+    const { areaCode } = resolveAreaCode(ward, areaName, councilId, areaCodeByName);
     const boundary = boundaryByAreaCode.get(areaCode);
     const directProjection = wardProjectionByCode[areaCode] || wardProjectionByCode[areaName];
     const directDemographics = demographicWardByCode.get(areaCode);

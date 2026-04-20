@@ -148,8 +148,10 @@ function buildAreaCodeByName({ boundaryData, demographicsData, projectionData })
   const map = new Map();
   const add = (name, code) => {
     if (name && /^[EWSN]\d{8}$/.test(String(code))) {
-      map.set(normaliseAreaName(name), code);
-      map.set(compactAreaName(name), code);
+      const normalised = normaliseAreaName(name);
+      const compact = compactAreaName(name);
+      if (!map.has(normalised)) map.set(normalised, code);
+      if (!map.has(compact)) map.set(compact, code);
     }
   };
 

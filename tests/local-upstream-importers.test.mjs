@@ -104,6 +104,33 @@ describe("local upstream importers", () => {
     expect(imported.boundaries[0].area_code).toBe("E05012011");
   });
 
+  it("prefers current boundary-code name matches over stale upstream GSS codes", () => {
+    const imported = importAidogeElectionData({
+      electionData: {
+        ...electionData,
+        wards: {
+          "Carnforth and Millhead Ward": {
+            ...electionData.wards["Bank Hall"],
+            name: "Carnforth and Millhead Ward",
+            gss_code: "E05005225"
+          }
+        }
+      },
+      sourceSnapshot,
+      areaCodeByName: new Map([["carnforth and millhead", "E05014889"]])
+    });
+
+    expect(imported.boundaries[0].area_code).toBe("E05014889");
+    expect(imported.boundaries[0].upstream).toMatchObject({
+      upstream_area_code: "E05005225",
+      area_code_method: "name_matched_current_boundary_code"
+    });
+    expect(imported.history[0].upstream).toMatchObject({
+      source_area_code: "E05005225",
+      area_code_method: "name_matched_current_boundary_code"
+    });
+  });
+
 
   it("imports AI DOGE polling as a validated aggregate", () => {
     const aggregate = importAidogePollAggregate({
