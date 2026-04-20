@@ -88,7 +88,12 @@ describe("local data auditor", () => {
           backtest_evidence_tier: "weak"
         },
         readiness_tasks: ["Backtest pass is limited and needs manual review before publication."],
-        blockers: []
+        blockers: [],
+        coverage: {
+          history_records: 1,
+          raw_history_records: 1,
+          quarantined_history_records: 0
+        }
       }],
       generatedAt: "2026-04-20T00:00:00Z"
     });
@@ -97,6 +102,9 @@ describe("local data auditor", () => {
     expect(audit.sources.by_family.dcleapil_leap_democracy_club).toBe(1);
     expect(audit.backtests.review_required_passes).toBe(1);
     expect(audit.readiness.limited_backtest_areas).toBe(1);
+    expect(audit.review_actions.total).toBe(1);
+    expect(audit.review_actions.by_action_code.vote_share_only_limited).toBe(1);
+    expect(audit.review_actions.areas[0].action).toContain("winner/elected-party calibration");
     expect(audit.issues.map((row) => row.code)).toContain("history_source_area_code_mismatch");
     expect(audit.issues.map((row) => row.code)).toContain("backtest_review_required_pass");
     expect(audit.issues.map((row) => row.code)).toContain("active_contest_without_roster");

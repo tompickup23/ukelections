@@ -380,6 +380,18 @@ function assessPass(metrics) {
       publication_gate: "review_required"
     };
   }
+  if (
+    metrics.mean_absolute_error <= 0.18 &&
+    metrics.competitive_party_hit_rate >= 0.5 &&
+    (metrics.calibration_scope_counts?.local_authority || 0) >= 1
+  ) {
+    return {
+      passed: true,
+      pass_reason: "local_competitive_party_hit_rate",
+      evidence_tier: "limited",
+      publication_gate: "review_required"
+    };
+  }
   return {
     passed: false,
     pass_reason: "below_threshold",

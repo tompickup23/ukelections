@@ -114,6 +114,105 @@ function compactReadiness(row) {
   };
 }
 
+function classifyReviewArea(row) {
+  const metrics = row.methodology?.backtest_metrics || {};
+  const backtestGate = row.source_gates?.backtest || {};
+  const historyRecords = row.coverage?.history_records ?? 0;
+  const rawHistoryRecords = row.coverage?.raw_history_records ?? historyRecords;
+  const quarantinedHistoryRecords = row.coverage?.quarantined_history_records ?? Math.max(0, rawHistoryRecords - historyRecords);
+  const passReason = row.methodology?.backtest_pass_reason || backtestGate.pass_reason;
+  const backtestStatus = row.methodology?.backtest_status;
+  const electedHitRate = metrics.elected_party_hit_rate ?? null;
+  const competitiveHitRate = metrics.competitive_party_hit_rate ?? null;
+  const mae = metrics.mean_absolute_error ?? null;
+
+  const base = {
+    area_code: row.area_code,
+    area_name: row.area_name,
+    model_family: row.model_family,
+    publication_status: row.publication_status,
+    history_records: historyRecords,
+    raw_history_records: rawHistoryRecords,
+    quarantined_history_records: quarantinedHistoryRecords,
+    pass_reason: passReason,
+    evidence_tier: row.methodology?.backtest_evidence_tier || backtestGate.evidence_tier,
+    backtest_status: backtestStatus,
+    metrics: {
+      mean_absolute_error: mae,
+      elected_party_hit_rate: electedHitRate,
+      competitive_party_hit_rate: competitiveHitRate,
+      calibration_scope_counts: metrics.calibration_scope_counts
+    }
+  };
+
+  if (backtestStatus && backtestStatus !== "passed") {
+    if (electedHitRate !== null && electedHitRate < 0.5 && competitiveHitRate !== null && competitiveHitRate >= 0.5 && mae !== null && mae <= 0.26) {
+      return {
+        ...base,
+        action_code: "failed_winner_signal",
+        action: "Keep in review until the local seat/winner signal is improved or another current-boundary contest validates it.",
+        rationale: "Vote-share or competitive-party calibration is acceptable, but the elected-party signal fails the gate."
+      };
+    }
+    if (mae !== null && mae > 0.26) {
+      return {
+        ...base,
+        action_code: "failed_vote_share_calibration",
+        action: "Keep in review and investigate local swing, boundary continuity, and candidate/party composition before publishing.",
+        rationale: "Mean absolute error is above the calibrated local-election threshold."
+      };
+    }
+    return {
+      ...base,
+      action_code: "failed_backtest_other",
+      action: "Keep in review until the backtest has enough validated contests and clears the winner/vote-share gates.",
+      rationale: "Backtest status is not passed and does not fit a narrower failure class."
+    };
+  }
+
+  if (backtestGate.publication_gate === "review_required") {
+    if (passReason === "single_contest_elected_party_hit" && historyRecords === 1 && quarantinedHistoryRecords > 0) {
+      return {
+        ...base,
+        action_code: "post_boundary_single_contest",
+        action: "Keep in review until an official notional current-boundary history estimate or another post-boundary contest is available.",
+        rationale: "Only one usable current-boundary contest exists; older same-name or stale-GSS rows are quarantined."
+      };
+    }
+    if (passReason === "single_contest_elected_party_hit" && historyRecords === 1) {
+      return {
+        ...base,
+        action_code: "single_current_contest",
+        action: "Keep in review until a second contest or official current-boundary comparator is available.",
+        rationale: "The backtest hits the elected party, but it is a one-contest cold start."
+      };
+    }
+    if (passReason === "single_contest_elected_party_hit") {
+      return {
+        ...base,
+        action_code: "limited_temporal_validation",
+        action: "Keep in review until the area has at least two leave-one-out validations or a reviewed notional baseline.",
+        rationale: "The historical record is usable, but the backtest currently has only one temporal validation."
+      };
+    }
+    if (["competitive_party_hit_rate", "local_competitive_party_hit_rate", "high_calibration_vote_share_only", "cold_start_vote_share_only"].includes(passReason)) {
+      return {
+        ...base,
+        action_code: "vote_share_only_limited",
+        action: "Keep in review until winner/elected-party calibration is improved; do not promote on vote-share fit alone.",
+        rationale: "The backtest passes a limited vote-share or competitive-party gate, not a reliable elected-party gate."
+      };
+    }
+  }
+
+  return {
+    ...base,
+    action_code: "manual_review_required",
+    action: "Keep in review pending source, boundary, or methodology inspection.",
+    rationale: "The review reason did not match a narrower automated class."
+  };
+}
+
 export function auditLocalDataBundle({
   boundaries = [],
   history = [],
@@ -183,7 +282,10 @@ export function auditLocalDataBundle({
     )
     .map(compactBacktest);
   const passedWithoutWinnerValidation = backtests
-    .filter((row) => row.status === "passed" && (row.metrics?.elected_party_hit_rate ?? 0) < 0.5)
+    .filter((row) => row.status === "passed" && row.publication_gate === "publishable" && (row.metrics?.elected_party_hit_rate ?? 0) < 0.5)
+    .map(compactBacktest);
+  const reviewPassedWithoutWinnerValidation = backtests
+    .filter((row) => row.status === "passed" && row.publication_gate === "review_required" && (row.metrics?.elected_party_hit_rate ?? 0) < 0.5)
     .map(compactBacktest);
   const coldStartBacktests = backtests
     .filter((row) => row.history_records === 1)
@@ -198,6 +300,9 @@ export function auditLocalDataBundle({
   const readinessWithTasks = readiness
     .filter((row) => (row.readiness_tasks || []).length > 0 || (row.blockers || []).length > 0)
     .map(compactReadiness);
+  const reviewAreaActions = readiness
+    .filter((row) => row.publication_status === "review")
+    .map(classifyReviewArea);
 
   const officialHistoryRecords = history.filter((record) => sourceFamily(sourceSnapshotById.get(record.source_snapshot_id)) === "official_council");
   const dcleapilHistoryRecords = history.filter((record) => sourceFamily(sourceSnapshotById.get(record.source_snapshot_id)) === "dcleapil_leap_democracy_club");
@@ -306,8 +411,14 @@ export function auditLocalDataBundle({
     issue(
       "backtest_passed_without_elected_party_validation",
       "high",
-      "Backtest passed despite elected-party hit rate below 0.5; this is vote-share calibration, not a reliable winner signal.",
+      "Backtest is publication-gated despite elected-party hit rate below 0.5; this is vote-share calibration, not a reliable winner signal.",
       passedWithoutWinnerValidation
+    ),
+    issue(
+      "review_backtest_without_elected_party_validation",
+      "medium",
+      "Backtest is explicitly review-gated because it lacks elected-party validation; do not treat as a publishable winner signal.",
+      reviewPassedWithoutWinnerValidation
     ),
     issue(
       "backtest_cold_start",
@@ -407,6 +518,7 @@ export function auditLocalDataBundle({
       by_publication_gate: countBy(backtests, (row) => row.publication_gate),
       review_required_passes: weakPassedBacktests.length,
       passed_without_elected_party_validation: passedWithoutWinnerValidation.length,
+      review_passed_without_elected_party_validation: reviewPassedWithoutWinnerValidation.length,
       cold_start_backtests: coldStartBacktests.length
     },
     readiness: {
@@ -416,6 +528,11 @@ export function auditLocalDataBundle({
       readiness_task_counts: countBy(readiness.flatMap((row) => row.readiness_tasks || []), (row) => row),
       blocker_counts: countBy(readiness.flatMap((row) => row.blockers || []), (row) => row),
       limited_backtest_areas: limitedReadiness.length
+    },
+    review_actions: {
+      total: reviewAreaActions.length,
+      by_action_code: countBy(reviewAreaActions, (row) => row.action_code),
+      areas: reviewAreaActions
     },
     issues: auditIssues.filter((row) => row.count > 0).map((row) => ({
       ...row,

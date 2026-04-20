@@ -425,4 +425,75 @@ describe("baseline backtest builder", () => {
     expect(targetBacktest.metrics.elected_party_hit_rate).toBe(1);
     expect(targetBacktest.status).toBe("passed");
   });
+
+  it("review-gates local competitive-party hits instead of failing useful same-council calibration", () => {
+    const history = [
+      {
+        history_id: "target-1",
+        area_code: "E05000000",
+        election_date: "2023-05-04",
+        contest_id: "target-1",
+        turnout_votes: 100,
+        upstream: { council: "Example Borough" },
+        result_rows: [
+          { party_name: "A", votes: 60, rank: 1, elected: true },
+          { party_name: "B", votes: 40, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "target-2",
+        area_code: "E05000000",
+        election_date: "2024-05-02",
+        contest_id: "target-2",
+        turnout_votes: 100,
+        upstream: { council: "Example Borough" },
+        result_rows: [
+          { party_name: "B", votes: 55, rank: 1, elected: true },
+          { party_name: "A", votes: 45, rank: 2, elected: false }
+        ]
+      },
+      ...["E05000001", "E05000002", "E05000003"].flatMap((areaCode, index) => [
+        {
+          history_id: `local-${index}-1`,
+          area_code: areaCode,
+          election_date: "2023-05-04",
+          contest_id: `local-${index}-1`,
+          turnout_votes: 100,
+          upstream: { council: "Example Borough" },
+          result_rows: [
+            { party_name: "A", votes: 60, rank: 1, elected: true },
+            { party_name: "B", votes: 40, rank: 2, elected: false }
+          ]
+        },
+        {
+          history_id: `local-${index}-2`,
+          area_code: areaCode,
+          election_date: "2024-05-02",
+          contest_id: `local-${index}-2`,
+          turnout_votes: 100,
+          upstream: { council: "Example Borough" },
+          result_rows: [
+            { party_name: "A", votes: 60, rank: 1, elected: true },
+            { party_name: "B", votes: 40, rank: 2, elected: false }
+          ]
+        }
+      ])
+    ];
+
+    const result = buildBaselineBacktests({
+      history,
+      featureSnapshots: [...new Set(history.map((record) => record.area_code))].map((areaCode) => ({
+        area_code: areaCode,
+        area_name: areaCode,
+        model_family: "local_fptp_borough"
+      })),
+      generatedAt: "2026-04-19T00:00:00Z"
+    });
+
+    const targetBacktest = result.find((row) => row.area_code === "E05000000");
+    expect(targetBacktest.status).toBe("passed");
+    expect(targetBacktest.pass_reason).toBe("local_competitive_party_hit_rate");
+    expect(targetBacktest.evidence_tier).toBe("limited");
+    expect(targetBacktest.publication_gate).toBe("review_required");
+  });
 });
