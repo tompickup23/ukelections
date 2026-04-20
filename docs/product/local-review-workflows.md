@@ -92,6 +92,18 @@ npm run draft:moderngov-review-imports -- \
 
 The ModernGov draft requires linked `mgElectionAreaResults.aspx` pages, not just the election-area index. Missing linked pages remain explicit failures in the draft output; use the source URL in the failure row to fetch the exact page before accepting any official-history row.
 
+For supported linked council HTML pages, draft rows from cached individual result pages:
+
+```bash
+npm run draft:council-html-review-imports -- \
+  --manifest /tmp/ukelections-local-upstreams/review-import-manifest.json \
+  --linked-raw-dir /tmp/ukelections-audit/raw-review-linked-sources \
+  --output /tmp/ukelections-local-upstreams/council-html-review-official-history.draft.json \
+  --markdown-output /tmp/ukelections-local-upstreams/council-html-review-official-history.draft.md
+```
+
+The council HTML draft currently supports Ribble Valley linked borough ward result pages. It intentionally fails areas where the cache only contains parish, division, index, or wrong-year evidence.
+
 ## Workflow Classes
 
 | Workflow | Blocks publication because | Required evidence |

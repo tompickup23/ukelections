@@ -25,11 +25,13 @@
     "build:review-import-manifest": "node scripts/build-review-import-manifest.mjs",
     "draft:structured-review-imports": "node scripts/draft-structured-review-imports.mjs",
     "draft:moderngov-review-imports": "node scripts/draft-moderngov-review-imports.mjs",
+    "draft:council-html-review-imports": "node scripts/draft-council-html-review-imports.mjs",
     "audit:local-data": "node scripts/audit-local-data.mjs",
     "backtest": "node scripts/run-backtest.mjs",
     "compile:features": "node scripts/compile-area-features.mjs",
     "fetch:source": "node scripts/fetch-source-snapshot.mjs",
     "import:local-upstreams": "node scripts/import-local-upstreams.mjs",
+    "summarise:coverage": "node scripts/summarise-coverage-status.mjs",
     "validate:sources": "node scripts/validate-source-snapshots.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
