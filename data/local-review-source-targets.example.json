@@ -1,0 +1,101 @@
+[
+  {
+    "target_id": "ribble-valley-2023-borough-results",
+    "council_name": "Ribble Valley",
+    "source_name": "Ribble Valley Borough Elections 2023 results",
+    "url": "https://www.ribblevalley.gov.uk/borough-elections/borough-elections-2023-results/7",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations"],
+    "applies_to_workflow_codes": ["investigate_vote_share_failure", "repair_winner_signal", "extend_temporal_validation"],
+    "notes": "Official ward result pages include East Whalley, Read and Simonstone and the other 2023 Ribble Valley wards; use to verify votes, elected flags, and party labels before adding notional or predecessor evidence."
+  },
+  {
+    "target_id": "fylde-2023-borough-results",
+    "council_name": "Fylde",
+    "source_name": "Fylde Borough Results 4 May 2023",
+    "url": "https://new.fylde.gov.uk/council/electoral-registration-elections/elections/local-elections-thursday-4-may-2023/results-2/borough-results/",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations"],
+    "applies_to_workflow_codes": ["build_boundary_notional_history", "wait_or_add_second_contest", "repair_winner_signal"],
+    "notes": "Official borough declaration page covers new Fylde wards such as Ansdell and Fairhaven, Carnegie, Freckleton Village, Kilgrimol, Lytham East/West, Rural East/North Fylde, and Wrea Green with Westby."
+  },
+  {
+    "target_id": "rossendale-2024-borough-results",
+    "council_name": "Rossendale",
+    "source_name": "Rossendale Borough Council election results 2 May 2024",
+    "url": "https://www.rossendale.gov.uk/elections-voting/election-results/3",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations"],
+    "applies_to_workflow_codes": ["build_boundary_notional_history", "wait_or_add_second_contest", "repair_winner_signal"],
+    "notes": "Official declaration page covers the post-boundary Rossendale wards and should be paired with LGBCE boundary-review evidence before older rows are reinstated."
+  },
+  {
+    "target_id": "west-lancashire-election-results-archive",
+    "council_name": "West Lancashire",
+    "source_name": "West Lancashire election results archive",
+    "url": "https://www.westlancs.gov.uk/about-the-council/elections-and-voting/election-results.aspx",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
+    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal"],
+    "notes": "Use the official archive to verify Burscough, Ormskirk, Rural, Skelmersdale, and Tarleton rows before promoting the 2023 boundary generation."
+  },
+  {
+    "target_id": "lancaster-2023-ward-results",
+    "council_name": "Lancaster",
+    "source_name": "Lancaster City Council Elections 4 May 2023 ward results",
+    "url": "https://committeeadmin.lancaster.gov.uk/mgElectionElectionAreaResults.aspx?EID=101&RPID=0",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations"],
+    "applies_to_workflow_codes": ["repair_winner_signal", "wait_or_add_second_contest"],
+    "notes": "Official committee election-result pages cover Bowerham, Halton-with-Aughton and Kellet, Scale Hall, and West End ward rows."
+  },
+  {
+    "target_id": "pendle-election-results",
+    "council_name": "Pendle",
+    "source_name": "Pendle election results",
+    "url": "https://www.pendle.gov.uk/electionresults",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
+    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal"],
+    "notes": "Official Pendle result index for Fence and Higham and Waterside and Horsfield checks."
+  },
+  {
+    "target_id": "hyndburn-election-results",
+    "council_name": "Hyndburn",
+    "source_name": "Hyndburn election results downloads",
+    "url": "https://www.hyndburnbc.gov.uk/download/election-results/",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "official_historical_result_declarations"],
+    "applies_to_workflow_codes": ["repair_winner_signal"],
+    "notes": "Official result downloads should be used to verify Huncoat elected-party misses before feature changes."
+  },
+  {
+    "target_id": "lancashire-2025-results-per-division",
+    "council_name": "Lancashire",
+    "source_name": "Lancashire County Council 2025 results per division",
+    "url": "https://www.lancashire.gov.uk/media/962973/2025-05-01-results-per-division-1.pdf",
+    "source_classes": ["official_current_boundary_results", "official_result_declarations", "county_division_results"],
+    "applies_to_workflow_codes": ["repair_winner_signal"],
+    "notes": "Official county division result PDF for Burnley Central West, Clayton with Whittle, Preston South West, and Rossendale West winner-signal review."
+  },
+  {
+    "target_id": "blackburn-democracy-club-fallback",
+    "council_name": "Blackburn with Darwen",
+    "source_name": "Democracy Club election data and identifiers",
+    "url": "https://democracyclub.org.uk/data_apis/data/",
+    "source_classes": ["candidate_rosters", "election_identifiers", "verified_secondary_results"],
+    "applies_to_workflow_codes": ["repair_winner_signal"],
+    "notes": "Use as fallback discovery for Darwen East candidates and identifiers until an official Blackburn with Darwen result URL is attached."
+  },
+  {
+    "target_id": "lgbce-all-reviews",
+    "council_name": "*",
+    "source_name": "Local Government Boundary Commission for England electoral reviews",
+    "url": "https://www.lgbce.org.uk/all-reviews",
+    "source_classes": ["lgbce_final_recommendations", "electoral_change_orders", "boundary_lineage"],
+    "applies_to_workflow_codes": ["build_boundary_notional_history", "extend_temporal_validation"],
+    "notes": "Use for every post-boundary and temporal-validation workflow before reinstating older same-name rows."
+  },
+  {
+    "target_id": "ons-electoral-geography-names-codes",
+    "council_name": "*",
+    "source_name": "ONS names and codes for electoral geographies",
+    "url": "https://www.ons.gov.uk/methodology/geography/geographicalproducts/namescodesandlookups/namesandcodeslistings/namesandcodesforelectoralgeography",
+    "source_classes": ["ons_boundary_codes", "area_name_code_register"],
+    "applies_to_workflow_codes": ["build_boundary_notional_history", "extend_temporal_validation", "wait_or_add_second_contest"],
+    "notes": "Use as the canonical current code/name check for every review-gated local area."
+  }
+]

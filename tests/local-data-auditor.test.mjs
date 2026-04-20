@@ -28,6 +28,8 @@ describe("local data auditor", () => {
         review_status: "quarantined",
         turnout_votes: 0,
         upstream: {
+          council_id: "example-borough",
+          council_name: "Example Borough",
           source_area_code: "E05099999",
           area_code_method: "manual_name_match"
         },
@@ -105,6 +107,11 @@ describe("local data auditor", () => {
     expect(audit.review_actions.total).toBe(1);
     expect(audit.review_actions.by_action_code.vote_share_only_limited).toBe(1);
     expect(audit.review_actions.areas[0].action).toContain("winner/elected-party calibration");
+    expect(audit.review_workflows.total).toBe(1);
+    expect(audit.review_workflows.by_workflow_code.repair_winner_signal).toBe(1);
+    expect(audit.review_workflows.by_priority.P1).toBe(1);
+    expect(audit.review_workflows.by_council["Example Borough"]).toBe(1);
+    expect(audit.review_workflows.areas[0].target_source_classes).toContain("candidate_rosters");
     expect(audit.issues.map((row) => row.code)).toContain("history_source_area_code_mismatch");
     expect(audit.issues.map((row) => row.code)).toContain("backtest_review_required_pass");
     expect(audit.issues.map((row) => row.code)).toContain("active_contest_without_roster");

@@ -63,3 +63,11 @@ run("Audit local data", "scripts/audit-local-data.mjs", [
   "--output",
   path.join(output, "data-audit.json")
 ]);
+run("Build review workflows", "scripts/build-review-workflows.mjs", [
+  "--input",
+  path.join(output, "data-audit.json"),
+  "--output",
+  path.join(output, "review-workflows.json"),
+  "--markdown-output",
+  path.join(output, "review-workflows.md")
+]);

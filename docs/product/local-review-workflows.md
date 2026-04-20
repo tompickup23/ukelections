@@ -1,0 +1,37 @@
+# Local Review Workflows
+
+The local audit now emits a review workflow bundle for every area still held out of publication.
+
+Run:
+
+```bash
+npm run build:local-audit -- --output /tmp/ukelections-local-upstreams
+```
+
+Outputs:
+
+- `/tmp/ukelections-local-upstreams/data-audit.json`
+- `/tmp/ukelections-local-upstreams/review-workflows.json`
+- `/tmp/ukelections-local-upstreams/review-workflows.md`
+
+## Workflow Classes
+
+| Workflow | Blocks publication because | Required evidence |
+| --- | --- | --- |
+| `investigate_vote_share_failure` | Vote-share error is too high or the local political break is not explained. | Official result rows, current-boundary or notional history, candidate/incumbency context, and a rerun passing strong elected-party validation. |
+| `repair_winner_signal` | Vote-share or competitive-party calibration is usable, but elected-party validation is not. | Official elected flags, candidate rosters, party-label checks, incumbency/defending-party evidence, and another current-boundary contest where available. |
+| `build_boundary_notional_history` | The area has one usable current-boundary contest and older rows are quarantined by boundary change. | LGBCE final recommendations, ONS codes, predecessor-boundary mappings, and official or documented notional results. |
+| `wait_or_add_second_contest` | Only one current-boundary contest exists. | Another official result, or a reviewed notional comparator with documented method. |
+| `extend_temporal_validation` | A limited temporal backtest exists but is not strong enough for publication. | Additional historical contests, official result declarations, or reviewed notional rows that increase leave-one-out validation. |
+
+## Current Review Queue
+
+The latest local run has 51 review areas:
+
+- `P0`: 1 area needing vote-share failure investigation.
+- `P1`: 23 areas needing boundary-notional history or winner-signal repair.
+- `P2`: 27 areas needing more temporal validation or another current-boundary contest.
+
+The source targets file at `data/local-review-source-targets.example.json` maps these workflows to official council pages, LGBCE boundary review evidence, ONS electoral code evidence, and verified secondary discovery sources.
+
+Promotion rule: an area must leave the review workflow, pass through `elected_party_hit_rate`, carry `strong` backtest evidence, have `publication_gate: "publishable"`, and have no blockers or readiness tasks. Do not promote an area just because a vote-share-only or one-contest backtest looks plausible.

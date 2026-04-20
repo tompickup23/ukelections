@@ -128,6 +128,165 @@ function compactPublishableQualityArea(row) {
   };
 }
 
+function buildAreaSourceContext(records = [], sourceSnapshotById = new Map()) {
+  const reviewedRecords = records.filter((record) => ["reviewed", "reviewed_with_warnings"].includes(record.review_status));
+  return {
+    council_ids: [...new Set(records.map((record) => record.upstream?.council_id || record.upstream?.council).filter(Boolean))],
+    council_names: [...new Set(records.map((record) => record.upstream?.council_name || record.upstream?.council).filter(Boolean))],
+    source_area_codes: [...new Set(records.map((record) => record.upstream?.source_area_code || record.upstream?.upstream_area_code).filter(Boolean))],
+    area_code_methods: [...new Set(records.map((record) => record.upstream?.area_code_method).filter(Boolean))],
+    source_families: [...new Set(records.map((record) => sourceFamily(sourceSnapshotById.get(record.source_snapshot_id))).filter(Boolean))],
+    reviewed_history_records: reviewedRecords.length,
+    latest_reviewed_election_date: reviewedRecords.map((record) => record.election_date).filter(Boolean).sort().at(-1) || null,
+    latest_raw_election_date: records.map((record) => record.election_date).filter(Boolean).sort().at(-1) || null
+  };
+}
+
+function workflowForAction(actionCode) {
+  const workflows = {
+    failed_vote_share_calibration: {
+      workflow_code: "investigate_vote_share_failure",
+      priority: "P0",
+      target_source_classes: [
+        "official_current_boundary_results",
+        "official_or_academic_notional_results",
+        "candidate_and_incumbency_history",
+        "local_party_change_context"
+      ],
+      workflow_steps: [
+        "Re-check every current-boundary result row against official council declarations.",
+        "Acquire notional or predecessor-boundary evidence before using older same-name ward rows.",
+        "Review candidate, incumbency, party label, and local campaign discontinuities.",
+        "Do not promote until MAE and elected-party validation improve under a rerun backtest."
+      ],
+      promotion_gate: "Backtest must pass through elected_party_hit_rate with strong evidence and publication_gate publishable."
+    },
+    failed_winner_signal: {
+      workflow_code: "repair_winner_signal",
+      priority: "P1",
+      target_source_classes: [
+        "official_result_declarations",
+        "candidate_rosters",
+        "incumbency_and_defending_party",
+        "local_party_change_context"
+      ],
+      workflow_steps: [
+        "Verify elected candidates, party labels, and multi-seat ordering against official declarations.",
+        "Check whether local independents, retirements, defections, or new candidate slates explain the miss.",
+        "Add candidate and incumbency features, then rerun the backtest.",
+        "Do not promote until the winner/elected-party signal clears the publishable gate."
+      ],
+      promotion_gate: "Elected-party hit rate must clear the strong publishable pass after candidate and incumbency review."
+    },
+    vote_share_only_limited: {
+      workflow_code: "repair_winner_signal",
+      priority: "P1",
+      target_source_classes: [
+        "official_result_declarations",
+        "candidate_rosters",
+        "incumbency_and_defending_party",
+        "additional_current_boundary_contests"
+      ],
+      workflow_steps: [
+        "Verify elected flags, multi-seat ordering, party labels, and candidate rows against official declarations.",
+        "Add candidate and incumbency features before relying on vote-share fit.",
+        "Acquire another current-boundary contest or a reviewed notional baseline.",
+        "Keep in review until the elected-party signal clears the publishable gate."
+      ],
+      promotion_gate: "Elected-party hit rate must clear the strong publishable pass, not only competitive-party or vote-share calibration."
+    },
+    post_boundary_single_contest: {
+      workflow_code: "build_boundary_notional_history",
+      priority: "P1",
+      target_source_classes: [
+        "lgbce_final_recommendations",
+        "ons_boundary_codes",
+        "official_notional_results",
+        "predecessor_boundary_result_rows"
+      ],
+      workflow_steps: [
+        "Attach the boundary review source and effective-date evidence.",
+        "Map predecessor wards/divisions to the current area using explicit weights.",
+        "Import only official or documented notional current-boundary history.",
+        "Rerun backtests and require more than a one-contest cold start before publication."
+      ],
+      promotion_gate: "Current-boundary history must have at least two usable validations or a reviewed notional baseline."
+    },
+    single_current_contest: {
+      workflow_code: "wait_or_add_second_contest",
+      priority: "P2",
+      target_source_classes: [
+        "official_next_contest_result",
+        "democracy_club_candidates",
+        "official_statement_of_persons_nominated"
+      ],
+      workflow_steps: [
+        "Verify the single current contest against an official declaration.",
+        "Attach candidate roster and statement-of-persons-nominated evidence for the next active contest.",
+        "Add the next result as soon as declared, then rerun leave-one-out validation.",
+        "Do not promote on one current-boundary contest alone."
+      ],
+      promotion_gate: "At least two current-boundary contests or a reviewed notional comparator must be available."
+    },
+    limited_temporal_validation: {
+      workflow_code: "extend_temporal_validation",
+      priority: "P2",
+      target_source_classes: [
+        "official_historical_result_declarations",
+        "local_elections_archive_rows",
+        "commons_library_local_handbooks",
+        "official_notional_results"
+      ],
+      workflow_steps: [
+        "Verify the two usable records and any same-date duplicate rows.",
+        "Acquire another contest or official notional history to increase temporal validation.",
+        "Check whether quarantined rows can be reinstated through boundary lineage evidence.",
+        "Rerun the baseline and promote only if the stronger elected-party gate passes."
+      ],
+      promotion_gate: "Temporal validation must exceed the limited one-validation state before publication."
+    },
+    failed_backtest_other: {
+      workflow_code: "manual_backtest_failure_review",
+      priority: "P1",
+      target_source_classes: [
+        "official_results",
+        "boundary_lineage",
+        "candidate_rosters"
+      ],
+      workflow_steps: [
+        "Inspect source, boundary, and candidate evidence manually.",
+        "Classify the failure into vote-share, winner-signal, temporal, or boundary-history work.",
+        "Rerun the audit after source correction."
+      ],
+      promotion_gate: "Manual review must produce a named pass reason and strong publishable backtest gate."
+    },
+    manual_review_required: {
+      workflow_code: "manual_review_triage",
+      priority: "P2",
+      target_source_classes: [
+        "official_results",
+        "boundary_evidence",
+        "candidate_rosters"
+      ],
+      workflow_steps: [
+        "Inspect source, boundary, and methodology fields.",
+        "Assign a narrower automated action code.",
+        "Rerun the audit."
+      ],
+      promotion_gate: "Area must leave manual triage and pass a named publishable gate."
+    }
+  };
+  return workflows[actionCode] || workflows.manual_review_required;
+}
+
+function decorateReviewAction(row) {
+  const workflow = workflowForAction(row.action_code);
+  return {
+    ...row,
+    ...workflow
+  };
+}
+
 function classifyReviewArea(row) {
   const metrics = row.methodology?.backtest_metrics || {};
   const backtestGate = row.source_gates?.backtest || {};
@@ -244,6 +403,10 @@ export function auditLocalDataBundle({
   const historyByArea = groupBy(history, (record) => record.area_code || "unknown");
   const boundaryMappingByTarget = groupBy(boundaryMappings, (mapping) => mapping.target_area_code);
   const readinessByAreaFamily = new Map(readiness.map((row) => [`${row.area_code}:${row.model_family}`, row]));
+  const areaSourceContextByCode = new Map([...historyByArea.entries()].map(([areaCode, records]) => [
+    areaCode,
+    buildAreaSourceContext(records, sourceSnapshotById)
+  ]));
 
   const quarantinedSourceSnapshots = sourceSnapshots
     .filter((snapshot) => snapshot.quality_status === "quarantined")
@@ -337,7 +500,11 @@ export function auditLocalDataBundle({
     .map(compactReadiness);
   const reviewAreaActions = readiness
     .filter((row) => row.publication_status === "review")
-    .map(classifyReviewArea);
+    .map((row) => ({
+      ...classifyReviewArea(row),
+      source_context: areaSourceContextByCode.get(row.area_code) || buildAreaSourceContext([], sourceSnapshotById)
+    }))
+    .map(decorateReviewAction);
 
   const officialHistoryRecords = history.filter((record) => sourceFamily(sourceSnapshotById.get(record.source_snapshot_id)) === "official_council");
   const dcleapilHistoryRecords = history.filter((record) => sourceFamily(sourceSnapshotById.get(record.source_snapshot_id)) === "dcleapil_leap_democracy_club");
@@ -588,6 +755,20 @@ export function auditLocalDataBundle({
     review_actions: {
       total: reviewAreaActions.length,
       by_action_code: countBy(reviewAreaActions, (row) => row.action_code),
+      areas: reviewAreaActions
+    },
+    review_workflows: {
+      total: reviewAreaActions.length,
+      by_workflow_code: countBy(reviewAreaActions, (row) => row.workflow_code),
+      by_priority: countBy(reviewAreaActions, (row) => row.priority),
+      by_council: countBy(
+        reviewAreaActions.flatMap((row) =>
+          row.source_context?.council_names?.length
+            ? row.source_context.council_names.map((councilName) => ({ council_name: councilName }))
+            : [{ council_name: "unknown" }]
+        ),
+        (row) => row.council_name
+      ),
       areas: reviewAreaActions
     },
     issues: auditIssues.filter((row) => row.count > 0).map((row) => ({
