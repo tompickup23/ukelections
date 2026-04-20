@@ -64,11 +64,12 @@ describe("model readiness quality", () => {
         candidate_rosters: { status: "not_applicable", source_snapshot_ids: [], notes: "No active contest.", active_contest: false },
         population_method: { status: "reviewed", source_snapshot_ids: ["s3"], notes: "test" },
         asylum_context: { status: "reviewed", source_snapshot_ids: ["s4"], notes: "test" },
-        backtest: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test" }
+        backtest: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test", evidence_tier: "strong", publication_gate: "publishable" }
       },
       methodology: {
         ...baseArea.methodology,
-        backtest_status: "passed"
+        backtest_status: "passed",
+        backtest_evidence_tier: "strong"
       },
       blockers: [],
       warnings: [],
@@ -76,6 +77,34 @@ describe("model readiness quality", () => {
     });
 
     expect(result.ok).toBe(true);
+  });
+
+  it("blocks publishable records with weak backtest evidence even when the status passed", () => {
+    const result = validateModelReadinessArea({
+      ...baseArea,
+      publication_status: "publishable",
+      review_status: "reviewed",
+      source_gates: {
+        ...baseArea.source_gates,
+        boundary_versions: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test", historical_lineage_status: "generated_identity" },
+        election_history: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test" },
+        candidate_rosters: { status: "not_applicable", source_snapshot_ids: [], notes: "No active contest.", active_contest: false },
+        poll_context: { status: "reviewed", source_snapshot_ids: ["s2"], notes: "test" },
+        population_method: { status: "reviewed", source_snapshot_ids: ["s3"], notes: "test" },
+        backtest: { status: "reviewed", source_snapshot_ids: ["s1"], notes: "test", evidence_tier: "limited", publication_gate: "publishable" }
+      },
+      methodology: {
+        ...baseArea.methodology,
+        backtest_status: "passed",
+        backtest_evidence_tier: "limited"
+      },
+      blockers: [],
+      warnings: [],
+      readiness_tasks: []
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain("publishable areas need strong backtest evidence before publication");
   });
 
   it("keeps otherwise clean areas in review until backtests are available", () => {

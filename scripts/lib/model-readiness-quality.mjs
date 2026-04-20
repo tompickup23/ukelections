@@ -162,6 +162,9 @@ export function validateModelReadinessArea(area) {
     if (gates.backtest?.publication_gate === "review_required") {
       errors.push(`${area.publication_status} areas need a strong backtest pass before publication`);
     }
+    if ((gates.backtest?.evidence_tier || methodology.backtest_evidence_tier) !== "strong") {
+      errors.push(`${area.publication_status} areas need strong backtest evidence before publication`);
+    }
     if (gates.boundary_versions?.historical_lineage_status === "pending") {
       errors.push(`${area.publication_status} areas need generated boundary lineage`);
     }

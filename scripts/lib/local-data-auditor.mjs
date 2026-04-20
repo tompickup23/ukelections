@@ -114,6 +114,20 @@ function compactReadiness(row) {
   };
 }
 
+function compactPublishableQualityArea(row) {
+  const metrics = row.methodology?.backtest_metrics || {};
+  return {
+    area_code: row.area_code,
+    area_name: row.area_name,
+    model_family: row.model_family,
+    backtest_pass_reason: row.methodology?.backtest_pass_reason,
+    history_records: row.coverage?.history_records,
+    contests: metrics.contests,
+    mean_absolute_error: metrics.mean_absolute_error,
+    elected_party_hit_rate: metrics.elected_party_hit_rate
+  };
+}
+
 function classifyReviewArea(row) {
   const metrics = row.methodology?.backtest_metrics || {};
   const backtestGate = row.source_gates?.backtest || {};
@@ -293,6 +307,27 @@ export function auditLocalDataBundle({
   const failedOrMissingBacktests = backtests
     .filter((row) => row.status !== "passed")
     .map(compactBacktest);
+  const publishableReadiness = readiness
+    .filter((row) => ["publishable", "published"].includes(row.publication_status))
+    .map(compactReadiness);
+  const publishableGateMismatches = readiness
+    .filter((row) => ["publishable", "published"].includes(row.publication_status))
+    .filter((row) =>
+      row.methodology?.backtest_status !== "passed" ||
+      row.methodology?.backtest_evidence_tier !== "strong" ||
+      row.source_gates?.backtest?.publication_gate !== "publishable" ||
+      (row.blockers || []).length > 0 ||
+      (row.readiness_tasks || []).length > 0
+    )
+    .map(compactReadiness);
+  const publishableBacktestMetrics = readiness
+    .filter((row) => ["publishable", "published"].includes(row.publication_status))
+    .map((row) => row.methodology?.backtest_metrics)
+    .filter(Boolean);
+  const marginalPublishableAreas = readiness
+    .filter((row) => ["publishable", "published"].includes(row.publication_status))
+    .filter((row) => (row.methodology?.backtest_metrics?.elected_party_hit_rate ?? 0) <= 0.6)
+    .map(compactPublishableQualityArea);
 
   const limitedReadiness = readiness
     .filter((row) => row.source_gates?.backtest?.publication_gate === "review_required")
@@ -433,6 +468,12 @@ export function auditLocalDataBundle({
       failedOrMissingBacktests
     ),
     issue(
+      "publishable_area_gate_mismatch",
+      "high",
+      "Area is marked publishable or published but lacks a strong passed publishable backtest gate, or still has blockers/tasks.",
+      publishableGateMismatches
+    ),
+    issue(
       "readiness_limited_backtest",
       "high",
       "Readiness area has a limited backtest gate and should remain in review.",
@@ -528,6 +569,21 @@ export function auditLocalDataBundle({
       readiness_task_counts: countBy(readiness.flatMap((row) => row.readiness_tasks || []), (row) => row),
       blocker_counts: countBy(readiness.flatMap((row) => row.blockers || []), (row) => row),
       limited_backtest_areas: limitedReadiness.length
+    },
+    publishable_quality: {
+      total: publishableReadiness.length,
+      by_model_family: countBy(publishableReadiness, (row) => row.model_family),
+      by_backtest_pass_reason: countBy(publishableReadiness, (row) => row.backtest_pass_reason),
+      by_backtest_evidence_tier: countBy(publishableReadiness, (row) => row.backtest_evidence_tier),
+      gate_mismatches: publishableGateMismatches.length,
+      minimum_elected_party_hit_rate: publishableBacktestMetrics.length
+        ? Math.min(...publishableBacktestMetrics.map((metrics) => metrics.elected_party_hit_rate ?? 0))
+        : null,
+      maximum_mean_absolute_error: publishableBacktestMetrics.length
+        ? Math.max(...publishableBacktestMetrics.map((metrics) => metrics.mean_absolute_error ?? 0))
+        : null,
+      marginal_elected_party_hit_rate_areas: marginalPublishableAreas.length,
+      marginal_areas: marginalPublishableAreas
     },
     review_actions: {
       total: reviewAreaActions.length,

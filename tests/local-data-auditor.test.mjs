@@ -109,4 +109,74 @@ describe("local data auditor", () => {
     expect(audit.issues.map((row) => row.code)).toContain("backtest_review_required_pass");
     expect(audit.issues.map((row) => row.code)).toContain("active_contest_without_roster");
   });
+
+  it("summarises publishable quality and flags publishable gate mismatches", () => {
+    const publishableArea = {
+      model_area_id: "r1",
+      area_code: "E05000000",
+      area_name: "Solid Ward",
+      model_family: "local_fptp_borough",
+      publication_status: "publishable",
+      review_status: "reviewed",
+      source_gates: {
+        backtest: {
+          publication_gate: "publishable"
+        }
+      },
+      methodology: {
+        backtest_status: "passed",
+        backtest_pass_reason: "elected_party_hit_rate",
+        backtest_evidence_tier: "strong",
+        backtest_metrics: {
+          mean_absolute_error: 0.08,
+          elected_party_hit_rate: 0.75
+        }
+      },
+      readiness_tasks: [],
+      blockers: [],
+      coverage: {
+        history_records: 3
+      }
+    };
+
+    const weakPublishableArea = {
+      ...publishableArea,
+      model_area_id: "r2",
+      area_code: "E05000001",
+      area_name: "Weak Ward",
+      methodology: {
+        ...publishableArea.methodology,
+        backtest_evidence_tier: "limited",
+        backtest_metrics: {
+          mean_absolute_error: 0.14,
+          elected_party_hit_rate: 0.5
+        }
+      }
+    };
+
+    const audit = auditLocalDataBundle({
+      readiness: [publishableArea, weakPublishableArea],
+      generatedAt: "2026-04-20T00:00:00Z"
+    });
+
+    expect(audit.publishable_quality.total).toBe(2);
+    expect(audit.publishable_quality.by_model_family.local_fptp_borough).toBe(2);
+    expect(audit.publishable_quality.by_backtest_evidence_tier.strong).toBe(1);
+    expect(audit.publishable_quality.by_backtest_evidence_tier.limited).toBe(1);
+    expect(audit.publishable_quality.gate_mismatches).toBe(1);
+    expect(audit.publishable_quality.minimum_elected_party_hit_rate).toBe(0.5);
+    expect(audit.publishable_quality.maximum_mean_absolute_error).toBe(0.14);
+    expect(audit.publishable_quality.marginal_elected_party_hit_rate_areas).toBe(1);
+    expect(audit.publishable_quality.marginal_areas).toEqual([{
+      area_code: "E05000001",
+      area_name: "Weak Ward",
+      model_family: "local_fptp_borough",
+      backtest_pass_reason: "elected_party_hit_rate",
+      history_records: 3,
+      contests: undefined,
+      mean_absolute_error: 0.14,
+      elected_party_hit_rate: 0.5
+    }]);
+    expect(audit.issues.map((row) => row.code)).toContain("publishable_area_gate_mismatch");
+  });
 });

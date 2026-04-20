@@ -53,6 +53,13 @@ console.log(JSON.stringify({
   ok: true,
   output: path.resolve(args.output),
   ...audit.summary,
+  publishable_quality: {
+    total: audit.publishable_quality.total,
+    gate_mismatches: audit.publishable_quality.gate_mismatches,
+    minimum_elected_party_hit_rate: audit.publishable_quality.minimum_elected_party_hit_rate,
+    maximum_mean_absolute_error: audit.publishable_quality.maximum_mean_absolute_error,
+    marginal_elected_party_hit_rate_areas: audit.publishable_quality.marginal_elected_party_hit_rate_areas
+  },
   high_issue_codes: audit.issues.filter((row) => row.severity === "high").map((row) => `${row.code}:${row.count}`),
   medium_issue_codes: audit.issues.filter((row) => row.severity === "medium").map((row) => `${row.code}:${row.count}`)
 }, null, 2));
