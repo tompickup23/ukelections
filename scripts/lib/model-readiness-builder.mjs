@@ -192,6 +192,9 @@ function collectReadinessIssues({ gates, coverage, methodology }) {
   if (methodology.backtest_status !== "passed" && !["missing", "not_applicable"].includes(gates.backtest?.status)) {
     blockers.push("Backtest metrics have not passed");
   }
+  if (gates.backtest?.publication_gate === "review_required") {
+    readinessTasks.push("Backtest pass is limited and needs manual review before publication.");
+  }
   return { blockers, warnings, readinessTasks };
 }
 
@@ -209,6 +212,7 @@ function hasPublishableEvidence({ gates, coverage, methodology }) {
   }
   if (!candidateGateIsPublishable(gates.candidate_rosters)) return false;
   if (methodology.backtest_status !== "passed") return false;
+  if (gates.backtest?.publication_gate === "review_required") return false;
   if (gates.boundary_versions?.historical_lineage_status === "pending") return false;
   if (coverage.history_records < methodology.minimum_history_contests) return false;
   return true;
@@ -304,6 +308,8 @@ export function buildModelReadinessAreas({
       methodology.backtest_status = backtest.status;
       methodology.backtest_id = backtest.backtest_id;
       methodology.backtest_metrics = backtest.metrics;
+      methodology.backtest_pass_reason = backtest.pass_reason;
+      methodology.backtest_evidence_tier = backtest.evidence_tier;
       methodology.minimum_history_contests = backtest.required_history_records ?? methodology.minimum_history_contests;
     }
     const gates = {
@@ -355,9 +361,12 @@ export function buildModelReadinessAreas({
         ? gate(["ward_estimate", "local_authority_context"].includes(latestAsylum.precision) ? "reviewed" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
         : gate("missing", [], "No asylum context is attached."),
       backtest: backtest
-        ? gate(backtest.status === "passed" ? "reviewed" : "not_applicable", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; elected-party hit rate ${backtest.metrics?.elected_party_hit_rate ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
+        ? gate(backtest.status === "passed" ? (backtest.publication_gate === "review_required" ? "accepted" : "reviewed") : "not_applicable", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; pass reason ${backtest.pass_reason || "unknown"}; evidence tier ${backtest.evidence_tier || "unknown"}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; elected-party hit rate ${backtest.metrics?.elected_party_hit_rate ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
             backtest_id: backtest.backtest_id,
-            method: backtest.method
+            method: backtest.method,
+            pass_reason: backtest.pass_reason,
+            evidence_tier: backtest.evidence_tier,
+            publication_gate: backtest.publication_gate
           })
         : gate("not_applicable", [], "Backtest metrics are not yet available for this area.")
     };

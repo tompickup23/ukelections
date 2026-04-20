@@ -294,4 +294,46 @@ describe("baseline backtest builder", () => {
 
     expect(result.find((row) => row.area_code === "E05000000").status).toBe("passed");
   });
+
+  it("marks single-contest cold-start passes as limited review-required evidence", () => {
+    const history = [
+      {
+        history_id: "target-1",
+        area_code: "E05000000",
+        election_date: "2024-05-02",
+        contest_id: "target-1",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 60, rank: 1, elected: true },
+          { party_name: "B", votes: 40, rank: 2, elected: false }
+        ]
+      },
+      {
+        history_id: "comparator-1",
+        area_code: "E05000001",
+        election_date: "2024-05-02",
+        contest_id: "comparator-1",
+        turnout_votes: 100,
+        result_rows: [
+          { party_name: "A", votes: 62, rank: 1, elected: true },
+          { party_name: "B", votes: 38, rank: 2, elected: false }
+        ]
+      }
+    ];
+
+    const result = buildBaselineBacktests({
+      history,
+      featureSnapshots: [
+        { area_code: "E05000000", area_name: "Target Ward", model_family: "local_fptp_borough" },
+        { area_code: "E05000001", area_name: "Comparator Ward", model_family: "local_fptp_borough" }
+      ],
+      generatedAt: "2026-04-19T00:00:00Z"
+    });
+
+    const targetBacktest = result.find((row) => row.area_code === "E05000000");
+    expect(targetBacktest.status).toBe("passed");
+    expect(targetBacktest.pass_reason).toBe("single_contest_elected_party_hit");
+    expect(targetBacktest.evidence_tier).toBe("limited");
+    expect(targetBacktest.publication_gate).toBe("review_required");
+  });
 });

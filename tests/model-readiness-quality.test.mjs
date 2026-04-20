@@ -228,4 +228,98 @@ describe("model readiness quality", () => {
     expect(areas[0].source_gates.candidate_rosters.source_basis).toEqual(["statement_of_persons_nominated"]);
     expect(areas[0].source_gates.backtest.status).toBe("reviewed");
   });
+
+  it("keeps limited backtest passes in review until manually checked", () => {
+    const areas = buildModelReadinessAreas({
+      boundaries: [{
+        boundary_version_id: "b1",
+        area_type: "ward",
+        area_code: "E05000000",
+        area_name: "Example Ward",
+        source_snapshot_id: "s1",
+        review_status: "reviewed"
+      }],
+      history: [
+        { area_code: "E05000000", source_snapshot_id: "s1" },
+        { area_code: "E05000000", source_snapshot_id: "s1" },
+        { area_code: "E05000000", source_snapshot_id: "s1" }
+      ],
+      candidateRosters: [{
+        area_code: "E05000000",
+        election_date: "2026-05-07",
+        source_snapshot_id: "s1",
+        source_basis: "statement_of_persons_nominated",
+        direct_statement_url_attached: true
+      }],
+      featureSnapshots: [{
+        area_code: "E05000000",
+        area_name: "Example Ward",
+        boundary_version_id: "b1",
+        model_family: "local_fptp_borough",
+        as_of: "2026-04-19",
+        provenance: [{ source_snapshot_id: "s1" }],
+        features: {
+          poll_context: { poll_aggregate_id: "p1" },
+          population_projection: {
+            method: "census_2021_rebased_component",
+            quality_level: "rebased_partial",
+            geography_fit: "exact_area",
+            confidence: "medium"
+          },
+          asylum_context: {
+            precision: "ward_estimate",
+            route_scope: "asylum_support"
+          }
+        }
+      }],
+      pollAggregates: [{
+        poll_aggregate_id: "p1",
+        provenance: { source_snapshot_id: "s2" }
+      }],
+      boundaryMappings: [{
+        mapping_id: "lineage-1",
+        source_area_id: "b1",
+        source_area_code: "E05000000",
+        target_area_id: "b1",
+        target_area_code: "E05000000",
+        weight: 1,
+        weight_basis: "manual",
+        source_snapshot_id: "s1",
+        source_url: "https://ukelections.co.uk/sources",
+        review_status: "reviewed"
+      }],
+      backtests: [{
+        area_code: "E05000000",
+        model_family: "local_fptp_borough",
+        backtest_id: "bt1",
+        status: "passed",
+        method: "rolling_two_contest_party_share_average_with_leave_one_area_out_election_swing",
+        source_history_ids: ["h1", "h2", "h3"],
+        required_history_records: 3,
+        pass_reason: "competitive_party_hit_rate",
+        evidence_tier: "limited",
+        publication_gate: "review_required",
+        metrics: {
+          contests: 4,
+          winner_accuracy: 0.25,
+          elected_party_hit_rate: 0.25,
+          competitive_party_hit_rate: 0.5,
+          mean_absolute_error: 0.1,
+          mean_calibration_area_count: 50
+        }
+      }],
+      sourceSnapshots: [{
+        snapshot_id: "s1",
+        source_name: "AI DOGE Example election history",
+        upstream_data_sources: ["DCLEAPIL v1.0", "Democracy Club", "Andrew Teale LEAP"]
+      }]
+    });
+    const validation = validateModelReadinessAreas(areas);
+
+    expect(validation.ok).toBe(true);
+    expect(areas[0].publication_status).toBe("review");
+    expect(areas[0].source_gates.backtest.status).toBe("accepted");
+    expect(areas[0].source_gates.backtest.publication_gate).toBe("review_required");
+    expect(areas[0].readiness_tasks).toContain("Backtest pass is limited and needs manual review before publication.");
+  });
 });

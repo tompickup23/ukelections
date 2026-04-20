@@ -290,15 +290,66 @@ function evaluateColdStart(records, context) {
   };
 }
 
-function passes(metrics) {
-  if (metrics.contests < 1 || metrics.mean_absolute_error === null) return false;
-  if (metrics.mean_absolute_error <= 0.26 && metrics.elected_party_hit_rate >= 0.5) return true;
-  if (metrics.contests === 1 && metrics.mean_calibration_area_count >= 100 && metrics.mean_absolute_error <= 0.26) return true;
-  if (metrics.contests === 1 && metrics.elected_party_hit_rate === 1 && metrics.mean_absolute_error <= 0.35) return true;
-  if (metrics.contests >= 4 && metrics.mean_calibration_area_count >= 50 && metrics.mean_absolute_error <= 0.1) return true;
-  return metrics.mean_absolute_error <= 0.16 &&
+function assessPass(metrics) {
+  if (metrics.contests < 1 || metrics.mean_absolute_error === null) {
+    return {
+      passed: false,
+      pass_reason: "no_evaluable_contests",
+      evidence_tier: "none",
+      publication_gate: "blocked"
+    };
+  }
+  if (metrics.mean_absolute_error <= 0.26 && metrics.elected_party_hit_rate >= 0.5) {
+    const singleContest = metrics.contests === 1;
+    return {
+      passed: true,
+      pass_reason: singleContest ? "single_contest_elected_party_hit" : "elected_party_hit_rate",
+      evidence_tier: singleContest ? "limited" : "strong",
+      publication_gate: singleContest ? "review_required" : "publishable"
+    };
+  }
+  if (metrics.contests === 1 && metrics.mean_calibration_area_count >= 100 && metrics.mean_absolute_error <= 0.26) {
+    return {
+      passed: true,
+      pass_reason: "cold_start_vote_share_only",
+      evidence_tier: "weak",
+      publication_gate: "review_required"
+    };
+  }
+  if (metrics.contests === 1 && metrics.elected_party_hit_rate === 1 && metrics.mean_absolute_error <= 0.35) {
+    return {
+      passed: true,
+      pass_reason: "sparse_single_contest_winner",
+      evidence_tier: "limited",
+      publication_gate: "review_required"
+    };
+  }
+  if (metrics.contests >= 4 && metrics.mean_calibration_area_count >= 50 && metrics.mean_absolute_error <= 0.1) {
+    return {
+      passed: true,
+      pass_reason: "high_calibration_vote_share_only",
+      evidence_tier: "limited",
+      publication_gate: "review_required"
+    };
+  }
+  if (
+    metrics.mean_absolute_error <= 0.16 &&
     metrics.competitive_party_hit_rate >= 0.5 &&
-    metrics.mean_calibration_area_count >= 20;
+    metrics.mean_calibration_area_count >= 20
+  ) {
+    return {
+      passed: true,
+      pass_reason: "competitive_party_hit_rate",
+      evidence_tier: "limited",
+      publication_gate: "review_required"
+    };
+  }
+  return {
+    passed: false,
+    pass_reason: "below_threshold",
+    evidence_tier: "none",
+    publication_gate: "blocked"
+  };
 }
 
 export function buildBaselineBacktests({ history = [], featureSnapshots = [], generatedAt }) {
@@ -333,7 +384,8 @@ export function buildBaselineBacktests({ history = [], featureSnapshots = [], ge
       mean_calibration_area_count: 0
     };
     const enoughHistory = records.length >= required;
-    const status = enoughHistory && passes(metrics) ? "passed" : enoughHistory ? "failed" : "missing";
+    const passAssessment = assessPass(metrics);
+    const status = enoughHistory && passAssessment.passed ? "passed" : enoughHistory ? "failed" : "missing";
     return {
       backtest_id: `baseline-history-${area.model_family}-${area.area_code}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
       area_code: area.area_code,
@@ -346,6 +398,9 @@ export function buildBaselineBacktests({ history = [], featureSnapshots = [], ge
       history_records: records.length,
       source_history_ids: records.flatMap((record) => record.source_history_ids || [record.history_id]).filter(Boolean),
       metrics,
+      pass_reason: enoughHistory ? passAssessment.pass_reason : "insufficient_history",
+      evidence_tier: enoughHistory ? passAssessment.evidence_tier : "none",
+      publication_gate: enoughHistory ? passAssessment.publication_gate : "blocked",
       thresholds: {
         mean_absolute_error_max: 0.22,
         calibrated_mean_absolute_error_max: 0.26,
