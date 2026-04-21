@@ -186,4 +186,37 @@ describe("local data auditor", () => {
     }]);
     expect(audit.issues.map((row) => row.code)).toContain("publishable_area_gate_mismatch");
   });
+
+  it("turns internal unreviewed history blockers into source-review workflows", () => {
+    const audit = auditLocalDataBundle({
+      readiness: [{
+        model_area_id: "r1",
+        area_code: "E14001118",
+        area_name: "Burnley",
+        model_family: "westminster_fptp",
+        publication_status: "internal",
+        review_status: "quarantined",
+        source_gates: {
+          election_history: { status: "imported_quarantined" },
+          backtest: { status: "not_applicable" }
+        },
+        methodology: {
+          backtest_status: "missing"
+        },
+        readiness_tasks: ["Need at least 2 historical contests for this model family"],
+        blockers: ["election_history is not source-reviewed"],
+        coverage: {
+          history_records: 1,
+          raw_history_records: 1,
+          quarantined_history_records: 0
+        }
+      }],
+      generatedAt: "2026-04-20T00:00:00Z"
+    });
+
+    expect(audit.review_actions.total).toBe(1);
+    expect(audit.review_actions.by_action_code.source_review_required).toBe(1);
+    expect(audit.review_workflows.by_workflow_code.verify_history_source_provenance).toBe(1);
+    expect(audit.review_workflows.areas[0].target_source_classes).toContain("official_constituency_result_files");
+  });
 });

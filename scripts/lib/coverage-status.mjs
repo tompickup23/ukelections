@@ -10,6 +10,12 @@ function isCompleteArea(area) {
   return ["publishable", "published"].includes(area.publication_status);
 }
 
+function isConstituencyArea(area) {
+  const geographyType = String(area.geography_type || "");
+  return geographyType.includes("constituency") ||
+    ["westminster_fptp", "senedd_closed_list_pr", "scottish_ams"].includes(area.model_family);
+}
+
 function councilNameForArea(area, boundaryByCode) {
   const boundary = boundaryByCode.get(area.area_code);
   return boundary?.upstream?.council_name || boundary?.upstream?.council_id || "unknown";
@@ -53,7 +59,7 @@ export function buildCoverageStatus({
 } = {}) {
   const boundaryByCode = new Map(boundaries.map((boundary) => [boundary.area_code, boundary]));
   const localAreas = readiness.filter((area) => area.model_family?.startsWith("local_fptp_"));
-  const constituencyAreas = readiness.filter((area) => area.model_family?.includes("constituency"));
+  const constituencyAreas = readiness.filter(isConstituencyArea);
   const councilMap = new Map();
 
   for (const area of localAreas) {

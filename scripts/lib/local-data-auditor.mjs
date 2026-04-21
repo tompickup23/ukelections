@@ -260,6 +260,23 @@ function workflowForAction(actionCode) {
       ],
       promotion_gate: "Manual review must produce a named pass reason and strong publishable backtest gate."
     },
+    source_review_required: {
+      workflow_code: "verify_history_source_provenance",
+      priority: "P1",
+      target_source_classes: [
+        "official_result_declarations",
+        "official_constituency_result_files",
+        "boundary_lineage",
+        "upstream_transform_notes"
+      ],
+      workflow_steps: [
+        "Trace every imported result row back to the official declaration or official national result file.",
+        "Attach the boundary source, boundary year, and any predecessor or notional-history evidence.",
+        "Promote the history source only after vote totals, party labels, elected flags, and electorate/turnout fields reconcile.",
+        "Rerun readiness and backtests after source promotion; do not publish from unverified upstream profile rows."
+      ],
+      promotion_gate: "Election history source gate must be reviewed and the area must clear the model-family history and backtest gates."
+    },
     manual_review_required: {
       workflow_code: "manual_review_triage",
       priority: "P2",
@@ -317,6 +334,15 @@ function classifyReviewArea(row) {
       calibration_scope_counts: metrics.calibration_scope_counts
     }
   };
+
+  if (row.source_gates?.election_history?.status === "imported_quarantined") {
+    return {
+      ...base,
+      action_code: "source_review_required",
+      action: "Keep out of publication until the imported election-history rows are reconciled to official result evidence.",
+      rationale: "Election history exists, but the source gate has not been promoted to reviewed evidence."
+    };
+  }
 
   if (backtestStatus && backtestStatus !== "passed") {
     if (electedHitRate !== null && electedHitRate < 0.5 && competitiveHitRate !== null && competitiveHitRate >= 0.5 && mae !== null && mae <= 0.26) {
@@ -499,7 +525,7 @@ export function auditLocalDataBundle({
     .filter((row) => (row.readiness_tasks || []).length > 0 || (row.blockers || []).length > 0)
     .map(compactReadiness);
   const reviewAreaActions = readiness
-    .filter((row) => row.publication_status === "review")
+    .filter((row) => !["publishable", "published"].includes(row.publication_status))
     .map((row) => ({
       ...classifyReviewArea(row),
       source_context: areaSourceContextByCode.get(row.area_code) || buildAreaSourceContext([], sourceSnapshotById)

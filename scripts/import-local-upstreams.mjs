@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { buildSourceSnapshot } from "./lib/source-fetcher.mjs";
 import {
   buildAidogeFeatureSnapshots,
   buildLocalFileSourceSnapshot,
+  importAidogeConstituencyProfiles,
   importAidogeElectionData,
   importAidogePollAggregate
 } from "./lib/local-upstream-importers.mjs";
+import { importCommonsLibraryWestminsterResults } from "./lib/commons-library-results-importer.mjs";
 import { importDcleapilSupplementalHistory } from "./lib/dcleapil-supplemental-history.mjs";
 import { importOfficialHistoryRecords } from "./lib/official-history-importer.mjs";
 import { validateSourceSnapshots, summariseSourceQuality } from "./lib/source-quality.mjs";
@@ -21,6 +24,9 @@ const DEFAULTS = {
   asylumModelRoot: "/Users/tompickup/asylumstats/data/model",
   localAsylumPath: "/Users/tompickup/asylumstats/data/marts/uk_routes/local-route-latest.json",
   constituencyAsylumPath: "/Users/tompickup/clawd/labour-tracker/constituency_asylum.json",
+  constituencyProfilesPath: "/Users/tompickup/clawd/burnley-council/data/shared/constituencies.json",
+  commonsResultsDbPath: "/tmp/psephology.db",
+  commonsResultsDbUrl: "https://raw.githubusercontent.com/ukparliament/psephology-datasette/main/psephology.db?raw=true",
   dcleapilPath: "/Users/tompickup/clawd/burnley-council/scripts/election_data_cache/dcleapil_results.csv",
   officialHistoryPath: "data/lancaster-official-election-history.json",
   candidateSourceManifestPath: "data/lancashire-2026-sopn-sources.json",
@@ -37,6 +43,9 @@ function parseArgs(argv) {
     else if (arg === "--asylum-model-root") args.asylumModelRoot = argv[++index];
     else if (arg === "--local-asylum") args.localAsylumPath = argv[++index];
     else if (arg === "--constituency-asylum") args.constituencyAsylumPath = argv[++index];
+    else if (arg === "--constituency-profiles") args.constituencyProfilesPath = argv[++index];
+    else if (arg === "--commons-results-db") args.commonsResultsDbPath = argv[++index];
+    else if (arg === "--commons-results-db-url") args.commonsResultsDbUrl = argv[++index];
     else if (arg === "--dcleapil") args.dcleapilPath = argv[++index];
     else if (arg === "--official-history") args.officialHistoryPath = argv[++index];
     else if (arg === "--candidate-source-manifest") args.candidateSourceManifestPath = argv[++index];
@@ -63,6 +72,9 @@ Options:
   --asylum-model-root <path>     asylumstats/UKD model root
   --local-asylum <path>          asylumstats local route latest JSON
   --constituency-asylum <path>   Labour tracker constituency asylum JSON
+  --constituency-profiles <path> AI DOGE Westminster constituency profile JSON
+  --commons-results-db <path>    House of Commons Library psephology SQLite database
+  --commons-results-db-url <url> URL used to fetch the Commons Library database when missing
   --dcleapil <path>              DCLEAPIL/LEAP local election results CSV cache
   --official-history <path>      Manual official ward-result supplement JSON
   --candidate-source-manifest <path>
@@ -107,6 +119,38 @@ function snapshotFor(filePath, sourceName, options) {
       ? "Local source snapshot is accepted for internal modelling with warnings; licence, upstream semantics, and public-release wording still need final review."
       : "Fetched automatically. Review licence, row semantics, and transformation notes before accepting."
   });
+}
+
+async function ensureDownloadedFile(filePath, sourceUrl) {
+  if (existsSync(filePath) || !sourceUrl) return existsSync(filePath) ? filePath : null;
+  mkdirSync(path.dirname(filePath), { recursive: true });
+  const response = await fetch(sourceUrl, {
+    headers: {
+      "user-agent": "UK Elections local upstream importer"
+    }
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${sourceUrl}: ${response.status} ${response.statusText}`);
+  }
+  writeFileSync(filePath, Buffer.from(await response.arrayBuffer()));
+  return filePath;
+}
+
+function binarySnapshotFor(filePath, sourceName, options, contentType = "application/octet-stream", sourceUrl = options.sourceUrl) {
+  const absolutePath = path.resolve(filePath);
+  const content = readFileSync(absolutePath);
+  return {
+    ...buildSourceSnapshot({
+      sourceName,
+      sourceUrl,
+      licence: options.licence,
+      rawFilePath: absolutePath,
+      content,
+      contentType
+    }),
+    quality_status: "accepted_with_warnings",
+    review_notes: "Official binary source snapshot is accepted for internal modelling. Keep transformation queries and publication wording under review."
+  };
 }
 
 function sourceSnapshotPush(target, snapshot) {
@@ -310,6 +354,31 @@ if (constituencyAsylum) {
   constituencyAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.constituencyAsylumPath, "Labour tracker constituency asylum context", options));
 }
 
+const constituencyProfiles = readJsonIfExists(options.constituencyProfilesPath);
+let constituencyProfilesSnapshot = null;
+if (constituencyProfiles) {
+  constituencyProfilesSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.constituencyProfilesPath, "AI DOGE Westminster constituency profiles", options));
+  constituencyProfilesSnapshot.upstream_data_sources = constituencyProfiles.meta?.data_sources || [];
+  constituencyProfilesSnapshot.upstream_generated = constituencyProfiles.meta?.generated || null;
+}
+
+await ensureDownloadedFile(options.commonsResultsDbPath, options.commonsResultsDbUrl);
+let commonsResultsSnapshot = null;
+if (existsSync(options.commonsResultsDbPath)) {
+  commonsResultsSnapshot = sourceSnapshotPush(sourceSnapshots, binarySnapshotFor(
+    options.commonsResultsDbPath,
+    "House of Commons Library election results database",
+    options,
+    "application/vnd.sqlite3",
+    options.commonsResultsDbUrl || "https://electionresults.parliament.uk/"
+  ));
+  commonsResultsSnapshot.upstream_data_sources = [
+    "House of Commons Library election results",
+    "UK Parliament electionresults.parliament.uk",
+    "Official Results"
+  ];
+}
+
 const localAsylum = readJsonIfExists(options.localAsylumPath);
 let localAsylumSnapshot = null;
 if (localAsylum) {
@@ -447,6 +516,34 @@ for (const councilDir of councilDirs) {
   }
 }
 
+let commonsConstituencyImport = { boundaries: [], history: [], featureSnapshots: [] };
+if (commonsResultsSnapshot) {
+  commonsConstituencyImport = importCommonsLibraryWestminsterResults({
+    dbPath: options.commonsResultsDbPath,
+    sourceSnapshot: commonsResultsSnapshot,
+    pollAggregate: pollAggregates[0] || null,
+    constituencyAsylum,
+    constituencyAsylumSnapshot
+  });
+  boundaries.push(...commonsConstituencyImport.boundaries);
+  history.push(...commonsConstituencyImport.history);
+  featureSnapshots.push(...commonsConstituencyImport.featureSnapshots);
+}
+
+let aidogeConstituencyImport = { boundaries: [], history: [], featureSnapshots: [] };
+if (!commonsResultsSnapshot && constituencyProfilesSnapshot && constituencyProfiles) {
+  aidogeConstituencyImport = importAidogeConstituencyProfiles({
+    constituencyData: constituencyProfiles,
+    sourceSnapshot: constituencyProfilesSnapshot,
+    pollAggregate: pollAggregates[0] || null,
+    constituencyAsylum,
+    constituencyAsylumSnapshot
+  });
+  boundaries.push(...aidogeConstituencyImport.boundaries);
+  history.push(...aidogeConstituencyImport.history);
+  featureSnapshots.push(...aidogeConstituencyImport.featureSnapshots);
+}
+
 const supplementalHistory = dcleapilSnapshot
   ? await importDcleapilSupplementalHistory({
     dcleapilPath: options.dcleapilPath,
@@ -495,6 +592,9 @@ writeJson(path.join(options.output, "import-summary.json"), {
     asylum_model_root: options.asylumModelRoot,
     local_asylum_path: options.localAsylumPath,
     constituency_asylum_path: options.constituencyAsylumPath,
+    constituency_profiles_path: options.constituencyProfilesPath,
+    commons_results_db_path: options.commonsResultsDbPath,
+    commons_results_db_url: options.commonsResultsDbUrl,
     dcleapil_path: options.dcleapilPath,
     official_history_path: options.officialHistoryPath,
     candidate_source_manifest_path: options.candidateSourceManifestPath
@@ -511,6 +611,16 @@ writeJson(path.join(options.output, "import-summary.json"), {
     candidate_rosters: candidateRosters.length,
     poll_aggregates: pollAggregates.length,
     feature_snapshots: featureSnapshots.length
+  },
+  imported_constituencies: {
+    primary_source_path: commonsResultsSnapshot ? options.commonsResultsDbPath : options.constituencyProfilesPath,
+    primary_source: commonsResultsSnapshot ? "house_of_commons_library" : "ai_doge_constituency_profiles",
+    commons_boundaries: commonsConstituencyImport.boundaries.length,
+    commons_history_records: commonsConstituencyImport.history.length,
+    commons_feature_snapshots: commonsConstituencyImport.featureSnapshots.length,
+    ai_doge_fallback_boundaries: aidogeConstituencyImport.boundaries.length,
+    ai_doge_fallback_history_records: aidogeConstituencyImport.history.length,
+    ai_doge_fallback_feature_snapshots: aidogeConstituencyImport.featureSnapshots.length
   },
   imported_councils: importedCouncils,
   skipped_councils: skippedCouncils,
@@ -530,6 +640,9 @@ console.log(JSON.stringify({
     history_records: history.length,
     supplemental_history_records: supplementalHistory.length,
     official_history_records: officialHistory.length,
+    constituency_boundaries: commonsConstituencyImport.boundaries.length + aidogeConstituencyImport.boundaries.length,
+    constituency_history_records: commonsConstituencyImport.history.length + aidogeConstituencyImport.history.length,
+    constituency_feature_snapshots: commonsConstituencyImport.featureSnapshots.length + aidogeConstituencyImport.featureSnapshots.length,
     candidate_rosters: candidateRosters.length,
     poll_aggregates: pollAggregates.length,
     feature_snapshots: featureSnapshots.length

@@ -332,6 +332,69 @@ function constituencyAsylumContext(councilName, constituencyAsylum = {}) {
   };
 }
 
+function westminsterConstituencyAsylumContext(constituencyName, constituencyAsylum = {}) {
+  if (!constituencyAsylum) return null;
+  const constituencies = constituencyAsylum.constituencies || {};
+  const normalisedName = normaliseName(constituencyName);
+  const [matchedName, row] = Object.entries(constituencies).find(([name, value]) =>
+    normaliseName(name) === normalisedName || normaliseName(value?.area_name) === normalisedName
+  ) || [];
+  if (!row) return null;
+  return {
+    supported_asylum_stock: integerOrUndefined(row.asylum_seekers) || 0,
+    rate_per_10000_population: numberOrNull(row.asylum_rate_per_10k) || 0,
+    population: integerOrUndefined(row.population),
+    white_british_pct: pctToShare(row.white_british_pct),
+    unit: "quarter_end_stock",
+    route_scope: "asylum_support",
+    precision: "constituency_context",
+    matched_area_name: row.area_name || matchedName,
+    matched_constituency_names: [matchedName].filter(Boolean)
+  };
+}
+
+function constituencyPopulationProjection(constituency, asylumContext) {
+  const totalPopulation = integerOrUndefined(asylumContext?.population);
+  return {
+    base_year: 2021,
+    projection_year: 2026,
+    scenario: "constituency_context",
+    method: "manual_context",
+    quality_level: "proxy",
+    source_depth: "proxy_context",
+    geography_fit: "constituency_proxy",
+    confidence: "low",
+    limitations: [
+      "AI DOGE constituency profile supplies 2024 Westminster result context, but not a full constituency component population projection.",
+      "Population context is Labour tracker/UKD-derived proxy context where matched; it is not an exact constituency projection.",
+      constituency.partial ? "Upstream constituency profile is flagged as partial." : null
+    ].filter(Boolean),
+    total_population: totalPopulation
+  };
+}
+
+function geResultRows(results = []) {
+  const filtered = results
+    .filter((candidate) => Number.isFinite(Number(candidate.votes)))
+    .map((candidate) => ({
+      candidate,
+      votes: Math.max(0, Math.round(Number(candidate.votes)))
+    }))
+    .filter((row) => row.votes > 0)
+    .sort((left, right) => right.votes - left.votes);
+  const hasElected = filtered.some(({ candidate }) => candidate.elected === true);
+  const voteTotal = filtered.reduce((sum, row) => sum + row.votes, 0);
+  return filtered.map(({ candidate, votes }, index) => ({
+    candidate_or_party_name: candidate.candidate || candidate.name || candidate.party || "Unknown",
+    party_name: candidate.party || "Independent",
+    votes,
+    vote_share: voteTotal > 0 ? votes / voteTotal : 0,
+    rank: index + 1,
+    elected: Boolean(candidate.elected) || (!hasElected && index === 0),
+    incumbent: Boolean(candidate.incumbent)
+  }));
+}
+
 export function buildLocalFileSourceSnapshot({
   filePath,
   sourceName,
@@ -562,6 +625,143 @@ export function importAidogePollAggregate({
       notes: "Imported from AI DOGE shared polling output. Pollster-level sources must be reviewed before public forecast claims."
     }
   };
+}
+
+export function importAidogeConstituencyProfiles({
+  constituencyData,
+  sourceSnapshot,
+  pollAggregate = null,
+  constituencyAsylum = null,
+  constituencyAsylumSnapshot = null,
+  asOf
+}) {
+  const meta = constituencyData?.meta || {};
+  const asOfDate = toDate(asOf || meta.generated || new Date().toISOString());
+  const sourceUrl = sourceSnapshot.source_url;
+  const boundaries = [];
+  const history = [];
+  const featureSnapshots = [];
+
+  for (const constituency of constituencyData?.constituencies || []) {
+    const areaCode = constituency.ons_code;
+    const areaName = constituency.name;
+    const ge2024 = constituency.ge2024 || {};
+    const resultRows = geResultRows(ge2024.results);
+    if (!areaCode || !areaName || resultRows.length === 0) continue;
+
+    const electionDate = "2024-07-04";
+    const boundaryVersionId = `ai-doge.westminster.${slug(areaCode)}.2024`;
+    const boundary = {
+      boundary_version_id: boundaryVersionId,
+      area_type: "westminster_constituency",
+      area_code: areaCode,
+      area_name: areaName,
+      valid_from: electionDate,
+      valid_to: null,
+      predecessor_boundary_version_ids: [],
+      successor_boundary_version_ids: [],
+      source_snapshot_id: sourceSnapshot.snapshot_id,
+      source_url: sourceUrl,
+      review_status: constituency.partial ? "quarantined" : "reviewed_with_warnings",
+      upstream: {
+        system: "AI DOGE",
+        model_family: "westminster_fptp",
+        boundary_revision: meta.boundary_revision || "2024",
+        source_area_code: areaCode,
+        area_code_method: "upstream_ons_code",
+        boundary_note: "AI DOGE Westminster profile uses 2024 constituency codes; official boundary geometry and predecessor/successor lineage still require separate review."
+      }
+    };
+    boundaries.push(boundary);
+
+    const voteTotal = resultRows.reduce((sum, row) => sum + row.votes, 0);
+    history.push({
+      history_id: `ai-doge.westminster.${slug(areaCode)}.${electionDate}`,
+      contest_id: `westminster.${slug(areaCode)}.${electionDate}`,
+      area_id: boundaryVersionId,
+      area_code: areaCode,
+      area_name: areaName,
+      boundary_version_id: boundaryVersionId,
+      election_date: electionDate,
+      election_type: "westminster",
+      voting_system: "fptp",
+      source_snapshot_id: sourceSnapshot.snapshot_id,
+      source_url: sourceUrl,
+      electorate: integerOrUndefined(ge2024.electorate),
+      turnout_votes: voteTotal,
+      turnout: turnoutShare(ge2024.turnout),
+      seats_contested: 1,
+      review_status: constituency.partial ? "quarantined" : "reviewed_with_warnings",
+      upstream: {
+        system: "AI DOGE",
+        result_summary: ge2024.result || null,
+        mp_name: constituency.mp?.name || null,
+        mp_party: constituency.mp?.party || null,
+        boundary_revision: meta.boundary_revision || "2024",
+        source_warning: "Imported from a local constituency profile bundle; official result-file row checks are still required before publication."
+      },
+      result_rows: resultRows
+    });
+
+    const asylumContext = westminsterConstituencyAsylumContext(areaName, constituencyAsylum);
+    const populationProjection = constituencyPopulationProjection(constituency, asylumContext);
+    const provenance = [
+      {
+        field: "features.electoral_history",
+        source_snapshot_id: sourceSnapshot.snapshot_id,
+        source_url: sourceUrl,
+        notes: "AI DOGE Westminster constituency profile with 2024 general election result rows."
+      },
+      pollAggregate && {
+        field: "features.poll_context",
+        source_snapshot_id: sourceSnapshot.snapshot_id,
+        source_url: sourceUrl,
+        notes: "AI DOGE shared GB polling aggregate used as contextual Westminster baseline input."
+      },
+      {
+        field: "features.population_projection",
+        source_snapshot_id: constituencyAsylumSnapshot?.snapshot_id || sourceSnapshot.snapshot_id,
+        source_url: constituencyAsylumSnapshot?.source_url || sourceUrl,
+        notes: asylumContext
+          ? "Labour tracker/UKD constituency asylum file supplies proxy population context."
+          : "No matched constituency population projection was found; model is held at proxy-context readiness."
+      },
+      asylumContext && constituencyAsylumSnapshot && {
+        field: "features.asylum_context",
+        source_snapshot_id: constituencyAsylumSnapshot.snapshot_id,
+        source_url: constituencyAsylumSnapshot.source_url,
+        notes: "Labour tracker constituency asylum support stock; used as constituency-level context."
+      }
+    ].filter(Boolean);
+
+    const snapshot = compileAreaFeatureSnapshot({
+      area: { area_code: areaCode, area_name: areaName },
+      modelFamily: "westminster_fptp",
+      boundaryVersion: boundary,
+      historyRecords: history,
+      pollAggregate,
+      asylumContext,
+      populationProjection,
+      provenance,
+      asOf: asOfDate
+    });
+
+    featureSnapshots.push({
+      ...snapshot,
+      review_status: "quarantined",
+      features: {
+        ...snapshot.features,
+        election_context: {
+          latest_election_date: electionDate,
+          election_cycle: "uk_general_election",
+          contested_at_next_election: false,
+          candidacy_source: null
+        }
+      }
+    });
+  }
+
+  return { boundaries, history, featureSnapshots };
 }
 
 export function buildAidogeFeatureSnapshots({

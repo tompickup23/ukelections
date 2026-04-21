@@ -31,7 +31,8 @@ describe("coverage status", () => {
         },
         {
           area_code: "W1",
-          model_family: "westminster_constituency",
+          geography_type: "westminster_constituency",
+          model_family: "westminster_fptp",
           publication_status: "review",
           source_gates: {}
         }

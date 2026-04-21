@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildAidogeFeatureSnapshots,
+  importAidogeConstituencyProfiles,
   importAidogeElectionData,
   importAidogePollAggregate
 } from "../scripts/lib/local-upstream-importers.mjs";
@@ -470,6 +471,89 @@ describe("local upstream importers", () => {
       precision: "local_authority_context",
       matched_area_code: "E07000117",
       matched_area_name: "Burnley"
+    });
+  });
+
+  it("imports AI DOGE Westminster constituency profiles into validated model inputs", () => {
+    const imported = importAidogeConstituencyProfiles({
+      constituencyData: {
+        meta: {
+          generated: "2026-04-18T00:00:00Z",
+          boundary_revision: "2024",
+          data_sources: ["Parliament Members API"]
+        },
+        constituencies: [{
+          ons_code: "E14001118",
+          name: "Burnley",
+          mp: { name: "Oliver Ryan", party: "Labour" },
+          ge2024: {
+            result: "Labour gain from Conservative",
+            turnout: 0.53,
+            electorate: 74954,
+            results: [
+              { candidate: "Oliver Ryan", party: "Labour", votes: 12598, elected: true },
+              { candidate: "Gordon Birtwistle", party: "Liberal Democrats", votes: 9178 },
+              { candidate: "Antony Higginbotham", party: "Conservative", votes: 8058 }
+            ]
+          }
+        }]
+      },
+      sourceSnapshot,
+      pollAggregate: importAidogePollAggregate({
+        sourceSnapshot,
+        pollingData: {
+          aggregate: { Labour: 0.4, Conservative: 0.3, Other: 0.3 },
+          individual_polls: []
+        }
+      }),
+      constituencyAsylum: {
+        constituencies: {
+          Burnley: {
+            area_name: "Burnley",
+            asylum_seekers: 461,
+            asylum_rate_per_10k: 46.5,
+            white_british_pct: 77.9,
+            population: 99233
+          }
+        }
+      },
+      constituencyAsylumSnapshot: sourceSnapshot
+    });
+    const historyValidation = validateHistoryBundle({
+      boundaries: imported.boundaries,
+      history: imported.history
+    });
+    const modelValidation = validateModelInputs({
+      pollAggregates: [],
+      featureSnapshots: imported.featureSnapshots
+    });
+
+    expect(historyValidation.ok).toBe(true);
+    expect(modelValidation.ok).toBe(true);
+    expect(imported.boundaries[0]).toMatchObject({
+      area_type: "westminster_constituency",
+      area_code: "E14001118",
+      review_status: "reviewed_with_warnings"
+    });
+    expect(imported.history[0]).toMatchObject({
+      election_type: "westminster",
+      voting_system: "fptp",
+      turnout_votes: 29834
+    });
+    expect(imported.featureSnapshots[0]).toMatchObject({
+      model_family: "westminster_fptp",
+      review_status: "quarantined",
+      features: {
+        asylum_context: {
+          precision: "constituency_context",
+          supported_asylum_stock: 461
+        },
+        population_projection: {
+          method: "manual_context",
+          geography_fit: "constituency_proxy",
+          confidence: "low"
+        }
+      }
     });
   });
 
