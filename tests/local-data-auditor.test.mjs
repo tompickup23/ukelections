@@ -219,4 +219,45 @@ describe("local data auditor", () => {
     expect(audit.review_workflows.by_workflow_code.verify_history_source_provenance).toBe(1);
     expect(audit.review_workflows.areas[0].target_source_classes).toContain("official_constituency_result_files");
   });
+
+  it("groups Westminster review workflows under a national source context", () => {
+    const audit = auditLocalDataBundle({
+      readiness: [{
+        model_area_id: "r1",
+        area_code: "E14000001",
+        area_name: "Example Seat",
+        model_family: "westminster_fptp",
+        publication_status: "review",
+        review_status: "reviewed_with_warnings",
+        source_gates: {
+          election_history: { status: "reviewed" },
+          backtest: { status: "accepted", publication_gate: "review_required" }
+        },
+        methodology: {
+          backtest_status: "passed",
+          backtest_pass_reason: "single_contest_elected_party_hit",
+          backtest_evidence_tier: "limited",
+          backtest_metrics: {
+            mean_absolute_error: 0.05,
+            elected_party_hit_rate: 1,
+            competitive_party_hit_rate: 1
+          }
+        },
+        readiness_tasks: ["Backtest pass is limited and needs manual review before publication."],
+        blockers: [],
+        coverage: {
+          history_records: 2,
+          raw_history_records: 2,
+          quarantined_history_records: 0
+        }
+      }],
+      generatedAt: "2026-04-20T00:00:00Z"
+    });
+
+    expect(audit.review_workflows.by_council["Westminster constituencies"]).toBe(1);
+    expect(audit.review_workflows.areas[0].source_context).toMatchObject({
+      council_names: ["Westminster constituencies"],
+      source_area_codes: ["E14000001"]
+    });
+  });
 });

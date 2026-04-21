@@ -304,6 +304,32 @@ function decorateReviewAction(row) {
   };
 }
 
+function sourceContextForReadiness(row, context) {
+  if (context?.council_names?.length) return context;
+  if (row.model_family === "westminster_fptp") {
+    return {
+      ...context,
+      council_names: ["Westminster constituencies"],
+      source_area_codes: [row.area_code].filter(Boolean)
+    };
+  }
+  if (row.model_family === "senedd_closed_list_pr") {
+    return {
+      ...context,
+      council_names: ["Senedd constituencies"],
+      source_area_codes: [row.area_code].filter(Boolean)
+    };
+  }
+  if (row.model_family === "scottish_ams") {
+    return {
+      ...context,
+      council_names: ["Scottish Parliament constituencies"],
+      source_area_codes: [row.area_code].filter(Boolean)
+    };
+  }
+  return context || buildAreaSourceContext([]);
+}
+
 function classifyReviewArea(row) {
   const metrics = row.methodology?.backtest_metrics || {};
   const backtestGate = row.source_gates?.backtest || {};
@@ -528,7 +554,7 @@ export function auditLocalDataBundle({
     .filter((row) => !["publishable", "published"].includes(row.publication_status))
     .map((row) => ({
       ...classifyReviewArea(row),
-      source_context: areaSourceContextByCode.get(row.area_code) || buildAreaSourceContext([], sourceSnapshotById)
+      source_context: sourceContextForReadiness(row, areaSourceContextByCode.get(row.area_code) || buildAreaSourceContext([], sourceSnapshotById))
     }))
     .map(decorateReviewAction);
 

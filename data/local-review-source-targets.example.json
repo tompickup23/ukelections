@@ -1,5 +1,34 @@
 [
   {
+    "target_id": "commons-library-election-results-site",
+    "council_name": "*",
+    "source_name": "House of Commons Library election results site",
+    "url": "https://electionresults.parliament.uk/",
+    "source_classes": ["official_constituency_result_files", "official_notional_results", "commons_library_westminster_results"],
+    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal", "investigate_vote_share_failure"],
+    "licence": "Open Parliament Licence",
+    "notes": "Official Commons Library result site for Westminster constituencies; includes 2024 actual results and 2019 notional results on 2024 boundaries used by the national constituency import."
+  },
+  {
+    "target_id": "commons-library-psephology-database",
+    "council_name": "*",
+    "source_name": "House of Commons Library psephology SQLite database",
+    "url": "https://raw.githubusercontent.com/ukparliament/psephology-datasette/main/psephology.db?raw=true",
+    "source_classes": ["official_constituency_result_files", "official_notional_results", "machine_readable_election_history"],
+    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal", "investigate_vote_share_failure"],
+    "licence": "Open Parliament Licence",
+    "notes": "Machine-readable source behind electionresults.parliament.uk. Use for row-level reconciliation of Westminster constituency candidates, votes, parties, electorates, and notional flags."
+  },
+  {
+    "target_id": "ons-parliamentary-constituency-statistics",
+    "council_name": "*",
+    "source_name": "ONS parliamentary constituency statistics and population estimates",
+    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates",
+    "source_classes": ["constituency_population_method", "population_estimates", "official_demographic_context"],
+    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal", "wait_or_add_second_contest"],
+    "notes": "Use to replace proxy constituency population context with official constituency population estimates where available."
+  },
+  {
     "target_id": "ribble-valley-2023-borough-results",
     "council_name": "Ribble Valley",
     "source_name": "Ribble Valley election results index",
