@@ -277,6 +277,23 @@ function workflowForAction(actionCode) {
       ],
       promotion_gate: "Election history source gate must be reviewed and the area must clear the model-family history and backtest gates."
     },
+    fill_demographic_context: {
+      workflow_code: "fill_demographic_context",
+      priority: "P1",
+      target_source_classes: [
+        "official_constituency_population_estimates",
+        "home_office_asylum_support_local_authority",
+        "constituency_to_local_authority_crosswalk",
+        "commons_constituency_statistics"
+      ],
+      workflow_steps: [
+        "Replace missing or proxy asylum context with Home Office local-authority asylum support stock, mapped to constituencies through documented boundary/lookup weights.",
+        "Replace proxy constituency population context with the latest ONS, NRS, or NISRA constituency population estimates for the relevant nation.",
+        "Store the source period, geography, transform method, and precision level so model areas with direct, apportioned, or proxy context are distinguishable.",
+        "Rerun readiness; do not promote areas whose demographic/asylum context remains missing or proxy-only."
+      ],
+      promotion_gate: "Asylum and population context must be direct or explicitly apportioned from official source geography, with source period and transform method recorded."
+    },
     manual_review_required: {
       workflow_code: "manual_review_triage",
       priority: "P2",
@@ -428,6 +445,15 @@ function classifyReviewArea(row) {
         rationale: "The backtest passes a limited vote-share or competitive-party gate, not a reliable elected-party gate."
       };
     }
+  }
+
+  if (["missing", "proxy"].includes(row.source_gates?.asylum_context?.status)) {
+    return {
+      ...base,
+      action_code: "fill_demographic_context",
+      action: "Keep in review until asylum and population context is rebuilt from official source geography with documented constituency apportionment.",
+      rationale: `The backtest is otherwise publishable, but asylum context is ${row.source_gates.asylum_context.status === "missing" ? "missing" : "proxy-only"}.`
+    };
   }
 
   return {

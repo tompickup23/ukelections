@@ -139,6 +139,66 @@ ORDER BY ca.geographic_code, ge.polling_on, c.result_position;
   return JSON.parse(result.stdout || "[]");
 }
 
+function queryOverlapRows(dbPath) {
+  const query = `
+WITH party_labels AS (
+  SELECT
+    cert.candidacy_id,
+    group_concat(pp.name, ' + ') AS party_names,
+    group_concat(pp.abbreviation, ' + ') AS party_abbreviations
+  FROM certifications cert
+  JOIN political_parties pp ON pp.id = cert.political_party_id
+  GROUP BY cert.candidacy_id
+),
+current_constituencies AS (
+  SELECT DISTINCT ca.id, ca.name, ca.geographic_code
+  FROM general_elections ge
+  JOIN elections e ON e.general_election_id = ge.id
+  JOIN constituency_groups cg ON cg.id = e.constituency_group_id
+  JOIN constituency_areas ca ON ca.id = cg.constituency_area_id
+  WHERE ge.id = 6
+)
+SELECT
+  ge.id AS general_election_id,
+  ge.polling_on AS polling_on,
+  e.id AS source_election_id,
+  e.valid_vote_count AS valid_vote_count,
+  elect.population_count AS electorate,
+  old_ca.name AS source_area_name,
+  old_ca.geographic_code AS source_area_code,
+  current_constituencies.name AS area_name,
+  current_constituencies.geographic_code AS area_code,
+  o.from_constituency_population AS overlap_weight,
+  o.formed_from_whole_of AS formed_from_whole_of,
+  c.id AS candidacy_id,
+  trim(coalesce(c.candidate_given_name, '') || ' ' || coalesce(c.candidate_family_name, '')) AS candidate_name,
+  c.is_standing_as_independent AS is_standing_as_independent,
+  c.vote_count AS vote_count,
+  pl.party_names AS party_names,
+  pl.party_abbreviations AS party_abbreviations
+FROM constituency_area_overlaps o
+JOIN constituency_areas old_ca ON old_ca.id = o.from_constituency_area_id
+JOIN current_constituencies ON current_constituencies.id = o.to_constituency_area_id
+JOIN constituency_groups cg ON cg.constituency_area_id = old_ca.id
+JOIN elections e ON e.constituency_group_id = cg.id
+JOIN general_elections ge ON ge.id = e.general_election_id
+LEFT JOIN electorates elect ON elect.id = e.electorate_id
+JOIN candidacies c ON c.election_id = e.id
+LEFT JOIN party_labels pl ON pl.candidacy_id = c.id
+WHERE ge.id IN (1, 2, 3)
+  AND current_constituencies.geographic_code IS NOT NULL
+ORDER BY current_constituencies.geographic_code, ge.polling_on, source_area_code;
+`;
+  const result = spawnSync("sqlite3", ["-json", dbPath, query], {
+    encoding: "utf8",
+    maxBuffer: 50 * 1024 * 1024
+  });
+  if (result.status !== 0) {
+    throw new Error(`sqlite3 failed: ${result.stderr || result.stdout}`);
+  }
+  return JSON.parse(result.stdout || "[]");
+}
+
 function groupBy(rows, keyFn) {
   const groups = new Map();
   for (const row of rows || []) {
@@ -165,6 +225,73 @@ function buildResultRows(rows) {
     }));
 }
 
+function buildOverlapHistoryRows(overlapRows, sourceSnapshot, sourceUrl) {
+  const history = [];
+  const rowsByAreaElection = groupBy(overlapRows, (row) => `${row.area_code}::${row.polling_on}`);
+  for (const rows of rowsByAreaElection.values()) {
+    const first = rows[0];
+    const partyVotes = new Map();
+    const sourceAreaCodes = new Set();
+    let weightedElectorate = 0;
+    let weightedValidVotes = 0;
+    for (const row of rows) {
+      const weight = Math.max(0, numberOrNull(row.overlap_weight) || 0);
+      if (weight <= 0) continue;
+      const party = partyName(row);
+      partyVotes.set(party, (partyVotes.get(party) || 0) + Math.max(0, Number(row.vote_count) || 0) * weight);
+      sourceAreaCodes.add(row.source_area_code);
+      weightedElectorate += (Number(row.electorate) || 0) * weight;
+      weightedValidVotes += (Number(row.valid_vote_count) || 0) * weight;
+    }
+    const totalVotes = [...partyVotes.values()].reduce((sum, value) => sum + value, 0);
+    if (totalVotes <= 0) continue;
+    const resultRows = [...partyVotes.entries()]
+      .map(([party, votes]) => ({ party, votes: Math.round(votes) }))
+      .filter((row) => row.votes > 0)
+      .sort((left, right) => right.votes - left.votes)
+      .map((row, index, allRows) => {
+        const roundedTotal = allRows.reduce((sum, item) => sum + item.votes, 0);
+        return {
+          candidate_or_party_name: row.party,
+          party_name: row.party,
+          votes: row.votes,
+          vote_share: roundedTotal > 0 ? row.votes / roundedTotal : 0,
+          rank: index + 1,
+          elected: index === 0,
+          incumbent: false
+        };
+      });
+    const turnoutVotes = resultRows.reduce((sum, row) => sum + row.votes, 0);
+    history.push({
+      history_id: `commons-library.westminster.${slug(first.area_code)}.${first.polling_on}.overlap-weighted`,
+      contest_id: `westminster.${slug(first.area_code)}.${first.polling_on}.overlap-weighted`,
+      area_id: `commons-library.westminster.${slug(first.area_code)}.2024`,
+      area_code: first.area_code,
+      area_name: first.area_name,
+      boundary_version_id: `commons-library.westminster.${slug(first.area_code)}.2024`,
+      election_date: first.polling_on,
+      election_type: "westminster",
+      voting_system: "fptp",
+      source_snapshot_id: sourceSnapshot.snapshot_id,
+      source_url: sourceUrl,
+      electorate: Math.round(weightedElectorate),
+      turnout_votes: turnoutVotes,
+      reported_turnout_votes: Math.round(weightedValidVotes),
+      seats_contested: 1,
+      review_status: "reviewed_with_warnings",
+      upstream: {
+        system: "House of Commons Library",
+        synthetic_current_boundary_history: true,
+        overlap_method: "from_constituency_population_weighted_party_votes",
+        source_area_codes: [...sourceAreaCodes].sort(),
+        source_warning: "Synthetic current-boundary party history derived from Commons Library official results and constituency-area overlap weights. It is suitable for model calibration review, not a substitute for official notional candidate declarations."
+      },
+      result_rows: resultRows
+    });
+  }
+  return history.sort((left, right) => `${left.area_code}:${left.election_date}`.localeCompare(`${right.area_code}:${right.election_date}`));
+}
+
 export function importCommonsLibraryWestminsterResults({
   dbPath,
   sourceSnapshot,
@@ -174,18 +301,23 @@ export function importCommonsLibraryWestminsterResults({
   asOf
 }) {
   const rows = queryRows(dbPath);
+  const overlapRows = queryOverlapRows(dbPath);
   const sourceUrl = sourceSnapshot.source_url;
   const boundaries = [];
-  const history = [];
+  const history = buildOverlapHistoryRows(overlapRows, sourceSnapshot, sourceUrl);
   const featureSnapshots = [];
   const rowsByElection = groupBy(rows, (row) => row.election_id);
   const rowsByArea = groupBy(rows, (row) => row.area_code);
+  const overlapRowsByArea = groupBy(overlapRows, (row) => row.area_code);
   const asOfDate = asOf || new Date().toISOString().slice(0, 10);
 
   for (const [areaCode, areaRows] of rowsByArea.entries()) {
     const currentRows = areaRows.find((row) => Number(row.general_election_id) === 6) ? areaRows : [];
     const current = currentRows.find((row) => Number(row.general_election_id) === 6) || areaRows[0];
-    const earliestPollingDate = areaRows.map((row) => row.polling_on).filter(Boolean).sort()[0] || current.boundary_start_on || "2024-05-30";
+    const earliestPollingDate = [
+      ...areaRows.map((row) => row.polling_on),
+      ...(overlapRowsByArea.get(areaCode) || []).map((row) => row.polling_on)
+    ].filter(Boolean).sort()[0] || current.boundary_start_on || "2024-05-30";
     const boundaryVersionId = `commons-library.westminster.${slug(areaCode)}.2024`;
     boundaries.push({
       boundary_version_id: boundaryVersionId,

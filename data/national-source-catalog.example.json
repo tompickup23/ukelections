@@ -20,11 +20,11 @@
   {
     "source_id": "democracy-club-data-api",
     "name": "Democracy Club election data and APIs",
-    "url": "https://democracyclub.org.uk/data_apis/data/",
+    "url": "https://developers.democracyclub.org.uk/api/v1/",
     "coverage": ["candidates", "ballots", "fptp_results", "election_ids"],
     "source_type": "verified_secondary",
     "licence_review": "required",
-    "notes": "Candidate and results CSV/API coverage is broad but updates quickly during election periods; statements of persons nominated remain the promotion gate."
+    "notes": "Candidate and election API documentation is machine-readable enough for workflow anchoring, but live calls may need credentials; statements of persons nominated remain the promotion gate."
   },
   {
     "source_id": "electoral-commission-election-api",
@@ -79,6 +79,33 @@
     "source_type": "primary",
     "licence_review": "required",
     "notes": "Defines output-area best-fit and ward/constituency population estimate methods; essential for population feature confidence."
+  },
+  {
+    "source_id": "ons-parliamentary-constituency-population-estimates",
+    "name": "ONS parliamentary constituency mid-year population estimates",
+    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/parliamentaryconstituencymidyearpopulationestimates",
+    "coverage": ["constituency_population_method", "official_constituency_population_estimates"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Primary ONS dataset page for parliamentary constituency population estimates. Use with explicit boundary-generation checks before attaching to 2024 Westminster constituencies."
+  },
+  {
+    "source_id": "nomis-parliamentary-constituency-population-api",
+    "name": "Nomis parliamentary constituency population estimates API",
+    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_2010_1.data.csv?geography=TYPE460&gender=0&c_age=0&measures=20100&date=latest",
+    "coverage": ["constituency_population_method", "machine_readable_demographic_context"],
+    "source_type": "primary_api",
+    "licence_review": "required",
+    "notes": "Fetchable API endpoint for constituency population rows where TYPE460/2010-boundary coverage is appropriate. Do not use as a 2024-boundary source without an explicit ONS/Commons boundary reconciliation."
+  },
+  {
+    "source_id": "ons-westminster-constituency-boundaries-2024",
+    "name": "ONS Open Geography Westminster Parliamentary Constituencies July 2024 boundaries",
+    "url": "https://geoportal.statistics.gov.uk/datasets/ons::westminster-parliamentary-constituencies-july-2024-boundaries-uk-bfe/about",
+    "coverage": ["constituency_boundaries", "constituency_to_local_authority_crosswalk", "area_names"],
+    "source_type": "primary",
+    "licence_review": "required",
+    "notes": "Official 2024 Westminster boundary layer needed for apportioning local-authority asylum data and validating constituency code/name joins."
   },
   {
     "source_id": "boundaries-scotland-data",

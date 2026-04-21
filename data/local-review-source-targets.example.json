@@ -22,11 +22,51 @@
   {
     "target_id": "ons-parliamentary-constituency-statistics",
     "council_name": "*",
-    "source_name": "ONS parliamentary constituency statistics and population estimates",
-    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates",
-    "source_classes": ["constituency_population_method", "population_estimates", "official_demographic_context"],
-    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal", "wait_or_add_second_contest"],
-    "notes": "Use to replace proxy constituency population context with official constituency population estimates where available."
+    "source_name": "ONS parliamentary constituency mid-year population estimates",
+    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/parliamentaryconstituencymidyearpopulationestimates",
+    "source_classes": ["constituency_population_method", "population_estimates", "official_constituency_population_estimates", "official_demographic_context"],
+    "applies_to_workflow_codes": ["extend_temporal_validation", "repair_winner_signal", "wait_or_add_second_contest", "fill_demographic_context"],
+    "notes": "Official ONS dataset page for parliamentary constituency mid-year population estimates; use where the relevant constituency boundary generation is available."
+  },
+  {
+    "target_id": "nomis-parliamentary-constituency-population-api",
+    "council_name": "*",
+    "source_name": "Nomis parliamentary constituency population estimates API",
+    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_2010_1.data.csv?geography=TYPE460&gender=0&c_age=0&measures=20100&date=latest",
+    "source_classes": ["constituency_population_method", "population_estimates", "official_constituency_population_estimates", "machine_readable_demographic_context"],
+    "applies_to_workflow_codes": ["fill_demographic_context"],
+    "licence": "Open Government Licence",
+    "notes": "Machine-readable Nomis endpoint for ONS small-area population estimates by parliamentary constituency where TYPE460/2010-boundary coverage is appropriate; 2024 constituency rows must be checked against the ONS/Commons dashboard source before use."
+  },
+  {
+    "target_id": "home-office-regional-local-authority-immigration-data",
+    "council_name": "*",
+    "source_name": "Home Office immigration statistics regional and local authority data",
+    "url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
+    "source_classes": ["home_office_asylum_support_local_authority", "official_asylum_support_context", "local_authority_demographic_context"],
+    "applies_to_workflow_codes": ["fill_demographic_context"],
+    "licence": "Open Government Licence",
+    "notes": "Stable GOV.UK collection page for regional and local authority immigration statistics, including asylum support local-authority tables used to replace proxy constituency asylum context."
+  },
+  {
+    "target_id": "home-office-regional-local-authority-data-dec-2025",
+    "council_name": "*",
+    "source_name": "Home Office regional and local authority immigration dataset December 2025",
+    "url": "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+    "source_classes": ["home_office_asylum_support_local_authority", "official_asylum_support_context", "machine_readable_demographic_context"],
+    "applies_to_workflow_codes": ["fill_demographic_context"],
+    "licence": "Open Government Licence",
+    "notes": "Latest regional/local authority dataset found on GOV.UK on 2026-04-21; refresh logic should check the stable collection page for a newer quarterly asset before each production import."
+  },
+  {
+    "target_id": "democracy-club-api-docs",
+    "council_name": "*",
+    "source_name": "Democracy Club API documentation",
+    "url": "https://developers.democracyclub.org.uk/api/v1/",
+    "source_classes": ["democracy_club_candidates", "candidate_rosters", "machine_readable_election_metadata"],
+    "applies_to_workflow_codes": ["wait_or_add_second_contest", "repair_winner_signal", "verify_history_source_provenance"],
+    "licence": "Review required before public reuse",
+    "notes": "API documentation for machine-readable election, candidate, and polling-place data. Live API calls may need credentials; use this target to keep candidate-roster workflows anchored to the documented API."
   },
   {
     "target_id": "ribble-valley-2023-borough-results",
@@ -128,12 +168,22 @@
     "notes": "Use for every post-boundary and temporal-validation workflow before reinstating older same-name rows."
   },
   {
+    "target_id": "ons-westminster-parliamentary-constituency-boundaries-2024",
+    "council_name": "*",
+    "source_name": "ONS Open Geography Westminster Parliamentary Constituencies July 2024 boundaries",
+    "url": "https://geoportal.statistics.gov.uk/datasets/ons::westminster-parliamentary-constituencies-july-2024-boundaries-uk-bfe/about",
+    "source_classes": ["constituency_to_local_authority_crosswalk", "ons_boundary_codes", "official_geography_boundaries"],
+    "applies_to_workflow_codes": ["fill_demographic_context", "build_boundary_notional_history", "extend_temporal_validation"],
+    "licence": "Open Government Licence",
+    "notes": "Use the official 2024 Westminster constituency boundaries when apportioning local-authority asylum data or reconciling constituency population evidence."
+  },
+  {
     "target_id": "ons-electoral-geography-names-codes",
     "council_name": "*",
     "source_name": "ONS names and codes for electoral geographies",
     "url": "https://www.ons.gov.uk/methodology/geography/geographicalproducts/namescodesandlookups/namesandcodeslistings/namesandcodesforelectoralgeography",
     "source_classes": ["ons_boundary_codes", "area_name_code_register"],
-    "applies_to_workflow_codes": ["build_boundary_notional_history", "extend_temporal_validation", "wait_or_add_second_contest"],
+    "applies_to_workflow_codes": ["build_boundary_notional_history", "extend_temporal_validation", "wait_or_add_second_contest", "fill_demographic_context"],
     "notes": "Use as the canonical current code/name check for every review-gated local area."
   }
 ]
