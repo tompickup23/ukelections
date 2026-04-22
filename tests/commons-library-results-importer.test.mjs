@@ -122,4 +122,63 @@ describe("Commons Library Westminster results importer", () => {
       }
     });
   });
+
+  it("uses official local-authority asylum data when a PCON-LAD crosswalk is available", () => {
+    const imported = importCommonsLibraryWestminsterResults({
+      dbPath: createDb(),
+      sourceSnapshot,
+      localAsylum: {
+        snapshotDate: "2025-12-31",
+        areas: [
+          {
+            areaCode: "E07000001",
+            areaName: "Example District",
+            supportedAsylum: 100,
+            supportedAsylumRate: 10,
+            population: 100000,
+            snapshotDate: "2025-12-31",
+            asylumAccommodationBreakdown: {
+              initial: 10,
+              dispersal: 70,
+              contingency: 20,
+              other: 0,
+              subsistenceOnly: 0
+            }
+          }
+        ]
+      },
+      localAsylumSnapshot: {
+        snapshot_id: "home-office-local",
+        source_url: "https://example.test/home-office.ods"
+      },
+      constituencyLocalAuthorityCrosswalk: {
+        method: { apportionment_basis: "live_postcode_count" },
+        rows: [
+          {
+            pcon24cd: "E14000001",
+            lad25cd: "E07000001",
+            postcode_count: 100,
+            pcon_postcode_share: 1,
+            lad_postcode_share: 1
+          }
+        ]
+      },
+      constituencyLocalAuthorityCrosswalkSnapshot: {
+        snapshot_id: "ons-crosswalk",
+        source_url: "https://example.test/ons-query"
+      },
+      asOf: "2026-04-22"
+    });
+
+    expect(imported.featureSnapshots[0].features.asylum_context).toMatchObject({
+      precision: "constituency_estimate",
+      supported_asylum_stock: 100,
+      population: 100000,
+      apportionment_method: "ons_postcode_directory_pcon24_lad25_live_postcode_weighted"
+    });
+    expect(imported.featureSnapshots[0].provenance.filter((row) => row.field === "features.asylum_context").map((row) => row.source_snapshot_id)).toEqual([
+      "home-office-local",
+      "ons-crosswalk"
+    ]);
+  });
 });

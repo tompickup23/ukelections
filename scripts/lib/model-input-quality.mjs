@@ -182,7 +182,7 @@ export function validateModelFeatureSnapshot(snapshot) {
     if (!["asylum_support", "hotel_accommodation", "route_specific"].includes(asylum.route_scope)) {
       errors.push("asylum_context.route_scope must stay route-specific");
     }
-    if (!["local_authority_context", "constituency_context", "ward_estimate"].includes(asylum.precision)) {
+    if (!["local_authority_context", "constituency_context", "constituency_estimate", "ward_estimate"].includes(asylum.precision)) {
       errors.push("asylum_context.precision is invalid");
     }
   }

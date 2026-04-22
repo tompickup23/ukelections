@@ -26,6 +26,7 @@ const DEFAULTS = {
   localAsylumPath: "/Users/tompickup/asylumstats/data/marts/uk_routes/local-route-latest.json",
   homeOfficeLocalAuthorityDataPath: "/Users/tompickup/asylumstats/data/raw/uk_routes/regional-and-local-authority-dataset-dec-2025.ods",
   homeOfficeLocalAuthorityDataUrl: "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+  pconLadCrosswalkPath: "data/ons-pcon24-lad25-postcode-crosswalk.json",
   constituencyAsylumPath: "/Users/tompickup/clawd/labour-tracker/constituency_asylum.json",
   constituencyProfilesPath: "/Users/tompickup/clawd/burnley-council/data/shared/constituencies.json",
   commonsResultsDbPath: "/tmp/psephology.db",
@@ -47,6 +48,7 @@ function parseArgs(argv) {
     else if (arg === "--local-asylum") args.localAsylumPath = argv[++index];
     else if (arg === "--home-office-local-authority-data") args.homeOfficeLocalAuthorityDataPath = argv[++index];
     else if (arg === "--home-office-local-authority-data-url") args.homeOfficeLocalAuthorityDataUrl = argv[++index];
+    else if (arg === "--pcon-lad-crosswalk") args.pconLadCrosswalkPath = argv[++index];
     else if (arg === "--constituency-asylum") args.constituencyAsylumPath = argv[++index];
     else if (arg === "--constituency-profiles") args.constituencyProfilesPath = argv[++index];
     else if (arg === "--commons-results-db") args.commonsResultsDbPath = argv[++index];
@@ -80,6 +82,7 @@ Options:
                                  Home Office regional/local authority ODS workbook
   --home-office-local-authority-data-url <url>
                                  Source URL for the Home Office local authority workbook
+  --pcon-lad-crosswalk <path>    ONSPD-derived PCON24/LAD25 postcode-count crosswalk JSON
   --constituency-asylum <path>   Labour tracker constituency asylum JSON
   --constituency-profiles <path> AI DOGE Westminster constituency profile JSON
   --commons-results-db <path>    House of Commons Library psephology SQLite database
@@ -117,7 +120,7 @@ function discoverCouncilDirs(root, councilFilter) {
 }
 
 function snapshotFor(filePath, sourceName, options) {
-  const acceptedFamilies = /AI DOGE|DCLEAPIL|UKD\/asylumstats|Labour tracker|Official|statements of persons nominated/i;
+  const acceptedFamilies = /AI DOGE|DCLEAPIL|UKD\/asylumstats|Labour tracker|Official|ONS Postcode Directory|ONS Open Geography|statements of persons nominated/i;
   return buildLocalFileSourceSnapshot({
     filePath,
     sourceName,
@@ -414,6 +417,25 @@ if (existsSync(options.homeOfficeLocalAuthorityDataPath)) {
   localAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.localAsylumPath, "UKD/asylumstats local asylum route context", options));
 }
 
+const pconLadCrosswalk = readJsonIfExists(options.pconLadCrosswalkPath);
+let pconLadCrosswalkSnapshot = null;
+if (pconLadCrosswalk) {
+  pconLadCrosswalkSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(
+    options.pconLadCrosswalkPath,
+    "ONS Postcode Directory PCON24-LAD25 live-postcode crosswalk",
+    {
+      ...options,
+      sourceUrl: pconLadCrosswalk.source?.source_url || "https://open-geography-portalx-ons.hub.arcgis.com/"
+    }
+  ));
+  pconLadCrosswalkSnapshot.upstream_data_sources = [
+    "ONS Open Geography",
+    "Online ONS Postcode Directory Live",
+    "PCON24CD",
+    "LAD25CD"
+  ];
+}
+
 const officialHistoryData = readJsonIfExists(options.officialHistoryPath);
 let officialHistorySnapshot = null;
 if (officialHistoryData) {
@@ -552,7 +574,11 @@ if (commonsResultsSnapshot) {
     sourceSnapshot: commonsResultsSnapshot,
     pollAggregate: pollAggregates[0] || null,
     constituencyAsylum,
-    constituencyAsylumSnapshot
+    constituencyAsylumSnapshot,
+    localAsylum,
+    localAsylumSnapshot,
+    constituencyLocalAuthorityCrosswalk: pconLadCrosswalk,
+    constituencyLocalAuthorityCrosswalkSnapshot: pconLadCrosswalkSnapshot
   });
   boundaries.push(...commonsConstituencyImport.boundaries);
   history.push(...commonsConstituencyImport.history);
@@ -622,6 +648,7 @@ writeJson(path.join(options.output, "import-summary.json"), {
     local_asylum_path: options.localAsylumPath,
     home_office_local_authority_data_path: options.homeOfficeLocalAuthorityDataPath,
     home_office_local_authority_data_url: options.homeOfficeLocalAuthorityDataUrl,
+    pcon_lad_crosswalk_path: options.pconLadCrosswalkPath,
     constituency_asylum_path: options.constituencyAsylumPath,
     constituency_profiles_path: options.constituencyProfilesPath,
     commons_results_db_path: options.commonsResultsDbPath,

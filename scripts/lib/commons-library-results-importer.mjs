@@ -64,7 +64,80 @@ function constituencyAsylumContext(areaName, constituencyAsylum = {}) {
   };
 }
 
+function officialConstituencyAsylumContext(areaCode, localAsylum = {}, crosswalk = {}) {
+  const areas = Array.isArray(localAsylum?.areas) ? localAsylum.areas : [];
+  const areaByCode = new Map(areas.map((area) => [area.areaCode, area]));
+  const links = (crosswalk?.rows || []).filter((row) => row.pcon24cd === areaCode);
+  if (links.length === 0) return null;
+
+  let supportedAsylum = 0;
+  let population = 0;
+  const localAuthorities = [];
+  const accommodation = {
+    initial: 0,
+    dispersal: 0,
+    contingency: 0,
+    other: 0,
+    subsistenceOnly: 0
+  };
+  for (const link of links) {
+    const localAuthority = areaByCode.get(link.lad25cd);
+    if (!localAuthority) continue;
+    const weight = Math.max(0, numberOrNull(link.lad_postcode_share) || 0);
+    if (weight <= 0) continue;
+    supportedAsylum += (Number(localAuthority.supportedAsylum) || 0) * weight;
+    population += (Number(localAuthority.population) || 0) * weight;
+    for (const key of Object.keys(accommodation)) {
+      accommodation[key] += (Number(localAuthority.asylumAccommodationBreakdown?.[key]) || 0) * weight;
+    }
+    localAuthorities.push({
+      area_code: localAuthority.areaCode,
+      area_name: localAuthority.areaName,
+      postcode_weight: weight,
+      pcon_postcode_share: numberOrNull(link.pcon_postcode_share),
+      postcode_count: integerOrUndefined(link.postcode_count)
+    });
+  }
+  if (localAuthorities.length === 0) return null;
+  const roundedSupportedAsylum = Math.round(supportedAsylum);
+  const roundedPopulation = Math.round(population);
+  return {
+    supported_asylum_stock: roundedSupportedAsylum,
+    rate_per_10000_population: roundedPopulation > 0 ? (roundedSupportedAsylum / roundedPopulation) * 10000 : 0,
+    population: roundedPopulation || undefined,
+    unit: "quarter_end_stock",
+    route_scope: "asylum_support",
+    precision: "constituency_estimate",
+    snapshot_date: localAsylum.snapshotDate || null,
+    apportionment_method: "ons_postcode_directory_pcon24_lad25_live_postcode_weighted",
+    apportionment_basis: crosswalk.method?.apportionment_basis || "live_postcode_count",
+    matched_local_authorities: localAuthorities.sort((left, right) => left.area_code.localeCompare(right.area_code)),
+    accommodation_breakdown_estimate: Object.fromEntries(Object.entries(accommodation).map(([key, value]) => [key, Math.round(value)])),
+    limitations: [
+      "Home Office asylum support stock is published by local authority, not Westminster constituency.",
+      "This constituency estimate apportions local-authority stock with ONSPD live-postcode counts. It is documented and reproducible, but not a resident, elector, household, or accommodation-location weighted allocation."
+    ]
+  };
+}
+
 function populationProjection(asylumContext) {
+  if (asylumContext?.precision === "constituency_estimate") {
+    return {
+      base_year: 2025,
+      projection_year: 2026,
+      scenario: "official_local_authority_context_apportioned_to_constituency",
+      method: "area_proxy",
+      quality_level: "ons_total_only",
+      source_depth: "total_population_only",
+      geography_fit: "constituency_proxy",
+      confidence: "low",
+      limitations: [
+        "Population total is apportioned from Home Office local-authority population denominators using the same ONSPD live-postcode crosswalk as the asylum context.",
+        "Use as constituency context until a population-weighted PCON24 method is imported."
+      ],
+      total_population: integerOrUndefined(asylumContext.population)
+    };
+  }
   return {
     base_year: 2021,
     projection_year: 2026,
@@ -298,6 +371,10 @@ export function importCommonsLibraryWestminsterResults({
   pollAggregate = null,
   constituencyAsylum = null,
   constituencyAsylumSnapshot = null,
+  localAsylum = null,
+  localAsylumSnapshot = null,
+  constituencyLocalAuthorityCrosswalk = null,
+  constituencyLocalAuthorityCrosswalkSnapshot = null,
   asOf
 }) {
   const rows = queryRows(dbPath);
@@ -381,7 +458,12 @@ export function importCommonsLibraryWestminsterResults({
   for (const [areaCode, areaRows] of rowsByArea.entries()) {
     const current = areaRows.find((row) => Number(row.general_election_id) === 6) || areaRows[0];
     const boundary = boundaryByAreaCode.get(areaCode);
-    const asylumContext = constituencyAsylumContext(current.area_name, constituencyAsylum);
+    const officialAsylumContext = officialConstituencyAsylumContext(areaCode, localAsylum, constituencyLocalAuthorityCrosswalk);
+    const trackerAsylumContext = constituencyAsylumContext(current.area_name, constituencyAsylum);
+    const asylumContext = officialAsylumContext || trackerAsylumContext;
+    const populationSnapshot = officialAsylumContext
+      ? (localAsylumSnapshot || constituencyLocalAuthorityCrosswalkSnapshot || sourceSnapshot)
+      : (constituencyAsylumSnapshot || sourceSnapshot);
     const provenance = [
       {
         field: "features.electoral_history",
@@ -397,13 +479,27 @@ export function importCommonsLibraryWestminsterResults({
       },
       {
         field: "features.population_projection",
-        source_snapshot_id: constituencyAsylumSnapshot?.snapshot_id || sourceSnapshot.snapshot_id,
-        source_url: constituencyAsylumSnapshot?.source_url || sourceUrl,
-        notes: asylumContext
+        source_snapshot_id: populationSnapshot.snapshot_id,
+        source_url: populationSnapshot.source_url || sourceUrl,
+        notes: officialAsylumContext
+          ? "Home Office local-authority population denominator apportioned to constituency using ONSPD PCON24-LAD25 live-postcode crosswalk."
+          : asylumContext
           ? "Labour tracker/UKD constituency asylum file supplies proxy population context."
           : "No matched constituency population projection was found; model is held at proxy-context readiness."
       },
-      asylumContext && constituencyAsylumSnapshot && {
+      officialAsylumContext && localAsylumSnapshot && {
+        field: "features.asylum_context",
+        source_snapshot_id: localAsylumSnapshot.snapshot_id,
+        source_url: localAsylumSnapshot.source_url,
+        notes: "Official Home Office local-authority asylum support stock apportioned to Westminster constituency using ONSPD PCON24-LAD25 live-postcode weights."
+      },
+      officialAsylumContext && constituencyLocalAuthorityCrosswalkSnapshot && {
+        field: "features.asylum_context",
+        source_snapshot_id: constituencyLocalAuthorityCrosswalkSnapshot.snapshot_id,
+        source_url: constituencyLocalAuthorityCrosswalkSnapshot.source_url,
+        notes: "ONS Open Geography ONSPD Live crosswalk between PCON24 and LAD25 geographies."
+      },
+      !officialAsylumContext && asylumContext && constituencyAsylumSnapshot && {
         field: "features.asylum_context",
         source_snapshot_id: constituencyAsylumSnapshot.snapshot_id,
         source_url: constituencyAsylumSnapshot.source_url,

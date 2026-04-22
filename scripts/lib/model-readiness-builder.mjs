@@ -143,6 +143,13 @@ function populationGateStatus(population) {
   }
   if (
     ["low", "none"].includes(population.confidence) &&
+    ["constituency_proxy", "local_authority_proxy"].includes(population.geography_fit) &&
+    population.quality_level === "ons_total_only"
+  ) {
+    return "accepted";
+  }
+  if (
+    ["low", "none"].includes(population.confidence) &&
     ["census_baseline_only", "proxy", "unknown"].includes(population.quality_level) &&
     ["local_authority_proxy", "constituency_proxy", "manual_proxy"].includes(population.geography_fit)
   ) {
@@ -365,7 +372,7 @@ export function buildModelReadinessAreas({
           : {})
         : gate("missing", [], "No population method metadata is attached."),
       asylum_context: latestAsylum
-        ? gate(["ward_estimate", "local_authority_context"].includes(latestAsylum.precision) ? "reviewed" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
+        ? gate(["ward_estimate", "local_authority_context", "constituency_estimate"].includes(latestAsylum.precision) ? "reviewed" : "proxy", [...sourceSnapshotIds], `Asylum context precision is ${latestAsylum.precision}; route scope is ${latestAsylum.route_scope}.`)
         : gate("missing", [], "No asylum context is attached."),
       backtest: backtest
         ? gate(backtest.status === "passed" ? (backtest.publication_gate === "review_required" ? "accepted" : "reviewed") : "not_applicable", backtest.source_history_ids || [], `Baseline backtest ${backtest.status}; pass reason ${backtest.pass_reason || "unknown"}; evidence tier ${backtest.evidence_tier || "unknown"}; winner accuracy ${backtest.metrics?.winner_accuracy ?? "n/a"}; elected-party hit rate ${backtest.metrics?.elected_party_hit_rate ?? "n/a"}; MAE ${backtest.metrics?.mean_absolute_error ?? "n/a"}.`, {
