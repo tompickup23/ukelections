@@ -297,7 +297,8 @@ function localAuthorityAsylumContext(councilCode, councilName, localAsylum = {})
     precision: "local_authority_context",
     matched_area_code: match.areaCode,
     matched_area_name: match.areaName,
-    snapshot_date: match.snapshotDate || localAsylum.snapshotDate || null
+    snapshot_date: match.snapshotDate || localAsylum.snapshotDate || null,
+    source_name: localAsylum.source?.name || null
   };
 }
 
@@ -834,7 +835,7 @@ export function buildAidogeFeatureSnapshots({
     const usesLocalAsylumSource = Boolean(asylumContext && "matched_area_code" in asylumContext);
     const asylumSourceSnapshot = usesLocalAsylumSource ? sourceSnapshots.localAsylum : sourceSnapshots.constituencyAsylum;
     const asylumSourceNote = usesLocalAsylumSource
-      ? "UKD/asylumstats local authority asylum support stock; used as contextual area data, not ward-level claims."
+      ? `${asylumSourceSnapshot?.source_name || asylumContext.source_name || "UKD/asylumstats local authority asylum support stock"}; used as contextual area data, not ward-level claims.`
       : asylumContext?.precision === "local_authority_context"
         ? "Labour tracker local authority asylum support stock; used as contextual area data, not ward-level claims."
         : "Labour tracker constituency asylum support stock; used as contextual area proxy, not ward-level claims.";

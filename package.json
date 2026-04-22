@@ -23,6 +23,7 @@
     "execute:review-workflows": "node scripts/execute-review-workflows.mjs",
     "verify:review-workflows": "node scripts/verify-review-workflows.mjs",
     "build:review-import-manifest": "node scripts/build-review-import-manifest.mjs",
+    "build:home-office-local-asylum": "node scripts/build-home-office-local-asylum.mjs",
     "draft:structured-review-imports": "node scripts/draft-structured-review-imports.mjs",
     "draft:moderngov-review-imports": "node scripts/draft-moderngov-review-imports.mjs",
     "draft:council-html-review-imports": "node scripts/draft-council-html-review-imports.mjs",
@@ -32,6 +33,7 @@
     "fetch:source": "node scripts/fetch-source-snapshot.mjs",
     "import:local-upstreams": "node scripts/import-local-upstreams.mjs",
     "summarise:coverage": "node scripts/summarise-coverage-status.mjs",
+    "summarise:demographics": "node scripts/summarise-demographic-methods.mjs",
     "validate:sources": "node scripts/validate-source-snapshots.mjs",
     "test": "vitest run",
     "test:watch": "vitest"

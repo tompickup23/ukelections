@@ -11,6 +11,7 @@ import {
 } from "./lib/local-upstream-importers.mjs";
 import { importCommonsLibraryWestminsterResults } from "./lib/commons-library-results-importer.mjs";
 import { importDcleapilSupplementalHistory } from "./lib/dcleapil-supplemental-history.mjs";
+import { importHomeOfficeLocalAuthorityAsylum } from "./lib/home-office-local-authority-asylum-importer.mjs";
 import { importOfficialHistoryRecords } from "./lib/official-history-importer.mjs";
 import { validateSourceSnapshots, summariseSourceQuality } from "./lib/source-quality.mjs";
 import { validateHistoryBundle } from "./lib/history-quality.mjs";
@@ -23,6 +24,8 @@ const DEFAULTS = {
   aiDogeRoot: "/Users/tompickup/clawd/burnley-council/data",
   asylumModelRoot: "/Users/tompickup/asylumstats/data/model",
   localAsylumPath: "/Users/tompickup/asylumstats/data/marts/uk_routes/local-route-latest.json",
+  homeOfficeLocalAuthorityDataPath: "/Users/tompickup/asylumstats/data/raw/uk_routes/regional-and-local-authority-dataset-dec-2025.ods",
+  homeOfficeLocalAuthorityDataUrl: "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
   constituencyAsylumPath: "/Users/tompickup/clawd/labour-tracker/constituency_asylum.json",
   constituencyProfilesPath: "/Users/tompickup/clawd/burnley-council/data/shared/constituencies.json",
   commonsResultsDbPath: "/tmp/psephology.db",
@@ -42,6 +45,8 @@ function parseArgs(argv) {
     if (arg === "--ai-doge-root") args.aiDogeRoot = argv[++index];
     else if (arg === "--asylum-model-root") args.asylumModelRoot = argv[++index];
     else if (arg === "--local-asylum") args.localAsylumPath = argv[++index];
+    else if (arg === "--home-office-local-authority-data") args.homeOfficeLocalAuthorityDataPath = argv[++index];
+    else if (arg === "--home-office-local-authority-data-url") args.homeOfficeLocalAuthorityDataUrl = argv[++index];
     else if (arg === "--constituency-asylum") args.constituencyAsylumPath = argv[++index];
     else if (arg === "--constituency-profiles") args.constituencyProfilesPath = argv[++index];
     else if (arg === "--commons-results-db") args.commonsResultsDbPath = argv[++index];
@@ -71,6 +76,10 @@ Options:
   --ai-doge-root <path>          AI DOGE data root containing council folders
   --asylum-model-root <path>     asylumstats/UKD model root
   --local-asylum <path>          asylumstats local route latest JSON
+  --home-office-local-authority-data <path>
+                                 Home Office regional/local authority ODS workbook
+  --home-office-local-authority-data-url <url>
+                                 Source URL for the Home Office local authority workbook
   --constituency-asylum <path>   Labour tracker constituency asylum JSON
   --constituency-profiles <path> AI DOGE Westminster constituency profile JSON
   --commons-results-db <path>    House of Commons Library psephology SQLite database
@@ -379,9 +388,29 @@ if (existsSync(options.commonsResultsDbPath)) {
   ];
 }
 
-const localAsylum = readJsonIfExists(options.localAsylumPath);
+let localAsylum = readJsonIfExists(options.localAsylumPath);
 let localAsylumSnapshot = null;
-if (localAsylum) {
+if (existsSync(options.homeOfficeLocalAuthorityDataPath)) {
+  localAsylum = importHomeOfficeLocalAuthorityAsylum({
+    odsPath: options.homeOfficeLocalAuthorityDataPath,
+    sourceUrl: options.homeOfficeLocalAuthorityDataUrl
+  });
+  localAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, binarySnapshotFor(
+    options.homeOfficeLocalAuthorityDataPath,
+    "Home Office regional and local authority immigration dataset",
+    {
+      ...options,
+      sourceUrl: options.homeOfficeLocalAuthorityDataUrl
+    },
+    "application/vnd.oasis.opendocument.spreadsheet",
+    options.homeOfficeLocalAuthorityDataUrl
+  ));
+  localAsylumSnapshot.upstream_data_sources = [
+    "Home Office immigration system statistics",
+    "Regional and local authority immigration data",
+    "Official asylum support local authority data"
+  ];
+} else if (localAsylum) {
   localAsylumSnapshot = sourceSnapshotPush(sourceSnapshots, snapshotFor(options.localAsylumPath, "UKD/asylumstats local asylum route context", options));
 }
 
@@ -591,6 +620,8 @@ writeJson(path.join(options.output, "import-summary.json"), {
     ai_doge_root: options.aiDogeRoot,
     asylum_model_root: options.asylumModelRoot,
     local_asylum_path: options.localAsylumPath,
+    home_office_local_authority_data_path: options.homeOfficeLocalAuthorityDataPath,
+    home_office_local_authority_data_url: options.homeOfficeLocalAuthorityDataUrl,
     constituency_asylum_path: options.constituencyAsylumPath,
     constituency_profiles_path: options.constituencyProfilesPath,
     commons_results_db_path: options.commonsResultsDbPath,

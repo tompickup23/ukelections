@@ -71,3 +71,11 @@ run("Build review workflows", "scripts/build-review-workflows.mjs", [
   "--markdown-output",
   path.join(output, "review-workflows.md")
 ]);
+run("Summarise demographic methods", "scripts/summarise-demographic-methods.mjs", [
+  "--input",
+  output,
+  "--output",
+  path.join(output, "demographic-methods.json"),
+  "--markdown-output",
+  path.join(output, "demographic-methods.md")
+]);
