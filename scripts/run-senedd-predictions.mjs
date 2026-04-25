@@ -34,25 +34,65 @@ function writeJson(rel, payload) {
   return full;
 }
 
-function applySwing(baseline, current) {
-  // baseline: prior result share dict; current: current polling share dict.
-  // Apply additive swing (nationalCurrent - baseline) per party, floor at 0,
-  // re-normalise.
-  const allParties = new Set([...Object.keys(baseline), ...Object.keys(current)]);
+function applyNationalSwing(baselineConstituency, baselineNational, currentNational) {
+  // Per-party additive swing applied to a constituency baseline:
+  //   predicted = max(0, baseline_constituency + (national_current - national_baseline))
+  // Re-normalise to 1.0.
+  const allParties = new Set([
+    ...Object.keys(baselineConstituency),
+    ...Object.keys(baselineNational),
+    ...Object.keys(currentNational),
+  ]);
   const adjusted = {};
   for (const p of allParties) {
-    const b = baseline[p] || 0;
-    const c = current[p] || 0;
-    // Apply swing as additive: predicted = max(0, baseline + (current - baseline))
-    // Simplified: predicted = current (since this is a Wales-wide application)
-    // For super-constituency-specific baselines (Stage 1.5), the formula would be
-    //   predicted = baseline_constituency + (current_national - baseline_national)
-    adjusted[p] = c;
+    const swing = (currentNational[p] || 0) - (baselineNational[p] || 0);
+    adjusted[p] = Math.max(0, (baselineConstituency[p] || 0) + swing);
   }
-  // Re-normalise
   const sum = Object.values(adjusted).reduce((s, v) => s + v, 0);
   for (const k of Object.keys(adjusted)) adjusted[k] = adjusted[k] / (sum || 1);
   return adjusted;
+}
+
+function dcPartyToCanonical(dcName) {
+  if (!dcName) return "Unknown";
+  const p = String(dcName).trim();
+  if (/^Labour Party$/i.test(p)) return "Labour";
+  if (/^Labour and Co-operative Party$/i.test(p)) return "Labour";
+  if (/^Conservative and Unionist Party$/i.test(p)) return "Conservative";
+  if (/^Plaid Cymru/i.test(p)) return "Plaid Cymru";
+  if (/^Liberal Democrats?$/i.test(p)) return "Liberal Democrats";
+  if (/^Reform UK$/i.test(p)) return "Reform UK";
+  if (/^Green Party$/i.test(p)) return "Green Party";
+  if (/independent/i.test(p)) return "Independent";
+  return p;
+}
+
+function pairBaselineFromGE2024(westminsterPair, history) {
+  // Aggregate vote shares across the two paired Westminster constituencies' GE2024 results.
+  // Weight by total votes cast in each.
+  const ge24 = (id) => history.results.find((r) => r.tier === "parl" && r.election_date === "2024-07-04" && r.ballot_paper_id === `parl.${id}.2024-07-04`);
+  const r1 = ge24(westminsterPair[0]);
+  const r2 = ge24(westminsterPair[1]);
+  const collect = (r) => {
+    if (!r) return { shares: {}, total: 0 };
+    const total = (r.candidates || []).reduce((s, c) => s + (c.votes || 0), 0);
+    const shares = {};
+    for (const c of r.candidates || []) {
+      const p = dcPartyToCanonical(c.party_name);
+      shares[p] = (shares[p] || 0) + (c.votes / total);
+    }
+    return { shares, total };
+  };
+  const a = collect(r1);
+  const b = collect(r2);
+  const totalVotes = a.total + b.total;
+  if (totalVotes === 0) return null;
+  const merged = {};
+  const allParties = new Set([...Object.keys(a.shares), ...Object.keys(b.shares)]);
+  for (const p of allParties) {
+    merged[p] = ((a.shares[p] || 0) * a.total + (b.shares[p] || 0) * b.total) / totalVotes;
+  }
+  return { shares: merged, totalVotes, sources: [r1?.source, r2?.source].filter(Boolean) };
 }
 
 function summariseSeatAllocations(perSuperResults) {
@@ -73,23 +113,36 @@ function summariseSeatAllocations(perSuperResults) {
 function main() {
   console.log("Loading inputs...");
   const identity = readJson("data/identity/wards-may-2026.json");
+  const history = readJson("data/history/dc-historic-results.json");
+  const pairs = readJson("data/identity/senedd-2026-super-constituency-pairs.json");
   const seneddBallots = identity.wards.filter((w) => w.tier === "senedd");
   console.log(`  ${seneddBallots.length} Senedd super-constituencies in scope`);
 
-  const baseline = WELSH_2024_GE_RESULT.shares;
+  const baselineNational = WELSH_2024_GE_RESULT.shares;
   const polling = WELSH_2026_APRIL_AVERAGE.shares;
-  const adjusted = applySwing(baseline, polling);
 
-  console.log(`  Welsh GE2024 baseline: ${JSON.stringify(baseline)}`);
+  console.log(`  Welsh GE2024 baseline: ${JSON.stringify(baselineNational)}`);
   console.log(`  Welsh Apr2026 polling: ${JSON.stringify(polling)}`);
-  console.log(`  Adjusted shares (used per super-constituency):`);
-  for (const [p, s] of Object.entries(adjusted).sort((a, b) => b[1] - a[1])) {
-    console.log(`    ${p.padEnd(20)} ${(s * 100).toFixed(1)}%`);
-  }
 
   const perSuper = [];
   for (let i = 0; i < seneddBallots.length; i += 1) {
     const b = seneddBallots[i];
+    const slug = b.ward_slug || b.ballot_paper_id.split(".")[1];
+    const pair = pairs.pairs[slug];
+    let supBaseline = null;
+    let supBaselineSource = "Welsh national fallback (no super-constituency pairing in repo)";
+    if (pair) {
+      const ge24Pair = pairBaselineFromGE2024(pair.westminster_pair, history);
+      if (ge24Pair) {
+        supBaseline = ge24Pair.shares;
+        supBaselineSource = `2024 GE Welsh constituency pair: ${pair.westminster_pair.join(" + ")} (${pair.confidence})`;
+      }
+    }
+    if (!supBaseline) supBaseline = baselineNational;
+
+    // Apply Welsh polling swing since 2024 GE per-party
+    const adjusted = applyNationalSwing(supBaseline, baselineNational, polling);
+
     const allocation = allocateDhondtWithIntervals({
       shares: adjusted,
       totalVotes: 100000,
@@ -104,6 +157,10 @@ function main() {
       seats: SEATS_PER_SUPER,
       central: allocation.central,
       per_party: allocation.per_party,
+      adjusted_shares: adjusted,
+      pair_source: supBaselineSource,
+      pair: pair?.westminster_pair || null,
+      pair_confidence: pair?.confidence || null,
       candidates_locked: b.candidates_locked,
       candidate_count: b.candidate_count,
       sopn_url: b.sopn_url,

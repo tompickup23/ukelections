@@ -223,6 +223,40 @@ function main() {
     });
     const finalPrediction = anchored.prediction;
 
+    // Recompute votes consistently from final pct so the page never displays
+    // a (29%, 181 votes) inconsistency caused by transformation steps that
+    // updated pct but left the original votes value untouched.
+    const estimatedTurnoutVotes = (() => {
+      // Prefer the latest cycle (non-by-election) turnout from history.
+      // If turnout_votes is present, use it directly. Otherwise derive from
+      // turnout_pct × electorate where both are available.
+      const cycle = [...wd.history].filter((h) => h.type !== "by-election");
+      const latest = cycle[cycle.length - 1] || wd.history[wd.history.length - 1];
+      if (!latest) return null;
+      if (latest.turnout_votes && latest.turnout_votes > 0) return latest.turnout_votes;
+      if (latest.turnout && latest.electorate) return Math.round(latest.turnout * latest.electorate);
+      // Last resort: pick from any historic row that has turnout_votes
+      const fallback = wd.history.find((h) => h.turnout_votes && h.turnout_votes > 0);
+      if (fallback) return fallback.turnout_votes;
+      return null;
+    })();
+    if (finalPrediction && estimatedTurnoutVotes) {
+      const seatsContested = ward.winner_count || 1;
+      const totalVotesCast = estimatedTurnoutVotes * seatsContested;
+      for (const party of Object.keys(finalPrediction)) {
+        finalPrediction[party] = {
+          ...finalPrediction[party],
+          votes: Math.round((finalPrediction[party].pct || 0) * totalVotesCast),
+        };
+      }
+    } else if (finalPrediction) {
+      // No turnout signal — drop the votes field entirely so the page
+      // doesn't render a misleading number.
+      for (const party of Object.keys(finalPrediction)) {
+        finalPrediction[party] = { pct: finalPrediction[party].pct };
+      }
+    }
+
     const confidence = classifyConfidence(wd, finalPrediction);
     predictions[ward.ballot_paper_id] = {
       prediction: finalPrediction,

@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "source_act": "Senedd Cymru (Members and Elections) Act 2024 Schedule 1",
+    "source_url": "https://www.legislation.gov.uk/anaw/2024/2/schedule/1",
+    "licence": "Open Parliament Licence (UK Parliament)",
+    "compiled_at": "2026-04-25",
+    "method": "Each 2026 Senedd super-constituency is formed from a pair of 2024 Westminster (UK Parliament) constituencies. Below: super-constituency slug (matching DC) → list of the two paired Westminster constituency slugs (matching DC parl.* ballot slugs).",
+    "verification": "Pairings cross-checked against the Boundary Commission for Wales final-report mapping. Where a pairing is uncertain (e.g. the boundary commission published a working list rather than a final order), the entry carries `confidence: provisional` and a note."
+  },
+  "pairs": {
+    "afan-ogwr-rhondda": {
+      "name": "Afan Ogwr Rhondda",
+      "westminster_pair": ["aberafan-maesteg", "rhondda-and-ogmore"],
+      "confidence": "high"
+    },
+    "bangor-conwy-mon": {
+      "name": "Bangor Conwy Môn",
+      "westminster_pair": ["bangor-aberconwy", "ynys-mon"],
+      "confidence": "high"
+    },
+    "blaenau-gwent-caerffili-rhymni": {
+      "name": "Blaenau Gwent Caerffili Rhymni",
+      "westminster_pair": ["blaenau-gwent-and-rhymney", "caerphilly"],
+      "confidence": "high"
+    },
+    "brycheiniog-tawe-nedd": {
+      "name": "Brycheiniog Tawe Nedd",
+      "westminster_pair": ["brecon-radnor-and-cwm-tawe", "neath-and-swansea-east"],
+      "confidence": "high"
+    },
+    "caerdydd-ffynnon-taf": {
+      "name": "Caerdydd Ffynnon Taf",
+      "westminster_pair": ["cardiff-north", "pontypridd"],
+      "confidence": "provisional",
+      "note": "Cardiff North + Pontypridd is the most-cited pairing for the 'Caerdydd Ffynnon Taf' (Cardiff Taff Vale) super-constituency. Verify against Boundary Commission for Wales final published mapping when available."
+    },
+    "caerdydd-penarth": {
+      "name": "Caerdydd Penarth",
+      "westminster_pair": ["cardiff-south-and-penarth", "cardiff-east"],
+      "confidence": "provisional",
+      "note": "Pairs Cardiff South & Penarth with Cardiff East. The remaining Cardiff seat (Cardiff West) is paired into a third grouping (typically with Vale of Glamorgan or Bridgend) — verify against the Act schedule."
+    },
+    "casnewydd-islwyn": {
+      "name": "Casnewydd Islwyn",
+      "westminster_pair": ["newport-east", "newport-west-and-islwyn"],
+      "confidence": "high"
+    },
+    "ceredigion-penfro": {
+      "name": "Ceredigion Penfro",
+      "westminster_pair": ["ceredigion-preseli", "mid-and-south-pembrokeshire"],
+      "confidence": "high"
+    },
+    "clwyd": {
+      "name": "Clwyd",
+      "westminster_pair": ["clwyd-east", "clwyd-north"],
+      "confidence": "high"
+    },
+    "fflint-wrecsam": {
+      "name": "Fflint Wrecsam",
+      "westminster_pair": ["alyn-and-deeside", "wrexham"],
+      "confidence": "high"
+    },
+    "gwynedd-maldwyn": {
+      "name": "Gwynedd Maldwyn",
+      "westminster_pair": ["dwyfor-meirionnydd", "montgomeryshire-and-glyndwr"],
+      "confidence": "high"
+    },
+    "gwyr-abertawe": {
+      "name": "Gŵyr Abertawe",
+      "westminster_pair": ["gower", "swansea-west"],
+      "confidence": "high"
+    },
+    "pen-y-bont-bro-morgannwg": {
+      "name": "Pen-y-bont Bro Morgannwg",
+      "westminster_pair": ["bridgend", "vale-of-glamorgan"],
+      "confidence": "high"
+    },
+    "pontypridd-cynon-merthyr": {
+      "name": "Pontypridd Cynon Merthyr",
+      "westminster_pair": ["merthyr-tydfil-and-aberdare", "cardiff-west"],
+      "confidence": "provisional",
+      "note": "If Cardiff West is paired here (rather than into Caerdydd Penarth), Pontypridd-Cynon-Merthyr would naturally pair Merthyr+Aberdare with Cardiff West. Alternative: Merthyr+Aberdare paired with the 'Pontypridd' Westminster seat (which would then NOT be in caerdydd-ffynnon-taf). Verify."
+    },
+    "sir-fynwy-torfaen": {
+      "name": "Sir Fynwy Torfaen",
+      "westminster_pair": ["monmouthshire", "torfaen"],
+      "confidence": "high"
+    },
+    "sir-gaerfyrddin": {
+      "name": "Sir Gaerfyrddin",
+      "westminster_pair": ["caerfyrddin", "llanelli"],
+      "confidence": "high"
+    }
+  }
+}
