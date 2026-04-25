@@ -9,7 +9,15 @@ from pathlib import Path
 
 ROOT = Path("/Users/tompickup/ukelections")
 CENSUS = ROOT / ".cache/census"
-LSOA_TO_WARD = ROOT / "data/features/lsoa21-to-ward.json"
+# Multi-year LSOA→ward lookups: aggregate using whichever year matches each
+# 2026 ward's GSS code (some wards are still on WD22 boundaries, others changed
+# in 2023/24/25 ward reviews — we union all four to maximise coverage).
+LOOKUP_PATHS = {
+    "22": ROOT / "data/features/lsoa21-to-ward.json",
+    "23": ROOT / "data/features/lsoa21-to-ward-wd23.json",
+    "24": ROOT / "data/features/lsoa21-to-ward-wd24.json",
+    "25": ROOT / "data/features/lsoa21-to-ward-wd25.json",
+}
 IMD = Path("/Users/tompickup/clawd/burnley-council/data/imd2019_cache.json")
 OUT = ROOT / "data/features/ward-demographics-2021.json"
 IDENTITY = ROOT / "data/identity/wards-may-2026.json"
@@ -121,31 +129,46 @@ def main():
     print("Loading Census tables...")
     tables = {k: load_table(k, info) for k, info in TABLES.items()}
 
-    print("\nLoading LSOA→ward lookup + IMD...")
-    lookup = json.load(open(LSOA_TO_WARD))["lookup"]
+    print("\nLoading LSOA→ward lookups for years 22/23/24/25 + IMD...")
+    lookups = {}  # year → { lsoa → {wdcd, wdnm, ladcd, ladnm} }
+    for year, path in LOOKUP_PATHS.items():
+        if not path.exists():
+            print(f"  skip wd{year}: missing {path}")
+            continue
+        try:
+            data = json.load(open(path))["lookup"]
+            # Old-format entries have wd22cd/wd22nm/lad22cd; new format has wdcd/wdnm/ladcd
+            normalised = {}
+            for lsoa, w in data.items():
+                if "wdcd" in w:
+                    normalised[lsoa] = {"wdcd": w["wdcd"], "wdnm": w["wdnm"], "ladcd": w["ladcd"], "ladnm": w["ladnm"]}
+                else:
+                    normalised[lsoa] = {"wdcd": w.get("wd22cd"), "wdnm": w.get("wd22nm"), "ladcd": w.get("lad22cd"), "ladnm": w.get("lad22nm")}
+            lookups[year] = normalised
+            print(f"  loaded wd{year}: {len(normalised):,} LSOAs")
+        except Exception as e:
+            print(f"  skip wd{year}: {e}")
     imd = json.load(open(IMD)) if IMD.exists() else {}
 
-    print("Aggregating to ward...")
+    print("Aggregating to ward (one row per (year, ward GSS) pair)...")
     agg = {}
-    matched = 0
-    for lsoa, ward_info in lookup.items():
-        wd = ward_info["wd22cd"]
-        if wd not in agg:
-            agg[wd] = {"ward_name": ward_info["wd22nm"], "lad22cd": ward_info.get("lad22cd"), "imd_sum": 0, "imd_count": 0, "totals": {}}
-        # IMD
-        if lsoa in imd and imd[lsoa].get("decile"):
-            agg[wd]["imd_sum"] += imd[lsoa]["decile"]
-            agg[wd]["imd_count"] += 1
-            matched += 1
-        # Census tables
-        for tkey, lsoa_data in tables.items():
-            if lsoa not in lsoa_data: continue
-            t = agg[wd]["totals"].setdefault(tkey, {})
-            for fname, val in lsoa_data[lsoa].items():
-                t[fname] = t.get(fname, 0) + val
-
-    print(f"LSOA→ward joins matched IMD: {matched:,}")
-    print(f"Wards aggregated: {len(agg):,}")
+    for year, lookup in lookups.items():
+        for lsoa, ward_info in lookup.items():
+            wd = ward_info["wdcd"]
+            if not wd: continue
+            if wd not in agg:
+                agg[wd] = {"ward_name": ward_info["wdnm"], "lad22cd": ward_info.get("ladcd"), "wd_year": year, "imd_sum": 0, "imd_count": 0, "totals": {}}
+            # IMD
+            if lsoa in imd and imd[lsoa].get("decile"):
+                agg[wd]["imd_sum"] += imd[lsoa]["decile"]
+                agg[wd]["imd_count"] += 1
+            # Census tables
+            for tkey, lsoa_data in tables.items():
+                if lsoa not in lsoa_data: continue
+                t = agg[wd]["totals"].setdefault(tkey, {})
+                for fname, val in lsoa_data[lsoa].items():
+                    t[fname] = t.get(fname, 0) + val
+    print(f"Wards aggregated (across all WD years): {len(agg):,}")
 
     out = {}
     for wd, v in agg.items():

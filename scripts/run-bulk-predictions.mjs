@@ -241,10 +241,29 @@ function main() {
   if (fsExistsSync(wardDemoPath)) {
     try {
       wardDemographics = readJson("data/features/ward-demographics-2021.json").wards || {};
-      console.log(`Loaded per-ward Census 2021 demographics for ${Object.keys(wardDemographics).length} wards (P3 partial).`);
+      console.log(`Loaded per-ward Census 2021 demographics for ${Object.keys(wardDemographics).length} wards.`);
     } catch (e) {
       console.log(`Could not load ward demographics: ${e}`);
     }
+  }
+  // Build a (lad22cd, normalised ward name) → demographics index for name-based
+  // fallback (covers wards with placeholder GSS like Bradford "BRD:airedale" or
+  // 2026 boundary-review wards not yet in the WD25 lookup).
+  const demoByLadName = {};
+  for (const [, demo] of Object.entries(wardDemographics)) {
+    if (!demo.lad22cd || !demo.ward_name) continue;
+    const key = `${demo.lad22cd}::${demo.ward_name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()}`;
+    demoByLadName[key] = demo;
+  }
+  console.log(`Built ${Object.keys(demoByLadName).length} (LAD, ward-name) keys for fallback`);
+
+  function findDemographics(ward) {
+    if (ward.gss_code && wardDemographics[ward.gss_code]) return wardDemographics[ward.gss_code];
+    // Name fallback: parent LAD via slug→LAD24 map, ward name match
+    const lad = slugMap.map[ward.council_slug]?.lad24cd;
+    if (!lad || !ward.ward_name) return null;
+    const wardName = ward.ward_name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    return demoByLadName[`${lad}::${wardName}`] || null;
   }
 
   console.log("Running bulk predictions...");
@@ -317,12 +336,10 @@ function main() {
     // model's stale-baseline blend + Reform new-party-entry proxy.
     const councilG24 = councilGe24[ward.council_slug];
     if (councilG24) ctx = { ...ctx, constituencyResult: councilG24.shares };
-    // P3 partial: prefer per-ward Census demographics where available
-    // (currently 4.6% of wards via AI DOGE corpus; LSOA→ward bulk aggregation
-    // is a Stage 1.5 task that needs the ONS LSOA→ward lookup).
-    const wardDemo = ward.gss_code ? wardDemographics[ward.gss_code] : null;
-    if (wardDemo) {
-      ctx = { ...ctx, demographics: { white_british_pct: wardDemo.white_british_pct, asian_pct: wardDemo.asian_pct, age_65_plus_pct: wardDemo.age_65_plus_pct, _source: wardDemo._source } };
+    // Per-ward Census demographics with name-based fallback for placeholder-GSS wards.
+    const wardDemoFullEarly = findDemographics(ward);
+    if (wardDemoFullEarly) {
+      ctx = { ...ctx, demographics: { white_british_pct: wardDemoFullEarly.white_british_pct, asian_pct: wardDemoFullEarly.asian_pct, age_65_plus_pct: wardDemoFullEarly.age_65_plus_pct, _source: wardDemoFullEarly._source } };
     }
     const { demographics, deprivation, ethnicProjections, constituencyResult } = ctx;
 
@@ -367,7 +384,7 @@ function main() {
     // 1a. Apply per-ward demographic adjustments BEFORE restriction (so that
     //     the demographic Independent boost in high-Asian wards lands before
     //     restrict-to-ballot proportional redistribution).
-    const wardDemoFull = ward.gss_code ? wardDemographics[ward.gss_code] : null;
+    const wardDemoFull = wardDemoFullEarly;
     const demoAdj = computeWardDemographicAdjustments(wardDemoFull);
     let postDemo = applyAdjustments(result.prediction, demoAdj.adjustments);
 

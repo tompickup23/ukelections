@@ -115,6 +115,11 @@ function main() {
   const identity = readJson("data/identity/wards-may-2026.json");
   const history = readJson("data/history/dc-historic-results.json");
   const pairs = readJson("data/identity/senedd-2026-super-constituency-pairs.json");
+  let demographics = {};
+  try {
+    demographics = readJson("data/features/senedd-2026-demographics.json").demographics || {};
+    console.log(`  Senedd super-constituency demographics loaded for ${Object.keys(demographics).length} areas`);
+  } catch {}
   const seneddBallots = identity.wards.filter((w) => w.tier === "senedd");
   console.log(`  ${seneddBallots.length} Senedd super-constituencies in scope`);
 
@@ -161,6 +166,7 @@ function main() {
       pair_source: supBaselineSource,
       pair: pair?.westminster_pair || null,
       pair_confidence: pair?.confidence || null,
+      demographics: demographics[slug] || null,
       candidates_locked: b.candidates_locked,
       candidate_count: b.candidate_count,
       sopn_url: b.sopn_url,
