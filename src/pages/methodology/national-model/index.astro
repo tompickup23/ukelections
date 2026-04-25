@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadPredictions } from "../../../lib/predictions";
+
+const p = loadPredictions();
+---
+
+<BaseLayout
+  title="Methodology — national model"
+  description="Full description of the model that produces the May 2026 ward-level forecasts: baseline → national swing → UKD demographic adjustment → incumbency → Reform-entry handling → normalisation."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Methodology</p>
+    <h1>How the May 2026 model works</h1>
+    <p class="lede">
+      One model, six steps, every assumption documented. Pin: <code>{p.snapshot.model_version as string}</code>
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Origin</h2>
+    <p>
+      The forecast engine is the AI DOGE election model originally trained and validated against Lancashire local elections (RMSE 1.65 percentage points in candidate briefings, 78.6% winner accuracy on the 2024 backtest after generalisation). It has been ported wholesale into ukelections.co.uk and run nationally with LA-level UKD HP v7.0 ethnic projection adjustments.
+    </p>
+
+    <h2>Step 1 — baseline</h2>
+    <p>
+      For each ward, take the most recent borough/local result available in the Democracy Club archive. By-elections count as the most recent vote in that ward. If the baseline is more than 8 years old, the model decays the historical share by 5pp per year past 8 and blends in the GE2024 constituency share as the "fresh" component.
+    </p>
+
+    <h2>Step 2 — national swing</h2>
+    <p>
+      Compute the change in UK Westminster vote intention since GE2024 per party (current polling minus the actual GE2024 result). Apply that swing additively to the baseline ward shares, dampened by 0.65 to reflect the well-documented lower national-effect amplitude in local elections vs. parliamentary elections.
+    </p>
+    <p style="font-size: 0.875rem">
+      <strong>Current national snapshot (April 2026 placeholder):</strong> Labour 23%, Conservative 18%, Reform UK 30%, Lib Dem 13%, Green 9%, SNP 2.5%. To be refreshed before launch.
+    </p>
+
+    <h2>Step 3 — UKD demographic adjustment</h2>
+    <p>
+      For every ward, look up the parent local authority's Hamilton-Perry v7.0 ethnic projection back-extrapolated to May 2026. For LAs with very high white British proportion (&gt;85%), apply a small Reform UK bonus. For LAs with high Asian heritage proportion, apply a small adjustment to Independent and Reform UK shares. For LAs with very low IMD deciles (1-2 = most deprived), apply a small Labour bonus and Conservative penalty.
+    </p>
+    <p>
+      The exact magnitudes (in percentage points) are: high-deprivation Labour bonus 2pp, Conservative penalty 2pp, Reform bonus 3pp; over-65 Conservative bonus 1.5pp, Reform bonus 2pp; high white British Reform bonus 3pp; high Asian heritage Independent bonus 2pp, Reform penalty 4pp. These are the empirical adjustments that improved the AI DOGE model's RMSE from 2.5 to 1.65.
+    </p>
+    <p style="font-size: 0.875rem; color: var(--muted)">
+      Source: <code>clawd/burnley-council/data/shared/hp_ethnic_projections_la.json</code> (320 LADs covered, back-extrapolated by linear interpolation between 2021 baseline and 2031 projection to May 2026).
+    </p>
+
+    <h2>Step 4 — incumbency</h2>
+    <p>
+      Where current sitting councillors and party are known, apply a 5pp bonus to their party. If a councillor has retired (no candidate from their party standing), apply a 2pp penalty. Stage 1 of UK Elections has incumbency data only for the 7 Lancashire AI DOGE councils; nationwide incumbency ingest is a Stage 1.5 task.
+    </p>
+
+    <h2>Step 5 — Reform UK new-party entry handling</h2>
+    <p>
+      Where Reform UK has no historical baseline in the ward (because they didn't stand at the last contest), the model imputes a baseline from the ward's GE2024 constituency Reform share, dampened by a borough factor (0.95). Where Reform did stand in the last cycle, this step is a no-op.
+    </p>
+
+    <h2>Step 6 — normalise</h2>
+    <p>
+      All party shares are floored at 0 and re-normalised to sum to 100%.
+    </p>
+
+    <h2>Confidence tiers</h2>
+    <ul>
+      <li><strong>High</strong>: 3 or more prior contests in the ward, latest within 4 years, demographics present.</li>
+      <li><strong>Medium</strong>: 1-2 prior contests OR latest 5-8 years old.</li>
+      <li><strong>Low</strong>: stale baseline &gt;8 years OR only by-election history.</li>
+      <li><strong>Not available</strong>: zero history (boundary-changed wards or cancelled contests).</li>
+    </ul>
+
+    <h2>Backtest</h2>
+    <p>
+      The same model, given only data available before May 2024, was run against the actual May 2024 results across {(p as any).tally?.ok ?? "all"} wards. It called the winner correctly in 78.6% of contests with an average per-party share error of 7.69pp on the five major parties. See the <a href="/data-quality/2024-backtest/">full backtest</a>.
+    </p>
+
+    <h2>Senedd and Holyrood</h2>
+    <p>
+      The Senedd model and the Holyrood model are simpler "national projection" estimates because the May 2026 elections are the first under their new geographies (Senedd super-constituencies; Scottish Parliament regional boundary changes). See <a href="/forecasts/senedd-2026/">Senedd</a> and <a href="/forecasts/holyrood-2026/">Holyrood</a> for their per-system documentation.
+    </p>
+
+    <h2>Editorial neutrality</h2>
+    <p>
+      UK Elections is a public-utility election information site. We list parties by predicted share, never by ideology. We do not publish "watch lists", endorsements, or commentary. Every prediction is reproducible from the cited Democracy Club, House of Commons Library, ONS, and UKD source files. Source-of-record polling snapshots and their refresh dates are pinned on this page and on each ward's prediction methodology breakdown.
+    </p>
+
+    <h2>What we don't do (yet)</h2>
+    <ul>
+      <li>MRP (multilevel regression and post-stratification) for Westminster forecasts — Stage 3.</li>
+      <li>Per-ward Census 2021 demographics for non-AI-DOGE councils (currently using LA-level HP v7.0).</li>
+      <li>Live election-night auto-call (manual updates only).</li>
+      <li>Per-candidate vote prediction (party-share + ward-winner only).</li>
+    </ul>
+  </section>
+</BaseLayout>

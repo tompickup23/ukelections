@@ -1,0 +1,1169 @@
+{
+  "snapshot": {
+    "generated_at": "2026-04-25T15:11:39.664Z",
+    "model_version": "ukelections.senedd.v0.1.0-may2026-stage1",
+    "sha256": "de99e4b306f58a2fd50cdd626a524300fd92f7de5fcf606a95a2695aa6fb8fa9",
+    "method_summary": "Stage 1 estimate under Senedd Cymru (Members and Elections) Act 2024 closed-list PR. 16 super-constituencies × 6 seats. Geographic differentiation between super-constituencies deferred — current model applies the Welsh-wide April 2026 polling average uniformly to each super-constituency and runs d'Hondt independently per area. Wider intervals (sigma=5pp) reflect zero prior elections under the new geography. Per-super-constituency baselines from 2024 GE Welsh subsets to be added in Stage 1.5.",
+    "input_baseline_2024_welsh_ge": {
+      "Labour": 0.366,
+      "Plaid Cymru": 0.149,
+      "Reform UK": 0.169,
+      "Conservative": 0.182,
+      "Liberal Democrats": 0.067,
+      "Green Party": 0.043,
+      "Other": 0.024
+    },
+    "input_polling_2026_welsh": {
+      "Plaid Cymru": 0.25,
+      "Reform UK": 0.23,
+      "Labour": 0.21,
+      "Conservative": 0.13,
+      "Liberal Democrats": 0.07,
+      "Green Party": 0.06,
+      "Other": 0.05
+    },
+    "input_polling_meta": {
+      "label": "Welsh vote intention — April 2026 placeholder (refresh required)",
+      "fieldwork": "2026-04",
+      "source": "PLACEHOLDER — refresh from Beaufort / YouGov Wales / ITV Wales poll before launch",
+      "review_status": "draft_placeholder",
+      "refresh_required_by": "2026-05-01"
+    },
+    "sigma_used": 0.05,
+    "bootstrap_samples": 2000
+  },
+  "welsh_seat_total_projection": {
+    "Labour": {
+      "p10": 16,
+      "p50": 16,
+      "p90": 32,
+      "central": 16
+    },
+    "Plaid Cymru": {
+      "p10": 16,
+      "p50": 32,
+      "p90": 32,
+      "central": 32
+    },
+    "Reform UK": {
+      "p10": 16,
+      "p50": 32,
+      "p90": 32,
+      "central": 32
+    },
+    "Conservative": {
+      "p10": 0,
+      "p50": 16,
+      "p90": 16,
+      "central": 16
+    },
+    "Liberal Democrats": {
+      "p10": 0,
+      "p50": 0,
+      "p90": 16,
+      "central": 0
+    },
+    "Green Party": {
+      "p10": 0,
+      "p50": 0,
+      "p90": 16,
+      "central": 0
+    },
+    "Other": {
+      "p10": 0,
+      "p50": 0,
+      "p90": 11,
+      "central": 0
+    }
+  },
+  "per_super_constituency": [
+    {
+      "ballot_paper_id": "senedd.afan-ogwr-rhondda.2026-05-07",
+      "super_constituency": "Afan Ogwr Rhondda",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9795
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9985
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.994
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6615
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1905
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.165
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.117
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 41,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.afan-ogwr-rhondda.2026-05-07/sopn/2026-04-10T19%3A35%3A57.073536%2B00%3A00/soppn-nop-sops-senedd-26-aor-eng-1.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.bangor-conwy-mon.2026-05-07",
+      "super_constituency": "Bangor Conwy Môn",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.982
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.999
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9965
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6845
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.199
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.146
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1015
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 42,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.bangor-conwy-mon.2026-05-07/sopn/2026-04-09T15%3A26%3A21.923884%2B00%3A00/Bangor_Conwy_Mon.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.blaenau-gwent-caerffili-rhymni.2026-05-07",
+      "super_constituency": "Blaenau Gwent Caerffili Rhymni",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9845
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.999
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9965
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6705
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.198
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.16
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.097
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 42,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.blaenau-gwent-caerffili-rhymni.2026-05-07/sopn/2026-04-10T19%3A38%3A19.542969%2B00%3A00/cr.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.brycheiniog-tawe-nedd.2026-05-07",
+      "super_constituency": "Brycheiniog Tawe Nedd",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.988
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9975
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.995
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6825
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.199
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.141
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.116
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 44,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.brycheiniog-tawe-nedd.2026-05-07/sopn/2026-04-10T14%3A51%3A51.336737%2B00%3A00/senedd.brycheiniog-tawe-nedd.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.caerdydd-ffynnon-taf.2026-05-07",
+      "super_constituency": "Caerdydd Ffynnon Taf",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9825
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.997
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.995
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6675
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.2065
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.151
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.119
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 45,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.caerdydd-ffynnon-taf.2026-05-07/sopn/2026-04-10T09%3A09%3A39.004137%2B00%3A00/senedd.caerdydd-ffynnon-taf.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.caerdydd-penarth.2026-05-07",
+      "super_constituency": "Caerdydd Penarth",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9845
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.999
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.996
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6625
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.209
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1525
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1075
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 42,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.caerdydd-penarth.2026-05-07/sopn/2026-04-10T09%3A09%3A40.111210%2B00%3A00/senedd.caerdydd-penarth.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.casnewydd-islwyn.2026-05-07",
+      "super_constituency": "Casnewydd Islwyn",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9825
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.998
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.996
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6725
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.2015
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1505
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.093
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 41,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.casnewydd-islwyn.2026-05-07/sopn/2026-04-10T16%3A20%3A31.166664%2B00%3A00/senedd.casnewydd-islwyn.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.ceredigion-penfro.2026-05-07",
+      "super_constituency": "Ceredigion Penfro",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9785
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.998
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9955
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6575
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.191
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.161
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.115
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 44,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.ceredigion-penfro.2026-05-07/sopn/2026-04-09T15%3A11%3A41.861813%2B00%3A00/Ceredigion_Penfro.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.clwyd.2026-05-07",
+      "super_constituency": "Clwyd",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.984
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9985
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.996
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6705
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.2095
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.158
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0885
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 40,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.clwyd.2026-05-07/sopn/2026-04-10T16%3A20%3A31.742353%2B00%3A00/senedd.clwyd.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.fflint-wrecsam.2026-05-07",
+      "super_constituency": "Fflint Wrecsam",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9805
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.998
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9975
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.664
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.2075
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1415
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1085
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 39,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.fflint-wrecsam.2026-05-07/sopn/2026-04-10T19%3A39%3A16.200269%2B00%3A00/senedd_sopn_and_nop_-_flint_wrecsam.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.gwynedd-maldwyn.2026-05-07",
+      "super_constituency": "Gwynedd Maldwyn",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9805
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 1
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.995
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6835
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.197
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.144
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.099
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 42,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.gwynedd-maldwyn.2026-05-07/sopn/2026-04-10T10%3A22%3A33.525251%2B00%3A00/senedd.gwynedd-maldwyn.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.gwyr-abertawe.2026-05-07",
+      "super_constituency": "Gŵyr Abertawe",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.982
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 1
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9955
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.674
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.2135
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1595
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.115
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 42,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.gwyr-abertawe.2026-05-07/sopn/2026-04-09T19%3A24%3A53.902030%2B00%3A00/senedd.gwyr-abertawe.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.pen-y-bont-bro-morgannwg.2026-05-07",
+      "super_constituency": "Pen-y-bont Bro Morgannwg",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9855
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9985
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.995
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.679
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1975
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.142
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.105
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 43,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.pen-y-bont-bro-morgannwg.2026-05-07/sopn/2026-04-10T16%3A20%3A32.272972%2B00%3A00/senedd.pen-y-bont-bro-morgannwg.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.pontypridd-cynon-merthyr.2026-05-07",
+      "super_constituency": "Pontypridd Cynon Merthyr",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.989
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9985
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9965
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.68
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.2115
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1425
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0975
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 42,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.pontypridd-cynon-merthyr.2026-05-07/sopn/2026-04-10T12%3A45%3A37.140229%2B00%3A00/Pontypridd.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.sir-fynwy-torfaen.2026-05-07",
+      "super_constituency": "Sir Fynwy Torfaen",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9875
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9985
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9955
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6805
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1875
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.159
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1045
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 43,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.sir-fynwy-torfaen.2026-05-07/sopn/2026-04-09T15%3A35%3A29.478363%2B00%3A00/senedd.sir-fynwy-torfaen.2026-05-07-sopn.pdf"
+    },
+    {
+      "ballot_paper_id": "senedd.sir-gaerfyrddin.2026-05-07",
+      "super_constituency": "Sir Gaerfyrddin",
+      "seats": 6,
+      "central": {
+        "Labour": 1,
+        "Plaid Cymru": 2,
+        "Reform UK": 2,
+        "Conservative": 1,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "Other": 0
+      },
+      "per_party": {
+        "Labour": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.981
+        },
+        "Plaid Cymru": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.999
+        },
+        "Reform UK": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.996
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.677
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1945
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.146
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1035
+        }
+      },
+      "candidates_locked": true,
+      "candidate_count": 43,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/senedd.sir-gaerfyrddin.2026-05-07/sopn/2026-04-09T22%3A18%3A48.688659%2B00%3A00/senedd.sir-gaerfyrddin.2026-05-07-sopn.pdf"
+    }
+  ]
+}

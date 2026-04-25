@@ -1,0 +1,806 @@
+{
+  "snapshot": {
+    "snapshot_id": "dc-ballots-2026-05-07-f2d10be9b458",
+    "source_name": "Democracy Club Candidates API",
+    "source_url": "https://candidates.democracyclub.org.uk/api/next/ballots/?election_date=2026-05-07",
+    "retrieved_at": "2026-04-25T13:18:53.287Z",
+    "licence": "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
+    "sha256": "f2d10be9b4586f99c9ca12ceeb3ff4e7188528533f5bc1763103201e3ff78b3a",
+    "quality_status": "imported_quarantined",
+    "review_notes": "Bulk DC API fetch. Verify candidate locks + cancellations + SoPN URLs before any per-contest publication."
+  },
+  "election_group": {
+    "election_id": "local.hartlepool.2026-05-07",
+    "name": "Hartlepool local election",
+    "classification": {
+      "tier": "local",
+      "model_family_hint": "local_fptp"
+    }
+  },
+  "ballots": [
+    {
+      "ballot_paper_id": "local.hartlepool.burn-valley.2026-05-07",
+      "post": {
+        "id": "gss:E05013038",
+        "label": "Burn Valley",
+        "slug": "burn-valley",
+        "created": "2020-04-01T12:06:46.170401+01:00",
+        "last_updated": "2023-07-11T15:30:49.155659+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.burn-valley.2026-05-07/sopn/2026-04-10T20%3A13%3A10.447286%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 53348,
+          "name": "Graham Harrison",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127167,
+          "name": "Lucas Hennells-Barber",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 54854,
+          "name": "Owen Craig Riddle",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 126071,
+          "name": "India Robertson",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127154,
+          "name": "Bryan Thompson",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.de-bruce.2026-05-07",
+      "post": {
+        "id": "gss:E05013039",
+        "label": "De Bruce",
+        "slug": "de-bruce",
+        "created": "2020-04-01T12:07:02.890214+01:00",
+        "last_updated": "2023-07-11T15:30:49.175527+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.de-bruce.2026-05-07/sopn/2026-04-10T20%3A13%3A50.875871%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 125413,
+          "name": "Nick Anderson",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80258,
+          "name": "Rachel Jayne Creevy",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125760,
+          "name": "Jasmine Jade Khan",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127179,
+          "name": "Lydia Dorelle Waller",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.fens-greatham.2026-05-07",
+      "post": {
+        "id": "gss:E05013040",
+        "label": "Fens & Greatham",
+        "slug": "fens-greatham",
+        "created": "2020-04-01T12:06:49.891283+01:00",
+        "last_updated": "2023-07-11T15:30:49.202899+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.fens-greatham.2026-05-07/sopn/2026-04-10T20%3A14%3A48.887038%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 125759,
+          "name": "Lisa Marie Arnell",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125415,
+          "name": "Dave Bruce",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 10261,
+          "name": "Bob Buchan",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 122830,
+          "name": "Mark Joseph Hanson",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.foggy-furze.2026-05-07",
+      "post": {
+        "id": "gss:E05013041",
+        "label": "Foggy Furze",
+        "slug": "foggy-furze",
+        "created": "2020-04-01T12:07:10.162252+01:00",
+        "last_updated": "2023-07-11T15:30:49.220212+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.foggy-furze.2026-05-07/sopn/2026-04-10T20%3A15%3A30.679820%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 5651,
+          "name": "Mike Cherrington",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80316,
+          "name": "Christopher Groves",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80276,
+          "name": "Melanie Morley",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 53229,
+          "name": "Connor Stallard",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125416,
+          "name": "Rob Stevenson",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.hart.2026-05-07",
+      "post": {
+        "id": "gss:E05013042",
+        "label": "Hart",
+        "slug": "hart",
+        "created": "2020-04-01T12:06:49.694351+01:00",
+        "last_updated": "2023-07-11T15:30:49.273312+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.hart.2026-05-07/sopn/2026-04-10T20%3A15%3A58.445766%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 137807,
+          "name": "Jo BANKS",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 126447,
+          "name": "Michael BROOKES",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 110201,
+          "name": "Stuart Alan CAMPBELL",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 53266,
+          "name": "Rob COOK",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80289,
+          "name": "Brian COWIE",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 87891,
+          "name": "Barry MCKINSTRAY",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 53267,
+          "name": "David NICHOLSON",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 120153,
+          "name": "Jake Ethan SWINBURNE",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.headland-harbour.2026-05-07",
+      "post": {
+        "id": "gss:E05013043",
+        "label": "Headland & Harbour",
+        "slug": "headland-harbour",
+        "created": "2020-04-01T12:07:07.420902+01:00",
+        "last_updated": "2023-07-11T15:30:49.354276+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.headland-harbour.2026-05-07/sopn/2026-04-10T20%3A16%3A33.565889%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 127243,
+          "name": "Amanda Davis",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125418,
+          "name": "Scott Gaitey",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125762,
+          "name": "Jessica Louise Ingham",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127249,
+          "name": "John Mawhinney",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 126069,
+          "name": "Nathan Maddison McLauchlan",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.manor-house.2026-05-07",
+      "post": {
+        "id": "gss:E05013044",
+        "label": "Manor House",
+        "slug": "manor-house",
+        "created": "2020-04-01T12:06:37.837385+01:00",
+        "last_updated": "2023-07-11T15:30:49.371865+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.manor-house.2026-05-07/sopn/2026-04-10T20%3A17%3A18.917282%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 127268,
+          "name": "Patricia Allen",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125419,
+          "name": "Ronald Buglass",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 10262,
+          "name": "Tom Casey",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80297,
+          "name": "Pamela Claire Hargreaves",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.rossmere.2026-05-07",
+      "post": {
+        "id": "gss:E05013045",
+        "label": "Rossmere",
+        "slug": "rossmere",
+        "created": "2020-04-01T12:06:52.999868+01:00",
+        "last_updated": "2023-07-11T15:30:49.415311+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.rossmere.2026-05-07/sopn/2026-04-10T20%3A18%3A19.581414%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 80312,
+          "name": "Moss Boddy",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125758,
+          "name": "Matthew James Hartley",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 42890,
+          "name": "Veronica Nicholson",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125421,
+          "name": "Christine Wiley",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.rural-west.2026-05-07",
+      "post": {
+        "id": "gss:E05013046",
+        "label": "Rural West",
+        "slug": "rural-west",
+        "created": "2020-04-01T12:06:53.204318+01:00",
+        "last_updated": "2023-07-11T15:30:49.458703+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.rural-west.2026-05-07/sopn/2026-04-10T20%3A19%3A04.466499%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 33198,
+          "name": "Thomas Cassidy",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125757,
+          "name": "Simon Niall Crute",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 124010,
+          "name": "Sara Kadry Mohamed Hamouda",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 53363,
+          "name": "Richie Hughes",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.seaton.2026-05-07",
+      "post": {
+        "id": "gss:E05013047",
+        "label": "Seaton",
+        "slug": "seaton",
+        "created": "2020-04-01T12:06:42.832478+01:00",
+        "last_updated": "2023-07-11T15:30:49.556657+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.seaton.2026-05-07/sopn/2026-04-10T20%3A19%3A54.656539%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 126446,
+          "name": "Mia Brown",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 123552,
+          "name": "Nicholas Brian Cain",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80336,
+          "name": "Gordon Cranney",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127303,
+          "name": "John Harrison",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80321,
+          "name": "Michael Noppen",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125422,
+          "name": "Peter Storey",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.throston.2026-05-07",
+      "post": {
+        "id": "gss:E05013048",
+        "label": "Throston",
+        "slug": "throston",
+        "created": "2020-04-01T12:07:05.892621+01:00",
+        "last_updated": "2023-07-11T15:30:49.574044+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.throston.2026-05-07/sopn/2026-04-10T20%3A20%3A59.230275%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 123543,
+          "name": "Jack Adam Callaghan",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 126070,
+          "name": "Samuel Allan Carr",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 98100,
+          "name": "Margaret Lyall",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 80350,
+          "name": "Amanda Elizabeth Napper",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 126072,
+          "name": "Ewan Dawson Train",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.hartlepool.victoria.2026-05-07",
+      "post": {
+        "id": "gss:E05013049",
+        "label": "Victoria",
+        "slug": "victoria",
+        "created": "2020-04-01T12:06:46.202906+01:00",
+        "last_updated": "2023-07-11T15:30:49.626076+01:00"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hartlepool.victoria.2026-05-07/sopn/2026-04-10T20%3A21%3A52.949013%2B00%3A00/temp.jpeg",
+      "sopn_source_url": "https://www.hartlepool.gov.uk/downloads/file/1500/statement-of-persons-nominated-local-elections-7-may-2026",
+      "candidates": [
+        {
+          "person_id": 83694,
+          "name": "Gary Allen",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125756,
+          "name": "Connor James Dorian",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "Green Party candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 75297,
+          "name": "Adam Gaines",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 98143,
+          "name": "Rodney Pangbourne",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "Local Conservatives",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    }
+  ]
+}

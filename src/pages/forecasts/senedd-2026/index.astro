@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadSenedd, partyColour } from "../../../lib/predictions";
+
+const senedd = loadSenedd();
+const totals = senedd.welsh_seat_total_projection;
+const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] as any).p50);
+---
+
+<BaseLayout
+  title="Senedd Cymru 2026 forecast"
+  description="First public estimate of the 2026 Senedd Cymru election under the new closed-list PR system. 16 super-constituencies × 6 list seats = 96 seats."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Senedd Cymru 2026</p>
+    <h1>96 seats — new closed-list PR system</h1>
+    <p class="lede">
+      First public estimate under the Senedd Cymru (Members and Elections) Act 2024. 16 super-constituencies × 6 list seats.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Important caveat</h2>
+    <p>
+      This is the first Senedd election under the new geography. There are no prior election results on these
+      super-constituency boundaries. Stage 1 of UK Elections applies the Welsh-wide vote intention uniformly to
+      each of the 16 super-constituencies and runs d'Hondt allocation independently per area. Geographic
+      differentiation between super-constituencies — using 2024 GE Welsh constituency-level results aggregated to
+      the new pairings — is a Stage 1.5 task expected before polling day.
+    </p>
+    <p>
+      Sigma (per-party noise) is set wider than locals (5 percentage points) to reflect this new-system uncertainty.
+      Treat all numbers below as a defensible first estimate, not a final prediction.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Wales-wide projection</p>
+      <h2>Predicted seat totals (96 seats)</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Central</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
+      <tbody>
+        {ranked.map(([party, t]: [string, any]) => (
+          <tr>
+            <td><span class="party-swatch" style={`background:${partyColour(party)}`}></span>{party}</td>
+            <td><strong>{t.central}</strong></td>
+            <td style="color: var(--muted)">{t.p10}</td>
+            <td>{t.p50}</td>
+            <td style="color: var(--muted)">{t.p90}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Super-constituencies</p>
+      <h2>16 super-constituencies × 6 seats</h2>
+    </div>
+    <table class="super-table">
+      <thead><tr><th>Super-constituency</th><th>Top predicted parties (central allocation)</th></tr></thead>
+      <tbody>
+        {senedd.per_super_constituency.map((s: any) => {
+          const central = Object.entries(s.central).filter(([_, n]) => (n as number) > 0).sort((a, b) => (b[1] as number) - (a[1] as number));
+          return (
+            <tr>
+              <td>{s.super_constituency}</td>
+              <td>{central.map(([party, seats], i) => (
+                <span style="margin-right: 0.75rem">
+                  <span class="party-swatch" style={`background:${partyColour(party)}`}></span>{party} {seats as number}
+                </span>
+              ))}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Inputs</h2>
+    <p><strong>Welsh GE2024 baseline:</strong> Wales-wide vote share aggregated across 32 Welsh Westminster constituencies (Labour 36.6%, Reform UK 16.9%, Conservative 18.2%, Plaid Cymru 14.9%, Lib Dem 6.7%, Green 4.3%).</p>
+    <p><strong>April 2026 Welsh polling (placeholder, refresh required by 2026-05-01):</strong> Plaid Cymru 25%, Reform UK 23%, Labour 21%, Conservative 13%, Lib Dem 7%, Green 6%.</p>
+    <p><strong>Method:</strong> Per super-constituency — 6 seats allocated by d'Hondt highest-averages over Welsh-wide April 2026 polling. Bootstrapped with 2,000 samples and σ=5pp per-party noise to produce P10/P50/P90 intervals.</p>
+  </section>
+</BaseLayout>
+
+<style>
+.seat-table, .super-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.seat-table th, .seat-table td, .super-table th, .super-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.seat-table th, .super-table th { font-weight: 600; color: var(--muted); font-size: 0.875rem; }
+.party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.5rem; vertical-align: middle; }
+</style>

@@ -1,0 +1,36 @@
+{
+  "snapshot": {
+    "snapshot_id": "dc-historic-results-847139b88aed",
+    "source_name": "Democracy Club Candidates API \u2014 results endpoint",
+    "source_url": "https://candidates.democracyclub.org.uk/api/next/results/",
+    "retrieved_at": "2026-04-25T13:53:27.884Z",
+    "sha256": "847139b88aed3133bc8d4d9e9697bfd7075a9f04851975a4cab2f4ac09af910d",
+    "licence": "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
+    "quality_status": "imported_quarantined",
+    "review_notes": "Bulk fetch of all DC results, filtered to May 2026 scope councils + national tiers. Per-result `source` is the official declaration PDF."
+  },
+  "election_date_target": "2026-05-07",
+  "totals": {
+    "raw_results_fetched": 34633,
+    "in_scope_results": 16003,
+    "target_local_or_mayor_wards": 2977,
+    "target_wards_with_any_dc_history": 2604,
+    "target_wards_with_cycle_history": 2604,
+    "coverage_pct_any": 87.5,
+    "coverage_pct_cycle": 87.5
+  },
+  "by_year": {
+    "2016": 1812,
+    "2017": 869,
+    "2018": 2468,
+    "2019": 1838,
+    "2020": 12,
+    "2021": 2537,
+    "2022": 2605,
+    "2023": 1821,
+    "2024": 1716,
+    "2025": 318,
+    "2026": 7
+  },
+  "note": "Full result bundle (52MB) is gitignored; regenerate via node scripts/ingest-dc-historic-results.mjs (uses .cache/dc-results pages)."
+}

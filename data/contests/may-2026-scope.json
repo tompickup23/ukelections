@@ -1,0 +1,2207 @@
+{
+  "snapshot": {
+    "snapshot_id": "dc-ballots-2026-05-07-f2d10be9b458",
+    "source_name": "Democracy Club Candidates API",
+    "source_url": "https://candidates.democracyclub.org.uk/api/next/ballots/?election_date=2026-05-07",
+    "retrieved_at": "2026-04-25T13:18:53.287Z",
+    "licence": "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
+    "sha256": "f2d10be9b4586f99c9ca12ceeb3ff4e7188528533f5bc1763103201e3ff78b3a",
+    "quality_status": "imported_quarantined",
+    "review_notes": "Bulk DC API fetch. Verify candidate locks + cancellations + SoPN URLs before any per-contest publication."
+  },
+  "election_date": "2026-05-07",
+  "totals": {
+    "ballots": 3074,
+    "cancelled": 6,
+    "candidates_locked": 3074,
+    "sopn_attached": 3074,
+    "candidacies": 26805,
+    "election_groups": 165,
+    "council_or_area_slugs": 164
+  },
+  "by_tier": {
+    "local": 2971,
+    "holyrood": 81,
+    "senedd": 16,
+    "mayor": 6
+  },
+  "party_candidacies_top_30": {
+    "Reform UK": 5063,
+    "Conservative and Unionist Party": 5017,
+    "Green Party": 4609,
+    "Labour Party": 4474,
+    "Liberal Democrats": 4182,
+    "Independent": 870,
+    "Labour and Co-operative Party": 686,
+    "Trade Unionist and Socialist Coalition": 300,
+    "Scottish National Party (SNP)": 143,
+    "Plaid Cymru - The Party of Wales": 107,
+    "Workers Party of Britain": 82,
+    "Newham Independents Party": 67,
+    "Scottish Green Party": 65,
+    "Social Democratic Party": 49,
+    "Alliance to Liberate Scotland": 49,
+    "Aspire": 46,
+    "Tower Hamlets Independents": 44,
+    "Redbridge Independents": 42,
+    "Heritage Party": 39,
+    "Havering Residents Association": 35,
+    "Kingston Independent Residents Group": 34,
+    "Scottish Family Party": 34,
+    "Christian Peoples Alliance": 29,
+    "Your Bradford Independent group": 29,
+    "Advance UK": 27,
+    "Ealing Community Independents Party": 26,
+    "UK Independence Party (UKIP)": 24,
+    "Scottish Socialist Party": 21,
+    "Your Party": 20,
+    "Walsall Community Independents Party": 20
+  },
+  "election_groups": [
+    {
+      "election_id": "local.adur.2026-05-07",
+      "name": "Adur local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "adur"
+    },
+    {
+      "election_id": "local.barking-and-dagenham.2026-05-07",
+      "name": "Barking and Dagenham local election",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "barking-and-dagenham"
+    },
+    {
+      "election_id": "local.barnet.2026-05-07",
+      "name": "Barnet local election",
+      "ballots": 24,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 24,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "barnet"
+    },
+    {
+      "election_id": "local.barnsley.2026-05-07",
+      "name": "Barnsley local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "barnsley"
+    },
+    {
+      "election_id": "local.basildon.2026-05-07",
+      "name": "Basildon local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "basildon"
+    },
+    {
+      "election_id": "local.basingstoke-and-deane.2026-05-07",
+      "name": "Basingstoke and Deane local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "basingstoke-and-deane"
+    },
+    {
+      "election_id": "local.bexley.2026-05-07",
+      "name": "Bexley local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "bexley"
+    },
+    {
+      "election_id": "local.birmingham.2026-05-07",
+      "name": "Birmingham local election",
+      "ballots": 69,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 69,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "birmingham"
+    },
+    {
+      "election_id": "local.blackburn-with-darwen.2026-05-07",
+      "name": "Blackburn with Darwen local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "blackburn-with-darwen"
+    },
+    {
+      "election_id": "local.bolton.2026-05-07",
+      "name": "Bolton local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "bolton"
+    },
+    {
+      "election_id": "local.bradford.2026-05-07",
+      "name": "Bradford local election",
+      "ballots": 30,
+      "candidates_locked_all": true,
+      "cancelled": 1,
+      "sopn_attached": 30,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "bradford"
+    },
+    {
+      "election_id": "local.brent.2026-05-07",
+      "name": "Brent local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "brent"
+    },
+    {
+      "election_id": "local.brentwood.2026-05-07",
+      "name": "Brentwood local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "brentwood"
+    },
+    {
+      "election_id": "local.bromley.2026-05-07",
+      "name": "Bromley local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "bromley"
+    },
+    {
+      "election_id": "local.broxbourne.2026-05-07",
+      "name": "Broxbourne local election",
+      "ballots": 10,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 10,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "broxbourne"
+    },
+    {
+      "election_id": "local.burnley.2026-05-07",
+      "name": "Burnley local election",
+      "ballots": 15,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 15,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "burnley"
+    },
+    {
+      "election_id": "local.bury.2026-05-07",
+      "name": "Bury local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 1,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "bury"
+    },
+    {
+      "election_id": "local.calderdale.2026-05-07",
+      "name": "Calderdale local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "calderdale"
+    },
+    {
+      "election_id": "local.cambridge.2026-05-07",
+      "name": "Cambridge local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "cambridge"
+    },
+    {
+      "election_id": "local.camden.2026-05-07",
+      "name": "Camden local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "camden"
+    },
+    {
+      "election_id": "local.cannock-chase.2026-05-07",
+      "name": "Cannock Chase local election",
+      "ballots": 12,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 12,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "cannock-chase"
+    },
+    {
+      "election_id": "local.chelmsford.2026-05-07",
+      "name": "Chelmsford local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "chelmsford"
+    },
+    {
+      "election_id": "local.cheltenham.2026-05-07",
+      "name": "Cheltenham local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "cheltenham"
+    },
+    {
+      "election_id": "local.cherwell.2026-05-07",
+      "name": "Cherwell local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "cherwell"
+    },
+    {
+      "election_id": "local.chesterfield.2026-05-07",
+      "name": "Chesterfield local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "chesterfield"
+    },
+    {
+      "election_id": "local.chorley.2026-05-07",
+      "name": "Chorley local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "chorley"
+    },
+    {
+      "election_id": "local.city-of-lincoln.2026-05-07",
+      "name": "City of Lincoln local election",
+      "ballots": 11,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 11,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "city-of-lincoln"
+    },
+    {
+      "election_id": "local.colchester.2026-05-07",
+      "name": "Colchester local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "colchester"
+    },
+    {
+      "election_id": "local.coventry.2026-05-07",
+      "name": "Coventry local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "coventry"
+    },
+    {
+      "election_id": "local.crawley.2026-05-07",
+      "name": "Crawley local election",
+      "ballots": 12,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 12,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "crawley"
+    },
+    {
+      "election_id": "local.croydon.2026-05-07",
+      "name": "Croydon local election",
+      "ballots": 28,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 28,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "croydon"
+    },
+    {
+      "election_id": "local.dudley.2026-05-07",
+      "name": "Dudley local election",
+      "ballots": 24,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 24,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "dudley"
+    },
+    {
+      "election_id": "local.ealing.2026-05-07",
+      "name": "Ealing local election",
+      "ballots": 24,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 24,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "ealing"
+    },
+    {
+      "election_id": "local.east-hertfordshire.2026-05-07",
+      "name": "East Hertfordshire local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "east-hertfordshire"
+    },
+    {
+      "election_id": "local.east-surrey.2026-05-07",
+      "name": "East Surrey local election",
+      "ballots": 36,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 36,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "east-surrey"
+    },
+    {
+      "election_id": "local.east-sussex.2026-05-07",
+      "name": "East Sussex local election",
+      "ballots": 50,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 50,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "east-sussex"
+    },
+    {
+      "election_id": "local.eastleigh.2026-05-07",
+      "name": "Eastleigh local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "eastleigh"
+    },
+    {
+      "election_id": "local.enfield.2026-05-07",
+      "name": "Enfield local election",
+      "ballots": 25,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 25,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "enfield"
+    },
+    {
+      "election_id": "local.epping-forest.2026-05-07",
+      "name": "Epping Forest local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "epping-forest"
+    },
+    {
+      "election_id": "local.essex.2026-05-07",
+      "name": "Essex local election",
+      "ballots": 78,
+      "candidates_locked_all": true,
+      "cancelled": 1,
+      "sopn_attached": 78,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "essex"
+    },
+    {
+      "election_id": "local.exeter.2026-05-07",
+      "name": "Exeter local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "exeter"
+    },
+    {
+      "election_id": "local.fareham.2026-05-07",
+      "name": "Fareham local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "fareham"
+    },
+    {
+      "election_id": "local.gateshead.2026-05-07",
+      "name": "Gateshead local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "gateshead"
+    },
+    {
+      "election_id": "local.gloucestershire.2026-05-07",
+      "name": "Gloucestershire local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "gloucestershire"
+    },
+    {
+      "election_id": "local.gosport.2026-05-07",
+      "name": "Gosport local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "gosport"
+    },
+    {
+      "election_id": "local.great-yarmouth.2026-05-07",
+      "name": "Great Yarmouth local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "great-yarmouth"
+    },
+    {
+      "election_id": "local.greenwich.2026-05-07",
+      "name": "Greenwich local election",
+      "ballots": 23,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 23,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "greenwich"
+    },
+    {
+      "election_id": "local.guildford.2026-05-07",
+      "name": "Guildford local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "guildford"
+    },
+    {
+      "election_id": "local.hackney.2026-05-07",
+      "name": "London Borough of Hackney",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hackney"
+    },
+    {
+      "election_id": "local.halton.2026-05-07",
+      "name": "Halton local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "halton"
+    },
+    {
+      "election_id": "local.hammersmith-and-fulham.2026-05-07",
+      "name": "Hammersmith and Fulham local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hammersmith-and-fulham"
+    },
+    {
+      "election_id": "local.hampshire.2026-05-07",
+      "name": "Hampshire local election",
+      "ballots": 76,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 76,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hampshire"
+    },
+    {
+      "election_id": "local.haringey.2026-05-07",
+      "name": "Haringey local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "haringey"
+    },
+    {
+      "election_id": "local.harlow.2026-05-07",
+      "name": "Harlow local election",
+      "ballots": 11,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 11,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "harlow"
+    },
+    {
+      "election_id": "local.harrow.2026-05-07",
+      "name": "Harrow local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "harrow"
+    },
+    {
+      "election_id": "local.hart.2026-05-07",
+      "name": "Hart local election",
+      "ballots": 11,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 11,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hart"
+    },
+    {
+      "election_id": "local.hartlepool.2026-05-07",
+      "name": "Hartlepool local election",
+      "ballots": 12,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 12,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hartlepool"
+    },
+    {
+      "election_id": "local.hastings.2026-05-07",
+      "name": "Hastings local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hastings"
+    },
+    {
+      "election_id": "local.havant.2026-05-07",
+      "name": "Havant local election",
+      "ballots": 12,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 12,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "havant"
+    },
+    {
+      "election_id": "local.havering.2026-05-07",
+      "name": "Havering local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "havering"
+    },
+    {
+      "election_id": "local.hertfordshire.2026-05-07",
+      "name": "Hertfordshire local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hertfordshire"
+    },
+    {
+      "election_id": "local.hertsmere.2026-05-07",
+      "name": "Hertsmere local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hertsmere"
+    },
+    {
+      "election_id": "local.hillingdon.2026-05-07",
+      "name": "Hillingdon local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 1,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hillingdon"
+    },
+    {
+      "election_id": "local.horsham.2026-05-07",
+      "name": "Horsham local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "horsham"
+    },
+    {
+      "election_id": "local.hounslow.2026-05-07",
+      "name": "Hounslow local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hounslow"
+    },
+    {
+      "election_id": "local.huntingdonshire.2026-05-07",
+      "name": "Huntingdonshire local election",
+      "ballots": 26,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 26,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "huntingdonshire"
+    },
+    {
+      "election_id": "local.hyndburn.2026-05-07",
+      "name": "Hyndburn local election",
+      "ballots": 11,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 11,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "hyndburn"
+    },
+    {
+      "election_id": "local.ipswich.2026-05-07",
+      "name": "Ipswich local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "ipswich"
+    },
+    {
+      "election_id": "local.isle-of-wight.2026-05-07",
+      "name": "Isle of Wight local election",
+      "ballots": 39,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 39,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "isle-of-wight"
+    },
+    {
+      "election_id": "local.islington.2026-05-07",
+      "name": "Islington local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "islington"
+    },
+    {
+      "election_id": "local.kensington-and-chelsea.2026-05-07",
+      "name": "Kensington and Chelsea local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "kensington-and-chelsea"
+    },
+    {
+      "election_id": "local.kingston-upon-hull.2026-05-07",
+      "name": "Kingston upon Hull local election",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "kingston-upon-hull"
+    },
+    {
+      "election_id": "local.kingston-upon-thames.2026-05-07",
+      "name": "Kingston upon Thames local election",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "kingston-upon-thames"
+    },
+    {
+      "election_id": "local.kirklees.2026-05-07",
+      "name": "Kirklees local election",
+      "ballots": 23,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 23,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "kirklees"
+    },
+    {
+      "election_id": "local.knowsley.2026-05-07",
+      "name": "Knowsley local election",
+      "ballots": 15,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 15,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "knowsley"
+    },
+    {
+      "election_id": "local.lambeth.2026-05-07",
+      "name": "Lambeth local election",
+      "ballots": 25,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 25,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "lambeth"
+    },
+    {
+      "election_id": "local.leeds.2026-05-07",
+      "name": "Leeds local election",
+      "ballots": 33,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 33,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "leeds"
+    },
+    {
+      "election_id": "local.lewes.2026-05-07",
+      "name": "Lewes local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "lewes"
+    },
+    {
+      "election_id": "local.lewisham.2026-05-07",
+      "name": "London Borough of Lewisham",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "lewisham"
+    },
+    {
+      "election_id": "local.manchester.2026-05-07",
+      "name": "Manchester local election",
+      "ballots": 32,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 32,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "manchester"
+    },
+    {
+      "election_id": "local.merton.2026-05-07",
+      "name": "Merton local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "merton"
+    },
+    {
+      "election_id": "local.mid-sussex.2026-05-07",
+      "name": "Mid Sussex local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "mid-sussex"
+    },
+    {
+      "election_id": "local.milton-keynes.2026-05-07",
+      "name": "Milton Keynes local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "milton-keynes"
+    },
+    {
+      "election_id": "local.newcastle-under-lyme.2026-05-07",
+      "name": "Newcastle-under-Lyme local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "newcastle-under-lyme"
+    },
+    {
+      "election_id": "local.newcastle-upon-tyne.2026-05-07",
+      "name": "Newcastle upon Tyne local election",
+      "ballots": 26,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 26,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "newcastle-upon-tyne"
+    },
+    {
+      "election_id": "local.newham.2026-05-07",
+      "name": "London Borough of Newham",
+      "ballots": 24,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 24,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "newham"
+    },
+    {
+      "election_id": "local.newport.2026-05-07",
+      "name": "Newport local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "newport"
+    },
+    {
+      "election_id": "local.norfolk.2026-05-07",
+      "name": "Norfolk local election",
+      "ballots": 84,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 84,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "norfolk"
+    },
+    {
+      "election_id": "local.north-east-lincolnshire.2026-05-07",
+      "name": "North East Lincolnshire local election",
+      "ballots": 15,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 15,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "north-east-lincolnshire"
+    },
+    {
+      "election_id": "local.north-tyneside.2026-05-07",
+      "name": "North Tyneside Council",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "north-tyneside"
+    },
+    {
+      "election_id": "local.norwich.2026-05-07",
+      "name": "Norwich local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "norwich"
+    },
+    {
+      "election_id": "local.nuneaton-and-bedworth.2026-05-07",
+      "name": "Nuneaton and Bedworth local election",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "nuneaton-and-bedworth"
+    },
+    {
+      "election_id": "local.oldham.2026-05-07",
+      "name": "Oldham local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "oldham"
+    },
+    {
+      "election_id": "local.oxford.2026-05-07",
+      "name": "Oxford local election",
+      "ballots": 24,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 24,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "oxford"
+    },
+    {
+      "election_id": "local.pendle.2026-05-07",
+      "name": "Pendle local election",
+      "ballots": 10,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 10,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "pendle"
+    },
+    {
+      "election_id": "local.peterborough.2026-05-07",
+      "name": "Peterborough local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "peterborough"
+    },
+    {
+      "election_id": "local.plymouth.2026-05-07",
+      "name": "Plymouth local election",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "plymouth"
+    },
+    {
+      "election_id": "local.portsmouth.2026-05-07",
+      "name": "Portsmouth local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "portsmouth"
+    },
+    {
+      "election_id": "local.powys.2026-05-07",
+      "name": "Powys local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "powys"
+    },
+    {
+      "election_id": "local.preston.2026-05-07",
+      "name": "Preston local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "preston"
+    },
+    {
+      "election_id": "local.reading.2026-05-07",
+      "name": "Reading local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "reading"
+    },
+    {
+      "election_id": "local.redbridge.2026-05-07",
+      "name": "Redbridge local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "redbridge"
+    },
+    {
+      "election_id": "local.redditch.2026-05-07",
+      "name": "Redditch local election",
+      "ballots": 9,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 9,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "redditch"
+    },
+    {
+      "election_id": "local.reigate-and-banstead.2026-05-07",
+      "name": "Reigate and Banstead local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "reigate-and-banstead"
+    },
+    {
+      "election_id": "local.richmond-upon-thames.2026-05-07",
+      "name": "Richmond upon Thames local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "richmond-upon-thames"
+    },
+    {
+      "election_id": "local.rochdale.2026-05-07",
+      "name": "Rochdale local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "rochdale"
+    },
+    {
+      "election_id": "local.rochford.2026-05-07",
+      "name": "Rochford local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "rochford"
+    },
+    {
+      "election_id": "local.rother.2026-05-07",
+      "name": "Rother local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "rother"
+    },
+    {
+      "election_id": "local.rugby.2026-05-07",
+      "name": "Rugby local election",
+      "ballots": 14,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 14,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "rugby"
+    },
+    {
+      "election_id": "local.rushmoor.2026-05-07",
+      "name": "Rushmoor local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "rushmoor"
+    },
+    {
+      "election_id": "local.salford.2026-05-07",
+      "name": "Salford City Council",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "salford"
+    },
+    {
+      "election_id": "local.sandwell.2026-05-07",
+      "name": "Sandwell local election",
+      "ballots": 24,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 24,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "sandwell"
+    },
+    {
+      "election_id": "local.sefton.2026-05-07",
+      "name": "Sefton local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "sefton"
+    },
+    {
+      "election_id": "local.sheffield.2026-05-07",
+      "name": "Sheffield local election",
+      "ballots": 28,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 28,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "sheffield"
+    },
+    {
+      "election_id": "local.solihull.2026-05-07",
+      "name": "Solihull local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "solihull"
+    },
+    {
+      "election_id": "local.somerset.2026-05-07",
+      "name": "Somerset local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "somerset"
+    },
+    {
+      "election_id": "local.south-cambridgeshire.2026-05-07",
+      "name": "South Cambridgeshire local election",
+      "ballots": 26,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 26,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "south-cambridgeshire"
+    },
+    {
+      "election_id": "local.south-tyneside.2026-05-07",
+      "name": "South Tyneside local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "south-tyneside"
+    },
+    {
+      "election_id": "local.southampton.2026-05-07",
+      "name": "Southampton local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "southampton"
+    },
+    {
+      "election_id": "local.southend-on-sea.2026-05-07",
+      "name": "Southend-on-Sea local election",
+      "ballots": 17,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 17,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "southend-on-sea"
+    },
+    {
+      "election_id": "local.southwark.2026-05-07",
+      "name": "Southwark local election",
+      "ballots": 23,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 23,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "southwark"
+    },
+    {
+      "election_id": "local.st-albans.2026-05-07",
+      "name": "St Albans local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "st-albans"
+    },
+    {
+      "election_id": "local.st-helens.2026-05-07",
+      "name": "St. Helens local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 1,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "st-helens"
+    },
+    {
+      "election_id": "local.stevenage.2026-05-07",
+      "name": "Stevenage local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "stevenage"
+    },
+    {
+      "election_id": "local.stockport.2026-05-07",
+      "name": "Stockport local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "stockport"
+    },
+    {
+      "election_id": "local.stratford-on-avon.2026-05-07",
+      "name": "Stratford-on-Avon local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "stratford-on-avon"
+    },
+    {
+      "election_id": "local.suffolk.2026-05-07",
+      "name": "Suffolk local election",
+      "ballots": 69,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 69,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "suffolk"
+    },
+    {
+      "election_id": "local.sunderland.2026-05-07",
+      "name": "Sunderland local election",
+      "ballots": 25,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 25,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "sunderland"
+    },
+    {
+      "election_id": "local.surrey.2026-05-07",
+      "name": "Surrey local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "surrey"
+    },
+    {
+      "election_id": "local.sutton.2026-05-07",
+      "name": "Sutton local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "sutton"
+    },
+    {
+      "election_id": "local.swindon.2026-05-07",
+      "name": "Swindon local election",
+      "ballots": 25,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 25,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "swindon"
+    },
+    {
+      "election_id": "local.tameside.2026-05-07",
+      "name": "Tameside local election",
+      "ballots": 19,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 19,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "tameside"
+    },
+    {
+      "election_id": "local.tamworth.2026-05-07",
+      "name": "Tamworth local election",
+      "ballots": 10,
+      "candidates_locked_all": true,
+      "cancelled": 1,
+      "sopn_attached": 10,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "tamworth"
+    },
+    {
+      "election_id": "local.three-rivers.2026-05-07",
+      "name": "Three Rivers local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "three-rivers"
+    },
+    {
+      "election_id": "local.thurrock.2026-05-07",
+      "name": "Thurrock local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "thurrock"
+    },
+    {
+      "election_id": "local.tower-hamlets.2026-05-07",
+      "name": "London Borough of Tower Hamlets",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "tower-hamlets"
+    },
+    {
+      "election_id": "local.trafford.2026-05-07",
+      "name": "Trafford local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "trafford"
+    },
+    {
+      "election_id": "local.tunbridge-wells.2026-05-07",
+      "name": "Tunbridge Wells local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "tunbridge-wells"
+    },
+    {
+      "election_id": "local.wakefield.2026-05-07",
+      "name": "Wakefield local election",
+      "ballots": 21,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 21,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "wakefield"
+    },
+    {
+      "election_id": "local.walsall.2026-05-07",
+      "name": "Walsall local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "walsall"
+    },
+    {
+      "election_id": "local.waltham-forest.2026-05-07",
+      "name": "Waltham Forest local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "waltham-forest"
+    },
+    {
+      "election_id": "local.wandsworth.2026-05-07",
+      "name": "Wandsworth local election",
+      "ballots": 22,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 22,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "wandsworth"
+    },
+    {
+      "election_id": "local.watford.2026-05-07",
+      "name": "Watford Borough Council",
+      "ballots": 12,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 12,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "watford"
+    },
+    {
+      "election_id": "local.welwyn-hatfield.2026-05-07",
+      "name": "Welwyn Hatfield local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "welwyn-hatfield"
+    },
+    {
+      "election_id": "local.west-lancashire.2026-05-07",
+      "name": "West Lancashire local election",
+      "ballots": 15,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 15,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "west-lancashire"
+    },
+    {
+      "election_id": "local.west-northamptonshire.2026-05-07",
+      "name": "West Northamptonshire local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "west-northamptonshire"
+    },
+    {
+      "election_id": "local.west-oxfordshire.2026-05-07",
+      "name": "West Oxfordshire local election",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "west-oxfordshire"
+    },
+    {
+      "election_id": "local.west-suffolk.2026-05-07",
+      "name": "West Suffolk local election",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "west-suffolk"
+    },
+    {
+      "election_id": "local.west-surrey.2026-05-07",
+      "name": "West Surrey local election",
+      "ballots": 45,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 45,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "west-surrey"
+    },
+    {
+      "election_id": "local.west-sussex.2026-05-07",
+      "name": "West Sussex local election",
+      "ballots": 70,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 70,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "west-sussex"
+    },
+    {
+      "election_id": "local.westminster.2026-05-07",
+      "name": "Westminster local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "westminster"
+    },
+    {
+      "election_id": "local.wigan.2026-05-07",
+      "name": "Wigan local election",
+      "ballots": 25,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 25,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "wigan"
+    },
+    {
+      "election_id": "local.winchester.2026-05-07",
+      "name": "Winchester local election",
+      "ballots": 15,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 15,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "winchester"
+    },
+    {
+      "election_id": "local.wokingham.2026-05-07",
+      "name": "Wokingham local election",
+      "ballots": 18,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 18,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "wokingham"
+    },
+    {
+      "election_id": "local.wolverhampton.2026-05-07",
+      "name": "Wolverhampton local election",
+      "ballots": 20,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 20,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "wolverhampton"
+    },
+    {
+      "election_id": "local.worthing.2026-05-07",
+      "name": "Worthing local election",
+      "ballots": 13,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 13,
+      "classification": {
+        "tier": "local",
+        "model_family_hint": "local_fptp"
+      },
+      "council_slug": "worthing"
+    },
+    {
+      "election_id": "mayor.croydon.2026-05-07",
+      "name": "Mayor of Croydon",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "mayor",
+        "model_family_hint": "mayor_supplementary"
+      },
+      "council_slug": "croydon"
+    },
+    {
+      "election_id": "mayor.hackney.2026-05-07",
+      "name": "Mayor of Hackney",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "mayor",
+        "model_family_hint": "mayor_supplementary"
+      },
+      "council_slug": "hackney"
+    },
+    {
+      "election_id": "mayor.lewisham.2026-05-07",
+      "name": "Mayor of Lewisham",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "mayor",
+        "model_family_hint": "mayor_supplementary"
+      },
+      "council_slug": "lewisham"
+    },
+    {
+      "election_id": "mayor.newham.2026-05-07",
+      "name": "Mayor of Newham",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "mayor",
+        "model_family_hint": "mayor_supplementary"
+      },
+      "council_slug": "newham"
+    },
+    {
+      "election_id": "mayor.tower-hamlets.2026-05-07",
+      "name": "Mayor of Tower Hamlets",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "mayor",
+        "model_family_hint": "mayor_supplementary"
+      },
+      "council_slug": "tower-hamlets"
+    },
+    {
+      "election_id": "mayor.watford.2026-05-07",
+      "name": "Mayor of Watford",
+      "ballots": 1,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 1,
+      "classification": {
+        "tier": "mayor",
+        "model_family_hint": "mayor_supplementary"
+      },
+      "council_slug": "watford"
+    },
+    {
+      "election_id": "senedd.2026-05-07",
+      "name": "Senedd Cymru elections",
+      "ballots": 16,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 16,
+      "classification": {
+        "tier": "senedd",
+        "model_family_hint": "senedd_closed_list_pr"
+      },
+      "council_slug": null
+    },
+    {
+      "election_id": "sp.c.2026-05-07",
+      "name": "Scottish Parliament elections (Constituencies)",
+      "ballots": 73,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 73,
+      "classification": {
+        "tier": "holyrood",
+        "model_family_hint": "scottish_ams"
+      },
+      "council_slug": "c"
+    },
+    {
+      "election_id": "sp.r.2026-05-07",
+      "name": "Scottish Parliament elections (Regions)",
+      "ballots": 8,
+      "candidates_locked_all": true,
+      "cancelled": 0,
+      "sopn_attached": 8,
+      "classification": {
+        "tier": "holyrood",
+        "model_family_hint": "scottish_ams"
+      },
+      "council_slug": "r"
+    }
+  ]
+}
