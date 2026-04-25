@@ -12,7 +12,9 @@ import { buildCounty2025Shares, applyCounty2025Anchor, DISTRICT_TO_PARENT_COUNTY
 import { applyIntervalsToBundle } from "../src/lib/intervals.js";
 import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
 import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
-import { existsSync as fsExistsSync } from "node:fs";
+import { computeWardDemographicAdjustments, applyAdjustments, applyDemographicCeilings } from "../src/lib/wardDemographicAdjustments.js";
+import { applyLocalStrength } from "../src/lib/localPartyStrength.js";
+import { existsSync as fsExistsSync, readdirSync } from "node:fs";
 
 const LONDON_BOROUGHS = new Set(["barking-and-dagenham", "barnet", "bexley", "brent", "bromley", "camden", "city-of-london", "croydon", "ealing", "enfield", "greenwich", "hackney", "hammersmith-and-fulham", "haringey", "harrow", "havering", "hillingdon", "hounslow", "islington", "kensington-and-chelsea", "kingston-upon-thames", "lambeth", "lewisham", "merton", "newham", "redbridge", "richmond-upon-thames", "southwark", "sutton", "tower-hamlets", "waltham-forest", "wandsworth", "westminster"]);
 const METROPOLITAN_BOROUGHS = new Set(["barnsley", "birmingham", "bolton", "bradford", "bury", "calderdale", "coventry", "doncaster", "dudley", "gateshead", "kirklees", "knowsley", "leeds", "liverpool", "manchester", "newcastle-upon-tyne", "north-tyneside", "oldham", "rochdale", "rotherham", "salford", "sandwell", "sefton", "sheffield", "solihull", "south-tyneside", "st-helens", "stockport", "sunderland", "tameside", "trafford", "wakefield", "walsall", "wigan", "wirral", "wolverhampton"]);
@@ -150,6 +152,23 @@ function main() {
   console.log("Building per-county 2025 reference shares...");
   const county2025 = buildCounty2025Shares(history);
   console.log(`  ${Object.keys(county2025).length} counties/unitaries with 2025 cycle baseline`);
+
+  // Load 2026 candidate rosters per ballot (for candidate-continuity detection)
+  console.log("Loading 2026 candidate rosters...");
+  const candidateRosters = {};
+  const rosterDir = path.join(ROOT, "data/candidates/may-2026");
+  try {
+    for (const file of readdirSync(rosterDir)) {
+      if (!file.endsWith(".json")) continue;
+      const roster = JSON.parse(readFileSync(path.join(rosterDir, file), "utf8"));
+      for (const b of roster.ballots || []) {
+        candidateRosters[b.ballot_paper_id] = b.candidates || [];
+      }
+    }
+    console.log(`  ${Object.keys(candidateRosters).length} ballot rosters loaded`);
+  } catch (e) {
+    console.log(`  ${e}`);
+  }
 
   let calibration;
   try {
@@ -293,10 +312,16 @@ function main() {
       continue;
     }
 
-    // 1. Restrict prediction to parties actually contesting this ballot in 2026.
-    //    Redistribute share of inherited-from-history non-standing parties pro-rata.
+    // 1a. Apply per-ward demographic adjustments BEFORE restriction (so that
+    //     the demographic Independent boost in high-Asian wards lands before
+    //     restrict-to-ballot proportional redistribution).
+    const wardDemoFull = ward.gss_code ? wardDemographics[ward.gss_code] : null;
+    const demoAdj = computeWardDemographicAdjustments(wardDemoFull);
+    let postDemo = applyAdjustments(result.prediction, demoAdj.adjustments);
+
+    // 1b. Restrict prediction to parties actually contesting this ballot in 2026.
     const onBallot = new Set(partiesOnBallotCanonical(ward));
-    const { prediction: filtered, dropped } = restrictToBallot(result.prediction, onBallot);
+    const { prediction: filtered, dropped } = restrictToBallot(postDemo, onBallot);
 
     // 2. Apply 2025 county-cycle anchor: blend the model's prediction toward the
     //    parent county / unitary's May 2025 cycle shares (with national swing
@@ -319,7 +344,21 @@ function main() {
       national2025Polling: polling2025,
       anchorWeight: dynamicAnchorWeight,
     });
-    const finalPrediction = anchored.prediction;
+    let postAnchor = anchored.prediction;
+
+    // 3. Local-party-strength + candidate continuity (Phases C + D)
+    // Coalclough LD 8-cycle stronghold (mean 47%) gets anchored back to ~40%
+    // even after Reform's national surge. Birtwistle name-match adds +5pp.
+    const localStrengthOut = applyLocalStrength({
+      prediction: postAnchor,
+      historyRows: wd.history,
+      candidates2026: candidateRosters[ward.ballot_paper_id] || [],
+    });
+    postAnchor = localStrengthOut.prediction;
+
+    // 4. Demographic ceilings (Phase F): cap Reform in high-Muslim wards.
+    const ceilingOut = applyDemographicCeilings(postAnchor, wardDemoFull);
+    const finalPrediction = ceilingOut.prediction;
 
     // Recompute votes consistently from final pct so the page never displays
     // a (29%, 181 votes) inconsistency caused by transformation steps that

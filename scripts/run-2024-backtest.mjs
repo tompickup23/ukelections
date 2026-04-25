@@ -10,6 +10,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { buildWardData, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 import { predictWard, DEFAULT_ASSUMPTIONS } from "../src/lib/electionModel.js";
+import { computeWardDemographicAdjustments, applyAdjustments, applyDemographicCeilings } from "../src/lib/wardDemographicAdjustments.js";
+import { applyLocalStrength } from "../src/lib/localPartyStrength.js";
 import { DISTRICT_TO_PARENT_COUNTY_2025 } from "../src/lib/county2025.js";
 
 const LONDON_BOROUGHS = new Set(["barking-and-dagenham", "barnet", "bexley", "brent", "bromley", "camden", "city-of-london", "croydon", "ealing", "enfield", "greenwich", "hackney", "hammersmith-and-fulham", "haringey", "harrow", "havering", "hillingdon", "hounslow", "islington", "kensington-and-chelsea", "kingston-upon-thames", "lambeth", "lewisham", "merton", "newham", "redbridge", "richmond-upon-thames", "southwark", "sutton", "tower-hamlets", "waltham-forest", "wandsworth", "westminster"]);
@@ -198,16 +200,22 @@ function main() {
 
     if (!result.prediction) continue;
     predicted += 1;
-    // Restrict to parties that actually stood in the 2024 ballot — same logic as 2026.
-    // For backtest, the "ballot" is the actual 2024 candidate set.
+    // Apply same per-ward demographic + local-strength + ceiling pipeline as
+    // the production 2026 prediction, so the backtest accuracy reflects the
+    // shipping model not a simplified one.
+    const wardDemoFull = laProj && ladCode ? null : null; // we already passed ethnic projections to predictWard
+    let postPipe = applyAdjustments(result.prediction, computeWardDemographicAdjustments(wardDemoFull).adjustments);
     const partiesIn2024 = new Set(
       (actualResult.candidates || [])
         .map((c) => dcPartyToCanonical(c.party_name))
         .filter(Boolean),
     );
-    const { prediction: filtered } = restrictToBallot(result.prediction, partiesIn2024);
+    const { prediction: filtered } = restrictToBallot(postPipe, partiesIn2024);
+    // Local-strength + continuity using historic candidates (same window as production)
+    const localOut = applyLocalStrength({ prediction: filtered, historyRows: wd.history, candidates2026: actualResult.candidates });
+    const ceilingOut = applyDemographicCeilings(localOut.prediction, wardDemoFull);
     const predictedShares = Object.fromEntries(
-      Object.entries(filtered || {}).map(([p, d]) => [p, d.pct])
+      Object.entries(ceilingOut.prediction || {}).map(([p, d]) => [p, d.pct])
     );
     const actualShares = actualSharesFromResult(actualResult);
     if (actualShares) with_actual += 1;
