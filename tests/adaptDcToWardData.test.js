@@ -78,7 +78,8 @@ describe("buildWardData", () => {
   it("ranks candidates and computes pct", () => {
     const wd = buildWardData(identityWard, historyBundle);
     const top = wd.history[0].candidates[0];
-    expect(top.party).toBe("Conservative and Unionist Party");
+    expect(top.party).toBe("Conservative");
+    expect(top.party_dc).toBe("Conservative and Unionist Party");
     expect(top.elected).toBe(true);
     expect(top.pct).toBeCloseTo(800 / 1500, 4);
   });

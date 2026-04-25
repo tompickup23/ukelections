@@ -23,6 +23,32 @@
  * Pure function. No I/O.
  */
 
+/**
+ * Translate Democracy Club party display names into the canonical
+ * party labels the AI DOGE election model and nationalPolling snapshots
+ * use as keys. The model also runs its own normalizePartyName for
+ * Labour-Coop / UKIP / etc. variants — this mapping handles the few
+ * DC-specific naming quirks before that runs.
+ */
+function dcPartyToCanonical(dcName) {
+  if (!dcName) return "Unknown";
+  const p = String(dcName).trim();
+  if (/^Labour Party$/i.test(p)) return "Labour";
+  if (/^Labour and Co-operative Party$/i.test(p)) return "Labour";
+  if (/^Conservative and Unionist Party$/i.test(p)) return "Conservative";
+  if (/^The Conservative Party/i.test(p)) return "Conservative";
+  if (/^Scottish National Party \(SNP\)$/i.test(p)) return "SNP";
+  if (/^Plaid Cymru/i.test(p)) return "Plaid Cymru";
+  if (/^Workers Party of Britain$/i.test(p)) return "Workers Party";
+  if (/^Scottish Green Party$/i.test(p)) return "Green Party";
+  if (/^Social Democratic Party$/i.test(p)) return "SDP";
+  if (/^Liberal Democrats?$/i.test(p)) return "Liberal Democrats";
+  if (/^Reform UK$/i.test(p)) return "Reform UK";
+  if (/^Green Party$/i.test(p)) return "Green Party";
+  if (/independent/i.test(p)) return "Independent";
+  return p;
+}
+
 function rankCandidates(candidates) {
   return [...candidates].sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0));
 }
@@ -45,7 +71,8 @@ function dcResultToHistoryRow(result, defaultType = "borough") {
   const seatsContested = (result.candidates || []).filter((c) => c.elected).length || 1;
   const candidatesOut = ranked.map((c, i) => ({
     name: c.name,
-    party: c.party_name,
+    party: dcPartyToCanonical(c.party_name),
+    party_dc: c.party_name,
     votes: c.votes,
     pct: shareOf(c, total),
     elected: c.elected === true,
@@ -101,7 +128,8 @@ export function buildWardData(identityWard, historyBundle) {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   const candidates2026 = (identityWard.parties_standing || []).map((p) => ({
-    party: p,
+    party: dcPartyToCanonical(p),
+    party_dc: p,
   }));
 
   return {
