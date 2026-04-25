@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadIdentity, loadSummary, loadBacktest, partyColour } from "../../../lib/predictions";
+
+const identity = loadIdentity();
+const summary = loadSummary();
+const backtest = loadBacktest();
+
+const localCouncils = summary.councils.filter((c: any) => c.tier === "local").sort((a: any, b: any) => a.council_name.localeCompare(b.council_name));
+const mayorCouncils = summary.councils.filter((c: any) => c.tier === "mayor").sort((a: any, b: any) => a.council_name.localeCompare(b.council_name));
+
+const totalWards = identity.wards.filter((w: any) => w.tier === "local" || w.tier === "mayor").length;
+const totalCandidates = identity.wards.reduce((s: any, w: any) => s + w.candidate_count, 0);
+
+const nationalSeatTotals: Record<string, number> = {};
+for (const c of summary.councils) {
+  for (const [party, seats] of Object.entries(c.predicted_seat_winners)) {
+    nationalSeatTotals[party] = (nationalSeatTotals[party] || 0) + (seats as number);
+  }
+}
+const totalSeats = Object.values(nationalSeatTotals).reduce((s, v) => s + v, 0);
+const rankedNational = Object.entries(nationalSeatTotals).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout
+  title="May 2026 forecast — every English local election"
+  description={`Forecast for all 156 English councils contested on 2026-05-07: ${totalWards} wards, ${totalCandidates} candidates. ${totalSeats} seats projected.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">National forecast</p>
+    <h1>May 7 2026 — every English local + mayoral seat</h1>
+    <p class="lede">
+      {summary.council_count} councils · {totalWards} contests · {totalCandidates.toLocaleString()} candidates · {totalSeats.toLocaleString()} seats
+    </p>
+    <p style="color: var(--muted)">
+      Forecast generated {new Date(summary.snapshot.generated_at as string).toISOString().slice(0, 10)} ·
+      Model version <code>{summary.snapshot.model_version}</code>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Headline national projection</p>
+      <h2>Predicted seat split (Stage 1 simplification)</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Predicted seats</th><th>Share</th></tr></thead>
+      <tbody>
+        {rankedNational.map(([party, seats]) => (
+          <tr>
+            <td><span class="party-swatch" style={`background:${partyColour(party)}`}></span>{party}</td>
+            <td><strong>{seats.toLocaleString()}</strong></td>
+            <td style="color: var(--muted)">{((seats / totalSeats) * 100).toFixed(1)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem">
+      Headline seats are awarded by ranking each ward's predicted vote shares and giving the top N seats (where N = winner_count for that ward) to the top N parties. This is the simplest defensible approach to multi-member FPTP wards. Per-ward intervals (P10/P50/P90) will be added in Stage 1.5.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Backtest</p>
+      <h2>How accurate was the model on the last cycle?</h2>
+    </div>
+    <p>
+      We backtested the same model against the actual May 2024 results across {backtest.totals.predicted} wards.
+      The model called the winner correctly in <strong>{(backtest.winner_accuracy * 100).toFixed(1)}%</strong> of contests
+      with an average per-party share error of <strong>{(backtest.overall_mae.major_parties_avg * 100).toFixed(2)}pp</strong>.
+    </p>
+    <p>
+      <a href="/data-quality/2024-backtest/">Read the full backtest →</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Local councils</p>
+      <h2>{localCouncils.length} councils on cycle</h2>
+    </div>
+    <table class="council-table">
+      <thead><tr><th>Council</th><th>Contests</th><th>Seats up</th><th>Top predicted party</th></tr></thead>
+      <tbody>
+        {localCouncils.map((c: any) => {
+          const top = Object.entries(c.predicted_seat_winners).sort((a, b) => (b[1] as number) - (a[1] as number))[0];
+          return (
+            <tr>
+              <td><a href={`/seats/${c.council_slug}/`}>{c.council_name}</a></td>
+              <td style="color: var(--muted)">{c.ward_count}</td>
+              <td style="color: var(--muted)">{c.seats_up}</td>
+              <td>{top ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{top[0]} ({top[1] as number})</> : "—"}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </section>
+
+  {mayorCouncils.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Mayoralties</p>
+        <h2>{mayorCouncils.length} directly elected mayors</h2>
+      </div>
+      <table class="council-table">
+        <thead><tr><th>Mayoralty</th><th>Top predicted</th></tr></thead>
+        <tbody>
+          {mayorCouncils.map((c: any) => {
+            const top = Object.entries(c.predicted_seat_winners).sort((a, b) => (b[1] as number) - (a[1] as number))[0];
+            return (
+              <tr>
+                <td><a href={`/seats/${c.council_slug}/`}>{c.council_name}</a></td>
+                <td>{top ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{top[0]}</> : "—"}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.5rem">
+        Mayoral predictions use the same ward-level model aggregated across the mayoralty. Treat with caution — mayoral races are small-N and high-variance.
+      </p>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+.seat-table, .council-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.seat-table th, .seat-table td, .council-table th, .council-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+.seat-table th, .council-table th { font-weight: 600; color: var(--muted); font-size: 0.875rem; }
+.party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.5rem; vertical-align: middle; }
+</style>

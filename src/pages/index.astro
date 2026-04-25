@@ -1,61 +1,72 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadSummary, loadIdentity, loadBacktest } from "../lib/predictions";
+
+const identity = loadIdentity();
+const summary = loadSummary();
+const backtest = loadBacktest();
+const totalWards = identity.wards.filter((w: any) => w.tier === "local" || w.tier === "mayor").length;
+const totalSeats = summary.councils.reduce((s: number, c: any) => s + (c.seats_up || 0), 0);
+const totalCands = identity.wards.reduce((s: number, w: any) => s + (w.candidate_count || 0), 0);
 ---
 
-<BaseLayout title="UK Elections" description="Election intelligence for every UK contest. Candidates, history, forecasts, source notes, and honest backtests.">
+<BaseLayout title="UK Elections" description="Forecasts for every UK contest on May 7 2026: 156 English councils, Senedd, Scottish Parliament. Sources, intervals, honest backtests.">
   <section class="hero">
-    <p class="eyebrow">Public election intelligence</p>
+    <p class="eyebrow">Live forecasts for May 7 2026</p>
     <h1>Every contest, source-led and testable.</h1>
     <p class="lede">
-      UK Elections is being built as a public record of candidates, boundaries, historic results,
-      forecast probabilities, confidence intervals, and backtests across UK elections.
+      Forecasts for {summary.council_count} English councils ({totalWards.toLocaleString()} wards, {totalSeats.toLocaleString()} seats), the Senedd, and the Scottish Parliament — built on Democracy Club data, UKD demographics, and a model whose accuracy is published.
     </p>
     <div class="action-row" aria-label="Primary actions">
-      <a class="button primary" href="/seats/">Review the seat model</a>
-      <a class="button" href="/data-quality/">Check data quality</a>
-      <a class="button" href="/methodology/">Read the method</a>
+      <a class="button primary" href="/forecasts/may-2026/">View the national forecast</a>
+      <a class="button" href="/data-quality/2024-backtest/">See the 2024 backtest</a>
+      <a class="button" href="/methodology/national-model/">Read the methodology</a>
     </div>
   </section>
 
-  <section class="status-grid" aria-label="Build status">
+  <section class="status-grid" aria-label="Status">
     <article>
-      <span class="status-label">Repository</span>
-      <strong>Live</strong>
-      <p>GitHub is connected and deploying the static scaffold from the main branch.</p>
+      <span class="status-label">Forecast scope</span>
+      <strong>3,074 ballots</strong>
+      <p>Every contested seat on 2026-05-07: English locals, mayoralties, Senedd Cymru, Scottish Parliament. {totalCands.toLocaleString()} candidates, all from the official Democracy Club register.</p>
     </article>
     <article>
-      <span class="status-label">Cloudflare Pages</span>
-      <strong>Live</strong>
-      <p>The production domain is bought and ready to attach once nameservers finish moving to Cloudflare.</p>
+      <span class="status-label">Backtest accuracy</span>
+      <strong>{(backtest.winner_accuracy * 100).toFixed(1)}% winners called</strong>
+      <p>Same model run against actual May 2024 results: {(backtest.overall_mae.major_parties_avg * 100).toFixed(2)}pp average per-party share error across {backtest.totals.predicted.toLocaleString()} wards. Full breakdown at /data-quality/.</p>
     </article>
     <article>
-      <span class="status-label">Data ingestion</span>
-      <strong>Queued</strong>
-      <p>Candidate, result, boundary, polling, and demographic ingestion are specified before any forecast claims go public.</p>
+      <span class="status-label">Provenance</span>
+      <strong>Every claim sourced</strong>
+      <p>Source files committed to the public repository. Each prediction page links to the official Statement of Persons Nominated PDF and to historic declaration PDFs.</p>
     </article>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Model scope</p>
-      <h2>Build the rails before publishing numbers.</h2>
+      <p class="eyebrow">Forecast surfaces</p>
+      <h2>Three election families, one model lineage.</h2>
     </div>
     <div class="feature-list">
       <article>
-        <h3>Local contests</h3>
-        <p>Borough, county, and unitary elections use separate ward or division baselines, candidate gates, and boundary checks.</p>
+        <h3>English local + mayoral</h3>
+        <p>Per-ward party share + per-council seat projection across 156 councils on cycle. Includes the 7 Lancashire councils where AI DOGE has 4-year ward-level history.</p>
+        <p><a href="/forecasts/may-2026/">View →</a></p>
       </article>
       <article>
-        <h3>National seats</h3>
-        <p>Westminster, Senedd, and Scottish Parliament models need voting-system-specific allocation and transparent assumptions.</p>
+        <h3>Senedd Cymru 2026</h3>
+        <p>First public estimate under the new closed-list PR system. 16 super-constituencies × 6 list seats = 96 seats.</p>
+        <p><a href="/forecasts/senedd-2026/">View →</a></p>
       </article>
       <article>
-        <h3>Backtests</h3>
-        <p>Every model release needs an archive of past predictions, error metrics, and missed-call analysis.</p>
+        <h3>Scottish Parliament 2026</h3>
+        <p>73 constituency (FPTP) + 56 regional list (d'Hondt) = 129 seats. Constituency-level 2021 baselines + Scottish polling adjustment.</p>
+        <p><a href="/forecasts/holyrood-2026/">View →</a></p>
       </article>
       <article>
-        <h3>Boundary history</h3>
-        <p>Ward, division, constituency, and list geography changes are versioned before historical results are reused.</p>
+        <h3>Backtests as product</h3>
+        <p>The same model that predicts 2026, replayed against actual 2024 results. Winner accuracy and per-party MAE published before any election claim.</p>
+        <p><a href="/data-quality/2024-backtest/">View →</a></p>
       </article>
     </div>
   </section>

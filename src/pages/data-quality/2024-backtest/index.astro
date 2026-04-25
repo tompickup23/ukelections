@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadBacktest, partyColour } from "../../../lib/predictions";
+
+const b = loadBacktest();
+const major = ["Labour", "Conservative", "Reform UK", "Liberal Democrats", "Green Party"];
+const majorMae = major.map((p) => ({ party: p, mae: b.overall_mae.per_party[p] || 0 }));
+---
+
+<BaseLayout
+  title="2024 backtest — predicted vs actual"
+  description={`The same model run forward to 2026, replayed against the actual May 2024 results. Winner accuracy ${(b.winner_accuracy * 100).toFixed(1)}%, average per-party share error ${(b.overall_mae.major_parties_avg * 100).toFixed(2)}pp.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Backtest</p>
+    <h1>How accurate was the model on the last cycle?</h1>
+    <p class="lede">
+      We took the same model that produces the 2026 forecast, gave it only data available before May 2024, and asked it to predict the actual May 2024 ward results. Here's how it did.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Headline</p>
+      <h2>Two numbers</h2>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">{(b.winner_accuracy * 100).toFixed(1)}%</span>
+        <span class="stat-label">winner called correctly</span>
+        <span class="stat-detail">across {b.totals.predicted.toLocaleString()} contests</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">{(b.overall_mae.major_parties_avg * 100).toFixed(2)}pp</span>
+        <span class="stat-label">average share error</span>
+        <span class="stat-detail">averaged across the five major parties</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Per-party</p>
+      <h2>Mean Absolute Error by party</h2>
+    </div>
+    <table class="mae-table">
+      <thead><tr><th>Party</th><th>MAE</th><th>Residual SD</th></tr></thead>
+      <tbody>
+        {majorMae.map(({ party, mae }) => (
+          <tr>
+            <td><span class="party-swatch" style={`background:${partyColour(party)}`}></span>{party}</td>
+            <td><strong>{(mae * 100).toFixed(2)}pp</strong></td>
+            <td style="color: var(--muted)">{((b.residual_sd_per_party[party] || 0) * 100).toFixed(2)}pp</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem">
+      MAE is the absolute difference between predicted and actual party share, averaged across all wards. Residual SD is used to calibrate the prediction intervals on individual ward pages.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Worst misses</p>
+      <h2>30 wards where the model was furthest off</h2>
+    </div>
+    <table class="miss-table">
+      <thead><tr><th>Council</th><th>Ward</th><th>MAE</th><th>Predicted</th><th>Actual</th></tr></thead>
+      <tbody>
+        {b.worst_30_misses.map((m: any) => (
+          <tr>
+            <td><a href={`/seats/${m.council_slug}/`}>{m.council_slug}</a></td>
+            <td>{m.ward_name}</td>
+            <td><strong>{(m.ward_mae * 100).toFixed(1)}pp</strong></td>
+            <td>{m.predicted_winner}</td>
+            <td>{m.actual_winner}{m.predicted_winner !== m.actual_winner && <span style="color: #c1121f">{" ←"}</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem">
+      Most of the worst misses are wards dominated by strong local independents or single-issue parties (Our West Lancashire, Peterborough First, Tunbridge Wells Alliance, etc.). The model has no national-tier baseline for these and underestimates their pull. This is a known limitation; we surface it rather than hide it.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Why publish this?</h2>
+    <p>
+      Every forecast site claims accuracy. Few publish their errors. The 7.7pp average share error and 78.6% winner accuracy on May 2024 are the credibility floor — we'll publish the same backtest against May 2026 actuals after the count, so you can see whether the model improves or degrades over time.
+    </p>
+    <p>
+      A 7-8pp MAE on per-party vote share is roughly comparable to academic local-election models. Winner accuracy near 80% is in the same ballpark as Electoral Calculus's claimed accuracy on national MRP, applied here to ~3,000 individual wards.
+    </p>
+    <p>
+      Methodology: the model was given only ward history before May 2024, then asked to predict each 2024 ward result using May 2024 polling vs the GE 2019 baseline, plus LA-level UKD HP v7.0 ethnic projections + IMD deprivation. See the <a href="/methodology/national-model/">methodology page</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.hero-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+.stat { background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); flex: 1; min-width: 240px; }
+.stat-num { display: block; font-size: 2.5rem; font-weight: 700; color: var(--accent-2); }
+.stat-label { display: block; font-weight: 600; margin-top: 0.25rem; }
+.stat-detail { display: block; color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem; }
+.mae-table, .miss-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.mae-table th, .mae-table td, .miss-table th, .miss-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+.mae-table th, .miss-table th { font-weight: 600; color: var(--muted); font-size: 0.875rem; }
+.party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.5rem; vertical-align: middle; }
+</style>

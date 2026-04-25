@@ -127,6 +127,9 @@ async function main() {
   // Filter + compact
   const compact = raw.map(compactResult).filter((r) => r.ballot_paper_id && r.election_date);
   const inScope = compact.filter((r) => {
+    // Always keep parl (Westminster) results — needed for stale-baseline GE2024 fallback
+    // and Senedd super-constituency baselines.
+    if (r.tier === "parl" || r.tier === "parl-by") return true;
     if (!targetTiers.has(r.tier)) {
       // Also allow tiers like sp.c, sp.r, senedd which our identity has as 'holyrood' / 'senedd'
       if (r.tier === "sp" && targetTiers.has("holyrood")) return true;
