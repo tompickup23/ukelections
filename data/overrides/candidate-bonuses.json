@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "purpose": "Hand-curated per-candidate prediction bonuses for cases where local knowledge is not derivable from the structured data. Each entry adds a fixed pp adjustment to a named candidate's predicted vote share, applied AFTER all model + demographic + continuity steps.",
+    "rules": [
+      "Each entry must cite the specific local-knowledge reason in the `reason` field — auditable.",
+      "Bonuses should be conservative (typically 1-5pp). Larger overrides require unusually strong local evidence.",
+      "If the override would change the predicted winner, the reason must be specific and dated.",
+      "Overrides are subject to review by the methodology page — the public sees the reason text."
+    ],
+    "schema_version": "v1",
+    "compiled_at": "2026-04-25"
+  },
+  "overrides": [
+    {
+      "ballot_paper_id": "local.burnley.briercliffe.2026-05-07",
+      "candidate_name": "Mark Poulton",
+      "party": "Reform UK",
+      "bonus_pp": 0.030,
+      "reason": "User-supplied (Tom Pickup, 2026-04-25): Mark Poulton has done particularly well in Briercliffe specifically as the sitting Lancashire CC councillor for Burnley Rural division (won May 2025 with 1,798 votes). His vote within the division concentrated above the division average in Briercliffe — adds 3pp Reform on top of the generic +2.2pp cross-tier county-winner continuity already applied."
+    }
+  ]
+}

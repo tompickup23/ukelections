@@ -14,6 +14,47 @@ import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
 import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
 import { computeWardDemographicAdjustments, applyAdjustments, applyDemographicCeilings } from "../src/lib/wardDemographicAdjustments.js";
 import { applyLocalStrength } from "../src/lib/localPartyStrength.js";
+import { buildCounty2025WinnerIndex, applyCounty2025Continuity } from "../src/lib/county2025Winners.js";
+
+function applyCandidateOverrides(prediction, overrides, ballotPaperId, candidates2026) {
+  if (!prediction || !overrides?.length) return { prediction, applied: [] };
+  const applied = [];
+  const out = { ...prediction };
+  for (const o of overrides) {
+    if (o.ballot_paper_id !== ballotPaperId) continue;
+    // Resolve the candidate's party from DC roster (canonicalised)
+    let party = o.party;
+    if (candidates2026?.length) {
+      const match = candidates2026.find((c) => {
+        const candFirst = (c.name || "").toLowerCase().split(" ")[0];
+        const overrideFirst = (o.candidate_name || "").toLowerCase().split(" ")[0];
+        const candLast = (c.name || "").toLowerCase().split(" ").slice(-1)[0];
+        const overrideLast = (o.candidate_name || "").toLowerCase().split(" ").slice(-1)[0];
+        return candFirst === overrideFirst && candLast === overrideLast;
+      });
+      if (!match) continue;
+      // Canonicalise party
+      const dcParty = match.party_name || match.party || party;
+      party = dcParty === "Labour Party" ? "Labour"
+            : dcParty === "Labour and Co-operative Party" ? "Labour"
+            : dcParty === "Conservative and Unionist Party" ? "Conservative"
+            : dcParty === "Liberal Democrats" ? "Liberal Democrats"
+            : dcParty === "Reform UK" ? "Reform UK"
+            : dcParty === "Green Party" ? "Green Party"
+            : /independent/i.test(dcParty) ? "Independent"
+            : dcParty;
+    }
+    if (!out[party]) continue;
+    const before = out[party].pct || 0;
+    out[party] = { ...out[party], pct: before + o.bonus_pp };
+    applied.push({ candidate: o.candidate_name, party, bonus: o.bonus_pp, reason: o.reason });
+  }
+  if (applied.length) {
+    const sum = Object.values(out).reduce((s, v) => s + (v.pct || 0), 0);
+    if (sum > 0) for (const p of Object.keys(out)) out[p].pct = out[p].pct / sum;
+  }
+  return { prediction: out, applied };
+}
 import { existsSync as fsExistsSync, readdirSync } from "node:fs";
 
 const LONDON_BOROUGHS = new Set(["barking-and-dagenham", "barnet", "bexley", "brent", "bromley", "camden", "city-of-london", "croydon", "ealing", "enfield", "greenwich", "hackney", "hammersmith-and-fulham", "haringey", "harrow", "havering", "hillingdon", "hounslow", "islington", "kensington-and-chelsea", "kingston-upon-thames", "lambeth", "lewisham", "merton", "newham", "redbridge", "richmond-upon-thames", "southwark", "sutton", "tower-hamlets", "waltham-forest", "wandsworth", "westminster"]);
@@ -152,6 +193,17 @@ function main() {
   console.log("Building per-county 2025 reference shares...");
   const county2025 = buildCounty2025Shares(history);
   console.log(`  ${Object.keys(county2025).length} counties/unitaries with 2025 cycle baseline`);
+
+  console.log("Building 2025 county-winner candidate index (for cross-tier continuity)...");
+  const county2025Winners = buildCounty2025WinnerIndex(history);
+  const winnerCount = Object.values(county2025Winners).reduce((s, w) => s + w.length, 0);
+  console.log(`  ${winnerCount} 2025 county winners indexed across ${Object.keys(county2025Winners).length} counties`);
+
+  let candidateOverrides = [];
+  try {
+    candidateOverrides = readJson("data/overrides/candidate-bonuses.json").overrides || [];
+    console.log(`Loaded ${candidateOverrides.length} hand-curated candidate overrides`);
+  } catch {}
 
   // Load 2026 candidate rosters per ballot (for candidate-continuity detection)
   console.log("Loading 2026 candidate rosters...");
@@ -356,6 +408,26 @@ function main() {
     });
     postAnchor = localStrengthOut.prediction;
 
+    // 3b. Cross-tier candidate continuity: 2025 county-winner standing in
+    //     this 2026 borough ward → personal-vote bonus.
+    //     Mark Poulton (Burnley Rural LCC winner 2025, 1,798 votes) standing
+    //     for Reform in Briercliffe → Reform +2.2pp.
+    const wardCandidates = candidateRosters[ward.ballot_paper_id] || [];
+    const crossTier = applyCounty2025Continuity({
+      prediction: postAnchor,
+      candidates2026: wardCandidates,
+      councilSlug: ward.council_slug,
+      wardName: ward.ward_name,
+      county2025Winners,
+    });
+    postAnchor = crossTier.prediction;
+
+    // 3c. Hand-curated candidate overrides (local intelligence not derivable
+    //     from data alone — e.g. Mark Poulton's specifically strong Briercliffe
+    //     base within the Burnley Rural division).
+    const overrideOut = applyCandidateOverrides(postAnchor, candidateOverrides, ward.ballot_paper_id, wardCandidates);
+    postAnchor = overrideOut.prediction;
+
     // 4. Demographic ceilings (Phase F): cap Reform in high-Muslim wards.
     const ceilingOut = applyDemographicCeilings(postAnchor, wardDemoFull);
     const finalPrediction = ceilingOut.prediction;
@@ -405,6 +477,8 @@ function main() {
       parties_on_ballot: [...onBallot].sort(),
       dropped_from_baseline: dropped,
       county_2025_anchor: anchored.anchor_used ? anchored.anchor_source : null,
+      cross_tier_continuity: crossTier.applied,
+      candidate_overrides: overrideOut.applied,
       model_version: MODEL_VERSION,
       methodology: [
         ...result.methodology,

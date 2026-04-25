@@ -19,8 +19,14 @@ const STRONGHOLD_THRESHOLD = 0.30; // mean share ≥ 30% across last 3+ contests
 const STRONGHOLD_MIN_CONTESTS = 3;
 const STRONGHOLD_STD_MAX = 0.15;   // std ≤ 15pp = stable
 const ANCHOR_WEIGHT = 0.65;         // 65% historical mean + 35% model
-const CONTINUITY_BONUS = 0.05;      // same-name candidate same-party = +5pp
-const INCUMBENT_BONUS = 0.05;       // same-name AND was elected in last contest = +5pp (additive to continuity)
+// Same-individual continuity: same first+last name + same party in last 3 cycles
+const SAME_INDIVIDUAL_BONUS = 0.05;
+const SAME_INDIVIDUAL_INCUMBENT_BONUS = 0.05; // additive
+// Family-name continuity: surname matches historic candidate but first name
+// differs — partial brand recognition (Pippa Lishman → daughter of Margaret/
+// Arthur Lishman, not the same personal vote).
+const FAMILY_NAME_BONUS = 0.02;
+const FAMILY_NAME_INCUMBENT_FAMILY_BONUS = 0.01; // tiny incumbency-by-association
 
 function dcPartyToCanonical(name) {
   if (!name) return "Unknown";
@@ -47,21 +53,37 @@ function normaliseName(name) {
     .trim();
 }
 
-function lastNames(name) {
-  // Capture surname token(s) for matching across DC and AI DOGE name conventions.
+function nameTokens(name) {
   const norm = normaliseName(name);
-  const tokens = norm.split(" ").filter((t) => t.length > 2);
-  if (tokens.length === 0) return [];
-  // Last token is the surname; also include second-to-last in case of compound
-  return tokens.slice(-2);
+  return norm.split(" ").filter((t) => t.length > 2);
 }
 
-function nameMatch(a, b) {
-  const la = lastNames(a);
-  const lb = lastNames(b);
-  if (la.length === 0 || lb.length === 0) return false;
-  // Surname (last token) must match
-  return la[la.length - 1] === lb[lb.length - 1];
+function surname(name) {
+  const t = nameTokens(name);
+  return t.length ? t[t.length - 1] : "";
+}
+
+function firstName(name) {
+  const t = nameTokens(name);
+  return t.length ? t[0] : "";
+}
+
+/**
+ * Returns one of:
+ *   "same_individual" — first AND last name match
+ *   "family"           — surname match but first name differs (or compound first-name overlap)
+ *   "none"             — no match
+ */
+function nameMatchType(a, b) {
+  const fa = firstName(a);
+  const fb = firstName(b);
+  const la = surname(a);
+  const lb = surname(b);
+  if (!la || !lb || la !== lb) return "none";
+  if (fa && fb && fa === fb) return "same_individual";
+  // Could also match if first-name is a known nickname pair (Pippa↔Philippa,
+  // Bill↔William, Bob↔Robert, Jeff↔Jeffrey) — left as a future refinement.
+  return "family";
 }
 
 /**
@@ -143,25 +165,29 @@ export function detectCandidateContinuity(historyRows, candidates2026) {
     const canon = dcPartyToCanonical(c2026.party_name || c2026.party);
     const name = c2026.name;
     if (!name || !canon) continue;
-    let isContinuous = false;
-    let isIncumbent = false;
+    let matchType = "none";
+    let matchedHistoricElected = false;
     let lastSharePersonal = null;
+    let matchedHistoricName = null;
     for (const row of recent) {
       for (const c of row.candidates || []) {
         if (dcPartyToCanonical(c.party) !== canon) continue;
-        if (nameMatch(c.name, name)) {
-          isContinuous = true;
-          // Was this person elected in their last appearance?
-          if (c.elected) isIncumbent = true;
+        const t = nameMatchType(c.name, name);
+        if (t === "none") continue;
+        // Prefer same_individual over family if both available
+        if (t === "same_individual" || (t === "family" && matchType !== "same_individual")) {
+          matchType = t;
+          matchedHistoricName = c.name;
+          if (c.elected) matchedHistoricElected = true;
           if (lastSharePersonal == null) {
             const total = row.candidates.reduce((s, x) => s + (x.votes || 0), 0);
             if (total > 0) lastSharePersonal = (c.votes || 0) / total;
           }
         }
       }
-      if (isContinuous) break; // first match counts
+      if (matchType === "same_individual") break; // best possible match
     }
-    byParty[canon] = { name, isContinuous, isIncumbent, lastSharePersonal };
+    byParty[canon] = { name, matchType, matchedHistoricName, matchedHistoricElected, lastSharePersonal };
   }
   return { byParty };
 }
@@ -189,14 +215,25 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026 }) 
     applied.push(`${party} stronghold (mean ${(s.mean * 100).toFixed(1)}%, ${s.contest_count} contests, std ${(s.std * 100).toFixed(1)}pp): anchored ${(original * 100).toFixed(1)}% → ${(anchored * 100).toFixed(1)}%`);
   }
 
-  // Step 2: candidate continuity bonuses
+  // Step 2: candidate continuity bonuses (distinguished by match type)
   for (const [party, info] of Object.entries(continuity.byParty)) {
-    if (!info.isContinuous) continue;
+    if (info.matchType === "none") continue;
     if (!out[party]) continue;
-    const bonus = info.isIncumbent ? CONTINUITY_BONUS + INCUMBENT_BONUS : CONTINUITY_BONUS;
+    let bonus = 0;
+    let label = "";
+    if (info.matchType === "same_individual") {
+      bonus = info.matchedHistoricElected ? SAME_INDIVIDUAL_BONUS + SAME_INDIVIDUAL_INCUMBENT_BONUS : SAME_INDIVIDUAL_BONUS;
+      label = info.matchedHistoricElected ? "incumbent + same-individual continuity" : "same-individual continuity";
+    } else if (info.matchType === "family") {
+      // Family-name brand recognition (e.g. Pippa Lishman as daughter of
+      // Margaret/Arthur Lishman) — much weaker than same-individual.
+      bonus = info.matchedHistoricElected ? FAMILY_NAME_BONUS + FAMILY_NAME_INCUMBENT_FAMILY_BONUS : FAMILY_NAME_BONUS;
+      label = `family-name brand (matches ${info.matchedHistoricName})`;
+    }
+    if (bonus === 0) continue;
     const original = out[party].pct || 0;
     out[party] = { ...out[party], pct: original + bonus };
-    applied.push(`${party} candidate ${info.name}: ${info.isIncumbent ? "incumbent + continuity" : "continuity"} +${(bonus * 100).toFixed(1)}pp`);
+    applied.push(`${party} candidate ${info.name}: ${label} +${(bonus * 100).toFixed(1)}pp`);
   }
 
   // Re-normalise
