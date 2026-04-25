@@ -5,7 +5,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { buildWardData } from "../src/lib/adaptDcToWardData.js";
+import { buildWardData, partiesOnBallotCanonical, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 import { predictWard, DEFAULT_ASSUMPTIONS, normalizePartyName } from "../src/lib/electionModel.js";
 import { pollingPair } from "../src/lib/nationalPolling.js";
 
@@ -164,16 +164,32 @@ function main() {
       continue;
     }
 
-    const confidence = classifyConfidence(wd, result.prediction);
+    // Restrict prediction to parties actually contesting this ballot in 2026.
+    // Redistribute share of inherited-from-history non-standing parties pro-rata.
+    const onBallot = new Set(partiesOnBallotCanonical(ward));
+    const { prediction: filtered, dropped } = restrictToBallot(result.prediction, onBallot);
+
+    const confidence = classifyConfidence(wd, filtered);
     predictions[ward.ballot_paper_id] = {
-      prediction: result.prediction,
+      prediction: filtered,
       confidence,
       baseline_date: wd.history[wd.history.length - 1]?.date || null,
       lad24cd: ladCode || null,
       lad_name: slugMap.map[ward.council_slug]?.lad_name || null,
       la_features_used: { demographics: !!demographics, deprivation: !!deprivation, ethnicProjections: !!ethnicProjections },
+      parties_on_ballot: [...onBallot].sort(),
+      dropped_from_baseline: dropped,
       model_version: MODEL_VERSION,
-      methodology: result.methodology,
+      methodology: [
+        ...result.methodology,
+        {
+          step: "Final",
+          name: "Restrict to ballot",
+          description: dropped.length
+            ? `Removed ${dropped.length} party/parties not standing in 2026 (${dropped.map((d) => `${d.party} ${(d.share * 100).toFixed(1)}pp`).join(", ")}). Their share has been redistributed pro-rata to the parties contesting this ballot.`
+            : "All predicted parties are on the 2026 ballot — no redistribution needed.",
+        },
+      ],
     };
     tally.ok += 1;
     tally.by_confidence[confidence] = (tally.by_confidence[confidence] || 0) + 1;

@@ -164,3 +164,81 @@ export function buildAllWardData(identity, historyBundle) {
   }
   return map;
 }
+
+/**
+ * Return the canonical party labels for parties on the 2026 ballot in this
+ * ward (i.e. the predict-able set). Apply this to identityWard.parties_standing
+ * upstream of any party-list comparison.
+ */
+export function partiesOnBallotCanonical(identityWard) {
+  return [...new Set((identityWard.parties_standing || []).map(dcPartyToCanonical))];
+}
+
+/**
+ * Restrict a model prediction to parties actually contesting this 2026 ballot
+ * and proportionally redistribute the share of any inherited-from-history
+ * party that is not standing this cycle.
+ *
+ * Why: the AI DOGE model's normalisation step keeps every party that has
+ * appeared in any prior contest. If Greens stood in 2022 with 8% but aren't
+ * on the 2026 ballot, the unfiltered prediction still shows Greens 8%. That
+ * misleads ward-page readers and mis-allocates seats in multi-member wards.
+ *
+ * Behaviour:
+ *   - Parties on the ballot keep their predicted share.
+ *   - Parties NOT on the ballot have their share redistributed pro-rata to
+ *     the parties that ARE on the ballot.
+ *   - If no overlap (e.g. a brand-new party-set), return the original prediction.
+ *
+ * Returns { prediction, dropped } so callers can surface what was redistributed.
+ */
+export function restrictToBallot(prediction, partiesOnBallotCanonicalSet) {
+  if (!prediction) return { prediction: null, dropped: [] };
+  if (!partiesOnBallotCanonicalSet || partiesOnBallotCanonicalSet.size === 0) {
+    return { prediction, dropped: [] };
+  }
+  const kept = {};
+  const dropped = [];
+  let keptSumPct = 0;
+  let droppedSumPct = 0;
+  for (const [party, payload] of Object.entries(prediction)) {
+    if (partiesOnBallotCanonicalSet.has(party)) {
+      kept[party] = { ...payload };
+      keptSumPct += payload.pct || 0;
+    } else {
+      dropped.push({ party, share: payload.pct || 0, votes: payload.votes || 0 });
+      droppedSumPct += payload.pct || 0;
+    }
+  }
+  if (keptSumPct <= 0) {
+    // No overlap between predicted and standing — fall back to flat-equal across
+    // the standing parties (rare; happens when a baseline only listed parties
+    // that all withdrew). Keep votes 0 to flag uncertainty.
+    const flat = 1 / Math.max(1, partiesOnBallotCanonicalSet.size);
+    const out = {};
+    for (const p of partiesOnBallotCanonicalSet) out[p] = { pct: flat, votes: 0 };
+    return { prediction: out, dropped };
+  }
+  // Re-normalise kept shares so they sum to 1.0
+  for (const p of Object.keys(kept)) kept[p].pct = kept[p].pct / keptSumPct;
+  // Re-scale votes proportionally (the absolute totals were derived from
+  // the same baseline turnout — keeping the ratio is the cleanest answer).
+  let keptVotes = 0;
+  for (const p of Object.keys(kept)) keptVotes += kept[p].votes || 0;
+  const droppedVotes = dropped.reduce((s, d) => s + (d.votes || 0), 0);
+  if (keptVotes > 0 && droppedVotes > 0) {
+    const scale = (keptVotes + droppedVotes) / keptVotes;
+    for (const p of Object.keys(kept)) kept[p].votes = Math.round((kept[p].votes || 0) * scale);
+  }
+  // Add any party on the ballot that the model didn't predict (e.g. brand-new
+  // local party with no historical baseline) at a small share so it appears
+  // in the predicted list.
+  const FLOOR_NEW_PARTY_PCT = 0.005; // 0.5%
+  for (const p of partiesOnBallotCanonicalSet) {
+    if (!kept[p]) kept[p] = { pct: FLOOR_NEW_PARTY_PCT, votes: 0, _floor: true };
+  }
+  // Re-normalise once more to absorb floor additions
+  let total = Object.values(kept).reduce((s, v) => s + v.pct, 0);
+  if (total > 0) for (const p of Object.keys(kept)) kept[p].pct = kept[p].pct / total;
+  return { prediction: kept, dropped };
+}

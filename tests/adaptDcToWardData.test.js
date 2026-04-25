@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildWardData, buildAllWardData } from "../src/lib/adaptDcToWardData.js";
+import { buildWardData, buildAllWardData, partiesOnBallotCanonical, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 
 const identityWard = {
   ballot_paper_id: "local.adur.buckingham.2026-05-07",
@@ -107,5 +107,69 @@ describe("buildWardData", () => {
     const map = buildAllWardData(identity, historyBundle);
     expect(map.size).toBe(1);
     expect(map.get("local.adur.buckingham.2026-05-07")?.gss_code).toBe("E05007562");
+  });
+});
+
+describe("partiesOnBallotCanonical", () => {
+  it("canonicalises DC party names to AI DOGE labels", () => {
+    const w = { parties_standing: ["Conservative and Unionist Party", "Labour Party", "Reform UK", "Liberal Democrats"] };
+    const out = partiesOnBallotCanonical(w);
+    expect(out).toContain("Conservative");
+    expect(out).toContain("Labour");
+    expect(out).toContain("Reform UK");
+    expect(out).toContain("Liberal Democrats");
+    expect(out).not.toContain("Conservative and Unionist Party");
+  });
+
+  it("dedupes when DC variants collapse to the same canonical", () => {
+    const w = { parties_standing: ["Labour Party", "Labour and Co-operative Party"] };
+    const out = partiesOnBallotCanonical(w);
+    expect(out).toEqual(["Labour"]);
+  });
+
+  it("returns empty array when parties_standing absent", () => {
+    expect(partiesOnBallotCanonical({})).toEqual([]);
+  });
+});
+
+describe("restrictToBallot", () => {
+  const prediction = {
+    "Liberal Democrats": { pct: 0.381, votes: 533 },
+    "Labour": { pct: 0.253, votes: 354 },
+    "Reform UK": { pct: 0.149, votes: 208 },
+    "Conservative": { pct: 0.142, votes: 199 },
+    "Green Party": { pct: 0.075, votes: 105 },
+  };
+
+  it("keeps standing parties and redistributes non-standing share pro-rata", () => {
+    const onBallot = new Set(["Conservative", "Labour", "Liberal Democrats", "Reform UK"]);
+    const { prediction: out, dropped } = restrictToBallot(prediction, onBallot);
+    expect(dropped.map((d) => d.party)).toEqual(["Green Party"]);
+    expect(Object.keys(out).sort()).toEqual([...onBallot].sort());
+    const total = Object.values(out).reduce((s, p) => s + p.pct, 0);
+    expect(total).toBeCloseTo(1.0, 5);
+  });
+
+  it("dropped Greens 7.5pp redistributed proportionally to the four kept parties", () => {
+    const onBallot = new Set(["Conservative", "Labour", "Liberal Democrats", "Reform UK"]);
+    const { prediction: out } = restrictToBallot(prediction, onBallot);
+    // Pre-redistribution kept sum = 1 - 0.075 = 0.925; LD 0.381/0.925 = 0.412
+    expect(out["Liberal Democrats"].pct).toBeCloseTo(0.412, 2);
+    // Non-standing parties not present
+    expect(out["Green Party"]).toBeUndefined();
+  });
+
+  it("adds parties on the ballot that have no historical baseline at a small floor", () => {
+    const onBallot = new Set(["Labour", "Reform UK", "Brand New Local Party"]);
+    const { prediction: out } = restrictToBallot(
+      { "Labour": { pct: 0.6, votes: 600 }, "Reform UK": { pct: 0.4, votes: 400 } },
+      onBallot,
+    );
+    expect(out["Brand New Local Party"]).toBeDefined();
+    expect(out["Brand New Local Party"].pct).toBeGreaterThan(0);
+  });
+
+  it("returns null prediction unchanged", () => {
+    expect(restrictToBallot(null, new Set(["Labour"])).prediction).toBe(null);
   });
 });
