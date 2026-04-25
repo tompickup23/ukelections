@@ -5,12 +5,46 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { buildWardData } from "../src/lib/adaptDcToWardData.js";
+import { buildWardData, partiesOnBallotCanonical, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 import { predictWard, DEFAULT_ASSUMPTIONS, normalizePartyName } from "../src/lib/electionModel.js";
-import { pollingPair } from "../src/lib/nationalPolling.js";
+import { pollingPair, UK_WESTMINSTER_2025_MAY_AVERAGE } from "../src/lib/nationalPolling.js";
+import { buildCounty2025Shares, applyCounty2025Anchor } from "../src/lib/county2025.js";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const MODEL_VERSION = "ukelections.local.v0.1.0-may2026";
+const CLAWD = "/Users/tompickup/clawd/burnley-council/data";
+const MODEL_VERSION = "ukelections.local.v0.2.0-may2026-lcc2025";
+
+// Lancashire districts where AI DOGE has lcc_2025_reference.json — load and
+// pass to the model so Reform's actual May 2025 LCC shares feed the
+// new-party-entry step instead of relying on the GE2024-only fallback.
+const LANCASHIRE_LCC_REF_COUNCILS = ["burnley", "blackburn", "blackpool", "chorley", "fylde", "hyndburn", "lancaster", "pendle", "preston", "ribble-valley", "rossendale", "south-ribble", "west-lancashire", "wyre"];
+
+function maybeLoadLcc2025(councilSlug) {
+  // DC slug uses hyphens; AI DOGE dirs use underscores.
+  const aidogeId = councilSlug.replace(/-/g, "_");
+  const p = path.join(CLAWD, aidogeId, "lcc_2025_reference.json");
+  try {
+    return JSON.parse(readFileSync(p, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function lcc2025ForWardName(lccRef, wardName) {
+  // The reference maps division → { results, reform_pct, wards: [ward names] }.
+  // Find the LCC division whose wards array contains this ward.
+  if (!lccRef?.divisions || !wardName) return null;
+  // Try exact match first, then case-insensitive, then alias-style normalisation.
+  const norm = (s) => String(s || "").toLowerCase().replace(/\s+/g, " ").trim();
+  const target = norm(wardName);
+  for (const [divName, div] of Object.entries(lccRef.divisions)) {
+    const wards = (div.wards || []).map(norm);
+    if (wards.includes(target)) {
+      return { ...div, division_name: divName };
+    }
+  }
+  return null;
+}
 
 function readJson(p) { return JSON.parse(readFileSync(path.join(ROOT, p), "utf8")); }
 
@@ -97,6 +131,11 @@ function main() {
   const laImd = readJson("data/features/la-imd.json");
   const laGe24 = readJson("data/features/la-ge2024-shares.json");
   const { nationalPolling, ge2024Result } = pollingPair();
+  const polling2025 = UK_WESTMINSTER_2025_MAY_AVERAGE.shares;
+
+  console.log("Building per-county 2025 reference shares...");
+  const county2025 = buildCounty2025Shares(history);
+  console.log(`  ${Object.keys(county2025).length} counties/unitaries with 2025 cycle baseline`);
 
   console.log("Running bulk predictions...");
   const predictions = {};
@@ -164,16 +203,93 @@ function main() {
       continue;
     }
 
-    const confidence = classifyConfidence(wd, result.prediction);
+    // 1. Restrict prediction to parties actually contesting this ballot in 2026.
+    //    Redistribute share of inherited-from-history non-standing parties pro-rata.
+    const onBallot = new Set(partiesOnBallotCanonical(ward));
+    const { prediction: filtered, dropped } = restrictToBallot(result.prediction, onBallot);
+
+    // 2. Apply 2025 county-cycle anchor: blend the model's prediction toward the
+    //    parent county / unitary's May 2025 cycle shares (with national swing
+    //    since 2025 added back). Critical fix for Reform under-prediction in
+    //    counties where Reform topped 2025 county council elections (Lancs,
+    //    Lincs, Staffs, Derbys, Kent, Notts, Leics, Warks, Northumberland).
+    const anchored = applyCounty2025Anchor({
+      prediction: filtered,
+      county2025Shares: county2025,
+      councilSlug: ward.council_slug,
+      nationalPollingNow: nationalPolling,
+      national2025Polling: polling2025,
+      anchorWeight: 0.40,
+    });
+    const finalPrediction = anchored.prediction;
+
+    // Recompute votes consistently from final pct so the page never displays
+    // a (29%, 181 votes) inconsistency caused by transformation steps that
+    // updated pct but left the original votes value untouched.
+    const estimatedTurnoutVotes = (() => {
+      // Prefer the latest cycle (non-by-election) turnout from history.
+      // If turnout_votes is present, use it directly. Otherwise derive from
+      // turnout_pct × electorate where both are available.
+      const cycle = [...wd.history].filter((h) => h.type !== "by-election");
+      const latest = cycle[cycle.length - 1] || wd.history[wd.history.length - 1];
+      if (!latest) return null;
+      if (latest.turnout_votes && latest.turnout_votes > 0) return latest.turnout_votes;
+      if (latest.turnout && latest.electorate) return Math.round(latest.turnout * latest.electorate);
+      // Last resort: pick from any historic row that has turnout_votes
+      const fallback = wd.history.find((h) => h.turnout_votes && h.turnout_votes > 0);
+      if (fallback) return fallback.turnout_votes;
+      return null;
+    })();
+    if (finalPrediction && estimatedTurnoutVotes) {
+      const seatsContested = ward.winner_count || 1;
+      const totalVotesCast = estimatedTurnoutVotes * seatsContested;
+      for (const party of Object.keys(finalPrediction)) {
+        finalPrediction[party] = {
+          ...finalPrediction[party],
+          votes: Math.round((finalPrediction[party].pct || 0) * totalVotesCast),
+        };
+      }
+    } else if (finalPrediction) {
+      // No turnout signal — drop the votes field entirely so the page
+      // doesn't render a misleading number.
+      for (const party of Object.keys(finalPrediction)) {
+        finalPrediction[party] = { pct: finalPrediction[party].pct };
+      }
+    }
+
+    const confidence = classifyConfidence(wd, finalPrediction);
     predictions[ward.ballot_paper_id] = {
-      prediction: result.prediction,
+      prediction: finalPrediction,
       confidence,
       baseline_date: wd.history[wd.history.length - 1]?.date || null,
       lad24cd: ladCode || null,
       lad_name: slugMap.map[ward.council_slug]?.lad_name || null,
       la_features_used: { demographics: !!demographics, deprivation: !!deprivation, ethnicProjections: !!ethnicProjections },
+      parties_on_ballot: [...onBallot].sort(),
+      dropped_from_baseline: dropped,
+      county_2025_anchor: anchored.anchor_used ? anchored.anchor_source : null,
       model_version: MODEL_VERSION,
-      methodology: result.methodology,
+      methodology: [
+        ...result.methodology,
+        {
+          step: "Final-A",
+          name: "Restrict to ballot",
+          description: dropped.length
+            ? `Removed ${dropped.length} party/parties not standing in 2026 (${dropped.map((d) => `${d.party} ${(d.share * 100).toFixed(1)}pp`).join(", ")}). Their share redistributed pro-rata.`
+            : "All predicted parties are on the 2026 ballot — no redistribution needed.",
+        },
+        anchored.anchor_used
+          ? {
+              step: "Final-B",
+              name: "2025 county-cycle anchor",
+              description: `Blended (weight ${anchored.anchor_weight}) toward May 2025 results for ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes), adjusted by national swing since May 2025. This corrects the model's tendency to under-weight Reform's 2025 county breakthroughs in 2-tier districts.`,
+            }
+          : {
+              step: "Final-B",
+              name: "2025 county-cycle anchor",
+              description: "No 2025 reference available for this council's parent area. Stage 1 uses national polling only.",
+            },
+      ],
     };
     tally.ok += 1;
     tally.by_confidence[confidence] = (tally.by_confidence[confidence] || 0) + 1;

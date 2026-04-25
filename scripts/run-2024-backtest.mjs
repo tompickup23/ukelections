@@ -8,7 +8,7 @@
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { buildWardData } from "../src/lib/adaptDcToWardData.js";
+import { buildWardData, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 import { predictWard, DEFAULT_ASSUMPTIONS } from "../src/lib/electionModel.js";
 import {
   UK_WESTMINSTER_2019_GE_RESULT,
@@ -180,8 +180,16 @@ function main() {
 
     if (!result.prediction) continue;
     predicted += 1;
+    // Restrict to parties that actually stood in the 2024 ballot — same logic as 2026.
+    // For backtest, the "ballot" is the actual 2024 candidate set.
+    const partiesIn2024 = new Set(
+      (actualResult.candidates || [])
+        .map((c) => dcPartyToCanonical(c.party_name))
+        .filter(Boolean),
+    );
+    const { prediction: filtered } = restrictToBallot(result.prediction, partiesIn2024);
     const predictedShares = Object.fromEntries(
-      Object.entries(result.prediction).map(([p, d]) => [p, d.pct])
+      Object.entries(filtered || {}).map(([p, d]) => [p, d.pct])
     );
     const actualShares = actualSharesFromResult(actualResult);
     if (actualShares) with_actual += 1;
