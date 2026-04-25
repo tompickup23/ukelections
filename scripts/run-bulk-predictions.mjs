@@ -11,6 +11,7 @@ import { pollingPair, UK_WESTMINSTER_2025_MAY_AVERAGE } from "../src/lib/nationa
 import { buildCounty2025Shares, applyCounty2025Anchor, DISTRICT_TO_PARENT_COUNTY_2025 } from "../src/lib/county2025.js";
 import { applyIntervalsToBundle } from "../src/lib/intervals.js";
 import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
+import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
 import { existsSync as fsExistsSync } from "node:fs";
 
 const LONDON_BOROUGHS = new Set(["barking-and-dagenham", "barnet", "bexley", "brent", "bromley", "camden", "city-of-london", "croydon", "ealing", "enfield", "greenwich", "hackney", "hammersmith-and-fulham", "haringey", "harrow", "havering", "hillingdon", "hounslow", "islington", "kensington-and-chelsea", "kingston-upon-thames", "lambeth", "lewisham", "merton", "newham", "redbridge", "richmond-upon-thames", "southwark", "sutton", "tower-hamlets", "waltham-forest", "wandsworth", "westminster"]);
@@ -196,15 +197,44 @@ function main() {
 
     const wd = buildWardData(ward, history);
     if (!wd.history.length) {
+      // Fallback: synthesise prediction from council-level GE2024 + county-2025 anchor
+      // restricted to the parties on the ballot. Marked confidence: low.
+      const onBallotSet = new Set(partiesOnBallotCanonical(ward));
+      const ge24 = councilGe24[ward.council_slug]?.shares || ge2024Result;
+      // Apply 2024→2026 swing using national polling
+      const swung = {};
+      const allParties = new Set([...Object.keys(ge24), ...Object.keys(nationalPolling)]);
+      for (const p of allParties) {
+        const swing = (nationalPolling[p] || 0) - (ge2024Result[p] || 0);
+        swung[p] = Math.max(0, (ge24[p] || 0) + swing);
+      }
+      // Restrict to ballot
+      const restrictedShares = {};
+      let kept = 0;
+      for (const p of onBallotSet) restrictedShares[p] = swung[p] || 0.005;
+      for (const p of Object.keys(restrictedShares)) kept += restrictedShares[p];
+      if (kept > 0) for (const p of Object.keys(restrictedShares)) restrictedShares[p] /= kept;
+      // Apply county-2025 anchor at 0.40 weight
+      const anchored = applyCounty2025Anchor({
+        prediction: Object.fromEntries(Object.entries(restrictedShares).map(([k, v]) => [k, { pct: v, votes: 0 }])),
+        county2025Shares: county2025,
+        councilSlug: ward.council_slug,
+        nationalPollingNow: nationalPolling,
+        national2025Polling: polling2025,
+        anchorWeight: 0.50,
+      });
       predictions[ward.ballot_paper_id] = {
-        prediction: null,
-        confidence: "none",
+        prediction: anchored.prediction,
+        confidence: "low",
         baseline_date: null,
         model_version: MODEL_VERSION,
-        methodology: [{ step: 0, name: "No history", description: "No prior contest results available for this ward in our DC history bundle. Likely a recent boundary change." }],
+        county_2025_anchor: anchored.anchor_used ? anchored.anchor_source : null,
+        methodology: [
+          { step: 0, name: "Fallback (no historic match)", description: "No prior contest results in DC bundle for this ward (likely 2026 boundary change). Synthesised prediction from council-level GE2024 aggregate + national 2024→2026 swing + county-2025 anchor where available, restricted to the parties on the 2026 ballot. Marked low confidence." },
+        ],
       };
       tally.no_history += 1;
-      tally.by_confidence.none += 1;
+      tally.by_confidence.low += 1;
       continue;
     }
 
@@ -230,6 +260,11 @@ function main() {
     const dampening = calibration?.[region]?.dampening ?? DEFAULT_ASSUMPTIONS.nationalToLocalDampening;
     const wardAssumptions = { ...DEFAULT_ASSUMPTIONS, nationalToLocalDampening: dampening };
 
+    // For Lancashire wards: pass per-division LCC 2025 reference so the
+    // Reform new-party-entry step can use real division-level Reform shares
+    // (e.g. Burnley Rural Reform 42.9%) instead of the GE2024-only proxy.
+    const lcc2025Arg = lancashireLcc2025ForWard(ward.council_slug, ward.ward_name);
+
     const result = predictWard(
       wd,
       wardAssumptions,
@@ -238,7 +273,7 @@ function main() {
       demographics,
       deprivation,
       constituencyResult,
-      null, // lcc2025 — Lancashire-specific, not used nationally
+      lcc2025Arg,
       null, // modelParams
       null, // fiscalData
       null, // candidates2026 (already in wardData)
@@ -268,13 +303,21 @@ function main() {
     //    since 2025 added back). Critical fix for Reform under-prediction in
     //    counties where Reform topped 2025 county council elections (Lancs,
     //    Lincs, Staffs, Derbys, Kent, Notts, Leics, Warks, Northumberland).
+    // County-2025 anchor — bump weight when the ward's baseline is very stale
+    // (>3 years old) so the most-recent local-equivalent signal dominates.
+    const baselineAge = (() => {
+      const latest = wd.history[wd.history.length - 1];
+      if (!latest?.year) return 99;
+      return 2026 - latest.year;
+    })();
+    const dynamicAnchorWeight = baselineAge >= 5 ? 0.65 : baselineAge >= 3 ? 0.55 : 0.45;
     const anchored = applyCounty2025Anchor({
       prediction: filtered,
       county2025Shares: county2025,
       councilSlug: ward.council_slug,
       nationalPollingNow: nationalPolling,
       national2025Polling: polling2025,
-      anchorWeight: 0.40,
+      anchorWeight: dynamicAnchorWeight,
     });
     const finalPrediction = anchored.prediction;
 

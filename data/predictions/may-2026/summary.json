@@ -1,8 +1,8 @@
 {
   "snapshot": {
-    "generated_at": "2026-04-25T17:06:21.049Z",
+    "generated_at": "2026-04-25T17:36:40.655Z",
     "model_version": "ukelections.local.v0.2.0-may2026-lcc2025",
-    "sha256": "2fa2a9b1fac832989972e1d6081496086f5bca3c5461b7aac44fcfd4e980e0ba",
+    "sha256": "7549a8cabb0ba8b49f572e290ea4779de6e7cd694410fe2de363a0b42c4dc073",
     "input_polling": {
       "Labour": 0.23,
       "Conservative": 0.18,
@@ -38,7 +38,7 @@
     },
     "method_summary": "AI DOGE election model (Lancashire-trained, RMSE 1.65) generalised. Pipeline: ward history baseline → national swing dampened 0.65 → LA-level UKD HP v7.0 demographic adjustment → IMD-based deprivation tilt → incumbency (where holders known) → Reform-entry handling → normalisation. Per-LA GE2024 deferred to Stage 1.5 — currently uses UK national."
   },
-  "council_count": 154,
+  "council_count": 156,
   "councils": [
     {
       "council_slug": "adur",
@@ -83,13 +83,13 @@
       "council_slug": "barnsley",
       "council_name": "Barnsley",
       "tier": "local",
-      "ward_count": 18,
-      "seats_up": 54,
+      "ward_count": 21,
+      "seats_up": 63,
       "predicted_seat_winners": {
-        "Labour": 18,
-        "Green Party": 4,
+        "Reform UK": 17,
+        "Labour": 21,
+        "Green Party": 7,
         "Conservative": 6,
-        "Reform UK": 14,
         "Liberal Democrats": 6,
         "English Democrats": 1,
         "SDP": 1,
@@ -180,15 +180,15 @@
       "council_slug": "bradford",
       "council_name": "Bradford",
       "tier": "local",
-      "ward_count": 17,
-      "seats_up": 51,
+      "ward_count": 29,
+      "seats_up": 87,
       "predicted_seat_winners": {
+        "Reform UK": 15,
+        "Labour": 29,
+        "Green Party": 14,
         "Conservative": 11,
-        "Labour": 17,
-        "Independent": 8,
-        "Liberal Democrats": 2,
-        "Green Party": 10,
-        "Reform UK": 3
+        "Independent": 16,
+        "Liberal Democrats": 2
       }
     },
     {
@@ -251,12 +251,7 @@
       "ward_count": 15,
       "seats_up": 15,
       "predicted_seat_winners": {
-        "Independent": 3,
-        "Labour": 6,
-        "Conservative": 3,
-        "Liberal Democrats": 1,
-        "Reform UK": 1,
-        "Green Party": 1
+        "Reform UK": 15
       }
     },
     {
@@ -276,13 +271,14 @@
       "council_slug": "calderdale",
       "council_name": "Calderdale",
       "tier": "local",
-      "ward_count": 9,
-      "seats_up": 27,
+      "ward_count": 18,
+      "seats_up": 54,
       "predicted_seat_winners": {
-        "Conservative": 8,
-        "Labour": 9,
+        "Conservative": 17,
+        "Labour": 18,
         "Green Party": 5,
         "Liberal Democrats": 4,
+        "Reform UK": 9,
         "Workers Party": 1
       }
     },
@@ -368,7 +364,7 @@
       "seats_up": 2,
       "predicted_seat_winners": {
         "Labour": 1,
-        "Liberal Democrats": 1
+        "Reform UK": 1
       }
     },
     {
@@ -378,8 +374,8 @@
       "ward_count": 14,
       "seats_up": 14,
       "predicted_seat_winners": {
-        "Labour": 11,
-        "Reform UK": 2,
+        "Labour": 8,
+        "Reform UK": 5,
         "Conservative": 1
       }
     },
@@ -412,14 +408,14 @@
       "council_slug": "coventry",
       "council_name": "Coventry",
       "tier": "local",
-      "ward_count": 15,
-      "seats_up": 45,
+      "ward_count": 18,
+      "seats_up": 54,
       "predicted_seat_winners": {
-        "Labour": 15,
-        "Conservative": 15,
+        "Labour": 18,
+        "Conservative": 18,
         "Green Party": 11,
+        "Reform UK": 5,
         "Liberal Democrats": 1,
-        "Reform UK": 2,
         "Trade Unionist and Socialist Coalition": 1
       }
     },
@@ -487,6 +483,17 @@
       }
     },
     {
+      "council_slug": "east-surrey",
+      "council_name": "East Surrey",
+      "tier": "local",
+      "ward_count": 36,
+      "seats_up": 72,
+      "predicted_seat_winners": {
+        "Reform UK": 36,
+        "Conservative": 36
+      }
+    },
+    {
       "council_slug": "east-sussex",
       "council_name": "East Sussex",
       "tier": "local",
@@ -546,9 +553,10 @@
       "council_slug": "essex",
       "council_name": "Essex",
       "tier": "local",
-      "ward_count": 33,
-      "seats_up": 33,
+      "ward_count": 77,
+      "seats_up": 77,
       "predicted_seat_winners": {
+        "Reform UK": 44,
         "Conservative": 22,
         "Green Party": 1,
         "Liberal Democrats": 5,
@@ -588,13 +596,13 @@
       "council_slug": "gateshead",
       "council_name": "Gateshead",
       "tier": "local",
-      "ward_count": 8,
-      "seats_up": 24,
+      "ward_count": 22,
+      "seats_up": 66,
       "predicted_seat_winners": {
-        "Labour": 8,
+        "Reform UK": 15,
+        "Labour": 22,
+        "Green Party": 20,
         "Liberal Democrats": 7,
-        "Green Party": 6,
-        "Reform UK": 1,
         "Conservative": 1,
         "Trade Unionist and Socialist Coalition": 1
       }
@@ -871,10 +879,10 @@
       "ward_count": 26,
       "seats_up": 52,
       "predicted_seat_winners": {
-        "Conservative": 21,
-        "Liberal Democrats": 14,
-        "Reform UK": 8,
-        "Labour": 4,
+        "Conservative": 22,
+        "Liberal Democrats": 13,
+        "Reform UK": 11,
+        "Labour": 1,
         "Independent": 4,
         "Green Party": 1
       }
@@ -886,8 +894,9 @@
       "ward_count": 11,
       "seats_up": 11,
       "predicted_seat_winners": {
-        "Labour": 9,
-        "Conservative": 2
+        "Labour": 3,
+        "Reform UK": 7,
+        "Conservative": 1
       }
     },
     {
@@ -973,15 +982,15 @@
       "council_slug": "kirklees",
       "council_name": "Kirklees",
       "tier": "local",
-      "ward_count": 17,
-      "seats_up": 51,
+      "ward_count": 23,
+      "seats_up": 69,
       "predicted_seat_winners": {
         "Liberal Democrats": 5,
-        "Labour": 17,
-        "Conservative": 16,
+        "Labour": 23,
+        "Conservative": 22,
         "Green Party": 6,
         "Independent": 6,
-        "Reform UK": 1
+        "Reform UK": 7
       }
     },
     {
@@ -1137,27 +1146,27 @@
       "council_slug": "milton-keynes",
       "council_name": "Milton Keynes",
       "tier": "local",
-      "ward_count": 7,
-      "seats_up": 21,
+      "ward_count": 21,
+      "seats_up": 60,
       "predicted_seat_winners": {
-        "Labour": 7,
-        "Conservative": 6,
+        "Labour": 21,
+        "Reform UK": 14,
+        "Conservative": 18,
         "Green Party": 4,
-        "Liberal Democrats": 3,
-        "Reform UK": 1
+        "Liberal Democrats": 3
       }
     },
     {
       "council_slug": "newcastle-upon-tyne",
       "council_name": "Newcastle upon Tyne",
       "tier": "local",
-      "ward_count": 19,
-      "seats_up": 57,
+      "ward_count": 26,
+      "seats_up": 78,
       "predicted_seat_winners": {
-        "Labour": 19,
+        "Labour": 26,
         "Independent": 3,
-        "Green Party": 14,
-        "Reform UK": 3,
+        "Green Party": 21,
+        "Reform UK": 10,
         "Liberal Democrats": 10,
         "Conservative": 8
       }
@@ -1169,9 +1178,9 @@
       "ward_count": 21,
       "seats_up": 44,
       "predicted_seat_winners": {
-        "Labour": 13,
-        "Conservative": 16,
-        "Reform UK": 15
+        "Reform UK": 18,
+        "Labour": 11,
+        "Conservative": 15
       }
     },
     {
@@ -1188,15 +1197,15 @@
       "council_slug": "norfolk",
       "council_name": "Norfolk",
       "tier": "local",
-      "ward_count": 57,
-      "seats_up": 57,
+      "ward_count": 84,
+      "seats_up": 84,
       "predicted_seat_winners": {
         "Conservative": 34,
         "Liberal Democrats": 6,
+        "Reform UK": 29,
         "Labour": 10,
         "Independent": 1,
-        "Green Party": 4,
-        "Reform UK": 2
+        "Green Party": 4
       }
     },
     {
@@ -1244,8 +1253,8 @@
       "ward_count": 19,
       "seats_up": 19,
       "predicted_seat_winners": {
-        "Conservative": 10,
-        "Labour": 8,
+        "Conservative": 11,
+        "Labour": 7,
         "Green Party": 1
       }
     },
@@ -1284,8 +1293,8 @@
       "predicted_seat_winners": {
         "Liberal Democrats": 2,
         "Conservative": 3,
-        "Independent": 4,
-        "Reform UK": 1
+        "Reform UK": 2,
+        "Independent": 3
       }
     },
     {
@@ -1347,10 +1356,9 @@
       "ward_count": 16,
       "seats_up": 16,
       "predicted_seat_winners": {
-        "Reform UK": 1,
-        "Labour": 9,
-        "Liberal Democrats": 5,
-        "Conservative": 1
+        "Reform UK": 8,
+        "Labour": 7,
+        "Liberal Democrats": 1
       }
     },
     {
@@ -1388,8 +1396,8 @@
       "ward_count": 9,
       "seats_up": 9,
       "predicted_seat_winners": {
-        "Conservative": 4,
-        "Labour": 5
+        "Conservative": 5,
+        "Labour": 4
       }
     },
     {
@@ -1494,12 +1502,12 @@
       "council_slug": "sandwell",
       "council_name": "Sandwell",
       "tier": "local",
-      "ward_count": 14,
-      "seats_up": 42,
+      "ward_count": 24,
+      "seats_up": 72,
       "predicted_seat_winners": {
-        "Labour": 14,
-        "Conservative": 14,
-        "Reform UK": 8,
+        "Reform UK": 18,
+        "Labour": 24,
+        "Conservative": 24,
         "Green Party": 3,
         "Independent": 3
       }
@@ -1508,13 +1516,13 @@
       "council_slug": "sefton",
       "council_name": "Sefton",
       "tier": "local",
-      "ward_count": 10,
-      "seats_up": 30,
+      "ward_count": 22,
+      "seats_up": 66,
       "predicted_seat_winners": {
         "Liberal Democrats": 7,
-        "Labour": 10,
-        "Conservative": 8,
-        "Reform UK": 2,
+        "Labour": 22,
+        "Conservative": 20,
+        "Reform UK": 14,
         "Green Party": 2,
         "Independent": 1
       }
@@ -1537,11 +1545,12 @@
       "council_slug": "solihull",
       "council_name": "Solihull",
       "tier": "local",
-      "ward_count": 10,
-      "seats_up": 30,
+      "ward_count": 17,
+      "seats_up": 51,
       "predicted_seat_winners": {
-        "Conservative": 10,
-        "Labour": 10,
+        "Reform UK": 7,
+        "Conservative": 17,
+        "Labour": 17,
         "Green Party": 6,
         "Liberal Democrats": 4
       }
@@ -1563,24 +1572,24 @@
       "ward_count": 26,
       "seats_up": 45,
       "predicted_seat_winners": {
-        "Liberal Democrats": 22,
-        "Conservative": 18,
-        "Reform UK": 3,
-        "Green Party": 1,
-        "Labour": 1
+        "Liberal Democrats": 23,
+        "Conservative": 17,
+        "Reform UK": 4,
+        "Green Party": 1
       }
     },
     {
       "council_slug": "south-tyneside",
       "council_name": "South Tyneside",
       "tier": "local",
-      "ward_count": 10,
-      "seats_up": 30,
+      "ward_count": 18,
+      "seats_up": 54,
       "predicted_seat_winners": {
+        "Reform UK": 13,
+        "Labour": 18,
+        "Conservative": 6,
         "Independent": 7,
-        "Labour": 10,
-        "Green Party": 8,
-        "Reform UK": 5
+        "Green Party": 10
       }
     },
     {
@@ -1657,9 +1666,9 @@
       "seats_up": 14,
       "predicted_seat_winners": {
         "Labour": 7,
-        "Reform UK": 2,
+        "Reform UK": 3,
         "Liberal Democrats": 2,
-        "Conservative": 3
+        "Conservative": 2
       }
     },
     {
@@ -1691,10 +1700,11 @@
       "council_slug": "suffolk",
       "council_name": "Suffolk",
       "tier": "local",
-      "ward_count": 31,
-      "seats_up": 31,
+      "ward_count": 69,
+      "seats_up": 70,
       "predicted_seat_winners": {
-        "Conservative": 19,
+        "Reform UK": 38,
+        "Conservative": 20,
         "Independent": 2,
         "Labour": 3,
         "Green Party": 5,
@@ -1705,13 +1715,13 @@
       "council_slug": "sunderland",
       "council_name": "Sunderland",
       "tier": "local",
-      "ward_count": 9,
-      "seats_up": 27,
+      "ward_count": 25,
+      "seats_up": 75,
       "predicted_seat_winners": {
-        "Conservative": 8,
-        "Liberal Democrats": 2,
-        "Labour": 9,
-        "Reform UK": 8
+        "Reform UK": 24,
+        "Labour": 25,
+        "Conservative": 24,
+        "Liberal Democrats": 2
       }
     },
     {
@@ -1743,11 +1753,12 @@
       "council_slug": "swindon",
       "council_name": "Swindon",
       "tier": "local",
-      "ward_count": 3,
-      "seats_up": 8,
+      "ward_count": 25,
+      "seats_up": 57,
       "predicted_seat_winners": {
-        "Labour": 3,
-        "Conservative": 3,
+        "Labour": 25,
+        "Reform UK": 19,
+        "Conservative": 11,
         "Liberal Democrats": 1,
         "Green Party": 1
       }
@@ -1772,9 +1783,9 @@
       "ward_count": 9,
       "seats_up": 9,
       "predicted_seat_winners": {
-        "Labour": 7,
-        "Reform UK": 1,
-        "Conservative": 1
+        "Conservative": 3,
+        "Labour": 3,
+        "Reform UK": 3
       }
     },
     {
@@ -1785,8 +1796,7 @@
       "seats_up": 13,
       "predicted_seat_winners": {
         "Conservative": 5,
-        "Liberal Democrats": 6,
-        "Green Party": 1,
+        "Liberal Democrats": 7,
         "Labour": 1
       }
     },
@@ -1794,12 +1804,12 @@
       "council_slug": "thurrock",
       "council_name": "Thurrock",
       "tier": "local",
-      "ward_count": 7,
-      "seats_up": 18,
+      "ward_count": 20,
+      "seats_up": 49,
       "predicted_seat_winners": {
-        "Labour": 7,
-        "Conservative": 7,
-        "Reform UK": 3,
+        "Reform UK": 16,
+        "Labour": 20,
+        "Conservative": 12,
         "Green Party": 1
       }
     },
@@ -1823,23 +1833,23 @@
       "ward_count": 13,
       "seats_up": 15,
       "predicted_seat_winners": {
-        "Conservative": 4,
-        "Liberal Democrats": 7,
-        "Reform UK": 4
+        "Conservative": 3,
+        "Liberal Democrats": 5,
+        "Reform UK": 7
       }
     },
     {
       "council_slug": "wakefield",
       "council_name": "Wakefield",
       "tier": "local",
-      "ward_count": 11,
-      "seats_up": 33,
+      "ward_count": 21,
+      "seats_up": 63,
       "predicted_seat_winners": {
-        "Labour": 11,
-        "Reform UK": 3,
+        "Reform UK": 13,
+        "Labour": 21,
+        "Conservative": 19,
         "Liberal Democrats": 1,
         "Green Party": 8,
-        "Conservative": 9,
         "Independent": 1
       }
     },
@@ -1847,13 +1857,13 @@
       "council_slug": "walsall",
       "council_name": "Walsall",
       "tier": "local",
-      "ward_count": 11,
-      "seats_up": 33,
+      "ward_count": 20,
+      "seats_up": 60,
       "predicted_seat_winners": {
-        "Labour": 10,
-        "Conservative": 11,
-        "Reform UK": 7,
-        "Independent": 3,
+        "Reform UK": 16,
+        "Labour": 19,
+        "Conservative": 14,
+        "Independent": 9,
         "Green Party": 1,
         "Liberal Democrats": 1
       }
@@ -1907,7 +1917,8 @@
       "predicted_seat_winners": {
         "Conservative": 5,
         "Labour": 7,
-        "Liberal Democrats": 5
+        "Liberal Democrats": 4,
+        "Reform UK": 1
       }
     },
     {
@@ -1917,9 +1928,9 @@
       "ward_count": 15,
       "seats_up": 15,
       "predicted_seat_winners": {
-        "Reform UK": 1,
-        "Conservative": 5,
-        "Labour": 9
+        "Reform UK": 8,
+        "Conservative": 2,
+        "Labour": 5
       }
     },
     {
@@ -1952,6 +1963,18 @@
       "seats_up": 1,
       "predicted_seat_winners": {
         "Green Party": 1
+      }
+    },
+    {
+      "council_slug": "west-surrey",
+      "council_name": "West Surrey",
+      "tier": "local",
+      "ward_count": 45,
+      "seats_up": 90,
+      "predicted_seat_winners": {
+        "Reform UK": 45,
+        "Labour": 43,
+        "Conservative": 2
       }
     },
     {
