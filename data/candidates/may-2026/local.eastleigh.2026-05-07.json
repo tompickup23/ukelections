@@ -1,0 +1,990 @@
+{
+  "snapshot": {
+    "snapshot_id": "dc-ballots-2026-05-07-f2d10be9b458",
+    "source_name": "Democracy Club Candidates API",
+    "source_url": "https://candidates.democracyclub.org.uk/api/next/ballots/?election_date=2026-05-07",
+    "retrieved_at": "2026-04-25T13:18:53.287Z",
+    "licence": "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
+    "sha256": "f2d10be9b4586f99c9ca12ceeb3ff4e7188528533f5bc1763103201e3ff78b3a",
+    "quality_status": "imported_quarantined",
+    "review_notes": "Bulk DC API fetch. Verify candidate locks + cancellations + SoPN URLs before any per-contest publication."
+  },
+  "election_group": {
+    "election_id": "local.eastleigh.2026-05-07",
+    "name": "Eastleigh local election",
+    "classification": {
+      "tier": "local",
+      "model_family_hint": "local_fptp"
+    }
+  },
+  "ballots": [
+    {
+      "ballot_paper_id": "local.eastleigh.bishopstoke.2026-05-07",
+      "post": {
+        "id": "gss:E05011187",
+        "label": "Bishopstoke",
+        "slug": "bishopstoke",
+        "created": "2019-01-18T13:07:54.737252Z",
+        "last_updated": "2023-03-13T14:19:31.924731Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.bishopstoke.2026-05-07/sopn/2026-04-09T17%3A06%3A16.151174%2B00%3A00/sopn-local.eastleigh.bishopstoke.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 127972,
+          "name": "Sarah Duggan",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125474,
+          "name": "Dani Hosford",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 26845,
+          "name": "Louise Anne Parker-Jones",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127973,
+          "name": "Graeme Richard Smith",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 16528,
+          "name": "Anne Margaret Winstanley",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.botley.2026-05-07",
+      "post": {
+        "id": "gss:E05011188",
+        "label": "Botley",
+        "slug": "botley",
+        "created": "2017-09-26T16:37:16.508905+01:00",
+        "last_updated": "2023-03-13T14:19:31.994731Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.botley.2026-05-07/sopn/2026-04-09T17%3A06%3A16.764193%2B00%3A00/sopn-local.eastleigh.botley.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 127618,
+          "name": "Dave COX",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 16537,
+          "name": "Rupert Gregory Miles KYRLE",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127619,
+          "name": "Finn LENNON",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125475,
+          "name": "Luke Leslie OTTLEY",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.bursledon-hound-north.2026-05-07",
+      "post": {
+        "id": "gss:E05011189",
+        "label": "Bursledon & Hound North",
+        "slug": "bursledon-hound-north",
+        "created": "2019-01-18T13:07:48.885313Z",
+        "last_updated": "2023-03-13T14:19:32.057420Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.bursledon-hound-north.2026-05-07/sopn/2026-04-09T17%3A06%3A17.287690%2B00%3A00/sopn-local.eastleigh.bursledon-hound-north.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 128662,
+          "name": "Carys CHESTNUT",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 128663,
+          "name": "Frankie COULTAS",
+          "party_name": "Trade Unionist and Socialist Coalition",
+          "party_ec_id": "PP804",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 29107,
+          "name": "Tonia CRAIG",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 35197,
+          "name": "Keith Philip DAY",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 122711,
+          "name": "Craig PALMER",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.chandlers-ford.2026-05-07",
+      "post": {
+        "id": "gss:E05011190",
+        "label": "Chandler's Ford",
+        "slug": "chandlers-ford",
+        "created": "2019-01-18T13:07:35.795873Z",
+        "last_updated": "2023-03-13T14:19:32.127401Z"
+      },
+      "winner_count": 2,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.chandlers-ford.2026-05-07/sopn/2026-04-09T17%3A06%3A18.046406%2B00%3A00/sopn-local.eastleigh.chandlers-ford.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 38642,
+          "name": "Alan Frederick BROADHURST",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127678,
+          "name": "Paul Jerome BRYANT",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127679,
+          "name": "Christopher John GIBBS",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125482,
+          "name": "Bors Tamás HULESCH",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127680,
+          "name": "Daniel Christopher JONES",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127681,
+          "name": "Nigel William MURKITT",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 98139,
+          "name": "Albie SLAWSON",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 5833,
+          "name": "Roy SWALES",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 139110,
+          "name": "Dave Walker",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.eastleigh-central.2026-05-07",
+      "post": {
+        "id": "gss:E05011191",
+        "label": "Eastleigh Central",
+        "slug": "eastleigh-central",
+        "created": "2019-01-18T13:08:11.678773Z",
+        "last_updated": "2023-03-13T14:19:32.195835Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.eastleigh-central.2026-05-07/sopn/2026-04-09T17%3A06%3A18.589534%2B00%3A00/sopn-local.eastleigh.eastleigh-central.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 125483,
+          "name": "Toby CAIN",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 75940,
+          "name": "Sukhdev RAJ",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 128667,
+          "name": "Poonam SHARMA",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 110838,
+          "name": "Zak SOUTHWARD",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 86851,
+          "name": "Cameron Edward SPENCER",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.eastleigh-north.2026-05-07",
+      "post": {
+        "id": "gss:E05011192",
+        "label": "Eastleigh North",
+        "slug": "eastleigh-north",
+        "created": "2019-01-18T13:07:49.779949Z",
+        "last_updated": "2023-03-13T14:19:32.287631Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.eastleigh-north.2026-05-07/sopn/2026-04-09T17%3A06%3A19.120802%2B00%3A00/sopn-local.eastleigh.eastleigh-north.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 86861,
+          "name": "Stephen Francis BEER",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 75934,
+          "name": "Alex CULLEY",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 16582,
+          "name": "Kathy O'NEILL",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127624,
+          "name": "Jeremy David Noel OVER",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 55523,
+          "name": "Jack Nathan Reginald STAPLETON",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.eastleigh-south.2026-05-07",
+      "post": {
+        "id": "gss:E05011193",
+        "label": "Eastleigh South",
+        "slug": "eastleigh-south",
+        "created": "2019-01-18T13:07:20.890101Z",
+        "last_updated": "2023-03-13T14:19:32.366547Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.eastleigh-south.2026-05-07/sopn/2026-04-09T17%3A06%3A19.669860%2B00%3A00/sopn-local.eastleigh.eastleigh-south.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 38660,
+          "name": "Paul BICKNELL",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 77793,
+          "name": "Clare Lorraine FAWCETT",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 128636,
+          "name": "Steven Peter PHILLIPS",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 110836,
+          "name": "Yogesh SAXENA",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125479,
+          "name": "Jim SMITH",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.fair-oak-horton-heath.2026-05-07",
+      "post": {
+        "id": "gss:E05011194",
+        "label": "Fair Oak & Horton Heath",
+        "slug": "fair-oak-horton-heath",
+        "created": "2019-01-18T13:08:00.890220Z",
+        "last_updated": "2023-03-13T14:19:32.438105Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.fair-oak-horton-heath.2026-05-07/sopn/2026-04-09T17%3A06%3A20.161099%2B00%3A00/sopn-local.eastleigh.fair-oak-horton-heath.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 127663,
+          "name": "William James BANKS",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 29096,
+          "name": "Ben BURCOMBE-FILER",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 38668,
+          "name": "Nick COULDREY",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 117010,
+          "name": "Russ KITCHING",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 75753,
+          "name": "Ben David PARRY",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127665,
+          "name": "Austen Thomas Petty",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127664,
+          "name": "Richard Anthony Shuker",
+          "party_name": "Independent",
+          "party_ec_id": "ynmp-party:2",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.hamble-netley.2026-05-07",
+      "post": {
+        "id": "gss:E05011195",
+        "label": "Hamble & Netley",
+        "slug": "hamble-netley",
+        "created": "2019-01-18T13:07:42.690199Z",
+        "last_updated": "2023-03-13T14:19:32.506638Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.hamble-netley.2026-05-07/sopn/2026-04-09T17%3A06%3A20.608755%2B00%3A00/sopn-local.eastleigh.hamble-netley.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 16539,
+          "name": "Steph ARNOLD",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 42733,
+          "name": "Prad BAINS",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127396,
+          "name": "Neil Leslie FLEMING",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 86946,
+          "name": "Philip John HORTON",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 100736,
+          "name": "Dennis ROBINSON",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.hedge-end-north.2026-05-07",
+      "post": {
+        "id": "gss:E05011196",
+        "label": "Hedge End North",
+        "slug": "hedge-end-north",
+        "created": "2019-01-18T13:07:56.448773Z",
+        "last_updated": "2023-03-13T14:19:32.580181Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.hedge-end-north.2026-05-07/sopn/2026-04-09T17%3A06%3A21.139187%2B00%3A00/sopn-local.eastleigh.hedge-end-north.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 16589,
+          "name": "Nick ARNOLD",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127640,
+          "name": "James FLAXMAN",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 86975,
+          "name": "Leigh John HADAWAY",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127641,
+          "name": "Edward HILL",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 98134,
+          "name": "Geoffrey Edwin Harold SKINNER",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.hedge-end-south.2026-05-07",
+      "post": {
+        "id": "gss:E05011197",
+        "label": "Hedge End South",
+        "slug": "hedge-end-south",
+        "created": "2019-01-18T13:07:37.323514Z",
+        "last_updated": "2023-03-13T14:19:32.656475Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.hedge-end-south.2026-05-07/sopn/2026-04-09T17%3A06%3A21.677931%2B00%3A00/sopn-local.eastleigh.hedge-end-south.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 29108,
+          "name": "Jerry HALL",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127625,
+          "name": "Anthony Keith SAVAGE",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 122712,
+          "name": "John Edward SHEPHERD",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 110815,
+          "name": "Anna Belle SKINNER",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.hiltingbury.2026-05-07",
+      "post": {
+        "id": "gss:E05011198",
+        "label": "Hiltingbury",
+        "slug": "hiltingbury",
+        "created": "2019-01-18T13:08:15.800447Z",
+        "last_updated": "2023-03-13T14:19:32.727928Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.hiltingbury.2026-05-07/sopn/2026-04-09T17%3A06%3A22.115868%2B00%3A00/sopn-local.eastleigh.hiltingbury.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 87020,
+          "name": "Maud Nancy ATTRILL",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127382,
+          "name": "Hannah Amy BOWYER",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127383,
+          "name": "Michael James HIBBERD",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 73910,
+          "name": "Shelagh LEE",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125477,
+          "name": "Oliver SMITH",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.west-end-north.2026-05-07",
+      "post": {
+        "id": "gss:E05011199",
+        "label": "West End North",
+        "slug": "west-end-north",
+        "created": "2019-01-18T13:07:14.803937Z",
+        "last_updated": "2023-03-13T14:19:32.802422Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.west-end-north.2026-05-07/sopn/2026-04-09T17%3A06%3A22.695609%2B00%3A00/sopn-local.eastleigh.west-end-north.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 125486,
+          "name": "Elaine Alexandra AVERY",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 110801,
+          "name": "Christian James BROOKES",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127373,
+          "name": "Colin GIFFORD",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127374,
+          "name": "Roy Gordon RUSSELL",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 5451,
+          "name": "Bruce Robert TENNENT",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.eastleigh.west-end-south.2026-05-07",
+      "post": {
+        "id": "gss:E05011200",
+        "label": "West End South",
+        "slug": "west-end-south",
+        "created": "2019-01-18T13:07:17.387809Z",
+        "last_updated": "2023-03-13T14:19:32.859138Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.eastleigh.west-end-south.2026-05-07/sopn/2026-04-09T17%3A06%3A23.106257%2B00%3A00/sopn-local.eastleigh.west-end-south.2026-05-07.pdf",
+      "sopn_source_url": "https://www.eastleigh.gov.uk/media/16480/sopn-borough-wards.pdf",
+      "candidates": [
+        {
+          "person_id": 127388,
+          "name": "David Andrew BERRY",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 127389,
+          "name": "Steve HUMBY",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 87057,
+          "name": "Roger Allen VIVIAN",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 98102,
+          "name": "Dave WAGHORN",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    }
+  ]
+}

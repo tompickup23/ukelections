@@ -1,0 +1,963 @@
+{
+  "snapshot": {
+    "snapshot_id": "dc-ballots-2026-05-07-f2d10be9b458",
+    "source_name": "Democracy Club Candidates API",
+    "source_url": "https://candidates.democracyclub.org.uk/api/next/ballots/?election_date=2026-05-07",
+    "retrieved_at": "2026-04-25T13:18:53.287Z",
+    "licence": "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
+    "sha256": "f2d10be9b4586f99c9ca12ceeb3ff4e7188528533f5bc1763103201e3ff78b3a",
+    "quality_status": "imported_quarantined",
+    "review_notes": "Bulk DC API fetch. Verify candidate locks + cancellations + SoPN URLs before any per-contest publication."
+  },
+  "election_group": {
+    "election_id": "local.norwich.2026-05-07",
+    "name": "Norwich local election",
+    "classification": {
+      "tier": "local",
+      "model_family_hint": "local_fptp"
+    }
+  },
+  "ballots": [
+    {
+      "ballot_paper_id": "local.norwich.bowthorpe.2026-05-07",
+      "post": {
+        "id": "gss:E05012901",
+        "label": "Bowthorpe",
+        "slug": "bowthorpe",
+        "created": "2020-02-03T14:07:08.502299Z",
+        "last_updated": "2023-03-13T14:20:34.935553Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.bowthorpe.2026-05-07/sopn/2026-04-10T16%3A20%3A07.276324%2B00%3A00/local.norwich.bowthorpe.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Bowthorpe-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 41089,
+          "name": "Neil Hardman",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 112676,
+          "name": "Rebeka Jones",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138569,
+          "name": "Mike Sands",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138571,
+          "name": "Amber Smith",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 113142,
+          "name": "Nick Taylor",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.catton-grove.2026-05-07",
+      "post": {
+        "id": "gss:E05012902",
+        "label": "Catton Grove",
+        "slug": "catton-grove",
+        "created": "2020-02-03T14:06:42.017756Z",
+        "last_updated": "2023-03-13T14:20:35.001708Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.catton-grove.2026-05-07/sopn/2026-04-10T16%3A20%3A07.734543%2B00%3A00/local.norwich.catton-grove.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Catton-Grove-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 138589,
+          "name": "Mike Conroy",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138590,
+          "name": "George Andrew Heaney",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 56191,
+          "name": "Nigel Clifford Lubbock",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17489,
+          "name": "Tony Arthur Park",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 57193,
+          "name": "Samuel Walker",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.crome.2026-05-07",
+      "post": {
+        "id": "gss:E05012903",
+        "label": "Crome",
+        "slug": "crome",
+        "created": "2020-02-03T14:07:05.913531Z",
+        "last_updated": "2023-03-13T14:20:35.109754Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.crome.2026-05-07/sopn/2026-04-10T16%3A20%3A08.382053%2B00%3A00/local.norwich.crome.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Crome-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 138604,
+          "name": "Tim Day",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17570,
+          "name": "Richard Alan Edwards",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 102434,
+          "name": "Tod James",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 113144,
+          "name": "Philip Jimenez",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 81221,
+          "name": "Claire Tamar Kidman",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138701,
+          "name": "Kai Andrew Stephens",
+          "party_name": "British Democratic Party",
+          "party_ec_id": "PP1765",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.eaton.2026-05-07",
+      "post": {
+        "id": "gss:E05012904",
+        "label": "Eaton",
+        "slug": "eaton",
+        "created": "2020-02-03T14:06:58.562830Z",
+        "last_updated": "2023-03-13T14:20:35.209113Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.eaton.2026-05-07/sopn/2026-04-10T16%3A20%3A08.881895%2B00%3A00/local.norwich.eaton.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Eaton-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 61068,
+          "name": "Caroline Ackroyd",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138622,
+          "name": "Bert Bremner",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 40884,
+          "name": "Iain Gwynn",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17509,
+          "name": "Jane Isobel Saunders",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138623,
+          "name": "Thomas Edward Waterhouse",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.lakenham.2026-05-07",
+      "post": {
+        "id": "gss:E05012905",
+        "label": "Lakenham",
+        "slug": "lakenham",
+        "created": "2020-02-03T14:06:58.925364Z",
+        "last_updated": "2023-03-13T14:20:35.286766Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.lakenham.2026-05-07/sopn/2026-04-10T16%3A20%3A09.383438%2B00%3A00/local.norwich.lakenham.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Lakenham-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 61307,
+          "name": "Carol Denise Chilton",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 136031,
+          "name": "Richard Eminson",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 55418,
+          "name": "Robert Hammond",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 136032,
+          "name": "Ashlee David Jones",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 81486,
+          "name": "Gurpreet Padda",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.mancroft.2026-05-07",
+      "post": {
+        "id": "gss:E05012906",
+        "label": "Mancroft",
+        "slug": "mancroft",
+        "created": "2020-02-03T14:06:43.536076Z",
+        "last_updated": "2023-03-13T14:20:35.355346Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.mancroft.2026-05-07/sopn/2026-04-10T16%3A20%3A09.910190%2B00%3A00/local.norwich.mancroft.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Mancroft-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 136023,
+          "name": "Sing On Lee",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 136024,
+          "name": "Clara Lynch",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 41158,
+          "name": "Cavan Conan Stewart",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 24190,
+          "name": "Ian Clifford Stutely",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 131667,
+          "name": "Mark Shaun Tucker",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.mile-cross.2026-05-07",
+      "post": {
+        "id": "gss:E05012907",
+        "label": "Mile Cross",
+        "slug": "mile-cross",
+        "created": "2020-02-03T14:07:01.576634Z",
+        "last_updated": "2023-03-13T14:20:35.450996Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.mile-cross.2026-05-07/sopn/2026-04-10T16%3A20%3A10.393792%2B00%3A00/local.norwich.mile-cross.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Mile-Cross-Ward-7-May-26.pdf",
+      "candidates": [
+        {
+          "person_id": 121975,
+          "name": "Craig Gordon Barker",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 61105,
+          "name": "Sean Timothy Bennett",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 125429,
+          "name": "Georgia Elizabeth Brumby",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 113137,
+          "name": "Georgi Dimitrov",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138722,
+          "name": "Sevi Marshall",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.nelson.2026-05-07",
+      "post": {
+        "id": "gss:E05012908",
+        "label": "Nelson",
+        "slug": "nelson",
+        "created": "2020-02-03T14:06:56.379884Z",
+        "last_updated": "2023-03-13T14:20:35.515165Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.nelson.2026-05-07/sopn/2026-04-10T16%3A20%3A11.280752%2B00%3A00/local.norwich.nelson.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Nelson-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 61197,
+          "name": "Denise Eileen Carlo",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138655,
+          "name": "Richard John Edmunds",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 107892,
+          "name": "Michael Tony Howard",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 121754,
+          "name": "Marlowe North",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138656,
+          "name": "James Nutman",
+          "party_name": "Communist Party of Britain",
+          "party_ec_id": "PP78",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 61279,
+          "name": "John Clarke Ward",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.sewell.2026-05-07",
+      "post": {
+        "id": "gss:E05012909",
+        "label": "Sewell",
+        "slug": "sewell",
+        "created": "2020-02-03T14:07:04.588140Z",
+        "last_updated": "2023-03-13T14:20:35.600660Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.sewell.2026-05-07/sopn/2026-04-10T16%3A20%3A11.767580%2B00%3A00/local.norwich.sewell.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Sewell-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 61230,
+          "name": "Helen Bernadette Arundell",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138691,
+          "name": "Sophia Della Corte",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138692,
+          "name": "Michelle Solange Gregory",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 55419,
+          "name": "Christine Mackie",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138693,
+          "name": "Alexander Ben Stevens",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.thorpe-hamlet.2026-05-07",
+      "post": {
+        "id": "gss:E05012910",
+        "label": "Thorpe Hamlet",
+        "slug": "thorpe-hamlet",
+        "created": "2020-02-03T14:07:06.021740Z",
+        "last_updated": "2023-03-13T14:20:35.701244Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.thorpe-hamlet.2026-05-07/sopn/2026-04-10T16%3A20%3A12.232613%2B00%3A00/local.norwich.thorpe-hamlet.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Thorpe-Hamlet-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 131834,
+          "name": "Stephen Bailey",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 61255,
+          "name": "Jeremy Nigel Hooke",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 61256,
+          "name": "Simon Mark Jones",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 107971,
+          "name": "Jane Christine Overhill",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 133590,
+          "name": "Bliss Wylie",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.town-close.2026-05-07",
+      "post": {
+        "id": "gss:E05012911",
+        "label": "Town Close",
+        "slug": "town-close",
+        "created": "2020-02-03T14:07:03.906326Z",
+        "last_updated": "2023-03-13T14:20:35.785191Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.town-close.2026-05-07/sopn/2026-04-10T16%3A20%3A13.130283%2B00%3A00/local.norwich.town-close.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Town-Close-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 138740,
+          "name": "Lisa Charlotte Alston",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138741,
+          "name": "Mark Broome",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17550,
+          "name": "Mary Josephine Chacksfield",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17546,
+          "name": "David Angus Fairbairn",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138742,
+          "name": "Cate Oliver",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.university.2026-05-07",
+      "post": {
+        "id": "gss:E05012912",
+        "label": "University",
+        "slug": "university",
+        "created": "2020-02-03T14:07:01.896800Z",
+        "last_updated": "2023-03-13T14:20:35.867931Z"
+      },
+      "winner_count": 1,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.university.2026-05-07/sopn/2026-04-10T16%3A20%3A13.582699%2B00%3A00/local.norwich.university.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-University-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 138744,
+          "name": "Matthew Ainsley",
+          "party_name": "Labour and Co-operative Party",
+          "party_ec_id": "joint-party:53-119",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138745,
+          "name": "Jenny Ashburn",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 92092,
+          "name": "James Andrew Hawketts",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138746,
+          "name": "Patricia Marie Menaul",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 134101,
+          "name": "Tammy Searle",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    },
+    {
+      "ballot_paper_id": "local.norwich.wensum.2026-05-07",
+      "post": {
+        "id": "gss:E05012913",
+        "label": "Wensum",
+        "slug": "wensum",
+        "created": "2020-02-03T14:06:45.508246Z",
+        "last_updated": "2023-03-13T14:20:35.927328Z"
+      },
+      "winner_count": 2,
+      "cancelled": false,
+      "candidates_locked": true,
+      "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.norwich.wensum.2026-05-07/sopn/2026-04-10T16%3A20%3A14.035116%2B00%3A00/local.norwich.wensum.2026-05-07-sopn.pdf",
+      "sopn_source_url": "https://www.norwich.gov.uk/sites/default/files/2026-04/SOPN-Wensum-Ward-7-May-2026.pdf",
+      "candidates": [
+        {
+          "person_id": 138753,
+          "name": "Tom Butterworth",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 24434,
+          "name": "Gordon Richard Dean",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 40957,
+          "name": "John Fisher",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 102234,
+          "name": "Andrew Hadley",
+          "party_name": "Conservative and Unionist Party",
+          "party_ec_id": "PP52",
+          "party_description_text": "The Conservative Party Candidate",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17572,
+          "name": "Kevin Joseph Patrick Maguire",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 17559,
+          "name": "Ben Price",
+          "party_name": "Green Party",
+          "party_ec_id": "PP63",
+          "party_description_text": "The Green Party",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138570,
+          "name": "Joe Skipper",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138688,
+          "name": "Kevin Spilling",
+          "party_name": "Reform UK",
+          "party_ec_id": "PP7931",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 138754,
+          "name": "Maggie Wheeler",
+          "party_name": "Labour Party",
+          "party_ec_id": "PP53",
+          "party_description_text": null,
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        },
+        {
+          "person_id": 55365,
+          "name": "Alan William Wright",
+          "party_name": "Liberal Democrats",
+          "party_ec_id": "PP90",
+          "party_description_text": "Liberal Democrat",
+          "party_list_position": null,
+          "deselected": false,
+          "elected": null
+        }
+      ]
+    }
+  ]
+}
