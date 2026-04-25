@@ -28,7 +28,12 @@ function step(label, cmd, cmdArgs = [], opts = {}) {
 }
 
 function run(label, scriptPath) {
-  step(label, "node", [scriptPath]);
+  if (scriptPath === null) {
+    // Python step
+    step(label, "python3", ["scripts/aggregate-lsoa-to-ward-demographics.py"]);
+  } else {
+    step(label, "node", [scriptPath]);
+  }
 }
 
 const phases = [];
@@ -41,6 +46,8 @@ if (!skipFetch) {
 }
 phases.push(["2. Build ward identity table", "scripts/build-ward-identity.mjs"]);
 phases.push(["3. Build LA features (HP v7.0 + IMD + GE2024)", "scripts/build-la-features.mjs"]);
+phases.push(["3b. Aggregate Census 2021 + IMD LSOA → ward (P3)", null /* python */ ]);
+phases.push(["3c. Calibrate regional dampening (P5)", "scripts/calibrate-regional-dampening.mjs"]);
 phases.push(["4. Run bulk ward predictions (locals + mayors)", "scripts/run-bulk-predictions.mjs"]);
 phases.push(["5. Run 2024 backtest", "scripts/run-2024-backtest.mjs"]);
 phases.push(["6. Run Senedd 2026 predictions", "scripts/run-senedd-predictions.mjs"]);

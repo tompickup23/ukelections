@@ -10,6 +10,16 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { buildWardData, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 import { predictWard, DEFAULT_ASSUMPTIONS } from "../src/lib/electionModel.js";
+import { DISTRICT_TO_PARENT_COUNTY_2025 } from "../src/lib/county2025.js";
+
+const LONDON_BOROUGHS = new Set(["barking-and-dagenham", "barnet", "bexley", "brent", "bromley", "camden", "city-of-london", "croydon", "ealing", "enfield", "greenwich", "hackney", "hammersmith-and-fulham", "haringey", "harrow", "havering", "hillingdon", "hounslow", "islington", "kensington-and-chelsea", "kingston-upon-thames", "lambeth", "lewisham", "merton", "newham", "redbridge", "richmond-upon-thames", "southwark", "sutton", "tower-hamlets", "waltham-forest", "wandsworth", "westminster"]);
+const METROPOLITAN_BOROUGHS = new Set(["barnsley", "birmingham", "bolton", "bradford", "bury", "calderdale", "coventry", "doncaster", "dudley", "gateshead", "kirklees", "knowsley", "leeds", "liverpool", "manchester", "newcastle-upon-tyne", "north-tyneside", "oldham", "rochdale", "rotherham", "salford", "sandwell", "sefton", "sheffield", "solihull", "south-tyneside", "st-helens", "stockport", "sunderland", "tameside", "trafford", "wakefield", "walsall", "wigan", "wirral", "wolverhampton"]);
+function regionOf(councilSlug) {
+  if (LONDON_BOROUGHS.has(councilSlug)) return "london";
+  if (METROPOLITAN_BOROUGHS.has(councilSlug)) return "metropolitan";
+  if (DISTRICT_TO_PARENT_COUNTY_2025[councilSlug]) return "county_district";
+  return "other";
+}
 import {
   UK_WESTMINSTER_2019_GE_RESULT,
   UK_WESTMINSTER_2024_MAY_AVERAGE,
@@ -133,6 +143,11 @@ function main() {
   const polling2024 = UK_WESTMINSTER_2024_MAY_AVERAGE.shares;
   const baseline2019 = UK_WESTMINSTER_2019_GE_RESULT.shares;
 
+  let calibration = {};
+  try {
+    calibration = readJson("data/calibration/regional-dampening.json").calibration;
+  } catch {}
+
   const target2024Date = "2024-05-02";
 
   console.log(`Backtesting model against ${target2024Date} ...`);
@@ -166,9 +181,12 @@ function main() {
       ? { white_british_pct_projected: proj.white_british_pct_projected, asian_pct_projected: proj.asian_pct_projected }
       : null;
 
+    const region = regionOf(ward.council_slug);
+    const dampening = calibration?.[region]?.dampening ?? DEFAULT_ASSUMPTIONS.nationalToLocalDampening;
+    const wardAssumptions = { ...DEFAULT_ASSUMPTIONS, nationalToLocalDampening: dampening };
     const result = predictWard(
       wd,
-      DEFAULT_ASSUMPTIONS,
+      wardAssumptions,
       polling2024,      // current polling = May 2024
       baseline2019,     // prior GE = 2019
       demographics,

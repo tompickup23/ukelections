@@ -8,7 +8,20 @@ import path from "node:path";
 import { buildWardData, partiesOnBallotCanonical, restrictToBallot } from "../src/lib/adaptDcToWardData.js";
 import { predictWard, DEFAULT_ASSUMPTIONS, normalizePartyName } from "../src/lib/electionModel.js";
 import { pollingPair, UK_WESTMINSTER_2025_MAY_AVERAGE } from "../src/lib/nationalPolling.js";
-import { buildCounty2025Shares, applyCounty2025Anchor } from "../src/lib/county2025.js";
+import { buildCounty2025Shares, applyCounty2025Anchor, DISTRICT_TO_PARENT_COUNTY_2025 } from "../src/lib/county2025.js";
+import { applyIntervalsToBundle } from "../src/lib/intervals.js";
+import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
+import { existsSync as fsExistsSync } from "node:fs";
+
+const LONDON_BOROUGHS = new Set(["barking-and-dagenham", "barnet", "bexley", "brent", "bromley", "camden", "city-of-london", "croydon", "ealing", "enfield", "greenwich", "hackney", "hammersmith-and-fulham", "haringey", "harrow", "havering", "hillingdon", "hounslow", "islington", "kensington-and-chelsea", "kingston-upon-thames", "lambeth", "lewisham", "merton", "newham", "redbridge", "richmond-upon-thames", "southwark", "sutton", "tower-hamlets", "waltham-forest", "wandsworth", "westminster"]);
+const METROPOLITAN_BOROUGHS = new Set(["barnsley", "birmingham", "bolton", "bradford", "bury", "calderdale", "coventry", "doncaster", "dudley", "gateshead", "kirklees", "knowsley", "leeds", "liverpool", "manchester", "newcastle-upon-tyne", "north-tyneside", "oldham", "rochdale", "rotherham", "salford", "sandwell", "sefton", "sheffield", "solihull", "south-tyneside", "st-helens", "stockport", "sunderland", "tameside", "trafford", "wakefield", "walsall", "wigan", "wirral", "wolverhampton"]);
+
+function regionOf(councilSlug) {
+  if (LONDON_BOROUGHS.has(councilSlug)) return "london";
+  if (METROPOLITAN_BOROUGHS.has(councilSlug)) return "metropolitan";
+  if (DISTRICT_TO_PARENT_COUNTY_2025[councilSlug]) return "county_district";
+  return "other";
+}
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const CLAWD = "/Users/tompickup/clawd/burnley-council/data";
@@ -137,6 +150,31 @@ function main() {
   const county2025 = buildCounty2025Shares(history);
   console.log(`  ${Object.keys(county2025).length} counties/unitaries with 2025 cycle baseline`);
 
+  let calibration;
+  try {
+    calibration = readJson("data/calibration/regional-dampening.json").calibration;
+    console.log(`Loaded regional dampening calibration: ${JSON.stringify(Object.fromEntries(Object.entries(calibration).map(([r, c]) => [r, c.dampening])))}`);
+  } catch {
+    calibration = {};
+    console.log("No regional calibration found — using DEFAULT_ASSUMPTIONS dampening 0.65");
+  }
+
+  console.log("Building per-council GE2024 aggregates (P2 — replaces national fallback)...");
+  const councilSlugs = [...new Set(identity.wards.filter((w) => w.tier === "local" || w.tier === "mayor").map((w) => w.council_slug))];
+  const councilGe24 = buildCouncilGe2024Index(history, councilSlugs);
+  console.log(`  ${Object.keys(councilGe24).length} of ${councilSlugs.length} councils have a per-council GE2024 baseline.`);
+
+  let wardDemographics = {};
+  const wardDemoPath = path.join(ROOT, "data/features/ward-demographics-2021.json");
+  if (fsExistsSync(wardDemoPath)) {
+    try {
+      wardDemographics = readJson("data/features/ward-demographics-2021.json").wards || {};
+      console.log(`Loaded per-ward Census 2021 demographics for ${Object.keys(wardDemographics).length} wards (P3 partial).`);
+    } catch (e) {
+      console.log(`Could not load ward demographics: ${e}`);
+    }
+  }
+
   console.log("Running bulk predictions...");
   const predictions = {};
   const tally = { ok: 0, no_history: 0, no_baseline: 0, cancelled: 0, by_confidence: { high: 0, medium: 0, low: 0, none: 0 } };
@@ -171,13 +209,30 @@ function main() {
     }
 
     const ladCode = slugMap.map[ward.council_slug]?.lad24cd;
-    const { demographics, deprivation, ethnicProjections, constituencyResult } = ladCode
+    let ctx = ladCode
       ? buildLaContext(ladCode, laProj, laImd, laGe24)
       : { demographics: null, deprivation: null, ethnicProjections: null, constituencyResult: laGe24.national };
+    // P2: prefer per-council GE2024 aggregate over national fallback for the
+    // model's stale-baseline blend + Reform new-party-entry proxy.
+    const councilG24 = councilGe24[ward.council_slug];
+    if (councilG24) ctx = { ...ctx, constituencyResult: councilG24.shares };
+    // P3 partial: prefer per-ward Census demographics where available
+    // (currently 4.6% of wards via AI DOGE corpus; LSOA→ward bulk aggregation
+    // is a Stage 1.5 task that needs the ONS LSOA→ward lookup).
+    const wardDemo = ward.gss_code ? wardDemographics[ward.gss_code] : null;
+    if (wardDemo) {
+      ctx = { ...ctx, demographics: { white_british_pct: wardDemo.white_british_pct, asian_pct: wardDemo.asian_pct, age_65_plus_pct: wardDemo.age_65_plus_pct, _source: wardDemo._source } };
+    }
+    const { demographics, deprivation, ethnicProjections, constituencyResult } = ctx;
+
+    // Apply per-region calibrated national-swing dampening (P5).
+    const region = regionOf(ward.council_slug);
+    const dampening = calibration?.[region]?.dampening ?? DEFAULT_ASSUMPTIONS.nationalToLocalDampening;
+    const wardAssumptions = { ...DEFAULT_ASSUMPTIONS, nationalToLocalDampening: dampening };
 
     const result = predictWard(
       wd,
-      DEFAULT_ASSUMPTIONS,
+      wardAssumptions,
       nationalPolling,
       ge2024Result,
       demographics,
@@ -296,6 +351,18 @@ function main() {
   }
 
   console.log(`\nTally: ${JSON.stringify(tally, null, 2)}`);
+
+  // P8: bootstrap P10/P50/P90 intervals + win_probability per ward using
+  // residual SDs from the latest 2024 backtest.
+  console.log("\nApplying bootstrap intervals from 2024 backtest residual SDs...");
+  let residualSd = {};
+  try {
+    residualSd = readJson("data/backtests/may-2024-summary.json").residual_sd_per_party || {};
+    console.log(`  residual SDs loaded for ${Object.keys(residualSd).length} parties`);
+  } catch {
+    console.log("  no backtest summary yet — using default sigmas in intervals.js");
+  }
+  applyIntervalsToBundle(predictions, residualSd, 800);
 
   const sha = createHash("sha256").update(JSON.stringify(predictions)).digest("hex");
   const payload = {

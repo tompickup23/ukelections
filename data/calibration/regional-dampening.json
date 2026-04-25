@@ -1,0 +1,203 @@
+{
+  "snapshot": {
+    "generated_at": "2026-04-25T17:05:42.647Z",
+    "method": "Grid search over dampening ∈ [0.4, 0.8] using 2024 backtest fixtures restricted to actual 2024 ballot. MAE is averaged across Labour/Conservative/Reform UK/Liberal Democrats/Green Party.",
+    "grid": [
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.5,
+      0.65,
+      0.8
+    ],
+    "regions": [
+      "london",
+      "metropolitan",
+      "county_district",
+      "other"
+    ]
+  },
+  "calibration": {
+    "london": {
+      "dampening": 0.65,
+      "mae": null,
+      "ward_count": 0,
+      "note": "no fixtures available — defaulting to 0.65"
+    },
+    "metropolitan": {
+      "dampening": 0.1,
+      "mae": 0.0392534927983163,
+      "ward_count": 505,
+      "trials": [
+        {
+          "dampening": 0.1,
+          "mae": 0.0392534927983163,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.15,
+          "mae": 0.04089917299026106,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.2,
+          "mae": 0.043092596131198195,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.25,
+          "mae": 0.04578397290186327,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.3,
+          "mae": 0.04878666322269497,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.35,
+          "mae": 0.05187952752071567,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.4,
+          "mae": 0.05488884566045889,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.5,
+          "mae": 0.06069377228993907,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.65,
+          "mae": 0.06873987846844763,
+          "ward_count": 505
+        },
+        {
+          "dampening": 0.8,
+          "mae": 0.0758293505073851,
+          "ward_count": 505
+        }
+      ]
+    },
+    "county_district": {
+      "dampening": 0.1,
+      "mae": 0.04112248975999952,
+      "ward_count": 297,
+      "trials": [
+        {
+          "dampening": 0.1,
+          "mae": 0.04112248975999952,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.15,
+          "mae": 0.04183982654580548,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.2,
+          "mae": 0.04296089773814245,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.25,
+          "mae": 0.044368171471267585,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.3,
+          "mae": 0.046055056861124,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.35,
+          "mae": 0.047948908384812146,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.4,
+          "mae": 0.05013735476984907,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.5,
+          "mae": 0.05516126638713701,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.65,
+          "mae": 0.06312579743765025,
+          "ward_count": 297
+        },
+        {
+          "dampening": 0.8,
+          "mae": 0.07142374027278144,
+          "ward_count": 297
+        }
+      ]
+    },
+    "other": {
+      "dampening": 0.1,
+      "mae": 0.03827834016694802,
+      "ward_count": 457,
+      "trials": [
+        {
+          "dampening": 0.1,
+          "mae": 0.03827834016694802,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.15,
+          "mae": 0.038866822559726635,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.2,
+          "mae": 0.03994030275303226,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.25,
+          "mae": 0.04142249683051952,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.3,
+          "mae": 0.04319785302921114,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.35,
+          "mae": 0.04522608411107137,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.4,
+          "mae": 0.04757156671878455,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.5,
+          "mae": 0.05277137848639566,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.65,
+          "mae": 0.06128780677909844,
+          "ward_count": 457
+        },
+        {
+          "dampening": 0.8,
+          "mae": 0.07004871244546834,
+          "ward_count": 457
+        }
+      ]
+    }
+  }
+}

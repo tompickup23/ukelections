@@ -94,10 +94,37 @@ function rankWinner(shares) {
   return Object.entries(shares).sort((a, b) => b[1] - a[1])[0];
 }
 
+function constituency2021RegionalListShares(historyBundle, regionSlug) {
+  // Aggregate the 2021 sp.r.* regional list result for one region.
+  const id2021 = `sp.r.${regionSlug}.2021-05-06`;
+  const r = historyBundle.by_ballot[id2021];
+  if (!r) return null;
+  const total = (r.candidates || []).reduce((s, c) => s + (c.votes || 0), 0);
+  if (total <= 0) return null;
+  const shares = {};
+  for (const c of r.candidates || []) {
+    const p = dcPartyToCanonical(c.party_name);
+    shares[p] = (shares[p] || 0) + c.votes / total;
+  }
+  return shares;
+}
+
+function buildConstituencyToRegion(regionMappingFile) {
+  const out = {};
+  for (const [regionSlug, region] of Object.entries(regionMappingFile.regions || {})) {
+    for (const c of region.constituencies || []) {
+      out[c] = { regionSlug, regionName: region.name };
+    }
+  }
+  return out;
+}
+
 function main() {
   console.log("Loading inputs...");
   const identity = readJson("data/identity/wards-may-2026.json");
   const history = readJson("data/history/dc-historic-results.json");
+  const regionMap = readJson("data/identity/holyrood-2026-region-mapping.json");
+  const constituencyToRegion = buildConstituencyToRegion(regionMap);
 
   const constituencies = identity.wards.filter((w) => w.tier === "holyrood" && w.election_group_id === "sp.c.2026-05-07");
   const regions = identity.wards.filter((w) => w.tier === "holyrood" && w.election_group_id === "sp.r.2026-05-07");
@@ -110,6 +137,8 @@ function main() {
   console.log("\n=== Constituency predictions (FPTP) ===");
   const constituencyPredictions = [];
   const constituencyWinnerCounts = {};
+  // Track winners by region so the regional list step can apply real prior seats.
+  const constituencyWinsByRegion = {};
   for (const c of constituencies) {
     const baselineRow = constituency2021Shares(history, c.ballot_paper_id);
     let shares, source;
@@ -123,9 +152,18 @@ function main() {
     }
     const [winner, winnerShare] = rankWinner(shares);
     constituencyWinnerCounts[winner] = (constituencyWinnerCounts[winner] || 0) + 1;
+    const cSlug = c.ballot_paper_id.split(".").slice(2, -1).join(".");
+    const region = constituencyToRegion[cSlug];
+    if (region) {
+      const regKey = region.regionSlug;
+      if (!constituencyWinsByRegion[regKey]) constituencyWinsByRegion[regKey] = {};
+      constituencyWinsByRegion[regKey][winner] = (constituencyWinsByRegion[regKey][winner] || 0) + 1;
+    }
     constituencyPredictions.push({
       ballot_paper_id: c.ballot_paper_id,
       constituency: c.ward_name,
+      region: region?.regionName || null,
+      region_slug: region?.regionSlug || null,
       predicted_winner: winner,
       predicted_winner_share: +winnerShare.toFixed(4),
       shares: Object.fromEntries(Object.entries(shares).map(([k, v]) => [k, +v.toFixed(4)])),
@@ -141,16 +179,16 @@ function main() {
 
   console.log("\n=== Regional list (d'Hondt, with constituency-win compensation) ===");
   const regionPredictions = [];
-  const totalConstituencySeats = Object.values(constituencyWinnerCounts).reduce((s, v) => s + v, 0);
 
   for (let i = 0; i < regions.length; i += 1) {
     const r = regions[i];
-    // Apply Scottish-wide swing to 2021 list shares
-    const adjustedListShares = applyScottishSwing(baselineList, baselineList, polling);
-    // Apportion priorSeats: each region gets (total_party_constituency_wins / 8) of the constituency wins
-    const priorSeats = Object.fromEntries(
-      Object.entries(constituencyWinnerCounts).map(([p, n]) => [p, Math.round(n / N_REGIONS)])
-    );
+    const regionSlug = r.ballot_paper_id.split(".").slice(2, -1).join(".");
+    // P6: per-region 2021 list baseline (was Scotland-wide).
+    const regionalBaseline = constituency2021RegionalListShares(history, regionSlug) || baselineList;
+    // Apply Scotland-wide swing to the per-region baseline.
+    const adjustedListShares = applyScottishSwing(regionalBaseline, baselineList, polling);
+    // Real prior seats: count constituency winners by party in this region.
+    const priorSeats = constituencyWinsByRegion[regionSlug] || {};
     const allocation = allocateDhondtWithIntervals({
       shares: adjustedListShares,
       totalVotes: 200000,
@@ -163,8 +201,11 @@ function main() {
     regionPredictions.push({
       ballot_paper_id: r.ballot_paper_id,
       region: r.ward_name,
+      region_slug: regionSlug,
       list_seats: REGION_LIST_SEATS,
-      prior_constituency_seats_apportioned: priorSeats,
+      regional_baseline_2021: regionalBaseline,
+      adjusted_list_shares: adjustedListShares,
+      prior_constituency_seats: priorSeats,
       central: allocation.central,
       per_party: allocation.per_party,
       sopn_url: r.sopn_url,
