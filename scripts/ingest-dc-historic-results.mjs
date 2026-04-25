@@ -137,7 +137,14 @@ async function main() {
       return false;
     }
     if (r.tier === "local" || r.tier === "mayor" || r.tier === "pcc") {
-      return targetCouncils.has(r.council_slug);
+      // Keep results from May 2026 scope councils for ward-level baselines AND
+      // ALL May 2024-2026 results from any council slug for the parent-county
+      // 2025-baseline fallback (used to factor Reform's 2025 county breakthroughs
+      // into district-level 2026 predictions where the district's parent county
+      // had elections in 2025).
+      if (targetCouncils.has(r.council_slug)) return true;
+      if (r.year >= 2024 && r.year <= 2026) return true;
+      return false;
     }
     return true; // senedd / holyrood — keep all (national)
   });

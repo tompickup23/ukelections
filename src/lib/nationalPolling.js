@@ -60,6 +60,26 @@ export const UK_WESTMINSTER_2024_MAY_AVERAGE = {
   },
 };
 
+export const UK_WESTMINSTER_2025_MAY_AVERAGE = {
+  // May 2025 average — used as the "national context at time of 2025 county
+  // elections" snapshot, so the county-2025 anchor can compute swing-since-2025.
+  shares: {
+    "Reform UK": 0.255,
+    "Labour": 0.245,
+    "Conservative": 0.220,
+    "Liberal Democrats": 0.135,
+    "Green Party": 0.085,
+    "SNP": 0.025,
+    "Plaid Cymru": 0.005,
+    "Other": 0.030,
+  },
+  _meta: {
+    label: "UK Westminster vote intention — May 2025 average",
+    fieldwork: "2025-04-15 to 2025-05-01",
+    source: "Cross-pollster average — historical reference",
+  },
+};
+
 export const UK_WESTMINSTER_2024_GE_RESULT = {
   // Source: HoC Library "General election 2024 results" CBP-10009.
   // Vote share of valid votes cast across UK constituencies.
