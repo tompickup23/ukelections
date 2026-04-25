@@ -74,6 +74,15 @@ export function loadHistory() { return load().history; }
 export function loadLaProj() { return load().laProj; }
 export function loadLaImd() { return load().laImd; }
 
+let _wardDemo: any = null;
+export function loadWardDemographics() {
+  if (_wardDemo) return _wardDemo;
+  try {
+    _wardDemo = JSON.parse(readFileSync(path.join(ROOT, "data/features/ward-demographics-2021.json"), "utf8")).wards || {};
+  } catch { _wardDemo = {}; }
+  return _wardDemo;
+}
+
 export function partyColour(party: string): string {
   const map: Record<string, string> = {
     "Labour": "#c1121f",

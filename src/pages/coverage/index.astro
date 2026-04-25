@@ -1,0 +1,91 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadIdentity, loadSummary } from "../../lib/predictions";
+
+const identity = loadIdentity();
+const summary = loadSummary();
+const totals = identity.wards.reduce(
+  (acc: any, w: any) => {
+    acc.byTier[w.tier] = (acc.byTier[w.tier] || 0) + 1;
+    if (w.cancelled) acc.cancelled += 1;
+    return acc;
+  },
+  { byTier: {}, cancelled: 0 }
+);
+---
+
+<BaseLayout
+  title="Coverage — what we are and aren't predicting"
+  description="Honest scope statement for May 7 2026: 156 English councils, 6 mayoralties, Senedd Cymru, Scottish Parliament. What's in, what's out, and why."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Coverage</p>
+    <h1>What we are and aren't predicting</h1>
+    <p class="lede">
+      Every contested seat on 2026-05-07 is in scope — but each tier has a different model and a different confidence story. Read this before drawing conclusions.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Scope</p>
+      <h2>Confirmed via Democracy Club API</h2>
+    </div>
+    <table class="scope-table">
+      <thead><tr><th>Tier</th><th>Ballots</th><th>Coverage</th></tr></thead>
+      <tbody>
+        <tr><td>English locals</td><td>{totals.byTier.local || 0}</td><td>Full ward-level model with intervals — see /forecasts/may-2026/</td></tr>
+        <tr><td>Mayoral</td><td>{totals.byTier.mayor || 0}</td><td>Aggregated ward model — wide intervals, treat with caution</td></tr>
+        <tr><td>Senedd Cymru</td><td>{totals.byTier.senedd || 0}</td><td>First public estimate under new closed-list PR — see /forecasts/senedd-2026/</td></tr>
+        <tr><td>Scottish Parliament</td><td>{totals.byTier.holyrood || 0}</td><td>Constituency + regional list under new boundaries — see /forecasts/holyrood-2026/</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem">
+      6 ballots cancelled by the returning officer (likely candidate-death postponements).
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>What we publish</h2>
+    <ul>
+      <li><strong>Per-ward party share predictions</strong> for every English local + mayoral contest, with confidence tier and methodology breakdown.</li>
+      <li><strong>Per-council seat projections</strong> (top-N parties win the N seats up).</li>
+      <li><strong>Wales-wide Senedd seat projection</strong> (16 super-constituencies × 6 list seats = 96 seats).</li>
+      <li><strong>Scotland-wide Holyrood seat projection</strong> (73 FPTP constituencies + 56 list seats across 8 regions = 129 seats).</li>
+      <li><strong>2024 backtest</strong> showing actual model accuracy on the previous cycle.</li>
+      <li><strong>All sources</strong> — every ward page links to the Democracy Club Statement of Persons Nominated PDF and to historic declaration PDFs where available.</li>
+    </ul>
+
+    <h2>Per-ward demographic data coverage</h2>
+    <p>
+      <strong>76% of May 2026 wards (2,264 of 2,977)</strong> have ward-level Census 2021 + IMD 2019 data attached, enabling per-ward demographic adjustment (Reform demographic ceiling for high-Muslim wards, Independent boost for high-Asian wards, LD suburb signature, etc.). Coverage is built by aggregating ONS LSOA Census bulks (TS021 ethnicity + TS030 religion + TS054 tenure + TS066 economic activity + TS067 qualifications + TS004 country of birth) via the WD22/23/24/25 lookups + name-based fallback for placeholder-GSS wards from 2026 LGBCE reviews.
+    </p>
+    <p>
+      The remaining 24% (713 wards) fall back to LA-level Hamilton-Perry v7.0 ethnic projections back-extrapolated to May 2026 — a single demographic adjustment per local authority applied uniformly to its constituent wards. This is mainly: counties without 2025 cycles (Norfolk, Essex, Hampshire, Suffolk, Hertfordshire) where the GSS codes are county-division codes (E58...) not ward codes.
+    </p>
+
+    <h2>What we don't publish (yet)</h2>
+    <ul>
+      <li>Westminster (GB650) constituency forecasts — Stage 3 (no GE in May 2026).</li>
+      <li>Per-candidate vote predictions (party share + ward winner only).</li>
+      <li>BES Wave 27 panel-MRP — registration-walled SPSS download, deferred. Mitigation: per-ward Census + per-county 2025 anchor + multi-cycle local-party-strength stack already produces 82.7% / 5.69pp backtest.</li>
+      <li>Live election-night auto-call (manual updates only after the count).</li>
+    </ul>
+
+    <h2>Editorial framing</h2>
+    <p>
+      UK Elections is a public-utility election information site. We list parties by predicted share, never by ideology. We do not publish "watch lists", endorsements, or commentary. Every prediction is reproducible from cited sources.
+    </p>
+
+    <h2>Provenance and reproducibility</h2>
+    <p>
+      Every dataset that feeds the model is committed to the public repository at <a href="https://github.com/tompickup23/ukelections">tompickup23/ukelections</a>: ward identity (Democracy Club API), historic results (DC results API), LA features (HP v7.0 + IMD 2019), polling snapshots (named pollster averages with refresh dates). Predictions and backtest replays are persisted as JSON. Every page on this site can be regenerated by running the build pipeline against the same inputs.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.scope-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.scope-table th, .scope-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+.scope-table th { font-weight: 600; color: var(--muted); font-size: 0.875rem; }
+</style>

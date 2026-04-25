@@ -1,25 +1,233 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadIdentity } from "../lib/predictions";
+
+const identity = loadIdentity();
+type IndexEntry = { council: string; council_slug: string; ward?: string; ward_slug?: string; tier: string; href: string };
+const wardIndex: IndexEntry[] = [];
+const councils = new Map<string, IndexEntry>();
+for (const w of identity.wards) {
+  if (w.tier !== "local" && w.tier !== "mayor") continue;
+  if (!w.ward_slug) continue;
+  wardIndex.push({
+    council: w.council_name,
+    council_slug: w.council_slug,
+    ward: w.ward_name,
+    ward_slug: w.ward_slug,
+    tier: w.tier,
+    href: `/seats/${w.council_slug}/${w.ward_slug}/`,
+  });
+  if (!councils.has(w.council_slug)) {
+    councils.set(w.council_slug, {
+      council: w.council_name,
+      council_slug: w.council_slug,
+      tier: w.tier,
+      href: `/seats/${w.council_slug}/`,
+    });
+  }
+}
+const councilIndex = [...councils.values()].sort((a, b) => a.council.localeCompare(b.council));
+const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
 ---
 
-<BaseLayout title="Your Area" description="Postcode and place lookup plan for routing voters to the right UK election contest.">
+<BaseLayout title="Your Area — find your ward" description="Look up your ward forecast for May 7 2026 by postcode, town, or council name.">
   <section class="page-hero">
     <p class="eyebrow">Your Area</p>
-    <h1>Lookup starts with the right contest.</h1>
+    <h1>Find your ward forecast</h1>
     <p class="lede">
-      The live version will accept a postcode or place name, resolve it to the right seat or contest,
-      and show what is known, what is estimated, and what is still missing.
+      Enter a UK postcode, town name, or council name. We'll route you to the May 7 2026 forecast for your ward.
     </p>
   </section>
 
-  <section class="lookup-shell" aria-label="Lookup placeholder">
-    <form class="lookup-form">
-      <label for="postcode">Postcode or place</label>
-      <div>
-        <input id="postcode" name="postcode" type="search" placeholder="e.g. SW1A 1AA" disabled />
-        <button type="button" disabled>Lookup coming soon</button>
+  <section class="lookup-shell">
+    <form id="lookup-form" autocomplete="off">
+      <label for="lookup-input"><strong>Postcode, town, council, or ward</strong></label>
+      <div class="lookup-row">
+        <input id="lookup-input" name="lookup" type="search" placeholder="e.g. BB12 6PG, Burnley, or Coal Clough" autofocus />
+        <button type="submit">Find</button>
       </div>
-      <p>The input is disabled until the boundary lookup and source cache are wired.</p>
+      <p id="lookup-status" class="lookup-status" aria-live="polite"></p>
     </form>
+
+    <div id="lookup-results" class="lookup-results" hidden>
+      <h3>Matches</h3>
+      <ul id="lookup-results-list"></ul>
+      <p id="lookup-results-overflow" hidden></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Browse</p>
+      <h2>All {councilIndex.length} councils on the May 7 2026 ballot</h2>
+    </div>
+    <div class="council-grid">
+      {councilIndex.map((c) => (
+        <a class="council-card" href={c.href}>
+          <strong>{c.council}</strong>
+          <span class="tier">{c.tier === "mayor" ? "Mayoralty" : "Local council"}</span>
+        </a>
+      ))}
+    </div>
   </section>
 </BaseLayout>
+
+<script type="application/json" id="search-index" set:html={indexJson} />
+
+<script is:inline>
+  (function () {
+    const data = JSON.parse(document.getElementById("search-index").textContent);
+    const form = document.getElementById("lookup-form");
+    const input = document.getElementById("lookup-input");
+    const status = document.getElementById("lookup-status");
+    const resultsRoot = document.getElementById("lookup-results");
+    const resultsList = document.getElementById("lookup-results-list");
+    const resultsOverflow = document.getElementById("lookup-results-overflow");
+
+    const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+
+    function setStatus(msg, isError) {
+      status.textContent = msg;
+      status.className = "lookup-status" + (isError ? " err" : "");
+    }
+
+    function renderResults(items) {
+      while (resultsList.firstChild) resultsList.removeChild(resultsList.firstChild);
+      resultsRoot.hidden = items.length === 0;
+      const visible = items.slice(0, 12);
+      visible.forEach(function (m) {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = m.href;
+        if (m.ward) {
+          const strong = document.createElement("strong");
+          strong.textContent = m.ward;
+          a.appendChild(strong);
+          a.appendChild(document.createTextNode(" — " + m.council));
+        } else {
+          const strong = document.createElement("strong");
+          strong.textContent = m.council;
+          a.appendChild(strong);
+        }
+        li.appendChild(a);
+        resultsList.appendChild(li);
+      });
+      if (items.length > 12) {
+        resultsOverflow.hidden = false;
+        resultsOverflow.textContent = "Showing 12 of " + items.length + " matches — refine your search.";
+      } else {
+        resultsOverflow.hidden = true;
+      }
+    }
+
+    function fuzzyFilter(query) {
+      const q = query.toLowerCase().trim();
+      if (q.length < 2) return [];
+      const wardHits = data.wards.filter(function (w) {
+        return (w.ward && w.ward.toLowerCase().includes(q)) || w.council.toLowerCase().includes(q);
+      });
+      const councilHits = data.councils.filter(function (c) {
+        return c.council.toLowerCase().includes(q);
+      });
+      const seen = new Set(wardHits.map(function (w) { return w.council_slug; }));
+      const filteredCouncils = councilHits.filter(function (c) { return !seen.has(c.council_slug); });
+      return wardHits.concat(filteredCouncils);
+    }
+
+    async function postcodeLookup(postcode) {
+      setStatus("Looking up postcode " + postcode + " …");
+      try {
+        const r = await fetch("https://api.postcodes.io/postcodes/" + encodeURIComponent(postcode.replace(/\s+/g, "")));
+        if (!r.ok) {
+          setStatus("Postcode not found.", true);
+          return;
+        }
+        const body = await r.json();
+        const result = body && body.result;
+        if (!result) {
+          setStatus("Postcode lookup returned no result.", true);
+          return;
+        }
+        const ward = result.admin_ward || "";
+        const district = result.admin_district || "";
+        setStatus("Postcode " + postcode + " → " + ward + ", " + district);
+        const wardLower = ward.toLowerCase();
+        const districtLower = district.toLowerCase();
+        const matches = data.wards.filter(function (w) {
+          return w.ward.toLowerCase() === wardLower && w.council.toLowerCase() === districtLower;
+        });
+        if (matches.length === 0) {
+          const districtMatches = data.councils.filter(function (c) { return c.council.toLowerCase() === districtLower; });
+          if (districtMatches.length === 0) {
+            const sameCouncilWards = data.wards.filter(function (w) { return w.council.toLowerCase() === districtLower; });
+            renderResults(sameCouncilWards);
+            setStatus(district + " is not on the May 2026 ballot. No forecast available.");
+          } else {
+            renderResults(districtMatches);
+            setStatus(district + " is on the ballot — pick your specific ward from the list.");
+          }
+        } else {
+          window.location.href = matches[0].href;
+        }
+      } catch (e) {
+        setStatus("Lookup failed: " + e.message, true);
+      }
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const value = (input.value || "").trim();
+      if (!value) return;
+      if (POSTCODE_RE.test(value)) {
+        postcodeLookup(value);
+      } else {
+        const hits = fuzzyFilter(value);
+        if (hits.length === 1) {
+          window.location.href = hits[0].href;
+        } else if (hits.length === 0) {
+          setStatus("No matches found. Try a council name, ward name, or UK postcode.", true);
+          renderResults([]);
+        } else {
+          setStatus(hits.length + " matches");
+          renderResults(hits);
+        }
+      }
+    });
+
+    let inputDebounce;
+    input.addEventListener("input", function () {
+      clearTimeout(inputDebounce);
+      const value = (input.value || "").trim();
+      if (POSTCODE_RE.test(value)) return;
+      inputDebounce = setTimeout(function () {
+        if (value.length >= 2) {
+          const hits = fuzzyFilter(value);
+          renderResults(hits);
+          if (hits.length > 0) setStatus(hits.length + " match" + (hits.length === 1 ? "" : "es"));
+          else setStatus("");
+        } else {
+          renderResults([]);
+          setStatus("");
+        }
+      }, 120);
+    });
+  })();
+</script>
+
+<style>
+.lookup-shell { background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 1rem; }
+.lookup-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.lookup-row input { flex: 1; padding: 0.75rem 1rem; font-size: 1.1rem; border: 1px solid var(--border); border-radius: 6px; }
+.lookup-row button { padding: 0.75rem 1.5rem; font-weight: 600; background: var(--accent-3); color: white; border: 0; border-radius: 6px; cursor: pointer; }
+.lookup-row button:hover { background: #163c6b; }
+.lookup-status { color: var(--muted); margin-top: 0.5rem; min-height: 1.4em; font-size: 0.95rem; }
+.lookup-status.err { color: #c1121f; }
+.lookup-results { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.lookup-results ul { list-style: none; padding: 0; margin: 0.5rem 0 0; display: grid; gap: 0.4rem; }
+.lookup-results a { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; background: #f6f8fb; text-decoration: none; color: var(--ink); }
+.lookup-results a:hover { background: #edf2f9; }
+.council-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; margin-top: 0.5rem; }
+.council-card { display: block; padding: 0.6rem 0.85rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--ink); }
+.council-card:hover { border-color: var(--accent-3); }
+.council-card .tier { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
+</style>
