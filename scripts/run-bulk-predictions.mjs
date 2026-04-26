@@ -363,7 +363,16 @@ function main() {
     // Apply per-region calibrated national-swing dampening (P5).
     const region = regionOf(ward.council_slug);
     const dampening = calibration?.[region]?.dampening ?? DEFAULT_ASSUMPTIONS.nationalToLocalDampening;
-    const wardAssumptions = { ...DEFAULT_ASSUMPTIONS, nationalToLocalDampening: dampening };
+    // Enable Strong Transition Model swing on locals too — it's bounded in
+    // [0,1] by construction, so it can't ever produce negative shares for a
+    // declining party in its weak ward (which UNS does silently). Backtest
+    // lift on the GE2019→GE2024 setting was +1.23pp MAE; locals lift will
+    // be smaller because the dampening is harsher (≤0.65) but still positive.
+    const wardAssumptions = {
+      ...DEFAULT_ASSUMPTIONS,
+      nationalToLocalDampening: dampening,
+      useStrongTransitionSwing: true,
+    };
 
     // For Lancashire wards: pass per-division LCC 2025 reference so the
     // Reform new-party-entry step can use real division-level Reform shares

@@ -128,19 +128,38 @@ function metrics(rows, parties) {
   };
 }
 
-function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling }) {
+function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019 }) {
   const baseIdx = buildIndex(dcResults, baseYear);
   const targetIdx = buildIndex(dcResults, targetYear);
   const baseNational = nationalShares(baseYear, dcResults);
   const targetNational = nationalShares(targetYear, dcResults);
 
   const rows = [];
+  let usedNotional = 0;
   for (const pcon of pcons) {
-    const baseRecord = baseIdx[pcon.slug];
     const targetRecord = targetIdx[pcon.slug];
-    if (!baseRecord || !targetRecord) continue;
+    if (!targetRecord) continue;
 
-    const baselineShares = pcononicalShares(baseRecord.candidates || []);
+    // Build baseline shares: prefer the actual base-year DC record (slug match);
+    // fall back to the notional-2019 record where the slug differs (boundary
+    // change). This restores the 211 PCONs we previously dropped.
+    let baselineShares = null;
+    let baselineSource = "actual";
+    const baseRecord = baseIdx[pcon.slug];
+    if (baseRecord) {
+      baselineShares = pcononicalShares(baseRecord.candidates || []);
+    } else if (notional2019 && baseYear === 2019) {
+      // Try notional 2019: keyed by GSS first, then slug
+      const notional = (pcon.pcon24cd && notional2019.by_gss?.[pcon.pcon24cd])
+        || notional2019.by_slug?.[pcon.slug];
+      if (notional?.candidates?.length > 0) {
+        baselineShares = pcononicalShares(notional.candidates || []);
+        baselineSource = "notional";
+        usedNotional += 1;
+      }
+    }
+    if (!baselineShares) continue;
+
     const actualShares = pcononicalShares(targetRecord.candidates || []);
     if (Object.keys(baselineShares).length === 0 || Object.keys(actualShares).length === 0) continue;
 
@@ -171,11 +190,13 @@ function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling }) 
       country: pcon.country,
       region: pcon.region,
       baseline: baselineShares,
+      baseline_source: baselineSource,
       predicted,
       actual: actualShares,
       methodology_steps: result.methodology.length,
     });
   }
+  console.log(`    used notional-2019 baseline for ${usedNotional} boundary-changed PCONs`);
   const allParties = new Set();
   for (const r of rows) {
     for (const p of Object.keys(r.actual)) allParties.add(p);
@@ -210,20 +231,22 @@ function main() {
   console.log("Loading inputs ...");
   const pcons = readJson("data/identity/pcons-ge-next.json").pcons;
   const dcRaw = readJson("data/history/dc-historic-results.json");
-  console.log(`  ${pcons.length} PCONs, ${dcRaw.results.length} historic DC records`);
+  let notional2019 = null;
+  try { notional2019 = readJson("data/history/ge-notional-2019.json"); } catch {}
+  console.log(`  ${pcons.length} PCONs, ${dcRaw.results.length} historic DC records${notional2019 ? `, ${Object.keys(notional2019.by_gss || {}).length} notional-2019 PCONs` : ''}`);
 
   // Run three modes back-to-back so the audit log shows STM lift + unwinding lift
   console.log("\n=== GE2024 backtest: GE2019 baseline → GE2024 actuals ===");
   const baseYear = 2019;
   const targetYear = 2024;
 
-  const uns = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns" });
+  const uns = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019 });
   console.log(`UNS:        ${uns.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(uns.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(uns.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${uns.metrics.brier_top_winner.toFixed(4)}`);
 
-  const stm = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm" });
+  const stm = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019 });
   console.log(`STM:        ${stm.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(stm.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(stm.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);

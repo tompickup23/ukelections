@@ -1,8 +1,8 @@
 {
   "snapshot": {
-    "generated_at": "2026-04-26T01:15:37.809Z",
+    "generated_at": "2026-04-26T02:40:30.171Z",
     "model_version": "ukelections.senedd.v0.1.0-may2026-stage1",
-    "sha256": "d48a61f9eb5cdef8a7306a5eee64d9bb6575a82707941c36abde9b855d3b534b",
+    "sha256": "1d9b6b88627cbffd4e685dae0fdc744506d6b7461fbc87a37214f4d9742370c5",
     "method_summary": "Senedd 2026 (Senedd Cymru Act 2024 Schedule 1 — closed-list PR, 16 super-constituencies × 6 seats). Per-super-constituency baseline aggregated from the constituent 2024 GE Welsh constituency pair (using hardcoded pairings with confidence flags), then Welsh-wide swing applied per party from the Apr 2026 Welsh polling average. d'Hondt allocation per area with σ=5pp bootstrap intervals.",
     "input_baseline_2024_welsh_ge": {
       "Labour": 0.366,
@@ -34,10 +34,10 @@
   },
   "welsh_seat_total_projection": {
     "Labour": {
-      "p10": 13,
-      "p50": 24,
-      "p90": 33,
-      "central": 25
+      "p10": 12,
+      "p50": 26,
+      "p90": 28,
+      "central": 26
     },
     "Reform UK": {
       "p10": 17,
@@ -46,16 +46,16 @@
       "central": 27
     },
     "Plaid Cymru": {
-      "p10": 21,
+      "p10": 20,
       "p50": 28,
       "p90": 39,
-      "central": 30
+      "central": 29
     },
     "Conservative": {
-      "p10": 4,
+      "p10": 3,
       "p50": 9,
       "p90": 19,
-      "central": 10
+      "central": 11
     },
     "Green Party": {
       "p10": 0,
@@ -67,7 +67,7 @@
       "p10": 1,
       "p50": 2,
       "p90": 10,
-      "central": 3
+      "central": 2
     },
     "Independent": {
       "p10": 0,
@@ -178,11 +178,11 @@
       },
       "per_party": {
         "Labour": {
-          "p10": 2,
+          "p10": 1,
           "p50": 2,
-          "p90": 3,
+          "p90": 2,
           "central": 2,
-          "win_probability": 1
+          "win_probability": 0.999
         },
         "Reform UK": {
           "p10": 2,
@@ -196,61 +196,61 @@
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.996
+          "win_probability": 0.9985
         },
         "Conservative": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.014
+          "win_probability": 0.0795
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0715
+          "win_probability": 0.091
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0305
+          "win_probability": 0.0395
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.01
+          "win_probability": 0.012
         },
         "Heritage Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0075
+          "win_probability": 0.0085
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0275
+          "win_probability": 0.0315
         }
       },
       "adjusted_shares": {
-        "Labour": 0.3324783611184863,
-        "Reform UK": 0.29593243526501867,
-        "Plaid Cymru": 0.2395810706949316,
-        "Conservative": 0.017213677841282277,
-        "Green Party": 0.04873516300778357,
-        "Liberal Democrats": 0.028866044353768116,
-        "Independent": 0.00863598887662274,
-        "Heritage Party": 0.002557258842106734,
-        "Other": 0.026000000000000002
+        "Labour": 0.28027446949421336,
+        "Reform UK": 0.3017917281360358,
+        "Plaid Cymru": 0.24928252282563204,
+        "Conservative": 0.04943834131520161,
+        "Green Party": 0.05036808069314899,
+        "Liberal Democrats": 0.02915420629824436,
+        "Independent": 0.008635988876622739,
+        "Heritage Party": 0.0025572588421067335,
+        "Other": 0.02849740351879419
       },
       "pair_source": "2024 GE Welsh constituency pair: aberafan-maesteg + rhondda-and-ogmore (high)",
       "pair": [
@@ -298,7 +298,7 @@
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.6815
+          "win_probability": 0.8615
         },
         "Plaid Cymru": {
           "p10": 2,
@@ -312,77 +312,77 @@
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.976
+          "win_probability": 0.934
         },
         "Reform UK": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.921
+          "win_probability": 0.9115
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.037
+          "win_probability": 0.0405
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.064
+          "win_probability": 0.0635
         },
         "Socialist Labour Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0115
+          "win_probability": 0.012
         },
         "Climate Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.007
+          "win_probability": 0.009
         },
         "The Official Monster Raving Loony Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0135
+          "win_probability": 0.013
         },
         "Libertarian Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.008
+          "win_probability": 0.0085
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0305
+          "win_probability": 0.028
         }
       },
       "adjusted_shares": {
-        "Labour": 0.13512373465431834,
-        "Plaid Cymru": 0.36621107042860224,
-        "Conservative": 0.2036132888218824,
-        "Reform UK": 0.18637691147964677,
-        "Liberal Democrats": 0.029424186948093907,
-        "Green Party": 0.04345110919664011,
+        "Labour": 0.16703820840821543,
+        "Plaid Cymru": 0.36092697111405203,
+        "Conservative": 0.18258092058705885,
+        "Reform UK": 0.18318552476491848,
+        "Liberal Democrats": 0.029267233503107268,
+        "Green Party": 0.04256170634171583,
         "Socialist Labour Party": 0.005707516691794099,
         "Climate Party": 0.0013999569244023261,
         "The Official Monster Raving Loony Party": 0.002099935386603489,
         "Libertarian Party": 0.0005922894680163687,
-        "Other": 0.026000000000000002
+        "Other": 0.02463973681011581
       },
       "pair_source": "2024 GE Welsh constituency pair: bangor-aberconwy + ynys-mon (high)",
       "pair": [
@@ -412,8 +412,8 @@
       "super_constituency": "Blaenau Gwent Caerffili Rhymni",
       "seats": 6,
       "central": {
-        "Labour": 3,
-        "Plaid Cymru": 2,
+        "Labour": 2,
+        "Plaid Cymru": 3,
         "Conservative": 0,
         "Independent": 0,
         "Green Party": 0,
@@ -425,17 +425,17 @@
       },
       "per_party": {
         "Labour": {
-          "p10": 2,
+          "p10": 1,
           "p50": 2,
-          "p90": 3,
-          "central": 3,
-          "win_probability": 1
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9995
         },
         "Plaid Cymru": {
           "p10": 2,
           "p50": 2,
           "p90": 3,
-          "central": 2,
+          "central": 3,
           "win_probability": 1
         },
         "Conservative": {
@@ -443,28 +443,28 @@
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.184
+          "win_probability": 0.319
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0635
+          "win_probability": 0.0645
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.2035
+          "win_probability": 0.216
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.106
+          "win_probability": 0.1075
         },
         "Workers Party of Britain": {
           "p10": 0,
@@ -478,34 +478,34 @@
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0115
+          "win_probability": 0.0135
         },
         "Reform UK": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9305
+          "win_probability": 0.946
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.046
+          "win_probability": 0.0485
         }
       },
       "adjusted_shares": {
-        "Labour": 0.29245648218792186,
-        "Plaid Cymru": 0.2765237983449733,
-        "Conservative": 0.06774000821644463,
+        "Labour": 0.2573110963373322,
+        "Plaid Cymru": 0.2849518680263529,
+        "Conservative": 0.08552857729746044,
         "Independent": 0.035345384118786315,
-        "Green Party": 0.06643071776512707,
-        "Liberal Democrats": 0.04783831210751805,
+        "Green Party": 0.06784930375110185,
+        "Liberal Democrats": 0.048088650810925365,
         "Workers Party of Britain": 0.00836316685251482,
         "Communist Party of Britain": 0.004533716767415928,
-        "Reform UK": 0.17476841363929807,
-        "Other": 0.026000000000000002
+        "Reform UK": 0.17985863394191348,
+        "Other": 0.028169602096196737
       },
       "pair_source": "2024 GE Welsh constituency pair: blaenau-gwent-and-rhymney + caerphilly (high)",
       "pair": [
@@ -551,21 +551,21 @@
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.949
+          "win_probability": 0.948
         },
         "Conservative": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.676
+          "win_probability": 0.671
         },
         "Labour": {
-          "p10": 0,
+          "p10": 1,
           "p50": 1,
-          "p90": 1,
+          "p90": 2,
           "central": 1,
-          "win_probability": 0.798
+          "win_probability": 0.9135
         },
         "Reform UK": {
           "p10": 1,
@@ -579,47 +579,47 @@
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9595
+          "win_probability": 0.927
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.109
+          "win_probability": 0.1005
         },
         "Abolish The Welsh Assembly Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.017
+          "win_probability": 0.0155
         },
         "The Official Monster Raving Loony Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.013
+          "win_probability": 0.0125
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0515
+          "win_probability": 0.045
         }
       },
       "adjusted_shares": {
-        "Liberal Democrats": 0.1884992213185672,
-        "Conservative": 0.132910884236027,
-        "Labour": 0.1520233027628771,
-        "Reform UK": 0.2540783872642326,
-        "Plaid Cymru": 0.18901984195650923,
-        "Green Party": 0.05044292553498299,
+        "Liberal Democrats": 0.18815480259827938,
+        "Conservative": 0.13207920302573356,
+        "Labour": 0.1767346819131262,
+        "Reform UK": 0.24707520661838017,
+        "Plaid Cymru": 0.1774244117068192,
+        "Green Party": 0.048491219453352,
         "Abolish The Welsh Assembly Party": 0.004291399896175809,
         "The Official Monster Raving Loony Party": 0.0027340370306281362,
-        "Other": 0.026000000000000002
+        "Other": 0.023015037757505543
       },
       "pair_source": "2024 GE Welsh constituency pair: brecon-radnor-and-cwm-tawe + neath-and-swansea-east (high)",
       "pair": [
@@ -662,69 +662,69 @@
         "Labour": {
           "p10": 1,
           "p50": 2,
-          "p90": 3,
+          "p90": 2,
           "central": 2,
-          "win_probability": 0.9995
+          "win_probability": 0.9985
         },
         "Conservative": {
           "p10": 0,
-          "p50": 0,
+          "p50": 1,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.4355
+          "win_probability": 0.5075
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.9935
+          "win_probability": 0.9945
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.99
+          "win_probability": 0.9925
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1345
+          "win_probability": 0.131
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.243
+          "win_probability": 0.257
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0635
+          "win_probability": 0.0625
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0525
+          "win_probability": 0.0605
         }
       },
       "adjusted_shares": {
-        "Labour": 0.2708690055382207,
-        "Conservative": 0.10248296507812232,
-        "Reform UK": 0.2199849282103833,
-        "Plaid Cymru": 0.21549493960921579,
-        "Liberal Democrats": 0.05796770330796422,
-        "Green Party": 0.07485771033148726,
-        "Independent": 0.03234274792460651,
-        "Other": 0.026000000000000002
+        "Labour": 0.2449248392432413,
+        "Conservative": 0.11034497505580163,
+        "Reform UK": 0.22528786828420677,
+        "Plaid Cymru": 0.2242752174363662,
+        "Liberal Democrats": 0.058228503639463726,
+        "Green Party": 0.0763355788766512,
+        "Independent": 0.0323427479246065,
+        "Other": 0.028260269539662496
       },
       "pair_source": "2024 GE Welsh constituency pair: cardiff-north + pontypridd (provisional)",
       "pair": [
@@ -767,69 +767,69 @@
         "Labour": {
           "p10": 1,
           "p50": 2,
-          "p90": 3,
+          "p90": 2,
           "central": 2,
-          "win_probability": 1
+          "win_probability": 0.9985
         },
         "Green Party": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.717
+          "win_probability": 0.724
         },
         "Conservative": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.181
+          "win_probability": 0.293
         },
         "Reform UK": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.943
+          "win_probability": 0.951
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9455
+          "win_probability": 0.9555
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.643
+          "win_probability": 0.6485
         },
         "Trade Unionist and Socialist Coalition": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0145
+          "win_probability": 0.016
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0395
+          "win_probability": 0.0425
         }
       },
       "adjusted_shares": {
-        "Labour": 0.26879469725028415,
-        "Green Party": 0.13931318407642498,
-        "Conservative": 0.06769501526200847,
-        "Reform UK": 0.1819849423364283,
-        "Plaid Cymru": 0.18755282953805286,
-        "Liberal Democrats": 0.12616887827430745,
+        "Labour": 0.24373466235672042,
+        "Green Party": 0.13990643591106947,
+        "Conservative": 0.08549643947286319,
+        "Reform UK": 0.1841136695077997,
+        "Plaid Cymru": 0.19107744337917598,
+        "Liberal Democrats": 0.12627356977453885,
         "Trade Unionist and Socialist Coalition": 0.002490453262493774,
-        "Other": 0.026000000000000002
+        "Other": 0.026907326335338634
       },
       "pair_source": "2024 GE Welsh constituency pair: cardiff-south-and-penarth + cardiff-east (provisional)",
       "pair": [
@@ -873,77 +873,77 @@
         "Labour": {
           "p10": 1,
           "p50": 2,
-          "p90": 3,
+          "p90": 2,
           "central": 2,
-          "win_probability": 0.999
+          "win_probability": 0.997
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 3,
           "central": 2,
-          "win_probability": 0.998
+          "win_probability": 0.999
         },
         "Conservative": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.527
+          "win_probability": 0.571
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9145
+          "win_probability": 0.9395
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1975
+          "win_probability": 0.2085
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1475
+          "win_probability": 0.152
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.088
+          "win_probability": 0.092
         },
         "Heritage Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.014
+          "win_probability": 0.0145
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.048
+          "win_probability": 0.0495
         }
       },
       "adjusted_shares": {
-        "Labour": 0.26370875475261546,
-        "Reform UK": 0.25858455306776673,
-        "Conservative": 0.11197455331626949,
-        "Plaid Cymru": 0.17266819910041997,
-        "Green Party": 0.068812827713029,
-        "Liberal Democrats": 0.0543406724484978,
+        "Labour": 0.24081649862854987,
+        "Reform UK": 0.26378777344521237,
+        "Conservative": 0.11712468094019249,
+        "Plaid Cymru": 0.1812833672663546,
+        "Green Party": 0.07026290552313681,
+        "Liberal Democrats": 0.054596568532634476,
         "Independent": 0.042233045898461774,
         "Heritage Party": 0.0016773937029397879,
-        "Other": 0.026000000000000002
+        "Other": 0.028217766062517833
       },
       "pair_source": "2024 GE Welsh constituency pair: newport-east + newport-west-and-islwyn (high)",
       "pair": [
@@ -974,8 +974,8 @@
       "seats": 6,
       "central": {
         "Plaid Cymru": 3,
-        "Liberal Democrats": 1,
-        "Labour": 0,
+        "Liberal Democrats": 0,
+        "Labour": 1,
         "Reform UK": 1,
         "Conservative": 1,
         "Green Party": 0,
@@ -996,77 +996,77 @@
           "p10": 0,
           "p50": 0,
           "p90": 1,
-          "central": 1,
-          "win_probability": 0.4435
+          "central": 0,
+          "win_probability": 0.4275
         },
         "Labour": {
           "p10": 0,
-          "p50": 0,
+          "p50": 1,
           "p90": 1,
-          "central": 0,
-          "win_probability": 0.234
+          "central": 1,
+          "win_probability": 0.684
         },
         "Reform UK": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.978
+          "win_probability": 0.955
         },
         "Conservative": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.8295
+          "win_probability": 0.784
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1245
+          "win_probability": 0.105
         },
         "Workers Party of Britain": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0105
+          "win_probability": 0.01
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.012
+          "win_probability": 0.013
         },
         "Women's Equality Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0145
+          "win_probability": 0.0155
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0445
+          "win_probability": 0.033
         }
       },
       "adjusted_shares": {
-        "Plaid Cymru": 0.3667885958399243,
-        "Liberal Democrats": 0.10330022274590826,
-        "Labour": 0.0795618684830681,
-        "Reform UK": 0.20306239037565504,
-        "Conservative": 0.15664942807028873,
-        "Green Party": 0.05485604373137059,
-        "Workers Party of Britain": 0.0024534331923685314,
-        "Independent": 0.00459480689974282,
-        "Women's Equality Party": 0.0027332106616737148,
-        "Other": 0.026000000000000002
+        "Plaid Cymru": 0.3434894213571492,
+        "Liberal Democrats": 0.10260816805830106,
+        "Labour": 0.13515844912962918,
+        "Reform UK": 0.18899061172764237,
+        "Conservative": 0.14903530576449192,
+        "Green Party": 0.05093440050159657,
+        "Workers Party of Britain": 0.002453433192368531,
+        "Independent": 0.004594806899742819,
+        "Women's Equality Party": 0.0027332106616737143,
+        "Other": 0.020002192707404456
       },
       "pair_source": "2024 GE Welsh constituency pair: ceredigion-preseli + mid-and-south-pembrokeshire (high)",
       "pair": [
@@ -1111,67 +1111,67 @@
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.988
+          "win_probability": 0.9835
         },
         "Conservative": {
           "p10": 1,
-          "p50": 2,
+          "p50": 1,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.999
+          "win_probability": 0.9905
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.99
+          "win_probability": 0.995
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9245
+          "win_probability": 0.9715
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0745
+          "win_probability": 0.0815
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
-          "p90": 0,
+          "p90": 1,
           "central": 0,
-          "win_probability": 0.095
+          "win_probability": 0.1075
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.019
+          "win_probability": 0.018
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0355
+          "win_probability": 0.0475
         }
       },
       "adjusted_shares": {
-        "Labour": 0.21603322563695515,
-        "Conservative": 0.25499057563527827,
-        "Reform UK": 0.22451216894543263,
-        "Plaid Cymru": 0.178049491889233,
-        "Liberal Democrats": 0.04262034231796891,
-        "Green Party": 0.051097642231886335,
-        "Independent": 0.006696553343245873,
-        "Other": 0.026000000000000006
+        "Labour": 0.21346168684087583,
+        "Conservative": 0.21927898259662726,
+        "Reform UK": 0.2357394335700409,
+        "Plaid Cymru": 0.1966388972512894,
+        "Liberal Democrats": 0.0431725028732775,
+        "Green Party": 0.05422655204530176,
+        "Independent": 0.00669655334324587,
+        "Other": 0.03078539147934127
       },
       "pair_source": "2024 GE Welsh constituency pair: clwyd-east + clwyd-north (high)",
       "pair": [
@@ -1217,75 +1217,75 @@
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.9995
+          "win_probability": 0.9975
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.999
+          "win_probability": 0.9995
         },
         "Conservative": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.85
+          "win_probability": 0.8075
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0995
+          "win_probability": 0.0965
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.914
+          "win_probability": 0.955
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.127
+          "win_probability": 0.1365
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.028
+          "win_probability": 0.0315
         },
         "Abolish The Welsh Assembly Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0155
+          "win_probability": 0.0165
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0425
+          "win_probability": 0.047
         }
       },
       "adjusted_shares": {
-        "Labour": 0.2526551662388826,
-        "Reform UK": 0.25817065600191014,
-        "Conservative": 0.16026049065838954,
-        "Liberal Democrats": 0.048866411985912975,
-        "Plaid Cymru": 0.17353626216200085,
-        "Green Party": 0.05597809347579538,
+        "Labour": 0.23447427571083426,
+        "Reform UK": 0.26603811487265194,
+        "Conservative": 0.15161463618456394,
+        "Liberal Democrats": 0.04925333619267077,
+        "Plaid Cymru": 0.18656271045618,
+        "Green Party": 0.05817066398075623,
         "Independent": 0.01880260251895183,
         "Abolish The Welsh Assembly Party": 0.0057303169581567484,
-        "Other": 0.026000000000000002
+        "Other": 0.029353343125234244
       },
       "pair_source": "2024 GE Welsh constituency pair: alyn-and-deeside + wrexham (high)",
       "pair": [
@@ -1315,10 +1315,10 @@
       "super_constituency": "Gwynedd Maldwyn",
       "seats": 6,
       "central": {
-        "Plaid Cymru": 4,
-        "Labour": 0,
-        "Reform UK": 2,
-        "Conservative": 0,
+        "Plaid Cymru": 3,
+        "Labour": 1,
+        "Reform UK": 1,
+        "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 0,
         "Heritage Party": 0,
@@ -1326,71 +1326,71 @@
       },
       "per_party": {
         "Plaid Cymru": {
-          "p10": 3,
+          "p10": 2,
           "p50": 3,
           "p90": 4,
-          "central": 4,
+          "central": 3,
           "win_probability": 1
         },
         "Labour": {
           "p10": 0,
-          "p50": 0,
+          "p50": 1,
           "p90": 1,
-          "central": 0,
-          "win_probability": 0.169
+          "central": 1,
+          "win_probability": 0.618
         },
         "Reform UK": {
           "p10": 1,
-          "p50": 2,
+          "p50": 1,
           "p90": 2,
-          "central": 2,
-          "win_probability": 0.994
+          "central": 1,
+          "win_probability": 0.9745
         },
         "Conservative": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
-          "central": 0,
-          "win_probability": 0.376
+          "central": 1,
+          "win_probability": 0.4605
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
-          "p90": 1,
+          "p90": 0,
           "central": 0,
-          "win_probability": 0.1175
+          "win_probability": 0.0945
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.378
+          "win_probability": 0.3775
         },
         "Heritage Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0135
+          "win_probability": 0.014
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.035
+          "win_probability": 0.0245
         }
       },
       "adjusted_shares": {
-        "Plaid Cymru": 0.4291970975685562,
-        "Labour": 0.06659545269801803,
-        "Reform UK": 0.2253794678078753,
-        "Conservative": 0.0972696105386473,
-        "Green Party": 0.05515717120520238,
-        "Liberal Democrats": 0.0968508618834724,
+        "Plaid Cymru": 0.3949761661209812,
+        "Labour": 0.12771870236771526,
+        "Reform UK": 0.20471138049795376,
+        "Conservative": 0.10662115038474806,
+        "Green Party": 0.04939721244669966,
+        "Liberal Democrats": 0.09583439857314839,
         "Heritage Party": 0.003550338298228417,
-        "Other": 0.026000000000000002
+        "Other": 0.017190651310525253
       },
       "pair_source": "2024 GE Welsh constituency pair: dwyfor-meirionnydd + montgomeryshire-and-glyndwr (high)",
       "pair": [
@@ -1421,9 +1421,9 @@
       "seats": 6,
       "central": {
         "Labour": 2,
-        "Conservative": 0,
+        "Conservative": 1,
         "Reform UK": 2,
-        "Plaid Cymru": 2,
+        "Plaid Cymru": 1,
         "Liberal Democrats": 0,
         "Green Party": 0,
         "Independent": 0,
@@ -1434,30 +1434,30 @@
         "Labour": {
           "p10": 1,
           "p50": 2,
-          "p90": 3,
+          "p90": 2,
           "central": 2,
-          "win_probability": 1
+          "win_probability": 0.999
         },
         "Conservative": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
-          "central": 0,
-          "win_probability": 0.415
+          "central": 1,
+          "win_probability": 0.4955
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.997
+          "win_probability": 0.999
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
-          "central": 2,
-          "win_probability": 0.9735
+          "central": 1,
+          "win_probability": 0.981
         },
         "Liberal Democrats": {
           "p10": 0,
@@ -1471,14 +1471,14 @@
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.232
+          "win_probability": 0.2425
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0205
+          "win_probability": 0.019
         },
         "Trade Unionist and Socialist Coalition": {
           "p10": 0,
@@ -1492,19 +1492,19 @@
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0415
+          "win_probability": 0.0435
         }
       },
       "adjusted_shares": {
-        "Labour": 0.269174335834761,
-        "Conservative": 0.0981942426947856,
-        "Reform UK": 0.23926894771131432,
-        "Plaid Cymru": 0.19808515310185074,
-        "Liberal Democrats": 0.0869707550129093,
-        "Green Party": 0.07482641218058539,
+        "Labour": 0.2439524877740432,
+        "Conservative": 0.10728160192484686,
+        "Reform UK": 0.24400069683953574,
+        "Plaid Cymru": 0.20591968854365994,
+        "Liberal Democrats": 0.08720346398642838,
+        "Green Party": 0.0761450963638602,
         "Independent": 0.00341432811331226,
         "Trade Unionist and Socialist Coalition": 0.004065825350481384,
-        "Other": 0.026000000000000002
+        "Other": 0.028016811103832077
       },
       "pair_source": "2024 GE Welsh constituency pair: gower + swansea-west (high)",
       "pair": [
@@ -1550,75 +1550,75 @@
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.997
+          "win_probability": 0.9955
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.999
+          "win_probability": 0.9995
         },
         "Conservative": {
-          "p10": 1,
+          "p10": 0,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9305
+          "win_probability": 0.8905
         },
         "Plaid Cymru": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9435
+          "win_probability": 0.9685
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.066
+          "win_probability": 0.064
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.142
+          "win_probability": 0.1505
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.07
+          "win_probability": 0.072
         },
         "Abolish The Welsh Assembly Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.019
+          "win_probability": 0.0205
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0485
+          "win_probability": 0.0575
         }
       },
       "adjusted_shares": {
-        "Labour": 0.23684403669724774,
-        "Reform UK": 0.231802752293578,
-        "Conservative": 0.18066055045871562,
-        "Plaid Cymru": 0.17983027522935782,
-        "Independent": 0.04036697247706423,
-        "Green Party": 0.05875458715596331,
-        "Liberal Democrats": 0.03806880733944955,
-        "Abolish The Welsh Assembly Party": 0.007672018348623854,
-        "Other": 0.026000000000000006
+        "Labour": 0.22540231613776507,
+        "Reform UK": 0.23940316564169772,
+        "Conservative": 0.16618610747051116,
+        "Plaid Cymru": 0.192414566182802,
+        "Independent": 0.04036697247706422,
+        "Green Party": 0.06087273513822619,
+        "Liberal Democrats": 0.03844259815984887,
+        "Abolish The Welsh Assembly Party": 0.007672018348623853,
+        "Other": 0.02923952044346089
       },
       "pair_source": "2024 GE Welsh constituency pair: bridgend + vale-of-glamorgan (high)",
       "pair": [
@@ -1667,14 +1667,14 @@
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.998
+          "win_probability": 0.994
         },
         "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.997
+          "win_probability": 0.998
         },
         "Plaid Cymru": {
           "p10": 1,
@@ -1688,35 +1688,35 @@
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.188
+          "win_probability": 0.309
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.088
+          "win_probability": 0.092
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.214
+          "win_probability": 0.221
         },
         "Workers Party of Britain": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0165
+          "win_probability": 0.017
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0175
+          "win_probability": 0.017
         },
         "Communist Party of Britain": {
           "p10": 0,
@@ -1730,36 +1730,36 @@
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.024
+          "win_probability": 0.026
         },
         "Heritage Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0135
+          "win_probability": 0.0145
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.027
+          "win_probability": 0.029
         }
       },
       "adjusted_shares": {
-        "Labour": 0.24705356874906217,
-        "Reform UK": 0.23568614014905218,
-        "Plaid Cymru": 0.2784496073625769,
-        "Conservative": 0.06706667333566749,
-        "Liberal Democrats": 0.04297649177212024,
-        "Green Party": 0.07186920422147752,
+        "Labour": 0.231260244364216,
+        "Reform UK": 0.23504457672822854,
+        "Plaid Cymru": 0.277387346616623,
+        "Conservative": 0.08504762381119105,
+        "Liberal Democrats": 0.04294493947273547,
+        "Green Party": 0.07169040785829715,
         "Workers Party of Britain": 0.006639823938378433,
         "Independent": 0.007702695943580253,
         "Communist Party of Britain": 0.0026509278247386584,
         "Propel": 0.013017055969589356,
         "Heritage Party": 0.0008878107337568149,
-        "Other": 0.026000000000000002
+        "Other": 0.025726546738665333
       },
       "pair_source": "2024 GE Welsh constituency pair: merthyr-tydfil-and-aberdare + cardiff-west (provisional)",
       "pair": [
@@ -1790,8 +1790,8 @@
       "seats": 6,
       "central": {
         "Labour": 2,
-        "Conservative": 2,
-        "Reform UK": 1,
+        "Conservative": 1,
+        "Reform UK": 2,
         "Green Party": 0,
         "Liberal Democrats": 0,
         "Plaid Cymru": 1,
@@ -1806,83 +1806,83 @@
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 1
+          "win_probability": 0.9965
         },
         "Conservative": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
-          "central": 2,
-          "win_probability": 0.9945
+          "central": 1,
+          "win_probability": 0.97
         },
         "Reform UK": {
           "p10": 1,
-          "p50": 1,
+          "p50": 2,
           "p90": 2,
-          "central": 1,
-          "win_probability": 0.989
+          "central": 2,
+          "win_probability": 0.9955
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1585
+          "win_probability": 0.1815
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1005
+          "win_probability": 0.108
         },
         "Plaid Cymru": {
           "p10": 0,
           "p50": 1,
-          "p90": 1,
+          "p90": 2,
           "central": 1,
-          "win_probability": 0.758
+          "win_probability": 0.883
         },
         "Independent": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0245
+          "win_probability": 0.0255
         },
         "True & Fair Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.02
+          "win_probability": 0.0185
         },
         "Heritage Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.013
+          "win_probability": 0.0135
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0525
+          "win_probability": 0.0655
         }
       },
       "adjusted_shares": {
-        "Labour": 0.26209841823706803,
-        "Conservative": 0.21847106263503913,
-        "Reform UK": 0.2145777420882968,
-        "Green Party": 0.0639329512761557,
-        "Liberal Democrats": 0.04832692463228923,
-        "Plaid Cymru": 0.14541414689944426,
-        "Independent": 0.015459450715779501,
-        "True & Fair Party": 0.002946307871841385,
-        "Heritage Party": 0.0027729956440860092,
-        "Other": 0.026000000000000002
+        "Labour": 0.23989253505405542,
+        "Conservative": 0.19319361616788513,
+        "Reform UK": 0.228503141649163,
+        "Green Party": 0.06781380033410203,
+        "Liberal Democrats": 0.049011780348397406,
+        "Plaid Cymru": 0.1684709560084194,
+        "Independent": 0.015459450715779503,
+        "True & Fair Party": 0.0029463078718413855,
+        "Heritage Party": 0.0027729956440860097,
+        "Other": 0.03193541620627084
       },
       "pair_source": "2024 GE Welsh constituency pair: monmouthshire + torfaen (high)",
       "pair": [
@@ -1927,7 +1927,7 @@
         "Plaid Cymru": {
           "p10": 2,
           "p50": 3,
-          "p90": 4,
+          "p90": 3,
           "central": 3,
           "win_probability": 1
         },
@@ -1936,14 +1936,14 @@
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.5415
+          "win_probability": 0.8235
         },
         "Conservative": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.379
+          "win_probability": 0.4475
         },
         "Reform UK": {
           "p10": 1,
@@ -1957,55 +1957,55 @@
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0525
+          "win_probability": 0.047
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.073
+          "win_probability": 0.058
         },
         "Women's Equality Party": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.013
+          "win_probability": 0.0125
         },
         "Workers Party of Britain": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0145
+          "win_probability": 0.01
         },
         "UK Independence Party (UKIP)": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.017
+          "win_probability": 0.016
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0405
+          "win_probability": 0.033
         }
       },
       "adjusted_shares": {
-        "Plaid Cymru": 0.39088511604206233,
-        "Labour": 0.11888766387177466,
-        "Conservative": 0.09971167832491779,
-        "Reform UK": 0.2716707740769908,
-        "Liberal Democrats": 0.034442534858942886,
-        "Green Party": 0.04568624635197109,
-        "Women's Equality Party": 0.0032658544494371614,
-        "Workers Party of Britain": 0.0025015055357391017,
-        "UK Independence Party (UKIP)": 0.0069486264881641726,
-        "Other": 0.026000000000000002
+        "Plaid Cymru": 0.3678257611691859,
+        "Labour": 0.15772243009036255,
+        "Conservative": 0.10836548451779843,
+        "Reform UK": 0.25774383697555053,
+        "Liberal Democrats": 0.03375760352608517,
+        "Green Party": 0.0418049687991107,
+        "Women's Equality Party": 0.003265854449437162,
+        "Workers Party of Britain": 0.002501505535739102,
+        "UK Independence Party (UKIP)": 0.006948626488164173,
+        "Other": 0.020063928448566446
       },
       "pair_source": "2024 GE Welsh constituency pair: caerfyrddin + llanelli (high)",
       "pair": [

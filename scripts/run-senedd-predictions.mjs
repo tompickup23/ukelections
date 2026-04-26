@@ -34,23 +34,16 @@ function writeJson(rel, payload) {
   return full;
 }
 
+import { applyStrongTransitionSwing } from "../src/lib/strongTransitionSwing.js";
+
 function applyNationalSwing(baselineConstituency, baselineNational, currentNational) {
-  // Per-party additive swing applied to a constituency baseline:
-  //   predicted = max(0, baseline_constituency + (national_current - national_baseline))
-  // Re-normalise to 1.0.
-  const allParties = new Set([
-    ...Object.keys(baselineConstituency),
-    ...Object.keys(baselineNational),
-    ...Object.keys(currentNational),
-  ]);
-  const adjusted = {};
-  for (const p of allParties) {
-    const swing = (currentNational[p] || 0) - (baselineNational[p] || 0);
-    adjusted[p] = Math.max(0, (baselineConstituency[p] || 0) + swing);
-  }
-  const sum = Object.values(adjusted).reduce((s, v) => s + v, 0);
-  for (const k of Object.keys(adjusted)) adjusted[k] = adjusted[k] / (sum || 1);
-  return adjusted;
+  // Strong Transition Model swing — bounded in [0, 1], multiplicative.
+  // Replaces the legacy additive UNS that could clamp at 0 and lose mass.
+  const stm = applyStrongTransitionSwing(baselineConstituency, currentNational, baselineNational);
+  const sum = Object.values(stm.shares).reduce((s, v) => s + v, 0);
+  const normalised = {};
+  for (const k of Object.keys(stm.shares)) normalised[k] = stm.shares[k] / (sum || 1);
+  return normalised;
 }
 
 function dcPartyToCanonical(dcName) {

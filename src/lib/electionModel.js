@@ -89,11 +89,37 @@ function getBaseline(wardData, electionType = 'borough') {
  * @returns {{ adjustments: Object<string, number>, methodology: Object }}
  */
 function calculateNationalSwing(baseline, nationalPolling, ge2024Result, assumptions) {
-  const adjustments = {};
-  const details = {};
   const dampening = assumptions.nationalToLocalDampening || 0.65;
   const multiplier = assumptions.swingMultiplier || 1.0;
 
+  // Opt-in Strong Transition Model path. When enabled, returns the STM
+  // adjustments (local change vs baseline) so the consuming `predictWard`
+  // can apply them additively just like the legacy UNS path.
+  if (assumptions.useStrongTransitionSwing) {
+    const stm = applyStrongTransitionSwingExternal(
+      baseline,
+      nationalPolling,
+      ge2024Result,
+      { dampening: dampening * multiplier },
+    );
+    const adjustments = {};
+    for (const p of new Set([...Object.keys(stm.shares), ...Object.keys(baseline)])) {
+      adjustments[p] = (stm.shares[p] || 0) - (baseline[p] || 0);
+    }
+    return {
+      adjustments,
+      methodology: {
+        step: 2,
+        name: 'National Swing (STM)',
+        description: `Strong Transition Model: multiplicative bounded swing, dampened by ${dampening} for local` + (multiplier !== 1.0 ? ` (×${multiplier} user adj)` : ''),
+        details: stm.swingsApplied,
+      },
+    };
+  }
+
+  // Legacy additive UNS path (default)
+  const adjustments = {};
+  const details = {};
   for (const party of Object.keys(baseline)) {
     const currentNational = nationalPolling[party] || 0;
     const ge2024National = ge2024Result[party] || 0;

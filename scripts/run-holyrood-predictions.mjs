@@ -71,22 +71,15 @@ function constituency2021Shares(historyBundle, constituencyBallotId2026) {
   return { shares, source: r.source, source_ballot_id: id2021 };
 }
 
+import { applyStrongTransitionSwing } from "../src/lib/strongTransitionSwing.js";
+
 function applyScottishSwing(constituencyShares, scotlandBaseline, scotlandPolling) {
-  // Per-party additive swing (national_now - national_baseline) applied to constituency shares.
-  // Floor at 0, re-normalise.
-  const allParties = new Set([
-    ...Object.keys(constituencyShares),
-    ...Object.keys(scotlandBaseline),
-    ...Object.keys(scotlandPolling),
-  ]);
+  // Strong Transition Model — bounded multiplicative swing replacing the
+  // legacy additive UNS (which used Math.max(0, ...) to clamp losers).
+  const stm = applyStrongTransitionSwing(constituencyShares, scotlandPolling, scotlandBaseline);
+  const sum = Object.values(stm.shares).reduce((s, v) => s + v, 0);
   const adjusted = {};
-  for (const p of allParties) {
-    const base = constituencyShares[p] || 0;
-    const swing = (scotlandPolling[p] || 0) - (scotlandBaseline[p] || 0);
-    adjusted[p] = Math.max(0, base + swing);
-  }
-  const sum = Object.values(adjusted).reduce((s, v) => s + v, 0);
-  for (const k of Object.keys(adjusted)) adjusted[k] = adjusted[k] / (sum || 1);
+  for (const k of Object.keys(stm.shares)) adjusted[k] = stm.shares[k] / (sum || 1);
   return adjusted;
 }
 
