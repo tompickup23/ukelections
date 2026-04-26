@@ -74,6 +74,24 @@ export function loadHistory() { return load().history; }
 export function loadLaProj() { return load().laProj; }
 export function loadLaImd() { return load().laImd; }
 
+let _ge: { predictions: any; summary: any; assumptions: any; backtest: any; identity: any } | null = null;
+function loadGe() {
+  if (_ge) return _ge;
+  _ge = {
+    predictions: JSON.parse(readFileSync(path.join(ROOT, "data/predictions/ge-next/constituencies.json"), "utf8")),
+    summary: JSON.parse(readFileSync(path.join(ROOT, "data/predictions/ge-next/summary.json"), "utf8")),
+    assumptions: JSON.parse(readFileSync(path.join(ROOT, "data/predictions/ge-next/assumptions.json"), "utf8")),
+    backtest: JSON.parse(readFileSync(path.join(ROOT, "data/backtests/ge-2024.json"), "utf8")),
+    identity: JSON.parse(readFileSync(path.join(ROOT, "data/identity/pcons-ge-next.json"), "utf8")),
+  };
+  return _ge;
+}
+export function loadGePredictions() { return loadGe().predictions; }
+export function loadGeSummary() { return loadGe().summary; }
+export function loadGeAssumptions() { return loadGe().assumptions; }
+export function loadGeBacktest() { return loadGe().backtest; }
+export function loadGeIdentity() { return loadGe().identity; }
+
 let _wardDemo: any = null;
 export function loadWardDemographics() {
   if (_wardDemo) return _wardDemo;

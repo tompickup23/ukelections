@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadGeBacktest, partyColour } from "../../../lib/predictions";
+
+const b = loadGeBacktest();
+const rows = b.rows || [];
+const top10Worst = [...rows]
+  .map((r: any) => {
+    const allParties = new Set([...Object.keys(r.predicted), ...Object.keys(r.actual)]);
+    let mae = 0; let n = 0;
+    for (const p of allParties) {
+      if (["Labour", "Conservative", "Liberal Democrats", "Reform UK", "Green Party"].includes(p)) {
+        mae += Math.abs((r.predicted[p] || 0) - (r.actual[p] || 0));
+        n += 1;
+      }
+    }
+    return { ...r, _mae: n > 0 ? mae / n : 0 };
+  })
+  .sort((a: any, b: any) => b._mae - a._mae)
+  .slice(0, 10);
+
+const partyMae = b.summary?.stm?.per_party_mae || {};
+const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1]).slice(0, 12);
+---
+
+<BaseLayout
+  title="GE backtest — data quality"
+  description={`Validation of the GE constituency model: predict GE2024 from GE2019 + national polling. ${rows.length} boundary-stable PCONs evaluated.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Data quality — backtest</p>
+    <h1>GE2024 backtest</h1>
+    <p class="lede">
+      Predicting GE2024 from the GE2019 baseline and the actual GE2024 polling — measuring whether our swing model adds value over Uniform National Swing.
+    </p>
+    <p style="color: var(--muted)">
+      Generated {b.snapshot?.generated_at?.slice(0, 10)} · {rows.length} boundary-stable PCONs evaluated
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Headline</p>
+      <h2>Strong Transition Model vs Uniform National Swing</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Uniform National Swing</td>
+          <td>{((b.summary?.uns?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((b.summary?.uns?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{b.summary?.uns?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+        <tr>
+          <td>Strong Transition Model</td>
+          <td>{((b.summary?.stm?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((b.summary?.stm?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{b.summary?.stm?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+        <tr>
+          <td>STM + anti-attenuation</td>
+          <td>{((b.summary?.stm_unwound?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((b.summary?.stm_unwound?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{b.summary?.stm_unwound?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: var(--muted)">
+      <strong>STM lift over UNS: {b.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp</strong> ·
+      Anti-attenuation under-shoots in this single backtest because the calibration spreads come from GE2019 (a tighter pre-Reform-breakthrough distribution); fix planned for a future calibration run.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Per-party performance (STM)</p>
+      <h2>Mean absolute error by party</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>MAE</th></tr></thead>
+      <tbody>
+        {sortedParty.map(([party, mae]: any) => (
+          <tr>
+            <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
+            <td>{((mae as number) * 100).toFixed(2)}pp</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Worst residuals</p>
+      <h2>Where we missed</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Constituency</th><th>Country</th><th>Major-party MAE</th></tr></thead>
+      <tbody>
+        {top10Worst.map((r: any) => (
+          <tr>
+            <td><a href={`/seats/parliament/${r.slug}/`}>{r.name}</a></td>
+            <td>{r.country?.replace(/_/g, " ")}</td>
+            <td>{(r._mae * 100).toFixed(2)}pp</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <p style="color: var(--muted)">
+      <a href="/methodology/general-election/">Methodology</a> ·
+      <a href="/forecasts/general-election/">Forecast</a> ·
+      <a href="/transparency/">Transparency</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.party-pill { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: 0.4em; vertical-align: middle; }
+</style>

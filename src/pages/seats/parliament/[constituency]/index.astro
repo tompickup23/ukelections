@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import { loadGePredictions, partyColour, formatPct } from "../../../../lib/predictions";
+
+export async function getStaticPaths() {
+  const ge = loadGePredictions();
+  const out = [] as any[];
+  for (const [slug, p] of Object.entries(ge.predictions || {})) {
+    if (!(p as any)?.prediction) continue;
+    out.push({ params: { constituency: slug }, props: { record: p } });
+  }
+  return out;
+}
+
+const { record } = Astro.props as { record: any };
+const ranked = Object.entries(record.prediction || {})
+  .sort((a: any, b: any) => (b[1].pct || 0) - (a[1].pct || 0));
+const ge2024Ranked = (record.ge2024?.candidates || [])
+  .sort((a: any, b: any) => (b.pct || 0) - (a.pct || 0));
+
+// Cross-link to AI DOGE / Labour Tracker / TheyWorkForYou per MP
+const mp = record.mp;
+const slug = record.slug;
+const sisterLinks = [
+  { label: "AI DOGE constituency profile", href: `https://aidoge.co.uk/constituency/${slug}/`, available: true },
+  { label: "Labour Tracker MP page", href: mp?.party === "Labour" || mp?.party === "Labour and Co-operative Party" ? `https://labourtracker.co.uk/your-mp/${slug}/` : null, available: mp?.party === "Labour" },
+  { label: "TheyWorkForYou", href: `https://www.theyworkforyou.com/mp/?p=${encodeURIComponent(slug.replace(/-/g, ' '))}`, available: true },
+].filter((l) => l.available && l.href);
+---
+
+<BaseLayout
+  title={`${record.name} — General election forecast`}
+  description={`Forecast for ${record.name} parliamentary constituency: ${record.winner} predicted to win with ${(record.majority_pct * 100).toFixed(1)}pp majority.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">General election forecast</p>
+    <h1>{record.name}</h1>
+    <p class="lede">
+      Predicted winner: <strong>
+        <span class="party-pill" style={`background:${partyColour(record.winner)}`}></span> {record.winner}
+      </strong>
+      ({((record.prediction[record.winner]?.pct || 0) * 100).toFixed(1)}%, {(record.majority_pct * 100).toFixed(1)}pp margin over {record.runner_up})
+    </p>
+    <p style="color: var(--muted)">
+      {record.country?.replace(/_/g, " ")}{record.region ? ` · ${record.region.replace(/_/g, " ")}` : ""}
+      {record.pcon24cd ? ` · GSS ${record.pcon24cd}` : ""}
+      {" · Confidence "}<strong>{record.confidence}</strong>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Predicted vote share</p>
+      <h2>Forecast</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Predicted</th><th>GE2024</th><th>Swing</th></tr></thead>
+      <tbody>
+        {ranked.map(([party, payload]: any) => {
+          const ge24 = ge2024Ranked.find((c: any) => c.party_name === party || c.party === party);
+          const swing = (payload.pct || 0) - (ge24?.pct || 0);
+          return (
+            <tr>
+              <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
+              <td>{((payload.pct || 0) * 100).toFixed(1)}%</td>
+              <td>{ge24 ? ((ge24.pct || 0) * 100).toFixed(1) + "%" : "–"}</td>
+              <td style={`color:${swing > 0 ? '#1f8a3a' : (swing < 0 ? '#b8362b' : 'var(--muted)')}`}>
+                {swing > 0 ? "+" : ""}{(swing * 100).toFixed(1)}pp
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Sitting MP</p>
+      <h2>{mp?.name || "Unknown"} ({mp?.party || "—"})</h2>
+    </div>
+    {mp ? (
+      <ul style="list-style:none; padding-left:0;">
+        <li><strong>Party:</strong> {mp.party}</li>
+        <li><strong>Tenure:</strong> {mp.tenure_years?.toFixed(1)} years (since {mp.since})</li>
+        <li><strong>Status:</strong> {mp.status?.replace(/_/g, " ")}</li>
+        <li><strong>Source:</strong> {mp.source?.replace(/_/g, " ")}</li>
+      </ul>
+    ) : (
+      <p>No MP record on file.</p>
+    )}
+    {sisterLinks.length > 0 && (
+      <p style="color: var(--muted)">
+        See also: {sisterLinks.map((l, i) => (
+          <span>{i > 0 && " · "}<a href={l.href}>{l.label}</a></span>
+        ))}
+      </p>
+    )}
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">GE2024 result</p>
+      <h2>What happened in 2024</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Candidate</th><th>Party</th><th>Votes</th><th>Share</th></tr></thead>
+      <tbody>
+        {ge2024Ranked.slice(0, 8).map((c: any) => (
+          <tr>
+            <td>{c.name || "—"}</td>
+            <td><span class="party-pill" style={`background:${partyColour(c.party_name)}`}></span> {c.party_name}</td>
+            <td>{(c.votes || 0).toLocaleString()}</td>
+            <td>{((c.pct || 0) * 100).toFixed(1)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    {record.ge2024?.source_url && (
+      <p style="color: var(--muted)">Source: <a href={record.ge2024.source_url}>Returning officer declaration</a></p>
+    )}
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Methodology</p>
+      <h2>How this forecast was built</h2>
+    </div>
+    <ol>
+      {record.methodology?.map((m: any) => (
+        <li><strong>{m.step}. {m.name}:</strong> <span style="color: var(--muted)">{m.description || ""}</span></li>
+      ))}
+    </ol>
+    <p style="color: var(--muted)">
+      <a href="/methodology/general-election/">Full methodology page</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.party-pill { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: 0.4em; vertical-align: middle; }
+</style>

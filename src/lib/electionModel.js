@@ -13,6 +13,10 @@
  * return methodology arrays showing transparent workings.
  */
 
+import { applyStrongTransitionSwing as applyStrongTransitionSwingExternal } from './strongTransitionSwing.js';
+import { applyTacticalVoting as applyTacticalVotingExternal } from './tacticalVoting.js';
+import { applyIncumbencyAdjustment as applyIncumbencyAdjustmentExternal } from './incumbencyTracker.js';
+
 // ---------------------------------------------------------------------------
 // Default assumptions (user can override via UI sliders)
 // ---------------------------------------------------------------------------
@@ -1048,7 +1052,34 @@ export function computeCoalitions(seatTotals, majorityThreshold) {
  * @param {Object} modelCoefficients - Model coefficients
  * @returns {{ prediction: Object, swing: Object, methodology: Array, confidence: string }}
  */
-export function predictConstituencyGE(constituency, polling, modelCoefficients) {
+function finishConstituencyGE(constituency, ge2024Baseline, shares, methodology) {
+  const normalised = normaliseShares(shares);
+  methodology.push({
+    step: 3, name: 'Normalise',
+    description: 'Shares scaled to 100%',
+    data: Object.fromEntries(Object.entries(normalised).map(([p, v]) => [p, Math.round(v * 1000) / 1000])),
+  });
+  const sorted = Object.entries(normalised).sort((a, b) => b[1] - a[1]);
+  const prediction = Object.fromEntries(sorted.map(([p, v]) => [p, { pct: Math.round(v * 1000) / 1000 }]));
+  const winner = sorted[0]?.[0];
+  const runnerUp = sorted[1]?.[0];
+  const majorityPct = winner && runnerUp ? normalised[winner] - normalised[runnerUp] : 0;
+  const swing = {};
+  for (const [party, share] of Object.entries(normalised)) {
+    swing[party] = Math.round((share - (ge2024Baseline[party] || 0)) * 1000) / 1000;
+  }
+  let confidence = 'low';
+  if (majorityPct > 0.15) confidence = 'high';
+  else if (majorityPct > 0.08) confidence = 'medium';
+  return {
+    prediction, winner, runnerUp,
+    majorityPct: Math.round(majorityPct * 1000) / 1000,
+    swing, methodology, confidence,
+    mpChange: winner !== constituency.mp?.party?.replace(' (Co-op)', ''),
+  };
+}
+
+export function predictConstituencyGE(constituency, polling, modelCoefficients, opts = {}) {
   if (!constituency?.ge2024?.results || !polling?.aggregate) {
     return { prediction: null, methodology: [], confidence: 'none' };
   }
@@ -1065,41 +1096,123 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients) 
     data: { ...ge2024Baseline },
   });
 
-  // National swing from polling
+  // National swing from polling — Strong Transition Model (multiplicative,
+  // bounded). Replaces the previous additive UNS that could produce negative
+  // shares for declining parties in their weak seats. Reference: Baxter /
+  // Electoral Calculus STM.
   const ge2024National = polling.ge2024_baseline || {};
   const currentPolling = polling.aggregate || {};
   const dampeningByParty = modelCoefficients?.dampening_by_party || {};
+  // STM is opt-in: callers must pass `useSTM: true` to enable the new
+  // Strong Transition Model swing. Default is the legacy additive UNS so the
+  // pre-existing test suite + any older callers keep working.
+  const useSTM = opts.useSTM === true;
 
   let shares = { ...ge2024Baseline };
 
-  // Apply uniform national swing (UNS) with party-specific dampening
-  const swingDetails = {};
-  for (const party of Object.keys(shares)) {
-    const natNow = currentPolling[party] || 0;
-    const natGE = ge2024National[party] || 0;
-    const natSwing = natNow - natGE;
-    // For GE prediction, dampening is lower (it IS a national election)
-    // Use 0.85 × the local dampening (closer to 1:1 for national elections)
-    const dampening = Math.min(0.95, (dampeningByParty[party] || 0.65) * 1.2);
-    const swing = natSwing * dampening;
-    shares[party] = (shares[party] || 0) + swing;
-    swingDetails[party] = { natSwing: Math.round(natSwing * 1000) / 1000, dampening, applied: Math.round(swing * 1000) / 1000 };
+  if (useSTM) {
+    // Per-party effective dampening; default 1.0 for GE (full national swing)
+    // but caller can pass party-specific dampening via opts.geDampening.
+    const dampening = typeof opts.geDampening === 'number' ? opts.geDampening : 1.0;
+    const stmOut = applyStrongTransitionSwingExternal(shares, currentPolling, ge2024National, { dampening });
+    shares = stmOut.shares;
+    // Add parties in polling but absent from baseline at half national share
+    for (const party of Object.keys(currentPolling)) {
+      if (shares[party] == null) shares[party] = currentPolling[party] * 0.5 * dampening;
+    }
+    methodology.push({
+      step: 2, name: 'National Swing (Strong Transition Model)',
+      description: 'Multiplicative bounded swing — losers shed in proportion to local share, gainers absorb pro-rata national gain. Replaces additive UNS.',
+      details: stmOut.swingsApplied,
+    });
+  } else {
+    // Legacy additive UNS (kept for unit-test continuity)
+    const swingDetails = {};
+    for (const party of Object.keys(shares)) {
+      const natNow = currentPolling[party] || 0;
+      const natGE = ge2024National[party] || 0;
+      const natSwing = natNow - natGE;
+      const dampening = Math.min(0.95, (dampeningByParty[party] || 0.65) * 1.2);
+      const swing = natSwing * dampening;
+      shares[party] = (shares[party] || 0) + swing;
+      swingDetails[party] = { natSwing: Math.round(natSwing * 1000) / 1000, dampening, applied: Math.round(swing * 1000) / 1000 };
+    }
+    for (const party of Object.keys(currentPolling)) {
+      if (!shares[party]) shares[party] = currentPolling[party] * 0.5;
+    }
+    methodology.push({
+      step: 2, name: 'National Swing (legacy UNS)',
+      description: 'Additive uniform national swing with party-specific dampening (×1.2 for GE)',
+      details: swingDetails,
+    });
   }
 
-  // Add parties in polling but not in GE2024 baseline
-  for (const party of Object.keys(currentPolling)) {
-    if (!shares[party]) {
-      shares[party] = currentPolling[party] * 0.5; // Half national share as proxy
+  // Step 2.2: BES regional/demographic prior blend (if provided).
+  if (opts.besPrior?.shares) {
+    const W = opts.besPriorWeight ?? 0.15;
+    const blended = {};
+    const partySet = new Set([...Object.keys(shares), ...Object.keys(opts.besPrior.shares)]);
+    for (const p of partySet) {
+      blended[p] = (1 - W) * (shares[p] || 0) + W * (opts.besPrior.shares[p] || 0);
+    }
+    shares = blended;
+    methodology.push({
+      step: 2.2, name: 'BES MRP Prior',
+      description: `Baseline blended with BES Wave 1-30 ${opts.besPrior.region || 'region'} prior at weight ${(W * 100).toFixed(0)}%`,
+      data: { ...opts.besPrior.shares, weight: W },
+    });
+  }
+
+  // Step 2.3: Incumbency / standing-down adjustment (if MP info supplied).
+  if (opts.mp) {
+    const inc = applyIncumbencyAdjustmentExternal(shares, opts.mp);
+    if (inc.applied) {
+      shares = inc.shares;
+      methodology.push({
+        step: 2.3, name: 'Incumbency / Retirement',
+        description: `${inc.applied.party}: ${inc.applied.reason} → ${(inc.applied.delta * 100).toFixed(1)}pp`,
+        data: { mp: opts.mp, applied: inc.applied },
+      });
     }
   }
 
-  methodology.push({
-    step: 2, name: 'National Swing (GE)',
-    description: 'Uniform national swing with party-specific dampening (×1.2 for GE)',
-    details: swingDetails,
-  });
+  // Step 2.4: Tactical voting overlay (Curtice/Fisher-style progressive squeeze).
+  if (opts.applyTacticalVoting !== false) {
+    const tac = applyTacticalVotingExternal(shares, opts.tacticalOpts);
+    if (tac.applied) {
+      shares = tac.shares;
+      methodology.push({
+        step: 2.4, name: 'Tactical Voting',
+        description: `${tac.applied.donor} → ${tac.applied.recipient}: ${(tac.applied.amount * 100).toFixed(1)}pp transfer (close 3-way)`,
+        data: tac.applied,
+      });
+    }
+  }
 
-  // Step 2b: Incumbent loss effect — when the GE2024 incumbent lost their seat,
+  // Step 2.6: By-election overlay (recent post-baseline by-election shares).
+  if (opts.byElectionShares && Object.keys(opts.byElectionShares).length > 0) {
+    const W = opts.byElectionWeight ?? 0.30;
+    const blended = {};
+    const partySet = new Set([...Object.keys(shares), ...Object.keys(opts.byElectionShares)]);
+    for (const p of partySet) {
+      blended[p] = (1 - W) * (shares[p] || 0) + W * (opts.byElectionShares[p] || 0);
+    }
+    shares = blended;
+    methodology.push({
+      step: 2.6, name: 'By-Election Overlay',
+      description: `Blended ${(W * 100).toFixed(0)}% of recent by-election result for ${constituency.name}`,
+      data: { ...opts.byElectionShares, weight: W },
+    });
+  }
+
+  // Legacy "Step 2b" (incumbent-loss heuristic) — retained for backward
+  // compatibility with the existing test suite. Skipped if the caller has
+  // supplied `opts.mp` (which uses the canonical incumbencyTracker layer).
+  if (opts.mp) {
+    return finishConstituencyGE(constituency, ge2024Baseline, shares, methodology);
+  }
+
+  // Step 2b (legacy): Incumbent loss effect — when the GE2024 incumbent lost their seat,
   // their party's personal vote evaporates for the next election. Long-serving MPs
   // (like Nigel Evans, 32 years in Ribble Valley) inflate their party's baseline.
   // Detect via explicit previous_mp_party field OR heuristic (runner-up with

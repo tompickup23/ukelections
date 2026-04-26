@@ -1,0 +1,156 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadGePredictions, loadGeSummary, loadGeBacktest, partyColour } from "../../../lib/predictions";
+
+const ge = loadGePredictions();
+const summary = loadGeSummary();
+const backtest = loadGeBacktest();
+
+const predictions = ge.predictions || {};
+const evaluated = Object.values(predictions).filter((p: any) => p?.prediction);
+const totalSeats = evaluated.length;
+
+const seatTallies = summary.seat_tallies_by_party || {};
+const ranked = Object.entries(seatTallies).sort((a: any, b: any) => b[1] - a[1]);
+
+const nationalShare = summary.national_vote_share || {};
+const rankedShare = Object.entries(nationalShare).sort((a: any, b: any) => b[1] - a[1]);
+
+// Top 100 marginals — predicted majority closest to 0
+const marginals = evaluated
+  .filter((p: any) => p?.majority_pct != null)
+  .sort((a: any, b: any) => Math.abs(a.majority_pct) - Math.abs(b.majority_pct))
+  .slice(0, 50);
+---
+
+<BaseLayout
+  title="General election forecast — every UK constituency"
+  description={`Forecast for all ${totalSeats} UK parliamentary constituencies, using current Westminster polling and the GE2024 baseline. Pre-registered, sha256-committed.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">National forecast — next general election</p>
+    <h1>Every UK parliamentary constituency, forecast</h1>
+    <p class="lede">
+      {totalSeats.toLocaleString()} constituencies · forecast as if a general election were held this week · current Westminster polling baseline
+    </p>
+    <p style="color: var(--muted)">
+      Generated {summary.snapshot.generated_at?.slice(0, 10)} · Methodology version <code>{summary.snapshot.methodology_version}</code> ·
+      Source: <code>{summary.snapshot.polling_source}</code>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Headline projection</p>
+      <h2>Predicted seat split</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Seats</th><th>Share</th></tr></thead>
+      <tbody>
+        {ranked.map(([party, seats]: any) => (
+          <tr>
+            <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
+            <td>{(seats as number).toLocaleString()}</td>
+            <td>{((seats as number) / totalSeats * 100).toFixed(1)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">National vote share</p>
+      <h2>Predicted UK-wide vote</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Vote share</th></tr></thead>
+      <tbody>
+        {rankedShare.slice(0, 12).map(([party, share]: any) => (
+          <tr>
+            <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
+            <td>{((share as number) * 100).toFixed(1)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Top 50 marginals</p>
+      <h2>Tightest predicted contests</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Constituency</th><th>Predicted winner</th><th>Margin</th><th>Country</th></tr></thead>
+      <tbody>
+        {marginals.map((m: any) => (
+          <tr>
+            <td><a href={`/seats/parliament/${m.slug}/`}>{m.name}</a></td>
+            <td><span class="party-pill" style={`background:${partyColour(m.winner)}`}></span> {m.winner}</td>
+            <td>{((m.majority_pct ?? 0) * 100).toFixed(1)}pp</td>
+            <td>{m.country?.replace(/_/g, " ")}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Backtest</p>
+      <h2>How the model performed on GE2024</h2>
+    </div>
+    <p style="color: var(--muted)">
+      Predicting GE2024 from GE2019 baseline + actual GE2024 polling, evaluated on
+      {backtest.rows?.length} constituencies (boundary-stable subset). Strong
+      Transition Model beat Uniform National Swing by
+      <strong>{backtest.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp MAE</strong>.
+    </p>
+    <table class="seat-table">
+      <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier (top)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Uniform National Swing (baseline)</td>
+          <td>{((backtest.summary?.uns?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((backtest.summary?.uns?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{backtest.summary?.uns?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+        <tr>
+          <td>Strong Transition Model</td>
+          <td>{((backtest.summary?.stm?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((backtest.summary?.stm?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{backtest.summary?.stm?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+        <tr>
+          <td>STM + anti-attenuation</td>
+          <td>{((backtest.summary?.stm_unwound?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((backtest.summary?.stm_unwound?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{backtest.summary?.stm_unwound?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: var(--muted)">
+      <a href="/data-quality/ge-backtest/">Full backtest details</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <p style="color: var(--muted)">
+      <a href="/methodology/general-election/">Methodology</a> ·
+      <a href="/transparency/">Transparency &amp; pre-registration</a> ·
+      <a href="/data-quality/ge-backtest/">Backtest details</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.party-pill {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+</style>

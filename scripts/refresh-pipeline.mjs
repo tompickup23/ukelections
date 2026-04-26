@@ -55,6 +55,9 @@ phases.push(["4. Run bulk ward predictions (locals + mayors)", "scripts/run-bulk
 phases.push(["5. Run 2024 backtest", "scripts/run-2024-backtest.mjs"]);
 phases.push(["6. Run Senedd 2026 predictions", "scripts/run-senedd-predictions.mjs"]);
 phases.push(["7. Run Holyrood 2026 predictions", "scripts/run-holyrood-predictions.mjs"]);
+phases.push(["7a. Build GE PCON identity table", "scripts/ingest-pcon-identity.mjs"]);
+phases.push(["7b. Run GE2024 backtest", "scripts/run-ge-backtest.mjs"]);
+phases.push(["7c. Run GE next-election bulk forecast (650 PCONs)", "scripts/run-ge-predictions.mjs"]);
 
 for (const [label, scriptPath] of phases) run(label, scriptPath);
 

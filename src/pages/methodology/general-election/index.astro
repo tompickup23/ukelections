@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadGeAssumptions, loadGeBacktest } from "../../../lib/predictions";
+
+const a = loadGeAssumptions();
+const b = loadGeBacktest();
+---
+
+<BaseLayout
+  title="General election forecast — methodology"
+  description="How the ukelections.co.uk general election constituency forecast is built. Strong Transition Model swing, BES priors, sitting-MP layer, tactical voting, by-election overlay. Audit-grade pre-registration."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Methodology</p>
+    <h1>How we forecast 650 constituencies</h1>
+    <p class="lede">
+      Strong Transition Model swing, BES Wave 1-30 demographic priors,
+      sitting-MP layer, Curtice/Fisher tactical voting overlay, recent by-election
+      overlay. Pre-registered, sha256-committed before each forecast run.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Pipeline</p>
+      <h2>Composition order</h2>
+    </div>
+    <ol>
+      <li><strong>GE2024 baseline.</strong> Each PCON's actual result on 4 July 2024, taken from Democracy Club CC0 data + Returning Officer declarations. 650/650 PCONs.</li>
+      <li><strong>National swing — Strong Transition Model (STM).</strong> Replaces additive Uniform National Swing. Losers shed share locally in proportion to their local vote; gainers absorb the freed share pro-rata to national gain. Bounded in [0,1] by construction. Reference: <a href="https://www.electoralcalculus.co.uk/blogs/ec_mrpinfo_20240604.html">Electoral Calculus / Baxter STM</a>. <strong>+1.37pp MAE lift over UNS</strong> on the GE2024 backtest.</li>
+      <li><strong>BES regional/demographic prior.</strong> 36,416 post-GE2024 respondents from the British Election Study Wave 1-30 panel, post-stratified into (region × age × ethnicity × tenure) cells with Dirichlet pooling κ=15, then projected to LAD-level priors. Each PCON inherits the prior of its primary intersecting LAD, blended at 15% weight.</li>
+      <li><strong>Sitting-MP layer.</strong> Personal-vote bonus for incumbents standing again (+1pp at &lt;5yr → +4pp at ≥20yr tenure); retirement drag for standing-down MPs (-2pp to -3pp); open-seat treatment for defectors / suspended MPs.</li>
+      <li><strong>Tactical voting overlay.</strong> Curtice/Fisher Lab/LD/Green progressive squeeze. When 1st = Conservative or Reform with ≤10pp lead over a progressive 2nd, transfer 30% of a 3rd-placed progressive's share to the 2nd-placed.</li>
+      <li><strong>By-election overlay.</strong> Where a post-GE2024 by-election has been held in this PCON (Runcorn 2025, Gorton 2026), blend 30% of the by-election's shares into the prediction.</li>
+      <li><strong>Normalise.</strong> Re-scale shares to sum to 1.0.</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Backtest</p>
+      <h2>How the model performs on GE2024</h2>
+    </div>
+    <p>
+      Predicting GE2024 from the GE2019 baseline + actual GE2024 national polling, evaluated on
+      <strong>{b.rows?.length}</strong> boundary-stable PCONs:
+    </p>
+    <ul>
+      <li>Uniform National Swing baseline: <strong>{((b.summary?.uns?.winner_accuracy ?? 0) * 100).toFixed(1)}%</strong> winner accuracy, <strong>{((b.summary?.uns?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</strong> major-party MAE.</li>
+      <li>Strong Transition Model: <strong>{((b.summary?.stm?.winner_accuracy ?? 0) * 100).toFixed(1)}%</strong> winner accuracy, <strong>{((b.summary?.stm?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</strong> major-party MAE — a <strong>{b.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp</strong> lift over UNS.</li>
+    </ul>
+    <p style="color: var(--muted)">
+      For comparison: Survation's published 2024 MRP RMSE was 5.55pp; YouGov's 2024 fared paper reported 92% winner accuracy. Our 78% on the boundary-stable 439-PCON subset is the floor — adding the new-boundary 211 PCONs once notional 2019 results are ingested, plus campaign-period polling, should close the gap.
+    </p>
+    <p style="color: var(--muted)">
+      <a href="/data-quality/ge-backtest/">Full backtest tables</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Assumptions log</p>
+      <h2>Every parameter, version-controlled</h2>
+    </div>
+    <p>
+      Every weight, ceiling, and dampening factor is recorded in
+      <code>data/predictions/ge-next/assumptions.json</code> and pre-registered with
+      its sha256 before the forecast is run. Current values:
+    </p>
+    <pre style="white-space: pre-wrap; background: var(--card); padding: 1rem;">{JSON.stringify(a.parameters, null, 2)}</pre>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Academic references</p>
+      <h2>Sources</h2>
+    </div>
+    <ul>
+      <li><a href="https://benjaminlauderdale.net/files/papers/mrp-polling-paper.pdf">Lauderdale, Bailey, Blumenau, Rivers (2020)</a> — foundational MRP paper</li>
+      <li><a href="https://benjaminlauderdale.net/files/papers/2016HanrettyLauderdaleVivyanPSRM.pdf">Hanretty, Lauderdale, Vivyan (2018)</a> — comparison of MRP strategies</li>
+      <li><a href="https://yougov.co.uk/politics/articles/49968-how-yougovs-seat-and-vote-projections-fared-at-the-2024-uk-general-election">YouGov 2024 fared paper</a> — unwinding correction</li>
+      <li><a href="https://www.britishpollingcouncil.org/wordpress/wp-content/uploads/2025/04/ge24-survation-mrp-postmortem.pdf">Survation/Hanretty 2024 MRP post-mortem</a></li>
+      <li><a href="https://www.focaldata.com/blog/review-into-our-performance-at-the-2024-uk-general-election">Focaldata 2024 review</a></li>
+      <li><a href="https://www.electoralcalculus.co.uk/blogs/ec_mrpinfo_20240604.html">Electoral Calculus Strong Transition Model</a></li>
+      <li><a href="https://users.ox.ac.uk/~nuff0084/FisherTT.pdf">Fisher (2004) — tactical voting and tactical non-voting</a></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <p style="color: var(--muted)">
+      <a href="/forecasts/general-election/">National forecast</a> ·
+      <a href="/transparency/">Transparency &amp; pre-registration</a> ·
+      <a href="/data-quality/ge-backtest/">Backtest details</a>
+    </p>
+  </section>
+</BaseLayout>

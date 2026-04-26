@@ -1,0 +1,27 @@
+{
+  "snapshot": {
+    "snapshot_id": "ge-next-assumptions-2026-04-26",
+    "generated_at": "2026-04-26T02:18:06.969Z"
+  },
+  "parameters": {
+    "use_strong_transition_model": true,
+    "ge_dampening": 1,
+    "bes_prior_weight": 0.15,
+    "tactical_voting_competitiveness_gap": 0.1,
+    "tactical_voting_floor": 0.05,
+    "tactical_voting_transfer_rate": 0.3,
+    "by_election_overlay_weight": 0.3,
+    "incumbency_personal_vote_pp": {
+      ">=20yr": 4,
+      ">=10yr": 3,
+      ">=5yr": 2,
+      "<5yr": 1
+    },
+    "retirement_drag_pp": {
+      ">=20yr": 3,
+      ">=10yr": 2.5,
+      "<10yr": 2
+    },
+    "defection_open_seat_drag_pp": 1.5
+  }
+}
