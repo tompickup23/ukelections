@@ -1,48 +1,61 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { MODEL_FAMILIES } from "../lib/modelFamilies";
+import { loadMayHeadline, loadGeHeadline, countdownToMay, shortPartyLabel } from "../lib/siteData";
+import { partyColour } from "../lib/predictions";
+
+const may = loadMayHeadline();
+const ge = loadGeHeadline();
+const cd = countdownToMay();
 ---
 
-<BaseLayout title="Forecasts" description="Forecast publication framework for UK Elections, including uncertainty, backtests, and source snapshots.">
+<BaseLayout title="All forecasts" description="Every UK election forecast on the site, in one place.">
   <section class="page-hero">
-    <p class="eyebrow">Forecasts</p>
-    <h1>No naked probabilities.</h1>
+    <p class="eyebrow">All forecasts</p>
+    <h1>Every UK election, forecast.</h1>
     <p class="lede">
-      Forecasts will only publish with model version, input snapshot, uncertainty, source notes,
-      and a backtest record that survives later model changes.
+      Four election families, one model, one accuracy record. Pick the contest you're interested in.
     </p>
   </section>
 
   <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">Coverage</p>
-      <h2>One output format, different engines.</h2>
-    </div>
     <div class="feature-list">
       <article>
-        <h2>Local models</h2>
-        <p>Borough, county, and unitary forecasts are built from their own wards, divisions, candidates, cycles, and local result histories.</p>
+        <h3>May 7 — English councils + mayoralties</h3>
+        <p>
+          {may.council_count} councils, {may.ward_count.toLocaleString()} wards, {may.seats_total.toLocaleString()} seats.
+          {cd.has_passed ? "Live tracking." : `${cd.days_until} days to go.`}
+        </p>
+        <p><a href="/forecasts/may-2026/">See the May 7 forecast →</a></p>
       </article>
       <article>
-        <h2>Devolved models</h2>
-        <p>Senedd and Scottish Parliament forecasts use the correct list or AMS allocation logic instead of Westminster shortcuts.</p>
+        <h3>Senedd Cymru 2026</h3>
+        <p>The first election under the new closed-list PR system: 16 super-constituencies × 6 list seats = 96 seats.</p>
+        <p><a href="/forecasts/senedd-2026/">See the Senedd forecast →</a></p>
       </article>
       <article>
-        <h2>Publication gate</h2>
-        <p>Outputs need intervals, model version, input snapshot, candidate status, boundary generation, and backtest status.</p>
+        <h3>Scottish Parliament 2026</h3>
+        <p>73 constituency seats (FPTP) + 56 regional list seats (d'Hondt) = 129 seats.</p>
+        <p><a href="/forecasts/holyrood-2026/">See the Holyrood forecast →</a></p>
+      </article>
+      <article>
+        <h3>UK general election</h3>
+        <p>
+          {ge.total_seats.toLocaleString()} constituencies. Refreshed daily.
+          {ge.seat_tallies[0] ? ` Headline: ${shortPartyLabel(ge.seat_tallies[0].party)} ${ge.seat_tallies[0].seats} seats.` : ""}
+        </p>
+        <p><a href="/forecasts/general-election/">See the GE forecast →</a></p>
       </article>
     </div>
   </section>
 
   <section class="section">
-    <div class="workflow" aria-label="Forecast model families">
-      {MODEL_FAMILIES.map((family, index) => (
-        <article>
-          <span>{index + 1}</span>
-          <h2>{family.label}</h2>
-          <p>{family.geography}. {family.votingSystem}. First gate: {family.firstGate}.</p>
-        </article>
-      ))}
+    <div class="section-head">
+      <p class="eyebrow">Find your specific ward or constituency</p>
+      <h2>Search by postcode</h2>
     </div>
+    <p>
+      Type a postcode, town name, or council name and we'll route you to the exact contest you'll be voting in.
+    </p>
+    <p><a class="button primary" href="/your-area/">Find my ward →</a></p>
   </section>
 </BaseLayout>

@@ -87,13 +87,17 @@ const majorMae = major.map((p) => ({ party: p, mae: b.overall_mae.per_party[p] |
   <section class="section prose-block">
     <h2>Why publish this?</h2>
     <p>
-      Every forecast site claims accuracy. Few publish their errors. The 7.7pp average share error and 78.6% winner accuracy on May 2024 are the credibility floor — we'll publish the same backtest against May 2026 actuals after the count, so you can see whether the model improves or degrades over time.
+      Every forecast site claims accuracy. Few publish their errors. The
+      <strong>{(b.overall_mae.major_parties_avg * 100).toFixed(2)}pp average share error</strong> and
+      <strong>{(b.winner_accuracy * 100).toFixed(1)}% winner accuracy</strong> on May 2024 are the credibility floor —
+      we'll publish the same backtest against May 2026 actuals after the count, so you can see whether the model
+      improves or degrades over time.
     </p>
     <p>
-      A 7-8pp MAE on per-party vote share is roughly comparable to academic local-election models. Winner accuracy near 80% is in the same ballpark as Electoral Calculus's claimed accuracy on national MRP, applied here to ~3,000 individual wards.
-    </p>
-    <p>
-      Methodology: the model was given only ward history before May 2024, then asked to predict each 2024 ward result using May 2024 polling vs the GE 2019 baseline, plus LA-level UKD HP v7.0 ethnic projections + IMD deprivation. See the <a href="/methodology/national-model/">methodology page</a>.
+      Methodology: the model was given only ward history before May 2024, then asked to predict each 2024 ward
+      result using May 2024 polling vs the GE 2019 baseline, plus local-authority demographic projections and
+      Index of Multiple Deprivation deciles. See the <a href="/methodology/national-model/">methodology page</a>
+      for the full pipeline.
     </p>
   </section>
 </BaseLayout>

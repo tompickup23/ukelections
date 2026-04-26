@@ -22,12 +22,11 @@ export interface SearchEntry {
 }
 
 export const NAV_ITEMS = [
-  { href: "/seats/", label: "Seats" },
-  { href: "/your-area/", label: "Your Area" },
-  { href: "/forecasts/", label: "Forecasts" },
-  { href: "/data-quality/", label: "Data Quality" },
-  { href: "/methodology/", label: "Methodology" },
-  { href: "/sources/", label: "Sources" }
+  { href: "/forecasts/may-2026/", label: "May 7 Election" },
+  { href: "/forecasts/general-election/", label: "General Election" },
+  { href: "/your-area/", label: "Find Your Ward" },
+  { href: "/data-quality/", label: "How Accurate" },
+  { href: "/methodology/", label: "About" },
 ] as const;
 
 export const RELEASES: ReleaseEntry[] = [
@@ -68,6 +67,10 @@ const STATIC_PATHS = [
   "/seats/",
   "/your-area/",
   "/forecasts/",
+  "/forecasts/may-2026/",
+  "/forecasts/general-election/",
+  "/forecasts/senedd-2026/",
+  "/forecasts/holyrood-2026/",
   "/data-quality/",
   "/methodology/",
   "/sources/",

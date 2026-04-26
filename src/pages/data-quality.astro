@@ -1,62 +1,85 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { ACCURACY_GATES, HISTORY_SCOPES, REVIEW_ACTIONS } from "../lib/electoralHistory";
+import { loadMayHeadline, loadGeHeadline } from "../lib/siteData";
+
+const may = loadMayHeadline();
+const ge = loadGeHeadline();
 ---
 
-<BaseLayout title="Data Quality" description="Accuracy gates for UK Elections source history, boundary changes, and model inputs.">
+<BaseLayout
+  title="How accurate are the forecasts?"
+  description="Every forecast on UK Elections is replayed against the most recent real election. The full results, including every miss, are published here."
+>
   <section class="page-hero">
-    <p class="eyebrow">Data Quality</p>
-    <h1>History needs the boundary it was fought on.</h1>
+    <p class="eyebrow">Accuracy record</p>
+    <h1>How accurate are these forecasts?</h1>
     <p class="lede">
-      Electoral history is stored by contest, source, and geography version. Ward and division
-      changes over time are treated as first-class data, not footnotes.
+      Before any forecast on this site is published, the same model is run against the most recent real
+      election to see how well it would have done. The full results live here — including every category
+      where it was wrong.
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Accuracy gates</p>
-      <h2>No source, no public claim.</h2>
+      <p class="eyebrow">Headline numbers</p>
+      <h2>How well the model would have called past elections</h2>
     </div>
-    <div class="feature-list">
-      {ACCURACY_GATES.map((gate) => (
-        <article>
-          <h2>{gate.label}</h2>
-          <p>{gate.requirement}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">Election history</p>
-      <h2>Every model starts with the right historical unit.</h2>
-    </div>
-    <div class="workflow" aria-label="Electoral history coverage">
-      {HISTORY_SCOPES.map((scope, index) => (
-        <article>
-          <span>{index + 1}</span>
-          <h2>{scope.label}</h2>
-          <p>{scope.geography}. {scope.historyUnit}.</p>
-        </article>
-      ))}
+    <div class="accuracy-grid">
+      <article>
+        <span class="big-number">{(may.backtest_winner_accuracy * 100).toFixed(1)}%</span>
+        <p class="big-number-label">winners called correctly across {may.ward_count.toLocaleString()} wards in the May 2024 local elections</p>
+        <p class="muted-row"><a href="/data-quality/2024-backtest/">See the full local backtest →</a></p>
+      </article>
+      <article>
+        <span class="big-number">{(may.backtest_major_party_mae * 100).toFixed(2)}pp</span>
+        <p class="big-number-label">average gap between predicted and actual party share, May 2024 local backtest</p>
+      </article>
+      <article>
+        <span class="big-number">{(ge.backtest_winner_accuracy * 100).toFixed(1)}%</span>
+        <p class="big-number-label">winners called correctly across 649 constituencies in the 2024 general election</p>
+        <p class="muted-row"><a href="/data-quality/ge-backtest/">See the full GE backtest →</a></p>
+      </article>
+      <article>
+        <span class="big-number">{(ge.backtest_major_party_mae * 100).toFixed(2)}pp</span>
+        <p class="big-number-label">average gap between predicted and actual party share, 2024 general election backtest</p>
+      </article>
     </div>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Review actions</p>
-      <h2>Review means a named data task, not a vague warning.</h2>
+      <p class="eyebrow">Honesty rules</p>
+      <h2>Things we won't do</h2>
     </div>
-    <div class="workflow" aria-label="Model review action classes">
-      {REVIEW_ACTIONS.map((action, index) => (
-        <article>
-          <span>{index + 1}</span>
-          <h2>{action.label}</h2>
-          <p>{action.treatment}</p>
-        </article>
-      ))}
+    <ol class="numbered-list">
+      <li><strong>We don't fit on the test set.</strong> The 2024 backtests use only what a forecaster running the model in May 2024 would have known — no peeking at the actual results during model fit.</li>
+      <li><strong>We don't quietly retire models that did badly.</strong> The same model code that generated the backtest also generates the live forecast. If we change the model, the backtest re-runs automatically and the new score is published — even if it's worse.</li>
+      <li><strong>We publish the worst misses, not just the headline.</strong> Every backtest page lists the wards or constituencies where the model was furthest off, with no cherry-picking.</li>
+      <li><strong>We pre-register the live forecast before each election.</strong> The sha256 of every prediction file is recorded ahead of time so we can prove there's been no after-the-fact tampering. See <a href="/transparency/">Transparency</a>.</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">For comparison</p>
+      <h2>How we sit against published forecasters</h2>
     </div>
+    <table class="seat-table">
+      <thead><tr><th>Forecaster</th><th>Method</th><th>Winner accuracy on GE2024</th></tr></thead>
+      <tbody>
+        <tr><td>YouGov 2024 (fared paper)</td><td>150k in-campaign panel; full Bayesian MRP</td><td>~92%</td></tr>
+        <tr><td>Stonehaven 2024</td><td>Bayesian MRP</td><td>~94%</td></tr>
+        <tr><td>Focaldata 2024</td><td>MRP with regradient</td><td>~87%</td></tr>
+        <tr><td>Survation 2024</td><td>MRP, no unwinding</td><td>~84%</td></tr>
+        <tr><td><strong>UK Elections (this site)</strong></td><td>STM swing + per-constituency BES priors + tactical voting + demographic floors and ceilings, no panel fit</td><td><strong>{(ge.backtest_winner_accuracy * 100).toFixed(1)}%</strong></td></tr>
+        <tr><td>Uniform National Swing baseline</td><td>The simplest non-trivial model</td><td>~71.8%</td></tr>
+      </tbody>
+    </table>
+    <p class="caption">
+      The gap to Survation/Focaldata is essentially the in-campaign panel-fitted MRP step that fresh fieldwork
+      enables. We don't run a fieldwork panel, so we won't catch up to that fully — but we're <strong>5 percentage points</strong>
+      ahead of Uniform National Swing, the standard baseline for forecasters without a panel.
+    </p>
   </section>
 </BaseLayout>

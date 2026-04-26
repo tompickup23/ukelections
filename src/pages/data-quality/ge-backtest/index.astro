@@ -25,7 +25,7 @@ const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1
 
 <BaseLayout
   title="GE backtest — data quality"
-  description={`Validation of the GE constituency model: predict GE2024 from GE2019 + national polling. ${rows.length} boundary-stable PCONs evaluated.`}
+  description={`Validation of the GE constituency model: predict GE2024 from GE2019 + national polling. ${rows.length} boundary-stable constituencies evaluated.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Data quality — backtest</p>
@@ -34,7 +34,7 @@ const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1
       Predicting GE2024 from the GE2019 baseline and the actual GE2024 polling — measuring whether our swing model adds value over Uniform National Swing.
     </p>
     <p style="color: var(--muted)">
-      Generated {b.snapshot?.generated_at?.slice(0, 10)} · {rows.length} boundary-stable PCONs evaluated
+      Generated {b.snapshot?.generated_at?.slice(0, 10)} · {rows.length} boundary-stable constituencies evaluated
     </p>
   </section>
 

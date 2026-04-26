@@ -399,6 +399,364 @@ input:focus-visible,
   text-decoration: none;
 }
 
+/* === Aesthetic upgrade — headline cards, party bars, big numbers === */
+
+.hero-v2 .eyebrow {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  background: rgba(193, 18, 31, 0.08);
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+}
+
+.headline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0 3rem;
+}
+
+.headline-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.headline-card header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.headline-card .kicker {
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--accent-3);
+  letter-spacing: 0.04em;
+}
+
+.headline-card h2 {
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.7rem);
+  line-height: 1.15;
+  margin: 0;
+}
+
+.headline-card .card-lede {
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.headline-card .card-cta {
+  margin-top: auto;
+  font-weight: 900;
+  color: var(--accent-3);
+  text-decoration: none;
+}
+
+.headline-card .card-cta:hover {
+  color: var(--accent);
+}
+
+/* Party-share bars */
+
+.party-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.party-bars-large {
+  gap: 0.7rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 7rem) 1fr minmax(4.5rem, auto);
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.party-bars-large .bar-row {
+  font-size: 1.05rem;
+}
+
+.bar-label {
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-track {
+  height: 0.7rem;
+  background: rgba(17, 24, 39, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.party-bars-large .bar-track {
+  height: 1rem;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.bar-value {
+  font-weight: 900;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bar-share {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.88em;
+}
+
+.swing-up { color: #167d3a; font-weight: 800; }
+.swing-down { color: #b5331f; font-weight: 800; }
+.swing-flat { color: var(--muted); }
+
+/* Big-number accuracy grid */
+
+.accuracy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.accuracy-grid article {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.big-number {
+  display: block;
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--accent-3);
+  line-height: 1;
+}
+
+.big-number-label {
+  margin: 0.5rem 0 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Generic helpers */
+
+.numbered-list {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.numbered-list li {
+  margin-bottom: 0.6rem;
+}
+
+.plain-list {
+  list-style: disc;
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.plain-list li {
+  margin-bottom: 0.4rem;
+}
+
+.caption {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}
+
+.muted-row {
+  color: var(--muted);
+  margin: 1rem 0;
+}
+
+.muted { color: var(--muted); }
+
+.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+.meta-row {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.method-details {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  margin: 2rem 0;
+}
+
+.method-details > summary {
+  cursor: pointer;
+  font-family: "Sora", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  list-style-position: inside;
+}
+
+.method-details > summary::marker {
+  color: var(--accent);
+}
+
+.method-details[open] > summary {
+  margin-bottom: 0.75rem;
+}
+
+/* Tables — share-bar friendly + tabular-aligned */
+
+.seat-table,
+.council-table,
+.ward-grid,
+.scope-table,
+.mae-table,
+.miss-table,
+.super-table,
+.constituency-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.seat-table th,
+.seat-table td,
+.council-table th,
+.council-table td,
+.ward-grid th,
+.ward-grid td,
+.scope-table th,
+.scope-table td,
+.mae-table th,
+.mae-table td,
+.miss-table th,
+.miss-table td,
+.super-table th,
+.super-table td,
+.constituency-table th,
+.constituency-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.seat-table th,
+.council-table th,
+.ward-grid th,
+.scope-table th,
+.mae-table th,
+.miss-table th,
+.super-table th,
+.constituency-table th {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(17, 24, 39, 0.025);
+}
+
+.seat-table tbody tr:hover,
+.council-table tbody tr:hover,
+.ward-grid tbody tr:hover {
+  background: rgba(29, 78, 137, 0.04);
+}
+
+.party-pill,
+.party-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 3px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.party-pill {
+  border-radius: 50%;
+}
+
+/* Council grid card */
+
+.council-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.75rem;
+}
+
+.council-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.council-card:hover {
+  border-color: var(--accent-3);
+  transform: translateY(-1px);
+}
+
+.council-card .tier {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* JSON pre-block */
+
+.json-block {
+  white-space: pre-wrap;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  overflow-x: auto;
+}
+
 @media (max-width: 820px) {
   .site-header,
   .footer-inner,
@@ -414,11 +772,18 @@ input:focus-visible,
   .status-grid,
   .feature-list,
   .workflow,
-  .source-table div {
+  .source-table div,
+  .headline-grid,
+  .accuracy-grid {
     grid-template-columns: 1fr;
   }
 
   .brand-copy small {
     max-width: 12rem;
+  }
+
+  .bar-row {
+    grid-template-columns: minmax(4.5rem, 5.5rem) 1fr minmax(3.5rem, auto);
+    font-size: 0.9rem;
   }
 }

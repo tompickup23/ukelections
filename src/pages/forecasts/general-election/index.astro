@@ -1,94 +1,93 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { loadGePredictions, loadGeSummary, loadGeBacktest, partyColour } from "../../../lib/predictions";
+import { loadGePredictions, partyColour } from "../../../lib/predictions";
+import { loadGeHeadline, shortPartyLabel } from "../../../lib/siteData";
 
 const ge = loadGePredictions();
-const summary = loadGeSummary();
-const backtest = loadGeBacktest();
+const headline = loadGeHeadline();
 
 const predictions = ge.predictions || {};
 const evaluated = Object.values(predictions).filter((p: any) => p?.prediction);
-const totalSeats = evaluated.length;
-
-const seatTallies = summary.seat_tallies_by_party || {};
-const ranked = Object.entries(seatTallies).sort((a: any, b: any) => b[1] - a[1]);
-
-const nationalShare = summary.national_vote_share || {};
-const rankedShare = Object.entries(nationalShare).sort((a: any, b: any) => b[1] - a[1]);
-
-// Top 100 marginals — predicted majority closest to 0
 const marginals = evaluated
   .filter((p: any) => p?.majority_pct != null)
   .sort((a: any, b: any) => Math.abs(a.majority_pct) - Math.abs(b.majority_pct))
   .slice(0, 50);
+
+const top = headline.seat_tallies[0];
+const second = headline.seat_tallies[1];
+const HALFWAY = 326;
 ---
 
 <BaseLayout
   title="General election forecast — every UK constituency"
-  description={`Forecast for all ${totalSeats} UK parliamentary constituencies, using current Westminster polling and the GE2024 baseline. Pre-registered, sha256-committed.`}
+  description={`Forecast for all ${headline.total_seats} UK constituencies if a general election were held today. Headline: ${top ? `${shortPartyLabel(top.party)} ${top.seats}` : "no clear lead"}.`}
 >
   <section class="page-hero">
-    <p class="eyebrow">National forecast — next general election</p>
-    <h1>Every UK parliamentary constituency, forecast</h1>
+    <p class="eyebrow">If a UK general election were held today</p>
+    <h1>{top ? `${shortPartyLabel(top.party)} projected to win ${top.seats} seats` : "Every UK constituency, forecast"}</h1>
     <p class="lede">
-      {totalSeats.toLocaleString()} constituencies · forecast as if a general election were held this week · current Westminster polling baseline
-    </p>
-    <p style="color: var(--muted)">
-      Generated {summary.snapshot.generated_at?.slice(0, 10)} · Methodology version <code>{summary.snapshot.methodology_version}</code> ·
-      Source: <code>{summary.snapshot.polling_source}</code>
+      All {headline.total_seats.toLocaleString()} UK parliamentary constituencies. Refreshed daily from the latest UK Westminster polling.
+      A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "—"} short of an overall majority.`}
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Headline projection</p>
-      <h2>Predicted seat split</h2>
+      <p class="eyebrow">Seats projection</p>
+      <h2>How the new House of Commons would look</h2>
     </div>
-    <table class="seat-table">
-      <thead><tr><th>Party</th><th>Seats</th><th>Share</th></tr></thead>
-      <tbody>
-        {ranked.map(([party, seats]: any) => (
-          <tr>
-            <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
-            <td>{(seats as number).toLocaleString()}</td>
-            <td>{((seats as number) / totalSeats * 100).toFixed(1)}%</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div class="party-bars party-bars-large">
+      {headline.seat_tallies.map((t) => (
+        <div class="bar-row">
+          <span class="bar-label">{shortPartyLabel(t.party)}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
+          </div>
+          <span class="bar-value">{t.seats.toLocaleString()} <span class="bar-share">({(t.share * 100).toFixed(1)}%)</span></span>
+        </div>
+      ))}
+    </div>
+    {top && second && (
+      <p class="caption">
+        That's a {(top.seats - second.seats).toLocaleString()}-seat lead for {shortPartyLabel(top.party)} over {shortPartyLabel(second.party)}.
+      </p>
+    )}
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">National vote share</p>
-      <h2>Predicted UK-wide vote</h2>
+      <p class="eyebrow">Vote share</p>
+      <h2>What share of the national vote each party would get</h2>
     </div>
-    <table class="seat-table">
-      <thead><tr><th>Party</th><th>Vote share</th></tr></thead>
-      <tbody>
-        {rankedShare.slice(0, 12).map(([party, share]: any) => (
-          <tr>
-            <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
-            <td>{((share as number) * 100).toFixed(1)}%</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div class="party-bars">
+      {headline.national_vote_share.slice(0, 8).map((t) => (
+        <div class="bar-row">
+          <span class="bar-label">{shortPartyLabel(t.party)}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
+          </div>
+          <span class="bar-value">{(t.share * 100).toFixed(1)}%</span>
+        </div>
+      ))}
+    </div>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Top 50 marginals</p>
-      <h2>Tightest predicted contests</h2>
+      <p class="eyebrow">Tightest contests</p>
+      <h2>Top 50 marginals</h2>
     </div>
+    <p class="caption">
+      The closest predicted contests on this forecast — these are the seats most likely to flip if the polling moves.
+    </p>
     <table class="seat-table">
       <thead><tr><th>Constituency</th><th>Predicted winner</th><th>Margin</th><th>Country</th></tr></thead>
       <tbody>
         {marginals.map((m: any) => (
           <tr>
             <td><a href={`/seats/parliament/${m.slug}/`}>{m.name}</a></td>
-            <td><span class="party-pill" style={`background:${partyColour(m.winner)}`}></span> {m.winner}</td>
-            <td>{((m.majority_pct ?? 0) * 100).toFixed(1)}pp</td>
+            <td><span class="party-swatch" style={`background:${partyColour(m.winner)}`}></span> {shortPartyLabel(m.winner)}</td>
+            <td class="num">{((m.majority_pct ?? 0) * 100).toFixed(1)}pp</td>
             <td>{m.country?.replace(/_/g, " ")}</td>
           </tr>
         ))}
@@ -98,59 +97,33 @@ const marginals = evaluated
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Backtest</p>
-      <h2>How the model performed on GE2024</h2>
+      <p class="eyebrow">How accurate</p>
+      <h2>Tested against the actual 2024 general election</h2>
     </div>
-    <p style="color: var(--muted)">
-      Predicting GE2024 from GE2019 baseline + actual GE2024 polling, evaluated on
-      {backtest.rows?.length} constituencies (boundary-stable subset). Strong
-      Transition Model beat Uniform National Swing by
-      <strong>{backtest.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp MAE</strong>.
+    <p>
+      We replayed the same model against the real 2024 general election using only what a forecaster running the model
+      in May 2024 would have known. The model called the winner correctly in
+      <strong>{(headline.backtest_winner_accuracy * 100).toFixed(1)}%</strong> of constituencies, with an average gap of
+      <strong>{(headline.backtest_major_party_mae * 100).toFixed(2)}pp</strong> between predicted and actual party share.
     </p>
-    <table class="seat-table">
-      <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier (top)</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Uniform National Swing (baseline)</td>
-          <td>{((backtest.summary?.uns?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((backtest.summary?.uns?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{backtest.summary?.uns?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-        <tr>
-          <td>Strong Transition Model</td>
-          <td>{((backtest.summary?.stm?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((backtest.summary?.stm?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{backtest.summary?.stm?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-        <tr>
-          <td>STM + anti-attenuation</td>
-          <td>{((backtest.summary?.stm_unwound?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((backtest.summary?.stm_unwound?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{backtest.summary?.stm_unwound?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="color: var(--muted)">
-      <a href="/data-quality/ge-backtest/">Full backtest details</a>
+    <p>
+      <a href="/data-quality/ge-backtest/">Full accuracy record →</a>
     </p>
   </section>
 
   <section class="section">
-    <p style="color: var(--muted)">
-      <a href="/methodology/general-election/">Methodology</a> ·
-      <a href="/transparency/">Transparency &amp; pre-registration</a> ·
-      <a href="/data-quality/ge-backtest/">Backtest details</a>
+    <div class="section-head">
+      <p class="eyebrow">Caveats</p>
+      <h2>What this forecast does and doesn't try to do</h2>
+    </div>
+    <ul class="plain-list">
+      <li><strong>It assumes a notional election held this week</strong>, using current Westminster polling. The next general election may be months or years away — the forecast will move with the polls.</li>
+      <li><strong>It does not predict turnout swings</strong> or campaign effects beyond what's already reflected in the polls. Late-campaign movement can be substantial.</li>
+      <li><strong>It does not assume tactical voting beyond the pattern observed in 2024.</strong> A formal pact between Labour and the Liberal Democrats, for example, is not modelled.</li>
+      <li><strong>Confidence intervals are not yet shown per seat.</strong> A future release will publish a high–low band on each constituency.</li>
+    </ul>
+    <p class="caption">
+      Read about the model and how it's tested at <a href="/methodology/">About</a>.
     </p>
   </section>
 </BaseLayout>
-
-<style>
-.party-pill {
-  display: inline-block;
-  width: 0.7em;
-  height: 0.7em;
-  border-radius: 50%;
-  margin-right: 0.4em;
-  vertical-align: middle;
-}
-</style>

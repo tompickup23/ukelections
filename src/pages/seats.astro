@@ -1,38 +1,75 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadIdentity } from "../lib/predictions";
+
+const identity = loadIdentity();
+const councils = new Map<string, { slug: string; name: string; tier: string }>();
+for (const w of identity.wards as any[]) {
+  if (w.tier !== "local" && w.tier !== "mayor") continue;
+  if (!councils.has(w.council_slug)) {
+    councils.set(w.council_slug, { slug: w.council_slug, name: w.council_name, tier: w.tier });
+  }
+}
+const ordered = [...councils.values()].sort((a, b) => a.name.localeCompare(b.name));
 ---
 
-<BaseLayout title="Seats" description="Contest pages planned for candidates, results, boundaries, and local election signals.">
+<BaseLayout
+  title="Browse councils"
+  description="Browse every English council, mayoralty, and devolved parliament forecast on UK Elections."
+>
   <section class="page-hero">
-    <p class="eyebrow">Seats</p>
-    <h1>Every contest needs the right geography.</h1>
+    <p class="eyebrow">Browse</p>
+    <h1>Every council and contest</h1>
     <p class="lede">
-      The first data phase creates stable contest pages for constituencies, wards, divisions,
-      lists, and authority-wide races before any live forecast is published.
+      {ordered.length} English councils on the May 7 ballot, plus the Senedd and the Scottish Parliament.
+      Tap a council to see its per-ward forecast.
     </p>
   </section>
 
   <section class="section">
-    <div class="workflow">
+    <div class="section-head">
+      <p class="eyebrow">Search</p>
+      <h2>Looking for your specific ward?</h2>
+    </div>
+    <p>The fastest way is to type your postcode.</p>
+    <p><a class="button primary" href="/your-area/">Find my ward →</a></p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">All councils</p>
+      <h2>Browse alphabetically</h2>
+    </div>
+    <div class="council-grid">
+      {ordered.map((c) => (
+        <a class="council-card" href={`/seats/${c.slug}/`}>
+          <strong>{c.name}</strong>
+          <span class="tier">{c.tier === "mayor" ? "Mayoralty" : "Local council"}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Devolved</p>
+      <h2>Welsh and Scottish forecasts</h2>
+    </div>
+    <div class="feature-list">
       <article>
-        <span>1</span>
-        <h2>Identity</h2>
-        <p>Official code, name, nation, authority, boundary generation, predecessor areas, and election cycle.</p>
+        <h3>Senedd Cymru 2026</h3>
+        <p>96 seats — closed-list PR.</p>
+        <p><a href="/forecasts/senedd-2026/">See Senedd forecast →</a></p>
       </article>
       <article>
-        <span>2</span>
-        <h2>Candidates</h2>
-        <p>Candidate name, party, incumbency, source URL, publication timestamp, and withdrawal or replacement status.</p>
+        <h3>Scottish Parliament 2026</h3>
+        <p>129 seats — Additional Member System.</p>
+        <p><a href="/forecasts/holyrood-2026/">See Holyrood forecast →</a></p>
       </article>
       <article>
-        <span>3</span>
-        <h2>History</h2>
-        <p>Borough, county, unitary, Westminster, Senedd, Scottish, mayoral, and by-election result links where they explain the contest.</p>
-      </article>
-      <article>
-        <span>4</span>
-        <h2>Signals</h2>
-        <p>Polling, demographics, incumbency, candidate strength, local context, and model inputs with provenance and freshness labels.</p>
+        <h3>UK general election</h3>
+        <p>650 constituencies — refreshed daily.</p>
+        <p><a href="/forecasts/general-election/">See GE forecast →</a></p>
       </article>
     </div>
   </section>

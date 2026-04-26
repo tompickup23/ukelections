@@ -29,12 +29,11 @@ const b = loadBacktest();
 
     <h2>Model lineage</h2>
     <p>
-      The forecast engine is a generalisation of the AI DOGE election model
-      originally trained against Lancashire local elections (RMSE 1.65 on
-      candidate briefings). It has been ported and extended for nationwide
-      ward-level prediction with per-ward UK Demographics (UKD) Census 2021
-      data, per-county May 2025 cycle anchoring, and multi-cycle local-party
-      stronghold detection.
+      The forecast engine was originally trained against Lancashire local
+      elections (RMSE 1.65 on candidate briefings). It has been ported and
+      extended for nationwide ward-level prediction with per-ward
+      UK Demographics (UKD) Census 2021 data, per-county May 2025 cycle
+      anchoring, and multi-cycle local-party stronghold detection.
     </p>
 
     <h2>Step 1 — baseline</h2>
@@ -150,10 +149,10 @@ const b = loadBacktest();
       <li>Anchor weight 0.55 if baseline 3-5 years old</li>
       <li>Anchor weight 0.65 if baseline &gt;5 years old</li>
     </ul>
-    <p>For Lancashire wards, the per-ward LCC division reference (from the AI
-    DOGE corpus) is also passed to the model's Reform-entry step, giving
-    division-specific Reform shares like Burnley Rural 42.9% rather than the
-    Lancashire-wide 35.3% average.</p>
+    <p>For Lancashire wards, a per-ward Lancashire County Council 2025
+    division reference is also passed to the model's Reform-entry step,
+    giving division-specific Reform shares like Burnley Rural 42.9% rather
+    than the Lancashire-wide 35.3% average.</p>
 
     <h2>Step 10 — Reform UK demographic ceiling</h2>
     <p>
@@ -182,20 +181,14 @@ const b = loadBacktest();
 
     <h2>National polling source</h2>
     <p>
-      Current UK Westminster snapshot (April 2026 placeholder): Reform UK 30%,
-      Labour 23%, Conservative 18%, Lib Dem 13%, Green 9%, SNP 2.5%, Plaid
-      0.8%. Sourced from rolling cross-pollster average. Refresh due
-      2026-05-01 via <code>scripts/refresh-polling.mjs</code>.
-    </p>
-    <p>
-      Welsh April 2026 placeholder: Plaid Cymru 25%, Reform UK 23%, Labour
-      21%, Conservative 13%, Lib Dem 7%, Green 6%. Used for the
-      <a href="/forecasts/senedd-2026/">Senedd model</a>.
-    </p>
-    <p>
-      Scottish April 2026 placeholder: SNP 29%, Labour 24%, Reform UK 18%,
-      Conservative 14%, Lib Dem 8%, Green 5%. Used for the
-      <a href="/forecasts/holyrood-2026/">Holyrood model</a>.
+      The UK Westminster, Welsh and Scottish polling values used by the model
+      are auto-refreshed daily as the rolling 14-day average of every
+      pollster published on Wikipedia's polling pages. The current values are
+      shown in the per-prediction methodology trace on every ward and
+      constituency page, and the raw input is downloadable at
+      <a href="/data/polling/override.json"><code>/data/polling/override.json</code></a>.
+      A static fallback for each polling family lives in
+      <code>src/lib/nationalPolling.js</code> in case the auto-refresh fails.
     </p>
 
     <h2>Senedd model</h2>
@@ -239,9 +232,11 @@ const b = loadBacktest();
 
     <h2>What we still don't do</h2>
     <ul>
-      <li>MRP for GB650 Westminster — no GE in May 2026</li>
+      <li>Full Bayesian MRP with in-campaign panel fitting (we publish a
+      per-constituency BES prior on the GE forecast — see the GE
+      methodology — but no fresh fieldwork panel)</li>
       <li>BES Wave 27 panel data MRP (registration-walled, deferred)</li>
-      <li>Per-candidate vote prediction (party-share + ward-winner only)</li>
+      <li>Per-candidate vote prediction (party-share + winner only)</li>
       <li>Live election-night auto-call (manual updates only after the count)</li>
     </ul>
 

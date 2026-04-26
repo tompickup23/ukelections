@@ -1,25 +1,91 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { SOURCE_REGISTER } from "../lib/sourceRegister";
 ---
 
-<BaseLayout title="Sources" description="Primary data sources planned for UK Elections candidate, result, boundary, polling, and demographic context.">
+<BaseLayout
+  title="Where the data comes from"
+  description="Every input that feeds a UK Elections forecast: the candidates, the past results, the polling, the demographics, and the academic research."
+>
   <section class="page-hero">
-    <p class="eyebrow">Sources</p>
-    <h1>Source status comes before claims.</h1>
+    <p class="eyebrow">Data sources</p>
+    <h1>Where the data comes from</h1>
     <p class="lede">
-      This page tracks the public data feeds, internal pilots, and review gates planned for the
-      first election datasets. Nothing here is presented as live coverage yet.
+      Every forecast on this site is built from public data. Here's the list of feeds, what each one contributes,
+      and how often it refreshes. Direct download links and file paths live on the
+      <a href="/transparency/">Transparency page</a>.
     </p>
   </section>
 
-  <section class="source-table" aria-label="Planned data sources">
-    {SOURCE_REGISTER.map((source) => (
-      <div>
-        <strong>{source.name}</strong>
-        <span>{source.purpose}</span>
-        <em>{source.status}</em>
-      </div>
-    ))}
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Candidates and ballots</p>
+      <h2>Who's standing where</h2>
+    </div>
+    <ul class="plain-list">
+      <li><strong>Democracy Club</strong> — the open candidate-data charity. Every candidate, ballot paper, and Statement of Persons Nominated for May 7 2026 is sourced from their public CC-BY API. Refreshed nightly.
+        (<a href="https://democracyclub.org.uk/">democracyclub.org.uk</a>)</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Past results</p>
+      <h2>What happened last time</h2>
+    </div>
+    <ul class="plain-list">
+      <li><strong>Democracy Club historic results</strong> for every contest from 2016 onwards.</li>
+      <li><strong>Returning officer declarations</strong> for results that have changed wards since (boundary review).</li>
+      <li><strong>House of Commons Library</strong> notional 2019 general election results on 2024 boundaries (CBP-9930), used so the 2024 backtest can run on all 650 constituencies including the 211 redrawn between 2019 and 2024.</li>
+      <li><strong>Andrew Teale's Local Election Archive Project</strong> for older local election results (1973 onwards).</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Polling</p>
+      <h2>Where the parties are nationally</h2>
+    </div>
+    <ul class="plain-list">
+      <li><strong>Wikipedia rolling 14-day average</strong> for UK Westminster, Senedd, and Holyrood vote intention. Auto-refreshed daily from the underlying primary pollsters (YouGov, Opinium, Find Out Now, Survation, etc.).</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Demographics</p>
+      <h2>What kind of place each ward is</h2>
+    </div>
+    <ul class="plain-list">
+      <li><strong>Office for National Statistics 2021 Census</strong> — ethnic group (TS021), national identity (TS027), religion (TS030), tenure (TS054), economic activity (TS066), highest qualification (TS067), and age structure (TS007A). Aggregated from LSOA bulk to ward and to constituency via ONS lookup tables.</li>
+      <li><strong>UK Demographics</strong> Hispanic-Asian-Black projection model v7.0 — local-authority projections of ethnic composition for May 2026, used to nudge the Census 2021 base-year onto a current-year demographic anchor. (<a href="https://ukdemographics.co.uk/">ukdemographics.co.uk</a>)</li>
+      <li><strong>Index of Multiple Deprivation 2019</strong> for area deprivation deciles.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Academic research</p>
+      <h2>Why the model nudges shares the way it does</h2>
+    </div>
+    <ul class="plain-list">
+      <li><strong>British Election Study</strong> Waves 1–30 — post-2024 panel data used as a per-constituency prior on the general election forecast.</li>
+      <li><strong>Sobolewska &amp; Ford (Brexitland, 2020)</strong> for the Reform / UKIP / BNP empirical ceiling in high-Muslim wards.</li>
+      <li><strong>Frontiers (2025) — "drivers of Reform UK support"</strong> for the English-national-identity coefficient in the Reform vote model.</li>
+      <li><strong>Curtice &amp; Fisher</strong> for the tactical-voting transfer model used in the closest three-way contests.</li>
+      <li><strong>Electoral Calculus / Baxter Strong Transition Model</strong> for the swing methodology used across every model family.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Independence</p>
+      <h2>What we don't take</h2>
+    </div>
+    <p>
+      UK Elections does not accept paid sources, party-aligned data feeds, or contributions of contest-specific
+      "campaign intelligence" beyond what is publicly verifiable. Hand-curated candidate overrides exist for a
+      handful of wards (where, for example, a candidate's specific local strength is documented in the local
+      press) — every override appears verbatim in that ward's methodology trace, with the cited reason.
+    </p>
   </section>
 </BaseLayout>

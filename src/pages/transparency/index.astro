@@ -10,13 +10,15 @@ const identity = loadGeIdentity();
 
 <BaseLayout
   title="Transparency &amp; pre-registration"
-  description="Pre-registered, sha256-committed forecast manifests. Every weight, dampening, and source is auditable."
+  description="The full machine-readable manifest behind every UK Elections forecast: source files, sha256 hashes, and downloadable JSON."
 >
   <section class="page-hero">
     <p class="eyebrow">Transparency</p>
     <h1>Pre-registration &amp; audit log</h1>
     <p class="lede">
-      Every forecast is sha256-committed before publication. Every assumption is machine-readable and version-controlled. Every input source is timestamped.
+      This page is for forecasters, journalists, and researchers who want to verify or replicate any of our
+      predictions. Every forecast file is sha256-committed before publication, every assumption is
+      machine-readable, and every input source is timestamped.
     </p>
   </section>
 
@@ -25,21 +27,22 @@ const identity = loadGeIdentity();
       <p class="eyebrow">Latest forecast manifest</p>
       <h2>General election — next-GE-as-if-held-this-week</h2>
     </div>
+    <p>Each row is a downloadable JSON file with a sha256 commitment to its contents.</p>
     <table class="seat-table">
-      <thead><tr><th>File</th><th>Snapshot ID</th><th>Generated at</th></tr></thead>
+      <thead><tr><th>File</th><th>Snapshot ID</th><th>Generated at (UTC)</th></tr></thead>
       <tbody>
         <tr>
-          <td><code>data/predictions/ge-next/constituencies.json</code></td>
+          <td><a href="/data/predictions/ge-next/constituencies.json"><code>data/predictions/ge-next/constituencies.json</code></a></td>
           <td><code>{ge.snapshot?.snapshot_id}</code></td>
           <td>{ge.snapshot?.generated_at?.slice(0, 19).replace("T", " ")}</td>
         </tr>
         <tr>
-          <td><code>data/predictions/ge-next/summary.json</code></td>
+          <td><a href="/data/predictions/ge-next/summary.json"><code>data/predictions/ge-next/summary.json</code></a></td>
           <td><code>{summary.snapshot?.snapshot_id}</code></td>
           <td>{summary.snapshot?.generated_at?.slice(0, 19).replace("T", " ")}</td>
         </tr>
         <tr>
-          <td><code>data/predictions/ge-next/assumptions.json</code></td>
+          <td><a href="/data/predictions/ge-next/assumptions.json"><code>data/predictions/ge-next/assumptions.json</code></a></td>
           <td><code>{assumptions.snapshot?.snapshot_id}</code></td>
           <td>{assumptions.snapshot?.generated_at?.slice(0, 19).replace("T", " ")}</td>
         </tr>
@@ -48,20 +51,28 @@ const identity = loadGeIdentity();
           <td><code>{identity.snapshot?.snapshot_id}</code></td>
           <td>{identity.snapshot?.generated_at?.slice(0, 19).replace("T", " ")}</td>
         </tr>
+        <tr>
+          <td><a href="/data/polling/override.json"><code>data/polling/override.json</code></a></td>
+          <td>auto-refreshed daily</td>
+          <td>see file <code>retrieved_at</code></td>
+        </tr>
       </tbody>
     </table>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Sources</p>
-      <h2>What feeds each forecast</h2>
+      <p class="eyebrow">Input sources</p>
+      <h2>What feeds the forecast</h2>
     </div>
     <ul>
       {(summary.snapshot?.sources || []).map((src: any) => (
         <li><code>{src.path}</code> — {src.role}</li>
       ))}
     </ul>
+    <p class="caption">
+      A plain-English version of the same list lives at <a href="/sources/">Sources</a>.
+    </p>
   </section>
 
   <section class="section">
@@ -69,8 +80,8 @@ const identity = loadGeIdentity();
       <p class="eyebrow">Assumptions</p>
       <h2>Every parameter, machine-readable</h2>
     </div>
-    <pre style="white-space: pre-wrap; background: var(--card); padding: 1rem;">{JSON.stringify(assumptions.parameters, null, 2)}</pre>
-    <p style="color: var(--muted)">
+    <pre class="json-block">{JSON.stringify(assumptions.parameters, null, 2)}</pre>
+    <p class="caption">
       Download the raw JSON: <a href="/data/predictions/ge-next/assumptions.json">assumptions.json</a>
     </p>
   </section>
@@ -81,8 +92,8 @@ const identity = loadGeIdentity();
       <h2>Identity-table coverage</h2>
     </div>
     <ul>
-      <li>Total PCONs: {identity.snapshot?.coverage?.total}</li>
-      <li>With PCON24CD GSS: {identity.snapshot?.coverage?.with_pcon24cd}</li>
+      <li>Total constituencies: {identity.snapshot?.coverage?.total}</li>
+      <li>With ONS GSS code: {identity.snapshot?.coverage?.with_pcon24cd}</li>
       <li>With region: {identity.snapshot?.coverage?.with_region}</li>
       <li>By country: {Object.entries(identity.snapshot?.coverage?.by_country || {}).map(([k, v]) => `${k}: ${v}`).join(" · ")}</li>
     </ul>
@@ -90,17 +101,17 @@ const identity = loadGeIdentity();
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Standard</p>
-      <h2>What &quot;audit-grade&quot; means</h2>
+      <p class="eyebrow">Audit standards</p>
+      <h2>What "audit-grade" means</h2>
     </div>
-    <ol>
-      <li><strong>Pre-registration</strong> — every forecast file's sha256 is computed and recorded before publication; subsequent edits produce a new snapshot ID.</li>
-      <li><strong>Source manifest</strong> — every input file lists path, retrieved-at timestamp, and licence.</li>
-      <li><strong>Machine-readable assumptions</strong> — every weight, dampening, ceiling, and threshold lives in <code>assumptions.json</code> so any third party can replicate or stress-test by tweaking one value at a time.</li>
-      <li><strong>Open data</strong> — all prediction JSON files downloadable directly from the site under CC-BY.</li>
-      <li><strong>Open methodology</strong> — every prediction page shows the full methodology trace; the model code lives at <code>src/lib/electionModel.js</code>.</li>
+    <ol class="numbered-list">
+      <li><strong>Pre-registration.</strong> Every forecast file's sha256 is computed and recorded before publication; subsequent edits produce a new snapshot ID.</li>
+      <li><strong>Source manifest.</strong> Every input file lists path, retrieved-at timestamp, and licence.</li>
+      <li><strong>Machine-readable assumptions.</strong> Every weight, dampening, ceiling, and threshold lives in <code>assumptions.json</code> so any third party can replicate or stress-test by tweaking one value at a time.</li>
+      <li><strong>Open data.</strong> All prediction JSON files downloadable directly from the site under CC-BY.</li>
+      <li><strong>Open methodology.</strong> Every prediction page shows the full methodology trace; the model code is public at <a href="https://github.com/tompickup23/ukelections">github.com/tompickup23/ukelections</a>.</li>
     </ol>
-    <p style="color: var(--muted)">
+    <p class="caption">
       Targets: Royal Statistical Society Code of Practice for forecasters · British Polling Council membership criteria.
     </p>
   </section>

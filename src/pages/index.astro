@@ -1,72 +1,124 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { loadSummary, loadIdentity, loadBacktest } from "../lib/predictions";
+import { partyColour } from "../lib/predictions";
+import { loadMayHeadline, loadGeHeadline, countdownToMay, shortPartyLabel } from "../lib/siteData";
 
-const identity = loadIdentity();
-const summary = loadSummary();
-const backtest = loadBacktest();
-const totalWards = identity.wards.filter((w: any) => w.tier === "local" || w.tier === "mayor").length;
-const totalSeats = summary.councils.reduce((s: number, c: any) => s + (c.seats_up || 0), 0);
-const totalCands = identity.wards.reduce((s: number, w: any) => s + (w.candidate_count || 0), 0);
+const may = loadMayHeadline();
+const ge = loadGeHeadline();
+const cd = countdownToMay();
+const topMay = may.seat_tallies.slice(0, 4);
+const topGe = ge.seat_tallies.slice(0, 4);
 ---
 
-<BaseLayout title="UK Elections" description="Forecasts for every UK contest on May 7 2026: 156 English councils, Senedd, Scottish Parliament. Sources, intervals, honest backtests.">
-  <section class="hero">
-    <p class="eyebrow">Live forecasts for May 7 2026</p>
-    <h1>Every contest, source-led and testable.</h1>
+<BaseLayout
+  title="UK Elections — what you'll be voting on, who's likely to win, and how confident we are"
+  description={`Forecasts for May 7 2026 (every English council, the Senedd, and Holyrood) and the next UK general election. ${cd.has_passed ? "Result tracking" : `${cd.days_until} days to go`}.`}
+>
+  <section class="hero hero-v2">
+    <p class="eyebrow">{cd.has_passed ? "Live results tracking" : `${cd.days_until} days to go · ${cd.date_pretty}`}</p>
+    <h1>Who's going to win — and how sure are we?</h1>
     <p class="lede">
-      Forecasts for {summary.council_count} English councils ({totalWards.toLocaleString()} wards, {totalSeats.toLocaleString()} seats), the Senedd, and the Scottish Parliament — built on Democracy Club data, UKD demographics, and a model whose accuracy is published.
+      Plain-English forecasts for every UK election: this May's local councils, the Senedd, the Scottish Parliament,
+      and a constantly-updated forecast of the next UK general election.
     </p>
     <div class="action-row" aria-label="Primary actions">
-      <a class="button primary" href="/forecasts/may-2026/">View the national forecast</a>
-      <a class="button" href="/data-quality/2024-backtest/">See the 2024 backtest</a>
-      <a class="button" href="/methodology/national-model/">Read the methodology</a>
+      <a class="button primary" href="/your-area/">Find my ward</a>
+      <a class="button" href="/forecasts/may-2026/">May 7 election</a>
+      <a class="button" href="/forecasts/general-election/">General election</a>
     </div>
   </section>
 
-  <section class="status-grid" aria-label="Status">
-    <article>
-      <span class="status-label">Forecast scope</span>
-      <strong>3,074 ballots</strong>
-      <p>Every contested seat on 2026-05-07: English locals, mayoralties, Senedd Cymru, Scottish Parliament. {totalCands.toLocaleString()} candidates, all from the official Democracy Club register.</p>
+  <section class="headline-grid" aria-label="Headline projections">
+    <article class="headline-card">
+      <header>
+        <span class="kicker">May 7 — English councils, Senedd, Holyrood</span>
+        <h2>{may.seats_total.toLocaleString()} seats up for election</h2>
+      </header>
+      <p class="card-lede">
+        {may.council_count} English councils plus mayoralties, the Senedd Cymru, and the Scottish Parliament.
+        Forecasts ready for every contested seat.
+      </p>
+      <div class="party-bars">
+        {topMay.map((t) => (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(t.party)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
+            </div>
+            <span class="bar-value">{t.seats.toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+      <a class="card-cta" href="/forecasts/may-2026/">See May 7 forecast →</a>
     </article>
-    <article>
-      <span class="status-label">Backtest accuracy</span>
-      <strong>{(backtest.winner_accuracy * 100).toFixed(1)}% winners called</strong>
-      <p>Same model run against actual May 2024 results: {(backtest.overall_mae.major_parties_avg * 100).toFixed(2)}pp average per-party share error across {backtest.totals.predicted.toLocaleString()} wards. Full breakdown at /data-quality/.</p>
-    </article>
-    <article>
-      <span class="status-label">Provenance</span>
-      <strong>Every claim sourced</strong>
-      <p>Source files committed to the public repository. Each prediction page links to the official Statement of Persons Nominated PDF and to historic declaration PDFs.</p>
+
+    <article class="headline-card">
+      <header>
+        <span class="kicker">If a UK general election were held today</span>
+        <h2>Reform UK projected to win {ge.seat_tallies[0]?.seats || 0} seats</h2>
+      </header>
+      <p class="card-lede">
+        All 650 UK parliamentary constituencies, refreshed daily from current Westminster polling.
+        This is what would happen if the country voted right now.
+      </p>
+      <div class="party-bars">
+        {topGe.map((t) => (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(t.party)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
+            </div>
+            <span class="bar-value">{t.seats.toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+      <a class="card-cta" href="/forecasts/general-election/">See general election forecast →</a>
     </article>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Forecast surfaces</p>
-      <h2>Three election families, one model lineage.</h2>
+      <p class="eyebrow">How accurate are these forecasts?</p>
+      <h2>We test the model against past elections — and publish the results.</h2>
+    </div>
+    <div class="accuracy-grid">
+      <article>
+        <span class="big-number">{(may.backtest_winner_accuracy * 100).toFixed(0)}%</span>
+        <p class="big-number-label">winners called correctly when we replayed the model on the May 2024 results</p>
+      </article>
+      <article>
+        <span class="big-number">{(may.backtest_major_party_mae * 100).toFixed(1)}pp</span>
+        <p class="big-number-label">average gap between predicted and actual party share, May 2024 backtest</p>
+      </article>
+      <article>
+        <span class="big-number">{(ge.backtest_winner_accuracy * 100).toFixed(0)}%</span>
+        <p class="big-number-label">winners called correctly when we replayed the model on the 2024 general election</p>
+      </article>
+    </div>
+    <p class="muted-row">
+      <a href="/data-quality/">See the full accuracy record →</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">What you can do here</p>
+      <h2>Built for voters, journalists, and campaigners alike.</h2>
     </div>
     <div class="feature-list">
       <article>
-        <h3>English local + mayoral</h3>
-        <p>Per-ward party share + per-council seat projection across 156 councils on cycle. Includes the 7 Lancashire councils where AI DOGE has 4-year ward-level history.</p>
-        <p><a href="/forecasts/may-2026/">View →</a></p>
+        <h3>Find your ward</h3>
+        <p>Type a UK postcode, town, or council and we'll show your specific contest on May 7 — candidates, parties, the forecast and the backtest.</p>
+        <p><a href="/your-area/">Find my ward →</a></p>
       </article>
       <article>
-        <h3>Senedd Cymru 2026</h3>
-        <p>First public estimate under the new closed-list PR system. 16 super-constituencies × 6 list seats = 96 seats.</p>
-        <p><a href="/forecasts/senedd-2026/">View →</a></p>
+        <h3>Read the headline</h3>
+        <p>Every election family has a single page with the seat-split projection, the parties on the ballot, and the local detail underneath.</p>
+        <p><a href="/forecasts/may-2026/">May 7 →</a> · <a href="/forecasts/general-election/">General election →</a></p>
       </article>
       <article>
-        <h3>Scottish Parliament 2026</h3>
-        <p>73 constituency (FPTP) + 56 regional list (d'Hondt) = 129 seats. Constituency-level 2021 baselines + Scottish polling adjustment.</p>
-        <p><a href="/forecasts/holyrood-2026/">View →</a></p>
-      </article>
-      <article>
-        <h3>Backtests as product</h3>
-        <p>The same model that predicts 2026, replayed against actual 2024 results. Winner accuracy and per-party MAE published before any election claim.</p>
-        <p><a href="/data-quality/2024-backtest/">View →</a></p>
+        <h3>Check our working</h3>
+        <p>Every prediction lists the model steps that produced it. The full method, the backtest, the data sources and the open downloads live in <a href="/methodology/">About</a>.</p>
       </article>
     </div>
   </section>

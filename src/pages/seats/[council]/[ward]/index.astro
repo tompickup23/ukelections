@@ -10,6 +10,7 @@ import {
   formatPct,
   partyColour,
 } from "../../../../lib/predictions";
+import { shortPartyLabel } from "../../../../lib/siteData";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -45,29 +46,30 @@ const top = ranked[0];
 const tierLabel = { local: "Local council", mayor: "Mayoralty" }[ward.tier] || ward.tier;
 const title = `${ward.ward_name}${ward.council_name ? ` — ${ward.council_name}` : ""}`;
 const description = wp?.prediction
-  ? `Forecast for ${ward.ward_name} on 2026-05-07. Top: ${top[0]} ${formatPct(top[1].pct)}.`
-  : `${ward.ward_name} (${ward.council_name}) on 2026-05-07. ${wp?.cancelled ? "Election cancelled." : "No prediction available — see methodology."}`;
+  ? `Forecast for ${ward.ward_name} on Thursday 7 May 2026. Top: ${shortPartyLabel(top[0])} ${formatPct(top[1].pct)}.`
+  : `${ward.ward_name} (${ward.council_name}) on Thursday 7 May 2026. ${wp?.cancelled ? "Election cancelled." : "No prediction available."}`;
 
 const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not available" }[wp?.confidence || "none"];
 ---
 
 <BaseLayout title={title} description={description}>
   <section class="page-hero">
-    <p class="eyebrow">{tierLabel}</p>
+    <p class="eyebrow">{tierLabel} · {ward.council_name}</p>
     <h1>{ward.ward_name}</h1>
     <p class="lede">
-      {ward.council_name} · GSS <code>{ward.gss_code || "—"}</code> · {ward.winner_count} {ward.winner_count === 1 ? "seat" : "seats"} contested on 2026-05-07
+      {ward.winner_count} {ward.winner_count === 1 ? "seat" : "seats"} contested on Thursday 7 May 2026.
+      {ward.candidate_count} candidates from {ward.parties_standing.length} {ward.parties_standing.length === 1 ? "party" : "parties"}.
     </p>
-    <p style="color: var(--muted)">
-      {ward.candidate_count} candidates from {ward.parties_standing.length} {ward.parties_standing.length === 1 ? "party" : "parties"} · Confidence: <strong>{confidenceLabel}</strong>
-      {ward.sopn_url && (<>{" · "}<a href={ward.sopn_url}>Statement of Persons Nominated</a></>)}
+    <p class="meta-row">
+      Confidence in the forecast: <strong>{confidenceLabel}</strong>
+      {ward.sopn_url && (<>{" · "}<a href={ward.sopn_url}>Official Statement of Persons Nominated (PDF)</a></>)}
     </p>
   </section>
 
   {wp?.cancelled && (
     <section class="section prose-block">
-      <h2>Election cancelled</h2>
-      <p>This ward's election on 2026-05-07 has been cancelled, most likely due to a candidate-death postponement. A by-election will be held on a later date.</p>
+      <h2>This election has been cancelled</h2>
+      <p>The 7 May 2026 election in this ward has been cancelled, most likely because of a candidate-death postponement. A by-election will be held on a later date.</p>
     </section>
   )}
 
@@ -77,25 +79,20 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
         <p class="eyebrow">Predicted vote share</p>
         <h2>What the model expects</h2>
       </div>
-      <table class="prediction-table">
-        <thead>
-          <tr><th>Party</th><th>Predicted share</th><th>≈ votes</th></tr>
-        </thead>
-        <tbody>
-          {ranked.map(([party, p]) => (
-            <tr>
-              <td>
-                <span class="party-swatch" style={`background:${partyColour(party)}`}></span>
-                {party}
-              </td>
-              <td><strong>{formatPct(p.pct)}</strong></td>
-              <td style="color: var(--muted)">{p.votes ?? "—"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem">
-        Predictions are point estimates derived from the latest baseline contest plus a national-swing adjustment dampened by 0.65 for local elections, then a UKD demographic adjustment at LA level. See the methodology section below.
+      <div class="party-bars party-bars-large">
+        {ranked.map(([party, p]) => (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(party)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(p.pct * 100).toFixed(1)}%; background:${partyColour(party)}`}></div>
+            </div>
+            <span class="bar-value">{formatPct(p.pct)}</span>
+          </div>
+        ))}
+      </div>
+      <p class="caption">
+        Predictions are point estimates: the model's best guess, not a guarantee. The "How this prediction was made"
+        section below lists every step that shaped this forecast.
       </p>
     </section>
   )}
@@ -103,7 +100,7 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
   {!wp?.prediction && !wp?.cancelled && (
     <section class="section prose-block">
       <h2>No prediction available</h2>
-      <p>{wp?.methodology?.[0]?.description || "No prior contest results available for this ward in our Democracy Club history bundle. This typically means the ward has been redrawn since 2016."}</p>
+      <p>{wp?.methodology?.[0]?.description || "We don't yet have enough prior contest results in this ward to produce a forecast — typically because the ward has been redrawn since 2016."}</p>
     </section>
   )}
 
@@ -113,7 +110,7 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
         <p class="eyebrow">Recent contests</p>
         <h2>What happened last time</h2>
       </div>
-      <table class="history-table">
+      <table class="seat-table">
         <thead>
           <tr><th>Date</th><th>Type</th><th>Winner</th><th>Top share</th><th>Source</th></tr>
         </thead>
@@ -125,9 +122,9 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
             return (
               <tr>
                 <td>{r.election_date}</td>
-                <td style="color: var(--muted)">{r.is_by_election ? "By-election" : "Cycle"}</td>
-                <td>{top?.party_name || "—"}</td>
-                <td>{share != null ? formatPct(share) : "—"}</td>
+                <td class="muted">{r.is_by_election ? "By-election" : "Cycle"}</td>
+                <td>{shortPartyLabel(top?.party_name) || "—"}</td>
+                <td class="num">{share != null ? formatPct(share) : "—"}</td>
                 <td>{r.source ? <a href={r.source}>declaration</a> : "—"}</td>
               </tr>
             );
@@ -147,21 +144,22 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
         {ward.parties_standing.map((p: string) => (
           <li>
             <span class="party-swatch" style={`background:${partyColour(p)}`}></span>
-            {p}
+            {shortPartyLabel(p)}
           </li>
         ))}
       </ul>
       {ward.sopn_url && (
-        <p style="margin-top: 0.75rem"><a href={ward.sopn_url}>View official Statement of Persons Nominated (PDF)</a></p>
+        <p class="caption"><a href={ward.sopn_url}>View the official Statement of Persons Nominated (PDF)</a></p>
       )}
     </section>
   )}
 
   {(ladProj || ladImd) && (
     <section class="section prose-block">
-      <h2>How this ward looks demographically</h2>
+      <h2>How this area looks demographically</h2>
       <p>
-        These figures come from {ladProj?.area_name || ward.council_name} as a whole. We apply the same LA-level adjustment to every ward in the same local authority — Stage 1 of UK Elections does not yet break demographics down to ward level outside the AI DOGE pilot footprint.
+        Figures are for {ladProj?.area_name || ward.council_name} as a whole. The same local-authority figures are used
+        for every ward in the council — finer ward-level demographics will land in a future release.
       </p>
       <ul>
         {ladProj && (
@@ -171,16 +169,16 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
           </>
         )}
         {ladImd && (
-          <li>Average IMD 2019 decile: <strong>{ladImd.avg_imd_decile.toFixed(1)}</strong> (1 = most deprived, 10 = least)</li>
+          <li>Average area deprivation decile: <strong>{ladImd.avg_imd_decile.toFixed(1)}</strong> (1 = most deprived, 10 = least)</li>
         )}
       </ul>
     </section>
   )}
 
   {wp?.methodology && wp.methodology.length > 0 && (
-    <section class="section prose-block">
-      <h2>How this prediction was made</h2>
-      <ol>
+    <details class="section method-details">
+      <summary>How this prediction was made</summary>
+      <ol class="numbered-list">
         {wp.methodology.map((step: any) => (
           <li>
             <strong>{step.name}</strong>
@@ -188,10 +186,10 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
           </li>
         ))}
       </ol>
-      <p style="font-size: 0.875rem; color: var(--muted)">
-        Model version: <code>{wp.model_version}</code> · Baseline date: <code>{wp.baseline_date || "n/a"}</code>
+      <p class="muted-row">
+        <a href="/methodology/national-model/">Read the full local-elections methodology →</a>
       </p>
-    </section>
+    </details>
   )}
 
   <section class="section">
@@ -200,10 +198,6 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
 </BaseLayout>
 
 <style>
-.prediction-table, .history-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-.prediction-table th, .prediction-table td, .history-table th, .history-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
-.prediction-table th, .history-table th { font-weight: 600; color: var(--muted); font-size: 0.875rem; }
-.party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.5rem; vertical-align: middle; }
 .party-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
 .party-list li { background: var(--surface); padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); }
 </style>

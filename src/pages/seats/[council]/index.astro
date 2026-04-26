@@ -9,6 +9,7 @@ import {
   formatPct,
   partyColour,
 } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -50,8 +51,7 @@ const description = `${wards.length} ward${wards.length === 1 ? "" : "s"} contes
     <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Local council"}</p>
     <h1>{councilName}</h1>
     <p class="lede">
-      {wards.length} {wards.length === 1 ? "contest" : "contests"} on 2026-05-07 ·
-      {seatTotal} {seatTotal === 1 ? "seat" : "seats"} contested
+      {wards.length} {wards.length === 1 ? "contest" : "contests"} on Thursday 7 May 2026 · {seatTotal} {seatTotal === 1 ? "seat" : "seats"} up for election
     </p>
   </section>
 
@@ -59,21 +59,26 @@ const description = `${wards.length} ward${wards.length === 1 ? "" : "s"} contes
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Seat projection</p>
-        <h2>Predicted seat split</h2>
+        <h2>How the council seats are likely to split</h2>
       </div>
-      <table class="seat-table">
-        <thead><tr><th>Party</th><th>Predicted seats</th></tr></thead>
-        <tbody>
-          {Object.entries(seatProjection).sort((a, b) => (b[1] as number) - (a[1] as number)).map(([party, seats]) => (
-            <tr>
-              <td><span class="party-swatch" style={`background:${partyColour(party)}`}></span>{party}</td>
-              <td><strong>{seats as number}</strong></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem">
-        Stage 1 simplification: each ward's seat(s) are awarded to the top N parties by predicted vote share, where N is the number of seats up. Ties are broken by predicted share.
+      <div class="party-bars party-bars-large">
+        {Object.entries(seatProjection)
+          .sort((a, b) => (b[1] as number) - (a[1] as number))
+          .map(([party, seats]) => {
+            const share = seatTotal > 0 ? (seats as number) / (seatTotal as number) : 0;
+            return (
+              <div class="bar-row">
+                <span class="bar-label">{shortPartyLabel(party)}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" style={`width:${(share * 100).toFixed(1)}%; background:${partyColour(party)}`}></div>
+                </div>
+                <span class="bar-value">{seats as number}</span>
+              </div>
+            );
+          })}
+      </div>
+      <p class="caption">
+        Each ward's seat(s) are awarded to the top parties by predicted vote share. Ties are broken by predicted share.
       </p>
     </section>
   )}
@@ -106,10 +111,10 @@ const description = `${wards.length} ward${wards.length === 1 ? "" : "s"} contes
           return (
             <tr>
               <td><a href={`/seats/${w.council_slug}/${w.ward_slug}/`}>{w.ward_name}</a></td>
-              <td>{top ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{top[0]}</> : <span style="color: var(--muted)">—</span>}</td>
-              <td>{top ? formatPct(top[1].pct) : "—"}</td>
-              <td style="color: var(--muted)">{wp?.confidence || "—"}</td>
-              <td style="color: var(--muted)">{w.candidate_count}</td>
+              <td>{top ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{shortPartyLabel(top[0])}</> : <span class="muted">—</span>}</td>
+              <td class="num">{top ? formatPct(top[1].pct) : "—"}</td>
+              <td class="muted">{wp?.confidence || "—"}</td>
+              <td class="num muted">{w.candidate_count}</td>
             </tr>
           );
         })}

@@ -22,15 +22,16 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
   <section class="section prose-block">
     <h2>Important caveat</h2>
     <p>
-      This is the first Senedd election under the new geography. There are no prior election results on these
-      super-constituency boundaries. Stage 1 of UK Elections applies the Welsh-wide vote intention uniformly to
-      each of the 16 super-constituencies and runs d'Hondt allocation independently per area. Geographic
-      differentiation between super-constituencies — using 2024 GE Welsh constituency-level results aggregated to
-      the new pairings — is a Stage 1.5 task expected before polling day.
+      This is the first Senedd election under the new geography — there are no prior election results on these
+      super-constituency boundaries to anchor a per-area forecast. The numbers below apply Welsh-wide vote
+      intention uniformly to each of the 16 super-constituencies and run d'Hondt allocation in each one
+      independently. Per-area geographic differentiation, using 2024 general election Welsh constituency-level
+      results aggregated to the new super-constituency pairings, is a planned upgrade.
     </p>
     <p>
-      Sigma (per-party noise) is set wider than locals (5 percentage points) to reflect this new-system uncertainty.
-      Treat all numbers below as a defensible first estimate, not a final prediction.
+      The intervals below are wider than the local-elections forecast — 5 percentage points of per-party noise
+      built into the bootstrap — to reflect this new-system uncertainty. Treat the numbers as a first estimate,
+      not a final prediction.
     </p>
   </section>
 
@@ -82,9 +83,9 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
 
   <section class="section prose-block">
     <h2>Inputs</h2>
-    <p><strong>Welsh GE2024 baseline:</strong> Wales-wide vote share aggregated across 32 Welsh Westminster constituencies (Labour 36.6%, Reform UK 16.9%, Conservative 18.2%, Plaid Cymru 14.9%, Lib Dem 6.7%, Green 4.3%).</p>
-    <p><strong>April 2026 Welsh polling (placeholder, refresh required by 2026-05-01):</strong> Plaid Cymru 25%, Reform UK 23%, Labour 21%, Conservative 13%, Lib Dem 7%, Green 6%.</p>
-    <p><strong>Method:</strong> Per super-constituency — 6 seats allocated by d'Hondt highest-averages over Welsh-wide April 2026 polling. Bootstrapped with 2,000 samples and σ=5pp per-party noise to produce P10/P50/P90 intervals.</p>
+    <p><strong>Welsh 2024 general election baseline:</strong> Wales-wide vote share aggregated across the 32 Welsh Westminster constituencies (Labour 36.6%, Reform UK 16.9%, Conservative 18.2%, Plaid Cymru 14.9%, Lib Dem 6.7%, Green 4.3%).</p>
+    <p><strong>Welsh polling:</strong> Auto-refreshed daily as the Wikipedia rolling 14-day average of every Welsh poll (current values shown on the <a href="/methodology/">About</a> page).</p>
+    <p><strong>Method:</strong> Per super-constituency — 6 seats allocated by d'Hondt highest-averages over Welsh-wide current polling. Bootstrapped with 2,000 samples and 5pp per-party noise to produce the high–low range.</p>
   </section>
 </BaseLayout>
 
