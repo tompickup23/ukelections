@@ -563,6 +563,7 @@ export function predictWard(
   fiscalData = null,
   candidates2026 = null,
   ethnicProjections = null,
+  besPrior = null,
 ) {
   const methodology = [];
 
@@ -612,6 +613,28 @@ export function predictWard(
       name: 'Stale Baseline Decay',
       description: `Baseline is ${baseline.staleness} years old — blending ${(decayFactor * 100).toFixed(0)}% historical + ${(freshWeight * 100).toFixed(0)}% GE2024 constituency data`,
       data: { decayFactor, freshWeight, stalenessYears: baseline.staleness },
+    });
+  }
+
+  // Step 1.7: BES MRP Prior — pull baseline ~15% toward the BES Wave 1-30
+  // post-stratified prior for this LAD. Anchors stale baselines on current
+  // demographically-appropriate vote intention. Skipped where the prior is
+  // unavailable (Northern Ireland or LADs without sufficient BES coverage).
+  const BES_WEIGHT = 0.15;
+  if (besPrior && Object.keys(besPrior.shares || {}).length > 0) {
+    const blended = {};
+    const partySet = new Set([...Object.keys(shares), ...Object.keys(besPrior.shares)]);
+    for (const p of partySet) {
+      const baselinePct = shares[p] || 0;
+      const priorPct = besPrior.shares[p] || 0;
+      blended[p] = (1 - BES_WEIGHT) * baselinePct + BES_WEIGHT * priorPct;
+    }
+    shares = blended;
+    methodology.push({
+      step: 1.7,
+      name: 'BES MRP Prior',
+      description: `Baseline blended with BES Wave 1-30 ${besPrior.region} prior (weight ${(BES_WEIGHT * 100).toFixed(0)}%, n=${besPrior.n_respondents_in_region || 'na'} regional respondents)`,
+      data: { shares: { ...besPrior.shares }, weight: BES_WEIGHT, region: besPrior.region },
     });
   }
 
@@ -833,7 +856,7 @@ export function findDefenderIndex(holders, defender) {
   return 0;
 }
 
-export function predictCouncil(electionsData, wardsUp, assumptions, nationalPolling, ge2024Result, demographicsMap, deprivationMap, constituencyMap, lcc2025, modelParams, fiscalData, integrityData, candidates2026Map, ethnicProjectionMap, lcc2025Reference) {
+export function predictCouncil(electionsData, wardsUp, assumptions, nationalPolling, ge2024Result, demographicsMap, deprivationMap, constituencyMap, lcc2025, modelParams, fiscalData, integrityData, candidates2026Map, ethnicProjectionMap, lcc2025Reference, besPriorMap = null) {
   const wardResults = {};
   const seatTotals = {};
 
@@ -892,6 +915,7 @@ export function predictCouncil(electionsData, wardsUp, assumptions, nationalPoll
       fiscalData || null,
       candidates2026Map?.[wardName] || null,
       ethnicProjectionMap?.[wardName] || null,
+      besPriorMap?.[wardName] || null,
     );
 
     // Apply integrity adjustment if data provided (Step 4.5)

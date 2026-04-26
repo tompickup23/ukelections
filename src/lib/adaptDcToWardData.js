@@ -112,20 +112,34 @@ function defaultTypeForTier(tier) {
  * Build wardData for a given identity entry.
  * @param {object} identityWard - one element from data/identity/wards-may-2026.json#wards
  * @param {object} historyBundle - data/history/dc-historic-results.json
+ * @param {object} [leapHistory] - optional data/history/leap-history.json (keyed by GSS)
  * @returns {object} wardData
  */
-export function buildWardData(identityWard, historyBundle) {
+export function buildWardData(identityWard, historyBundle, leapHistory) {
   const tier = identityWard.tier;
   const wardKey = `${tier}::${identityWard.council_slug}::${identityWard.ward_slug}`;
   const ballotIds = (historyBundle?.by_ward_slug || {})[wardKey] || [];
   const defaultType = defaultTypeForTier(tier);
 
-  const history = ballotIds
+  const dcHistory = ballotIds
     .map((id) => historyBundle.by_ballot[id])
     .filter(Boolean)
     .filter((r) => r.election_date !== identityWard.election_group_id?.split(".").pop())
-    .map((r) => dcResultToHistoryRow(r, defaultType))
-    .sort((a, b) => a.date.localeCompare(b.date));
+    .map((r) => dcResultToHistoryRow(r, defaultType));
+
+  // Merge in LEAP supplemental rows for wards we have an exact GSS match on.
+  // DC coverage is reliable from 2018 onwards; LEAP fills 2009-2017. Drop any
+  // LEAP year already represented in DC history for this ward to avoid
+  // double-counting (which would happen on the 2016 / 2017 boundary).
+  const dcYears = new Set(dcHistory.map((r) => r.year));
+  const gss = identityWard.gss_code;
+  const leapRows = (leapHistory?.by_gss?.[gss] || [])
+    .filter((r) => !dcYears.has(r.year))
+    .map((r) => ({ ...r, type: r.type || defaultType }));
+
+  const history = [...dcHistory, ...leapRows].sort((a, b) =>
+    (a.date || "").localeCompare(b.date || "")
+  );
 
   const candidates2026 = (identityWard.parties_standing || []).map((p) => ({
     party: dcPartyToCanonical(p),
@@ -147,8 +161,11 @@ export function buildWardData(identityWard, historyBundle) {
       tier,
       cancelled: identityWard.cancelled,
       sopn_url: identityWard.sopn_url,
-      history_source: "democracy_club_results_api",
+      history_source: leapRows.length > 0
+        ? "democracy_club_results_api+leap_archive"
+        : "democracy_club_results_api",
       history_count: history.length,
+      leap_supplemental_count: leapRows.length,
     },
   };
 }
@@ -157,10 +174,10 @@ export function buildWardData(identityWard, historyBundle) {
  * Build wardData for every ward in the identity table.
  * Returns a Map keyed by ballot_paper_id.
  */
-export function buildAllWardData(identity, historyBundle) {
+export function buildAllWardData(identity, historyBundle, leapHistory) {
   const map = new Map();
   for (const w of identity.wards) {
-    map.set(w.ballot_paper_id, buildWardData(w, historyBundle));
+    map.set(w.ballot_paper_id, buildWardData(w, historyBundle, leapHistory));
   }
   return map;
 }

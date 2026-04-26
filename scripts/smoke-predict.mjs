@@ -5,10 +5,12 @@ import { pollingPair } from "../src/lib/nationalPolling.js";
 
 const identity = JSON.parse(readFileSync("data/identity/wards-may-2026.json", "utf8"));
 const history = JSON.parse(readFileSync("data/history/dc-historic-results.json", "utf8"));
+let leapHistory = null;
+try { leapHistory = JSON.parse(readFileSync("data/history/leap-history.json", "utf8")); } catch {}
 const { nationalPolling, ge2024Result } = pollingPair();
 
 const sample = identity.wards.find((w) => w.ward_slug === "buckingham" && w.council_slug === "adur");
-const wd = buildWardData(sample, history);
+const wd = buildWardData(sample, history, leapHistory);
 console.log(`Ward: ${wd.council_name} / ${wd.ward_name} (${wd.gss_code})`);
 console.log(`  History: ${wd.history.length} contests, latest ${wd.history[wd.history.length - 1]?.date}`);
 console.log(`  2026 candidates standing for parties:`, wd.candidates_2026.map((c) => c.party).join(", "));

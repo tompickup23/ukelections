@@ -45,9 +45,12 @@ if (!skipFetch) {
   process.stdout.write("(skipping remote DC fetches — reusing cached ingest files)\n");
 }
 phases.push(["2. Build ward identity table", "scripts/build-ward-identity.mjs"]);
+phases.push(["2b. Ingest LEAP archive (Andrew Teale 2009-2017 supplemental)", "scripts/ingest-leap.mjs"]);
 phases.push(["3. Build LA features (HP v7.0 + IMD + GE2024)", "scripts/build-la-features.mjs"]);
 phases.push(["3b. Aggregate Census 2021 + IMD LSOA → ward (P3)", null /* python */ ]);
 phases.push(["3c. Calibrate regional dampening (P5)", "scripts/calibrate-regional-dampening.mjs"]);
+// 3d builds BES Wave 1-30 LAD priors. Skipped automatically if .sav not staged.
+phases.push(["3d. Build BES Wave 1-30 priors", "scripts/build-bes-priors-wrapper.mjs"]);
 phases.push(["4. Run bulk ward predictions (locals + mayors)", "scripts/run-bulk-predictions.mjs"]);
 phases.push(["5. Run 2024 backtest", "scripts/run-2024-backtest.mjs"]);
 phases.push(["6. Run Senedd 2026 predictions", "scripts/run-senedd-predictions.mjs"]);

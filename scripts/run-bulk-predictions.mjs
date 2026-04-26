@@ -183,6 +183,23 @@ function main() {
   console.log("Loading inputs...");
   const identity = readJson("data/identity/wards-may-2026.json");
   const history = readJson("data/history/dc-historic-results.json");
+  let leapHistory = null;
+  try {
+    leapHistory = readJson("data/history/leap-history.json");
+    const leapWards = Object.keys(leapHistory.by_gss || {}).length;
+    const leapContests = leapHistory?.totals?.contests ?? 0;
+    console.log(`Loaded LEAP supplemental history: ${leapContests} contests across ${leapWards} ward GSS codes`);
+  } catch {
+    console.log("No LEAP supplemental history found (data/history/leap-history.json) — proceeding with DC only");
+  }
+  let besPriors = null;
+  try {
+    besPriors = readJson("data/features/ward-mrp-priors.json");
+    const ladCount = Object.keys(besPriors.priors || {}).length;
+    console.log(`Loaded BES Wave 1-30 priors: ${ladCount} LADs, ${besPriors.snapshot?.respondents_used || 'na'} respondents`);
+  } catch {
+    console.log("No BES priors found (data/features/ward-mrp-priors.json) — skipping BES MRP prior step");
+  }
   const slugMap = readJson("data/identity/council-slug-to-lad24.json");
   const laProj = readJson("data/features/la-ethnic-projections.json");
   const laImd = readJson("data/features/la-imd.json");
@@ -285,7 +302,7 @@ function main() {
       continue;
     }
 
-    const wd = buildWardData(ward, history);
+    const wd = buildWardData(ward, history, leapHistory);
     if (!wd.history.length) {
       // Fallback: synthesise prediction from council-level GE2024 + county-2025 anchor
       // restricted to the parties on the ballot. Marked confidence: low.
@@ -353,6 +370,9 @@ function main() {
     // (e.g. Burnley Rural Reform 42.9%) instead of the GE2024-only proxy.
     const lcc2025Arg = lancashireLcc2025ForWard(ward.council_slug, ward.ward_name);
 
+    const ladCodeForBes = slugMap.map[ward.council_slug]?.lad24cd;
+    const besPrior = ladCodeForBes ? besPriors?.priors?.[ladCodeForBes] || null : null;
+
     const result = predictWard(
       wd,
       wardAssumptions,
@@ -366,6 +386,7 @@ function main() {
       null, // fiscalData
       null, // candidates2026 (already in wardData)
       ethnicProjections,
+      besPrior,
     );
 
     if (!result.prediction) {

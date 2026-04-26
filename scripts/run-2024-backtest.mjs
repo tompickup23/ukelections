@@ -75,7 +75,7 @@ function predictedWinner(prediction) {
   return ranked[0]?.[0] || null;
 }
 
-function buildHistoricalWardData(currentWard, history2024Date, fullHistoryBundle) {
+function buildHistoricalWardData(currentWard, history2024Date, fullHistoryBundle, leapHistory) {
   // Build wardData using only history rows BEFORE the 2024 backtest target date.
   // Same key as our normal pipeline.
   const wardKey = `${currentWard.tier}::${currentWard.council_slug}::${currentWard.ward_slug}`;
@@ -88,7 +88,17 @@ function buildHistoricalWardData(currentWard, history2024Date, fullHistoryBundle
     by_ballot: Object.fromEntries(priorBallots.map((r) => [r.ballot_paper_id, r])),
     by_ward_slug: { [wardKey]: priorBallots.map((r) => r.ballot_paper_id) },
   };
-  return buildWardData(currentWard, narrowedBundle);
+  // LEAP rows are only ever pre-2018 — for a 2024 backtest they're all in-window.
+  // Drop any LEAP row dated >= history2024Date defensively.
+  let narrowedLeap = leapHistory;
+  if (leapHistory?.by_gss && currentWard.gss_code) {
+    const rows = (leapHistory.by_gss[currentWard.gss_code] || [])
+      .filter((r) => r.date < history2024Date);
+    narrowedLeap = rows.length > 0
+      ? { ...leapHistory, by_gss: { [currentWard.gss_code]: rows } }
+      : null;
+  }
+  return buildWardData(currentWard, narrowedBundle, narrowedLeap);
 }
 
 function aggregateMae(rows) {
@@ -138,6 +148,8 @@ function main() {
   console.log("Loading inputs...");
   const identity = readJson("data/identity/wards-may-2026.json");
   const history = readJson("data/history/dc-historic-results.json");
+  let leapHistory = null;
+  try { leapHistory = readJson("data/history/leap-history.json"); } catch {}
   const slugMap = readJson("data/identity/council-slug-to-lad24.json");
   const laProj = readJson("data/features/la-ethnic-projections.json");
   const laImd = readJson("data/features/la-imd.json");
@@ -166,7 +178,7 @@ function main() {
     if (!actualResult) continue;
     processed += 1;
 
-    const wd = buildHistoricalWardData(ward, target2024Date, history);
+    const wd = buildHistoricalWardData(ward, target2024Date, history, leapHistory);
     if (!wd.history.length) {
       no_history += 1;
       continue;
