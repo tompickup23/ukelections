@@ -103,13 +103,30 @@ export function buildMpRosterFromGe2024(pcons, byElectionResults = [], standingD
     const tenureYears = Math.max(0, (today - elected) / (365.25 * 86400_000));
     const override = standingDownMap[slug];
     const status = override?.status || "standing_again";
+    let effectiveParty = party;
+    let effectiveTenure = Number(tenureYears.toFixed(2));
+    let defectionDate = null;
+    // Tory→Reform / Lab→Independent / etc defections: the sitting MP is now
+    // the incumbent of new_party (short tenure since defection date). The
+    // old-party baseline still applies via the STM swing — we DON'T double-
+    // dock by also applying open-seat drag.
+    if (override?.new_party && override?.as_of) {
+      effectiveParty = override.new_party;
+      const def = new Date(override.as_of);
+      effectiveTenure = Math.max(0, (today - def) / (365.25 * 86400_000));
+      effectiveTenure = Number(effectiveTenure.toFixed(2));
+      defectionDate = override.as_of;
+    }
     roster[slug] = {
-      party,
+      party: effectiveParty,
+      previous_party: override?.new_party ? party : undefined,
       name,
-      tenure_years: Number(tenureYears.toFixed(2)),
+      tenure_years: effectiveTenure,
       status,
       source: byElection ? "by_election" : "ge_2024",
-      since: sourceDate,
+      since: defectionDate || sourceDate,
+      defected_from: override?.new_party ? party : undefined,
+      defection_date: defectionDate,
     };
   }
   return roster;

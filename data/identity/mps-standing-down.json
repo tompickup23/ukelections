@@ -1,22 +1,24 @@
 {
   "snapshot": {
-    "snapshot_id": "mps-standing-down-2026-04-26",
-    "generated_at": "2026-04-26T03:50:00Z",
+    "snapshot_id": "mps-standing-down-2026-04-26b",
+    "generated_at": "2026-04-26T05:10:00Z",
     "sources": [
-      "Institute for Government MP retirement tracker",
-      "The Spectator standing-down list",
-      "LabourList suspended/expelled MP coverage",
-      "Wikipedia: List of MPs of the 2024 United Kingdom Parliament who have left the Commons or changed parties"
+      "Wikipedia: 2024 suspension of rebel Labour MPs",
+      "Wikipedia: List of Conservative Party defections to Reform UK",
+      "Institute for Government MP suspension tracker",
+      "PoliMonitor: The Starmer Sanction chronicle of whip removals",
+      "LabourList + LBC + Bloomberg suspended/expelled MP coverage 2024-2026",
+      "ITV / New Statesman / The Pink News Tory→Reform defection coverage Jan-Feb 2026"
     ],
-    "method": "Manually curated from public reporting as of April 2026. Update when new announcements are made.",
-    "scope": "Currently focused on confirmed defections, suspensions, and explicit standing-down announcements since GE2024.",
+    "method": "Manually curated from public reporting as of April 26 2026. Update when new announcements are made.",
+    "scope": "Confirmed defections, suspensions, and explicit standing-down announcements since GE2024 affecting current sitting MPs only. Reinstated MPs (e.g. Oliver Ryan/Burnley, Burgon, Byrne, Long-Bailey, Hussain, McDonnell, Begum) are NOT listed here as they have rejoined the Parliamentary Labour Party.",
     "licence": "Compilation: CC-BY 4.0 (data points are from public reporting; this aggregation is editorial)."
   },
   "by_slug": {
     "gorton-and-denton": {
       "status": "defected",
       "previous_party": "Labour",
-      "reason": "Andrew Gwynne suspended (Whatsapp messages 2025) → resigned from Parliament 23 Jan 2026 citing ill health; by-election 26 Feb 2026 won by Green Party. Treat as fresh open seat.",
+      "reason": "Andrew Gwynne suspended (WhatsApp messages, Feb 2025) → resigned from Parliament 23 Jan 2026 citing ill health; by-election 26 Feb 2026 won by Green Party (Hannah Spencer). Treat as fresh open seat.",
       "as_of": "2026-02-26"
     },
     "runcorn-and-helsby": {
@@ -24,6 +26,78 @@
       "previous_party": "Labour",
       "reason": "Mike Amesbury suspended after assault conviction; resigned. By-election 1 May 2025 won by Reform UK (Sarah Pochin). Treat as fresh open seat.",
       "as_of": "2025-05-01"
+    },
+    "hackney-north-and-stoke-newington": {
+      "status": "suspended",
+      "previous_party": "Labour",
+      "allow_high_independent": true,
+      "reason": "Diane Abbott suspended from Labour Party 17 Jul 2025 after BBC interview remarks. Senior Labour sources say unlikely to be readmitted. May stand as Independent — bypass Indep cap given strong personal vote (40+ years as MP for the seat).",
+      "as_of": "2025-07-17"
+    },
+    "coventry-south": {
+      "status": "defected",
+      "previous_party": "Labour",
+      "allow_high_independent": true,
+      "reason": "Zarah Sultana left Labour Jul 2025 to co-found new left-of-Labour party with Jeremy Corbyn. Treat as fresh open seat with high-independent eligibility.",
+      "as_of": "2025-07-04"
+    },
+    "north-east-somerset-and-hanham": {
+      "status": "suspended",
+      "previous_party": "Labour",
+      "reason": "Dan Norris suspended Apr 2025 following arrest for sexual offences and rape. Treat as open seat.",
+      "as_of": "2025-04-15"
+    },
+    "poole": {
+      "status": "suspended",
+      "previous_party": "Labour",
+      "reason": "Neil Duncan-Jordan whip removed for voting against welfare reforms 2025. Status unresolved.",
+      "as_of": "2025-07-15"
+    },
+    "alloa-and-grangemouth": {
+      "status": "suspended",
+      "previous_party": "Labour",
+      "reason": "Brian Leishman whip removed for welfare-rebellion vote 2025.",
+      "as_of": "2025-07-15"
+    },
+    "north-east-hertfordshire": {
+      "status": "suspended",
+      "previous_party": "Labour",
+      "reason": "Chris Hinchliff whip removed for welfare-rebellion vote 2025.",
+      "as_of": "2025-07-15"
+    },
+    "york-central": {
+      "status": "suspended",
+      "previous_party": "Labour",
+      "reason": "Rachael Maskell whip removed for welfare-rebellion vote 2025.",
+      "as_of": "2025-07-15"
+    },
+    "east-wiltshire": {
+      "status": "defected",
+      "previous_party": "Conservative",
+      "new_party": "Reform UK",
+      "reason": "Danny Kruger defected from Conservative to Reform UK on 15 September 2025. Sitting MP at time of defection. Assume he stands again as Reform UK incumbent.",
+      "as_of": "2025-09-15"
+    },
+    "newark": {
+      "status": "defected",
+      "previous_party": "Conservative",
+      "new_party": "Reform UK",
+      "reason": "Robert Jenrick (former Home Secretary) defected from Conservative to Reform UK on 16 January 2026. Sitting MP at time of defection.",
+      "as_of": "2026-01-16"
+    },
+    "romford": {
+      "status": "defected",
+      "previous_party": "Conservative",
+      "new_party": "Reform UK",
+      "reason": "Andrew Rosindell defected from Conservative to Reform UK on 18 January 2026. Sitting MP at time of defection.",
+      "as_of": "2026-01-18"
+    },
+    "fareham-and-waterlooville": {
+      "status": "defected",
+      "previous_party": "Conservative",
+      "new_party": "Reform UK",
+      "reason": "Suella Braverman (former Home Secretary) defected from Conservative to Reform UK on 26 January 2026. Sitting MP at time of defection.",
+      "as_of": "2026-01-26"
     },
     "islington-north": {
       "status": "standing_again",

@@ -198,7 +198,7 @@ function main() {
       useSTM: true,
       geDampening: 1.0,
       besPrior: besPriorMap[pcon.slug] || null,
-      besPriorWeight: 0.15,
+      besPriorWeight: 0.05,
       mp: mpRoster[pcon.slug] || null,
       applyTacticalVoting: true,
       byElectionShares: byElectionShareMap[pcon.slug] || null,

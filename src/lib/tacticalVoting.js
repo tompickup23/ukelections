@@ -28,7 +28,7 @@ const PROGRESSIVE_PARTIES = new Set(["Labour", "Liberal Democrats", "Green Party
 export function applyTacticalVoting(shares, opts = {}) {
   const competitivenessGap = opts.competitivenessGap ?? 0.10;
   const tacticalFloor = opts.tacticalFloor ?? 0.05;
-  const transferRate = opts.transferRate ?? 0.30;
+  const transferRate = opts.transferRate ?? 0.15;
 
   if (!shares || Object.keys(shares).length < 3) return { shares: { ...(shares || {}) }, applied: null };
 

@@ -43,6 +43,36 @@ const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1
       <p class="eyebrow">Headline</p>
       <h2>Strong Transition Model vs Uniform National Swing</h2>
     </div>
+    <h3 style="margin-top: 1.5rem">Real-polling forecast test (genuine pre-election simulation)</h3>
+    <p style="color: var(--muted); margin-bottom: 0.5rem">
+      Uses ACTUAL May 2024 polling averages (Lab 44%, Con 24%, Reform 12%) — what a forecaster running this model in May 2024 would have produced. The most honest forecaster comparison.
+    </p>
+    <table class="seat-table">
+      <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Uniform National Swing (May 2024 polling)</td>
+          <td>{((b.summary?.uns_real_polling?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
+          <td>{((b.summary?.uns_real_polling?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
+          <td>{b.summary?.uns_real_polling?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+        <tr style="background: rgba(0, 100, 200, 0.05)">
+          <td><strong>Strong Transition Model (May 2024 polling)</strong></td>
+          <td><strong>{((b.summary?.stm_real_polling?.winner_accuracy ?? 0) * 100).toFixed(1)}%</strong></td>
+          <td><strong>{((b.summary?.stm_real_polling?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</strong></td>
+          <td>{b.summary?.stm_real_polling?.brier_top_winner?.toFixed(4)}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: var(--muted)">
+      <strong>STM lift over UNS (real polling): {b.summary?.stm_real_lift_over_uns_real_pp?.toFixed(2)}pp</strong>.
+      For comparison: Survation 2024 final MRP scored 83.8% / 5.55pp RMSE; YouGov 92% (in-campaign panel of 150k); UNS counterfactual 7.61pp RMSE.
+    </p>
+
+    <h3 style="margin-top: 2rem">Perfect-polling structural test (model only)</h3>
+    <p style="color: var(--muted); margin-bottom: 0.5rem">
+      Feeds the model GE2024 actual national shares as if it had perfect foresight. Isolates the structural model quality from polling-error noise.
+    </p>
     <table class="seat-table">
       <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier</th></tr></thead>
       <tbody>
@@ -67,8 +97,9 @@ const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1
       </tbody>
     </table>
     <p style="color: var(--muted)">
-      <strong>STM lift over UNS: {b.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp</strong> ·
-      Anti-attenuation under-shoots in this single backtest because the calibration spreads come from GE2019 (a tighter pre-Reform-breakthrough distribution); fix planned for a future calibration run.
+      <strong>STM lift over UNS (perfect polling): {b.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp</strong> ·
+      <strong>Polling-error penalty: {b.summary?.perfect_polling_advantage_pp?.toFixed(2)}pp</strong> (extra MAE we paid for using May 2024 polling vs perfect foresight) ·
+      Anti-attenuation under-shoots even with out-of-sample calibration on GE2010+2015+2017 because pre-2017 distributions had wider between-PCON variance than 2024's fragmented 4-way race.
     </p>
   </section>
 

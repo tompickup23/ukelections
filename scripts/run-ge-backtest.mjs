@@ -19,6 +19,7 @@ import { dirname, resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { predictConstituencyGE } from "../src/lib/electionModel.js";
 import { applyAntiAttenuation, computeHistoricSigmas } from "../src/lib/antiAttenuation.js";
+import { UK_WESTMINSTER_2019_GE_RESULT, UK_WESTMINSTER_2024_MAY_AVERAGE } from "../src/lib/nationalPolling.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(__dirname, "..");
@@ -128,11 +129,24 @@ function metrics(rows, parties) {
   };
 }
 
-function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019 }) {
+function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019, useRealPolling }) {
   const baseIdx = buildIndex(dcResults, baseYear);
   const targetIdx = buildIndex(dcResults, targetYear);
   const baseNational = nationalShares(baseYear, dcResults);
   const targetNational = nationalShares(targetYear, dcResults);
+  // Decide what to feed to the model as "national polling now" + "national past":
+  //   - Default: pass the actual target-year national result as polling. This is
+  //     the "perfect polling foresight" test — measures the structural model
+  //     given correct polling input.
+  //   - useRealPolling=true: pass the actual pre-target polling average as polling.
+  //     This is the genuine forecast test — measures what a forecaster running
+  //     the model in real time before the target election would have produced.
+  const pollingNational = useRealPolling
+    ? UK_WESTMINSTER_2024_MAY_AVERAGE.shares
+    : (polling || targetNational);
+  const pollingPast = useRealPolling
+    ? UK_WESTMINSTER_2019_GE_RESULT.shares
+    : baseNational;
 
   const rows = [];
   let usedNotional = 0;
@@ -171,8 +185,8 @@ function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, no
       },
     };
     const pollingArg = {
-      aggregate: polling || targetNational,
-      ge2024_baseline: baseNational,
+      aggregate: pollingNational,
+      ge2024_baseline: pollingPast,
     };
     const opts = {
       useSTM: mode === "stm",
@@ -254,17 +268,34 @@ function main() {
   const baseYear = 2019;
   const targetYear = 2024;
 
+  // Run all four configurations: UNS-perfect, STM-perfect, UNS-realpolling, STM-realpolling.
+  // "perfect" = uses actual GE2024 national result as polling input (measures
+  // structural model). "realpolling" = uses actual May 2024 polling average
+  // (measures what a forecaster running the model live in May 2024 would have
+  // produced — the genuine forecast test).
   const uns = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019 });
-  console.log(`UNS:        ${uns.rows.length} PCONs evaluated`);
+  console.log(`UNS (perfect polling):        ${uns.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(uns.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(uns.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${uns.metrics.brier_top_winner.toFixed(4)}`);
 
   const stm = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019 });
-  console.log(`STM:        ${stm.rows.length} PCONs evaluated`);
+  console.log(`STM (perfect polling):        ${stm.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(stm.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(stm.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${stm.metrics.brier_top_winner.toFixed(4)}`);
+
+  const unsReal = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019, useRealPolling: true });
+  console.log(`UNS (May 2024 polling):       ${unsReal.rows.length} PCONs evaluated`);
+  console.log(`  winner accuracy: ${(unsReal.metrics.winner_accuracy * 100).toFixed(1)}%`);
+  console.log(`  major-party MAE avg: ${(unsReal.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
+  console.log(`  Brier (top): ${unsReal.metrics.brier_top_winner.toFixed(4)}`);
+
+  const stmReal = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019, useRealPolling: true });
+  console.log(`STM (May 2024 polling):       ${stmReal.rows.length} PCONs evaluated`);
+  console.log(`  winner accuracy: ${(stmReal.metrics.winner_accuracy * 100).toFixed(1)}%`);
+  console.log(`  major-party MAE avg: ${(stmReal.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
+  console.log(`  Brier (top): ${stmReal.metrics.brier_top_winner.toFixed(4)}`);
 
   // Out-of-sample calibration cohort: blend GE2010 + GE2015 + GE2017
   // between-PCON share distributions. Using elections that PRE-DATE the
@@ -308,10 +339,14 @@ function main() {
     summary: {
       uns: uns.metrics,
       stm: stm.metrics,
+      uns_real_polling: unsReal.metrics,
+      stm_real_polling: stmReal.metrics,
       stm_unwound: { ...unwound.metrics, gammas: unwound.gammas },
       stm_lift_over_uns_pp: (uns.metrics.major_party_mae_avg - stm.metrics.major_party_mae_avg) * 100,
       unwinding_lift_over_stm_pp: (stm.metrics.major_party_mae_avg - unwound.metrics.major_party_mae_avg) * 100,
       total_lift_pp: (uns.metrics.major_party_mae_avg - unwound.metrics.major_party_mae_avg) * 100,
+      stm_real_lift_over_uns_real_pp: (unsReal.metrics.major_party_mae_avg - stmReal.metrics.major_party_mae_avg) * 100,
+      perfect_polling_advantage_pp: (stmReal.metrics.major_party_mae_avg - stm.metrics.major_party_mae_avg) * 100,
     },
     rows: unwound.rows.map((r) => ({
       slug: r.slug, name: r.name, country: r.country, region: r.region,
