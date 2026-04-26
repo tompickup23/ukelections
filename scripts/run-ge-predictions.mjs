@@ -61,22 +61,43 @@ function pcononicalShares(candidates) {
   return out;
 }
 
-function buildBesPriorMap(pcons, ladPriors, ladRegionMap) {
-  // For now: use the LAD prior of the FIRST LAD intersecting each PCON. When
-  // a PCON intersects multiple LADs, weight by LAD postcode share if available.
-  // Fall back to regional marginal where no LAD prior exists.
+function buildBesPriorMap(pcons, ladPriors) {
+  // Weighted blend across all LADs the PCON intersects. When the LSOA
+  // crosswalk gives us multiple LADs per PCON, average their shares (equal
+  // weight per LAD; a future upgrade would weight by LAD population share
+  // within the PCON, which requires LSOA→PCON+LAD joint counts). Falls back
+  // to regional marginal when no LAD prior is available.
   const out = {};
   for (const pcon of pcons) {
     if (!ladPriors?.priors) continue;
     const lads = pcon.lad24cds || [];
-    let chosen = null;
-    for (const lad of lads) {
-      if (ladPriors.priors[lad]) { chosen = ladPriors.priors[lad]; break; }
+    const matchedPriors = lads.map((l) => ladPriors.priors[l]).filter(Boolean);
+    if (matchedPriors.length > 0) {
+      const blended = {};
+      let nResp = 0;
+      for (const prior of matchedPriors) {
+        for (const [party, share] of Object.entries(prior.shares || {})) {
+          blended[party] = (blended[party] || 0) + share;
+        }
+        nResp += prior.n_respondents_in_region || 0;
+      }
+      for (const k of Object.keys(blended)) blended[k] /= matchedPriors.length;
+      out[pcon.slug] = {
+        region: matchedPriors[0].region,
+        shares: blended,
+        n_respondents_in_region: Math.round(nResp / matchedPriors.length),
+        lads_blended: matchedPriors.length,
+      };
+      continue;
     }
-    if (!chosen && pcon.region && ladPriors.regions?.[pcon.region]) {
-      chosen = { region: pcon.region, shares: ladPriors.regions[pcon.region] };
+    if (pcon.region && ladPriors.regions?.[pcon.region]) {
+      out[pcon.slug] = {
+        region: pcon.region,
+        shares: ladPriors.regions[pcon.region],
+        n_respondents_in_region: null,
+        lads_blended: 0,
+      };
     }
-    if (chosen) out[pcon.slug] = chosen;
   }
   return out;
 }
@@ -87,12 +108,20 @@ function main() {
   const dcRaw = readJson("data/history/dc-historic-results.json");
   let ladPriors = null;
   try { ladPriors = readJson("data/features/ward-mrp-priors.json"); } catch {}
+  let pconDemographics = null;
+  try { pconDemographics = readJson("data/features/pcon-demographics.json"); } catch {}
+  let standingDown = null;
+  try { standingDown = readJson("data/identity/mps-standing-down.json"); } catch {}
   console.log(`  ${pcons.length} PCONs loaded`);
   if (ladPriors) console.log(`  ${Object.keys(ladPriors.priors || {}).length} LAD-level BES priors available`);
+  if (pconDemographics) console.log(`  ${Object.keys(pconDemographics.by_pcon || {}).length} PCONs with Census 2021 demographics`);
+  if (standingDown) console.log(`  ${Object.keys(standingDown.by_slug || {}).length} MPs flagged with non-default standing status`);
 
-  // Build sitting-MP roster from GE2024 winners + post-2024 by-elections
+  // Build sitting-MP roster from GE2024 winners + post-2024 by-elections,
+  // overlaying any standing-down / defection flags from the manual tracker.
   const byElectionResults = dcRaw.results.filter((r) => r.tier === "parl" && r.is_by_election && r.election_date >= "2024-07-04");
-  const mpRoster = buildMpRosterFromGe2024(pcons, byElectionResults);
+  const standingDownMap = standingDown?.by_slug || {};
+  const mpRoster = buildMpRosterFromGe2024(pcons, byElectionResults, standingDownMap);
   console.log(`  ${Object.keys(mpRoster).length} MPs in roster (incl. ${byElectionResults.length} post-GE2024 by-election overrides)`);
 
   // Build by-election overlay shares (post-GE2024 only)
@@ -151,6 +180,8 @@ function main() {
       applyTacticalVoting: true,
       byElectionShares: byElectionShareMap[pcon.slug] || null,
       byElectionWeight: 0.30,
+      demographics: pcon.pcon24cd ? pconDemographics?.by_pcon?.[pcon.pcon24cd] || null : null,
+      allowHighIndependent: standingDownMap[pcon.slug]?.allow_high_independent === true,
     };
     const result = predictConstituencyGE(constituency, polling, {}, opts);
     if (!result?.prediction) {

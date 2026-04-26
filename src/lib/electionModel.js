@@ -16,6 +16,7 @@
 import { applyStrongTransitionSwing as applyStrongTransitionSwingExternal } from './strongTransitionSwing.js';
 import { applyTacticalVoting as applyTacticalVotingExternal } from './tacticalVoting.js';
 import { applyIncumbencyAdjustment as applyIncumbencyAdjustmentExternal } from './incumbencyTracker.js';
+import { applyReformDemographicCeiling, applyIndependentCeiling } from './pconDemographicCeilings.js';
 
 // ---------------------------------------------------------------------------
 // Default assumptions (user can override via UI sliders)
@@ -1211,6 +1212,28 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
         step: 2.4, name: 'Tactical Voting',
         description: `${tac.applied.donor} → ${tac.applied.recipient}: ${(tac.applied.amount * 100).toFixed(1)}pp transfer (close 3-way)`,
         data: tac.applied,
+      });
+    }
+  }
+
+  // Step 2.5: Demographic ceilings (PCON-level Census 2021).
+  if (opts.demographics) {
+    const reformCap = applyReformDemographicCeiling(shares, opts.demographics);
+    if (reformCap.applied) {
+      shares = reformCap.shares;
+      methodology.push({
+        step: 2.5, name: 'Reform demographic ceiling',
+        description: `Muslim ${(reformCap.applied.muslim_pct * 100).toFixed(1)}% → cap Reform at ${(reformCap.applied.ceiling * 100).toFixed(0)}%; redistributed ${(reformCap.applied.excess_redistributed * 100).toFixed(1)}pp`,
+        data: reformCap.applied,
+      });
+    }
+    const indCap = applyIndependentCeiling(shares, { allowHighIndependent: opts.allowHighIndependent });
+    if (indCap.applied) {
+      shares = indCap.shares;
+      methodology.push({
+        step: 2.55, name: 'Independent ceiling',
+        description: `Cap Independent at ${(indCap.applied.cap * 100).toFixed(0)}% (no override flag); redistributed ${(indCap.applied.excess_redistributed * 100).toFixed(1)}pp`,
+        data: indCap.applied,
       });
     }
   }
