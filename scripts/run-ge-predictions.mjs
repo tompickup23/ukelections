@@ -61,41 +61,57 @@ function pcononicalShares(candidates) {
   return out;
 }
 
-function buildBesPriorMap(pcons, ladPriors) {
-  // Weighted blend across all LADs the PCON intersects. When the LSOA
-  // crosswalk gives us multiple LADs per PCON, average their shares (equal
-  // weight per LAD; a future upgrade would weight by LAD population share
-  // within the PCON, which requires LSOA→PCON+LAD joint counts). Falls back
-  // to regional marginal when no LAD prior is available.
+function buildBesPriorMap(pcons, pconPriors, ladPriors) {
+  // Three-tier prior selection per PCON, in preference order:
+  //   1. PCON24-level prior (BES respondents mapped via PCON10→PCON24 lookup)
+  //   2. Multi-LAD weighted blend (BES priors keyed by LAD24CD, averaged
+  //      across all LADs the PCON intersects)
+  //   3. Regional marginal (England/Wales/Scotland 11-region rolled-up vote intent)
   const out = {};
   for (const pcon of pcons) {
-    if (!ladPriors?.priors) continue;
-    const lads = pcon.lad24cds || [];
-    const matchedPriors = lads.map((l) => ladPriors.priors[l]).filter(Boolean);
-    if (matchedPriors.length > 0) {
-      const blended = {};
-      let nResp = 0;
-      for (const prior of matchedPriors) {
-        for (const [party, share] of Object.entries(prior.shares || {})) {
-          blended[party] = (blended[party] || 0) + share;
-        }
-        nResp += prior.n_respondents_in_region || 0;
-      }
-      for (const k of Object.keys(blended)) blended[k] /= matchedPriors.length;
+    // Tier 1: direct PCON24 prior
+    if (pcon.pcon24cd && pconPriors?.priors?.[pcon.pcon24cd]) {
+      const p = pconPriors.priors[pcon.pcon24cd];
       out[pcon.slug] = {
-        region: matchedPriors[0].region,
-        shares: blended,
-        n_respondents_in_region: Math.round(nResp / matchedPriors.length),
-        lads_blended: matchedPriors.length,
+        region: p.region,
+        shares: p.shares,
+        n_respondents_in_region: p.n_respondents,
+        source: "pcon",
       };
       continue;
     }
-    if (pcon.region && ladPriors.regions?.[pcon.region]) {
+    // Tier 2: multi-LAD blend
+    if (ladPriors?.priors) {
+      const lads = pcon.lad24cds || [];
+      const matchedPriors = lads.map((l) => ladPriors.priors[l]).filter(Boolean);
+      if (matchedPriors.length > 0) {
+        const blended = {};
+        let nResp = 0;
+        for (const prior of matchedPriors) {
+          for (const [party, share] of Object.entries(prior.shares || {})) {
+            blended[party] = (blended[party] || 0) + share;
+          }
+          nResp += prior.n_respondents_in_region || 0;
+        }
+        for (const k of Object.keys(blended)) blended[k] /= matchedPriors.length;
+        out[pcon.slug] = {
+          region: matchedPriors[0].region,
+          shares: blended,
+          n_respondents_in_region: Math.round(nResp / matchedPriors.length),
+          lads_blended: matchedPriors.length,
+          source: "lad_blend",
+        };
+        continue;
+      }
+    }
+    // Tier 3: regional marginal
+    const regional = pconPriors?.regions?.[pcon.region] || ladPriors?.regions?.[pcon.region];
+    if (pcon.region && regional) {
       out[pcon.slug] = {
         region: pcon.region,
-        shares: ladPriors.regions[pcon.region],
+        shares: regional,
         n_respondents_in_region: null,
-        lads_blended: 0,
+        source: "region",
       };
     }
   }
@@ -108,12 +124,15 @@ function main() {
   const dcRaw = readJson("data/history/dc-historic-results.json");
   let ladPriors = null;
   try { ladPriors = readJson("data/features/ward-mrp-priors.json"); } catch {}
+  let pconPriors = null;
+  try { pconPriors = readJson("data/features/pcon-mrp-priors.json"); } catch {}
   let pconDemographics = null;
   try { pconDemographics = readJson("data/features/pcon-demographics.json"); } catch {}
   let standingDown = null;
   try { standingDown = readJson("data/identity/mps-standing-down.json"); } catch {}
   console.log(`  ${pcons.length} PCONs loaded`);
-  if (ladPriors) console.log(`  ${Object.keys(ladPriors.priors || {}).length} LAD-level BES priors available`);
+  if (pconPriors) console.log(`  ${Object.keys(pconPriors.priors || {}).length} PCON-level BES priors available (preferred)`);
+  if (ladPriors) console.log(`  ${Object.keys(ladPriors.priors || {}).length} LAD-level BES priors available (fallback)`);
   if (pconDemographics) console.log(`  ${Object.keys(pconDemographics.by_pcon || {}).length} PCONs with Census 2021 demographics`);
   if (standingDown) console.log(`  ${Object.keys(standingDown.by_slug || {}).length} MPs flagged with non-default standing status`);
 
@@ -131,9 +150,13 @@ function main() {
   }
   console.log(`  ${Object.keys(byElectionShareMap).length} post-GE2024 by-elections will overlay`);
 
-  // Build BES PCON-level prior map (currently LAD-derived)
-  const besPriorMap = buildBesPriorMap(pcons, ladPriors);
-  console.log(`  ${Object.keys(besPriorMap).length} PCONs have a BES prior available`);
+  // Build BES prior map: prefer PCON24-direct, fall back LAD blend, then regional
+  const besPriorMap = buildBesPriorMap(pcons, pconPriors, ladPriors);
+  const sourceCounts = Object.values(besPriorMap).reduce((acc, v) => {
+    acc[v.source] = (acc[v.source] || 0) + 1;
+    return acc;
+  }, {});
+  console.log(`  ${Object.keys(besPriorMap).length} PCONs have a BES prior — by source:`, sourceCounts);
 
   // Polling
   const ge2024National = {};

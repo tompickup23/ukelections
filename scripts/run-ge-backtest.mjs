@@ -266,22 +266,26 @@ function main() {
   console.log(`  major-party MAE avg: ${(stm.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${stm.metrics.brier_top_winner.toFixed(4)}`);
 
-  // Calibration set: blend GE2019 baseline + the actual target spread (with
-  // 0.5 weight each). Pure GE2019 spreads under-shoot the post-Reform 2024+
-  // distribution (Reform broke through new constituencies, LD vote
-  // concentrated more in target seats); pure target spreads circular-leak.
-  // The blend is conservative — it stretches predictions toward both the
-  // recent past and the actual target's variance pattern in equal measure,
-  // approximating what an independent calibration cohort would deliver.
-  const baselineShares = stm.rows.map((r) => r.baseline);
-  const actualShares = stm.rows.map((r) => r.actual);
-  const baseSig = computeHistoricSigmas(baselineShares.map((s) => ({ shares: s })));
-  const tgtSig = computeHistoricSigmas(actualShares.map((s) => ({ shares: s })));
-  const blendedSigmas = {};
-  for (const p of new Set([...Object.keys(baseSig), ...Object.keys(tgtSig)])) {
-    blendedSigmas[p] = 0.5 * (baseSig[p] || 0) + 0.5 * (tgtSig[p] || 0);
+  // Out-of-sample calibration cohort: blend GE2010 + GE2015 + GE2017
+  // between-PCON share distributions. Using elections that PRE-DATE the
+  // Reform UK era gives an independent measure of how-much-spread-is-typical
+  // in UK general elections, without leaking the GE2024 target answer.
+  //
+  // The 2017 election in particular saw both Lab and Con near 40%
+  // nationally with sharp constituency-level variation — a useful test of
+  // whether our predictions allow enough between-PCON variance.
+  const calibrationYears = [2010, 2015, 2017];
+  const indexed = Object.fromEntries(calibrationYears.map((y) => [y, buildIndex(dcRaw.results, y)]));
+  const calibrationRows = [];
+  for (const y of calibrationYears) {
+    for (const r of Object.values(indexed[y])) {
+      const shares = pcononicalShares(r.candidates || []);
+      if (Object.keys(shares).length > 0) calibrationRows.push({ shares });
+    }
   }
-  const unwound = applyUnwindingToRowsWithSigmas(stm.rows, blendedSigmas);
+  const calibratedSigmas = computeHistoricSigmas(calibrationRows);
+  console.log(`Anti-attenuation calibration: ${calibrationRows.length} historical PCON results from ${calibrationYears.join(", ")}`);
+  const unwound = applyUnwindingToRowsWithSigmas(stm.rows, calibratedSigmas);
   console.log(`STM+unwind: ${unwound.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(unwound.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(unwound.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);

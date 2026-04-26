@@ -95,6 +95,19 @@ function main() {
   const lsoaCount = Object.keys(lsoaToPcon.lookup || {}).length;
   console.log(`Loaded LSOA→PCON lookup: ${lsoaCount} LSOAs`);
 
+  // UKD HP v7.0 LAD-level projections for ethnic group as of May 2026.
+  // Used to scale Census 2021 LSOA counts onto a May-2026 demographic
+  // baseline, so the Reform demographic ceiling fires on projected
+  // current-year demographics rather than 5-year-stale 2021 counts.
+  let ukdProjections = null;
+  try {
+    ukdProjections = readJson("data/features/la-ethnic-projections.json");
+    const projCount = Object.keys(ukdProjections.projections || {}).length;
+    console.log(`Loaded UKD HP v7.0 LAD projections (May 2026 anchor): ${projCount} LADs`);
+  } catch (e) {
+    console.log("UKD projections unavailable — falling back to Census 2021 raw counts");
+  }
+
   const out = {
     snapshot: {
       snapshot_id: `pcon-demographics-${new Date().toISOString().slice(0, 10)}`,
@@ -208,11 +221,36 @@ function main() {
     }
   }
 
-  // Compute derived percentages per PCON
+  // Build a PCON → primary LAD lookup for UKD projection scaling. Each PCON
+  // intersects 1+ LADs; we approximate by picking the most-represented LAD
+  // in the LSOA crosswalk for that PCON.
+  const pconToLad = new Map();
+  if (ukdProjections) {
+    const counts = new Map();
+    for (const v of Object.values(lsoaToPcon.lookup || {})) {
+      const pcon = v.pcon24cd;
+      const lad = v.lad21cd;
+      if (!pcon || !lad) continue;
+      const key = `${pcon}::${lad}`;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    }
+    const bestPerPcon = new Map();
+    for (const [key, n] of counts.entries()) {
+      const [pcon, lad] = key.split("::");
+      const prev = bestPerPcon.get(pcon);
+      if (!prev || n > prev.n) bestPerPcon.set(pcon, { lad, n });
+    }
+    for (const [pcon, { lad }] of bestPerPcon.entries()) pconToLad.set(pcon, lad);
+  }
+
+  // Compute derived percentages per PCON; apply UKD HP v7.0 projection
+  // scaling to ethnicity shares where the LAD has a 2026 projection.
+  let ukdScaledCount = 0;
   for (const [pcon, payload] of Object.entries(out.by_pcon)) {
     if (payload.ethnicity?.total > 0) {
       const e = payload.ethnicity;
-      payload.ethnicity_pct = {
+      // Raw 2021 percentages
+      payload.ethnicity_pct_2021 = {
         white: e.white / e.total,
         white_british: e.white_british / e.total,
         white_other: e.white_other / e.total,
@@ -224,10 +262,52 @@ function main() {
         mixed: e.mixed / e.total,
         other: e.other / e.total,
       };
+      // UKD-scaled May 2026 estimate. We rescale the four broad UKD groups
+      // (white_british, asian, black, mixed, other) by the LAD-level
+      // projected/2021 ratio. Other categories carry through unchanged.
+      const lad = pconToLad.get(pcon);
+      const proj = lad ? ukdProjections?.projections?.[lad] : null;
+      if (proj?.groups_projected_2026 && proj?.groups_2021) {
+        const factor = (key, alt) => {
+          const k = (proj.groups_projected_2026[key] ?? 0) / 100;
+          const k2021 = (proj.groups_2021[key] ?? 0) / 100;
+          if (k2021 <= 0 || k <= 0) return 1;
+          return k / k2021;
+        };
+        const scaled = {
+          white_british: payload.ethnicity_pct_2021.white_british * factor("white_british"),
+          asian: payload.ethnicity_pct_2021.asian * factor("asian"),
+          black: payload.ethnicity_pct_2021.black * factor("black"),
+          mixed: payload.ethnicity_pct_2021.mixed * factor("mixed"),
+          other: payload.ethnicity_pct_2021.other * factor("other"),
+        };
+        // Re-normalise (factors don't preserve total; renormalisation keeps ratios)
+        const sum = Object.values(scaled).reduce((s, v) => s + v, 0);
+        if (sum > 0) for (const k of Object.keys(scaled)) scaled[k] /= sum;
+        // Compose projected pct (preserving sub-categories from 2021 since UKD
+        // doesn't project at sub-category granularity)
+        payload.ethnicity_pct = {
+          ...payload.ethnicity_pct_2021,
+          white_british: scaled.white_british,
+          asian: scaled.asian,
+          asian_pakistani: payload.ethnicity_pct_2021.asian_pakistani * factor("asian"),
+          asian_bangladeshi: payload.ethnicity_pct_2021.asian_bangladeshi * factor("asian"),
+          asian_indian: payload.ethnicity_pct_2021.asian_indian * factor("asian"),
+          black: scaled.black,
+          mixed: scaled.mixed,
+          other: scaled.other,
+        };
+        payload._demographic_anchor = "ukd_hpv7_may2026";
+        payload._scaling_lad = lad;
+        ukdScaledCount += 1;
+      } else {
+        payload.ethnicity_pct = payload.ethnicity_pct_2021;
+        payload._demographic_anchor = "census_2021";
+      }
     }
     if (payload.religion?.total > 0) {
       const r = payload.religion;
-      payload.religion_pct = {
+      payload.religion_pct_2021 = {
         no_religion: r.no_religion / r.total,
         christian: r.christian / r.total,
         muslim: r.muslim / r.total,
@@ -235,6 +315,43 @@ function main() {
         sikh: r.sikh / r.total,
         jewish: r.jewish / r.total,
       };
+      // Approximate May-2026 religion shares by scaling each minority
+      // religion with the ethnic-group it's most correlated with (UKD only
+      // projects ethnicity, not religion). Muslim ≈ scales with Asian + Other;
+      // Hindu/Sikh ≈ Asian; Jewish ≈ White; Christian ≈ White-British.
+      // Refers back to the same scaling factors used for ethnicity above.
+      const lad2 = pconToLad.get(pcon);
+      const proj2 = lad2 ? ukdProjections?.projections?.[lad2] : null;
+      if (proj2?.groups_projected_2026 && proj2?.groups_2021) {
+        const factor = (key) => {
+          const k = (proj2.groups_projected_2026[key] ?? 0) / 100;
+          const k2021 = (proj2.groups_2021[key] ?? 0) / 100;
+          if (k2021 <= 0 || k <= 0) return 1;
+          return k / k2021;
+        };
+        const fAsian = factor("asian");
+        const fOther = factor("other");
+        // Weight: Muslim demographics are ~90% Asian + Other in England,
+        // ~10% white/black. Use a 0.85 Asian × 0.15 Other blend.
+        const fMuslim = 0.85 * fAsian + 0.15 * fOther;
+        const fHinduSikh = fAsian;
+        // Christian/no-religion shrink slightly as minorities grow; we
+        // don't scale those (they're the residual after re-normalisation).
+        const scaled = {
+          ...payload.religion_pct_2021,
+          muslim: payload.religion_pct_2021.muslim * fMuslim,
+          hindu: payload.religion_pct_2021.hindu * fHinduSikh,
+          sikh: payload.religion_pct_2021.sikh * fHinduSikh,
+        };
+        const sum = Object.values(scaled).reduce((s, v) => s + v, 0);
+        const target = Object.values(payload.religion_pct_2021).reduce((s, v) => s + v, 0);
+        if (sum > 0 && target > 0) {
+          for (const k of Object.keys(scaled)) scaled[k] = scaled[k] * (target / sum);
+        }
+        payload.religion_pct = scaled;
+      } else {
+        payload.religion_pct = payload.religion_pct_2021;
+      }
     }
     if (payload.tenure?.total > 0) {
       const t = payload.tenure;
@@ -264,7 +381,9 @@ function main() {
 
   out.snapshot.coverage = {
     pcons_with_data: Object.keys(out.by_pcon).length,
+    pcons_ukd_scaled: ukdScaledCount,
   };
+  console.log(`  UKD-scaled ethnicity for ${ukdScaledCount} PCONs (rest fall back to Census 2021 raw)`);
   mkdirSync(dirname(join(REPO, OUT)), { recursive: true });
   writeFileSync(join(REPO, OUT), JSON.stringify(out, null, 2));
   console.log(`Wrote ${OUT}: ${Object.keys(out.by_pcon).length} PCONs with demographic data`);
