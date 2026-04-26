@@ -7,16 +7,69 @@
  * assumptions.nationalToLocalDampening (default 0.65), and applies the
  * remainder as an additive adjustment to baseline shares.
  *
- * Replace this file's snapshots with the most recent reputable polling
- * average before each Stage 1 model run. The contract is that
- * `latestUKWestminster()` returns the shares used for prediction, and
- * the Methodology page renders the `_meta` block verbatim.
+ * Two-tier resolution:
+ *   1. data/polling/override.json — auto-refreshed weekly by
+ *      scripts/refresh-polling.mjs (Wikipedia rolling-average parser).
+ *      If present and the relevant constant has a successful
+ *      auto-parsed entry, it overrides the static snapshot below.
+ *   2. The hardcoded constants in this file act as a stable fallback
+ *      so a parse failure can never blank the model.
  *
  * Strict neutrality rule: source must be a named pollster published in
- * the previous 14 days, OR a transparent average (e.g. PollOfPolls.eu /
- * Politico EU UK aggregate / Wikipedia rolling average). Never editorial
- * commentary.
+ * the previous 14 days, OR a transparent average (e.g. Wikipedia
+ * rolling average). Never editorial commentary.
  */
+import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+let __OVERRIDE_BY_CONSTANT = null;
+function loadOverride() {
+  if (__OVERRIDE_BY_CONSTANT !== null) return __OVERRIDE_BY_CONSTANT;
+  __OVERRIDE_BY_CONSTANT = {};
+  try {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const overridePath = resolve(here, "../../data/polling/override.json");
+    if (!existsSync(overridePath)) return __OVERRIDE_BY_CONSTANT;
+    const raw = JSON.parse(readFileSync(overridePath, "utf8"));
+    for (const [key, src] of Object.entries(raw.sources || {})) {
+      if (src.review_status === "auto_parsed" && src.shares && src.constant) {
+        __OVERRIDE_BY_CONSTANT[src.constant] = {
+          shares: src.shares,
+          fieldwork_window: src.fieldwork_window,
+          polls_used: src.polls_used,
+          page: src.page,
+          retrieved_at: src.retrieved_at,
+          generated_at: raw.generated_at,
+          source_key: key,
+        };
+      }
+    }
+  } catch {
+    // Override is best-effort; failures are silent so the static fallback wins.
+  }
+  return __OVERRIDE_BY_CONSTANT;
+}
+
+function applyOverride(constantName, snapshot) {
+  const ov = loadOverride()[constantName];
+  if (!ov) return snapshot;
+  return {
+    ...snapshot,
+    shares: { ...snapshot.shares, ...ov.shares },
+    _meta: {
+      ...snapshot._meta,
+      label: `${snapshot._meta?.label || constantName} (auto-refreshed from Wikipedia ${ov.fieldwork_window?.latest})`,
+      fieldwork: ov.fieldwork_window
+        ? `${ov.fieldwork_window.earliest} to ${ov.fieldwork_window.latest}`
+        : snapshot._meta?.fieldwork,
+      source: `Wikipedia rolling 14-day average — ${ov.polls_used} polls`,
+      source_url: `https://en.wikipedia.org/wiki/${ov.page}`,
+      review_status: "auto_refreshed",
+      retrieved_at: ov.retrieved_at,
+    },
+  };
+}
 
 export const UK_WESTMINSTER_2019_GE_RESULT = {
   // GE2019 — used as the prior-baseline for the 2024 backtest run.
@@ -102,7 +155,7 @@ export const UK_WESTMINSTER_2024_GE_RESULT = {
   },
 };
 
-export const UK_WESTMINSTER_2026_APRIL_AVERAGE = {
+const UK_WESTMINSTER_2026_APRIL_AVERAGE_STATIC = {
   // Indicative April 2026 rolling average. Update this object before
   // each Stage 1 model run with the latest publicly available pollster
   // average (PollOfPolls / Wikipedia rolling 14-day mean).
@@ -146,7 +199,7 @@ export const WELSH_2024_GE_RESULT = {
   },
 };
 
-export const WELSH_2026_APRIL_AVERAGE = {
+const WELSH_2026_APRIL_AVERAGE_STATIC = {
   // Welsh-wide vote intention placeholder, April 2026.
   shares: {
     "Plaid Cymru": 0.250,
@@ -194,7 +247,7 @@ export const SCOTTISH_2021_HOLYROOD_RESULT = {
   },
 };
 
-export const SCOTTISH_2026_APRIL_AVERAGE = {
+const SCOTTISH_2026_APRIL_AVERAGE_STATIC = {
   // Scotland-wide Westminster/Holyrood placeholder, April 2026.
   shares: {
     "SNP": 0.290,
@@ -213,6 +266,23 @@ export const SCOTTISH_2026_APRIL_AVERAGE = {
     refresh_required_by: "2026-05-01",
   },
 };
+
+// Auto-override-aware exports: each 2026 placeholder is replaced at module
+// load time with the latest Wikipedia rolling average if data/polling/
+// override.json contains a successful auto-parsed entry. Otherwise the
+// static placeholder above is returned unchanged.
+export const UK_WESTMINSTER_2026_APRIL_AVERAGE = applyOverride(
+  "UK_WESTMINSTER_2026_APRIL_AVERAGE",
+  UK_WESTMINSTER_2026_APRIL_AVERAGE_STATIC,
+);
+export const WELSH_2026_APRIL_AVERAGE = applyOverride(
+  "WELSH_2026_APRIL_AVERAGE",
+  WELSH_2026_APRIL_AVERAGE_STATIC,
+);
+export const SCOTTISH_2026_APRIL_AVERAGE = applyOverride(
+  "SCOTTISH_2026_APRIL_AVERAGE",
+  SCOTTISH_2026_APRIL_AVERAGE_STATIC,
+);
 
 /**
  * Returns the snapshot used by predictWard's nationalPolling argument.

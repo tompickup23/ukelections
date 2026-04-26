@@ -20,9 +20,17 @@ describe("nationalPolling snapshots", () => {
     expect(sumShares(UK_WESTMINSTER_2026_APRIL_AVERAGE.shares)).toBeCloseTo(1.0, 1);
   });
 
-  it("Apr 2026 snapshot is flagged as draft_placeholder until refresh", () => {
-    expect(UK_WESTMINSTER_2026_APRIL_AVERAGE._meta.review_status).toBe("draft_placeholder");
-    expect(UK_WESTMINSTER_2026_APRIL_AVERAGE._meta.refresh_required_by).toBe("2026-05-01");
+  it("Apr 2026 snapshot is flagged either draft_placeholder or auto_refreshed", () => {
+    // Either state is a valid pre-launch posture: draft_placeholder means
+    // refresh-polling.mjs hasn't run yet (and refresh_required_by is set);
+    // auto_refreshed means the cron has populated data/polling/override.json.
+    const status = UK_WESTMINSTER_2026_APRIL_AVERAGE._meta.review_status;
+    expect(["draft_placeholder", "auto_refreshed"]).toContain(status);
+    if (status === "draft_placeholder") {
+      expect(UK_WESTMINSTER_2026_APRIL_AVERAGE._meta.refresh_required_by).toBe("2026-05-01");
+    } else {
+      expect(UK_WESTMINSTER_2026_APRIL_AVERAGE._meta.retrieved_at).toMatch(/^\d{4}-\d{2}-\d{2}/);
+    }
   });
 
   it("GE2024 every share between 0 and 1", () => {

@@ -16,7 +16,7 @@
 import { applyStrongTransitionSwing as applyStrongTransitionSwingExternal } from './strongTransitionSwing.js';
 import { applyTacticalVoting as applyTacticalVotingExternal } from './tacticalVoting.js';
 import { applyIncumbencyAdjustment as applyIncumbencyAdjustmentExternal } from './incumbencyTracker.js';
-import { applyReformDemographicCeiling, applyIndependentCeiling } from './pconDemographicCeilings.js';
+import { applyReformDemographicCeiling, applyIndependentCeiling, applyEnglishIdentityFloor, applyAgeStructureAdjustment } from './pconDemographicCeilings.js';
 
 // ---------------------------------------------------------------------------
 // Default assumptions (user can override via UI sliders)
@@ -1216,13 +1216,40 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
     }
   }
 
-  // Step 2.5: Demographic ceilings (PCON-level Census 2021).
+  // Step 2.5: Demographic ceilings + floors (PCON-level Census 2021).
   if (opts.demographics) {
+    // 2.5a: English-identity floor (TS027) — Reform's strongest demographic
+    // predictor (Frontiers 2025, β≈0.45). Boost Reform 1-3pp in high-English-
+    // identity PCONs before the Muslim cap fires, so the cap can still trim
+    // any over-shoot in the rare overlap PCONs.
+    const engFloor = applyEnglishIdentityFloor(shares, opts.demographics);
+    if (engFloor.applied) {
+      shares = engFloor.shares;
+      methodology.push({
+        step: 2.5, name: 'English-identity floor',
+        description: `English ${(engFloor.applied.english_identity_pct * 100).toFixed(1)}% → Reform +${(engFloor.applied.bonus * 100).toFixed(1)}pp`,
+        data: engFloor.applied,
+      });
+    }
+    // 2.51: Age-structure adjustment (TS007A) — Reform/Con lift in 65+-heavy
+    // PCONs. Dampened to 0.4× when a BES prior is already shaping the
+    // posterior, since BES respondents implicitly carry the age signal.
+    const ageAdj = applyAgeStructureAdjustment(shares, opts.demographics, {
+      hasBesPrior: opts.besPrior != null,
+    });
+    if (ageAdj.applied) {
+      shares = ageAdj.shares;
+      methodology.push({
+        step: 2.51, name: 'Age-structure adjustment',
+        description: `65+ ${(ageAdj.applied.age_65_plus_pct * 100).toFixed(1)}% → Reform +${(ageAdj.applied.reform_bonus * 100).toFixed(2)}pp, Con +${(ageAdj.applied.conservative_bonus * 100).toFixed(2)}pp${ageAdj.applied.dampened ? ' (BES-dampened)' : ''}`,
+        data: ageAdj.applied,
+      });
+    }
     const reformCap = applyReformDemographicCeiling(shares, opts.demographics);
     if (reformCap.applied) {
       shares = reformCap.shares;
       methodology.push({
-        step: 2.5, name: 'Reform demographic ceiling',
+        step: 2.52, name: 'Reform demographic ceiling',
         description: `Muslim ${(reformCap.applied.muslim_pct * 100).toFixed(1)}% → cap Reform at ${(reformCap.applied.ceiling * 100).toFixed(0)}%; redistributed ${(reformCap.applied.excess_redistributed * 100).toFixed(1)}pp`,
         data: reformCap.applied,
       });

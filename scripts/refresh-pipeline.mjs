@@ -41,6 +41,7 @@ const phases = [];
 if (!skipFetch) {
   phases.push(["1a. Refresh Democracy Club ballot scope (May 7 2026)", "scripts/build-may-2026-scope.mjs"]);
   phases.push(["1b. Refresh Democracy Club historic results", "scripts/ingest-dc-historic-results.mjs"]);
+  phases.push(["1c. Refresh polling override from Wikipedia rolling avg", "scripts/refresh-polling.mjs"]);
 } else {
   process.stdout.write("(skipping remote DC fetches — reusing cached ingest files)\n");
 }

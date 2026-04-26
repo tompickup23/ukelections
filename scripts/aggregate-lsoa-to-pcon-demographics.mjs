@@ -8,10 +8,12 @@
  *
  * Tables consumed (cached at ~/ukelections/.cache/census/):
  *   TS021 — Ethnic group (20 categories)
+ *   TS027 — National identity (UK / English / Welsh / Scottish / NI / etc.)
  *   TS030 — Religion (10 categories)
  *   TS054 — Tenure (with breakdowns)
  *   TS066 — Economic activity (status)
  *   TS067 — Highest qualification
+ *   TS007A — Age structure (5-year bands, 0-4 to 85+)
  *
  * Per-PCON output is the SUM of LSOA counts (LSOAs entirely within the PCON;
  * boundary-crossing LSOAs are assigned to their primary PCON in the lookup).
@@ -114,10 +116,12 @@ function main() {
       generated_at: new Date().toISOString(),
       sources: [
         { path: "Census 2021 TS021 (LSOA)", role: "Ethnic group (20 categories)" },
+        { path: "Census 2021 TS027 (LSOA)", role: "National identity" },
         { path: "Census 2021 TS030 (LSOA)", role: "Religion (10 categories)" },
         { path: "Census 2021 TS054 (LSOA)", role: "Tenure" },
         { path: "Census 2021 TS066 (LSOA)", role: "Economic activity" },
         { path: "Census 2021 TS067 (LSOA)", role: "Highest qualification" },
+        { path: "Census 2021 TS007A (LSOA)", role: "Age structure (5-year bands)" },
       ],
       method: "LSOA primary-assignment to PCON via lsoa21-to-pcon24 lookup; counts summed.",
       licence: "ONS OGL v3",
@@ -187,6 +191,48 @@ function main() {
         total: findColumn(headers, /Total: All usual residents aged 16 years and over/i),
         no_quals: findColumn(headers, /No qualifications/i),
         level_4_plus: findColumn(headers, /Level 4 qualifications and above/i),
+      }),
+    },
+    {
+      key: "national_identity",
+      file: "ts027",
+      cols: (headers) => ({
+        total: findColumn(headers, /National identity: Total: All usual residents/i),
+        british_only: findColumn(headers, /National identity: British only identity/i),
+        english_only: findColumn(headers, /National identity: English only identity/i),
+        english_and_british: findColumn(headers, /National identity: English and British only identity/i),
+        welsh_only: findColumn(headers, /National identity: Welsh only identity/i),
+        welsh_and_british: findColumn(headers, /National identity: Welsh and British only identity/i),
+        scottish_only: findColumn(headers, /National identity: Scottish only identity/i),
+        scottish_and_british: findColumn(headers, /National identity: Scottish and British only identity/i),
+        ni_only: findColumn(headers, /National identity: Northern Irish only identity/i),
+        ni_and_british: findColumn(headers, /National identity: Northern Irish and British only identity/i),
+        non_uk_only: findColumn(headers, /National identity: Non-UK identity only/i),
+      }),
+    },
+    {
+      key: "age",
+      file: "ts007a",
+      cols: (headers) => ({
+        total: findColumn(headers, /^Age: Total$/i),
+        a0_4: findColumn(headers, /Age: Aged 4 years and under/i),
+        a5_9: findColumn(headers, /Age: Aged 5 to 9 years/i),
+        a10_14: findColumn(headers, /Age: Aged 10 to 14 years/i),
+        a15_19: findColumn(headers, /Age: Aged 15 to 19 years/i),
+        a20_24: findColumn(headers, /Age: Aged 20 to 24 years/i),
+        a25_29: findColumn(headers, /Age: Aged 25 to 29 years/i),
+        a30_34: findColumn(headers, /Age: Aged 30 to 34 years/i),
+        a35_39: findColumn(headers, /Age: Aged 35 to 39 years/i),
+        a40_44: findColumn(headers, /Age: Aged 40 to 44 years/i),
+        a45_49: findColumn(headers, /Age: Aged 45 to 49 years/i),
+        a50_54: findColumn(headers, /Age: Aged 50 to 54 years/i),
+        a55_59: findColumn(headers, /Age: Aged 55 to 59 years/i),
+        a60_64: findColumn(headers, /Age: Aged 60 to 64 years/i),
+        a65_69: findColumn(headers, /Age: Aged 65 to 69 years/i),
+        a70_74: findColumn(headers, /Age: Aged 70 to 74 years/i),
+        a75_79: findColumn(headers, /Age: Aged 75 to 79 years/i),
+        a80_84: findColumn(headers, /Age: Aged 80 to 84 years/i),
+        a85_plus: findColumn(headers, /Age: Aged 85 years and over/i),
       }),
     },
   ];
@@ -376,6 +422,43 @@ function main() {
         sick_disabled: e.sick_disabled / e.total,
         student: e.student / e.total,
       };
+    }
+    if (payload.national_identity?.total > 0) {
+      const n = payload.national_identity;
+      const englishCount = (n.english_only || 0) + (n.english_and_british || 0);
+      const ukAnyCount =
+        (n.british_only || 0) + (n.english_only || 0) + (n.english_and_british || 0) +
+        (n.welsh_only || 0) + (n.welsh_and_british || 0) +
+        (n.scottish_only || 0) + (n.scottish_and_british || 0) +
+        (n.ni_only || 0) + (n.ni_and_british || 0);
+      payload.national_identity_pct = {
+        british_only: (n.british_only || 0) / n.total,
+        english: englishCount / n.total,
+        english_only: (n.english_only || 0) / n.total,
+        welsh: ((n.welsh_only || 0) + (n.welsh_and_british || 0)) / n.total,
+        scottish: ((n.scottish_only || 0) + (n.scottish_and_british || 0)) / n.total,
+        northern_irish: ((n.ni_only || 0) + (n.ni_and_british || 0)) / n.total,
+        any_uk: ukAnyCount / n.total,
+        non_uk_only: (n.non_uk_only || 0) / n.total,
+      };
+      payload.english_identity_pct = englishCount / n.total;
+    }
+    if (payload.age?.total > 0) {
+      const a = payload.age;
+      const t = a.total;
+      const sum65plus =
+        (a.a65_69 || 0) + (a.a70_74 || 0) + (a.a75_79 || 0) + (a.a80_84 || 0) + (a.a85_plus || 0);
+      const sum50_64 = (a.a50_54 || 0) + (a.a55_59 || 0) + (a.a60_64 || 0);
+      const sum18_29_approx = (a.a20_24 || 0) + (a.a25_29 || 0) + ((a.a15_19 || 0) * 0.4);
+      payload.age_pct = {
+        under_18_approx: ((a.a0_4 || 0) + (a.a5_9 || 0) + (a.a10_14 || 0) + (a.a15_19 || 0) * 0.6) / t,
+        a18_29_approx: sum18_29_approx / t,
+        a30_49: ((a.a30_34 || 0) + (a.a35_39 || 0) + (a.a40_44 || 0) + (a.a45_49 || 0)) / t,
+        a50_64: sum50_64 / t,
+        a65_plus: sum65plus / t,
+      };
+      payload.age_65_plus_pct = sum65plus / t;
+      payload.age_50_plus_pct = (sum50_64 + sum65plus) / t;
     }
   }
 

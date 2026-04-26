@@ -129,7 +129,7 @@ function metrics(rows, parties) {
   };
 }
 
-function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019, useRealPolling }) {
+function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019, useRealPolling, pconDemographics }) {
   const baseIdx = buildIndex(dcResults, baseYear);
   const targetIdx = buildIndex(dcResults, targetYear);
   const baseNational = nationalShares(baseYear, dcResults);
@@ -191,6 +191,12 @@ function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, no
     const opts = {
       useSTM: mode === "stm",
       geDampening: 1.0,
+      // Census 2021 demographics anchor pre-dates GE2024, so passing them
+      // is not look-ahead bias. BES priors ARE post-GE2024 and remain
+      // disabled in the backtest.
+      demographics: pcon.pcon24cd && pconDemographics
+        ? pconDemographics.by_pcon?.[pcon.pcon24cd] || null
+        : null,
     };
     const result = predictConstituencyGE(constituency, pollingArg, {}, opts);
     if (!result?.prediction) continue;
@@ -261,7 +267,9 @@ function main() {
   const dcRaw = readJson("data/history/dc-historic-results.json");
   let notional2019 = null;
   try { notional2019 = readJson("data/history/ge-notional-2019.json"); } catch {}
-  console.log(`  ${pcons.length} PCONs, ${dcRaw.results.length} historic DC records${notional2019 ? `, ${Object.keys(notional2019.by_gss || {}).length} notional-2019 PCONs` : ''}`);
+  let pconDemographics = null;
+  try { pconDemographics = readJson("data/features/pcon-demographics.json"); } catch {}
+  console.log(`  ${pcons.length} PCONs, ${dcRaw.results.length} historic DC records${notional2019 ? `, ${Object.keys(notional2019.by_gss || {}).length} notional-2019 PCONs` : ''}${pconDemographics ? `, ${Object.keys(pconDemographics.by_pcon || {}).length} PCONs with Census 2021 demographics` : ''}`);
 
   // Run three modes back-to-back so the audit log shows STM lift + unwinding lift
   console.log("\n=== GE2024 backtest: GE2019 baseline → GE2024 actuals ===");
@@ -273,25 +281,25 @@ function main() {
   // structural model). "realpolling" = uses actual May 2024 polling average
   // (measures what a forecaster running the model live in May 2024 would have
   // produced — the genuine forecast test).
-  const uns = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019 });
+  const uns = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019, pconDemographics });
   console.log(`UNS (perfect polling):        ${uns.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(uns.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(uns.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${uns.metrics.brier_top_winner.toFixed(4)}`);
 
-  const stm = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019 });
+  const stm = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019, pconDemographics });
   console.log(`STM (perfect polling):        ${stm.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(stm.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(stm.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${stm.metrics.brier_top_winner.toFixed(4)}`);
 
-  const unsReal = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019, useRealPolling: true });
+  const unsReal = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "uns", notional2019, useRealPolling: true, pconDemographics });
   console.log(`UNS (May 2024 polling):       ${unsReal.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(unsReal.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(unsReal.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
   console.log(`  Brier (top): ${unsReal.metrics.brier_top_winner.toFixed(4)}`);
 
-  const stmReal = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019, useRealPolling: true });
+  const stmReal = runBacktest({ pcons, dcResults: dcRaw.results, baseYear, targetYear, mode: "stm", notional2019, useRealPolling: true, pconDemographics });
   console.log(`STM (May 2024 polling):       ${stmReal.rows.length} PCONs evaluated`);
   console.log(`  winner accuracy: ${(stmReal.metrics.winner_accuracy * 100).toFixed(1)}%`);
   console.log(`  major-party MAE avg: ${(stmReal.metrics.major_party_mae_avg * 100).toFixed(2)}pp`);
