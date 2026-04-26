@@ -9,6 +9,11 @@ import { buildWardData, partiesOnBallotCanonical, restrictToBallot } from "../sr
 import { predictWard, DEFAULT_ASSUMPTIONS, normalizePartyName } from "../src/lib/electionModel.js";
 import { pollingPair, UK_WESTMINSTER_2025_MAY_AVERAGE } from "../src/lib/nationalPolling.js";
 import { buildCounty2025Shares, applyCounty2025Anchor, DISTRICT_TO_PARENT_COUNTY_2025 } from "../src/lib/county2025.js";
+import {
+  detectLocalNonMajorEntrenchment,
+  detectDefectionCrystallisation,
+  applyDefectionBonus,
+} from "../src/lib/independentEntrenchment.js";
 import { applyIntervalsToBundle } from "../src/lib/intervals.js";
 import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
 import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
@@ -434,7 +439,17 @@ function main() {
       if (!latest?.year) return 99;
       return 2026 - latest.year;
     })();
-    const dynamicAnchorWeight = baselineAge >= 5 ? 0.65 : baselineAge >= 3 ? 0.55 : 0.45;
+    let dynamicAnchorWeight = baselineAge >= 5 ? 0.65 : baselineAge >= 3 ? 0.55 : 0.45;
+    // Bug fix (26 Apr 2026): in wards where the most-recent borough cycle was
+    // won by a non-major-party candidate ≥40% (Independent / Workers Party /
+    // Burnley & Padiham Indep), the 2025 county-cycle anchor washes out the
+    // local personal-vote stronghold because the same person isn't standing
+    // in LCC. Drop the anchor weight to 0.10 in those wards so the borough
+    // baseline dominates. Affects Bank Hall, Daneshouse, Queensgate, Gannow.
+    const entrenchment = detectLocalNonMajorEntrenchment(wd.history);
+    if (entrenchment.entrenched) {
+      dynamicAnchorWeight = 0.10;
+    }
     const anchored = applyCounty2025Anchor({
       prediction: filtered,
       county2025Shares: county2025,
@@ -444,6 +459,17 @@ function main() {
       anchorWeight: dynamicAnchorWeight,
     });
     let postAnchor = anchored.prediction;
+
+    // Bug fix (26 Apr 2026): post-2023 Labour-to-non-major defection
+    // crystallisation overlay. Where Labour was ≥50% in 2022 or 2023 but
+    // collapsed to ≤40% in 2024 with the lost share going to a non-major
+    // recipient who's still on the 2026 ballot, add half the drop (capped
+    // +10pp) to the recipient. The empirical pattern in Burnley + Bradford
+    // West + Birmingham Yardley + Leicester East is monotonic decline:
+    // a flat-baseline model under-prices the continuation.
+    const defection = detectDefectionCrystallisation(wd.history);
+    const defectionOut = applyDefectionBonus(postAnchor, defection, onBallot);
+    postAnchor = defectionOut.prediction;
 
     // 3. Local-party-strength + candidate continuity (Phases C + D)
     // Coalclough LD 8-cycle stronghold (mean 47%) gets anchored back to ~40%
@@ -540,13 +566,24 @@ function main() {
           ? {
               step: "Final-B",
               name: "2025 county-cycle anchor",
-              description: `Blended (weight ${anchored.anchor_weight}) toward May 2025 results for ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes), adjusted by national swing since May 2025. This corrects the model's tendency to under-weight Reform's 2025 county breakthroughs in 2-tier districts.`,
+              description: entrenchment.entrenched
+                ? `Anchor weight reduced to 0.10 because ${entrenchment.party} won the latest borough cycle (${(entrenchment.share * 100).toFixed(1)}%) — a hyperlocal personal-vote stronghold not represented in cross-tier county results. Otherwise blended toward May 2025 ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes).`
+                : `Blended (weight ${anchored.anchor_weight}) toward May 2025 results for ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes), adjusted by national swing since May 2025. This corrects the model's tendency to under-weight Reform's 2025 county breakthroughs in 2-tier districts.`,
             }
           : {
               step: "Final-B",
               name: "2025 county-cycle anchor",
               description: "No 2025 reference available for this council's parent area. Stage 1 uses national polling only.",
             },
+        ...(defectionOut.applied
+          ? [{
+              step: "Final-B2",
+              name: "Defection crystallisation",
+              description: defectionOut.applied.skipped
+                ? `Detected Labour collapse ${(defectionOut.applied.drop_pp * 100).toFixed(1)}pp ${defectionOut.applied.prior_year}→${defectionOut.applied.latest_year} → ${defectionOut.applied.recipient}, but no continuation bonus applied (${defectionOut.applied.skipped}).`
+                : `Labour collapsed ${(defectionOut.applied.drop_pp * 100).toFixed(1)}pp from ${defectionOut.applied.prior_year} to ${defectionOut.applied.latest_year} with the share going to ${defectionOut.applied.recipient_name || defectionOut.applied.recipient}. Continuation bonus +${(defectionOut.applied.bonus_applied * 100).toFixed(1)}pp applied to ${defectionOut.applied.recipient} on top of the 2024 baseline (the empirical defection pattern in Burnley / Bradford West / Birmingham Yardley etc. is monotonic decline, not a one-cycle protest).`,
+            }]
+          : []),
       ],
     };
     tally.ok += 1;
