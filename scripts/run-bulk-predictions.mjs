@@ -688,6 +688,107 @@ function main() {
 
   console.log(`\nTally: ${JSON.stringify(tally, null, 2)}`);
 
+  // National-share calibration: ensure aggregate predicted shares track
+  // national polling within a few pp. Without this, the per-ward model
+  // (anchored heavily to 2016-2024 cycle history + dampened national
+  // swing) systematically over-weights the historic 2016-2024 ward-level
+  // dominance of Lab and Con, and under-weights Reform / Green where
+  // their national 2026 polling far exceeds their historic ward share.
+  // Pre-calibration aggregate against May 2026 polls 23 Apr - 5 May:
+  //   Lab predicted 30% vs polled 18% (+12pp over)
+  //   Con predicted 21% vs polled 19% (+2pp)
+  //   Reform predicted 16% vs polled 26% (-10pp under)
+  //   LD predicted 14% vs polled 12% (+2pp)
+  //   Grn predicted 14% vs polled 16% (-2pp)
+  //
+  // Method: shrink each major party's per-ward share toward
+  // (national_poll / predicted_aggregate)^calibration_strength of its
+  // current value. Calibration strength 0.65 — strong enough to close
+  // most of the gap, weak enough that the per-ward signal still wins
+  // where local effects are real (incumbency, demographics, by-election
+  // collapse, LCC realignment).
+  console.log("\nNational-share calibration:");
+  const CALIBRATION_PARTIES = [
+    "Labour", "Conservative", "Reform UK", "Liberal Democrats",
+    "Green Party", "SNP", "Plaid Cymru",
+  ];
+  const CALIBRATION_STRENGTH = 0.65;
+  // Compute aggregate predicted share (vote-weighted across all local + mayor wards).
+  const aggVotes = {};
+  let totalAggVotes = 0;
+  for (const v of Object.values(predictions)) {
+    if (!v.prediction) continue;
+    for (const [party, d] of Object.entries(v.prediction)) {
+      const votes = d.votes || 0;
+      aggVotes[party] = (aggVotes[party] || 0) + votes;
+      totalAggVotes += votes;
+    }
+  }
+  const targets = pollingPair().nationalPolling;
+  const multipliers = {};
+  for (const party of CALIBRATION_PARTIES) {
+    const predictedAgg = totalAggVotes > 0 ? (aggVotes[party] || 0) / totalAggVotes : 0;
+    const target = targets[party] || 0;
+    if (predictedAgg < 0.005 || target < 0.005) {
+      multipliers[party] = 1.0;
+      continue;
+    }
+    const rawRatio = target / predictedAgg;
+    multipliers[party] = Math.pow(rawRatio, CALIBRATION_STRENGTH);
+    console.log(`  ${party}: predicted ${(predictedAgg * 100).toFixed(1)}% vs polled ${(target * 100).toFixed(1)}% → multiplier ${multipliers[party].toFixed(3)}`);
+  }
+  // Apply multipliers per ward, then re-normalise.
+  for (const v of Object.values(predictions)) {
+    if (!v.prediction) continue;
+    let scaled = {};
+    let sum = 0;
+    for (const [party, d] of Object.entries(v.prediction)) {
+      const m = multipliers[party] || 1.0;
+      const newPct = (d.pct || 0) * m;
+      scaled[party] = { ...d, pct: newPct };
+      sum += newPct;
+    }
+    if (sum > 0) {
+      for (const party of Object.keys(scaled)) {
+        scaled[party].pct = scaled[party].pct / sum;
+      }
+    }
+    // Recompute votes from re-normalised pct so the per-page numbers
+    // stay consistent.
+    const wardTotalVotes = Object.values(v.prediction).reduce((s, d) => s + (d.votes || 0), 0);
+    if (wardTotalVotes > 0) {
+      for (const party of Object.keys(scaled)) {
+        scaled[party].votes = Math.round((scaled[party].pct || 0) * wardTotalVotes);
+      }
+    }
+    v.prediction = scaled;
+    v.methodology = [
+      ...v.methodology,
+      {
+        step: "Final-C",
+        name: "National-share calibration",
+        description: `Aggregate-predicted vs national-polled mismatch corrected at strength ${CALIBRATION_STRENGTH}. Multipliers — ${CALIBRATION_PARTIES.map((p) => `${p} ×${(multipliers[p] || 1).toFixed(2)}`).join(", ")}.`,
+      },
+    ];
+  }
+  // Verify post-calibration aggregate against polling.
+  const postAggVotes = {};
+  let postTotal = 0;
+  for (const v of Object.values(predictions)) {
+    if (!v.prediction) continue;
+    for (const [party, d] of Object.entries(v.prediction)) {
+      const votes = d.votes || 0;
+      postAggVotes[party] = (postAggVotes[party] || 0) + votes;
+      postTotal += votes;
+    }
+  }
+  console.log(`  post-calibration aggregate (${postTotal.toLocaleString()} total votes):`);
+  for (const party of CALIBRATION_PARTIES) {
+    const post = postTotal > 0 ? (postAggVotes[party] || 0) / postTotal : 0;
+    const target = targets[party] || 0;
+    console.log(`    ${party}: ${(post * 100).toFixed(1)}% vs polled ${(target * 100).toFixed(1)}% (gap ${((post - target) * 100).toFixed(1)}pp)`);
+  }
+
   // P8: bootstrap P10/P50/P90 intervals + win_probability per ward using
   // residual SDs from the latest 2024 backtest.
   console.log("\nApplying bootstrap intervals from 2024 backtest residual SDs...");
