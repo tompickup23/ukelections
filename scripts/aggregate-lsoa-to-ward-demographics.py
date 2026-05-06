@@ -4,10 +4,14 @@
 Adds: TS021 ethnicity, TS030 religion, TS054 tenure, TS066 economic activity,
 TS067 qualifications, TS004 country of birth, plus IMD 2019 sub-domains.
 """
-import csv, json
+import csv, json, os, sys
 from pathlib import Path
 
-ROOT = Path("/Users/tompickup/ukelections")
+# Auto-detect ROOT: env var → script location → home dir fallback.
+if os.environ.get("UKE_ROOT"):
+    ROOT = Path(os.environ["UKE_ROOT"])
+else:
+    ROOT = Path(__file__).resolve().parent.parent
 CENSUS = ROOT / ".cache/census"
 # Multi-year LSOA→ward lookups: aggregate using whichever year matches each
 # 2026 ward's GSS code (some wards are still on WD22 boundaries, others changed
@@ -18,7 +22,13 @@ LOOKUP_PATHS = {
     "24": ROOT / "data/features/lsoa21-to-ward-wd24.json",
     "25": ROOT / "data/features/lsoa21-to-ward-wd25.json",
 }
-IMD = Path("/Users/tompickup/clawd/burnley-council/data/imd2019_cache.json")
+IMD_CANDIDATES = [
+    Path(os.environ["CLAWD_DATA"]) / "imd2019_cache.json" if os.environ.get("CLAWD_DATA") else None,
+    Path("/Users/tompickup/clawd/burnley-council/data/imd2019_cache.json"),
+    Path("/root/aidoge/burnley-council/data/imd2019_cache.json"),
+    Path("/root/clawd/burnley-council/data/imd2019_cache.json"),
+]
+IMD = next((p for p in IMD_CANDIDATES if p and p.exists()), IMD_CANDIDATES[1])
 OUT = ROOT / "data/features/ward-demographics-2021.json"
 IDENTITY = ROOT / "data/identity/wards-may-2026.json"
 

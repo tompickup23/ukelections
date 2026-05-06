@@ -181,8 +181,14 @@ function ingestFile(path, electionDate) {
 
 function main() {
   if (!existsSync(LEAP_ROOT)) {
-    console.error(`LEAP_ROOT not found: ${LEAP_ROOT}`);
-    process.exit(1);
+    if (existsSync(OUT_PATH)) {
+      console.log(`LEAP_ROOT not found (${LEAP_ROOT}); reusing existing ${OUT_PATH}`);
+      process.exit(0);
+    }
+    console.log(`LEAP_ROOT not found (${LEAP_ROOT}) and no prior output — writing empty supplemental history`);
+    mkdirSync(dirname(OUT_PATH), { recursive: true });
+    writeFileSync(OUT_PATH, "{}\n");
+    process.exit(0);
   }
   const dirs = readdirSync(LEAP_ROOT).filter((d) => /^\d{4}|leap-\d{4}/i.test(d));
   const byGss = {};

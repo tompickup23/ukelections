@@ -67,15 +67,33 @@ step("9. Build Astro static site", "npm", ["run", "build"]);
 
 if (!noDeploy) {
   process.stdout.write("\n=== 10. Deploy to Cloudflare Pages via vps-main ===\n");
-  step("10a. rsync dist to vps-main", "rsync", ["-az", "--delete", "dist/", "vps-main:/tmp/ukelections-dist/"]);
-  step(
-    "10b. wrangler pages deploy",
-    "ssh",
-    [
-      "vps-main",
-      "set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy /tmp/ukelections-dist --project-name ukelections --branch main --commit-dirty=true",
-    ],
-  );
+  // Detect whether we're already running on vps-main (cron context) — if so,
+  // skip the rsync and deploy from the local dist directly. Otherwise rsync
+  // from a developer machine to vps-main first.
+  const onVpsMain = process.env.UKE_ON_VPS_MAIN === "1"
+    || (() => {
+      try {
+        const hostname = spawnSync("hostname", [], { encoding: "utf8" }).stdout.trim();
+        return /vps-main|hostinger|srv\d+/i.test(hostname);
+      } catch { return false; }
+    })();
+  if (onVpsMain) {
+    step(
+      "10. wrangler pages deploy (running on vps-main; deploy from local dist)",
+      "bash",
+      ["-c", "set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy dist --project-name ukelections --branch main --commit-dirty=true"],
+    );
+  } else {
+    step("10a. rsync dist to vps-main", "rsync", ["-az", "--delete", "dist/", "vps-main:/tmp/ukelections-dist/"]);
+    step(
+      "10b. wrangler pages deploy",
+      "ssh",
+      [
+        "vps-main",
+        "set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy /tmp/ukelections-dist --project-name ukelections --branch main --commit-dirty=true",
+      ],
+    );
+  }
 } else {
   process.stdout.write("\n(skipping deploy — --no-deploy set)\n");
 }

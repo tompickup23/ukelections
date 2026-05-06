@@ -73,7 +73,16 @@ function regionOf(councilSlug) {
 }
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const CLAWD = "/Users/tompickup/clawd/burnley-council/data";
+const CLAWD_CANDIDATES = [
+  process.env.CLAWD_DATA,
+  "/Users/tompickup/clawd/burnley-council/data",
+  "/root/aidoge/burnley-council/data",
+  "/root/clawd/burnley-council/data",
+].filter(Boolean);
+const CLAWD = CLAWD_CANDIDATES.find((p) => {
+  try { return readFileSync(path.join(p, "burnley", "lcc_2025_reference.json"), "utf8") && true; }
+  catch { return false; }
+}) || CLAWD_CANDIDATES[0];
 const MODEL_VERSION = "ukelections.local.v0.2.0-may2026-lcc2025";
 
 // Lancashire districts where AI DOGE has lcc_2025_reference.json — load and
@@ -96,9 +105,14 @@ function lcc2025ForWardName(lccRef, wardName) {
   // The reference maps division → { results, reform_pct, wards: [ward names] }.
   // Find the LCC division whose wards array contains this ward.
   if (!lccRef?.divisions || !wardName) return null;
-  // Try exact match first, then case-insensitive, then alias-style normalisation.
-  const norm = (s) => String(s || "").toLowerCase().replace(/\s+/g, " ").trim();
+  // Strip-everything-non-alphanumeric normalisation handles space variations
+  // (e.g. DC "Coal Clough" vs LCC ref "Coalclough"), hyphens, ampersands, and
+  // apostrophes. A whitespace-collapsing normaliser silently failed across all
+  // 14 Lancashire districts because the LCC ref ward names follow ONS
+  // pre-2018 spelling and DC follows the post-2018 boundary-review spelling.
+  const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   const target = norm(wardName);
+  if (!target) return null;
   for (const [divName, div] of Object.entries(lccRef.divisions)) {
     const wards = (div.wards || []).map(norm);
     if (wards.includes(target)) {

@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadIdentity } from "../lib/predictions";
 
 const identity = loadIdentity();
-type IndexEntry = { council: string; council_slug: string; ward?: string; ward_slug?: string; tier: string; href: string };
+type IndexEntry = { council: string; council_slug: string; ward?: string | null; ward_slug?: string; tier: string; href: string };
 const wardIndex: IndexEntry[] = [];
 const councils = new Map<string, IndexEntry>();
 for (const w of identity.wards) {

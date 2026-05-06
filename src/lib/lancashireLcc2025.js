@@ -17,7 +17,18 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-const CLAWD = "/Users/tompickup/clawd/burnley-council/data";
+// CLAWD source resolution: env var → local laptop → vps-main aidoge mirror.
+// The hardcoded laptop path silently broke every Lancashire ward when the
+// pipeline ran on vps-main (loadLccRef returned null → "LCC aggregate 0.0%"
+// in the audit trail → Reform proxy collapsed to GE2024-only across all
+// 14 Lancashire districts).
+const CLAWD_CANDIDATES = [
+  process.env.CLAWD_DATA,
+  "/Users/tompickup/clawd/burnley-council/data",
+  "/root/aidoge/burnley-council/data",
+  "/root/clawd/burnley-council/data",
+].filter(Boolean);
+const CLAWD = CLAWD_CANDIDATES.find((p) => existsSync(path.join(p, "burnley", "lcc_2025_reference.json"))) || CLAWD_CANDIDATES[0];
 const LANCASHIRE_DISTRICTS = [
   "burnley", "blackburn-with-darwen", "blackpool", "chorley", "fylde",
   "hyndburn", "lancaster", "pendle", "preston", "ribble-valley",

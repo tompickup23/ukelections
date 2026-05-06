@@ -76,7 +76,7 @@ export function loadMayHeadline(): MayHeadline {
     candidate_count: candidateCount,
     seats_total: seatsTotal,
     seat_tallies: rankTallies(tallies, seatsTotal),
-    generated_at: summary.snapshot.generated_at,
+    generated_at: summary.snapshot.generated_at as string,
     backtest_winner_accuracy: backtest.winner_accuracy,
     backtest_major_party_mae: backtest.overall_mae.major_parties_avg,
   };
@@ -105,7 +105,7 @@ export function loadGeHeadline(): GeHeadline {
     total_seats: totalSeats,
     seat_tallies: rankTallies(tallies, totalSeats),
     national_vote_share: ranked,
-    generated_at: summary.snapshot.generated_at,
+    generated_at: summary.snapshot.generated_at as string,
     polling_window: pollingWindow,
     backtest_winner_accuracy: backtest.summary?.stm?.winner_accuracy ?? 0,
     backtest_major_party_mae: backtest.summary?.stm?.major_party_mae_avg ?? 0,

@@ -7,12 +7,18 @@
 //   data/features/la-imd.json                  (avg IMD 2019 decile per LAD)
 //   data/features/la-ge2024-shares.json        (DC parl.* 2024 results aggregated by PCON-LAD postcode share)
 
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const CLAWD = "/Users/tompickup/clawd/burnley-council/data";
+const CLAWD_CANDIDATES = [
+  process.env.CLAWD_DATA,
+  "/Users/tompickup/clawd/burnley-council/data",
+  "/root/aidoge/burnley-council/data",
+  "/root/clawd/burnley-council/data",
+].filter(Boolean);
+const CLAWD = CLAWD_CANDIDATES.find((p) => existsSync(p)) || CLAWD_CANDIDATES[0];
 
 function slugify(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -255,8 +261,24 @@ function buildLaGE2024Shares(historyBundle, crosswalk) {
 function main() {
   console.log("Loading inputs...");
   const identity = readJson(path.join(ROOT, "data/identity/wards-may-2026.json"));
-  const hp = readJson(path.join(CLAWD, "shared/hp_ethnic_projections_la.json"));
-  const imd = readJson(path.join(CLAWD, "imd2019_cache.json"));
+  const hpPath = path.join(CLAWD, "shared/hp_ethnic_projections_la.json");
+  const imdPath = path.join(CLAWD, "imd2019_cache.json");
+  if (!existsSync(hpPath) || !existsSync(imdPath)) {
+    const allOutputs = [
+      "data/identity/council-slug-to-lad24.json",
+      "data/features/la-ethnic-projections.json",
+      "data/features/la-imd.json",
+      "data/features/la-ge2024-shares.json",
+    ].map((p) => path.join(ROOT, p));
+    if (allOutputs.every((p) => existsSync(p))) {
+      console.log(`CLAWD source data missing (tried ${CLAWD_CANDIDATES.join(", ")}); existing outputs in data/features/ are reused (inputs are stable reference data).`);
+      return;
+    }
+    console.error(`CLAWD source data missing and no prior outputs to fall back on. Tried: ${CLAWD_CANDIDATES.join(", ")}. Missing: ${[hpPath, imdPath].filter((p) => !existsSync(p)).join(", ")}`);
+    process.exit(1);
+  }
+  const hp = readJson(hpPath);
+  const imd = readJson(imdPath);
   const history = readJson(path.join(ROOT, "data/history/dc-historic-results.json"));
 
   console.log("Building council slug → LAD code map...");
