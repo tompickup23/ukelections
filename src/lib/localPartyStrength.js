@@ -197,7 +197,7 @@ export function detectCandidateContinuity(historyRows, candidates2026) {
  *
  * Returns { prediction, applied: [factors...] }.
  */
-export function applyLocalStrength({ prediction, historyRows, candidates2026 }) {
+export function applyLocalStrength({ prediction, historyRows, candidates2026, recent2025Shares, recent2025Winner }) {
   if (!prediction) return { prediction: null, applied: [] };
   const strength = computeLocalStrength(historyRows);
   const continuity = detectCandidateContinuity(historyRows, candidates2026);
@@ -205,10 +205,81 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026 }) 
   const out = { ...prediction };
   const applied = [];
 
+  // Detect stronghold collapse from two independent signals.
+  //
+  // Signal 1 — most-recent contest collapse: if the latest contest of any
+  // kind (including by-elections, which computeLocalStrength filters out)
+  // shows a historical-stronghold party at ≤25% AND cycle mean was ≥40%,
+  // the pre-2024 stronghold is broken. Lanehead Nov 2025 by-election:
+  // Labour collapsed to 16.5% after averaging ~55% over 7 cycle contests.
+  //
+  // Signal 2 — May 2025 local-equivalent collapse: if the most recent
+  // county / LCC division contest shows a historic-stronghold party at
+  // <70% of its cycle mean, the post-2024 realignment has detached this
+  // ward from its earlier voting pattern. Lancashire wards under
+  // Reform-winning LCC divisions (Burnley Rural, Padiham + Burnley West,
+  // Burnley Central West, Burnley South West) consistently show
+  // Conservative + Lib Dem strongholds breaking; same applies in Lincs,
+  // Staffs, Derbys, Kent, Notts, Leics, Warks, Northumberland 2-tier
+  // districts where Reform won the May 2025 county ballot.
+  const collapsedParties = new Set();
+  const collapseReasons = {};
+  if (Array.isArray(historyRows) && historyRows.length > 0) {
+    const sorted = [...historyRows].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    const mostRecent = sorted[0];
+    if (mostRecent?.candidates) {
+      const total = mostRecent.candidates.reduce((s, c) => s + (c.votes || 0), 0);
+      if (total > 0) {
+        for (const c of mostRecent.candidates) {
+          const canon = dcPartyToCanonical(c.party);
+          const share = (c.votes || 0) / total;
+          const s = strength.byParty[canon];
+          if (s?.is_stronghold && s.mean >= 0.40 && share <= 0.25) {
+            collapsedParties.add(canon);
+            collapseReasons[canon] = `most recent contest ${(share * 100).toFixed(1)}% vs cycle mean ${(s.mean * 100).toFixed(1)}%`;
+          }
+        }
+      }
+    }
+  }
+  if (recent2025Shares) {
+    for (const [party, s] of Object.entries(strength.byParty)) {
+      if (!s.is_stronghold) continue;
+      const lccPct = recent2025Shares[party] ?? 0;
+      if (s.mean > 0 && lccPct < 0.70 * s.mean) {
+        collapsedParties.add(party);
+        if (!collapseReasons[party]) {
+          collapseReasons[party] = `May 2025 local-equivalent ${(lccPct * 100).toFixed(1)}% vs cycle mean ${(s.mean * 100).toFixed(1)}%`;
+        }
+      }
+    }
+  }
+  // Signal 3 — Reform won the parent May 2025 contest. The realignment is
+  // established at the local-equivalent level, so the cycle-history anchor
+  // for non-Reform stronghold parties is no longer predictive of the 2026
+  // borough cycle. Suppress those anchors so the Step 5 + Step 6 LCC-proxy
+  // signal carries through unmuted. Without this, Whittlefield Con
+  // (cycle mean 46%, LCC division 34%) stays anchored to ~46% even though
+  // Reform took the parent division at 43.8%.
+  if (recent2025Winner === "Reform UK") {
+    for (const [party, s] of Object.entries(strength.byParty)) {
+      if (!s.is_stronghold) continue;
+      if (party === "Reform UK") continue;
+      collapsedParties.add(party);
+      if (!collapseReasons[party]) {
+        collapseReasons[party] = `Reform UK won the May 2025 local-equivalent contest — ${party} stronghold anchor suppressed under realignment rule`;
+      }
+    }
+  }
+
   // Step 1: stronghold survival anchor
   for (const [party, payload] of Object.entries(out)) {
     const s = strength.byParty[party];
     if (!s?.is_stronghold) continue;
+    if (collapsedParties.has(party)) {
+      applied.push(`${party} stronghold collapsed (${collapseReasons[party] || "signal threshold"}) — anchor skipped`);
+      continue;
+    }
     const original = payload.pct || 0;
     const anchored = ANCHOR_WEIGHT * s.mean + (1 - ANCHOR_WEIGHT) * original;
     out[party] = { ...payload, pct: anchored };

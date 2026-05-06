@@ -396,7 +396,34 @@ function main() {
     // For Lancashire wards: pass per-division LCC 2025 reference so the
     // Reform new-party-entry step can use real division-level Reform shares
     // (e.g. Burnley Rural Reform 42.9%) instead of the GE2024-only proxy.
-    const lcc2025Arg = lancashireLcc2025ForWard(ward.council_slug, ward.ward_name);
+    // For non-Lancashire wards whose parent county had a 2025 election (Lincs,
+    // Staffs, Derbys, Kent, Notts, Leics, Warks, Northumberland, Cornwall,
+    // Bucks, Glos, Devon, Cambs, Herts, etc.), fall back to the county-wide
+    // 2025 aggregate so Step 5 New Party Entry gets a real Reform proxy
+    // instead of "LCC aggregate 0.0%".
+    let lcc2025Arg = lancashireLcc2025ForWard(ward.council_slug, ward.ward_name);
+    if (!lcc2025Arg) {
+      const refSlug = (function () {
+        if (county2025?.[ward.council_slug]) return ward.council_slug;
+        const parent = DISTRICT_TO_PARENT_COUNTY_2025?.[ward.council_slug];
+        if (parent && county2025?.[parent]) return parent;
+        return null;
+      })();
+      if (refSlug && county2025[refSlug]?.shares) {
+        const shares = county2025[refSlug].shares;
+        const results = {};
+        for (const [p, pct] of Object.entries(shares)) results[p] = { pct };
+        let topParty = null, topPct = 0;
+        for (const [p, pct] of Object.entries(shares)) {
+          if (pct > topPct) { topPct = pct; topParty = p; }
+        }
+        lcc2025Arg = {
+          results,
+          winner: topPct > 0.30 ? topParty : null,
+          _source: `county-aggregate fallback: ${refSlug} 2025 (${county2025[refSlug].source_ballot_count} divisions)`,
+        };
+      }
+    }
 
     const ladCodeForBes = slugMap.map[ward.council_slug]?.lad24cd;
     const besPrior = ladCodeForBes ? besPriors?.priors?.[ladCodeForBes] || null : null;
@@ -464,6 +491,20 @@ function main() {
     if (entrenchment.entrenched) {
       dynamicAnchorWeight = 0.10;
     }
+    // Bug fix (6 May 2026, T-1 day): when per-division LCC 2025 data was
+    // already injected into Step 5 (Lancashire wards have lcc2025Arg set),
+    // the county-wide aggregate anchor at weight 0.45 actively dilutes the
+    // per-division Reform signal. e.g. Whittlefield falls under Padiham +
+    // Burnley West LCC (Reform 43.8%), Step 5 lifts Reform to 38.1%, then
+    // Final-B blends 45% toward the Lancs-WIDE aggregate where Reform's
+    // share is mixed across all 82 divisions — pulling Whittlefield's
+    // Reform back down to 33%. Drop the anchor to 0.10 in this case so the
+    // per-division signal dominates. The county anchor stays at full
+    // weight in non-Lancashire 2-tier districts where we have no
+    // per-division reference.
+    if (lcc2025Arg && !entrenchment.entrenched) {
+      dynamicAnchorWeight = 0.10;
+    }
     const anchored = applyCounty2025Anchor({
       prediction: filtered,
       county2025Shares: county2025,
@@ -488,10 +529,51 @@ function main() {
     // 3. Local-party-strength + candidate continuity (Phases C + D)
     // Coalclough LD 8-cycle stronghold (mean 47%) gets anchored back to ~40%
     // even after Reform's national surge. Birtwistle name-match adds +5pp.
+    //
+    // recent2025Shares: parent-area May 2025 result (LCC division for
+    // Lancashire wards, county-aggregate for other 2-tier districts whose
+    // parent county had a 2025 election). Used inside applyLocalStrength to
+    // detect "stronghold collapse" — historic Con/Lab/LD strongholds where
+    // the May 2025 local-equivalent contest shows the party at <70% of
+    // cycle mean. Skips the anchor for those parties so the post-2024
+    // realignment carries through cleanly. Without this, the cycle-mean
+    // anchor pulls Conservative back up to ~50% in Whittlefield even
+    // though the parent LCC division (Padiham + Burnley West) showed Con
+    // at 34% and Reform at 43.8% in May 2025.
+    let recent2025Shares = null;
+    let recent2025Winner = null;
+    if (lcc2025Arg?.results) {
+      recent2025Shares = {};
+      for (const [party, payload] of Object.entries(lcc2025Arg.results)) {
+        recent2025Shares[party] = payload.pct ?? payload;
+      }
+      recent2025Winner = lcc2025Arg.winner || null;
+    } else {
+      const refSlug = (function () {
+        if (county2025?.[ward.council_slug]) return ward.council_slug;
+        const parent = DISTRICT_TO_PARENT_COUNTY_2025?.[ward.council_slug];
+        if (parent && county2025?.[parent]) return parent;
+        return null;
+      })();
+      if (refSlug) {
+        recent2025Shares = county2025[refSlug].shares || null;
+        // Derive winner from the highest-share party in the aggregate.
+        if (recent2025Shares) {
+          let topParty = null;
+          let topPct = 0;
+          for (const [p, pct] of Object.entries(recent2025Shares)) {
+            if (pct > topPct) { topPct = pct; topParty = p; }
+          }
+          if (topPct > 0.30) recent2025Winner = topParty;
+        }
+      }
+    }
     const localStrengthOut = applyLocalStrength({
       prediction: postAnchor,
       historyRows: wd.history,
       candidates2026: candidateRosters[ward.ballot_paper_id] || [],
+      recent2025Shares,
+      recent2025Winner,
     });
     postAnchor = localStrengthOut.prediction;
 
