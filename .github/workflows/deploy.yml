@@ -15,6 +15,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # The canonical build runs daily on vps-main (cron 04:30 UTC) and deploys
+  # to Cloudflare Pages, which serves ukelections.co.uk. GH Actions cannot
+  # reproduce that build because the data pipeline depends on the AI DOGE
+  # corpus (Companies House, IMD, HP v7.0 ethnic projections, LCC 2025
+  # reference) which is gitignored. Instead, we treat the GH Pages copy as
+  # a mirror: pull the canonical static site from ukelections.co.uk and
+  # re-serve it under tompickup23.github.io/ukelections so the backup
+  # channel cannot diverge from production.
   build:
     runs-on: ubuntu-latest
     steps:
@@ -27,14 +35,35 @@ jobs:
       - run: npm test
       - run: npm run validate:backend
       - run: npm run check
-      - run: npm run build
+      - name: Mirror canonical build from ukelections.co.uk
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          wget \
+            --recursive \
+            --no-parent \
+            --no-host-directories \
+            --convert-links \
+            --adjust-extension \
+            --page-requisites \
+            --span-hosts --domains=ukelections.co.uk \
+            --tries=3 --waitretry=5 \
+            --quiet \
+            --directory-prefix=dist \
+            https://ukelections.co.uk/ || true
+          # Sanity: confirm a few critical pages landed.
+          for p in index.html forecasts/may-2026/index.html forecasts/general-election/index.html your-area/index.html seats/burnley/coal-clough-with-deerplay/index.html; do
+            if [ ! -f "dist/$p" ]; then
+              echo "::error::Mirror missing dist/$p — Cloudflare Pages production build may be incomplete or unreachable."
+              exit 1
+            fi
+          done
+          echo "Mirrored $(find dist -type f | wc -l) files from ukelections.co.uk"
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: build-diagnostics
-          path: |
-            dist
-            .astro
+          path: dist
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
