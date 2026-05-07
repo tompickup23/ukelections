@@ -20,6 +20,7 @@ import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
 import { computeWardDemographicAdjustments, applyAdjustments, applyDemographicCeilings } from "../src/lib/wardDemographicAdjustments.js";
 import { applyLocalStrength } from "../src/lib/localPartyStrength.js";
 import { buildCounty2025WinnerIndex, applyCounty2025Continuity } from "../src/lib/county2025Winners.js";
+import { applyReformRealignmentUplift } from "../src/lib/reformRealignmentUplift.js";
 
 function applyCandidateOverrides(prediction, overrides, ballotPaperId, candidates2026) {
   if (!prediction || !overrides?.length) return { prediction, applied: [] };
@@ -687,6 +688,134 @@ function main() {
   }
 
   console.log(`\nTally: ${JSON.stringify(tally, null, 2)}`);
+
+  // Final-B3: Reform realignment uplift for councils with no 2025 county
+  // anchor. The May-2025 county elections delivered a strong Reform UK
+  // realignment in 2-tier districts whose parent counties contested that
+  // year (Lancashire, Lincs, Staffs, Derbys, Kent, Notts, Leics, Warks,
+  // Northumberland, Cornwall, Bucks, Glos, Devon, Cambs, Herts). Unitaries
+  // and metropolitan boroughs OUTSIDE those areas got no anchor and fell
+  // back to dampened national swing only — empirically too weak. Without
+  // this step, Blackburn with Darwen (Lancashire unitary, outside LCC
+  // 2025) predicted Reform at 4.8% mean across 17 wards with zero wins,
+  // despite cross-border evidence of a strong realignment in adjacent
+  // Burnley / Hyndburn / Pendle. 53 of 156 contesting councils had the
+  // same blind spot; ~30 plausibly affected. See
+  // src/lib/reformRealignmentUplift.js for the calibration curve and
+  // regional-multiplier table.
+  //
+  // Gated by REALIGNMENT_UPLIFT_ENABLED so the May-2024 backtest (which
+  // predates the 2025 realignment signal) does not see this step.
+  const REALIGNMENT_UPLIFT_ENABLED = process.env.UKE_DISABLE_REALIGNMENT_UPLIFT !== "1";
+  if (REALIGNMENT_UPLIFT_ENABLED) {
+    console.log("\nFinal-B3 Reform realignment uplift (no-anchor councils):");
+    // LA-level fallback for county-council divisions and other wards whose
+    // GSS code doesn't appear in the WD23/24/25 demographic reference file
+    // (Hampshire CC, East/West Sussex CC, etc.). Uses HP v7.0 May-2026
+    // projection at LA level — coarse but sufficient for the lift logic
+    // (which only needs Asian% within ±5pp accuracy).
+    let laEthnicProjections = {};
+    try {
+      laEthnicProjections = readJson("data/features/la-ethnic-projections.json").projections || {};
+    } catch (e) { /* file not present — fallback unavailable */ }
+    // Manual Asian% overrides for upper-tier county councils (E10*) and a
+    // few unitaries whose codes don't appear in la-ethnic-projections.json.
+    // Population-weighted Census 2021 Asian% across constituent districts.
+    const COUNTY_ASIAN_PCT_OVERRIDES = {
+      "hampshire": 0.022,
+      "east-sussex": 0.018,
+      "west-sussex": 0.030,
+      "surrey": 0.090,
+      "kent": 0.038,
+      "essex": 0.038,
+      "norfolk": 0.020,
+      "suffolk": 0.024,
+      "oxfordshire": 0.075,
+      "cornwall": 0.010,
+      "isle-of-wight": 0.011,
+    };
+    function findDemographicsWithFallback(ward) {
+      const direct = findDemographics(ward);
+      if (direct) return direct;
+      const slug = ward.council_slug;
+      if (COUNTY_ASIAN_PCT_OVERRIDES[slug] != null) {
+        return {
+          asian_pct: COUNTY_ASIAN_PCT_OVERRIDES[slug],
+          muslim_pct: 0,
+          _source: `manual county-level override (${slug})`,
+        };
+      }
+      const lad = slugMap.map[slug]?.lad24cd;
+      const proj = lad && laEthnicProjections[lad];
+      if (!proj) return null;
+      return {
+        asian_pct: proj.asian_pct_projected,
+        muslim_pct: 0,
+        _source: `LA-level HP v7.0 fallback (${lad})`,
+      };
+    }
+    let liftCount = 0;
+    let skipCount = 0;
+    let fallbackUsed = 0;
+    const lifts = [];
+    for (const [bpid, v] of Object.entries(predictions)) {
+      if (!v.prediction) continue;
+      const slug = bpid.split(".")[1];
+      const hasCountyAnchor = v.county_2025_anchor != null;
+      const ward = identity.wards.find((w) => w.ballot_paper_id === bpid);
+      if (!ward) continue;
+      let demo = findDemographics(ward);
+      if (!demo) {
+        demo = findDemographicsWithFallback(ward);
+        if (demo) fallbackUsed += 1;
+      }
+      if (!demo) { skipCount += 1; continue; }
+      const regionTag = regionOf(slug);
+      const result = applyReformRealignmentUplift(v.prediction, demo, {
+        councilSlug: slug,
+        regionTag,
+        hasCountyAnchor,
+        enabled: true,
+      });
+      if (result.applied) {
+        v.prediction = result.prediction;
+        // Recompute votes from new pcts using the existing ward total.
+        const wardTotalVotes = Object.values(v.prediction).reduce((s, d) => s + (d.votes || 0), 0);
+        if (wardTotalVotes > 0) {
+          for (const p of Object.keys(v.prediction)) {
+            v.prediction[p].votes = Math.round((v.prediction[p].pct || 0) * wardTotalVotes);
+          }
+        }
+        v.methodology = [
+          ...(v.methodology || []),
+          {
+            step: "Final-B3",
+            name: "Reform realignment uplift (no-anchor councils)",
+            description: `No 2025 parent-county anchor available; demographic-borrow rule applied. Asian ${(result.applied.asian_pct * 100).toFixed(1)}% → base target ${(result.applied.base_target * 100).toFixed(1)}% × regional multiplier ${result.applied.regional_multiplier.toFixed(2)} = ${(result.applied.final_target * 100).toFixed(1)}%. Reform ${(result.applied.reform_before * 100).toFixed(1)}% → ${(result.applied.reform_after * 100).toFixed(1)}% (lift +${(result.applied.lift * 100).toFixed(1)}pp). Other parties scaled pro-rata. Calibration source: Burnley 2026 ward-level Asian%↔Reform% relationship (the 2-tier district that did receive the LCC 2025 anchor).`,
+          },
+        ];
+        liftCount += 1;
+        lifts.push({ slug, bpid, lift_pp: result.applied.lift * 100 });
+      }
+    }
+    console.log(`  ${liftCount} wards lifted, ${skipCount} skipped (no demographics), ${fallbackUsed} used LA-level fallback.`);
+    // Top councils by mean lift, for the run log
+    const byCouncil = {};
+    for (const l of lifts) {
+      byCouncil[l.slug] = byCouncil[l.slug] || { count: 0, sum: 0 };
+      byCouncil[l.slug].count += 1;
+      byCouncil[l.slug].sum += l.lift_pp;
+    }
+    const ranked = Object.entries(byCouncil)
+      .map(([slug, r]) => ({ slug, n: r.count, avg: r.sum / r.count }))
+      .sort((a, b) => b.avg - a.avg)
+      .slice(0, 10);
+    for (const r of ranked) {
+      console.log(`    ${r.slug.padEnd(32)} ${r.n.toString().padStart(3)} wards  avg lift +${r.avg.toFixed(1)}pp`);
+    }
+  } else {
+    console.log("\nFinal-B3 Reform realignment uplift: DISABLED (UKE_DISABLE_REALIGNMENT_UPLIFT=1).");
+  }
 
   // National-share calibration: ensure aggregate predicted shares track
   // national polling within a few pp. Without this, the per-ward model

@@ -154,6 +154,65 @@ const b = loadBacktest();
     giving division-specific Reform shares like Burnley Rural 42.9% rather
     than the Lancashire-wide 35.3% average.</p>
 
+    <h2>Step 9b — Reform realignment uplift (no-anchor councils)</h2>
+    <p>
+      Added 7 May 2026 to address a structural blind spot uncovered in the
+      pre-election audit. Step 9 (the county-2025 anchor) only fires for
+      wards whose <em>parent</em> county contested in May 2025. Unitary
+      authorities and metropolitan boroughs sitting <em>outside</em> those
+      counties received no realignment signal and fell back to dampened
+      national swing only. The original Blackburn with Darwen forecast
+      pinned Reform UK at a 4.8% mean across 17 wards (zero predicted wins)
+      despite Burnley, Hyndburn and Pendle showing 30-40% Reform shares
+      one mile across the unitary boundary. A subsequent national audit
+      flagged 53 of 156 contesting councils with the same shape; about 30
+      were demographically plausible Reform-realigning areas and the rest
+      (heavily Asian/Muslim London boroughs, Manchester/Birmingham central)
+      were correctly held down by the existing Step 10 ceiling.
+    </p>
+    <p>
+      The fix borrows from the per-ward Asian%↔Reform% relationship
+      observed in Burnley after the May-2025 LCC anchor lifted Reform to
+      its empirically-realigned level. The relationship is monotone — at
+      ~2% Asian Reform sits at 32-42%, at 30% Asian it's 24%, at 80%
+      Asian it's capped at 12%. This piecewise-linear curve is applied
+      to wards where no county-2025 anchor was available, modulated by a
+      regional multiplier:
+    </p>
+    <ul>
+      <li><strong>Northern unitaries</strong> demographically aligned with the
+        Reform-realigning 2-tier districts (Hull, NE Lincs, Stoke-on-Trent,
+        Derby, Nottingham, Leicester, Tees Valley, etc.) — multiplier 1.00</li>
+      <li><strong>Metropolitan boroughs</strong> (Sheffield, Leeds, Manchester,
+        Liverpool, Birmingham etc.) — multiplier 0.75. Reduced from full
+        lift to recognise that core-city Labour strongholds within these
+        authorities are markedly more Reform-resistant than equivalent
+        demographic profiles elsewhere.</li>
+      <li><strong>Southern unitaries / county councils</strong> (Hampshire,
+        East/West Sussex, Surrey, Wokingham etc.) — multiplier 0.85.
+        Polling shows Reform there ~22%, slightly below the calibration
+        source.</li>
+      <li><strong>London boroughs</strong> — multiplier 0.50. London polling
+        is markedly less Reform-leaning across all demographic profiles
+        than equivalent areas outside the capital.</li>
+    </ul>
+    <p>
+      The lift is applied as an upward floor only — never reduces an
+      existing Reform share. Other parties are scaled pro-rata so each
+      ward sums to 100%. Step 10 (demographic ceiling) is then re-applied
+      via the Final-C national-share calibration as a safety net.
+    </p>
+    <p style="font-size: 0.95rem">
+      The step is gated by an environment flag and is <strong>not</strong>
+      enabled in the May 2024 backtest, because the May-2025 realignment
+      signal it borrows from did not yet exist. The 2024 backtest figures
+      reported on this site (winner accuracy 82.7%, MAE 5.69pp) therefore
+      remain the standard model's published accuracy — this step adds a
+      forward-looking correction for the post-2025 political landscape
+      and will itself be backtested against the 7 May 2026 declared
+      results in the post-election audit.
+    </p>
+
     <h2>Step 10 — Reform UK demographic ceiling</h2>
     <p>
       After all adjustments, cap Reform's predicted share at the
