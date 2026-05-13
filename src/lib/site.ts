@@ -84,17 +84,31 @@ const STATIC_PATHS = [
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
   {
+    href: "/councils/",
+    title: "Councils",
+    kind: "page",
+    description: "Every English and Welsh council that contested May 7 2026: result, control, Reform seats, and next-election date (or TBC where Local Government Reorganisation is in play).",
+    priority: 102
+  },
+  {
+    href: "/past-results/",
+    title: "Past Results — May 7 2026",
+    kind: "page",
+    description: "Locked May 7 2026 forecast scored against actual count. Per-party MAE, Step 9b isolation audit, and the 15 Reform UK majorities.",
+    priority: 101
+  },
+  {
     href: "/seats/",
     title: "Seats",
     kind: "page",
-    description: "Constituency and contest pages planned for candidates, history, boundaries, and local signals.",
+    description: "Per-council and per-ward pages with predicted vs actual winner, candidates, history, and local signals.",
     priority: 100
   },
   {
     href: "/your-area/",
     title: "Your Area",
     kind: "page",
-    description: "Postcode and place lookup specification for routing voters to the right contest.",
+    description: "Postcode and place lookup that routes voters to the right contest.",
     priority: 95
   },
   {
