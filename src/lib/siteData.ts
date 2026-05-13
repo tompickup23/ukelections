@@ -12,6 +12,10 @@ import {
   loadGePredictions,
   loadGeSummary,
   loadGeBacktest,
+  loadCouncilCycles,
+  loadMay7Control,
+  loadMay7Postaudit,
+  type CouncilCycle,
 } from "./predictions";
 
 // Reference election dates. Tom updates ELECTION_DATE_MAY when the next
@@ -130,6 +134,122 @@ export function countdownToMay(now: Date = new Date()): Countdown {
     date_iso: ELECTION_DATE_MAY,
     date_pretty: "Thursday 7 May 2026",
   };
+}
+
+// ---------- Council cycles + May 7 actuals ----------
+
+export interface May7Headline {
+  contesting_councils: number;
+  reform_majorities: number;
+  reform_largest_noc: number;
+  reform_seats_won: number;
+  control_by_party: Record<string, number>;
+  noc_count: number;
+  declared_coverage_pct: number;
+  live_winner_accuracy: number;
+  live_major_party_mae: number;
+  prereg_winner_accuracy: number;
+  prereg_major_party_mae: number;
+}
+
+export function loadMay7Headline(): May7Headline {
+  const ctl = loadMay7Control();
+  const pa = loadMay7Postaudit();
+  const sum = ctl.summary;
+  const seats = sum.aggregate_seats || {};
+  const totalDeclared = (ctl.councils as any[]).filter((c) => c.may7_wins?.evaluated_ballots).length;
+  const totalTargeted = (ctl.councils as any[]).length;
+  return {
+    contesting_councils: sum.contesting_councils,
+    reform_majorities: sum.reform_outcomes?.majorities ?? 0,
+    reform_largest_noc: sum.reform_outcomes?.largest_party_noc ?? 0,
+    reform_seats_won: (seats.won && seats.won.ref) || 0,
+    control_by_party: sum.by_controlling_party || {},
+    noc_count: sum.control_outcomes?.no_overall_control ?? 0,
+    declared_coverage_pct: pa.snapshot?.coverage_pct ?? (totalTargeted ? totalDeclared / totalTargeted : 0),
+    live_winner_accuracy: pa.live?.summary?.winner_accuracy ?? 0,
+    live_major_party_mae: pa.live?.summary?.major_party_mae_avg ?? 0,
+    prereg_winner_accuracy: pa.prereg?.summary?.winner_accuracy ?? 0,
+    prereg_major_party_mae: pa.prereg?.summary?.major_party_mae_avg ?? 0,
+  };
+}
+
+export function loadCycleFor(councilSlug: string): CouncilCycle | null {
+  const f = loadCouncilCycles();
+  return f.councils[councilSlug] || null;
+}
+
+const COUNCIL_TYPE_LABELS: Record<string, string> = {
+  london_borough: "London borough",
+  metropolitan_borough: "Metropolitan borough",
+  unitary_authority: "Unitary authority",
+  district_council: "District council",
+  county_council: "County council",
+  welsh_principal_area: "Welsh principal area",
+  unclassified: "Council",
+};
+
+export function councilTypeLabel(type: string | undefined | null): string {
+  return COUNCIL_TYPE_LABELS[type || ""] || "Council";
+}
+
+/**
+ * Public-facing label for a council's next election. Always prefer this over
+ * raw cycle.next_election so we display "TBC (Local Government Reorganisation)"
+ * rather than a fabricated date for 2-tier councils.
+ */
+export function formatNextElection(cycle: CouncilCycle | null): {
+  label: string;
+  date_iso: string | null;
+  is_tbc: boolean;
+  reason: string;
+} {
+  if (!cycle) {
+    return { label: "TBC", date_iso: null, is_tbc: true, reason: "Council not yet classified." };
+  }
+  if (cycle.status === "scheduled" && cycle.next_election) {
+    return {
+      label: cycle.next_election_label,
+      date_iso: cycle.next_election,
+      is_tbc: false,
+      reason: cycle.cycle,
+    };
+  }
+  if (cycle.status === "lgr_pending") {
+    return {
+      label: "TBC (Local Government Reorganisation)",
+      date_iso: null,
+      is_tbc: true,
+      reason: cycle.note || cycle.cycle,
+    };
+  }
+  return {
+    label: "TBC",
+    date_iso: null,
+    is_tbc: true,
+    reason: cycle.note || cycle.cycle,
+  };
+}
+
+/**
+ * Lower-cased two/three-letter slug → full party name. Council-control.json
+ * keys its by_party tallies on slugs ("con", "lab", "ld", "ref", "green",
+ * "snp", "pc", "nat", "ukip", "other") which we expand for display.
+ */
+export function partySlugToName(slug: string): string {
+  switch (slug) {
+    case "con": return "Conservative";
+    case "lab": return "Labour";
+    case "ld": return "Liberal Democrats";
+    case "ref": return "Reform UK";
+    case "green": return "Green Party";
+    case "snp": return "SNP";
+    case "pc": return "Plaid Cymru";
+    case "nat": return "Nationalist";
+    case "ukip": return "UKIP";
+    case "other": return "Independent / Other";
+    default: return slug;
+  }
 }
 
 /**

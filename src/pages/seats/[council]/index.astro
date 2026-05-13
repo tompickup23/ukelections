@@ -4,12 +4,19 @@ import {
   loadIdentity,
   loadPredictions,
   loadSummary,
-  loadBacktest,
+  loadMay7Control,
+  loadMay7Results,
+  loadCouncilCycles,
   rankedShares,
   formatPct,
   partyColour,
 } from "../../../lib/predictions";
-import { shortPartyLabel } from "../../../lib/siteData";
+import {
+  shortPartyLabel,
+  formatNextElection,
+  partySlugToName,
+  councilTypeLabel,
+} from "../../../lib/siteData";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -25,9 +32,12 @@ const { council } = Astro.params;
 const identity = loadIdentity();
 const predictions = loadPredictions().predictions;
 const summary = loadSummary();
-const backtest = loadBacktest();
+const control = loadMay7Control();
+const results = loadMay7Results();
+const cycles = loadCouncilCycles();
 
-const wards = identity.wards.filter((w: any) => w.council_slug === council && (w.tier === "local" || w.tier === "mayor"))
+const wards = identity.wards
+  .filter((w: any) => w.council_slug === council && (w.tier === "local" || w.tier === "mayor"))
   .sort((a: any, b: any) => (a.ward_name || "").localeCompare(b.ward_name || ""));
 const tier = wards[0]?.tier || "local";
 const councilName = wards[0]?.council_name || council;
@@ -36,61 +46,214 @@ const summaryEntry = summary.councils.find((c: any) => c.council_slug === counci
 const seatProjection = summaryEntry?.predicted_seat_winners || {};
 const seatTotal = Object.values(seatProjection).reduce((s: any, v: any) => s + v, 0);
 
-const backtestForLad = (() => {
-  const sample = wards.find((w: any) => predictions[w.ballot_paper_id]?.lad24cd);
-  const lad = sample ? predictions[sample.ballot_paper_id].lad24cd : null;
-  return lad ? backtest.per_lad?.[lad] : null;
+const ctlRow = (control.councils as any[]).find((c) => c.council_slug === council);
+const cycle = cycles.councils[council!] || null;
+const nextElection = formatNextElection(cycle);
+const resultsBy = results.by_ballot || {};
+
+const controllingParty: string | null = ctlRow?.control?.controlling_party || null;
+const pluralityParty: string | null = ctlRow?.control?.plurality_party || null;
+const preControlParty: string | null = ctlRow?.control?.pre_control || null;
+const changeStatus: string | null = ctlRow?.control?.change_status || null;
+const reformPost: number = ctlRow?.reform?.post_seats || 0;
+const reformWon: number = ctlRow?.reform?.won_seats || 0;
+const reformPre: number = ctlRow?.reform?.pre_seats || 0;
+const reformMajority: boolean = !!ctlRow?.reform?.has_majority;
+const reformLargest: boolean = !!ctlRow?.reform?.is_largest;
+const totalSeats: number = ctlRow?.cycle?.total_seats || 0;
+const seatsUp: number = ctlRow?.cycle?.seats_up || wards.length;
+
+const controlHeadline = (() => {
+  if (controllingParty) return `${partySlugToName(controllingParty)} majority`;
+  if (pluralityParty) return `No overall control — ${partySlugToName(pluralityParty)} largest party`;
+  return "No overall control";
 })();
 
-const title = `${councilName} forecast — May 7 2026`;
-const description = `${wards.length} ward${wards.length === 1 ? "" : "s"} contested on 2026-05-07. Predicted seat split: ${Object.entries(seatProjection).sort((a, b) => (b[1] as number) - (a[1] as number)).slice(0, 3).map(([p, n]) => `${p} ${n}`).join(", ")}.`;
+const changeLabel = (() => {
+  switch (changeStatus) {
+    case "majority_gained": return "Majority gained";
+    case "majority_held": return "Majority held";
+    case "majority_lost": return "Majority lost";
+    case "noc_continued": return "Remained no overall control";
+    default: return null;
+  }
+})();
+
+// Per-ward winner accuracy for this council, computed on the fly.
+let ballotsScored = 0;
+let winnersCorrect = 0;
+let majorPartyAbsErrorSum = 0;
+let majorPartyAbsErrorN = 0;
+const MAJOR = ["Labour", "Conservative", "Liberal Democrats", "Reform UK", "Green Party"];
+for (const w of wards as any[]) {
+  const wp = predictions[w.ballot_paper_id];
+  const actual = resultsBy[w.ballot_paper_id];
+  if (!wp?.prediction || !actual) continue;
+  ballotsScored += 1;
+  const predicted = rankedShares(wp.prediction)[0]?.[0];
+  if (predicted && predicted === actual.winner_party_canonical) winnersCorrect += 1;
+  for (const p of MAJOR) {
+    const predShare = (wp.prediction[p]?.pct || 0) / 100;
+    const actShare = (actual.vote_shares?.[p] as number) || 0;
+    if (predShare === 0 && actShare === 0) continue;
+    majorPartyAbsErrorSum += Math.abs(predShare - actShare);
+    majorPartyAbsErrorN += 1;
+  }
+}
+const winnerAcc = ballotsScored ? winnersCorrect / ballotsScored : 0;
+const majorMae = majorPartyAbsErrorN ? majorPartyAbsErrorSum / majorPartyAbsErrorN : 0;
+
+interface PartyRow { slug: string; name: string; seats: number; share: number; }
+const postMay7Rows: PartyRow[] = ctlRow?.post_may7?.by_party
+  ? Object.entries(ctlRow.post_may7.by_party as Record<string, number>)
+      .filter(([, n]) => (n as number) > 0)
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
+      .map(([slug, n]) => {
+        const seats = n as number;
+        return {
+          slug,
+          name: partySlugToName(slug),
+          seats,
+          share: totalSeats > 0 ? seats / totalSeats : 0,
+        };
+      })
+  : [];
+
+interface SeatProjRow { party: string; seats: number; share: number; }
+const seatProjectionRows: SeatProjRow[] = Object.entries(seatProjection as Record<string, number>)
+  .sort((a, b) => (b[1] as number) - (a[1] as number))
+  .map(([party, seats]) => ({
+    party,
+    seats: seats as number,
+    share: seatTotal > 0 ? (seats as number) / (seatTotal as number) : 0,
+  }));
+
+const title = `${councilName} — May 7 2026 result and what's next`;
+const description = `${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp} seats up. Next election: ${nextElection.label}.`;
 ---
 
 <BaseLayout title={title} description={description}>
   <section class="page-hero">
-    <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Local council"}</p>
+    <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Council"} · {councilTypeLabel(cycle?.type)}</p>
     <h1>{councilName}</h1>
     <p class="lede">
-      {wards.length} {wards.length === 1 ? "contest" : "contests"} on Thursday 7 May 2026 · {seatTotal} {seatTotal === 1 ? "seat" : "seats"} up for election
+      <strong>{controlHeadline}</strong> after May 7 2026.{" "}
+      {changeLabel && <span class="muted">({changeLabel}{preControlParty && preControlParty !== controllingParty ? ` — previously ${partySlugToName(preControlParty)}` : ""})</span>}
     </p>
+    <div class="action-row">
+      <a class="button" href="/councils/">← All councils</a>
+      <a class="button" href="/your-area/">Find a ward</a>
+    </div>
   </section>
 
-  {Object.keys(seatProjection).length > 0 && (
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">What happened on May 7</p>
+      <h2>Seats won and overall control</h2>
+    </div>
+    <div class="status-grid">
+      <article class="status-card">
+        <p class="status-label">After May 7</p>
+        <p class="status-value">{controlHeadline}</p>
+        {totalSeats > 0 && (
+          <p class="muted">Council size: {totalSeats} seats · {seatsUp} up on May 7</p>
+        )}
+      </article>
+      <article class="status-card">
+        <p class="status-label">Reform UK</p>
+        <p class="status-value">
+          {reformPost} <span class="muted">of {totalSeats || "—"} seats</span>
+        </p>
+        <p class="muted">
+          Won {reformWon} on May 7 · had {reformPre} before
+          {reformMajority && <strong style="color:#0e7c4a"> · majority</strong>}
+          {!reformMajority && reformLargest && <strong> · largest party</strong>}
+        </p>
+      </article>
+      <article class="status-card">
+        <p class="status-label">Next election</p>
+        <p class="status-value">{nextElection.label}</p>
+        <p class="muted">{nextElection.reason}</p>
+      </article>
+    </div>
+  </section>
+
+  {postMay7Rows.length > 0 && (
     <section class="section">
       <div class="section-head">
-        <p class="eyebrow">Seat projection</p>
-        <h2>How the council seats are likely to split</h2>
+        <p class="eyebrow">Post-May 7 composition</p>
+        <h2>Every party's seat count on the new council</h2>
       </div>
       <div class="party-bars party-bars-large">
-        {Object.entries(seatProjection)
-          .sort((a, b) => (b[1] as number) - (a[1] as number))
-          .map(([party, seats]) => {
-            const share = seatTotal > 0 ? (seats as number) / (seatTotal as number) : 0;
-            return (
-              <div class="bar-row">
-                <span class="bar-label">{shortPartyLabel(party)}</span>
-                <div class="bar-track">
-                  <div class="bar-fill" style={`width:${(share * 100).toFixed(1)}%; background:${partyColour(party)}`}></div>
-                </div>
-                <span class="bar-value">{seats as number}</span>
-              </div>
-            );
-          })}
+        {postMay7Rows.map((row) => (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(row.name)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(row.share * 100).toFixed(1)}%; background:${partyColour(row.name)}`}></div>
+            </div>
+            <span class="bar-value">{row.seats}</span>
+          </div>
+        ))}
       </div>
       <p class="caption">
-        Each ward's seat(s) are awarded to the top parties by predicted vote share. Ties are broken by predicted share.
+        Pre-May-7 composition is the latest OCD snapshot of who held each seat; post is pre minus seats up plus actual winners.
       </p>
     </section>
   )}
 
-  {backtestForLad && (
-    <section class="section prose-block">
-      <h2>How accurate was the model on the last cycle?</h2>
+  {nextElection.is_tbc && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Local Government Reorganisation</p>
+        <h2>Why we don't yet know when {councilName} next votes</h2>
+      </div>
       <p>
-        On {backtestForLad.ward_count} {backtestForLad.ward_count === 1 ? "contest" : "contests"} in this local authority area in May 2024,
-        the model called the winner correctly in <strong>{(backtestForLad.winner_accuracy * 100).toFixed(0)}%</strong> of wards
-        with an average per-party share error of <strong>{(backtestForLad.mae * 100).toFixed(1)}pp</strong>.
-        See the <a href="/data-quality/2024-backtest/">full backtest</a>.
+        {councilName} sits in a two-tier county area under review for Local Government Reorganisation following the
+        English Devolution White Paper (December 2024). The county council and its districts are expected to be
+        replaced by one or more new unitary authorities. Until the Statutory Instrument is laid, the next election
+        date is not in our gift to guess.
+      </p>
+      <p>
+        We'll flip this page from <strong>TBC</strong> to a confirmed date the moment the SI publishes.
+      </p>
+    </section>
+  )}
+
+  {ballotsScored > 0 && (
+    <section class="section prose-block">
+      <h2>How accurate was our forecast for this council?</h2>
+      <p>
+        We scored our locked May 7 forecast against the actual count for the {ballotsScored}{" "}
+        {ballotsScored === 1 ? "ward" : "wards"} we have results for in {councilName}.{" "}
+        We called the winner correctly in <strong>{(winnerAcc * 100).toFixed(0)}%</strong>{" "}
+        ({winnersCorrect}/{ballotsScored}) with an average per-party vote-share error of{" "}
+        <strong>{(majorMae * 100).toFixed(1)}pp</strong> across the five Westminster-tier parties.
+      </p>
+      <p>
+        <a href="/past-results/">See the full national accuracy audit →</a>
+      </p>
+    </section>
+  )}
+
+  {seatProjectionRows.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Our locked May 7 forecast</p>
+        <h2>The pre-election prediction</h2>
+      </div>
+      <div class="party-bars party-bars-large">
+        {seatProjectionRows.map((row) => (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(row.party)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(row.share * 100).toFixed(1)}%; background:${partyColour(row.party)}`}></div>
+            </div>
+            <span class="bar-value">{row.seats}</span>
+          </div>
+        ))}
+      </div>
+      <p class="caption">
+        This is the seats-on-the-ballot projection we published before polls opened — used here for accuracy comparison only.
       </p>
     </section>
   )}
@@ -98,23 +261,43 @@ const description = `${wards.length} ward${wards.length === 1 ? "" : "s"} contes
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">All wards</p>
-      <h2>Forecast per ward</h2>
+      <h2>Per-ward forecast vs actual</h2>
     </div>
     <table class="ward-grid">
       <thead>
-        <tr><th>Ward</th><th>Top party</th><th>Top share</th><th>Confidence</th><th>Candidates</th></tr>
+        <tr>
+          <th scope="col">Ward</th>
+          <th scope="col">Our top pick</th>
+          <th scope="col">Actual winner</th>
+          <th scope="col">Predicted share</th>
+          <th scope="col">Confidence</th>
+        </tr>
       </thead>
       <tbody>
         {wards.map((w: any) => {
           const wp = predictions[w.ballot_paper_id];
           const top = wp?.prediction ? rankedShares(wp.prediction)[0] : null;
+          const actual = resultsBy[w.ballot_paper_id];
+          const actualWinner = actual?.winner_party_canonical;
+          const isHit = top && actualWinner && top[0] === actualWinner;
           return (
             <tr>
               <td><a href={`/seats/${w.council_slug}/${w.ward_slug}/`}>{w.ward_name}</a></td>
-              <td>{top ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{shortPartyLabel(top[0])}</> : <span class="muted">—</span>}</td>
+              <td>
+                {top
+                  ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{shortPartyLabel(top[0])}</>
+                  : <span class="muted">—</span>}
+              </td>
+              <td>
+                {actualWinner
+                  ? <span class={isHit ? "winner-hit" : "winner-miss"}>
+                      <span class="party-swatch" style={`background:${partyColour(actualWinner)}`}></span>
+                      {shortPartyLabel(actualWinner)}
+                    </span>
+                  : <span class="muted">Not yet declared</span>}
+              </td>
               <td class="num">{top ? formatPct(top[1].pct) : "—"}</td>
               <td class="muted">{wp?.confidence || "—"}</td>
-              <td class="num muted">{w.candidate_count}</td>
             </tr>
           );
         })}
@@ -123,13 +306,16 @@ const description = `${wards.length} ward${wards.length === 1 ? "" : "s"} contes
   </section>
 
   <section class="section">
-    <p><a href="/forecasts/may-2026/">← Back to national forecast</a></p>
+    <p><a href="/councils/">← All councils</a></p>
   </section>
 </BaseLayout>
 
 <style>
-.seat-table, .ward-grid { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-.seat-table th, .seat-table td, .ward-grid th, .ward-grid td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
-.seat-table th, .ward-grid th { font-weight: 600; color: var(--muted); font-size: 0.875rem; }
-.party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.5rem; vertical-align: middle; }
+.status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 0.75rem; margin-top: 0.5rem; }
+.status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+.status-label { margin: 0 0 0.25rem; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+.status-value { margin: 0 0 0.25rem; font-size: 1.25rem; font-weight: 800; color: var(--ink); }
+.winner-hit { font-weight: 700; color: #0e7c4a; }
+.winner-miss { color: var(--ink-soft); }
+.party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.4rem; vertical-align: middle; }
 </style>

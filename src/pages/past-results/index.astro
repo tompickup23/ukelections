@@ -1,0 +1,272 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  loadMay7Control,
+  loadMay7Postaudit,
+  partyColour,
+} from "../../lib/predictions";
+import {
+  loadMay7Headline,
+  partySlugToName,
+  shortPartyLabel,
+} from "../../lib/siteData";
+
+const ctl = loadMay7Control();
+const pa = loadMay7Postaudit();
+const head = loadMay7Headline();
+
+const seatsWon = ctl.summary?.aggregate_seats?.won || {};
+const seatsWonTotal = Object.values(seatsWon).reduce(
+  (s: number, v: any) => s + ((v as number) || 0),
+  0,
+);
+const rankedSeatsWon = Object.entries(seatsWon)
+  .filter(([, n]) => (n as number) > 0)
+  .sort((a, b) => (b[1] as number) - (a[1] as number));
+
+const liveSummary = pa.live?.summary || {};
+const preregSummary = pa.prereg?.summary || {};
+const step9b = pa.step9b?.aggregate || {};
+const perParty = pa.live?.per_party || {};
+
+// Reform-majority councils, sorted by margin over the majority threshold.
+const reformMajorities = (ctl.councils as any[])
+  .filter((c) => c.reform?.has_majority)
+  .map((c) => ({
+    slug: c.council_slug,
+    name: c.council_name,
+    seats: c.reform.post_seats,
+    total: c.cycle?.total_seats || 0,
+    margin: (c.reform.post_seats - (c.control?.threshold || 0)) || 0,
+    pre_control: c.control?.pre_control as string | null,
+  }))
+  .sort((a, b) => b.margin - a.margin);
+---
+
+<BaseLayout
+  title="May 7 2026 results — how the model did, who's in charge now"
+  description={`Post-audit of our May 7 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "—"} declared ballots (${((head.declared_coverage_pct || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Past results · May 7 2026</p>
+    <h1>Results, and how we did</h1>
+    <p class="lede">
+      Our locked pre-election forecast, scored against the actual count.
+      Reform UK won {head.reform_majorities} council majorities and {head.reform_seats_won.toLocaleString()} seats —
+      we called the winner correctly in <strong>{(head.live_winner_accuracy * 100).toFixed(1)}%</strong>{" "}
+      of the {pa.live?.summary?.ballots_evaluated?.toLocaleString() || "evaluated"} wards we have results for.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Headline</p>
+      <h2>What happened on the night</h2>
+    </div>
+    <div class="accuracy-grid">
+      <article>
+        <span class="big-number">{head.reform_majorities}</span>
+        <p class="big-number-label">Reform UK overall majorities</p>
+      </article>
+      <article>
+        <span class="big-number">{head.reform_seats_won.toLocaleString()}</span>
+        <p class="big-number-label">Reform UK seats won (across all contesting councils)</p>
+      </article>
+      <article>
+        <span class="big-number">{head.reform_largest_noc}</span>
+        <p class="big-number-label">councils where Reform UK is now largest party without a majority</p>
+      </article>
+      <article>
+        <span class="big-number">{head.noc_count}</span>
+        <p class="big-number-label">councils with no overall control</p>
+      </article>
+    </div>
+
+    <h3 style="margin-top:1.5rem">All seats won on May 7</h3>
+    <div class="party-bars party-bars-large">
+      {rankedSeatsWon.map(([slug, n]) => {
+        const name = partySlugToName(slug);
+        const share = seatsWonTotal > 0 ? (n as number) / seatsWonTotal : 0;
+        return (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(name)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(share * 100).toFixed(1)}%; background:${partyColour(name)}`}></div>
+            </div>
+            <span class="bar-value">{(n as number).toLocaleString()}</span>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Forecast vs reality</p>
+      <h2>How accurate were we?</h2>
+    </div>
+    <p>
+      Two forecasts were live for May 7. The pre-registration (sha256-witnessed 11 days before polling day) and
+      the as-served forecast which added one extra step — a Reform realignment uplift — calibrated on the morning
+      of polling day after we spotted a structural undershoot in northern unitaries.
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th scope="col">Forecast version</th>
+          <th scope="col">Winner accuracy</th>
+          <th scope="col">Major-party MAE</th>
+          <th scope="col">Ballots evaluated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Live</strong> (as users saw it)</td>
+          <td class="num"><strong>{(liveSummary.winner_accuracy * 100).toFixed(1)}%</strong></td>
+          <td class="num">{(liveSummary.major_party_mae_avg * 100).toFixed(2)}pp</td>
+          <td class="num">{liveSummary.ballots_evaluated?.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td>Pre-registration (locked 26 Apr 2026)</td>
+          <td class="num">{(preregSummary.winner_accuracy * 100).toFixed(1)}%</td>
+          <td class="num">{(preregSummary.major_party_mae_avg * 100).toFixed(2)}pp</td>
+          <td class="num">{preregSummary.ballots_evaluated?.toLocaleString()}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    {Object.keys(perParty).length > 0 && (
+      <>
+        <h3 style="margin-top:1.5rem">Per-party vote-share error (live)</h3>
+        <table class="seat-table">
+          <thead>
+            <tr>
+              <th scope="col">Party</th>
+              <th scope="col">Wards evaluated</th>
+              <th scope="col">MAE</th>
+              <th scope="col">Signed bias</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(perParty).map(([party, row]: [string, any]) => (
+              <tr>
+                <td>
+                  <span class="party-swatch" style={`background:${partyColour(party)}; display:inline-block;width:.75rem;height:.75rem;border-radius:2px;margin-right:.4rem;vertical-align:middle`}></span>
+                  {shortPartyLabel(party)}
+                </td>
+                <td class="num">{row.n?.toLocaleString?.() || row.n}</td>
+                <td class="num">{(row.mae * 100).toFixed(2)}pp</td>
+                <td class="num">{row.signed_bias > 0 ? "+" : ""}{(row.signed_bias * 100).toFixed(2)}pp</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="caption">
+          A positive signed bias means we predicted that party would win <em>more</em> share than they did.
+          Reform is +3.35pp (we ran them slightly hot on average) — Greens are -4.04pp (we ran them cold).
+        </p>
+      </>
+    )}
+  </section>
+
+  {step9b && step9b.cohort_size > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Methodology audit</p>
+        <h2>Step 9b — the Reform realignment uplift</h2>
+      </div>
+      <p>
+        On polling day, after spotting Blackburn-with-Darwen at 4.8% Reform across 17 wards while Burnley/Hyndburn/Pendle
+        next door were at 30-40%, we added a per-ward "realignment uplift" calibrated on Asian-population share against
+        observed Reform share in Lancashire. It was applied as an upward floor only — never reduced a predicted Reform
+        share. The shadow column shows what would have happened without it.
+      </p>
+      <table class="seat-table">
+        <thead>
+          <tr>
+            <th scope="col">Metric</th>
+            <th scope="col">Live (with 9b)</th>
+            <th scope="col">Shadow (no 9b)</th>
+            <th scope="col">Δ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Reform UK MAE (uplift cohort)</td>
+            <td class="num">{(step9b.live_reform_mae * 100).toFixed(2)}pp</td>
+            <td class="num">{(step9b.shadow_reform_mae * 100).toFixed(2)}pp</td>
+            <td class="num">{((step9b.shadow_reform_mae - step9b.live_reform_mae) * 100).toFixed(2)}pp</td>
+          </tr>
+          <tr>
+            <td>Wards helped / hurt / neutral</td>
+            <td colspan="3">{step9b.helped} helped · {step9b.hurt} hurt · {step9b.neutral} neutral</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="caption">
+        Verdict: net positive nationally, but the London (0.50 multiplier) tier hurt Reform MAE by 3.43pp — that tier
+        needs a downward retune. Full audit JSON: {" "}
+        <a href="/data/transparency/may-2026-postaudit-2026-05-10.json"><code>postaudit-2026-05-10.json</code></a>.
+      </p>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Reform UK majorities</p>
+      <h2>The {reformMajorities.length} councils Reform UK now runs outright</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th scope="col">Council</th>
+          <th scope="col">Reform seats</th>
+          <th scope="col">Total</th>
+          <th scope="col">Margin over majority</th>
+          <th scope="col">Previously</th>
+        </tr>
+      </thead>
+      <tbody>
+        {reformMajorities.map((c) => (
+          <tr>
+            <td><a href={`/seats/${c.slug}/`}>{c.name}</a></td>
+            <td class="num"><strong style="color:#0e7c4a">{c.seats}</strong></td>
+            <td class="num">{c.total}</td>
+            <td class="num">+{c.margin}</td>
+            <td class="muted">{c.pre_control ? partySlugToName(c.pre_control) : "—"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Full Reform-controlled-councils dataset (incl. largest-party-NOC and breakthrough seats):{" "}
+      <a href="/data/transparency/may-2026-reform-controlled-councils.md">markdown</a> ·{" "}
+      <a href="/data/transparency/may-2026-reform-controlled-councils.json">JSON</a> ·{" "}
+      <a href="/data/transparency/may-2026-reform-controlled-councils.csv">CSV</a>.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">More accuracy</p>
+      <h2>Other backtests on record</h2>
+    </div>
+    <div class="feature-list">
+      <article>
+        <h3>2024 general election backtest</h3>
+        <p>Model replayed against the 4 July 2024 result, all 650 constituencies.</p>
+        <p><a href="/data-quality/ge-backtest/">See GE backtest →</a></p>
+      </article>
+      <article>
+        <h3>May 2024 local backtest</h3>
+        <p>Same model architecture, scored on the previous English local cycle.</p>
+        <p><a href="/data-quality/2024-backtest/">See 2024 local backtest →</a></p>
+      </article>
+      <article>
+        <h3>Pre-registration manifest</h3>
+        <p>Every published forecast file with its pre-publication sha256 hash.</p>
+        <p><a href="/transparency/">See transparency log →</a></p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

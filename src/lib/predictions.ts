@@ -74,6 +74,65 @@ export function loadHistory() { return load().history; }
 export function loadLaProj() { return load().laProj; }
 export function loadLaImd() { return load().laImd; }
 
+export interface CouncilCycle {
+  council_slug: string;
+  council_name: string;
+  type: string;
+  status: "scheduled" | "lgr_pending" | "tbc";
+  next_election: string | null;
+  next_election_label: string;
+  cycle: string;
+  last_election: string;
+  note?: string;
+}
+
+export interface CouncilCyclesFile {
+  metadata: Record<string, unknown>;
+  councils: Record<string, CouncilCycle>;
+}
+
+let _cycles: CouncilCyclesFile | null = null;
+export function loadCouncilCycles(): CouncilCyclesFile {
+  if (_cycles) return _cycles;
+  _cycles = JSON.parse(
+    readFileSync(path.join(ROOT, "data/identity/council-cycles.json"), "utf8")
+  );
+  return _cycles!;
+}
+
+let _controlMay7: any = null;
+export function loadMay7Control() {
+  if (_controlMay7) return _controlMay7;
+  _controlMay7 = JSON.parse(
+    readFileSync(path.join(ROOT, "data/results/may-2026/council-control.json"), "utf8")
+  );
+  return _controlMay7;
+}
+
+let _postaudit: any = null;
+export function loadMay7Postaudit() {
+  if (_postaudit) return _postaudit;
+  _postaudit = JSON.parse(
+    readFileSync(
+      path.join(ROOT, "data/transparency/may-2026-postaudit-2026-05-10.json"),
+      "utf8"
+    )
+  );
+  return _postaudit;
+}
+
+let _results: any = null;
+export function loadMay7Results() {
+  if (_results) return _results;
+  _results = JSON.parse(
+    readFileSync(
+      path.join(ROOT, "data/results/may-2026/local-and-mayor.merged.json"),
+      "utf8"
+    )
+  );
+  return _results;
+}
+
 let _ge: { predictions: any; summary: any; assumptions: any; backtest: any; identity: any } | null = null;
 function loadGe() {
   if (_ge) return _ge;

@@ -1,0 +1,273 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  loadCouncilCycles,
+  loadMay7Control,
+} from "../../lib/predictions";
+import {
+  loadMay7Headline,
+  formatNextElection,
+  partySlugToName,
+} from "../../lib/siteData";
+import { partyColour } from "../../lib/predictions";
+
+const cycles = loadCouncilCycles();
+const ctl = loadMay7Control();
+const head = loadMay7Headline();
+
+const controlBySlug = new Map<string, any>();
+for (const c of ctl.councils as any[]) controlBySlug.set(c.council_slug, c);
+
+interface CouncilRow {
+  slug: string;
+  name: string;
+  type: string;
+  type_label: string;
+  next_label: string;
+  next_iso: string | null;
+  next_is_tbc: boolean;
+  control_label: string;
+  control_party_slug: string | null;
+  control_party_name: string;
+  reform_post: number;
+  reform_share: number;
+  reform_majority: boolean;
+  total_seats: number;
+  status_group: "ref_majority" | "ref_largest" | "other_majority" | "noc" | "unknown";
+}
+
+const TYPE_LABELS: Record<string, string> = {
+  london_borough: "London borough",
+  metropolitan_borough: "Metropolitan borough",
+  unitary_authority: "Unitary authority",
+  district_council: "District council",
+  county_council: "County council",
+  welsh_principal_area: "Welsh principal area",
+  unclassified: "Council",
+};
+
+const rows: CouncilRow[] = Object.values(cycles.councils).map((cycle) => {
+  const ctlRow = controlBySlug.get(cycle.council_slug);
+  const next = formatNextElection(cycle);
+  const controlling = ctlRow?.control?.controlling_party as string | null;
+  const plurality = ctlRow?.control?.plurality_party as string | null;
+  const status = ctlRow?.control?.status as string | undefined;
+  const reformPost = ctlRow?.reform?.post_seats || 0;
+  const reformMajority = !!ctlRow?.reform?.has_majority;
+  const reformLargest = !!ctlRow?.reform?.is_largest;
+  let group: CouncilRow["status_group"] = "unknown";
+  if (reformMajority) group = "ref_majority";
+  else if (reformLargest) group = "ref_largest";
+  else if (status === "majority") group = "other_majority";
+  else if (status === "no_overall_control") group = "noc";
+
+  const controlPartySlug = controlling || plurality || null;
+  const controlLabel = (() => {
+    if (controlling) return `${partySlugToName(controlling)} majority`;
+    if (plurality) return `${partySlugToName(plurality)} largest (NOC)`;
+    return "No overall control";
+  })();
+
+  return {
+    slug: cycle.council_slug,
+    name: cycle.council_name,
+    type: cycle.type,
+    type_label: TYPE_LABELS[cycle.type] || "Council",
+    next_label: next.label,
+    next_iso: next.date_iso,
+    next_is_tbc: next.is_tbc,
+    control_label: controlLabel,
+    control_party_slug: controlPartySlug,
+    control_party_name: controlPartySlug ? partySlugToName(controlPartySlug) : "No overall control",
+    reform_post: reformPost,
+    reform_share: ctlRow?.reform?.post_share || 0,
+    reform_majority: reformMajority,
+    total_seats: ctlRow?.cycle?.total_seats || 0,
+    status_group: group,
+  };
+});
+
+rows.sort((a, b) => a.name.localeCompare(b.name));
+
+const counts = {
+  total: rows.length,
+  scheduled: rows.filter((r) => !r.next_is_tbc).length,
+  lgr: rows.filter((r) => r.next_is_tbc).length,
+  ref_majority: rows.filter((r) => r.status_group === "ref_majority").length,
+};
+
+const ePartyToColour = (slug: string | null) => {
+  if (!slug) return "#9ca3af";
+  switch (slug) {
+    case "lab": return partyColour("Labour");
+    case "con": return partyColour("Conservative");
+    case "ld": return partyColour("Liberal Democrats");
+    case "ref": return partyColour("Reform UK");
+    case "green": return partyColour("Green Party");
+    case "snp": return partyColour("SNP");
+    case "pc": return partyColour("Plaid Cymru");
+    default: return "#9ca3af";
+  }
+};
+---
+
+<BaseLayout
+  title="Council elections — every council, last result and next vote"
+  description="Every English council, London borough, metropolitan borough and unitary authority — May 7 2026 result, who controls it now, and when residents vote again. Two-tier councils awaiting Local Government Reorganisation are marked TBC."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Council elections</p>
+    <h1>Every council, before and after May 7</h1>
+    <p class="lede">
+      All {counts.total} English and Welsh councils that contested the May 7 2026 ballot. Sort by who controls
+      the council now, or by when residents vote again. Two-tier councils being abolished under Local Government
+      Reorganisation are explicitly marked <strong>TBC</strong> rather than given a misleading date.
+    </p>
+    <div class="action-row">
+      <a class="button primary" href="/your-area/">Find my council</a>
+      <a class="button" href="/past-results/">May 7 results in detail</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">At a glance</p>
+      <h2>{counts.ref_majority} Reform majorities, {counts.scheduled} next dates known, {counts.lgr} awaiting LGR</h2>
+    </div>
+    <div class="accuracy-grid">
+      <article>
+        <span class="big-number">{head.reform_majorities}</span>
+        <p class="big-number-label">Reform UK overall majorities won on May 7</p>
+      </article>
+      <article>
+        <span class="big-number">{head.reform_seats_won.toLocaleString()}</span>
+        <p class="big-number-label">Reform UK seats won on May 7 (across all contesting councils)</p>
+      </article>
+      <article>
+        <span class="big-number">{counts.lgr}</span>
+        <p class="big-number-label">councils whose next election is on hold while Local Government Reorganisation is consulted</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Browse</p>
+      <h2>Every council</h2>
+    </div>
+    <div class="council-filter-bar">
+      <label for="council-search" class="visually-hidden">Filter councils by name</label>
+      <input id="council-search" type="search" placeholder="Filter by council name…" autocomplete="off" />
+      <div class="council-filter-chips" role="group" aria-label="Filter by status">
+        <button type="button" class="chip is-active" data-filter="all">All ({counts.total})</button>
+        <button type="button" class="chip" data-filter="ref_majority">Reform majorities ({counts.ref_majority})</button>
+        <button type="button" class="chip" data-filter="other_majority">Other majorities ({rows.filter(r => r.status_group === "other_majority").length})</button>
+        <button type="button" class="chip" data-filter="noc">No overall control ({rows.filter(r => r.status_group === "noc").length})</button>
+        <button type="button" class="chip" data-filter="lgr">Awaiting LGR ({counts.lgr})</button>
+      </div>
+    </div>
+
+    <table class="council-table">
+      <thead>
+        <tr>
+          <th scope="col">Council</th>
+          <th scope="col">Type</th>
+          <th scope="col">Control after May 7</th>
+          <th scope="col">Reform seats</th>
+          <th scope="col">Next election</th>
+        </tr>
+      </thead>
+      <tbody id="council-table-body">
+        {rows.map((r) => (
+          <tr
+            data-name={r.name.toLowerCase()}
+            data-status={r.status_group}
+            data-lgr={r.next_is_tbc ? "1" : "0"}
+          >
+            <td><a href={`/seats/${r.slug}/`}>{r.name}</a></td>
+            <td class="muted-cell">{r.type_label}</td>
+            <td>
+              <span class="party-pill" style={`background:${ePartyToColour(r.control_party_slug)}`} aria-hidden="true"></span>
+              {r.control_label}
+            </td>
+            <td>
+              {r.total_seats > 0
+                ? <span class={r.reform_majority ? "reform-majority-cell" : ""}>{r.reform_post}/{r.total_seats}</span>
+                : <span class="muted-cell">—</span>}
+            </td>
+            <td>
+              {r.next_is_tbc
+                ? <span class="tbc-pill" title="Local Government Reorganisation">{r.next_label}</span>
+                : <span>{r.next_label}</span>}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Two-tier councils (county + district) are being reorganised into unitary authorities under the
+      December 2024 English Devolution White Paper. Election dates flip from TBC to a confirmed date as each
+      Statutory Instrument is laid. See <a href="/methodology/">our methodology</a> for how we classify
+      councils.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Devolved</p>
+      <h2>Welsh and Scottish parliaments</h2>
+    </div>
+    <div class="feature-list">
+      <article>
+        <h3>Senedd Cymru</h3>
+        <p>Last election 6 May 2026 (96 seats, closed-list PR).</p>
+        <p><a href="/forecasts/senedd-2026/">See Senedd forecast and result →</a></p>
+      </article>
+      <article>
+        <h3>Scottish Parliament</h3>
+        <p>Last election 7 May 2026 (129 seats, AMS).</p>
+        <p><a href="/forecasts/holyrood-2026/">See Holyrood forecast and result →</a></p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    const search = document.getElementById("council-search");
+    const tbody = document.getElementById("council-table-body");
+    const chips = document.querySelectorAll(".council-filter-chips .chip");
+    if (!search || !tbody) return;
+
+    let activeFilter = "all";
+    let query = "";
+
+    function applyFilter() {
+      const rows = tbody.querySelectorAll("tr");
+      rows.forEach((row) => {
+        const name = row.getAttribute("data-name") || "";
+        const status = row.getAttribute("data-status") || "";
+        const isLgr = row.getAttribute("data-lgr") === "1";
+        const matchesQuery = !query || name.indexOf(query) !== -1;
+        let matchesFilter = true;
+        if (activeFilter === "lgr") matchesFilter = isLgr;
+        else if (activeFilter !== "all") matchesFilter = status === activeFilter;
+        row.style.display = matchesQuery && matchesFilter ? "" : "none";
+      });
+    }
+
+    search.addEventListener("input", (e) => {
+      query = (e.target.value || "").toLowerCase().trim();
+      applyFilter();
+    });
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chips.forEach((c) => c.classList.remove("is-active"));
+        chip.classList.add("is-active");
+        activeFilter = chip.getAttribute("data-filter") || "all";
+        applyFilter();
+      });
+    });
+  })();
+</script>

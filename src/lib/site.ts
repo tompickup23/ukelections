@@ -22,10 +22,10 @@ export interface SearchEntry {
 }
 
 export const NAV_ITEMS = [
-  { href: "/forecasts/may-2026/", label: "May 7 Election" },
+  { href: "/councils/", label: "Councils" },
   { href: "/forecasts/general-election/", label: "General Election" },
   { href: "/your-area/", label: "Find Your Ward" },
-  { href: "/data-quality/", label: "How Accurate" },
+  { href: "/past-results/", label: "Past Results" },
   { href: "/methodology/", label: "About" },
 ] as const;
 
@@ -64,6 +64,8 @@ export const RELEASES: ReleaseEntry[] = [
 
 const STATIC_PATHS = [
   "/",
+  "/councils/",
+  "/past-results/",
   "/seats/",
   "/your-area/",
   "/forecasts/",
