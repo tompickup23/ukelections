@@ -126,7 +126,15 @@ function lcc2025ForWardName(lccRef, wardName) {
 function readJson(p) { return JSON.parse(readFileSync(path.join(ROOT, p), "utf8")); }
 
 function writeJson(rel, payload) {
-  const full = path.join(ROOT, rel);
+  // UKE_OUT_SUFFIX lets a shadow run (e.g. UKE_DISABLE_REALIGNMENT_UPLIFT=1)
+  // write alongside the locked pre-registered file without overwriting it,
+  // by inserting `.<suffix>` before `.json` (e.g. `local-and-mayor.shadow-no-step9b.json`).
+  let target = rel;
+  const suffix = process.env.UKE_OUT_SUFFIX;
+  if (suffix && rel.endsWith(".json")) {
+    target = rel.replace(/\.json$/, `.${suffix}.json`);
+  }
+  const full = path.join(ROOT, target);
   mkdirSync(path.dirname(full), { recursive: true });
   writeFileSync(full, JSON.stringify(payload, null, 2));
   return full;
