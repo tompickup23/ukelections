@@ -106,6 +106,12 @@ describe("Makerfield by-election forecast", () => {
     expect(parties).toContain("Restore Britain");
   });
 
+  it("steps confidence down to 'medium' after the comparator analysis", () => {
+    expect(forecast.confidence).toBe("medium");
+    expect(forecast.confidence_note).toMatch(/comparator average/);
+    expect(forecast.confidence_note).toMatch(/26\.5pp/);
+  });
+
   it("exposes an 11-step methodology trace", () => {
     expect(forecast.methodology.length).toBe(11);
     const names = forecast.methodology.map((m) => m.name);

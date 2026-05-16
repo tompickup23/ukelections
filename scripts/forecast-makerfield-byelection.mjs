@@ -606,9 +606,9 @@ function build() {
         data: blended,
       },
     ],
-    confidence: "medium-high",
+    confidence: "medium",
     confidence_note:
-      "Medium-high reflects: (a) a single published constituency poll, (b) the unprecedented nature of a stand-aside-for-an-outsider Westminster by-election since 1965, (c) genuine uncertainty about whether Burnham's mayoral brand transfers to a partisan Commons contest where Starmer's Labour record is on the ballot. The headline 0.9pp margin is well inside the ±6pp scenario A uncertainty band — treat as a toss-up that leans Reform.",
+      "Stepped down from medium-high to medium after the per-ward + comparator analysis (see makerfield-2026-06-18.analysis.json). Reasons to weight Reform's side of the toss-up more heavily: (a) Makerfield's Reform-vs-Lab council lead (26.5pp) is nearly double the comparator average (14.2pp across Grimsby, Barnsley, Bradford); (b) the within-seat regression shows 72% of cross-ward Reform variance is explained by education + deprivation + retired + social-rent — Burnham's brand is strongest in graduate-rich wards (Orrell, Winstanley) where Reform are already weakest, so the uplift narrows rather than reverses the gap in the no-quals wards (Pemberton, Hindley, Abram) where Reform are 52-56%; (c) two of the closest demographic comparators (Grimsby +31.7pp Reform, Barnsley +9.7pp Reform) bracket Makerfield's local-elections aggregate exactly. The 1.4pp Reform-leaning toss-up remains the central estimate but a 3-5pp Reform lead is now more probable than the bare blended figure suggests.",
     next_refresh: "Daily until polling day; re-fit on any new constituency poll.",
   };
 
