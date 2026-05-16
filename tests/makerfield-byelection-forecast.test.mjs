@@ -63,14 +63,26 @@ describe("Makerfield by-election forecast", () => {
     );
   });
 
-  it("includes the Survation 14-15 May 2026 poll inputs", () => {
-    expect(forecast.inputs.survation_poll_2026_05_15.pollster).toBe("Survation");
-    expect(
-      forecast.inputs.survation_poll_2026_05_15.scenarios.burnham_stands.shares["Labour"],
-    ).toBe(0.45);
-    expect(
-      forecast.inputs.survation_poll_2026_05_15.scenarios.burnham_withdraws.shares["Reform UK"],
-    ).toBe(0.53);
+  it("includes the Survation 15 May 2026 pre-poll forecast inputs", () => {
+    const s = forecast.inputs.survation_forecast_2026_05_15;
+    expect(s.source).toBe("Survation");
+    expect(s.type).toBe("pre-poll forecast");
+    expect(s.scenarios.burnham_stands.shares["Labour"]).toBe(0.45);
+    expect(s.scenarios.burnham_withdraws.shares["Reform UK"]).toBe(0.53);
+    // Probability 0.67 is P[Lab wins | Burnham], NOT P[Burnham on ballot]
+    expect(s.scenarios.burnham_stands.probability_labour_wins_given_burnham).toBe(0.67);
+  });
+
+  it("includes the Britain Elects (Ben Walker) adjusted forecast as a second anchor", () => {
+    const be = forecast.inputs.britain_elects_forecast_2026_05_15;
+    expect(be.source).toMatch(/Britain Elects/);
+    expect(be.burnham_stands_shares["Labour"]).toBe(0.39);
+    expect(be.burnham_stands_shares["Reform UK"]).toBe(0.36);
+  });
+
+  it("flags the ward-count discrepancy with Survation (9 post-2023 vs 8 pre-2023)", () => {
+    expect(forecast.inputs.ward_count_discrepancy_note).toMatch(/9 Wigan wards/);
+    expect(forecast.inputs.ward_count_discrepancy_note).toMatch(/Survation/);
   });
 
   it("includes a 120-year historical anchor going back to 1983", () => {
@@ -94,12 +106,13 @@ describe("Makerfield by-election forecast", () => {
     expect(parties).toContain("Restore Britain");
   });
 
-  it("exposes a 10-step methodology trace", () => {
-    expect(forecast.methodology.length).toBe(10);
+  it("exposes an 11-step methodology trace", () => {
+    expect(forecast.methodology.length).toBe(11);
     const names = forecast.methodology.map((m) => m.name);
     expect(names).toContain("GE2024 baseline");
     expect(names).toContain("1 May 2026 ward signal");
     expect(names).toContain("Burnham personal-vote uplift (calibration)");
     expect(names).toContain("Probability-weighted blend");
+    expect(names).toContain("Britain Elects 15 May 2026 adjusted forecast");
   });
 });

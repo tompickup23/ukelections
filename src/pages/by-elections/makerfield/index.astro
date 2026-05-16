@@ -28,7 +28,8 @@ const wardAgg = wardSignal.aggregate_shares as Record<string, number>;
 const reformLead = (forecast.inputs.ward_aggregate_reform_lead_pp * 100).toFixed(1);
 const turnoutPct = (wardSignal.average_turnout_pct * 100).toFixed(1);
 
-const survation = forecast.inputs.survation_poll_2026_05_15;
+const survation = forecast.inputs.survation_forecast_2026_05_15;
+const britainElects = forecast.inputs.britain_elects_forecast_2026_05_15;
 const scenarioA = forecast.scenarios.burnham_stands;
 const scenarioB = forecast.scenarios.burnham_withdraws;
 
@@ -143,7 +144,13 @@ function classificationLabel(c: string): string {
     </div>
     <p>
       The headline forecast hinges almost entirely on whether Burnham appears on the ballot.
-      Survation's 14-15 May poll measured both directly.
+      Two independent forecasts were published on 15 May 2026 — Survation and Britain Elects
+      (Ben Walker). <strong>Neither is a fieldwork-based constituency poll</strong> — Survation
+      transfers the Burnham effect from their Gorton &amp; Denton post-by-election poll
+      (n=501, 9 Mar 2026) re-weighted for Makerfield demographics, while Britain Elects
+      applies a North West regional Burnham favourability adjustment to the GE2024 baseline.
+      Both agree Labour leads by 3pp with Burnham as candidate; they disagree on absolute
+      levels (Survation Lab 45 / Ref 42; Britain Elects Lab 39 / Ref 36).
     </p>
     <table class="seat-table">
       <thead>
@@ -171,9 +178,18 @@ function classificationLabel(c: string): string {
       </tbody>
     </table>
     <p class="caption">
-      Scenario probability assigned by the model: <strong>{(forecast.forecast.burnham_on_ballot_probability * 100).toFixed(0)}%</strong> Burnham stands
-      (raised above Survation's 67% to reflect NEC clearance and Burnham's same-day acceptance), <strong>{((1 - forecast.forecast.burnham_on_ballot_probability) * 100).toFixed(0)}%</strong> Burnham withdraws.
-      Survation's two scenario shares are reproduced verbatim from the published topline.
+      Scenario A blends both forecasts: 50/50 mean of Survation (Lab 45 / Ref 42) and
+      Britain Elects (Lab 39 / Ref 36) for the major parties, with Survation's minor-party
+      splits scaled to the residual. Scenario B is Survation's non-Burnham scenario verbatim
+      (Britain Elects didn't publish one).
+    </p>
+    <p class="caption">
+      <strong>Probability framing.</strong> Our model uses
+      <strong>{(forecast.forecast.burnham_on_ballot_probability * 100).toFixed(0)}%</strong>
+      as P[Burnham appears on the ballot], reflecting NEC clearance + Burnham's same-day
+      acceptance + Downing Street's confirmation of no block. Note this is a different
+      quantity to Survation's published <strong>67%</strong>, which is P[Labour wins |
+      Burnham stands] from their 10,000-simulation run.
     </p>
   </section>
 
@@ -186,6 +202,12 @@ function classificationLabel(c: string): string {
       Reform UK won <strong>all nine</strong> Wigan wards inside the Makerfield Westminster
       boundary on 7 May 2026. Aggregated across {wardSignal.total_valid_votes.toLocaleString()} valid
       votes (turnout {turnoutPct}%), Reform led Labour by <strong>{reformLead}pp</strong>:
+    </p>
+    <p class="caption">
+      Survation's note references 8 wards / Reform 7-of-8 — that's the pre-2023 Wigan
+      boundary layout, before Hindley split into Hindley + Hindley Green. Our 9-ward
+      aggregate uses the current (May 2023+) boundaries, which is what was actually voted
+      on 7 May 2026.
     </p>
     <table class="seat-table">
       <thead>

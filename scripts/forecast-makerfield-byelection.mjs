@@ -62,18 +62,27 @@ const BURNHAM_MAYORAL = {
     "Greater Manchester combined authority mayoral election 1 May 2024 declared totals (LGBCE / Wigan elections office).",
 };
 
-// Survation by-election poll, fielded 14-15 May 2026, published 15 May 2026.
-// Two-scenario design (Lab fields Burnham / Lab fields someone else).
+// Survation pre-poll forecast, published 15 May 2026. NB: this is NOT a
+// Makerfield constituency poll — Survation explicitly states "this is a
+// pre-poll forecast, not a poll". The Burnham effect is transferred from
+// Survation's Gorton & Denton post-by-election poll (fieldwork 9 March
+// 2026, n=501), re-weighted for Makerfield's older, more White British,
+// more Leave-voting electorate. Forecast then run 10,000 simulations per
+// scenario. The 0.67 figure below is P[Labour wins | Burnham stands], NOT
+// the probability that Burnham appears on the ballot.
 const SURVATION_2026_05_15 = {
-  pollster: "Survation",
-  fieldwork: "2026-05-14 / 2026-05-15",
+  source: "Survation",
+  type: "pre-poll forecast",
   published_at: "2026-05-15",
-  sample: "MRP-conditioned constituency model, n=708 Makerfield",
+  transfer_basis:
+    "Burnham personal-vote effect re-weighted from Survation's Gorton & Denton post-by-election poll (fieldwork 9 March 2026, n=501).",
+  methodology:
+    "Combines (a) Makerfield GE2024 result, (b) Wigan council 7 May 2026 ward results across the 8 wards Survation maps to the PCON, (c) Census 2021 demographic estimate. Burnham effect transferred from G&D and re-weighted for Makerfield demographics. 10,000 simulations per scenario.",
   source_url:
-    "https://www.survation.com/by-election-polling-makerfield-2026-06-18/",
+    "https://cdn.survation.com/wp-content/uploads/2026/05/15164649/Makerfield_Initial_Estimate_Note.pdf",
   scenarios: {
     burnham_stands: {
-      probability_assigned_by_pollster: 0.67,
+      probability_labour_wins_given_burnham: 0.67,
       shares: {
         "Labour": 0.45,
         "Reform UK": 0.42,
@@ -85,7 +94,7 @@ const SURVATION_2026_05_15 = {
       },
     },
     burnham_withdraws: {
-      probability_assigned_by_pollster: 0.33,
+      probability_labour_wins_given_no_burnham: 0.0,
       shares: {
         "Labour": 0.27,
         "Reform UK": 0.53,
@@ -99,10 +108,35 @@ const SURVATION_2026_05_15 = {
   },
 };
 
-// Post-NEC clearance (15 May 2026) the probability that Burnham actually
-// appears on the ballot is materially higher than Survation's 67%. Tom's
-// model bumps this to 0.85 on the public record (Burnham accepted candidacy
-// invitation same day; Downing Street confirmed it will not block).
+// Britain Elects (Ben Walker) adjusted forecast for Makerfield with Burnham
+// as Labour candidate, published 14-15 May 2026 across GB News + commentary
+// pieces. Methodology: GE2024 baseline + North West regional Burnham
+// favourability uplift (~+20pp vs national, putting GM-area Burnham
+// favourability at 50-60%). Burnham takes ~5pp off Reform and ~4pp off
+// Green. No published non-Burnham scenario from Britain Elects.
+const BRITAIN_ELECTS_2026_05_15 = {
+  source: "Britain Elects (Ben Walker)",
+  type: "adjusted forecast",
+  published_at: "2026-05-15",
+  source_url:
+    "https://www.gbnews.com/politics/andy-burnham-makerfield-byelection-reform-uk-labour",
+  burnham_stands_shares: {
+    "Labour": 0.39,
+    "Reform UK": 0.36,
+    // BE doesn't publish full minor-party splits — we infer the residual
+    // 25% is spread across Con / Grn / LD / RB / Other roughly in line
+    // with the local council results.
+  },
+  burnham_takes_pp_from_reform: 0.05,
+  burnham_takes_pp_from_green: 0.04,
+};
+
+// Probability that Burnham actually appears on the ballot (a separate
+// quantity from Survation's P[Lab wins | Burnham]=0.67). Post-NEC
+// clearance (15 May 2026) + same-day acceptance + Downing Street
+// confirmation of no block, we set this at 0.85. Would only fall back on
+// a fresh Code-of-Conduct issue or Burnham declining to formally resign
+// as GM mayor (required within 6 weeks of taking up a Commons seat).
 const BURNHAM_ON_BALLOT_PROBABILITY = 0.85;
 
 // Declared / expected candidates (from Democracy Club + party statements,
@@ -316,37 +350,68 @@ function canonicaliseParty(name) {
 // Step 4 — Scenario forecasts (Burnham stands / Burnham withdraws)
 // ---------------------------------------------------------------------------
 function buildScenarioA(wardSignal) {
-  // Anchor on Survation Burnham scenario (the only published constituency
-  // poll), then validate the Reform ceiling against the bottom-up ward
-  // aggregate. The two anchors cross-check almost exactly:
-  //   - Ward Reform 50.2% minus 8.2pp (soft-Reform return to Lab to back
-  //     Burnham + ~2pp leakage to Restore Britain) → 42.0%
-  //   - Ward Labour 24.3% plus ~20.7pp Burnham personal-vote uplift → 45.0%
-  // Burnham uplift sized by mayoral over-performance in Wigan borough
-  // (60.2% personal vs 33.7% national Lab brand = +26.5pp ceiling; we
-  // discount that to +20.7pp because a Westminster contest is more
-  // partisan than a mayoral contest and Reform are now embedded locally).
+  // Two independent forecasts published 15 May 2026 anchor this scenario:
+  //   - Survation: Lab 45 / Ref 42 (3pp Lab lead)
+  //   - Britain Elects (Ben Walker): Lab 39 / Ref 36 (3pp Lab lead)
+  // Both agree on the direction and the 3pp margin but disagree on absolute
+  // levels (BE has 6pp lower for both major parties, implying a larger
+  // minor-party residual). We blend them 50/50 for Lab and Reform; for
+  // minor parties we use Survation's full splits (BE doesn't publish them)
+  // scaled up so that the overall total renormalises.
   const survation = SURVATION_2026_05_15.scenarios.burnham_stands.shares;
+  const be = BRITAIN_ELECTS_2026_05_15.burnham_stands_shares;
   const wardLab = wardSignal.aggregate_shares["Labour"] || 0;
   const wardReform = wardSignal.aggregate_shares["Reform UK"] || 0;
-  const impliedBurnhamUplift = (survation["Labour"] || 0) - wardLab;
-  const impliedReformContraction = wardReform - (survation["Reform UK"] || 0);
 
-  const central = normalise(survation);
+  // Blend major-party shares 50/50
+  const labBlend = (survation["Labour"] + be["Labour"]) / 2;
+  const reformBlend = (survation["Reform UK"] + be["Reform UK"]) / 2;
+
+  // Minor parties — take Survation's splits as the structural prior, then
+  // re-scale the residual block so totals sum to 1.
+  const survationMinorSum =
+    (survation["Conservative"] || 0) +
+    (survation["Green Party"] || 0) +
+    (survation["Liberal Democrats"] || 0) +
+    (survation["Restore Britain"] || 0) +
+    (survation["Other"] || 0);
+  const residual = 1 - labBlend - reformBlend;
+  const scale = survationMinorSum > 0 ? residual / survationMinorSum : 0;
+
+  const central = normalise({
+    "Labour": labBlend,
+    "Reform UK": reformBlend,
+    "Conservative": (survation["Conservative"] || 0) * scale,
+    "Green Party": (survation["Green Party"] || 0) * scale,
+    "Liberal Democrats": (survation["Liberal Democrats"] || 0) * scale,
+    "Restore Britain": (survation["Restore Britain"] || 0) * scale,
+    "Other": (survation["Other"] || 0) * scale,
+  });
+
+  const impliedBurnhamUplift = labBlend - wardLab;
+  const impliedReformContraction = wardReform - reformBlend;
+
   return {
     name: "Burnham stands",
     central,
     ranked: rankByShare(central),
+    inputs: {
+      survation_labour: survation["Labour"],
+      survation_reform: survation["Reform UK"],
+      britain_elects_labour: be["Labour"],
+      britain_elects_reform: be["Reform UK"],
+      blend_method: "50/50 mean for Lab and Reform; Survation minor-party splits scaled to residual.",
+    },
     cross_check: {
       ward_baseline_labour: wardLab,
-      survation_burnham_labour: survation["Labour"],
-      implied_burnham_personal_vote_uplift_pp: impliedBurnhamUplift,
       ward_baseline_reform: wardReform,
-      survation_burnham_reform: survation["Reform UK"],
+      blended_labour: labBlend,
+      blended_reform: reformBlend,
+      implied_burnham_personal_vote_uplift_pp: impliedBurnhamUplift,
       implied_reform_contraction_pp: impliedReformContraction,
       burnham_wigan_mayoral_uplift_pp: BURNHAM_MAYORAL.burnham_to_national_lab_uplift_wigan,
       uplift_calibration_note:
-        "Survation-implied uplift (~20.7pp) is 78% of the observed Wigan mayoral uplift (26.5pp), which is the expected discount for a partisan Westminster contest vs an executive mayoral race.",
+        "Blended-forecast implied uplift (~17.7pp Lab) sits between Survation's 20.7pp and Britain Elects' 14.7pp, both well inside the observed Wigan mayoral over-performance (+26.5pp). The Westminster discount factor (vs mayoral) lands at ~67% on the blend.",
     },
     confidence_interval_pp: 6.0,
   };
@@ -440,9 +505,14 @@ function build() {
     inputs: {
       ge2024_baseline: ge2024,
       ward_signal_2026_05_07: wardSignal,
-      survation_poll_2026_05_15: SURVATION_2026_05_15,
+      survation_forecast_2026_05_15: SURVATION_2026_05_15,
+      britain_elects_forecast_2026_05_15: BRITAIN_ELECTS_2026_05_15,
       burnham_mayoral_baseline: BURNHAM_MAYORAL,
       ward_aggregate_reform_lead_pp: labReformAggregate,
+      ward_count_discrepancy_note:
+        "Our ward signal aggregates 9 Wigan wards inside Makerfield (post-2023 Wigan boundary review). Survation's note references 8 wards — that's the pre-2023 layout, before Hindley split into Hindley + Hindley Green. Survation says Reform won 7 of 8; we observe Reform won all 9 on the new boundaries.",
+      no_published_constituency_poll_yet:
+        "As of 16 May 2026 no fieldwork-based Makerfield constituency poll has been published. Both anchors above are forecasts that transfer national or comparable-by-election data onto the seat.",
     },
     historical_anchor: HISTORY,
     methodology: [
@@ -488,41 +558,48 @@ function build() {
       },
       {
         step: 5,
-        name: "Survation 14-15 May 2026 by-election poll",
+        name: "Survation 15 May 2026 pre-poll forecast",
         description:
-          "Survation MRP-conditioned constituency poll, n=708, fielded immediately after the resignation. Two scenarios: Burnham stands → Lab 45 / Ref 42 (3pp Lab lead); Burnham withdraws → Lab 27 / Ref 53 (26pp Ref lead). Pollster-assigned scenario probabilities: 0.67 / 0.33.",
+          "NB: Survation explicitly state 'this is a pre-poll forecast, not a poll' — no Makerfield fieldwork has been done. Burnham effect transferred from Survation's Gorton & Denton post-by-election poll (fieldwork 9 March 2026, n=501) and re-weighted for Makerfield's older, more White British, more Leave-voting electorate. Two scenarios from 10,000 simulations: Burnham stands → Lab 45 / Ref 42 (3pp Lab lead, P[Lab wins]=0.67); Burnham withdraws → Lab 27 / Ref 53 (26pp Ref lead, P[Lab wins]≈0).",
         data: SURVATION_2026_05_15,
       },
       {
         step: 6,
-        name: "Burnham-on-ballot probability bump",
+        name: "Britain Elects 15 May 2026 adjusted forecast",
         description:
-          "Post-NEC clearance (15 May 2026) and Burnham's same-day acceptance, the probability Burnham appears on the ballot is materially higher than Survation's 0.67. Set at 0.85 — would only fall back if a fresh Code of Conduct issue surfaced or Burnham declined to formally resign as GM mayor (statutorily required within 6 weeks of taking up a Commons seat).",
-        data: { burnham_on_ballot_probability: BURNHAM_ON_BALLOT_PROBABILITY },
+          "Ben Walker (Britain Elects / Britain Predicts) published a second adjusted forecast on 15 May. Method: GE2024 baseline + North West regional Burnham favourability (+20pp uplift over national; 50-60% in GM vs 30-40% nationally). Burnham takes ~5pp off Reform and ~4pp off Green. Result with Burnham as Labour candidate: Lab 39 / Ref 36 — same 3pp Lab lead as Survation but 6pp lower absolute levels for both major parties (implying a larger minor-party residual).",
+        data: BRITAIN_ELECTS_2026_05_15,
       },
       {
         step: 7,
+        name: "Burnham-on-ballot probability (separate from P[Lab wins | Burnham])",
+        description:
+          "The two quantities are distinct: Survation's 0.67 is P[Labour wins | Burnham stands]; we need P[Burnham appears on the ballot]. Post-NEC clearance (15 May 2026), Burnham's same-day acceptance, and Downing Street's confirmation of no block, we set the latter at 0.85. Would only fall back on a fresh Code-of-Conduct issue or Burnham declining to formally resign as GM mayor (statutorily required within 6 weeks of taking up a Commons seat).",
+        data: { burnham_on_ballot_probability: BURNHAM_ON_BALLOT_PROBABILITY },
+      },
+      {
+        step: 8,
         name: "Restore Britain entry effect",
         description:
           "Rupert Lowe's Restore Britain (formed November 2025) will field its first Westminster candidate. Modelled as 1-4% of the vote drawn principally from Reform's right flank. Already incorporated in Survation's two scenarios; no further adjustment applied.",
         data: { expected_share_band: [0.01, 0.04] },
       },
       {
-        step: 8,
-        name: "Scenario A — Burnham stands",
+        step: 9,
+        name: "Scenario A — Burnham stands (Survation + Britain Elects blend)",
         description:
-          "Anchored on Survation Burnham scenario. Cross-checked against ward baseline + Burnham uplift. ±6.0pp 1-sigma uncertainty on the winning margin.",
+          "Major-party shares are a 50/50 mean of the two published forecasts (Survation Lab 45 / Ref 42; Britain Elects Lab 39 / Ref 36). Minor-party splits taken from Survation and scaled to the residual. ±6.0pp 1-sigma uncertainty on the winning margin.",
         data: scenarioA,
       },
       {
-        step: 9,
+        step: 10,
         name: "Scenario B — Burnham withdraws (contingency)",
         description:
-          "Anchored on Survation non-Burnham scenario. Reform ceiling (~53%) consistent with the 1 May ward result (50.2%) plus by-election protest amplification. ±8.0pp 1-sigma.",
+          "Anchored on Survation non-Burnham scenario (Britain Elects didn't publish one). Reform ceiling (~53%) consistent with the 1 May ward result (50.2%) plus by-election protest amplification. ±8.0pp 1-sigma.",
         data: scenarioB,
       },
       {
-        step: 10,
+        step: 11,
         name: "Probability-weighted blend",
         description:
           "Final central forecast = 0.85 × Scenario A + 0.15 × Scenario B, renormalised.",
