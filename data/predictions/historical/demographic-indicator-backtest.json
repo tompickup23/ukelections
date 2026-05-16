@@ -1,0 +1,3973 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-05-16T20:36:07.754Z",
+  "summary": {
+    "n_councils_2025": 24,
+    "n_councils_2026": 136,
+    "predictors": [
+      "imd",
+      "white_british",
+      "asian",
+      "no_quals",
+      "degree",
+      "retired"
+    ],
+    "parties": [
+      "Reform UK",
+      "Labour",
+      "Conservative",
+      "Liberal Democrats",
+      "Green Party"
+    ]
+  },
+  "per_party": {
+    "Reform UK": {
+      "regression_2025": {
+        "n_councils": 23,
+        "mean_share": 0.3112,
+        "single_predictor_pearson": {
+          "imd": -0.16,
+          "white_british": 0.406,
+          "asian": -0.382,
+          "no_quals": 0.905,
+          "degree": -0.896,
+          "retired": 0.277
+        },
+        "coefficients": {
+          "intercept": 0.4096,
+          "imd": 0.0044,
+          "white_british": 0.0118,
+          "asian": 0.4759,
+          "no_quals": 0.982,
+          "degree": -1.014
+        },
+        "r_squared": 0.875
+      },
+      "regression_2026": {
+        "n_councils": 136,
+        "mean_share": 0.267,
+        "single_predictor_pearson": {
+          "imd": -0.137,
+          "white_british": 0.711,
+          "asian": -0.394,
+          "no_quals": 0.594,
+          "degree": -0.853,
+          "retired": 0.685
+        },
+        "coefficients": {
+          "intercept": 0.0858,
+          "imd": 0.0094,
+          "white_british": 0.2059,
+          "asian": -0.0242,
+          "no_quals": 0.9156,
+          "degree": -0.4732
+        },
+        "r_squared": 0.804
+      },
+      "stability": {
+        "no_quals_2025": 0.905,
+        "no_quals_2026": 0.594,
+        "no_quals_stability": 0.689,
+        "r2_2025": 0.875,
+        "r2_2026": 0.804
+      }
+    },
+    "Labour": {
+      "regression_2025": {
+        "n_councils": 23,
+        "mean_share": 0.1472,
+        "single_predictor_pearson": {
+          "imd": -0.287,
+          "white_british": 0.027,
+          "asian": -0.079,
+          "no_quals": 0.779,
+          "degree": -0.555,
+          "retired": -0.109
+        },
+        "coefficients": {
+          "intercept": -1.0577,
+          "imd": -0.0043,
+          "white_british": 0.0602,
+          "asian": 0.0324,
+          "no_quals": 4.1412,
+          "degree": 1.3984
+        },
+        "r_squared": 0.773
+      },
+      "regression_2026": {
+        "n_councils": 136,
+        "mean_share": 0.1944,
+        "single_predictor_pearson": {
+          "imd": -0.638,
+          "white_british": -0.463,
+          "asian": 0.242,
+          "no_quals": 0.2,
+          "degree": 0.18,
+          "retired": -0.562
+        },
+        "coefficients": {
+          "intercept": 0.6023,
+          "imd": -0.0468,
+          "white_british": -0.1687,
+          "asian": -0.2153,
+          "no_quals": -0.3568,
+          "degree": 0.1258
+        },
+        "r_squared": 0.593
+      },
+      "stability": {
+        "no_quals_2025": 0.779,
+        "no_quals_2026": 0.2,
+        "no_quals_stability": 0.421,
+        "r2_2025": 0.773,
+        "r2_2026": 0.593
+      }
+    },
+    "Conservative": {
+      "regression_2025": {
+        "n_councils": 23,
+        "mean_share": 0.2316,
+        "single_predictor_pearson": {
+          "imd": -0.025,
+          "white_british": -0.378,
+          "asian": 0.424,
+          "no_quals": -0.443,
+          "degree": 0.369,
+          "retired": -0.157
+        },
+        "coefficients": {
+          "intercept": 1.3566,
+          "imd": 0.0041,
+          "white_british": -0.2578,
+          "asian": 0.6277,
+          "no_quals": -2.7741,
+          "degree": -1.4778
+        },
+        "r_squared": 0.392
+      },
+      "regression_2026": {
+        "n_councils": 136,
+        "mean_share": 0.1829,
+        "single_predictor_pearson": {
+          "imd": 0.497,
+          "white_british": -0.113,
+          "asian": 0.04,
+          "no_quals": -0.253,
+          "degree": 0.137,
+          "retired": 0.075
+        },
+        "coefficients": {
+          "intercept": 0.2702,
+          "imd": 0.0553,
+          "white_british": -0.3937,
+          "asian": -0.3399,
+          "no_quals": 0.3862,
+          "degree": -0.4494
+        },
+        "r_squared": 0.41
+      },
+      "stability": {
+        "no_quals_2025": -0.443,
+        "no_quals_2026": -0.253,
+        "no_quals_stability": 0.81,
+        "r2_2025": 0.392,
+        "r2_2026": 0.41
+      }
+    },
+    "Liberal Democrats": {
+      "regression_2025": {
+        "n_councils": 23,
+        "mean_share": 0.1692,
+        "single_predictor_pearson": {
+          "imd": 0.309,
+          "white_british": -0.147,
+          "asian": 0.142,
+          "no_quals": -0.841,
+          "degree": 0.747,
+          "retired": -0.083
+        },
+        "coefficients": {
+          "intercept": 0.4672,
+          "imd": 0.0001,
+          "white_british": 0.0425,
+          "asian": -0.8603,
+          "no_quals": -2.7723,
+          "degree": 0.6012
+        },
+        "r_squared": 0.762
+      },
+      "regression_2026": {
+        "n_councils": 134,
+        "mean_share": 0.1364,
+        "single_predictor_pearson": {
+          "imd": 0.609,
+          "white_british": 0.104,
+          "asian": -0.129,
+          "no_quals": -0.583,
+          "degree": 0.391,
+          "retired": 0.095
+        },
+        "coefficients": {
+          "intercept": -0.4327,
+          "imd": 0.0301,
+          "white_british": 0.2509,
+          "asian": 0.2371,
+          "no_quals": 0.0291,
+          "degree": 0.5982
+        },
+        "r_squared": 0.454
+      },
+      "stability": {
+        "no_quals_2025": -0.841,
+        "no_quals_2026": -0.583,
+        "no_quals_stability": 0.742,
+        "r2_2025": 0.762,
+        "r2_2026": 0.454
+      }
+    },
+    "Green Party": {
+      "regression_2025": {
+        "n_councils": 23,
+        "mean_share": 0.0821,
+        "single_predictor_pearson": {
+          "imd": 0.172,
+          "white_british": -0.272,
+          "asian": 0.127,
+          "no_quals": -0.198,
+          "degree": 0.25,
+          "retired": -0.31
+        },
+        "coefficients": {
+          "intercept": 0.4375,
+          "imd": 0.0054,
+          "white_british": -0.3448,
+          "asian": -0.4501,
+          "no_quals": -0.2222,
+          "degree": -0.1121
+        },
+        "r_squared": 0.194
+      },
+      "regression_2026": {
+        "n_councils": 136,
+        "mean_share": 0.1713,
+        "single_predictor_pearson": {
+          "imd": -0.402,
+          "white_british": -0.394,
+          "asian": 0.148,
+          "no_quals": -0.085,
+          "degree": 0.33,
+          "retired": -0.519
+        },
+        "coefficients": {
+          "intercept": 0.7719,
+          "imd": -0.0455,
+          "white_british": -0.1143,
+          "asian": -0.1244,
+          "no_quals": -1.3847,
+          "degree": -0.046
+        },
+        "r_squared": 0.45
+      },
+      "stability": {
+        "no_quals_2025": -0.198,
+        "no_quals_2026": -0.085,
+        "no_quals_stability": 0.887,
+        "r2_2025": 0.194,
+        "r2_2026": 0.45
+      }
+    }
+  },
+  "predictive_backtest_2025_to_2026": {
+    "Reform UK": {
+      "n_councils": 136,
+      "mae_pp": 8.42,
+      "correlation": 0.676,
+      "rmse_pp": 11.73,
+      "fit_r2": 0.008
+    },
+    "Labour": {
+      "n_councils": 136,
+      "mae_pp": 7.74,
+      "correlation": 0.56,
+      "rmse_pp": 9.55,
+      "fit_r2": 0.066
+    },
+    "Conservative": {
+      "n_councils": 136,
+      "mae_pp": 11.46,
+      "correlation": 0.259,
+      "rmse_pp": 14.22,
+      "fit_r2": -0.939
+    },
+    "Liberal Democrats": {
+      "n_councils": 134,
+      "mae_pp": 12.19,
+      "correlation": 0.534,
+      "rmse_pp": 16.78,
+      "fit_r2": -0.951
+    },
+    "Green Party": {
+      "n_councils": 136,
+      "mae_pp": 7.78,
+      "correlation": 0.368,
+      "rmse_pp": 10.54,
+      "fit_r2": -0.375
+    }
+  },
+  "best_indicator_per_party": {
+    "Reform UK": {
+      "predictor": "degree",
+      "pearson_r": -0.853,
+      "direction": "negative"
+    },
+    "Labour": {
+      "predictor": "imd",
+      "pearson_r": -0.638,
+      "direction": "negative"
+    },
+    "Conservative": {
+      "predictor": "imd",
+      "pearson_r": 0.497,
+      "direction": "positive"
+    },
+    "Liberal Democrats": {
+      "predictor": "imd",
+      "pearson_r": 0.609,
+      "direction": "positive"
+    },
+    "Green Party": {
+      "predictor": "retired",
+      "pearson_r": -0.519,
+      "direction": "negative"
+    }
+  },
+  "council_panel_2025": [
+    {
+      "slug": "buckinghamshire",
+      "ward_count": 49,
+      "shares": {
+        "Conservative": 0.3141,
+        "Labour": 0.0959,
+        "Reform UK": 0.1966,
+        "Independent": 0.0956,
+        "Liberal Democrats": 0.2641,
+        "Green Party": 0.0326,
+        "Other": 0.0011
+      },
+      "demographics": {
+        "population": 2212276,
+        "imd": 0,
+        "white_british": 0.6821,
+        "asian": 0.1414,
+        "no_quals": 0.1378,
+        "degree": 0.4095,
+        "retired": 0.2154
+      }
+    },
+    {
+      "slug": "cambridgeshire",
+      "ward_count": 59,
+      "shares": {
+        "Green Party": 0.104,
+        "Labour": 0.1318,
+        "Reform UK": 0.2299,
+        "Conservative": 0.2373,
+        "Liberal Democrats": 0.2741,
+        "Independent": 0.0226,
+        "Other": 0.0003
+      },
+      "demographics": {
+        "population": 2715240,
+        "imd": 6.984,
+        "white_british": 0.7423,
+        "asian": 0.064,
+        "no_quals": 0.1512,
+        "degree": 0.3975,
+        "retired": 0.2118
+      }
+    },
+    {
+      "slug": "cornwall",
+      "ward_count": 87,
+      "shares": {
+        "Liberal Democrats": 0.2445,
+        "Reform UK": 0.2905,
+        "Conservative": 0.1572,
+        "Green Party": 0.0389,
+        "Independent": 0.137,
+        "Other": 0.0402,
+        "Labour": 0.0917
+      },
+      "demographics": {
+        "population": 2281152,
+        "imd": 4.543,
+        "white_british": 0.9252,
+        "asian": 0.0075,
+        "no_quals": 0.1635,
+        "degree": 0.3048,
+        "retired": 0.2874
+      }
+    },
+    {
+      "slug": "county-durham",
+      "ward_count": 51,
+      "shares": {
+        "Reform UK": 0.4072,
+        "Independent": 0.1302,
+        "Labour": 0.2278,
+        "Green Party": 0.0368,
+        "Conservative": 0.0628,
+        "Liberal Democrats": 0.1197,
+        "Other": 0.0154
+      },
+      "demographics": {
+        "population": 2088252,
+        "imd": 4.262,
+        "white_british": 0.94,
+        "asian": 0.0163,
+        "no_quals": 0.2105,
+        "degree": 0.2666,
+        "retired": 0.2566
+      }
+    },
+    {
+      "slug": "derbyshire",
+      "ward_count": 64,
+      "shares": {
+        "Reform UK": 0.3677,
+        "Labour": 0.2016,
+        "Conservative": 0.2102,
+        "Green Party": 0.0866,
+        "Liberal Democrats": 0.0874,
+        "Independent": 0.041,
+        "Other": 0.0055
+      },
+      "demographics": {
+        "population": 3178612,
+        "imd": 6.005,
+        "white_british": 0.9259,
+        "asian": 0.0167,
+        "no_quals": 0.189,
+        "degree": 0.293,
+        "retired": 0.2621
+      }
+    },
+    {
+      "slug": "devon",
+      "ward_count": 58,
+      "shares": {
+        "Reform UK": 0.2724,
+        "Labour": 0.0786,
+        "Liberal Democrats": 0.2803,
+        "Green Party": 0.1013,
+        "Conservative": 0.2192,
+        "Independent": 0.0461,
+        "Other": 0.002
+      },
+      "demographics": {
+        "population": 3246432,
+        "imd": 6.167,
+        "white_british": 0.9116,
+        "asian": 0.0177,
+        "no_quals": 0.1559,
+        "degree": 0.3282,
+        "retired": 0.2894
+      }
+    },
+    {
+      "slug": "doncaster",
+      "ward_count": 21,
+      "shares": {
+        "Reform UK": 0.4055,
+        "Labour": 0.3361,
+        "Green Party": 0.0464,
+        "Conservative": 0.1421,
+        "Liberal Democrats": 0.02,
+        "Other": 0.0276,
+        "Independent": 0.0223
+      },
+      "demographics": {
+        "population": 1232348,
+        "imd": 3.954,
+        "white_british": 0.8304,
+        "asian": 0.0316,
+        "no_quals": 0.2469,
+        "degree": 0.2263,
+        "retired": 0.2321
+      }
+    },
+    {
+      "slug": "gloucestershire",
+      "ward_count": 55,
+      "shares": {
+        "Conservative": 0.2078,
+        "Reform UK": 0.2522,
+        "Liberal Democrats": 0.2723,
+        "Labour": 0.085,
+        "Green Party": 0.1489,
+        "Independent": 0.0322,
+        "Other": 0.0015
+      },
+      "demographics": {
+        "population": 2580384,
+        "imd": 6.815,
+        "white_british": 0.8624,
+        "asian": 0.0308,
+        "no_quals": 0.1521,
+        "degree": 0.3552,
+        "retired": 0.2475
+      }
+    },
+    {
+      "slug": "hertfordshire",
+      "ward_count": 78,
+      "shares": {
+        "Liberal Democrats": 0.2597,
+        "Conservative": 0.2593,
+        "Reform UK": 0.24,
+        "Independent": 0.0093,
+        "Green Party": 0.0926,
+        "Labour": 0.1359,
+        "Other": 0.0032
+      },
+      "demographics": {
+        "population": 4795328,
+        "imd": 7.262,
+        "white_british": 0.6725,
+        "asian": 0.0995,
+        "no_quals": 0.1468,
+        "degree": 0.3944,
+        "retired": 0.1982
+      }
+    },
+    {
+      "slug": "isles-of-scilly",
+      "ward_count": 1,
+      "shares": {
+        "Independent": 1
+      },
+      "demographics": {
+        "population": 8220,
+        "imd": 7,
+        "white_british": 0.9068,
+        "asian": 0.0095,
+        "no_quals": 0.1231,
+        "degree": 0.3786,
+        "retired": 0.2672
+      }
+    },
+    {
+      "slug": "kent",
+      "ward_count": 72,
+      "shares": {
+        "Reform UK": 0.3699,
+        "Conservative": 0.216,
+        "Labour": 0.131,
+        "Green Party": 0.1381,
+        "Liberal Democrats": 0.1183,
+        "Independent": 0.0215,
+        "Other": 0.0053
+      },
+      "demographics": {
+        "population": 6303876,
+        "imd": 5.478,
+        "white_british": 0.8068,
+        "asian": 0.0488,
+        "no_quals": 0.1796,
+        "degree": 0.3049,
+        "retired": 0.2352
+      }
+    },
+    {
+      "slug": "lancashire",
+      "ward_count": 82,
+      "shares": {
+        "Reform UK": 0.3569,
+        "Labour": 0.1892,
+        "Conservative": 0.2115,
+        "Green Party": 0.0838,
+        "Independent": 0.0546,
+        "Liberal Democrats": 0.0901,
+        "Other": 0.0138
+      },
+      "demographics": {
+        "population": 4941208,
+        "imd": 5.241,
+        "white_british": 0.829,
+        "asian": 0.0919,
+        "no_quals": 0.188,
+        "degree": 0.3045,
+        "retired": 0.2472
+      }
+    },
+    {
+      "slug": "leicestershire",
+      "ward_count": 53,
+      "shares": {
+        "Reform UK": 0.3249,
+        "Labour": 0.1173,
+        "Conservative": 0.2846,
+        "Liberal Democrats": 0.1617,
+        "Green Party": 0.0918,
+        "Independent": 0.0189,
+        "Other": 0.0008
+      },
+      "demographics": {
+        "population": 2849384,
+        "imd": 7.395,
+        "white_british": 0.8104,
+        "asian": 0.0938,
+        "no_quals": 0.1677,
+        "degree": 0.3197,
+        "retired": 0.2458
+      }
+    },
+    {
+      "slug": "lincolnshire",
+      "ward_count": 70,
+      "shares": {
+        "Reform UK": 0.3945,
+        "Green Party": 0.034,
+        "Conservative": 0.2734,
+        "Labour": 0.1083,
+        "Liberal Democrats": 0.0927,
+        "Independent": 0.0943,
+        "Other": 0.0029
+      },
+      "demographics": {
+        "population": 3073616,
+        "imd": 5.63,
+        "white_british": 0.8757,
+        "asian": 0.016,
+        "no_quals": 0.2051,
+        "degree": 0.2559,
+        "retired": 0.2723
+      }
+    },
+    {
+      "slug": "north-northamptonshire",
+      "ward_count": 30,
+      "shares": {
+        "Reform UK": 0.3503,
+        "Green Party": 0.154,
+        "Conservative": 0.2595,
+        "Labour": 0.1756,
+        "Liberal Democrats": 0.0408,
+        "Independent": 0.0195,
+        "Other": 0.0003
+      },
+      "demographics": {
+        "population": 1437976,
+        "imd": 0,
+        "white_british": 0.7632,
+        "asian": 0.0476,
+        "no_quals": 0.1997,
+        "degree": 0.2669,
+        "retired": 0.2143
+      }
+    },
+    {
+      "slug": "northumberland",
+      "ward_count": 69,
+      "shares": {
+        "Conservative": 0.2884,
+        "Reform UK": 0.2925,
+        "Labour": 0.223,
+        "Green Party": 0.0468,
+        "Liberal Democrats": 0.0658,
+        "Independent": 0.0814,
+        "Other": 0.0021
+      },
+      "demographics": {
+        "population": 1282328,
+        "imd": 5.401,
+        "white_british": 0.9267,
+        "asian": 0.0233,
+        "no_quals": 0.1797,
+        "degree": 0.3061,
+        "retired": 0.3003
+      }
+    },
+    {
+      "slug": "nottinghamshire",
+      "ward_count": 55,
+      "shares": {
+        "Reform UK": 0.3628,
+        "Labour": 0.1935,
+        "Conservative": 0.2086,
+        "Liberal Democrats": 0.0551,
+        "Green Party": 0.0606,
+        "Independent": 0.0956,
+        "Other": 0.0238
+      },
+      "demographics": {
+        "population": 3299304,
+        "imd": 5.929,
+        "white_british": 0.865,
+        "asian": 0.0327,
+        "no_quals": 0.1941,
+        "degree": 0.2984,
+        "retired": 0.2537
+      }
+    },
+    {
+      "slug": "oxfordshire",
+      "ward_count": 69,
+      "shares": {
+        "Liberal Democrats": 0.3007,
+        "Conservative": 0.2133,
+        "Green Party": 0.1192,
+        "Labour": 0.1283,
+        "Reform UK": 0.178,
+        "Independent": 0.0503,
+        "Other": 0.0102
+      },
+      "demographics": {
+        "population": 2901196,
+        "imd": 7.651,
+        "white_british": 0.7363,
+        "asian": 0.0703,
+        "no_quals": 0.1359,
+        "degree": 0.4189,
+        "retired": 0.1997
+      }
+    },
+    {
+      "slug": "shropshire",
+      "ward_count": 72,
+      "shares": {
+        "Liberal Democrats": 0.3419,
+        "Reform UK": 0.2742,
+        "Labour": 0.0887,
+        "Conservative": 0.1989,
+        "Green Party": 0.0649,
+        "Other": 0.012,
+        "Independent": 0.0193
+      },
+      "demographics": {
+        "population": 1294360,
+        "imd": 5.891,
+        "white_british": 0.9247,
+        "asian": 0.0145,
+        "no_quals": 0.1675,
+        "degree": 0.3245,
+        "retired": 0.2841
+      }
+    },
+    {
+      "slug": "staffordshire",
+      "ward_count": 62,
+      "shares": {
+        "Reform UK": 0.4157,
+        "Labour": 0.1608,
+        "Conservative": 0.2775,
+        "Liberal Democrats": 0.0511,
+        "Independent": 0.0352,
+        "Green Party": 0.0571,
+        "Other": 0.0025
+      },
+      "demographics": {
+        "population": 3504472,
+        "imd": 6.327,
+        "white_british": 0.8834,
+        "asian": 0.0379,
+        "no_quals": 0.1936,
+        "degree": 0.289,
+        "retired": 0.2597
+      }
+    },
+    {
+      "slug": "warwickshire",
+      "ward_count": 57,
+      "shares": {
+        "Conservative": 0.2514,
+        "Reform UK": 0.3064,
+        "Labour": 0.1301,
+        "Liberal Democrats": 0.1741,
+        "Green Party": 0.1199,
+        "Other": 0.0108,
+        "Independent": 0.0073
+      },
+      "demographics": {
+        "population": 2387048,
+        "imd": 6.609,
+        "white_british": 0.79,
+        "asian": 0.0695,
+        "no_quals": 0.1691,
+        "degree": 0.3503,
+        "retired": 0.2376
+      }
+    },
+    {
+      "slug": "west-northamptonshire",
+      "ward_count": 35,
+      "shares": {
+        "Labour": 0.1957,
+        "Reform UK": 0.3307,
+        "Conservative": 0.2582,
+        "Green Party": 0.0631,
+        "Liberal Democrats": 0.1165,
+        "Other": 0.0027,
+        "Independent": 0.0332
+      },
+      "demographics": {
+        "population": 1702976,
+        "imd": 0,
+        "white_british": 0.7062,
+        "asian": 0.0659,
+        "no_quals": 0.1745,
+        "degree": 0.317,
+        "retired": 0.1998
+      }
+    },
+    {
+      "slug": "wiltshire",
+      "ward_count": 98,
+      "shares": {
+        "Conservative": 0.3213,
+        "Reform UK": 0.2218,
+        "Liberal Democrats": 0.3395,
+        "Green Party": 0.0309,
+        "Labour": 0.0353,
+        "Independent": 0.0505,
+        "Other": 0.0007
+      },
+      "demographics": {
+        "population": 2041568,
+        "imd": 7.007,
+        "white_british": 0.881,
+        "asian": 0.0269,
+        "no_quals": 0.1439,
+        "degree": 0.3409,
+        "retired": 0.2478
+      }
+    },
+    {
+      "slug": "worcestershire",
+      "ward_count": 53,
+      "shares": {
+        "Independent": 0.0418,
+        "Conservative": 0.2552,
+        "Reform UK": 0.3165,
+        "Labour": 0.1245,
+        "Green Party": 0.1363,
+        "Liberal Democrats": 0.121,
+        "Other": 0.0046
+      },
+      "demographics": {
+        "population": 2414592,
+        "imd": 6.171,
+        "white_british": 0.87,
+        "asian": 0.033,
+        "no_quals": 0.1806,
+        "degree": 0.3224,
+        "retired": 0.2614
+      }
+    }
+  ],
+  "council_panel_2026": [
+    {
+      "slug": "adur",
+      "ward_count": 14,
+      "shares": {
+        "Labour": 0.2566,
+        "Reform UK": 0.2929,
+        "Conservative": 0.1137,
+        "Green Party": 0.1842,
+        "Liberal Democrats": 0.0591,
+        "Independent": 0.0935
+      },
+      "demographics": {
+        "population": 258280,
+        "imd": 5.905,
+        "white_british": 0.8758,
+        "asian": 0.0225,
+        "no_quals": 0.195,
+        "degree": 0.2793,
+        "retired": 0.2708
+      }
+    },
+    {
+      "slug": "barking-and-dagenham",
+      "ward_count": 19,
+      "shares": {
+        "Labour": 0.3784,
+        "Green Party": 0.2058,
+        "Reform UK": 0.2689,
+        "Conservative": 0.1102,
+        "Liberal Democrats": 0.0232,
+        "Christian Peoples Alliance": 0.0014,
+        "Independent": 0.0105,
+        "Workers Party of Britain": 0.0016
+      },
+      "demographics": {
+        "population": 875472,
+        "imd": 2.682,
+        "white_british": 0.237,
+        "asian": 0.3116,
+        "no_quals": 0.2272,
+        "degree": 0.3332,
+        "retired": 0.1043
+      }
+    },
+    {
+      "slug": "barnet",
+      "ward_count": 24,
+      "shares": {
+        "Labour": 0.2746,
+        "Conservative": 0.3538,
+        "Reform UK": 0.1489,
+        "Green Party": 0.1628,
+        "Liberal Democrats": 0.0453,
+        "Rejoin EU": 0.0048,
+        "Independent": 0.0093,
+        "Trade Unionist and Socialist Coalition": 0.0004
+      },
+      "demographics": {
+        "population": 1557460,
+        "imd": 6.384,
+        "white_british": 0.3174,
+        "asian": 0.1873,
+        "no_quals": 0.1546,
+        "degree": 0.4895,
+        "retired": 0.1491
+      }
+    },
+    {
+      "slug": "barnsley",
+      "ward_count": 21,
+      "shares": {
+        "Reform UK": 0.4204,
+        "Labour": 0.3235,
+        "Green Party": 0.0631,
+        "Conservative": 0.045,
+        "Liberal Democrats": 0.123,
+        "English Democrats": 0.001,
+        "Social Democratic Party": 0.0018,
+        "Trade Unionist and Socialist Coalition": 0.0009,
+        "Independent": 0.0213
+      },
+      "demographics": {
+        "population": 12585,
+        "imd": 3.823,
+        "white_british": 0.8997,
+        "asian": 0.0102,
+        "no_quals": 0.1503,
+        "degree": 0.3915,
+        "retired": 0.3219
+      }
+    },
+    {
+      "slug": "basildon",
+      "ward_count": 14,
+      "shares": {
+        "Conservative": 0.2541,
+        "Reform UK": 0.4084,
+        "Green Party": 0.0825,
+        "Labour": 0.1522,
+        "Liberal Democrats": 0.0426,
+        "British Democratic Party": 0.0009,
+        "Independent": 0.0548,
+        "Trade Unionist and Socialist Coalition": 0.0045
+      },
+      "demographics": {
+        "population": 750356,
+        "imd": 5.2,
+        "white_british": 0.777,
+        "asian": 0.0478,
+        "no_quals": 0.208,
+        "degree": 0.2452,
+        "retired": 0.2062
+      }
+    },
+    {
+      "slug": "basingstoke-and-deane",
+      "ward_count": 18,
+      "shares": {
+        "Independent": 0.179,
+        "Reform UK": 0.2479,
+        "Conservative": 0.2117,
+        "Liberal Democrats": 0.1563,
+        "Labour": 0.109,
+        "Green Party": 0.0803,
+        "The All In Party": 0.0157
+      },
+      "demographics": {
+        "population": 740696,
+        "imd": 7.358,
+        "white_british": 0.7882,
+        "asian": 0.0697,
+        "no_quals": 0.1421,
+        "degree": 0.3525,
+        "retired": 0.2028
+      }
+    },
+    {
+      "slug": "bexley",
+      "ward_count": 17,
+      "shares": {
+        "Conservative": 0.3657,
+        "Reform UK": 0.3237,
+        "Labour": 0.1937,
+        "Green Party": 0.0731,
+        "Liberal Democrats": 0.0368,
+        "Trade Unionist and Socialist Coalition": 0.0009,
+        "Independent": 0.0052,
+        "Working for Sidcup": 0.0009
+      },
+      "demographics": {
+        "population": 985976,
+        "imd": 6.507,
+        "white_british": 0.569,
+        "asian": 0.1135,
+        "no_quals": 0.1821,
+        "degree": 0.3162,
+        "retired": 0.1983
+      }
+    },
+    {
+      "slug": "birmingham",
+      "ward_count": 43,
+      "shares": {
+        "Liberal Democrats": 0.0965,
+        "Reform UK": 0.1936,
+        "Green Party": 0.2216,
+        "Labour": 0.2016,
+        "Workers Party of Britain": 0.0165,
+        "Conservative": 0.1552,
+        "Trade Unionist and Socialist Coalition": 0.0009,
+        "Independent": 0.1044,
+        "Your Party": 0.0053,
+        "TUSC": 0.0001,
+        "Workers Party": 0.0044
+      },
+      "demographics": {
+        "population": 4579764,
+        "imd": 2.89,
+        "white_british": 0.373,
+        "asian": 0.3197,
+        "no_quals": 0.2419,
+        "degree": 0.2951,
+        "retired": 0.1545
+      }
+    },
+    {
+      "slug": "blackburn-with-darwen",
+      "ward_count": 17,
+      "shares": {
+        "Independent": 0.2418,
+        "Labour": 0.2332,
+        "Reform UK": 0.2956,
+        "Green Party": 0.1162,
+        "Conservative": 0.1085,
+        "Liberal Democrats": 0.0029,
+        "Workers Party of Britain": 0.0017
+      },
+      "demographics": {
+        "population": 619048,
+        "imd": 3.319,
+        "white_british": 0.5183,
+        "asian": 0.3956,
+        "no_quals": 0.2443,
+        "degree": 0.2667,
+        "retired": 0.1754
+      }
+    },
+    {
+      "slug": "bolton",
+      "ward_count": 20,
+      "shares": {
+        "Reform UK": 0.3257,
+        "Conservative": 0.1441,
+        "Green Party": 0.1762,
+        "Labour": 0.1952,
+        "Liberal Democrats": 0.074,
+        "Independent": 0.0517,
+        "Farnworth and Kearsley First Party": 0.0319,
+        "Advance UK": 0.0008,
+        "Trade Unionist and Socialist Coalition": 0.0005
+      },
+      "demographics": {
+        "population": 1183752,
+        "imd": 4.209,
+        "white_british": 0.6145,
+        "asian": 0.241,
+        "no_quals": 0.2288,
+        "degree": 0.2719,
+        "retired": 0.208
+      }
+    },
+    {
+      "slug": "bradford",
+      "ward_count": 29,
+      "shares": {
+        "Conservative": 0.1735,
+        "Green Party": 0.2136,
+        "Reform UK": 0.2256,
+        "Labour": 0.2146,
+        "Yorkshire Party": 0.0005,
+        "Liberal Democrats": 0.0302,
+        "UK Independence Party (UKIP)": 0.0001,
+        "Independent": 0.1407,
+        "Social Democratic Party": 0.0003,
+        "Trade Unionist and Socialist Coalition": 0.0003,
+        "Heritage Party": 0.0002,
+        "British Democratic Party": 0.0004
+      },
+      "demographics": {
+        "population": 2185732,
+        "imd": 3.629,
+        "white_british": 0.5279,
+        "asian": 0.3455,
+        "no_quals": 0.2437,
+        "degree": 0.2708,
+        "retired": 0.1847
+      }
+    },
+    {
+      "slug": "brentwood",
+      "ward_count": 13,
+      "shares": {
+        "Reform UK": 0.3701,
+        "Conservative": 0.2523,
+        "Liberal Democrats": 0.2428,
+        "Green Party": 0.071,
+        "Labour": 0.0566,
+        "Independent": 0.0073
+      },
+      "demographics": {
+        "population": 308224,
+        "imd": 8.022,
+        "white_british": 0.8011,
+        "asian": 0.0597,
+        "no_quals": 0.1509,
+        "degree": 0.354,
+        "retired": 0.2372
+      }
+    },
+    {
+      "slug": "bromley",
+      "ward_count": 22,
+      "shares": {
+        "Liberal Democrats": 0.1079,
+        "Conservative": 0.362,
+        "Green Party": 0.1188,
+        "Labour": 0.1697,
+        "Reform UK": 0.2055,
+        "Better Bromley": 0.0019,
+        "Chislehurst Matters": 0.0324,
+        "Independent": 0.0017
+      },
+      "demographics": {
+        "population": 1320028,
+        "imd": 7.107,
+        "white_british": 0.6033,
+        "asian": 0.0997,
+        "no_quals": 0.1383,
+        "degree": 0.4275,
+        "retired": 0.2086
+      }
+    },
+    {
+      "slug": "broxbourne",
+      "ward_count": 10,
+      "shares": {
+        "Conservative": 0.3958,
+        "Reform UK": 0.3349,
+        "Green Party": 0.1177,
+        "Labour": 0.112,
+        "Liberal Democrats": 0.0355,
+        "Trade Unionist and Socialist Coalition": 0.0041
+      },
+      "demographics": {
+        "population": 395932,
+        "imd": 5.911,
+        "white_british": 0.6152,
+        "asian": 0.0398,
+        "no_quals": 0.2086,
+        "degree": 0.2727,
+        "retired": 0.2031
+      }
+    },
+    {
+      "slug": "burnley",
+      "ward_count": 15,
+      "shares": {
+        "Independent": 0.1347,
+        "Reform UK": 0.4311,
+        "Labour": 0.1222,
+        "Liberal Democrats": 0.1178,
+        "Conservative": 0.109,
+        "Green Party": 0.0853
+      },
+      "demographics": {
+        "population": 378516,
+        "imd": 3.217,
+        "white_british": 0.7296,
+        "asian": 0.1703,
+        "no_quals": 0.2461,
+        "degree": 0.2422,
+        "retired": 0.214
+      }
+    },
+    {
+      "slug": "bury",
+      "ward_count": 16,
+      "shares": {
+        "Labour": 0.2682,
+        "Reform UK": 0.3038,
+        "Green Party": 0.1341,
+        "Conservative": 0.1356,
+        "Independent": 0.0559,
+        "English Democrats": 0.0024,
+        "Workers Party of Britain": 0.0253,
+        "Together for Bury": 0.01,
+        "Communist Party of Britain": 0.0006,
+        "Radcliffe First": 0.0622,
+        "Liberal Democrats": 0.002
+      },
+      "demographics": {
+        "population": 775520,
+        "imd": 5.217,
+        "white_british": 0.7358,
+        "asian": 0.1272,
+        "no_quals": 0.1862,
+        "degree": 0.3222,
+        "retired": 0.2191
+      }
+    },
+    {
+      "slug": "calderdale",
+      "ward_count": 18,
+      "shares": {
+        "Reform UK": 0.3624,
+        "Conservative": 0.0961,
+        "Green Party": 0.2031,
+        "Labour": 0.2216,
+        "Liberal Democrats": 0.0677,
+        "Workers Party of Britain": 0.0127,
+        "Independent": 0.0353,
+        "The Official Monster Raving Loony Party": 0.0013
+      },
+      "demographics": {
+        "population": 826504,
+        "imd": 4.477,
+        "white_british": 0.8094,
+        "asian": 0.117,
+        "no_quals": 0.1938,
+        "degree": 0.3065,
+        "retired": 0.2332
+      }
+    },
+    {
+      "slug": "cambridge",
+      "ward_count": 14,
+      "shares": {
+        "Green Party": 0.3261,
+        "Labour": 0.2533,
+        "Reform UK": 0.0921,
+        "Liberal Democrats": 0.2409,
+        "Conservative": 0.0783,
+        "Communist Party of Britain": 0.0008,
+        "Independent": 0.0086
+      },
+      "demographics": {
+        "population": 582680,
+        "imd": 6.609,
+        "white_british": 0.4774,
+        "asian": 0.1611,
+        "no_quals": 0.0979,
+        "degree": 0.5589,
+        "retired": 0.1188
+      }
+    },
+    {
+      "slug": "camden",
+      "ward_count": 20,
+      "shares": {
+        "Liberal Democrats": 0.1484,
+        "Conservative": 0.1408,
+        "Green Party": 0.2714,
+        "Labour": 0.3284,
+        "Reform UK": 0.0751,
+        "Independent": 0.001,
+        "National Housing Party United Kingdom": 0.0035,
+        "Camden People's Alliance": 0.0315
+      },
+      "demographics": {
+        "population": 840652,
+        "imd": 5.406,
+        "white_british": 0.3141,
+        "asian": 0.1817,
+        "no_quals": 0.1179,
+        "degree": 0.5739,
+        "retired": 0.108
+      }
+    },
+    {
+      "slug": "cannock-chase",
+      "ward_count": 12,
+      "shares": {
+        "Reform UK": 0.5357,
+        "Labour": 0.1353,
+        "Conservative": 0.169,
+        "Green Party": 0.1539,
+        "Trade Unionist and Socialist Coalition": 0.0007,
+        "Independent": 0.0054
+      },
+      "demographics": {
+        "population": 402056,
+        "imd": 5.233,
+        "white_british": 0.9381,
+        "asian": 0.012,
+        "no_quals": 0.2198,
+        "degree": 0.2272,
+        "retired": 0.2281
+      }
+    },
+    {
+      "slug": "cheltenham",
+      "ward_count": 20,
+      "shares": {
+        "Liberal Democrats": 0.4229,
+        "Green Party": 0.1918,
+        "Reform UK": 0.1935,
+        "Conservative": 0.1754,
+        "Labour": 0.0152,
+        "Heritage Party": 0.0002,
+        "Trade Unionist and Socialist Coalition": 0.0003,
+        "Christian Peoples Alliance": 0.0005
+      },
+      "demographics": {
+        "population": 475344,
+        "imd": 7.013,
+        "white_british": 0.8109,
+        "asian": 0.0447,
+        "no_quals": 0.135,
+        "degree": 0.4293,
+        "retired": 0.2255
+      }
+    },
+    {
+      "slug": "cherwell",
+      "ward_count": 16,
+      "shares": {
+        "Liberal Democrats": 0.2491,
+        "Conservative": 0.2174,
+        "Reform UK": 0.263,
+        "Green Party": 0.1501,
+        "Labour": 0.0901,
+        "Independent": 0.0282,
+        "Animal Welfare Party": 0.0016,
+        "Social Democratic Party": 0.0006
+      },
+      "demographics": {
+        "population": 643944,
+        "imd": 6.86,
+        "white_british": 0.735,
+        "asian": 0.0696,
+        "no_quals": 0.1602,
+        "degree": 0.351,
+        "retired": 0.1973
+      }
+    },
+    {
+      "slug": "chorley",
+      "ward_count": 14,
+      "shares": {
+        "Labour": 0.3333,
+        "Reform UK": 0.3593,
+        "Conservative": 0.1601,
+        "Green Party": 0.1284,
+        "Trade Unionist and Socialist Coalition": 0.0015,
+        "Liberal Democrats": 0.0169,
+        "Independent": 0.0006
+      },
+      "demographics": {
+        "population": 470948,
+        "imd": 6.424,
+        "white_british": 0.9227,
+        "asian": 0.0194,
+        "no_quals": 0.1598,
+        "degree": 0.3386,
+        "retired": 0.2465
+      }
+    },
+    {
+      "slug": "city-of-lincoln",
+      "ward_count": 11,
+      "shares": {
+        "Liberal Democrats": 0.1343,
+        "Green Party": 0.1863,
+        "Reform UK": 0.3051,
+        "Labour": 0.2307,
+        "Independent": 0.0113,
+        "Conservative": 0.1294,
+        "Trade Unionist and Socialist Coalition": 0.002,
+        "The Liberal Party": 0.0008
+      },
+      "demographics": {
+        "population": 415256,
+        "imd": 4.333,
+        "white_british": 0.7961,
+        "asian": 0.0335,
+        "no_quals": 0.176,
+        "degree": 0.263,
+        "retired": 0.1693
+      }
+    },
+    {
+      "slug": "colchester",
+      "ward_count": 17,
+      "shares": {
+        "Labour": 0.1427,
+        "Reform UK": 0.293,
+        "Green Party": 0.1567,
+        "Conservative": 0.2123,
+        "Liberal Democrats": 0.1877,
+        "Independent": 0.0076
+      },
+      "demographics": {
+        "population": 770880,
+        "imd": 6.171,
+        "white_british": 0.7661,
+        "asian": 0.0597,
+        "no_quals": 0.1534,
+        "degree": 0.3228,
+        "retired": 0.2079
+      }
+    },
+    {
+      "slug": "coventry",
+      "ward_count": 18,
+      "shares": {
+        "Reform UK": 0.2943,
+        "Conservative": 0.1653,
+        "Labour": 0.2932,
+        "Green Party": 0.1997,
+        "Independent": 0.0054,
+        "Liberal Democrats": 0.0225,
+        "Coventry Citizens Party": 0.0038,
+        "Trade Unionist and Socialist Coalition": 0.009,
+        "Social Democratic Party": 0.0009,
+        "Workers Party of Britain": 0.0058
+      },
+      "demographics": {
+        "population": 1381272,
+        "imd": 4.692,
+        "white_british": 0.4865,
+        "asian": 0.1864,
+        "no_quals": 0.196,
+        "degree": 0.3043,
+        "retired": 0.1722
+      }
+    },
+    {
+      "slug": "crawley",
+      "ward_count": 12,
+      "shares": {
+        "Reform UK": 0.3342,
+        "Labour": 0.2474,
+        "Green Party": 0.1518,
+        "Conservative": 0.2075,
+        "Liberal Democrats": 0.0463,
+        "Trade Unionist and Socialist Coalition": 0.0039,
+        "Independent": 0.0088
+      },
+      "demographics": {
+        "population": 473876,
+        "imd": 5.5,
+        "white_british": 0.5677,
+        "asian": 0.1619,
+        "no_quals": 0.1784,
+        "degree": 0.2751,
+        "retired": 0.157
+      }
+    },
+    {
+      "slug": "croydon",
+      "ward_count": 28,
+      "shares": {
+        "Conservative": 0.2655,
+        "Labour": 0.263,
+        "Green Party": 0.23,
+        "Liberal Democrats": 0.09,
+        "Reform UK": 0.1392,
+        "Trade Unionist and Socialist Coalition": 0.0008,
+        "Independent": 0.0025,
+        "Workers Party of Britain": 0.0007,
+        "Taking The Initiative Party": 0.0068,
+        "Equality Party": 0.0004,
+        "Your Party": 0.0011
+      },
+      "demographics": {
+        "population": 1562988,
+        "imd": 5.023,
+        "white_british": 0.3275,
+        "asian": 0.1761,
+        "no_quals": 0.1615,
+        "degree": 0.4091,
+        "retired": 0.1541
+      }
+    },
+    {
+      "slug": "dudley",
+      "ward_count": 24,
+      "shares": {
+        "Reform UK": 0.4189,
+        "Conservative": 0.2194,
+        "Labour": 0.1609,
+        "Green Party": 0.1031,
+        "Liberal Democrats": 0.0755,
+        "The Black Country Party": 0.0155,
+        "Libertarian Party": 0.0003,
+        "Independent": 0.0054,
+        "Trade Unionist and Socialist Coalition": 0.0003,
+        "Freedom Alliance": 0.0006
+      },
+      "demographics": {
+        "population": 1293888,
+        "imd": 5.08,
+        "white_british": 0.7841,
+        "asian": 0.0967,
+        "no_quals": 0.2317,
+        "degree": 0.249,
+        "retired": 0.2409
+      }
+    },
+    {
+      "slug": "ealing",
+      "ward_count": 24,
+      "shares": {
+        "Labour": 0.3,
+        "Conservative": 0.177,
+        "Green Party": 0.1822,
+        "Reform UK": 0.1084,
+        "Liberal Democrats": 0.1664,
+        "Independent": 0.0598,
+        "Rejoin EU": 0.0043,
+        "Trade Unionist and Socialist Coalition": 0.0016,
+        "Social Democratic Party": 0.0005
+      },
+      "demographics": {
+        "population": 1468520,
+        "imd": 4.796,
+        "white_british": 0.215,
+        "asian": 0.2999,
+        "no_quals": 0.1802,
+        "degree": 0.4413,
+        "retired": 0.1286
+      }
+    },
+    {
+      "slug": "eastleigh",
+      "ward_count": 14,
+      "shares": {
+        "Independent": 0.0543,
+        "Reform UK": 0.2523,
+        "Liberal Democrats": 0.4119,
+        "Conservative": 0.1518,
+        "Green Party": 0.105,
+        "Trade Unionist and Socialist Coalition": 0.0006,
+        "Labour": 0.0242
+      },
+      "demographics": {
+        "population": 545872,
+        "imd": 8.065,
+        "white_british": 0.8672,
+        "asian": 0.0404,
+        "no_quals": 0.1371,
+        "degree": 0.3315,
+        "retired": 0.2333
+      }
+    },
+    {
+      "slug": "east-surrey",
+      "ward_count": 36,
+      "shares": {
+        "Independent": 0.0477,
+        "Liberal Democrats": 0.2937,
+        "Reform UK": 0.2146,
+        "Conservative": 0.2233,
+        "Green Party": 0.1174,
+        "Labour": 0.0339,
+        "Social Democratic Party": 0.0002,
+        "Residents Associations of Epsom and Ewell": 0.034,
+        "Hinchley Wood Residents": 0.0103,
+        "Nork & Tattenhams Residents' Associations": 0.0141,
+        "Heritage Party": 0.0001,
+        "The Molesey Residents Association": 0.007,
+        "The Walton Society": 0.0039
+      },
+      "demographics": {
+        "population": 2392052,
+        "imd": 8.085,
+        "white_british": 0.7892,
+        "asian": 0.0569,
+        "no_quals": 0.1232,
+        "degree": 0.4259,
+        "retired": 0.2255
+      }
+    },
+    {
+      "slug": "east-sussex",
+      "ward_count": 50,
+      "shares": {
+        "Reform UK": 0.3301,
+        "Conservative": 0.1691,
+        "Green Party": 0.1918,
+        "Liberal Democrats": 0.212,
+        "Labour": 0.0581,
+        "Independent": 0.0378,
+        "Trade Unionist and Socialist Coalition": 0.0004,
+        "UK Independence Party (UKIP)": 0.0005,
+        "Heritage Party": 0.0002
+      },
+      "demographics": {
+        "population": 2183252,
+        "imd": 5.726,
+        "white_british": 0.8721,
+        "asian": 0.022,
+        "no_quals": 0.1735,
+        "degree": 0.3125,
+        "retired": 0.29
+      }
+    },
+    {
+      "slug": "enfield",
+      "ward_count": 25,
+      "shares": {
+        "Conservative": 0.3536,
+        "Green Party": 0.1953,
+        "Labour": 0.2422,
+        "Reform UK": 0.1154,
+        "Liberal Democrats": 0.0612,
+        "Trade Unionist and Socialist Coalition": 0.0026,
+        "Independent": 0.029,
+        "Christian Peoples Alliance": 0.0004,
+        "Communist League Election Campaign": 0.0002
+      },
+      "demographics": {
+        "population": 1319948,
+        "imd": 4.383,
+        "white_british": 0.266,
+        "asian": 0.1106,
+        "no_quals": 0.2266,
+        "degree": 0.3605,
+        "retired": 0.1547
+      }
+    },
+    {
+      "slug": "epping-forest",
+      "ward_count": 18,
+      "shares": {
+        "Reform UK": 0.407,
+        "Green Party": 0.0537,
+        "Conservative": 0.2633,
+        "Liberal Democrats": 0.0899,
+        "Labour": 0.072,
+        "Independent": 0.1123,
+        "Trade Unionist and Socialist Coalition": 0.0001,
+        "English Democrats": 0.0017
+      },
+      "demographics": {
+        "population": 539840,
+        "imd": 6.628,
+        "white_british": 0.7056,
+        "asian": 0.0835,
+        "no_quals": 0.1887,
+        "degree": 0.3241,
+        "retired": 0.2178
+      }
+    },
+    {
+      "slug": "essex",
+      "ward_count": 77,
+      "shares": {
+        "Conservative": 0.2516,
+        "Reform UK": 0.374,
+        "Green Party": 0.0917,
+        "Liberal Democrats": 0.1147,
+        "Labour": 0.0846,
+        "Independent": 0.0635,
+        "Trade Unionist and Socialist Coalition": 0.0007,
+        "Advance UK": 0.0003,
+        "Residents for Uttlesford": 0.0126,
+        "English Democrats": 0.0002,
+        "Rochford District Residents": 0.0053,
+        "South Woodham Ferrers Residents Party": 0.0008
+      },
+      "demographics": {
+        "population": 6014100,
+        "imd": 6.336,
+        "white_british": 0.8238,
+        "asian": 0.0427,
+        "no_quals": 0.1883,
+        "degree": 0.2789,
+        "retired": 0.2395
+      }
+    },
+    {
+      "slug": "exeter",
+      "ward_count": 13,
+      "shares": {
+        "Labour": 0.2211,
+        "Reform UK": 0.2232,
+        "Green Party": 0.327,
+        "Conservative": 0.1095,
+        "Liberal Democrats": 0.1169,
+        "Independent": 0.0021,
+        "Trade Unionist and Socialist Coalition": 0.0002
+      },
+      "demographics": {
+        "population": 522820,
+        "imd": 6.392,
+        "white_british": 0.8091,
+        "asian": 0.0479,
+        "no_quals": 0.138,
+        "degree": 0.3466,
+        "retired": 0.1874
+      }
+    },
+    {
+      "slug": "fareham",
+      "ward_count": 16,
+      "shares": {
+        "Conservative": 0.3901,
+        "Reform UK": 0.2573,
+        "Liberal Democrats": 0.2002,
+        "Green Party": 0.097,
+        "Labour": 0.0554
+      },
+      "demographics": {
+        "population": 457920,
+        "imd": 8.329,
+        "white_british": 0.9207,
+        "asian": 0.0192,
+        "no_quals": 0.1382,
+        "degree": 0.334,
+        "retired": 0.292
+      }
+    },
+    {
+      "slug": "gateshead",
+      "ward_count": 22,
+      "shares": {
+        "Reform UK": 0.3705,
+        "Labour": 0.2726,
+        "Liberal Democrats": 0.2052,
+        "Green Party": 0.1355,
+        "Conservative": 0.0126,
+        "Independent": 0.0018,
+        "Trade Unionist and Socialist Coalition": 0.0017,
+        "Save Us Now": 0.0002
+      },
+      "demographics": {
+        "population": 784632,
+        "imd": 4.254,
+        "white_british": 0.8641,
+        "asian": 0.0384,
+        "no_quals": 0.2167,
+        "degree": 0.2794,
+        "retired": 0.241
+      }
+    },
+    {
+      "slug": "gosport",
+      "ward_count": 14,
+      "shares": {
+        "Conservative": 0.2993,
+        "Reform UK": 0.3431,
+        "Liberal Democrats": 0.2055,
+        "Green Party": 0.104,
+        "Labour": 0.0481
+      },
+      "demographics": {
+        "population": 327732,
+        "imd": 5.528,
+        "white_british": 0.9161,
+        "asian": 0.015,
+        "no_quals": 0.1739,
+        "degree": 0.2466,
+        "retired": 0.2508
+      }
+    },
+    {
+      "slug": "greenwich",
+      "ward_count": 23,
+      "shares": {
+        "Labour": 0.3242,
+        "Green Party": 0.2693,
+        "Reform UK": 0.177,
+        "Independent": 0.0062,
+        "Conservative": 0.1555,
+        "Liberal Democrats": 0.0617,
+        "The Official Monster Raving Loony Party": 0.0006,
+        "Your Party": 0.0055
+      },
+      "demographics": {
+        "population": 1156228,
+        "imd": 4.318,
+        "white_british": 0.3629,
+        "asian": 0.1327,
+        "no_quals": 0.168,
+        "degree": 0.4539,
+        "retired": 0.1183
+      }
+    },
+    {
+      "slug": "hackney",
+      "ward_count": 21,
+      "shares": {
+        "Green Party": 0.4309,
+        "Labour": 0.3566,
+        "Liberal Democrats": 0.0373,
+        "Conservative": 0.1113,
+        "Reform UK": 0.0257,
+        "Independent": 0.0367,
+        "Trade Unionist and Socialist Coalition": 0.0014
+      },
+      "demographics": {
+        "population": 1036448,
+        "imd": 2.743,
+        "white_british": 0.3287,
+        "asian": 0.1031,
+        "no_quals": 0.1707,
+        "degree": 0.5179,
+        "retired": 0.0786
+      }
+    },
+    {
+      "slug": "halton",
+      "ward_count": 18,
+      "shares": {
+        "Reform UK": 0.4141,
+        "Labour": 0.3062,
+        "Green Party": 0.1483,
+        "Conservative": 0.0588,
+        "Liberal Democrats": 0.0548,
+        "Libertarian Party": 0.0019,
+        "Independent": 0.0159
+      },
+      "demographics": {
+        "population": 513864,
+        "imd": 3.797,
+        "white_british": 0.924,
+        "asian": 0.0115,
+        "no_quals": 0.2109,
+        "degree": 0.2387,
+        "retired": 0.2203
+      }
+    },
+    {
+      "slug": "hammersmith-and-fulham",
+      "ward_count": 21,
+      "shares": {
+        "Labour": 0.4073,
+        "Green Party": 0.127,
+        "Conservative": 0.2682,
+        "Liberal Democrats": 0.0794,
+        "Reform UK": 0.1157,
+        "Independent": 0.0024
+      },
+      "demographics": {
+        "population": 732644,
+        "imd": 4.823,
+        "white_british": 0.3532,
+        "asian": 0.109,
+        "no_quals": 0.1185,
+        "degree": 0.5759,
+        "retired": 0.1001
+      }
+    },
+    {
+      "slug": "hampshire",
+      "ward_count": 76,
+      "shares": {
+        "Reform UK": 0.2706,
+        "Labour": 0.0655,
+        "Conservative": 0.2733,
+        "Green Party": 0.1123,
+        "Liberal Democrats": 0.2549,
+        "Independent": 0.008,
+        "Libertarian Party": 0.0001,
+        "The All In Party": 0.0023,
+        "Social Democratic Party": 0.0001,
+        "Community Campaign (Hart)": 0.0052,
+        "Your Party": 0.0001,
+        "The Official Monster Raving Loony Party": 0.0002,
+        "Whitehill & Bordon Community Party": 0.0072,
+        "Wessex Regionalists": 0.0001
+      },
+      "demographics": {
+        "population": 5603480,
+        "imd": 7.45,
+        "white_british": 0.8633,
+        "asian": 0.0415,
+        "no_quals": 0.1473,
+        "degree": 0.3423,
+        "retired": 0.2514
+      }
+    },
+    {
+      "slug": "haringey",
+      "ward_count": 21,
+      "shares": {
+        "Labour": 0.3419,
+        "Liberal Democrats": 0.173,
+        "Green Party": 0.3543,
+        "Independent": 0.0065,
+        "Reform UK": 0.0403,
+        "Conservative": 0.063,
+        "Haringey Socialist Alliance": 0.0196,
+        "Christian Peoples Alliance": 0.0007,
+        "Trade Unionist and Socialist Coalition": 0.0007
+      },
+      "demographics": {
+        "population": 1056908,
+        "imd": 3.903,
+        "white_british": 0.2975,
+        "asian": 0.083,
+        "no_quals": 0.1858,
+        "degree": 0.4807,
+        "retired": 0.1066
+      }
+    },
+    {
+      "slug": "harlow",
+      "ward_count": 11,
+      "shares": {
+        "Conservative": 0.5674,
+        "Reform UK": 0.2017,
+        "Labour": 0.1323,
+        "Green Party": 0.0947,
+        "Independent": 0.0012,
+        "Liberal Democrats": 0.0015,
+        "Trade Unionist and Socialist Coalition": 0.0011
+      },
+      "demographics": {
+        "population": 373352,
+        "imd": 4.815,
+        "white_british": 0.6769,
+        "asian": 0.0607,
+        "no_quals": 0.2101,
+        "degree": 0.2445,
+        "retired": 0.1713
+      }
+    },
+    {
+      "slug": "harrow",
+      "ward_count": 22,
+      "shares": {
+        "Conservative": 0.4656,
+        "Green Party": 0.0986,
+        "Labour": 0.2322,
+        "Reform UK": 0.1144,
+        "Liberal Democrats": 0.0572,
+        "Arise": 0.032
+      },
+      "demographics": {
+        "population": 1044868,
+        "imd": 6.555,
+        "white_british": 0.1638,
+        "asian": 0.4314,
+        "no_quals": 0.174,
+        "degree": 0.4498,
+        "retired": 0.1648
+      }
+    },
+    {
+      "slug": "hart",
+      "ward_count": 11,
+      "shares": {
+        "Liberal Democrats": 0.2747,
+        "Reform UK": 0.2308,
+        "Conservative": 0.2561,
+        "Green Party": 0.0792,
+        "Labour": 0.0144,
+        "Community Campaign (Hart)": 0.1433,
+        "The Official Monster Raving Loony Party": 0.0016
+      },
+      "demographics": {
+        "population": 397552,
+        "imd": 9.386,
+        "white_british": 0.8575,
+        "asian": 0.0387,
+        "no_quals": 0.1083,
+        "degree": 0.4148,
+        "retired": 0.2351
+      }
+    },
+    {
+      "slug": "hartlepool",
+      "ward_count": 12,
+      "shares": {
+        "Reform UK": 0.497,
+        "Labour": 0.2531,
+        "Green Party": 0.0938,
+        "Conservative": 0.0988,
+        "Liberal Democrats": 0.0252,
+        "Independent": 0.032
+      },
+      "demographics": {
+        "population": 369364,
+        "imd": 3.69,
+        "white_british": 0.9459,
+        "asian": 0.0183,
+        "no_quals": 0.2323,
+        "degree": 0.2467,
+        "retired": 0.2383
+      }
+    },
+    {
+      "slug": "hastings",
+      "ward_count": 16,
+      "shares": {
+        "Reform UK": 0.2553,
+        "Green Party": 0.4173,
+        "Labour": 0.1666,
+        "Conservative": 0.0955,
+        "Liberal Democrats": 0.0142,
+        "Independent": 0.0505,
+        "Libertarian Party": 0.0006
+      },
+      "demographics": {
+        "population": 364020,
+        "imd": 3.226,
+        "white_british": 0.8328,
+        "asian": 0.0296,
+        "no_quals": 0.2023,
+        "degree": 0.2836,
+        "retired": 0.2268
+      }
+    },
+    {
+      "slug": "havant",
+      "ward_count": 12,
+      "shares": {
+        "Reform UK": 0.4164,
+        "Liberal Democrats": 0.107,
+        "Conservative": 0.2591,
+        "Green Party": 0.1306,
+        "Labour": 0.0869
+      },
+      "demographics": {
+        "population": 496888,
+        "imd": 5.449,
+        "white_british": 0.9246,
+        "asian": 0.0176,
+        "no_quals": 0.2009,
+        "degree": 0.2624,
+        "retired": 0.2794
+      }
+    },
+    {
+      "slug": "havering",
+      "ward_count": 20,
+      "shares": {
+        "Liberal Democrats": 0.0109,
+        "Conservative": 0.1402,
+        "Local": 0.2654,
+        "Green Party": 0.1089,
+        "Reform UK": 0.3672,
+        "Labour": 0.1051,
+        "Independent": 0.0022
+      },
+      "demographics": {
+        "population": 1047980,
+        "imd": 6.347,
+        "white_british": 0.5572,
+        "asian": 0.1525,
+        "no_quals": 0.2006,
+        "degree": 0.2952,
+        "retired": 0.2083
+      }
+    },
+    {
+      "slug": "hillingdon",
+      "ward_count": 20,
+      "shares": {
+        "Conservative": 0.4002,
+        "Reform UK": 0.1924,
+        "Labour": 0.2171,
+        "Green Party": 0.1068,
+        "Liberal Democrats": 0.05,
+        "Independent": 0.0303,
+        "UKIP": 0.0007,
+        "TUSC": 0.0017,
+        "Social Democratic Party": 0.0006
+      },
+      "demographics": {
+        "population": 1223484,
+        "imd": 5.907,
+        "white_british": 0.3051,
+        "asian": 0.3572,
+        "no_quals": 0.1826,
+        "degree": 0.3737,
+        "retired": 0.1543
+      }
+    },
+    {
+      "slug": "hounslow",
+      "ward_count": 22,
+      "shares": {
+        "Reform UK": 0.1826,
+        "Labour": 0.3262,
+        "Conservative": 0.2676,
+        "Green Party": 0.0983,
+        "Liberal Democrats": 0.0941,
+        "Independent": 0.0302,
+        "Trade Unionist and Socialist Coalition": 0.001
+      },
+      "demographics": {
+        "population": 1152800,
+        "imd": 4.831,
+        "white_british": 0.243,
+        "asian": 0.366,
+        "no_quals": 0.1872,
+        "degree": 0.414,
+        "retired": 0.1288
+      }
+    },
+    {
+      "slug": "huntingdonshire",
+      "ward_count": 26,
+      "shares": {
+        "Conservative": 0.2536,
+        "Reform UK": 0.2719,
+        "Green Party": 0.0854,
+        "Liberal Democrats": 0.2644,
+        "Labour": 0.0555,
+        "Independent": 0.0676,
+        "Animal Welfare Party": 0.0008,
+        "Party Of Women": 0.0008
+      },
+      "demographics": {
+        "population": 723280,
+        "imd": 7.352,
+        "white_british": 0.8333,
+        "asian": 0.034,
+        "no_quals": 0.1563,
+        "degree": 0.3348,
+        "retired": 0.2348
+      }
+    },
+    {
+      "slug": "hyndburn",
+      "ward_count": 11,
+      "shares": {
+        "Reform UK": 0.4193,
+        "Labour": 0.2124,
+        "Conservative": 0.225,
+        "Green Party": 0.1029,
+        "Independent": 0.0404
+      },
+      "demographics": {
+        "population": 328880,
+        "imd": 3.519,
+        "white_british": 0.7651,
+        "asian": 0.1746,
+        "no_quals": 0.2304,
+        "degree": 0.2496,
+        "retired": 0.2208
+      }
+    },
+    {
+      "slug": "ipswich",
+      "ward_count": 16,
+      "shares": {
+        "Green Party": 0.1901,
+        "Labour": 0.2676,
+        "Reform UK": 0.3168,
+        "Conservative": 0.143,
+        "Liberal Democrats": 0.0824
+      },
+      "demographics": {
+        "population": 558592,
+        "imd": 4.518,
+        "white_british": 0.6961,
+        "asian": 0.0595,
+        "no_quals": 0.2177,
+        "degree": 0.2606,
+        "retired": 0.1955
+      }
+    },
+    {
+      "slug": "isle-of-wight",
+      "ward_count": 39,
+      "shares": {
+        "Liberal Democrats": 0.0844,
+        "Conservative": 0.188,
+        "Reform UK": 0.319,
+        "Independent": 0.2412,
+        "Green Party": 0.1254,
+        "Labour": 0.0383,
+        "Vectis Party": 0.0038
+      },
+      "demographics": {
+        "population": 561852,
+        "imd": 4.596,
+        "white_british": 0.9328,
+        "asian": 0.012,
+        "no_quals": 0.1844,
+        "degree": 0.2733,
+        "retired": 0.3294
+      }
+    },
+    {
+      "slug": "islington",
+      "ward_count": 17,
+      "shares": {
+        "Labour": 0.3854,
+        "Green Party": 0.3674,
+        "Liberal Democrats": 0.0827,
+        "Reform UK": 0.0614,
+        "Conservative": 0.0667,
+        "Independent": 0.0355,
+        "Social Democratic Party": 0.0002,
+        "National Housing Party United Kingdom": 0.0004,
+        "Christian Peoples Alliance": 0.0003
+      },
+      "demographics": {
+        "population": 866432,
+        "imd": 3.642,
+        "white_british": 0.3602,
+        "asian": 0.0965,
+        "no_quals": 0.1377,
+        "degree": 0.5661,
+        "retired": 0.0918
+      }
+    },
+    {
+      "slug": "kensington-and-chelsea",
+      "ward_count": 17,
+      "shares": {
+        "Conservative": 0.5131,
+        "Green Party": 0.0785,
+        "Liberal Democrats": 0.1263,
+        "Labour": 0.1811,
+        "Reform UK": 0.0952,
+        "Independent": 0.0058
+      },
+      "demographics": {
+        "population": 573460,
+        "imd": 5.214,
+        "white_british": 0.2963,
+        "asian": 0.121,
+        "no_quals": 0.1141,
+        "degree": 0.5938,
+        "retired": 0.1306
+      }
+    },
+    {
+      "slug": "kingston-upon-hull",
+      "ward_count": 19,
+      "shares": {
+        "Liberal Democrats": 0.318,
+        "Green Party": 0.1225,
+        "Labour": 0.1745,
+        "Reform UK": 0.3566,
+        "Conservative": 0.024,
+        "Trade Unionist and Socialist Coalition": 0.0012,
+        "Independent": 0.0029,
+        "National Rebirth Party": 0.0004
+      },
+      "demographics": {
+        "population": 1068176,
+        "imd": 2.952,
+        "white_british": 0.7921,
+        "asian": 0.0303,
+        "no_quals": 0.2537,
+        "degree": 0.2162,
+        "retired": 0.1794
+      }
+    },
+    {
+      "slug": "kingston-upon-thames",
+      "ward_count": 19,
+      "shares": {
+        "Liberal Democrats": 0.4493,
+        "Conservative": 0.1495,
+        "Reform UK": 0.1166,
+        "Independent": 0.0859,
+        "Green Party": 0.1319,
+        "Labour": 0.0647,
+        "The Official Monster Raving Loony Party": 0.0019,
+        "Heritage Party": 0.0002
+      },
+      "demographics": {
+        "population": 672132,
+        "imd": 7.622,
+        "white_british": 0.4843,
+        "asian": 0.182,
+        "no_quals": 0.1194,
+        "degree": 0.5132,
+        "retired": 0.1614
+      }
+    },
+    {
+      "slug": "kirklees",
+      "ward_count": 23,
+      "shares": {
+        "Labour": 0.1627,
+        "Green Party": 0.1847,
+        "Conservative": 0.1449,
+        "Reform UK": 0.3017,
+        "Liberal Democrats": 0.0985,
+        "People's Alliance for Change and Equality": 0.0007,
+        "Independent": 0.0986,
+        "Community Alliance Kirklees": 0.0047,
+        "ABUBAKAR, Mohammed": 0.0032,
+        "The Revolting Party. Join The Revolt": 0.0003
+      },
+      "demographics": {
+        "population": 1732664,
+        "imd": 4.714,
+        "white_british": 0.6673,
+        "asian": 0.2098,
+        "no_quals": 0.2092,
+        "degree": 0.2975,
+        "retired": 0.2173
+      }
+    },
+    {
+      "slug": "knowsley",
+      "ward_count": 15,
+      "shares": {
+        "Independent": 0.1138,
+        "Reform UK": 0.308,
+        "Labour": 0.315,
+        "Green Party": 0.214,
+        "Conservative": 0.01,
+        "Trade Unionist and Socialist Coalition": 0.0109,
+        "Liberal Democrats": 0.0283
+      },
+      "demographics": {
+        "population": 618148,
+        "imd": 2.561,
+        "white_british": 0.9055,
+        "asian": 0.0169,
+        "no_quals": 0.2633,
+        "degree": 0.2369,
+        "retired": 0.1925
+      }
+    },
+    {
+      "slug": "lambeth",
+      "ward_count": 25,
+      "shares": {
+        "Green Party": 0.3696,
+        "Labour": 0.347,
+        "Liberal Democrats": 0.1514,
+        "Conservative": 0.0796,
+        "Independent": 0.0102,
+        "Reform UK": 0.0391,
+        "The Socialist Party of Great Britain": 0.0007,
+        "Trade Unionist and Socialist Coalition": 0.0018,
+        "Christian Peoples Alliance": 0.0004,
+        "Social Democratic Party": 0.0002
+      },
+      "demographics": {
+        "population": 1270672,
+        "imd": 3.949,
+        "white_british": 0.3492,
+        "asian": 0.0739,
+        "no_quals": 0.1312,
+        "degree": 0.5616,
+        "retired": 0.0833
+      }
+    },
+    {
+      "slug": "leeds",
+      "ward_count": 33,
+      "shares": {
+        "Conservative": 0.1611,
+        "Labour": 0.2387,
+        "Reform UK": 0.2326,
+        "Green Party": 0.2171,
+        "Liberal Democrats": 0.0771,
+        "Social Democratic Party": 0.0126,
+        "Trade Unionist and Socialist Coalition": 0.0005,
+        "The Official Monster Raving Loony Party": 0.0002,
+        "Independent": 0.058,
+        "Yorkshire Party": 0.0018,
+        "UK Independence Party (UKIP)": 0.0001,
+        "Your Party": 0.0002
+      },
+      "demographics": {
+        "population": 3248068,
+        "imd": 4.797,
+        "white_british": 0.6811,
+        "asian": 0.1036,
+        "no_quals": 0.1842,
+        "degree": 0.3454,
+        "retired": 0.1897
+      }
+    },
+    {
+      "slug": "lewisham",
+      "ward_count": 19,
+      "shares": {
+        "Labour": 0.344,
+        "Green Party": 0.4364,
+        "Reform UK": 0.0638,
+        "Conservative": 0.0625,
+        "Liberal Democrats": 0.087,
+        "Independent": 0.002,
+        "The Motoring Party": 0.0001,
+        "Trade Unionist and Socialist Coalition": 0.002,
+        "Communist Party of Britain": 0.0004,
+        "Christian Peoples Alliance": 0.0004,
+        "Climate Party": 0.0002,
+        "Your Party": 0.0011
+      },
+      "demographics": {
+        "population": 1202272,
+        "imd": 3.763,
+        "white_british": 0.3467,
+        "asian": 0.0882,
+        "no_quals": 0.1468,
+        "degree": 0.497,
+        "retired": 0.1054
+      }
+    },
+    {
+      "slug": "manchester",
+      "ward_count": 32,
+      "shares": {
+        "Green Party": 0.373,
+        "Liberal Democrats": 0.0822,
+        "Labour": 0.3089,
+        "Reform UK": 0.1648,
+        "Conservative": 0.0294,
+        "Workers Party of Britain": 0.0248,
+        "Communist Party of Britain": 0.0002,
+        "Trade Unionist and Socialist Coalition": 0.0007,
+        "Independent": 0.0154,
+        "Social Democratic Party": 0.0004,
+        "Communist League Election Campaign": 0.0001
+      },
+      "demographics": {
+        "population": 2208148,
+        "imd": 2.543,
+        "white_british": 0.4301,
+        "asian": 0.2253,
+        "no_quals": 0.2023,
+        "degree": 0.3685,
+        "retired": 0.1082
+      }
+    },
+    {
+      "slug": "merton",
+      "ward_count": 20,
+      "shares": {
+        "Liberal Democrats": 0.277,
+        "Labour": 0.3082,
+        "Green Party": 0.1228,
+        "Conservative": 0.153,
+        "Reform UK": 0.1186,
+        "Independent": 0.0196,
+        "Animal Welfare Party": 0.0006,
+        "Libertarian Party": 0.0002
+      },
+      "demographics": {
+        "population": 860688,
+        "imd": 6.887,
+        "white_british": 0.3717,
+        "asian": 0.1834,
+        "no_quals": 0.1429,
+        "degree": 0.4988,
+        "retired": 0.1392
+      }
+    },
+    {
+      "slug": "milton-keynes",
+      "ward_count": 21,
+      "shares": {
+        "Reform UK": 0.2445,
+        "Labour": 0.2224,
+        "Conservative": 0.2048,
+        "Green Party": 0.1376,
+        "Liberal Democrats": 0.1853,
+        "Independent": 0.005,
+        "Heritage Party": 0.0002,
+        "Workers Party of Britain": 0.0003
+      },
+      "demographics": {
+        "population": 1148212,
+        "imd": 6.138,
+        "white_british": 0.559,
+        "asian": 0.1394,
+        "no_quals": 0.1579,
+        "degree": 0.359,
+        "retired": 0.1658
+      }
+    },
+    {
+      "slug": "newcastle-under-lyme",
+      "ward_count": 21,
+      "shares": {
+        "Reform UK": 0.4107,
+        "Conservative": 0.2672,
+        "Liberal Democrats": 0.0202,
+        "Labour": 0.2148,
+        "The Potteries Party": 0.0038,
+        "Green Party": 0.0764,
+        "Trade Unionist and Socialist Coalition": 0.001,
+        "Independent": 0.0059
+      },
+      "demographics": {
+        "population": 493304,
+        "imd": 5.688,
+        "white_british": 0.8871,
+        "asian": 0.0413,
+        "no_quals": 0.2019,
+        "degree": 0.2794,
+        "retired": 0.2536
+      }
+    },
+    {
+      "slug": "newcastle-upon-tyne",
+      "ward_count": 26,
+      "shares": {
+        "Green Party": 0.2701,
+        "Labour": 0.1784,
+        "Reform UK": 0.2421,
+        "Liberal Democrats": 0.231,
+        "Conservative": 0.0375,
+        "Independent": 0.0399,
+        "Imagine": 0.0002,
+        "Trade Unionist and Socialist Coalition": 0.0003,
+        "Communist Party of Britain": 0.0002,
+        "Party Of Women": 0.0003
+      },
+      "demographics": {
+        "population": 1200452,
+        "imd": 4.526,
+        "white_british": 0.6948,
+        "asian": 0.1224,
+        "no_quals": 0.1918,
+        "degree": 0.3428,
+        "retired": 0.1754
+      }
+    },
+    {
+      "slug": "norfolk",
+      "ward_count": 84,
+      "shares": {
+        "Reform UK": 0.3121,
+        "Green Party": 0.1657,
+        "Conservative": 0.1976,
+        "Labour": 0.1027,
+        "Liberal Democrats": 0.1466,
+        "Independent": 0.0266,
+        "Great Yarmouth First": 0.048,
+        "Heritage Party": 0.0002,
+        "Communist Party of Britain": 0.0002,
+        "The Official Monster Raving Loony Party": 0.0002
+      },
+      "demographics": {
+        "population": 3664636,
+        "imd": 5.339,
+        "white_british": 0.8763,
+        "asian": 0.0212,
+        "no_quals": 0.2047,
+        "degree": 0.2663,
+        "retired": 0.278
+      }
+    },
+    {
+      "slug": "north-east-lincolnshire",
+      "ward_count": 15,
+      "shares": {
+        "Reform UK": 0.4587,
+        "Labour": 0.1418,
+        "Green Party": 0.0855,
+        "Conservative": 0.1799,
+        "Liberal Democrats": 0.0657,
+        "Independent": 0.0628,
+        "Trade Unionist and Socialist Coalition": 0.0044,
+        "Social Democratic Party": 0.0003,
+        "National Housing Party United Kingdom": 0.001
+      },
+      "demographics": {
+        "population": 627816,
+        "imd": 4.292,
+        "white_british": 0.9077,
+        "asian": 0.0167,
+        "no_quals": 0.2438,
+        "degree": 0.2144,
+        "retired": 0.2467
+      }
+    },
+    {
+      "slug": "north-tyneside",
+      "ward_count": 20,
+      "shares": {
+        "Labour": 0.2912,
+        "Reform UK": 0.3106,
+        "Green Party": 0.1983,
+        "Conservative": 0.1439,
+        "Social Democratic Party": 0.0012,
+        "Liberal Democrats": 0.0234,
+        "Workers Party of Britain": 0.0007,
+        "Independent": 0.0308
+      },
+      "demographics": {
+        "population": 835712,
+        "imd": 5.45,
+        "white_british": 0.915,
+        "asian": 0.0278,
+        "no_quals": 0.175,
+        "degree": 0.3282,
+        "retired": 0.2499
+      }
+    },
+    {
+      "slug": "norwich",
+      "ward_count": 13,
+      "shares": {
+        "Green Party": 0.4399,
+        "Reform UK": 0.2066,
+        "Labour": 0.203,
+        "Conservative": 0.0596,
+        "Liberal Democrats": 0.0884,
+        "British Democratic Party": 0.0015,
+        "Communist Party of Britain": 0.0009
+      },
+      "demographics": {
+        "population": 575600,
+        "imd": 4.157,
+        "white_british": 0.7425,
+        "asian": 0.0558,
+        "no_quals": 0.1733,
+        "degree": 0.3378,
+        "retired": 0.167
+      }
+    },
+    {
+      "slug": "nuneaton-and-bedworth",
+      "ward_count": 19,
+      "shares": {
+        "Reform UK": 0.4329,
+        "Conservative": 0.2062,
+        "Labour": 0.1776,
+        "Green Party": 0.1703,
+        "Liberal Democrats": 0.0086,
+        "Trade Unionist and Socialist Coalition": 0.0044
+      },
+      "demographics": {
+        "population": 536848,
+        "imd": 4.963,
+        "white_british": 0.7789,
+        "asian": 0.0876,
+        "no_quals": 0.2267,
+        "degree": 0.2443,
+        "retired": 0.2306
+      }
+    },
+    {
+      "slug": "oldham",
+      "ward_count": 20,
+      "shares": {
+        "The Oldham Group Party": 0.0886,
+        "Labour": 0.2073,
+        "Reform UK": 0.372,
+        "Green Party": 0.0938,
+        "Liberal Democrats": 0.1085,
+        "Independent": 0.069,
+        "Northern Heart": 0.0004,
+        "Conservative": 0.0394,
+        "National Housing Party United Kingdom": 0.0007,
+        "Workers Party - Oldham Group": 0.0203
+      },
+      "demographics": {
+        "population": 968312,
+        "imd": 3.844,
+        "white_british": 0.5924,
+        "asian": 0.2692,
+        "no_quals": 0.2514,
+        "degree": 0.2431,
+        "retired": 0.1929
+      }
+    },
+    {
+      "slug": "oxford",
+      "ward_count": 24,
+      "shares": {
+        "Labour": 0.2893,
+        "Reform UK": 0.0924,
+        "Green Party": 0.305,
+        "Independent": 0.1111,
+        "Conservative": 0.0609,
+        "Liberal Democrats": 0.1402,
+        "Workers Party of Britain": 0.0007,
+        "Trade Unionist and Socialist Coalition": 0.0006
+      },
+      "demographics": {
+        "population": 648232,
+        "imd": 6.289,
+        "white_british": 0.4815,
+        "asian": 0.1671,
+        "no_quals": 0.1292,
+        "degree": 0.4792,
+        "retired": 0.1223
+      }
+    },
+    {
+      "slug": "pendle",
+      "ward_count": 10,
+      "shares": {
+        "Liberal Democrats": 0.1566,
+        "Reform UK": 0.3171,
+        "Conservative": 0.1759,
+        "Green Party": 0.0876,
+        "Labour": 0.0836,
+        "Independent": 0.1793
+      },
+      "demographics": {
+        "population": 382996,
+        "imd": 3.807,
+        "white_british": 0.6011,
+        "asian": 0.3141,
+        "no_quals": 0.2516,
+        "degree": 0.2511,
+        "retired": 0.2189
+      }
+    },
+    {
+      "slug": "peterborough",
+      "ward_count": 18,
+      "shares": {
+        "Reform UK": 0.272,
+        "Conservative": 0.2332,
+        "Labour": 0.1515,
+        "Green Party": 0.1699,
+        "Liberal Democrats": 0.0966,
+        "Trade Unionist and Socialist Coalition": 0.0018,
+        "Independent": 0.033,
+        "Your Party": 0.0017,
+        "Peterborough First": 0.0404
+      },
+      "demographics": {
+        "population": 862616,
+        "imd": 4.223,
+        "white_british": 0.5327,
+        "asian": 0.1497,
+        "no_quals": 0.2244,
+        "degree": 0.262,
+        "retired": 0.1707
+      }
+    },
+    {
+      "slug": "plymouth",
+      "ward_count": 19,
+      "shares": {
+        "Reform UK": 0.3719,
+        "Conservative": 0.1558,
+        "Independent": 0.0305,
+        "Labour": 0.2192,
+        "Green Party": 0.1678,
+        "Liberal Democrats": 0.0519,
+        "Trade Unionist and Socialist Coalition": 0.003
+      },
+      "demographics": {
+        "population": 1058872,
+        "imd": 4.478,
+        "white_british": 0.8756,
+        "asian": 0.0249,
+        "no_quals": 0.1744,
+        "degree": 0.2742,
+        "retired": 0.2189
+      }
+    },
+    {
+      "slug": "portsmouth",
+      "ward_count": 14,
+      "shares": {
+        "Liberal Democrats": 0.2955,
+        "Conservative": 0.1326,
+        "Green Party": 0.1323,
+        "Labour": 0.1416,
+        "Reform UK": 0.2971,
+        "Heritage Party": 0.0004,
+        "Independent": 0.0006
+      },
+      "demographics": {
+        "population": 831912,
+        "imd": 4.288,
+        "white_british": 0.7342,
+        "asian": 0.0746,
+        "no_quals": 0.1755,
+        "degree": 0.2974,
+        "retired": 0.1715
+      }
+    },
+    {
+      "slug": "preston",
+      "ward_count": 16,
+      "shares": {
+        "Liberal Democrats": 0.2293,
+        "Reform UK": 0.2734,
+        "Labour": 0.2099,
+        "Green Party": 0.1662,
+        "Conservative": 0.1083,
+        "Independent": 0.0123,
+        "Trade Unionist and Socialist Coalition": 0.0006
+      },
+      "demographics": {
+        "population": 591396,
+        "imd": 4.163,
+        "white_british": 0.61,
+        "asian": 0.2267,
+        "no_quals": 0.1968,
+        "degree": 0.3149,
+        "retired": 0.1795
+      }
+    },
+    {
+      "slug": "reading",
+      "ward_count": 16,
+      "shares": {
+        "Green Party": 0.288,
+        "Labour": 0.2916,
+        "Conservative": 0.1749,
+        "Reform UK": 0.1637,
+        "Liberal Democrats": 0.0792,
+        "Trade Unionist and Socialist Coalition": 0.0005,
+        "Social Democratic Party": 0.0006,
+        "Independent": 0.0005,
+        "The Liberal Party": 0.001
+      },
+      "demographics": {
+        "population": 697000,
+        "imd": 5.474,
+        "white_british": 0.4751,
+        "asian": 0.1978,
+        "no_quals": 0.1595,
+        "degree": 0.4028,
+        "retired": 0.1377
+      }
+    },
+    {
+      "slug": "redditch",
+      "ward_count": 9,
+      "shares": {
+        "Reform UK": 0.3917,
+        "Conservative": 0.1959,
+        "Labour": 0.1844,
+        "Green Party": 0.1704,
+        "Liberal Democrats": 0.0576
+      },
+      "demographics": {
+        "population": 348124,
+        "imd": 5.273,
+        "white_british": 0.7972,
+        "asian": 0.0617,
+        "no_quals": 0.2084,
+        "degree": 0.2578,
+        "retired": 0.2163
+      }
+    },
+    {
+      "slug": "richmond-upon-thames",
+      "ward_count": 18,
+      "shares": {
+        "Liberal Democrats": 0.5165,
+        "Conservative": 0.1798,
+        "Green Party": 0.1616,
+        "Reform UK": 0.0963,
+        "Labour": 0.0453,
+        "Independent": 0.0005
+      },
+      "demographics": {
+        "population": 781224,
+        "imd": 8.322,
+        "white_british": 0.5874,
+        "asian": 0.0969,
+        "no_quals": 0.091,
+        "degree": 0.6034,
+        "retired": 0.181
+      }
+    },
+    {
+      "slug": "rochdale",
+      "ward_count": 20,
+      "shares": {
+        "Reform UK": 0.3501,
+        "Labour": 0.2561,
+        "Green Party": 0.1092,
+        "Workers Party of Britain": 0.0808,
+        "Conservative": 0.1088,
+        "Liberal Democrats": 0.0771,
+        "Independent": 0.0171,
+        "Advance UK": 0.0008
+      },
+      "demographics": {
+        "population": 895236,
+        "imd": 3.545,
+        "white_british": 0.6485,
+        "asian": 0.1998,
+        "no_quals": 0.2343,
+        "degree": 0.2629,
+        "retired": 0.1992
+      }
+    },
+    {
+      "slug": "rochford",
+      "ward_count": 13,
+      "shares": {
+        "Reform UK": 0.408,
+        "Liberal Democrats": 0.144,
+        "Conservative": 0.2387,
+        "Green Party": 0.1016,
+        "Labour": 0.0389,
+        "Independent": 0.0456,
+        "Rochford District Residents": 0.0221,
+        "Heritage Party": 0.001
+      },
+      "demographics": {
+        "population": 342628,
+        "imd": 8,
+        "white_british": 0.9336,
+        "asian": 0.014,
+        "no_quals": 0.1915,
+        "degree": 0.2279,
+        "retired": 0.277
+      }
+    },
+    {
+      "slug": "rugby",
+      "ward_count": 14,
+      "shares": {
+        "Reform UK": 0.283,
+        "Conservative": 0.2569,
+        "Labour": 0.1485,
+        "Liberal Democrats": 0.2012,
+        "Green Party": 0.1103
+      },
+      "demographics": {
+        "population": 457332,
+        "imd": 6.934,
+        "white_british": 0.7011,
+        "asian": 0.0881,
+        "no_quals": 0.1565,
+        "degree": 0.3493,
+        "retired": 0.2171
+      }
+    },
+    {
+      "slug": "rushmoor",
+      "ward_count": 13,
+      "shares": {
+        "Reform UK": 0.3133,
+        "Labour": 0.2449,
+        "Conservative": 0.2374,
+        "Green Party": 0.1185,
+        "Trade Unionist and Socialist Coalition": 0.0012,
+        "Liberal Democrats": 0.0739,
+        "British Democratic Party": 0.0022,
+        "Independent": 0.0086
+      },
+      "demographics": {
+        "population": 398964,
+        "imd": 6.552,
+        "white_british": 0.6653,
+        "asian": 0.1677,
+        "no_quals": 0.1829,
+        "degree": 0.2979,
+        "retired": 0.1705
+      }
+    },
+    {
+      "slug": "salford",
+      "ward_count": 20,
+      "shares": {
+        "Labour": 0.28,
+        "Reform UK": 0.3467,
+        "Green Party": 0.1941,
+        "Conservative": 0.098,
+        "Liberal Democrats": 0.056,
+        "Independent": 0.0223,
+        "Trade Unionist and Socialist Coalition": 0.0005,
+        "Advance UK": 0.0014,
+        "Your Party": 0.0009
+      },
+      "demographics": {
+        "population": 1079644,
+        "imd": 3.533,
+        "white_british": 0.6687,
+        "asian": 0.0635,
+        "no_quals": 0.2006,
+        "degree": 0.3291,
+        "retired": 0.1568
+      }
+    },
+    {
+      "slug": "sandwell",
+      "ward_count": 24,
+      "shares": {
+        "Green Party": 0.1625,
+        "Labour": 0.3431,
+        "Reform UK": 0.3627,
+        "Conservative": 0.1058,
+        "Trade Unionist and Socialist Coalition": 0.0012,
+        "Independent": 0.01,
+        "Liberal Democrats": 0.0141,
+        "Yeshua": 0.0002,
+        "Advance UK": 0.0005
+      },
+      "demographics": {
+        "population": 1367244,
+        "imd": 2.812,
+        "white_british": 0.4471,
+        "asian": 0.2789,
+        "no_quals": 0.2896,
+        "degree": 0.2263,
+        "retired": 0.1729
+      }
+    },
+    {
+      "slug": "sefton",
+      "ward_count": 22,
+      "shares": {
+        "Liberal Democrats": 0.1563,
+        "Reform UK": 0.2665,
+        "Conservative": 0.0813,
+        "Labour": 0.2982,
+        "Green Party": 0.1266,
+        "Independent": 0.0643,
+        "The Official Monster Raving Loony Party": 0.0003,
+        "Trade Unionist and Socialist Coalition": 0.001,
+        "Formby Residents Action Group": 0.0055
+      },
+      "demographics": {
+        "population": 1116988,
+        "imd": 4.762,
+        "white_british": 0.9025,
+        "asian": 0.0169,
+        "no_quals": 0.1979,
+        "degree": 0.2979,
+        "retired": 0.2645
+      }
+    },
+    {
+      "slug": "sheffield",
+      "ward_count": 28,
+      "shares": {
+        "Liberal Democrats": 0.1843,
+        "Reform UK": 0.2639,
+        "Green Party": 0.2753,
+        "Labour": 0.2025,
+        "Conservative": 0.0392,
+        "Trade Unionist and Socialist Coalition": 0.0054,
+        "Independent": 0.0292,
+        "UK Independence Party (UKIP)": 0.0003
+      },
+      "demographics": {
+        "population": 19941,
+        "imd": 4.838,
+        "white_british": 0.7108,
+        "asian": 0.101,
+        "no_quals": 0.1715,
+        "degree": 0.3074,
+        "retired": 0.2774
+      }
+    },
+    {
+      "slug": "solihull",
+      "ward_count": 17,
+      "shares": {
+        "Conservative": 0.3543,
+        "Reform UK": 0.3153,
+        "Liberal Democrats": 0.1093,
+        "Green Party": 0.1554,
+        "Labour": 0.0642,
+        "Independent": 0.0015
+      },
+      "demographics": {
+        "population": 864892,
+        "imd": 6.567,
+        "white_british": 0.7303,
+        "asian": 0.139,
+        "no_quals": 0.1767,
+        "degree": 0.3523,
+        "retired": 0.2564
+      }
+    },
+    {
+      "slug": "southampton",
+      "ward_count": 17,
+      "shares": {
+        "Green Party": 0.1965,
+        "Labour": 0.2126,
+        "Reform UK": 0.2568,
+        "Conservative": 0.1675,
+        "Liberal Democrats": 0.1413,
+        "Independent": 0.0075,
+        "Trade Unionist and Socialist Coalition": 0.0179
+      },
+      "demographics": {
+        "population": 995684,
+        "imd": 4.115,
+        "white_british": 0.6243,
+        "asian": 0.1135,
+        "no_quals": 0.1748,
+        "degree": 0.3137,
+        "retired": 0.1566
+      }
+    },
+    {
+      "slug": "south-cambridgeshire",
+      "ward_count": 26,
+      "shares": {
+        "Liberal Democrats": 0.4269,
+        "Conservative": 0.1724,
+        "Reform UK": 0.1732,
+        "Green Party": 0.1653,
+        "Labour": 0.0606,
+        "Independent": 0.0017
+      },
+      "demographics": {
+        "population": 648380,
+        "imd": 8.427,
+        "white_british": 0.7582,
+        "asian": 0.0672,
+        "no_quals": 0.1177,
+        "degree": 0.4792,
+        "retired": 0.2252
+      }
+    },
+    {
+      "slug": "southend-on-sea",
+      "ward_count": 17,
+      "shares": {
+        "Reform UK": 0.3127,
+        "Green Party": 0.1743,
+        "Conservative": 0.1851,
+        "Independent": 0.0588,
+        "Labour": 0.1629,
+        "Liberal Democrats": 0.077,
+        "Confelicity": 0.0272,
+        "Heritage Party": 0.0016,
+        "The Moon And Serpent Party": 0.0005
+      },
+      "demographics": {
+        "population": 722708,
+        "imd": 5.505,
+        "white_british": 0.7875,
+        "asian": 0.0656,
+        "no_quals": 0.197,
+        "degree": 0.2718,
+        "retired": 0.224
+      }
+    },
+    {
+      "slug": "southwark",
+      "ward_count": 23,
+      "shares": {
+        "Liberal Democrats": 0.1679,
+        "Green Party": 0.3488,
+        "Labour": 0.3618,
+        "Reform UK": 0.0483,
+        "Conservative": 0.0685,
+        "Independent": 0.0038,
+        "Communist League Election Campaign": 0.0003,
+        "Build": 0.0006
+      },
+      "demographics": {
+        "population": 1230492,
+        "imd": 4.024,
+        "white_british": 0.331,
+        "asian": 0.1007,
+        "no_quals": 0.1389,
+        "degree": 0.5483,
+        "retired": 0.0861
+      }
+    },
+    {
+      "slug": "st-albans",
+      "ward_count": 20,
+      "shares": {
+        "Liberal Democrats": 0.4516,
+        "Independent": 0.024,
+        "Green Party": 0.1307,
+        "Reform UK": 0.1609,
+        "Conservative": 0.1837,
+        "Labour": 0.0489,
+        "Communist Party of Britain": 0.0003
+      },
+      "demographics": {
+        "population": 592708,
+        "imd": 8.506,
+        "white_british": 0.6955,
+        "asian": 0.0961,
+        "no_quals": 0.1013,
+        "degree": 0.5308,
+        "retired": 0.2075
+      }
+    },
+    {
+      "slug": "stevenage",
+      "ward_count": 13,
+      "shares": {
+        "Reform UK": 0.3519,
+        "Green Party": 0.1566,
+        "Labour": 0.2301,
+        "Conservative": 0.1333,
+        "Liberal Democrats": 0.1254,
+        "Trade Unionist and Socialist Coalition": 0.0027
+      },
+      "demographics": {
+        "population": 357992,
+        "imd": 5.231,
+        "white_british": 0.7142,
+        "asian": 0.089,
+        "no_quals": 0.1702,
+        "degree": 0.2956,
+        "retired": 0.1805
+      }
+    },
+    {
+      "slug": "stockport",
+      "ward_count": 21,
+      "shares": {
+        "Liberal Democrats": 0.3213,
+        "Reform UK": 0.2486,
+        "Conservative": 0.096,
+        "Green Party": 0.1683,
+        "Labour": 0.1286,
+        "Trade Unionist and Socialist Coalition": 0.0006,
+        "Your Party": 0.0005,
+        "Party Of Women": 0.0005,
+        "Edgeley Community Association": 0.0177,
+        "Independent": 0.0178
+      },
+      "demographics": {
+        "population": 1179168,
+        "imd": 5.921,
+        "white_british": 0.8002,
+        "asian": 0.0875,
+        "no_quals": 0.1555,
+        "degree": 0.3753,
+        "retired": 0.2405
+      }
+    },
+    {
+      "slug": "suffolk",
+      "ward_count": 69,
+      "shares": {
+        "Green Party": 0.2326,
+        "Reform UK": 0.3323,
+        "Conservative": 0.2198,
+        "Labour": 0.1045,
+        "Independent": 0.0206,
+        "Liberal Democrats": 0.0901,
+        "Communist Party of Britain": 0.0001,
+        "The Official Monster Raving Loony Party": 0.0001
+      },
+      "demographics": {
+        "population": 2631892,
+        "imd": 5.755,
+        "white_british": 0.8249,
+        "asian": 0.0351,
+        "no_quals": 0.2007,
+        "degree": 0.2771,
+        "retired": 0.266
+      }
+    },
+    {
+      "slug": "sunderland",
+      "ward_count": 25,
+      "shares": {
+        "Labour": 0.2628,
+        "Reform UK": 0.413,
+        "Conservative": 0.1064,
+        "Liberal Democrats": 0.1298,
+        "Green Party": 0.0861,
+        "Independent": 0.0019
+      },
+      "demographics": {
+        "population": 1096788,
+        "imd": 3.827,
+        "white_british": 0.9158,
+        "asian": 0.0333,
+        "no_quals": 0.2291,
+        "degree": 0.2448,
+        "retired": 0.246
+      }
+    },
+    {
+      "slug": "sutton",
+      "ward_count": 20,
+      "shares": {
+        "Independent": 0.0193,
+        "Liberal Democrats": 0.4439,
+        "Reform UK": 0.2011,
+        "Green Party": 0.105,
+        "Labour": 0.0596,
+        "Conservative": 0.1705,
+        "The Christian Party Christian Peoples Alliance": 0.0004
+      },
+      "demographics": {
+        "population": 838328,
+        "imd": 7.099,
+        "white_british": 0.4981,
+        "asian": 0.2037,
+        "no_quals": 0.1519,
+        "degree": 0.3974,
+        "retired": 0.1763
+      }
+    },
+    {
+      "slug": "swindon",
+      "ward_count": 25,
+      "shares": {
+        "Labour": 0.2798,
+        "Reform UK": 0.2651,
+        "Conservative": 0.2968,
+        "Green Party": 0.1101,
+        "Liberal Democrats": 0.0473,
+        "Trade Unionist and Socialist Coalition": 0.0009
+      },
+      "demographics": {
+        "population": 933708,
+        "imd": 6.182,
+        "white_british": 0.6739,
+        "asian": 0.1579,
+        "no_quals": 0.1728,
+        "degree": 0.2793,
+        "retired": 0.1898
+      }
+    },
+    {
+      "slug": "tameside",
+      "ward_count": 19,
+      "shares": {
+        "Reform UK": 0.4193,
+        "Labour": 0.238,
+        "Conservative": 0.0999,
+        "Green Party": 0.1807,
+        "Independent": 0.0435,
+        "The Official Monster Raving Loony Party": 0.0007,
+        "Liberal Democrats": 0.0127,
+        "Your Party": 0.0018,
+        "Workers Party of Britain": 0.0035
+      },
+      "demographics": {
+        "population": 924348,
+        "imd": 3.638,
+        "white_british": 0.7847,
+        "asian": 0.1071,
+        "no_quals": 0.2187,
+        "degree": 0.2442,
+        "retired": 0.2129
+      }
+    },
+    {
+      "slug": "tamworth",
+      "ward_count": 9,
+      "shares": {
+        "Reform UK": 0.5176,
+        "Conservative": 0.1789,
+        "Labour": 0.1372,
+        "Green Party": 0.1422,
+        "Liberal Democrats": 0.0051,
+        "Independent": 0.017,
+        "UK Independence Party (UKIP)": 0.002
+      },
+      "demographics": {
+        "population": 314612,
+        "imd": 5.373,
+        "white_british": 0.8892,
+        "asian": 0.0141,
+        "no_quals": 0.2181,
+        "degree": 0.2182,
+        "retired": 0.2277
+      }
+    },
+    {
+      "slug": "three-rivers",
+      "ward_count": 13,
+      "shares": {
+        "Conservative": 0.3164,
+        "Liberal Democrats": 0.2572,
+        "Reform UK": 0.2173,
+        "Green Party": 0.1288,
+        "Labour": 0.0586,
+        "Independent": 0.021,
+        "Trade Unionist and Socialist Coalition": 0.0006
+      },
+      "demographics": {
+        "population": 375144,
+        "imd": 8.057,
+        "white_british": 0.623,
+        "asian": 0.1888,
+        "no_quals": 0.1341,
+        "degree": 0.4254,
+        "retired": 0.2057
+      }
+    },
+    {
+      "slug": "thurrock",
+      "ward_count": 20,
+      "shares": {
+        "Reform UK": 0.5146,
+        "Labour": 0.2255,
+        "Green Party": 0.0833,
+        "Conservative": 0.1407,
+        "Independent": 0.0325,
+        "Liberal Democrats": 0.0035
+      },
+      "demographics": {
+        "population": 703984,
+        "imd": 5.265,
+        "white_british": 0.5778,
+        "asian": 0.085,
+        "no_quals": 0.216,
+        "degree": 0.2632,
+        "retired": 0.1653
+      }
+    },
+    {
+      "slug": "trafford",
+      "ward_count": 21,
+      "shares": {
+        "Green Party": 0.2343,
+        "Conservative": 0.2318,
+        "Reform UK": 0.19,
+        "Labour": 0.2331,
+        "Liberal Democrats": 0.1055,
+        "Advance UK": 0.0024,
+        "Independent": 0.0013,
+        "Social Democratic Party": 0.0017
+      },
+      "demographics": {
+        "population": 939948,
+        "imd": 6.775,
+        "white_british": 0.6696,
+        "asian": 0.1513,
+        "no_quals": 0.1396,
+        "degree": 0.4298,
+        "retired": 0.2143
+      }
+    },
+    {
+      "slug": "tunbridge-wells",
+      "ward_count": 13,
+      "shares": {
+        "Conservative": 0.2329,
+        "Reform UK": 0.2111,
+        "Liberal Democrats": 0.3791,
+        "Green Party": 0.0943,
+        "Labour": 0.0237,
+        "Independent": 0.0219,
+        "Tunbridge Wells Alliance": 0.0356,
+        "English Democrats": 0.0014
+      },
+      "demographics": {
+        "population": 461172,
+        "imd": 7.618,
+        "white_british": 0.8176,
+        "asian": 0.0464,
+        "no_quals": 0.1349,
+        "degree": 0.411,
+        "retired": 0.2241
+      }
+    },
+    {
+      "slug": "wakefield",
+      "ward_count": 21,
+      "shares": {
+        "Reform UK": 0.4442,
+        "Labour": 0.2588,
+        "Green Party": 0.1297,
+        "Conservative": 0.0802,
+        "Liberal Democrats": 0.042,
+        "Independent": 0.0419,
+        "Trade Unionist and Socialist Coalition": 0.0011,
+        "Social Democratic Party": 0.0008,
+        "British Democratic Party": 0.0004,
+        "Yorkshire Party": 0.001
+      },
+      "demographics": {
+        "population": 1413372,
+        "imd": 4.335,
+        "white_british": 0.8518,
+        "asian": 0.0408,
+        "no_quals": 0.2448,
+        "degree": 0.2423,
+        "retired": 0.2326
+      }
+    },
+    {
+      "slug": "walsall",
+      "ward_count": 20,
+      "shares": {
+        "Conservative": 0.2284,
+        "Reform UK": 0.3732,
+        "Labour": 0.1408,
+        "Green Party": 0.1167,
+        "Independent": 0.1281,
+        "Advance UK": 0.0062,
+        "Liberal Democrats": 0.0067
+      },
+      "demographics": {
+        "population": 1136628,
+        "imd": 3.832,
+        "white_british": 0.6095,
+        "asian": 0.1989,
+        "no_quals": 0.265,
+        "degree": 0.2358,
+        "retired": 0.2055
+      }
+    },
+    {
+      "slug": "waltham-forest",
+      "ward_count": 22,
+      "shares": {
+        "Green Party": 0.372,
+        "Labour": 0.3291,
+        "Reform UK": 0.0665,
+        "Liberal Democrats": 0.043,
+        "Conservative": 0.1556,
+        "Independent": 0.029,
+        "Trade Unionist and Socialist Coalition": 0.0024,
+        "Your Party": 0.0005,
+        "TUSC": 0.0019
+      },
+      "demographics": {
+        "population": 1113776,
+        "imd": 4.076,
+        "white_british": 0.3277,
+        "asian": 0.1941,
+        "no_quals": 0.1825,
+        "degree": 0.4315,
+        "retired": 0.1153
+      }
+    },
+    {
+      "slug": "wandsworth",
+      "ward_count": 22,
+      "shares": {
+        "Conservative": 0.3116,
+        "Labour": 0.3362,
+        "Green Party": 0.1726,
+        "Liberal Democrats": 0.0908,
+        "Reform UK": 0.0728,
+        "Independent": 0.0154,
+        "Trade Unionist and Socialist Coalition": 0.0005
+      },
+      "demographics": {
+        "population": 1310196,
+        "imd": 6.212,
+        "white_british": 0.4488,
+        "asian": 0.1205,
+        "no_quals": 0.0998,
+        "degree": 0.6252,
+        "retired": 0.0986
+      }
+    },
+    {
+      "slug": "watford",
+      "ward_count": 12,
+      "shares": {
+        "Liberal Democrats": 0.4482,
+        "Green Party": 0.1355,
+        "Reform UK": 0.1981,
+        "Labour": 0.1206,
+        "Conservative": 0.0941,
+        "Trade Unionist and Socialist Coalition": 0.0028,
+        "Heritage Party": 0.0007
+      },
+      "demographics": {
+        "population": 408988,
+        "imd": 6.434,
+        "white_british": 0.3898,
+        "asian": 0.273,
+        "no_quals": 0.1591,
+        "degree": 0.4097,
+        "retired": 0.146
+      }
+    },
+    {
+      "slug": "welwyn-hatfield",
+      "ward_count": 16,
+      "shares": {
+        "Conservative": 0.2327,
+        "Reform UK": 0.2743,
+        "Green Party": 0.1354,
+        "Labour": 0.159,
+        "Liberal Democrats": 0.1983,
+        "Heritage Party": 0.0003
+      },
+      "demographics": {
+        "population": 479344,
+        "imd": 6.836,
+        "white_british": 0.6274,
+        "asian": 0.1019,
+        "no_quals": 0.1438,
+        "degree": 0.373,
+        "retired": 0.1795
+      }
+    },
+    {
+      "slug": "west-lancashire",
+      "ward_count": 15,
+      "shares": {
+        "Our West Lancashire": 0.1869,
+        "Reform UK": 0.3202,
+        "Labour": 0.1733,
+        "Conservative": 0.1729,
+        "Green Party": 0.1141,
+        "Liberal Democrats": 0.0203,
+        "Your Party": 0.0124
+      },
+      "demographics": {
+        "population": 469676,
+        "imd": 6.164,
+        "white_british": 0.9147,
+        "asian": 0.0105,
+        "no_quals": 0.1798,
+        "degree": 0.298,
+        "retired": 0.2502
+      }
+    },
+    {
+      "slug": "westminster",
+      "ward_count": 18,
+      "shares": {
+        "Conservative": 0.3506,
+        "Reform UK": 0.1076,
+        "Labour": 0.3018,
+        "Green Party": 0.1775,
+        "Liberal Democrats": 0.0618,
+        "Workers Party of Britain": 0.0004,
+        "Independent": 0.0004
+      },
+      "demographics": {
+        "population": 816856,
+        "imd": 5.453,
+        "white_british": 0.2491,
+        "asian": 0.1754,
+        "no_quals": 0.1302,
+        "degree": 0.5746,
+        "retired": 0.1089
+      }
+    },
+    {
+      "slug": "west-oxfordshire",
+      "ward_count": 16,
+      "shares": {
+        "Liberal Democrats": 0.3251,
+        "Conservative": 0.3037,
+        "Reform UK": 0.2032,
+        "Green Party": 0.0953,
+        "Labour": 0.0705,
+        "Independent": 0.0022
+      },
+      "demographics": {
+        "population": 456932,
+        "imd": 8.47,
+        "white_british": 0.8764,
+        "asian": 0.0166,
+        "no_quals": 0.1391,
+        "degree": 0.3823,
+        "retired": 0.239
+      }
+    },
+    {
+      "slug": "west-surrey",
+      "ward_count": 45,
+      "shares": {
+        "Reform UK": 0.2062,
+        "Conservative": 0.249,
+        "Green Party": 0.0863,
+        "Liberal Democrats": 0.3568,
+        "Labour": 0.0376,
+        "Independent": 0.0361,
+        "Farnham Residents": 0.0194,
+        "Trade Unionist and Socialist Coalition": 0.0002,
+        "The Peace Party - Non-violence, Justice, Environment": 0.0002,
+        "Residents for Guildford and Villages": 0.0074,
+        "The Official Monster Raving Loony Party": 0.0002,
+        "Heritage Party": 0.0005
+      },
+      "demographics": {
+        "population": 2420464,
+        "imd": 8.006,
+        "white_british": 0.6827,
+        "asian": 0.1169,
+        "no_quals": 0.1342,
+        "degree": 0.4223,
+        "retired": 0.2079
+      }
+    },
+    {
+      "slug": "west-sussex",
+      "ward_count": 70,
+      "shares": {
+        "Conservative": 0.2244,
+        "Reform UK": 0.2835,
+        "Green Party": 0.1417,
+        "Liberal Democrats": 0.2276,
+        "Labour": 0.0986,
+        "Independent": 0.0185,
+        "Pirate Party UK": 0.0002,
+        "Patria": 0,
+        "The Peace Party - Non-violence, Justice, Environment": 0.0002,
+        "The Official Monster Raving Loony Party": 0.0002,
+        "Libertarian Party": 0.0001,
+        "English Democrats": 0.0002,
+        "Local": 0.0049
+      },
+      "demographics": {
+        "population": 3530668,
+        "imd": 6.855,
+        "white_british": 0.8246,
+        "asian": 0.0454,
+        "no_quals": 0.1572,
+        "degree": 0.3273,
+        "retired": 0.2586
+      }
+    },
+    {
+      "slug": "wigan",
+      "ward_count": 25,
+      "shares": {
+        "Reform UK": 0.4627,
+        "Labour": 0.2409,
+        "Green Party": 0.1121,
+        "Conservative": 0.091,
+        "Liberal Democrats": 0.0283,
+        "Independent": 0.0649,
+        "Social Democratic Party": 0.0001
+      },
+      "demographics": {
+        "population": 1317408,
+        "imd": 4.885,
+        "white_british": 0.8969,
+        "asian": 0.0204,
+        "no_quals": 0.2111,
+        "degree": 0.2575,
+        "retired": 0.2322
+      }
+    },
+    {
+      "slug": "winchester",
+      "ward_count": 15,
+      "shares": {
+        "Liberal Democrats": 0.4161,
+        "Conservative": 0.222,
+        "Reform UK": 0.1728,
+        "Green Party": 0.1398,
+        "Labour": 0.0216,
+        "Independent": 0.0277
+      },
+      "demographics": {
+        "population": 509880,
+        "imd": 8.186,
+        "white_british": 0.8662,
+        "asian": 0.0335,
+        "no_quals": 0.1112,
+        "degree": 0.449,
+        "retired": 0.241
+      }
+    },
+    {
+      "slug": "wokingham",
+      "ward_count": 18,
+      "shares": {
+        "Liberal Democrats": 0.3476,
+        "Conservative": 0.2932,
+        "Reform UK": 0.1855,
+        "Green Party": 0.0964,
+        "Labour": 0.0683,
+        "Trade Unionist and Socialist Coalition": 0.0011,
+        "Independent": 0.0079
+      },
+      "demographics": {
+        "population": 709980,
+        "imd": 9.273,
+        "white_british": 0.67,
+        "asian": 0.1588,
+        "no_quals": 0.1042,
+        "degree": 0.4617,
+        "retired": 0.2113
+      }
+    },
+    {
+      "slug": "wolverhampton",
+      "ward_count": 20,
+      "shares": {
+        "Reform UK": 0.3421,
+        "Green Party": 0.1629,
+        "Labour": 0.2881,
+        "Conservative": 0.1806,
+        "Liberal Democrats": 0.0187,
+        "Independent": 0.0075
+      },
+      "demographics": {
+        "population": 1054868,
+        "imd": 3.538,
+        "white_british": 0.4877,
+        "asian": 0.2208,
+        "no_quals": 0.2543,
+        "degree": 0.2613,
+        "retired": 0.19
+      }
+    },
+    {
+      "slug": "worthing",
+      "ward_count": 13,
+      "shares": {
+        "Green Party": 0.2368,
+        "Reform UK": 0.2688,
+        "Labour": 0.2248,
+        "Conservative": 0.1836,
+        "Liberal Democrats": 0.086
+      },
+      "demographics": {
+        "population": 445372,
+        "imd": 6.292,
+        "white_british": 0.8333,
+        "asian": 0.0413,
+        "no_quals": 0.1619,
+        "degree": 0.3166,
+        "retired": 0.2568
+      }
+    },
+    {
+      "slug": "brent",
+      "ward_count": 19,
+      "shares": {
+        "Labour": 0.2862,
+        "Green Party": 0.221,
+        "Liberal Democrats": 0.1521,
+        "Conservative": 0.2257,
+        "Reform UK": 0.1024,
+        "Independent": 0.0123,
+        "UKIP": 0.0004
+      },
+      "demographics": {
+        "population": 1359296,
+        "imd": 4.162,
+        "white_british": 0.1393,
+        "asian": 0.316,
+        "no_quals": 0.218,
+        "degree": 0.3986,
+        "retired": 0.121
+      }
+    },
+    {
+      "slug": "newham",
+      "ward_count": 2,
+      "shares": {
+        "Green Party": 0.5363,
+        "Labour": 0.24,
+        "Independent": 0.0821,
+        "Liberal Democrats": 0.0413,
+        "Reform UK": 0.0384,
+        "Conservative": 0.0619
+      },
+      "demographics": {
+        "population": 1404276,
+        "imd": 3.091,
+        "white_british": 0.1368,
+        "asian": 0.4215,
+        "no_quals": 0.2087,
+        "degree": 0.3988,
+        "retired": 0.0774
+      }
+    },
+    {
+      "slug": "tower-hamlets",
+      "ward_count": 4,
+      "shares": {
+        "Aspire": 0.2947,
+        "Green Party": 0.2292,
+        "Labour": 0.2593,
+        "Reform UK": 0.0517,
+        "Conservative": 0.0523,
+        "Liberal Democrats": 0.0756,
+        "Independent": 0.0319,
+        "TUSC": 0.0049,
+        "The Forward Party": 0.0004
+      },
+      "demographics": {
+        "population": 1241288,
+        "imd": 3.681,
+        "white_british": 0.1984,
+        "asian": 0.4583,
+        "no_quals": 0.1633,
+        "degree": 0.5007,
+        "retired": 0.0583
+      }
+    },
+    {
+      "slug": "redbridge",
+      "ward_count": 22,
+      "shares": {
+        "Conservative": 0.2149,
+        "Green Party": 0.1866,
+        "Independent": 0.2043,
+        "Reform UK": 0.1951,
+        "Liberal Democrats": 0.0478,
+        "Labour": 0.1244,
+        "Redbridge Matters": 0.0221,
+        "Redbridge Trade Union Party": 0.0048
+      },
+      "demographics": {
+        "population": 1241096,
+        "imd": 5.988,
+        "white_british": 0.1875,
+        "asian": 0.4884,
+        "no_quals": 0.1741,
+        "degree": 0.4231,
+        "retired": 0.1398
+      }
+    },
+    {
+      "slug": "south-tyneside",
+      "ward_count": 18,
+      "shares": {
+        "Green Party": 0.2507,
+        "Reform UK": 0.3992,
+        "Labour": 0.1886,
+        "Independent": 0.1445,
+        "Conservative": 0.0127,
+        "Liberal Democrats": 0.0042
+      },
+      "demographics": {
+        "population": 591064,
+        "imd": 3.647,
+        "white_british": 0.9222,
+        "asian": 0.0326,
+        "no_quals": 0.2054,
+        "degree": 0.2605,
+        "retired": 0.2466
+      }
+    },
+    {
+      "slug": "st-helens",
+      "ward_count": 17,
+      "shares": {
+        "Labour": 0.2837,
+        "Independent": 0.1098,
+        "Green Party": 0.1216,
+        "Reform UK": 0.3896,
+        "Conservative": 0.0406,
+        "Liberal Democrats": 0.0547
+      },
+      "demographics": {
+        "population": 732940,
+        "imd": 3.958,
+        "white_british": 0.9214,
+        "asian": 0.0148,
+        "no_quals": 0.2148,
+        "degree": 0.271,
+        "retired": 0.2441
+      }
+    }
+  ]
+}

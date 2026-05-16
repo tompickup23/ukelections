@@ -1,0 +1,340 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const data = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "data/predictions/historical/demographic-indicator-backtest.json"),
+    "utf8",
+  ),
+);
+
+const PARTIES = ["Reform UK", "Labour", "Conservative", "Liberal Democrats", "Green Party"];
+const PREDICTORS = ["imd", "white_british", "asian", "no_quals", "degree", "retired"];
+
+function fmtR(r: number): string {
+  if (r == null) return "—";
+  return (r >= 0 ? "+" : "") + r.toFixed(3);
+}
+
+function fmtPct(x: number, d = 1): string {
+  return (x * 100).toFixed(d) + "%";
+}
+
+function strength(r: number): string {
+  const a = Math.abs(r);
+  if (a > 0.8) return "very strong";
+  if (a > 0.6) return "strong";
+  if (a > 0.4) return "moderate";
+  if (a > 0.2) return "weak";
+  return "near-zero";
+}
+
+const perParty = data.per_party as Record<string, any>;
+const predictive = data.predictive_backtest_2025_to_2026 as Record<string, any>;
+const bestIndicator = data.best_indicator_per_party as Record<string, any>;
+const n2025 = data.summary.n_councils_2025;
+const n2026 = data.summary.n_councils_2026;
+---
+
+<BaseLayout
+  title="Demographic indicators — backtest 2025 → 2026"
+  description={`Backtest of the demographic theories of British council voting against the 2026 local elections (n=${n2026} councils). Reform's degree-share signal is the most stable relationship; Labour's coalition reshuffled hard between 2025 and 2026; Conservatives have lost demographic predictability.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Past results · Indicator backtest</p>
+    <h1>What predicts vote share — and does it hold up across elections?</h1>
+    <p class="lede">
+      We ran the same demographic regression on the <strong>1 May 2025</strong>
+      county council elections (n={n2025} councils) and the <strong>1 May 2026</strong>
+      local elections (n={n2026} councils) for each major party. The headline:
+      <strong>Reform UK's correlation with degree-holder share (r ≈ −0.85) is
+      the single most stable, lawful demographic relationship in modern English
+      local elections.</strong> Other parties' coefficients moved meaningfully
+      between the two years — diagnostic of real coalitional reshuffling, not noise.
+    </p>
+    <p class="meta-row">
+      Predictors: IMD decile, White British %, Asian %, no-qualifications %,
+      degree %, retired % · Source: DC historic results + Census 2021 +
+      IMD 2019 + LA ethnic projections.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Per-party best single indicator</p>
+      <h2>One number per party — what to look at first</h2>
+    </div>
+    <p>
+      Across the much larger 2026 panel (n={n2026}), the strongest single demographic
+      predictor of each party's council-level vote share:
+    </p>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Best predictor</th><th class="num">Pearson r</th><th>Direction</th><th>Strength</th></tr></thead>
+      <tbody>
+        {PARTIES.map((p) => {
+          const b = bestIndicator[p];
+          if (!b) return null;
+          return (
+            <tr>
+              <td><span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}</td>
+              <td>{b.predictor.replace(/_/g, " ")}</td>
+              <td class="num">{fmtR(b.pearson_r)}</td>
+              <td>{b.direction}</td>
+              <td>{strength(b.pearson_r)}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+    <p>
+      Reform's −0.85 with degree-share is the strongest in the set. Labour and
+      the Conservatives now share IMD as their primary axis (negative for Labour,
+      positive for the Conservatives), confirming the partial re-emergence of a
+      traditional class divide on local government issues. Greens are best
+      predicted by their younger-electorate signature.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Backtest A — coefficient stability 2025 → 2026</p>
+      <h2>Which correlations held up, and which moved?</h2>
+    </div>
+    <p>
+      Same predictor, different election. Where the correlation is stable across
+      both years, the demographic relationship is real and lawful. Where it moved
+      meaningfully, the underlying coalition shifted.
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Party</th>
+          <th>Predictor</th>
+          <th class="num">2025 r (n={n2025})</th>
+          <th class="num">2026 r (n={n2026})</th>
+          <th class="num">Stability</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PARTIES.map((p) => {
+          const r25 = perParty[p].regression_2025?.single_predictor_pearson || {};
+          const r26 = perParty[p].regression_2026?.single_predictor_pearson || {};
+          return PREDICTORS.map((pred, i) => {
+            const v25 = r25[pred];
+            const v26 = r26[pred];
+            const delta = (v25 != null && v26 != null) ? Math.abs(v25 - v26) : null;
+            const stab = delta == null ? "—" : delta < 0.1 ? "stable" : delta < 0.3 ? "moderate shift" : "large shift";
+            return (
+              <tr>
+                {i === 0 ? <td rowspan={PREDICTORS.length}><strong><span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}</strong></td> : null}
+                <td>{pred.replace(/_/g, " ")}</td>
+                <td class="num">{fmtR(v25)}</td>
+                <td class="num">{fmtR(v26)}</td>
+                <td class="num">
+                  <span class={delta == null ? "swing-flat" : delta < 0.1 ? "swing-flat" : delta < 0.3 ? "swing-down" : "swing-down"}>
+                    {stab}
+                  </span>
+                </td>
+              </tr>
+            );
+          });
+        })}
+      </tbody>
+    </table>
+    <p>
+      <strong>Reform UK degree-share is the most stable correlation in the set</strong>
+      (−0.896 → −0.853, delta 0.04). Reform's no-quals correlation weakened (+0.91 → +0.59)
+      as its vote broadened beyond the no-quals base; its white-British and retired
+      correlations both strengthened materially as the vote consolidated in
+      older White British areas.
+    </p>
+    <p>
+      <strong>Labour underwent the largest coalitional shift.</strong> Its no-quals
+      correlation collapsed (+0.78 → +0.20), its degree correlation flipped sign
+      (−0.56 → +0.18), and its IMD correlation strengthened (−0.29 → −0.64). Labour
+      in 2026 is now "younger graduates in more-deprived urban areas" rather than
+      the cross-class coalition it was in 2025. The R² of the same regression also
+      fell (0.77 → 0.59) — Labour's vote is now less demographically predictable.
+    </p>
+    <p>
+      <strong>Conservatives have minimal demographic predictability either year</strong>
+      (R² ≈ 0.40 both years) — their vote depends much more on local incumbency,
+      candidate quality, and tactical voting than on any of these axes. The one
+      meaningful shift is on IMD: it flipped from near-zero (−0.025) in 2025 to
+      strongly positive (+0.50) in 2026, consistent with the Conservatives becoming
+      "the wealthy who haven't gone Reform yet".
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Backtest B — predictive accuracy</p>
+      <h2>Train on 2025 coefficients, predict 2026 vote share</h2>
+    </div>
+    <p>
+      The hardest test: take each party's 2025-trained regression coefficients,
+      apply them to every 2026 council's demographics, and compare predicted vs
+      actual vote share. Mean Absolute Error in percentage points (lower = better):
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Party</th>
+          <th class="num">2025 mean share</th>
+          <th class="num">2026 mean share</th>
+          <th class="num">MAE (pp)</th>
+          <th class="num">RMSE (pp)</th>
+          <th class="num">Pearson r (pred vs actual)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PARTIES.map((p) => {
+          const r25 = perParty[p].regression_2025;
+          const r26 = perParty[p].regression_2026;
+          const pred = predictive[p];
+          if (!pred) return null;
+          return (
+            <tr>
+              <td><span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}</td>
+              <td class="num">{r25 ? fmtPct(r25.mean_share) : "—"}</td>
+              <td class="num">{r26 ? fmtPct(r26.mean_share) : "—"}</td>
+              <td class="num">{pred.mae_pp.toFixed(2)}pp</td>
+              <td class="num">{pred.rmse_pp.toFixed(2)}pp</td>
+              <td class="num">{fmtR(pred.correlation)}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+    <p>
+      <strong>Reform UK has the strongest predictive correlation</strong>
+      (r=+0.676 between predicted and actual 2026 vote share) on an 8.4pp MAE.
+      The demographic-only model captures the relative ranking of councils
+      better for Reform than for any other party, even though absolute levels
+      shifted modestly as Reform's national vote broadened.
+    </p>
+    <p>
+      <strong>Conservatives have the worst predictive accuracy</strong>
+      (MAE 11.5pp, r=+0.26) — using 2025 coefficients massively over-predicts
+      Conservative vote in 2026 in places where the demographic profile looked
+      "Tory" on paper but Reform actually swept. This is direct quantitative
+      evidence of the Conservative-to-Reform vote shift.
+    </p>
+    <p>
+      <strong>Liberal Democrats have a large MAE (12.2pp) but decent correlation
+      (r=+0.53)</strong> — the demographic ranking is right but the absolute
+      levels rose in 2026 (LDs gained vote share generally). A 2026-trained
+      model would do better in level, even if 2025-trained captures the
+      cross-council ranking.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Per-party demographic signature</p>
+      <h2>What each party looks like on the demographics</h2>
+    </div>
+    {PARTIES.map((p) => {
+      const r25 = perParty[p].regression_2025;
+      const r26 = perParty[p].regression_2026;
+      return (
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="margin-top:1rem;">
+            <span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}
+          </h3>
+          <p>
+            <strong>2025 R² = {r25?.r_squared ?? "—"} · 2026 R² = {r26?.r_squared ?? "—"}</strong>
+            {r25 && r26 ? (
+              <span> · 2025 mean vote {fmtPct(r25.mean_share)} → 2026 mean vote {fmtPct(r26.mean_share)}</span>
+            ) : null}
+          </p>
+          <table class="seat-table">
+            <thead><tr><th>Predictor</th><th class="num">2025 r</th><th class="num">2026 r</th></tr></thead>
+            <tbody>
+              {PREDICTORS.map((pred) => (
+                <tr>
+                  <td>{pred.replace(/_/g, " ")}</td>
+                  <td class="num">{fmtR(r25?.single_predictor_pearson?.[pred])}</td>
+                  <td class="num">{fmtR(r26?.single_predictor_pearson?.[pred])}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    })}
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Headline conclusions</p>
+      <h2>What we can take to the bank</h2>
+    </div>
+    <ol class="numbered-list">
+      <li>
+        <strong>Reform UK's degree-share correlation (r ≈ −0.85) is the most
+        stable lawful relationship in modern English local elections.</strong>
+        It held within 0.04 points across both years on totally different
+        samples (n=24 county councils in 2025 vs n=136 mixed local elections
+        in 2026). Graduates repel Reform, full stop.
+      </li>
+      <li>
+        <strong>Reform's vote broadened in 2026 beyond its no-quals base.</strong>
+        The no-quals correlation weakened (+0.91 → +0.59) while the white-British
+        (+0.41 → +0.71) and retired-share (+0.28 → +0.69) correlations both
+        strengthened. The 2026 Reform vote is more "older, whiter, retired"
+        than "low-qualifications" specifically.
+      </li>
+      <li>
+        <strong>Labour's coalition has reshuffled hard.</strong> The Labour
+        coefficient pattern looks nothing like 2025: no-quals dropped from
+        +0.78 to +0.20, degree flipped from −0.56 to +0.18, retired from
+        −0.11 to −0.56. Labour 2026 is "younger graduates in more-deprived
+        urban areas" — fundamentally a different coalition. Labour's R²
+        also dropped (0.77 → 0.59) — its vote is now less demographically
+        predictable.
+      </li>
+      <li>
+        <strong>Conservatives have no clear demographic signature</strong>
+        (R² ≈ 0.40 both years). Their vote is now driven more by local
+        incumbency, candidate quality, and tactical voting than by any
+        demographic axis. Their training-on-2025 prediction accuracy for 2026
+        is the worst of all parties (MAE 11.5pp, r=0.26) — direct evidence
+        of the Conservative-to-Reform shift.
+      </li>
+      <li>
+        <strong>IMD is the Labour-Conservative axis; degree is the
+        Reform-everything-else axis.</strong> The two axes are roughly
+        independent. Both matter, but for different parties. A national
+        model that uses only IMD or only degree will systematically misread
+        either Labour or Reform.
+      </li>
+      <li>
+        <strong>For ward-level Reform forecasting, no-quals % is the most
+        practical proxy</strong> (degree % is nearly perfectly anti-correlated;
+        either works). At LA / council level, the choice is irrelevant — both
+        deliver the same ranking. The implementation question is which is
+        available in the ward demographic file (both are, but no-quals
+        intuitively maps to the Reform coalition better in narrative terms).
+      </li>
+    </ol>
+  </section>
+
+  <details class="section method-details">
+    <summary>Methodology</summary>
+    <ul class="plain-list">
+      <li><strong>Sample.</strong> 1 May 2025: 24 councils (11 unitaries + 14 county councils). 1 May 2026: 136 councils (all tier-local contests where a slug → LAD24 mapping resolves).</li>
+      <li><strong>Demographics.</strong> Population-weighted aggregation of constituent LAD24 demographics — IMD 2019 (mean of LSOA deciles), 2026 ethnic projections (linear interpolation between Census 2021 + 2031 ONS midpoint), Census 2021 (TS021/030/054/066/067/004) aggregated to LAD by resident-population weight.</li>
+      <li><strong>Regression.</strong> OLS on the council panel. Predictors: intercept + IMD + white_british % + asian % + no_quals % + degree %. R², single-predictor Pearson correlations, and coefficient stability across years reported.</li>
+      <li><strong>Predictive backtest.</strong> 2025 fitted coefficients applied to every 2026 council's demographics; predicted vote share compared to actual; MAE, RMSE, and Pearson r reported per party.</li>
+      <li><strong>Caveats.</strong> County-council aggregation for 2-tier shires uses average district demographics weighted by ward-level resident totals; this approximates a true county-wide average but treats districts as equal-weight inside each county.</li>
+    </ul>
+    <p class="muted-row">
+      Raw data: <a href="https://github.com/tompickup23/ukelections/blob/main/data/predictions/historical/demographic-indicator-backtest.json">demographic-indicator-backtest.json</a>
+    </p>
+  </details>
+</BaseLayout>

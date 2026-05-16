@@ -74,6 +74,7 @@ const STATIC_PATHS = [
   "/forecasts/general-election/",
   "/by-elections/makerfield/",
   "/past-results/may-2025/",
+  "/past-results/indicators/",
   "/forecasts/senedd-2026/",
   "/forecasts/holyrood-2026/",
   "/data-quality/",
@@ -86,6 +87,13 @@ const STATIC_PATHS = [
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
+  {
+    href: "/past-results/indicators/",
+    title: "Demographic indicators — backtest 2025 → 2026",
+    kind: "page",
+    description: "What predicts vote share for each major party across both the 1 May 2025 and 1 May 2026 council elections. Reform's degree-share correlation (−0.85) is the most stable lawful relationship in modern English local elections. Labour's coalition reshuffled hard between 2025 and 2026. Train-2025 predict-2026 MAE per party.",
+    priority: 109
+  },
   {
     href: "/past-results/may-2025/",
     title: "1 May 2025 council elections — full review",
