@@ -73,6 +73,7 @@ const STATIC_PATHS = [
   "/forecasts/may-2026/",
   "/forecasts/general-election/",
   "/by-elections/makerfield/",
+  "/past-results/may-2025/",
   "/forecasts/senedd-2026/",
   "/forecasts/holyrood-2026/",
   "/data-quality/",
@@ -85,6 +86,13 @@ const STATIC_PATHS = [
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
+  {
+    href: "/past-results/may-2025/",
+    title: "1 May 2025 council elections — full review",
+    kind: "page",
+    description: "Comprehensive analytical review of the 1 May 2025 county council elections. 24 councils, 1,400 seats, 547 Reform UK seats (39.1%), 9 Reform majorities, with the demographic regression that explains 84% of cross-council Reform vote variance (no-quals r = +0.905; degree r = -0.896).",
+    priority: 108
+  },
   {
     href: "/by-elections/makerfield/",
     title: "Makerfield by-election — 18 June 2026",

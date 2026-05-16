@@ -1,0 +1,361 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const analysis = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "data/predictions/historical/may-2025-council-analysis.json"),
+    "utf8",
+  ),
+);
+
+const national = analysis.national;
+const indicators = analysis.indicators;
+const councils = analysis.councils as Array<any>;
+const regional = analysis.regional as Record<string, any>;
+
+const pct = (x: number) => (x * 100).toFixed(1);
+
+// Sort councils by Reform vote share for the main table
+const councilsByReform = [...councils]
+  .filter((c) => !c.error && c.shares?.["Reform UK"] != null)
+  .sort((a, b) => (b.shares["Reform UK"] || 0) - (a.shares["Reform UK"] || 0));
+
+const corrSorted = Object.entries(indicators.single_predictor_pearson)
+  .map(([k, v]) => ({ key: k, r: v as number }))
+  .sort((a, b) => Math.abs(b.r) - Math.abs(a.r));
+
+const regionList = Object.entries(regional)
+  .map(([k, v]) => ({ region: k, ...(v as any) }))
+  .sort((a, b) => (b.reform_vote_pct || 0) - (a.reform_vote_pct || 0));
+
+const fits = indicators.multiple_regression.council_fits as Array<any>;
+const fitsSortedResidual = [...fits].sort((a, b) => b.residual_pp - a.residual_pp);
+---
+
+<BaseLayout
+  title="1 May 2025 council elections — full review"
+  description={`Full review of the 1 May 2025 county council elections: ${national.councils_analysed} councils, ${national.total_seats_contested.toLocaleString()} seats, ${national.reform_majority_councils.length} Reform majorities, and the demographic indicators that explain ${(indicators.multiple_regression.r_squared * 100).toFixed(0)}% of cross-council Reform vote variance.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Past results · 1 May 2025</p>
+    <h1>The 1 May 2025 council elections — what the demographics tell us</h1>
+    <p class="lede">
+      <strong>{national.councils_analysed} councils</strong> reviewed.
+      Reform UK took <strong>{pct(national.national_vote_shares["Reform UK"])}%</strong>
+      of the total vote and <strong>{national.seats_by_party["Reform UK"]}</strong>
+      seats ({pct(national.national_seat_shares["Reform UK"])}%), winning majorities
+      in <strong>{national.reform_majority_councils.length}</strong> of them. A simple
+      four-predictor demographic regression explains
+      <strong>{(indicators.multiple_regression.r_squared * 100).toFixed(0)}%</strong>
+      of the cross-council variance.
+    </p>
+    <p class="meta-row">
+      Election date: 1 May 2025 · Excludes 6 mayoral / combined-authority contests
+      (Cambs &amp; Peterborough, Doncaster Mayor, Greater Lincolnshire CCA, Hull &amp;
+      East Yorkshire CA, North Tyneside Mayor, West of England) · Includes 11 unitaries
+      and 14 county councils.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">National headline</p>
+      <h2>Vote share and seat share by party</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th class="num">National vote</th><th class="num">Seats</th><th class="num">Seat share</th></tr></thead>
+      <tbody>
+        {(Object.entries(national.national_vote_shares) as Array<[string, number]>)
+          .sort((a, b) => b[1] - a[1])
+          .map(([p, v]) => (
+            <tr>
+              <td><span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}</td>
+              <td class="num">{pct(v)}%</td>
+              <td class="num">{national.seats_by_party[p] || 0}</td>
+              <td class="num">{((national.seats_by_party[p] || 0) / national.total_seats_contested * 100).toFixed(1)}%</td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Vote shares are weighted by valid votes cast across {national.total_valid_votes.toLocaleString()}
+      ballots; seat counts sum across {national.total_seats_contested.toLocaleString()} council
+      divisions / wards contested on the day.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The 9 Reform UK majorities</p>
+      <h2>Where Reform broke through</h2>
+    </div>
+    <p>
+      Reform UK won outright majorities (more than half of all seats) in 9 of the 25
+      councils analysed — its first wave of council control. The set covers every
+      English region except London and the South West:
+    </p>
+    <table class="seat-table">
+      <thead><tr><th>Council</th><th>Region</th><th class="num">Reform seats</th><th class="num">Total seats</th><th class="num">Reform seat %</th><th class="num">Reform vote %</th></tr></thead>
+      <tbody>
+        {national.reform_majority_councils.map((c: any) => {
+          const full = councils.find((x: any) => x.slug === c.slug);
+          return (
+            <tr>
+              <td><strong>{c.name}</strong></td>
+              <td>{full?.region}</td>
+              <td class="num">{c.reform_seats}</td>
+              <td class="num">{c.total_seats}</td>
+              <td class="num">{((c.reform_seats / c.total_seats) * 100).toFixed(1)}%</td>
+              <td class="num">{pct(c.reform_vote_pct)}%</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">What predicts Reform vote share?</p>
+      <h2>The education gradient is the headline</h2>
+    </div>
+    <p>
+      Across the 24 councils with comparable demographic data, a multiple regression of
+      Reform 2025 vote share on (IMD decile, White British %, Asian %, no-qualifications %)
+      achieves R² = <strong>{indicators.multiple_regression.r_squared}</strong> — almost
+      <strong>{(indicators.multiple_regression.r_squared * 100).toFixed(0)}%</strong> of
+      cross-council variance explained by four axes. The single-predictor correlations
+      tell the story even more clearly:
+    </p>
+    <table class="seat-table">
+      <thead><tr><th>Predictor</th><th class="num">Pearson r</th><th>Strength</th></tr></thead>
+      <tbody>
+        {corrSorted.map((c) => (
+          <tr>
+            <td>{c.key.replace(/_/g, " ").replace(" pct", " %")}</td>
+            <td class="num">{c.r >= 0 ? "+" : ""}{c.r.toFixed(3)}</td>
+            <td>
+              {Math.abs(c.r) > 0.7 ? "Very strong " : Math.abs(c.r) > 0.5 ? "Strong " : Math.abs(c.r) > 0.3 ? "Moderate " : "Weak "}
+              {c.r > 0 ? "positive" : "negative"}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p>
+      Two findings dominate:
+    </p>
+    <ol class="numbered-list">
+      <li>
+        <strong>No-qualifications % is the single best predictor of Reform vote</strong>
+        (r = +0.905) — and degree-holder % is its near-perfect mirror (r = −0.896).
+        Reform's 2025 council coalition is structurally an <em>education</em> story
+        rather than a deprivation or ethnicity story.
+      </li>
+      <li>
+        <strong>IMD on its own has almost no signal at council level</strong>
+        (r = −0.160) — that's because the most-deprived councils include both
+        Reform-friendly post-industrial unitaries (Co Durham, Doncaster) and
+        Reform-resistant inner-urban metro councils (which weren't in this 2025
+        cycle, but the pattern would extend). Once you control for education and
+        ethnicity, the deprivation signal becomes secondary.
+      </li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">All councils ranked by Reform vote share</p>
+      <h2>From Staffordshire (42%) to Oxfordshire (18%)</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Council</th>
+          <th>Region</th>
+          <th class="num">Type</th>
+          <th class="num">Reform %</th>
+          <th class="num">Lab %</th>
+          <th class="num">Con %</th>
+          <th class="num">LD %</th>
+          <th class="num">Grn %</th>
+          <th>Control after</th>
+        </tr>
+      </thead>
+      <tbody>
+        {councilsByReform.map((c: any, i: number) => (
+          <tr>
+            <td class="num">{i + 1}</td>
+            <td>{c.name}</td>
+            <td>{c.region}</td>
+            <td class="num">{c.type}</td>
+            <td class="num"><strong>{pct(c.shares["Reform UK"] || 0)}%</strong></td>
+            <td class="num">{pct(c.shares["Labour"] || 0)}%</td>
+            <td class="num">{pct(c.shares["Conservative"] || 0)}%</td>
+            <td class="num">{pct(c.shares["Liberal Democrats"] || 0)}%</td>
+            <td class="num">{pct(c.shares["Green Party"] || 0)}%</td>
+            <td>{c.control}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Where Reform over- and under-performed</p>
+      <h2>Regression residuals — beyond what demographics predicted</h2>
+    </div>
+    <p>
+      Comparing each council's <em>actual</em> Reform vote share to what the demographic
+      regression <em>predicted</em> isolates non-demographic effects — campaign quality,
+      local incumbency, candidate strength, regional-specific dynamics.
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Council</th>
+          <th>Region</th>
+          <th class="num">Actual</th>
+          <th class="num">Predicted</th>
+          <th class="num">Residual</th>
+        </tr>
+      </thead>
+      <tbody>
+        {fitsSortedResidual.map((f: any) => (
+          <tr>
+            <td>{f.name}</td>
+            <td>{f.region}</td>
+            <td class="num">{pct(f.actual_reform)}%</td>
+            <td class="num">{pct(f.predicted_reform)}%</td>
+            <td class="num">
+              <span class={f.residual_pp > 0 ? "swing-up" : (f.residual_pp < 0 ? "swing-down" : "swing-flat")}>
+                {f.residual_pp > 0 ? "+" : ""}{f.residual_pp.toFixed(1)}pp
+              </span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p>
+      <strong>Top over-performers — Staffordshire (+5.5pp), Kent (+5.3pp), West
+      Northamptonshire (+4.2pp).</strong> These three suggest there's a real "Reform
+      campaign-organisation premium" in the Midlands belt where Tice and Farage
+      personally invested air-time and ground game. Staffordshire's 49/62 seat haul
+      (79% of available) is the most extreme campaign over-performance in the set.
+    </p>
+    <p>
+      <strong>Top under-performers — Doncaster (−6.9pp), Northumberland (−3.7pp),
+      Oxfordshire (−3.2pp).</strong> Doncaster's miss is striking: it had the most
+      Reform-friendly demographic profile of any council in the set, yet only delivered
+      40.6% (vs 47.4% predicted). The reason: organised Labour incumbency on a
+      single-LA unitary council, plus Ros Jones's personal vote as long-standing
+      directly-elected Mayor, held some of the Lab vote that Reform's fundamentals
+      would otherwise have peeled off. Northumberland's −3.7pp is partly a Liberal
+      Democrat strong-second-place effect (organised local LD incumbency in Berwick,
+      Hexham). Oxfordshire's −3.2pp reflects the Green / Lib Dem ceiling on Reform
+      everywhere in graduate-heavy Oxford-adjacent territory.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Regional breakdown</p>
+      <h2>Reform's vote concentrated in the Midlands and the North East</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Region</th>
+          <th class="num">Councils</th>
+          <th class="num">Reform vote</th>
+          <th class="num">Labour vote</th>
+          <th class="num">Con vote</th>
+          <th class="num">Reform seats</th>
+          <th class="num">Total seats</th>
+          <th class="num">Reform seat %</th>
+        </tr>
+      </thead>
+      <tbody>
+        {regionList.map((r) => (
+          <tr>
+            <td>{r.region}</td>
+            <td class="num">{r.councils}</td>
+            <td class="num"><strong>{pct(r.reform_vote_pct)}%</strong></td>
+            <td class="num">{pct(r.labour_vote_pct)}%</td>
+            <td class="num">{pct(r.conservative_vote_pct)}%</td>
+            <td class="num">{r.reform_seats}</td>
+            <td class="num">{r.total_seats}</td>
+            <td class="num">{pct(r.reform_seat_pct)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p>
+      The East Midlands (Derbyshire, Lincs, Notts, Leics, N Northants, W Northants),
+      the West Midlands (Staffs, Worcs, Warks, Shropshire) and the North East
+      (Co Durham, Northumberland) are where Reform's 2025 vote concentrated — every
+      one of these regions delivered 30%+ Reform vote share. The South West and South
+      East delivered the most resistance, principally because the LD / Green ceiling
+      is higher in graduate-rich shire-county territory.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">What we can use this for</p>
+      <h2>Implications for the rolling GE forecast</h2>
+    </div>
+    <ol class="numbered-list">
+      <li>
+        <strong>Replace IMD with no-quals % as the primary Reform proxy</strong>
+        wherever the ward-level model currently uses deprivation. The 2025 evidence
+        is unambiguous: no-quals at r = +0.905 dwarfs IMD at r = −0.160 as a
+        Reform predictor at the council level.
+      </li>
+      <li>
+        <strong>Reform's seat-conversion premium is real and large.</strong> Reform
+        converted a 31.7% vote share into a 39.1% seat share — a +7.4pp seat-share
+        bonus. That's the FPTP / vote-concentration premium of running a campaign
+        targeted at low-education electorates that cluster geographically. The
+        2026 onward forecast should NOT assume vote-share proportionality when
+        translating Reform polling into projected seats.
+      </li>
+      <li>
+        <strong>Treat Doncaster as the canonical "incumbency-resistant" case.</strong>
+        Where there's a long-standing directly-elected Labour mayor with personal
+        vote, Reform's demographic ceiling drops by ~7pp. This is directly relevant
+        to the Makerfield by-election where Burnham (Greater Manchester mayor,
+        60.2% personal vote in Wigan 2024) is on the ballot — the Reform
+        under-performance vs demographic fundamentals could be even larger than in
+        Doncaster.
+      </li>
+      <li>
+        <strong>The +5pp Reform-campaign premium in Staffs / Kent / W Northants is
+        a campaign-quality signal, not a fluke.</strong> Where Reform put in major
+        organisational effort in 2025, they outperformed demographics by ~5pp.
+        Farage has pledged to "throw everything" at the Makerfield by-election —
+        consistent with a similar over-performance there.
+      </li>
+    </ol>
+  </section>
+
+  <details class="section method-details">
+    <summary>Methodology + caveats</summary>
+    <ul class="plain-list">
+      <li><strong>Source.</strong> Democracy Club <code>local.*.2025-05-01</code> results, aggregated to council level.</li>
+      <li><strong>Demographics.</strong> LA-level IMD 2019 (mean of LSOA deciles), 2026 ethnic projections (linear interpolation between Census 2021 and 2031 ONS projection midpoint), and ward-level Census 2021 (TS021/030/054/066/067/004) aggregated to LAD by resident-population weight.</li>
+      <li><strong>County aggregation.</strong> For 2-tier county councils (Cambs, Derbyshire, Devon, Glos, Herts, Kent, Lancs, Leics, Lincs, Notts, Oxon, Staffs, Warks, Worcs), the council-level demographic average is a population-weighted mean across constituent district LADs. Isles of Scilly excluded (party-less politics).</li>
+      <li><strong>Mayoral / combined-authority excluded.</strong> Cambs & Peterborough, Doncaster Mayor, Greater Lincolnshire CCA, Hull & East Yorkshire CA, North Tyneside Mayor, and West of England Mayor are not in scope here.</li>
+      <li><strong>Regression.</strong> OLS on n=24 councils. Predictors: intercept, avg_imd_decile, white_british %, asian %, no_quals %. R² = {indicators.multiple_regression.r_squared}. With n=24 and 4 predictors there are 19 degrees of freedom — sufficient for the headline correlations to be robust.</li>
+    </ul>
+    <p class="muted-row">
+      Raw data: <a href={`https://github.com/tompickup23/ukelections/blob/main/data/predictions/historical/may-2025-council-analysis.json`}>may-2025-council-analysis.json</a>
+    </p>
+  </details>
+</BaseLayout>
