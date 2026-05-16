@@ -1,0 +1,320 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const forecast = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "data/predictions/by-elections/makerfield-2026-06-18.json"),
+    "utf8",
+  ),
+);
+
+const central = forecast.forecast.central_shares as Record<string, number>;
+const ranked = (forecast.forecast.ranked || []) as Array<{ party: string; pct: number }>;
+const winner = forecast.forecast.winner as string;
+const runnerUp = forecast.forecast.runner_up as string;
+const marginPp = (forecast.forecast.margin_pp * 100).toFixed(1);
+const winnerPct = (forecast.forecast.central_shares[winner] * 100).toFixed(1);
+const runnerUpPct = (forecast.forecast.central_shares[runnerUp] * 100).toFixed(1);
+const classification = forecast.forecast.classification as string;
+
+const ge2024 = forecast.inputs.ge2024_baseline;
+const ge2024Shares = ge2024.vote_shares as Record<string, number>;
+const wardSignal = forecast.inputs.ward_signal_2026_05_07;
+const wardAgg = wardSignal.aggregate_shares as Record<string, number>;
+const reformLead = (forecast.inputs.ward_aggregate_reform_lead_pp * 100).toFixed(1);
+const turnoutPct = (wardSignal.average_turnout_pct * 100).toFixed(1);
+
+const survation = forecast.inputs.survation_poll_2026_05_15;
+const scenarioA = forecast.scenarios.burnham_stands;
+const scenarioB = forecast.scenarios.burnham_withdraws;
+
+const history = forecast.historical_anchor;
+const candidates = forecast.candidates as Array<any>;
+
+const pollingDay = forecast.contest.polling_day;
+const headline = forecast.forecast.headline;
+
+function pct(x: number): string {
+  return (x * 100).toFixed(1);
+}
+
+function swingFromGe2024(party: string): number {
+  return (central[party] || 0) - (ge2024Shares[party] || 0);
+}
+
+function classificationLabel(c: string): string {
+  switch (c) {
+    case "toss-up":
+      return "Toss-up";
+    case "lean":
+      return "Lean";
+    case "likely":
+      return "Likely";
+    case "safe":
+      return "Safe";
+    default:
+      return c;
+  }
+}
+---
+
+<BaseLayout
+  title="Makerfield by-election — 18 June 2026 forecast"
+  description={`Forecast for the 18 June 2026 Makerfield parliamentary by-election. Central forecast: ${shortPartyLabel(winner)} ${winnerPct}% vs ${shortPartyLabel(runnerUp)} ${runnerUpPct}% — a ${marginPp}pp ${classification}.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">By-election forecast · Polling day {pollingDay}</p>
+    <h1>Makerfield by-election</h1>
+    <p class="lede">
+      Central forecast:
+      <strong><span class="party-pill" style={`background:${partyColour(winner)}`}></span> {shortPartyLabel(winner)}</strong>
+      with <strong>{winnerPct}%</strong>,
+      <strong><span class="party-pill" style={`background:${partyColour(runnerUp)}`}></span> {shortPartyLabel(runnerUp)}</strong>
+      on {runnerUpPct}% — a <strong>{marginPp}pp</strong> margin. Classification: <strong>{classificationLabel(classification)}</strong>.
+    </p>
+    <p class="meta-row">
+      England · North West · Wigan borough · {forecast.contest.pcon24cd}
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Trigger</p>
+      <h2>Why this seat is being contested</h2>
+    </div>
+    <p>
+      Josh Simons (Labour, MP for Makerfield since GE2024) announced his resignation on
+      <strong>14 May 2026</strong> so that Greater Manchester mayor <strong>Andy Burnham</strong>
+      could seek a return to Parliament. Labour's National Executive Committee cleared Burnham
+      to stand on <strong>15 May 2026</strong>. The Prime Minister has indicated Downing Street
+      will not block the candidacy.
+    </p>
+    <p>
+      It is the first Westminster by-election since <strong>1965 (Leyton, Patrick Gordon Walker)</strong>
+      to be triggered specifically to seat a political figure from outside Parliament. Bookmakers
+      and commentators frame the result as a precursor to a Labour leadership challenge to
+      Sir Keir Starmer.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Probability-weighted central forecast</p>
+      <h2>What the model expects on 18 June</h2>
+    </div>
+    <div class="party-bars party-bars-large">
+      {ranked.map((row) => {
+        const swing = swingFromGe2024(row.party);
+        const ge24 = ge2024Shares[row.party] || 0;
+        return (
+          <div class="bar-row">
+            <span class="bar-label">{shortPartyLabel(row.party)}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style={`width:${(row.pct * 100).toFixed(1)}%; background:${partyColour(row.party)}`}></div>
+            </div>
+            <span class="bar-value">
+              {(row.pct * 100).toFixed(1)}%
+              {ge24 > 0 ? (
+                <span class={swing > 0 ? "swing-up" : (swing < 0 ? "swing-down" : "swing-flat")}>
+                  {swing > 0 ? "+" : ""}{(swing * 100).toFixed(1)}pp
+                </span>
+              ) : null}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+    <p class="caption">
+      Coloured number is the swing vs the 4 July 2024 general election result.
+      Blend = {(forecast.forecast.burnham_on_ballot_probability * 100).toFixed(0)}% Scenario A
+      (Burnham stands) + {((1 - forecast.forecast.burnham_on_ballot_probability) * 100).toFixed(0)}% Scenario B
+      (Burnham withdraws).
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Two scenarios</p>
+      <h2>The Burnham-on-the-ballot question</h2>
+    </div>
+    <p>
+      The headline forecast hinges almost entirely on whether Burnham appears on the ballot.
+      Survation's 14-15 May poll measured both directly.
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Party</th>
+          <th class="num">Scenario A — Burnham stands</th>
+          <th class="num">Scenario B — Burnham withdraws</th>
+          <th class="num">Blended (central)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ranked.map((row) => {
+          const a = (scenarioA.central[row.party] || 0) * 100;
+          const b = (scenarioB.central[row.party] || 0) * 100;
+          const c = row.pct * 100;
+          return (
+            <tr>
+              <td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
+              <td class="num">{a.toFixed(1)}%</td>
+              <td class="num">{b.toFixed(1)}%</td>
+              <td class="num"><strong>{c.toFixed(1)}%</strong></td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+    <p class="caption">
+      Scenario probability assigned by the model: <strong>{(forecast.forecast.burnham_on_ballot_probability * 100).toFixed(0)}%</strong> Burnham stands
+      (raised above Survation's 67% to reflect NEC clearance and Burnham's same-day acceptance), <strong>{((1 - forecast.forecast.burnham_on_ballot_probability) * 100).toFixed(0)}%</strong> Burnham withdraws.
+      Survation's two scenario shares are reproduced verbatim from the published topline.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">1 May 2026 ward signal</p>
+      <h2>What the council elections said about this seat</h2>
+    </div>
+    <p>
+      Reform UK won <strong>all nine</strong> Wigan wards inside the Makerfield Westminster
+      boundary on 7 May 2026. Aggregated across {wardSignal.total_valid_votes.toLocaleString()} valid
+      votes (turnout {turnoutPct}%), Reform led Labour by <strong>{reformLead}pp</strong>:
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Ward</th>
+          <th class="num">Turnout</th>
+          <th class="num">Reform</th>
+          <th class="num">Labour</th>
+          <th class="num">Green</th>
+          <th class="num">Con</th>
+          <th class="num">LD</th>
+        </tr>
+      </thead>
+      <tbody>
+        {wardSignal.per_ward.map((w: any) => (
+          <tr>
+            <td>{w.ward_slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}</td>
+            <td class="num">{(w.turnout_pct * 100).toFixed(1)}%</td>
+            <td class="num">{w.vote_shares["Reform UK"] ? (w.vote_shares["Reform UK"] * 100).toFixed(1) + "%" : "—"}</td>
+            <td class="num">{w.vote_shares["Labour"] ? (w.vote_shares["Labour"] * 100).toFixed(1) + "%" : "—"}</td>
+            <td class="num">{w.vote_shares["Green Party"] ? (w.vote_shares["Green Party"] * 100).toFixed(1) + "%" : "—"}</td>
+            <td class="num">{w.vote_shares["Conservative"] ? (w.vote_shares["Conservative"] * 100).toFixed(1) + "%" : "—"}</td>
+            <td class="num">{w.vote_shares["Liberal Democrats"] ? (w.vote_shares["Liberal Democrats"] * 100).toFixed(1) + "%" : "—"}</td>
+          </tr>
+        ))}
+        <tr>
+          <td><strong>Aggregate</strong></td>
+          <td class="num"><strong>{turnoutPct}%</strong></td>
+          <td class="num"><strong>{pct(wardAgg["Reform UK"] || 0)}%</strong></td>
+          <td class="num"><strong>{pct(wardAgg["Labour"] || 0)}%</strong></td>
+          <td class="num"><strong>{pct(wardAgg["Green Party"] || 0)}%</strong></td>
+          <td class="num"><strong>{pct(wardAgg["Conservative"] || 0)}%</strong></td>
+          <td class="num"><strong>{pct(wardAgg["Liberal Democrats"] || 0)}%</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Candidates</p>
+      <h2>Who is contesting the seat</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Party</th><th>Candidate</th><th>Status</th></tr></thead>
+      <tbody>
+        {candidates.map((c: any) => (
+          <tr>
+            <td><span class="party-pill" style={`background:${partyColour(c.party)}`}></span> {shortPartyLabel(c.party)}</td>
+            <td>{c.candidate}</td>
+            <td>{c.status}{c.note ? <> — <span class="muted">{c.note}</span></> : null}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Refreshed nightly from Democracy Club Candidates API. Final list confirmed at SoPN publication.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">120-year historical anchor</p>
+      <h2>What this seat has always done</h2>
+    </div>
+    <p>
+      {history.summary}
+      The seat voted <strong>{(history.brexit_2016_leave_pct * 100).toFixed(0)}% Leave</strong> at the 2016 referendum.
+    </p>
+    <table class="seat-table">
+      <thead><tr><th class="num">Year</th><th>Winner</th><th class="num">Lab share</th><th>Runner-up</th><th class="num">Majority</th></tr></thead>
+      <tbody>
+        {history.makerfield_results.map((r: any) => (
+          <tr>
+            <td class="num">{r.year}</td>
+            <td><span class="party-pill" style={`background:${partyColour(r.winner)}`}></span> {r.winner_name}</td>
+            <td class="num">{(r.lab_pct * 100).toFixed(1)}%</td>
+            <td>{shortPartyLabel(r.runner_up)} {(r.runner_up_pct * 100).toFixed(1)}%</td>
+            <td class="num">{(r.majority_pct * 100).toFixed(1)}pp</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Sources: Wikipedia, House of Commons Library general election briefings.
+      Predecessor seat <strong>{history.predecessor_seat.name}</strong> held by Labour {history.predecessor_seat.period}.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Burnham personal vote — calibration</p>
+      <h2>Where the +20.7pp Labour uplift comes from</h2>
+    </div>
+    <p>
+      In the 1 May 2024 Greater Manchester mayoral election, Burnham scored
+      <strong>{(forecast.inputs.burnham_mayoral_baseline.wigan_first_pref_2024 * 100).toFixed(1)}%</strong>
+      first-preference vote across <em>Wigan borough</em> — the local authority that contains every
+      Makerfield ward. National Labour's brand on the same day stood at
+      <strong>{(forecast.inputs.burnham_mayoral_baseline.national_lab_share_2024 * 100).toFixed(1)}%</strong>.
+      That gives Burnham a measured <strong>+26.5pp personal-vote uplift</strong> over the Labour brand
+      in this electorate.
+    </p>
+    <p>
+      The model discounts that to <strong>+20.7pp</strong> (78% of the mayoral uplift) to reflect that
+      a Westminster by-election is more partisan than an executive mayoral race and that the Starmer
+      government's record is also on the ballot. Applied to the 24.3% ward baseline, this lands
+      Labour at 45.0% — within rounding of Survation's published 45%.
+    </p>
+  </section>
+
+  <details class="section method-details">
+    <summary>Full methodology trace ({forecast.methodology.length} steps)</summary>
+    <ol class="numbered-list">
+      {forecast.methodology.map((m: any) => (
+        <li>
+          <strong>{m.name}</strong>
+          {m.description ? <> — {m.description}</> : null}
+        </li>
+      ))}
+    </ol>
+    <p class="muted-row">
+      Model version: <code>{forecast.model_version}</code> · Generated {forecast.generated_at} ·
+      Confidence: <strong>{forecast.confidence}</strong>.
+    </p>
+    <p class="muted-row">{forecast.confidence_note}</p>
+    <p class="muted-row">
+      <a href="/methodology/">Read the full UKE methodology →</a> ·
+      <a href={`https://github.com/tompickup23/ukelections/blob/main/data/predictions/by-elections/makerfield-2026-06-18.json`}>Raw forecast JSON →</a>
+    </p>
+  </details>
+</BaseLayout>

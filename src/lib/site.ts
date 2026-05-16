@@ -24,6 +24,7 @@ export interface SearchEntry {
 export const NAV_ITEMS = [
   { href: "/councils/", label: "Councils" },
   { href: "/forecasts/general-election/", label: "General Election" },
+  { href: "/by-elections/makerfield/", label: "Makerfield" },
   { href: "/your-area/", label: "Find Your Ward" },
   { href: "/past-results/", label: "Past Results" },
   { href: "/methodology/", label: "About" },
@@ -71,6 +72,7 @@ const STATIC_PATHS = [
   "/forecasts/",
   "/forecasts/may-2026/",
   "/forecasts/general-election/",
+  "/by-elections/makerfield/",
   "/forecasts/senedd-2026/",
   "/forecasts/holyrood-2026/",
   "/data-quality/",
@@ -83,6 +85,13 @@ const STATIC_PATHS = [
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
+  {
+    href: "/by-elections/makerfield/",
+    title: "Makerfield by-election — 18 June 2026",
+    kind: "page",
+    description: "Forecast for the Makerfield by-election triggered by Josh Simons' resignation to make way for Andy Burnham. Two scenarios (Burnham stands / withdraws), 1 May 2026 ward signal, Survation 14-15 May poll, 120-year historical anchor.",
+    priority: 110
+  },
   {
     href: "/councils/",
     title: "Councils",

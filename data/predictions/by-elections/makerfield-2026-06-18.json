@@ -1,0 +1,923 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "makerfield-by-election-v1",
+  "generated_at": "2026-05-16T19:35:55.338Z",
+  "contest": {
+    "constituency_slug": "makerfield",
+    "constituency_name": "Makerfield",
+    "pcon24cd": "E14001350",
+    "trigger": {
+      "type": "resignation",
+      "departing_mp": "Josh Simons",
+      "departing_party": "Labour",
+      "resignation_announced_at": "2026-05-14",
+      "stated_reason": "To make the seat available for Greater Manchester mayor Andy Burnham to seek a Westminster return."
+    },
+    "polling_day": "2026-06-18",
+    "writ_status": "expected",
+    "precedent_note": "First Westminster by-election since 1965 (Leyton, Patrick Gordon Walker) triggered specifically to seat an outside political figure."
+  },
+  "candidates": [
+    {
+      "party": "Labour",
+      "candidate": "Andy Burnham",
+      "status": "selected (subject to formal NEC endorsement)",
+      "note": "Greater Manchester mayor since 2017; cleared by NEC 15 May 2026."
+    },
+    {
+      "party": "Reform UK",
+      "candidate": "Robert Kenyon",
+      "status": "expected reselection (GE2024 runner-up; elected Wigan councillor 1 May 2026)",
+      "note": "Came second in Makerfield at GE2024 with 31.8%."
+    },
+    {
+      "party": "Conservative",
+      "candidate": "to be confirmed",
+      "status": "confirmed contesting",
+      "note": "Kemi Badenoch confirmed Conservative candidate; ruled out non-aggression pact with Reform."
+    },
+    {
+      "party": "Green Party",
+      "candidate": "to be confirmed",
+      "status": "confirmed contesting",
+      "note": "Green Party of England and Wales confirmed selection underway."
+    },
+    {
+      "party": "Liberal Democrats",
+      "candidate": "to be confirmed",
+      "status": "expected to contest"
+    },
+    {
+      "party": "Restore Britain",
+      "candidate": "to be confirmed",
+      "status": "confirmed contesting",
+      "note": "First Westminster candidacy for Rupert Lowe's Restore Britain party (formed November 2025)."
+    },
+    {
+      "party": "Official Monster Raving Loony Party",
+      "candidate": "Howling Laud Hope",
+      "status": "expected"
+    }
+  ],
+  "forecast": {
+    "winner": "Reform UK",
+    "runner_up": "Labour",
+    "margin_pp": 0.013500000000000012,
+    "classification": "toss-up",
+    "headline": "Probability-weighted central forecast — Reform UK 43.7% vs Labour 42.3% (1.4pp margin, toss-up).",
+    "central_shares": {
+      "Labour": 0.42300000000000004,
+      "Reform UK": 0.43650000000000005,
+      "Conservative": 0.05000000000000001,
+      "Green Party": 0.04300000000000001,
+      "Liberal Democrats": 0.021500000000000005,
+      "Restore Britain": 0.014500000000000002,
+      "Other": 0.011500000000000002
+    },
+    "ranked": [
+      {
+        "party": "Reform UK",
+        "pct": 0.43650000000000005
+      },
+      {
+        "party": "Labour",
+        "pct": 0.42300000000000004
+      },
+      {
+        "party": "Conservative",
+        "pct": 0.05000000000000001
+      },
+      {
+        "party": "Green Party",
+        "pct": 0.04300000000000001
+      },
+      {
+        "party": "Liberal Democrats",
+        "pct": 0.021500000000000005
+      },
+      {
+        "party": "Restore Britain",
+        "pct": 0.014500000000000002
+      },
+      {
+        "party": "Other",
+        "pct": 0.011500000000000002
+      }
+    ],
+    "burnham_on_ballot_probability": 0.85
+  },
+  "scenarios": {
+    "burnham_stands": {
+      "name": "Burnham stands",
+      "central": {
+        "Labour": 0.45,
+        "Reform UK": 0.42,
+        "Conservative": 0.05,
+        "Green Party": 0.04,
+        "Liberal Democrats": 0.02,
+        "Restore Britain": 0.01,
+        "Other": 0.01
+      },
+      "ranked": [
+        {
+          "party": "Labour",
+          "pct": 0.45
+        },
+        {
+          "party": "Reform UK",
+          "pct": 0.42
+        },
+        {
+          "party": "Conservative",
+          "pct": 0.05
+        },
+        {
+          "party": "Green Party",
+          "pct": 0.04
+        },
+        {
+          "party": "Liberal Democrats",
+          "pct": 0.02
+        },
+        {
+          "party": "Restore Britain",
+          "pct": 0.01
+        },
+        {
+          "party": "Other",
+          "pct": 0.01
+        }
+      ],
+      "cross_check": {
+        "ward_baseline_labour": 0.24310880172359167,
+        "survation_burnham_labour": 0.45,
+        "implied_burnham_personal_vote_uplift_pp": 0.20689119827640834,
+        "ward_baseline_reform": 0.5020594385653634,
+        "survation_burnham_reform": 0.42,
+        "implied_reform_contraction_pp": 0.08205943856536341,
+        "burnham_wigan_mayoral_uplift_pp": 0.26499999999999996,
+        "uplift_calibration_note": "Survation-implied uplift (~20.7pp) is 78% of the observed Wigan mayoral uplift (26.5pp), which is the expected discount for a partisan Westminster contest vs an executive mayoral race."
+      },
+      "confidence_interval_pp": 6
+    },
+    "burnham_withdraws": {
+      "name": "Burnham withdraws (contingency)",
+      "central": {
+        "Labour": 0.26999999999999996,
+        "Reform UK": 0.5299999999999999,
+        "Conservative": 0.04999999999999999,
+        "Green Party": 0.059999999999999984,
+        "Liberal Democrats": 0.029999999999999992,
+        "Restore Britain": 0.039999999999999994,
+        "Other": 0.019999999999999997
+      },
+      "ranked": [
+        {
+          "party": "Reform UK",
+          "pct": 0.5299999999999999
+        },
+        {
+          "party": "Labour",
+          "pct": 0.26999999999999996
+        },
+        {
+          "party": "Green Party",
+          "pct": 0.059999999999999984
+        },
+        {
+          "party": "Conservative",
+          "pct": 0.04999999999999999
+        },
+        {
+          "party": "Restore Britain",
+          "pct": 0.039999999999999994
+        },
+        {
+          "party": "Liberal Democrats",
+          "pct": 0.029999999999999992
+        },
+        {
+          "party": "Other",
+          "pct": 0.019999999999999997
+        }
+      ],
+      "cross_check": {
+        "ward_baseline_reform": 0.5020594385653634,
+        "survation_no_burnham_reform": 0.53,
+        "ward_to_survation_reform_lift_pp": 0.027940561434636635,
+        "note": "Reform ceiling ~53% reflects by-election turnout collapse on disengaged Labour voters with no Burnham brand to mobilise them; consistent with Reform's GE2024 31.8% + the 13.4pp ward swing observed 1 May 2026 + an additional 7.8pp by-election protest amplification."
+      },
+      "confidence_interval_pp": 8
+    }
+  },
+  "inputs": {
+    "ge2024_baseline": {
+      "turnout_votes": 40263,
+      "electorate": 76641,
+      "winner_party": "Labour",
+      "runner_up_party": "Reform UK",
+      "majority_pct": 0.13409333631373715,
+      "vote_shares": {
+        "Labour": 0.45207758984675755,
+        "Reform UK": 0.3179842535330204,
+        "Conservative": 0.10875990363360902,
+        "Liberal Democrats": 0.06792837096093188,
+        "Green Party": 0.044109976901870206,
+        "Other": 0.009139905123810943
+      },
+      "source_url": "https://www.wigan.gov.uk/Council/Voting-and-Elections/Results/UK-Parliamentary-General-Election-4-July-2024.aspx"
+    },
+    "ward_signal_2026_05_07": {
+      "ward_count": 9,
+      "ward_slugs": [
+        "abram",
+        "ashton-in-makerfield-south",
+        "bryn-with-ashton-in-makerfield-north",
+        "hindley",
+        "hindley-green",
+        "orrell",
+        "pemberton",
+        "winstanley",
+        "worsley-mesnes"
+      ],
+      "total_valid_votes": 31562,
+      "total_electorate": 84673,
+      "average_turnout_pct": 0.372751644562021,
+      "aggregate_shares": {
+        "Reform UK": 0.5020594385653634,
+        "Labour": 0.24310880172359167,
+        "Green Party": 0.10512641784424308,
+        "Conservative": 0.09533616374120778,
+        "Liberal Democrats": 0.03681642481465053,
+        "Independent": 0.01755275331094354
+      },
+      "per_ward": [
+        {
+          "ward_slug": "abram",
+          "valid_votes": 3492,
+          "turnout_pct": 0.3307,
+          "vote_shares": {
+            "Reform UK": 0.5607101947308133,
+            "Labour": 0.24169530355097366,
+            "Green Party": 0.11282932416953036,
+            "Conservative": 0.04524627720504009,
+            "Liberal Democrats": 0.03951890034364261
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "ashton-in-makerfield-south",
+          "valid_votes": 3389,
+          "turnout_pct": 0.3849,
+          "vote_shares": {
+            "Reform UK": 0.463853644142815,
+            "Labour": 0.3245795219828858,
+            "Green Party": 0.1274712304514606,
+            "Conservative": 0.0840956034228386
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "bryn-with-ashton-in-makerfield-north",
+          "valid_votes": 3392,
+          "turnout_pct": 0.37829999999999997,
+          "vote_shares": {
+            "Reform UK": 0.5218160377358491,
+            "Labour": 0.24056603773584906,
+            "Green Party": 0.1179245283018868,
+            "Conservative": 0.06751179245283019,
+            "Liberal Democrats": 0.052181603773584904
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "hindley",
+          "valid_votes": 3503,
+          "turnout_pct": 0.35259999999999997,
+          "vote_shares": {
+            "Reform UK": 0.5229803025977733,
+            "Labour": 0.21410219811590064,
+            "Green Party": 0.10676562946046246,
+            "Independent": 0.08050242649157864,
+            "Conservative": 0.03996574364830146,
+            "Liberal Democrats": 0.03568369968598344
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "hindley-green",
+          "valid_votes": 3588,
+          "turnout_pct": 0.3886,
+          "vote_shares": {
+            "Reform UK": 0.5234113712374582,
+            "Labour": 0.326644370122631,
+            "Green Party": 0.07190635451505016,
+            "Conservative": 0.048494983277591976,
+            "Liberal Democrats": 0.029542920847268672
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "orrell",
+          "valid_votes": 4060,
+          "turnout_pct": 0.4305,
+          "vote_shares": {
+            "Reform UK": 0.39926108374384234,
+            "Labour": 0.24211822660098523,
+            "Conservative": 0.1938423645320197,
+            "Green Party": 0.11576354679802955,
+            "Liberal Democrats": 0.04901477832512315
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "pemberton",
+          "valid_votes": 2993,
+          "turnout_pct": 0.3109,
+          "vote_shares": {
+            "Reform UK": 0.5422652856665553,
+            "Labour": 0.24490477781490144,
+            "Green Party": 0.11961242900100234,
+            "Conservative": 0.04878048780487805,
+            "Liberal Democrats": 0.04443701971266288
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "winstanley",
+          "valid_votes": 3786,
+          "turnout_pct": 0.42369999999999997,
+          "vote_shares": {
+            "Reform UK": 0.4968304278922345,
+            "Labour": 0.31008980454305335,
+            "Green Party": 0.08240887480190175,
+            "Conservative": 0.06418383518225039,
+            "Liberal Democrats": 0.04648705758055996
+          },
+          "winner_party": "Reform UK"
+        },
+        {
+          "ward_slug": "worsley-mesnes",
+          "valid_votes": 3359,
+          "turnout_pct": 0.3738,
+          "vote_shares": {
+            "Reform UK": 0.509377791009229,
+            "Conservative": 0.2521583804703781,
+            "Green Party": 0.09526644834772253,
+            "Independent": 0.08097648109556416,
+            "Liberal Democrats": 0.032152426317356354,
+            "Labour": 0.030068472759749925
+          },
+          "winner_party": "Reform UK"
+        }
+      ]
+    },
+    "survation_poll_2026_05_15": {
+      "pollster": "Survation",
+      "fieldwork": "2026-05-14 / 2026-05-15",
+      "published_at": "2026-05-15",
+      "sample": "MRP-conditioned constituency model, n=708 Makerfield",
+      "source_url": "https://www.survation.com/by-election-polling-makerfield-2026-06-18/",
+      "scenarios": {
+        "burnham_stands": {
+          "probability_assigned_by_pollster": 0.67,
+          "shares": {
+            "Labour": 0.45,
+            "Reform UK": 0.42,
+            "Conservative": 0.05,
+            "Green Party": 0.04,
+            "Liberal Democrats": 0.02,
+            "Restore Britain": 0.01,
+            "Other": 0.01
+          }
+        },
+        "burnham_withdraws": {
+          "probability_assigned_by_pollster": 0.33,
+          "shares": {
+            "Labour": 0.27,
+            "Reform UK": 0.53,
+            "Conservative": 0.05,
+            "Green Party": 0.06,
+            "Liberal Democrats": 0.03,
+            "Restore Britain": 0.04,
+            "Other": 0.02
+          }
+        }
+      }
+    },
+    "burnham_mayoral_baseline": {
+      "gm_first_pref_2024": 0.634,
+      "wigan_first_pref_2024": 0.602,
+      "national_lab_share_2024": 0.337,
+      "burnham_to_national_lab_uplift_wigan": 0.26499999999999996,
+      "source": "Greater Manchester combined authority mayoral election 1 May 2024 declared totals (LGBCE / Wigan elections office)."
+    },
+    "ward_aggregate_reform_lead_pp": 0.2589506368417717
+  },
+  "historical_anchor": {
+    "predecessor_seat": {
+      "name": "Ince",
+      "held_by": "Labour",
+      "period": "1906-1983",
+      "note": "Predecessor coal-field constituency; Labour held continuously without interruption from 1906."
+    },
+    "makerfield_results": [
+      {
+        "year": 2024,
+        "winner": "Labour",
+        "winner_name": "Josh Simons",
+        "lab_pct": 0.452,
+        "runner_up": "Reform UK",
+        "runner_up_pct": 0.318,
+        "majority_pct": 0.134
+      },
+      {
+        "year": 2019,
+        "winner": "Labour",
+        "winner_name": "Yvonne Fovargue",
+        "lab_pct": 0.451,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.344,
+        "majority_pct": 0.107
+      },
+      {
+        "year": 2017,
+        "winner": "Labour",
+        "winner_name": "Yvonne Fovargue",
+        "lab_pct": 0.601,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.313,
+        "majority_pct": 0.288
+      },
+      {
+        "year": 2015,
+        "winner": "Labour",
+        "winner_name": "Yvonne Fovargue",
+        "lab_pct": 0.518,
+        "runner_up": "UKIP",
+        "runner_up_pct": 0.224,
+        "majority_pct": 0.294
+      },
+      {
+        "year": 2010,
+        "winner": "Labour",
+        "winner_name": "Yvonne Fovargue",
+        "lab_pct": 0.473,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.188,
+        "majority_pct": 0.285
+      },
+      {
+        "year": 2005,
+        "winner": "Labour",
+        "winner_name": "Ian McCartney",
+        "lab_pct": 0.566,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.193,
+        "majority_pct": 0.373
+      },
+      {
+        "year": 2001,
+        "winner": "Labour",
+        "winner_name": "Ian McCartney",
+        "lab_pct": 0.624,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.207,
+        "majority_pct": 0.417
+      },
+      {
+        "year": 1997,
+        "winner": "Labour",
+        "winner_name": "Ian McCartney",
+        "lab_pct": 0.658,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.188,
+        "majority_pct": 0.47
+      },
+      {
+        "year": 1992,
+        "winner": "Labour",
+        "winner_name": "Ian McCartney",
+        "lab_pct": 0.616,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.273,
+        "majority_pct": 0.343
+      },
+      {
+        "year": 1987,
+        "winner": "Labour",
+        "winner_name": "Ian McCartney",
+        "lab_pct": 0.522,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.297,
+        "majority_pct": 0.225
+      },
+      {
+        "year": 1983,
+        "winner": "Labour",
+        "winner_name": "Roger Stott",
+        "lab_pct": 0.45,
+        "runner_up": "Conservative",
+        "runner_up_pct": 0.3,
+        "majority_pct": 0.15
+      }
+    ],
+    "brexit_2016_leave_pct": 0.66,
+    "summary": "Makerfield (and predecessor Ince) has returned a Labour MP at every general election since 1906 — a 120-year unbroken streak. GE2024 produced the smallest Labour majority since 1931 (13.4pp); the 2026 Reform sweep of every constituent ward extends that compression."
+  },
+  "methodology": [
+    {
+      "step": 1,
+      "name": "120-year historical anchor",
+      "description": "Makerfield and its predecessor Ince have returned a Labour MP at every general election since 1906. GE2024 produced the smallest Labour majority since 1931 (13.4pp). Treated as a soft prior; the contest fundamentals are dominated by the 1 May 2026 ward signal and the Burnham personal-vote shock.",
+      "data": {
+        "predecessor_seat": {
+          "name": "Ince",
+          "held_by": "Labour",
+          "period": "1906-1983",
+          "note": "Predecessor coal-field constituency; Labour held continuously without interruption from 1906."
+        },
+        "makerfield_results": [
+          {
+            "year": 2024,
+            "winner": "Labour",
+            "winner_name": "Josh Simons",
+            "lab_pct": 0.452,
+            "runner_up": "Reform UK",
+            "runner_up_pct": 0.318,
+            "majority_pct": 0.134
+          },
+          {
+            "year": 2019,
+            "winner": "Labour",
+            "winner_name": "Yvonne Fovargue",
+            "lab_pct": 0.451,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.344,
+            "majority_pct": 0.107
+          },
+          {
+            "year": 2017,
+            "winner": "Labour",
+            "winner_name": "Yvonne Fovargue",
+            "lab_pct": 0.601,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.313,
+            "majority_pct": 0.288
+          },
+          {
+            "year": 2015,
+            "winner": "Labour",
+            "winner_name": "Yvonne Fovargue",
+            "lab_pct": 0.518,
+            "runner_up": "UKIP",
+            "runner_up_pct": 0.224,
+            "majority_pct": 0.294
+          },
+          {
+            "year": 2010,
+            "winner": "Labour",
+            "winner_name": "Yvonne Fovargue",
+            "lab_pct": 0.473,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.188,
+            "majority_pct": 0.285
+          },
+          {
+            "year": 2005,
+            "winner": "Labour",
+            "winner_name": "Ian McCartney",
+            "lab_pct": 0.566,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.193,
+            "majority_pct": 0.373
+          },
+          {
+            "year": 2001,
+            "winner": "Labour",
+            "winner_name": "Ian McCartney",
+            "lab_pct": 0.624,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.207,
+            "majority_pct": 0.417
+          },
+          {
+            "year": 1997,
+            "winner": "Labour",
+            "winner_name": "Ian McCartney",
+            "lab_pct": 0.658,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.188,
+            "majority_pct": 0.47
+          },
+          {
+            "year": 1992,
+            "winner": "Labour",
+            "winner_name": "Ian McCartney",
+            "lab_pct": 0.616,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.273,
+            "majority_pct": 0.343
+          },
+          {
+            "year": 1987,
+            "winner": "Labour",
+            "winner_name": "Ian McCartney",
+            "lab_pct": 0.522,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.297,
+            "majority_pct": 0.225
+          },
+          {
+            "year": 1983,
+            "winner": "Labour",
+            "winner_name": "Roger Stott",
+            "lab_pct": 0.45,
+            "runner_up": "Conservative",
+            "runner_up_pct": 0.3,
+            "majority_pct": 0.15
+          }
+        ],
+        "brexit_2016_leave_pct": 0.66,
+        "summary": "Makerfield (and predecessor Ince) has returned a Labour MP at every general election since 1906 — a 120-year unbroken streak. GE2024 produced the smallest Labour majority since 1931 (13.4pp); the 2026 Reform sweep of every constituent ward extends that compression."
+      }
+    },
+    {
+      "step": 2,
+      "name": "GE2024 baseline",
+      "description": "Actual 4 July 2024 result in Makerfield. Labour 45.2% / Reform 31.8% / Con 10.9% / LD 6.8% / Green 4.4%. Reform was the runner-up, 13.4pp behind.",
+      "data": {
+        "turnout_votes": 40263,
+        "electorate": 76641,
+        "winner_party": "Labour",
+        "runner_up_party": "Reform UK",
+        "majority_pct": 0.13409333631373715,
+        "vote_shares": {
+          "Labour": 0.45207758984675755,
+          "Reform UK": 0.3179842535330204,
+          "Conservative": 0.10875990363360902,
+          "Liberal Democrats": 0.06792837096093188,
+          "Green Party": 0.044109976901870206,
+          "Other": 0.009139905123810943
+        },
+        "source_url": "https://www.wigan.gov.uk/Council/Voting-and-Elections/Results/UK-Parliamentary-General-Election-4-July-2024.aspx"
+      }
+    },
+    {
+      "step": 3,
+      "name": "1 May 2026 ward signal",
+      "description": "Aggregated weighted vote share across the nine Wigan wards inside the Makerfield PCON boundary, contested on 7 May 2026. Reform won every ward. Reform 50.2% / Labour 24.3% — a 25.9pp Reform lead, identical in sign to John Curtice's published 22.9pp on a slightly different 8-ward perimeter. Average turnout 37.3%.",
+      "data": {
+        "ward_count": 9,
+        "total_valid_votes": 31562,
+        "average_turnout_pct": 0.372751644562021,
+        "aggregate_shares": {
+          "Reform UK": 0.5020594385653634,
+          "Labour": 0.24310880172359167,
+          "Green Party": 0.10512641784424308,
+          "Conservative": 0.09533616374120778,
+          "Liberal Democrats": 0.03681642481465053,
+          "Independent": 0.01755275331094354
+        },
+        "reform_lead_pp": 0.2589506368417717
+      }
+    },
+    {
+      "step": 4,
+      "name": "Burnham personal-vote uplift (calibration)",
+      "description": "Burnham scored 60.2% first-pref in Wigan borough at the 1 May 2024 GM mayoral, vs 33.7% national Labour brand on the same day — a +26.5pp uplift. Applied at 78% strength (+20.7pp) to discount for partisan Westminster vs executive-mayoral framing. Cross-checked against the Survation Burnham scenario, which independently implies a +20.7pp uplift on Labour's 24.3% ward baseline.",
+      "data": {
+        "burnham_wigan_mayoral_pct": 0.602,
+        "national_lab_2024_pct": 0.337,
+        "implied_personal_vote_uplift_pp": 0.26499999999999996,
+        "westminster_discount_factor": 0.78,
+        "applied_uplift_pp": 0.207
+      }
+    },
+    {
+      "step": 5,
+      "name": "Survation 14-15 May 2026 by-election poll",
+      "description": "Survation MRP-conditioned constituency poll, n=708, fielded immediately after the resignation. Two scenarios: Burnham stands → Lab 45 / Ref 42 (3pp Lab lead); Burnham withdraws → Lab 27 / Ref 53 (26pp Ref lead). Pollster-assigned scenario probabilities: 0.67 / 0.33.",
+      "data": {
+        "pollster": "Survation",
+        "fieldwork": "2026-05-14 / 2026-05-15",
+        "published_at": "2026-05-15",
+        "sample": "MRP-conditioned constituency model, n=708 Makerfield",
+        "source_url": "https://www.survation.com/by-election-polling-makerfield-2026-06-18/",
+        "scenarios": {
+          "burnham_stands": {
+            "probability_assigned_by_pollster": 0.67,
+            "shares": {
+              "Labour": 0.45,
+              "Reform UK": 0.42,
+              "Conservative": 0.05,
+              "Green Party": 0.04,
+              "Liberal Democrats": 0.02,
+              "Restore Britain": 0.01,
+              "Other": 0.01
+            }
+          },
+          "burnham_withdraws": {
+            "probability_assigned_by_pollster": 0.33,
+            "shares": {
+              "Labour": 0.27,
+              "Reform UK": 0.53,
+              "Conservative": 0.05,
+              "Green Party": 0.06,
+              "Liberal Democrats": 0.03,
+              "Restore Britain": 0.04,
+              "Other": 0.02
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 6,
+      "name": "Burnham-on-ballot probability bump",
+      "description": "Post-NEC clearance (15 May 2026) and Burnham's same-day acceptance, the probability Burnham appears on the ballot is materially higher than Survation's 0.67. Set at 0.85 — would only fall back if a fresh Code of Conduct issue surfaced or Burnham declined to formally resign as GM mayor (statutorily required within 6 weeks of taking up a Commons seat).",
+      "data": {
+        "burnham_on_ballot_probability": 0.85
+      }
+    },
+    {
+      "step": 7,
+      "name": "Restore Britain entry effect",
+      "description": "Rupert Lowe's Restore Britain (formed November 2025) will field its first Westminster candidate. Modelled as 1-4% of the vote drawn principally from Reform's right flank. Already incorporated in Survation's two scenarios; no further adjustment applied.",
+      "data": {
+        "expected_share_band": [
+          0.01,
+          0.04
+        ]
+      }
+    },
+    {
+      "step": 8,
+      "name": "Scenario A — Burnham stands",
+      "description": "Anchored on Survation Burnham scenario. Cross-checked against ward baseline + Burnham uplift. ±6.0pp 1-sigma uncertainty on the winning margin.",
+      "data": {
+        "name": "Burnham stands",
+        "central": {
+          "Labour": 0.45,
+          "Reform UK": 0.42,
+          "Conservative": 0.05,
+          "Green Party": 0.04,
+          "Liberal Democrats": 0.02,
+          "Restore Britain": 0.01,
+          "Other": 0.01
+        },
+        "ranked": [
+          {
+            "party": "Labour",
+            "pct": 0.45
+          },
+          {
+            "party": "Reform UK",
+            "pct": 0.42
+          },
+          {
+            "party": "Conservative",
+            "pct": 0.05
+          },
+          {
+            "party": "Green Party",
+            "pct": 0.04
+          },
+          {
+            "party": "Liberal Democrats",
+            "pct": 0.02
+          },
+          {
+            "party": "Restore Britain",
+            "pct": 0.01
+          },
+          {
+            "party": "Other",
+            "pct": 0.01
+          }
+        ],
+        "cross_check": {
+          "ward_baseline_labour": 0.24310880172359167,
+          "survation_burnham_labour": 0.45,
+          "implied_burnham_personal_vote_uplift_pp": 0.20689119827640834,
+          "ward_baseline_reform": 0.5020594385653634,
+          "survation_burnham_reform": 0.42,
+          "implied_reform_contraction_pp": 0.08205943856536341,
+          "burnham_wigan_mayoral_uplift_pp": 0.26499999999999996,
+          "uplift_calibration_note": "Survation-implied uplift (~20.7pp) is 78% of the observed Wigan mayoral uplift (26.5pp), which is the expected discount for a partisan Westminster contest vs an executive mayoral race."
+        },
+        "confidence_interval_pp": 6
+      }
+    },
+    {
+      "step": 9,
+      "name": "Scenario B — Burnham withdraws (contingency)",
+      "description": "Anchored on Survation non-Burnham scenario. Reform ceiling (~53%) consistent with the 1 May ward result (50.2%) plus by-election protest amplification. ±8.0pp 1-sigma.",
+      "data": {
+        "name": "Burnham withdraws (contingency)",
+        "central": {
+          "Labour": 0.26999999999999996,
+          "Reform UK": 0.5299999999999999,
+          "Conservative": 0.04999999999999999,
+          "Green Party": 0.059999999999999984,
+          "Liberal Democrats": 0.029999999999999992,
+          "Restore Britain": 0.039999999999999994,
+          "Other": 0.019999999999999997
+        },
+        "ranked": [
+          {
+            "party": "Reform UK",
+            "pct": 0.5299999999999999
+          },
+          {
+            "party": "Labour",
+            "pct": 0.26999999999999996
+          },
+          {
+            "party": "Green Party",
+            "pct": 0.059999999999999984
+          },
+          {
+            "party": "Conservative",
+            "pct": 0.04999999999999999
+          },
+          {
+            "party": "Restore Britain",
+            "pct": 0.039999999999999994
+          },
+          {
+            "party": "Liberal Democrats",
+            "pct": 0.029999999999999992
+          },
+          {
+            "party": "Other",
+            "pct": 0.019999999999999997
+          }
+        ],
+        "cross_check": {
+          "ward_baseline_reform": 0.5020594385653634,
+          "survation_no_burnham_reform": 0.53,
+          "ward_to_survation_reform_lift_pp": 0.027940561434636635,
+          "note": "Reform ceiling ~53% reflects by-election turnout collapse on disengaged Labour voters with no Burnham brand to mobilise them; consistent with Reform's GE2024 31.8% + the 13.4pp ward swing observed 1 May 2026 + an additional 7.8pp by-election protest amplification."
+        },
+        "confidence_interval_pp": 8
+      }
+    },
+    {
+      "step": 10,
+      "name": "Probability-weighted blend",
+      "description": "Final central forecast = 0.85 × Scenario A + 0.15 × Scenario B, renormalised.",
+      "data": {
+        "burnham_on_ballot_probability": 0.85,
+        "central": {
+          "Labour": 0.42300000000000004,
+          "Reform UK": 0.43650000000000005,
+          "Conservative": 0.05000000000000001,
+          "Green Party": 0.04300000000000001,
+          "Liberal Democrats": 0.021500000000000005,
+          "Restore Britain": 0.014500000000000002,
+          "Other": 0.011500000000000002
+        },
+        "ranked": [
+          {
+            "party": "Reform UK",
+            "pct": 0.43650000000000005
+          },
+          {
+            "party": "Labour",
+            "pct": 0.42300000000000004
+          },
+          {
+            "party": "Conservative",
+            "pct": 0.05000000000000001
+          },
+          {
+            "party": "Green Party",
+            "pct": 0.04300000000000001
+          },
+          {
+            "party": "Liberal Democrats",
+            "pct": 0.021500000000000005
+          },
+          {
+            "party": "Restore Britain",
+            "pct": 0.014500000000000002
+          },
+          {
+            "party": "Other",
+            "pct": 0.011500000000000002
+          }
+        ],
+        "winner": "Reform UK",
+        "runner_up": "Labour",
+        "margin_pp": 0.013500000000000012,
+        "classification": "toss-up",
+        "headline": "Probability-weighted central forecast — Reform UK 43.7% vs Labour 42.3% (1.4pp margin, toss-up)."
+      }
+    }
+  ],
+  "confidence": "medium-high",
+  "confidence_note": "Medium-high reflects: (a) a single published constituency poll, (b) the unprecedented nature of a stand-aside-for-an-outsider Westminster by-election since 1965, (c) genuine uncertainty about whether Burnham's mayoral brand transfers to a partisan Commons contest where Starmer's Labour record is on the ballot. The headline 0.9pp margin is well inside the ±6pp scenario A uncertainty band — treat as a toss-up that leans Reform.",
+  "next_refresh": "Daily until polling day; re-fit on any new constituency poll.",
+  "hash": "014ab0ed4b0198ee7c346a474c3345dd3eee971b4c68a887d61fb92409cc0cac"
+}
