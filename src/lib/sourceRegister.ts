@@ -57,9 +57,9 @@ export const SOURCE_REGISTER: SourceRegisterEntry[] = [
     sourceType: "context"
   },
   {
-    name: "Home Office asylum support tables",
-    purpose: "Route-specific local asylum support stock, accommodation type, and local authority context",
-    status: "Review",
+    name: "asylumstats.co.uk (sister site)",
+    purpose: "Single source of truth for asylum routes, support stock, hotel accommodation, and Home Office spending. UK Elections defers all asylum data to asylumstats rather than duplicating ingest",
+    status: "Internal",
     sourceType: "context"
   },
   {
@@ -76,7 +76,7 @@ export const SOURCE_REGISTER: SourceRegisterEntry[] = [
   },
   {
     name: "AI DOGE and Labour tracker",
-    purpose: "Local upstream imports for ward histories, nominations, polling context, population features, and constituency asylum context",
+    purpose: "Local upstream imports for ward histories, nominations, polling context, and population features. Constituency-level asylum context is sourced from asylumstats.co.uk rather than re-derived locally",
     status: "Internal",
     sourceType: "internal"
   }

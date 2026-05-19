@@ -336,64 +336,190 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
           type: "div",
           props: { style: { display: "flex", flexGrow: 1 } },
         },
-        // Footer row
+        // Footer block — primary row + sister-sites cross-promo strip
         {
           type: "div",
           props: {
             style: {
               display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              fontSize: 28,
-              fontWeight: 700,
-              color: "#475467",
+              flexDirection: "column",
+              gap: 14,
             },
             children: [
+              // Row 1: brand + optional party chip
               {
                 type: "div",
                 props: {
-                  style: { display: "flex" },
-                  children: "ukelections.co.uk",
-                },
-              },
-              partyChipLabel
-                ? {
-                    type: "div",
-                    props: {
-                      style: {
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 12,
-                        padding: "10px 22px",
-                        background: "#ffffff",
-                        borderRadius: 999,
-                        border: "1px solid #d4dce6",
-                        fontSize: 22,
-                        fontWeight: 700,
-                        color: "#111827",
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    fontSize: 28,
+                    fontWeight: 700,
+                    color: "#475467",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex" },
+                        children: "ukelections.co.uk",
                       },
-                      children: [
-                        {
+                    },
+                    partyChipLabel
+                      ? {
                           type: "div",
                           props: {
                             style: {
                               display: "flex",
-                              width: 14,
-                              height: 14,
-                              borderRadius: 7,
-                              background: partyChipColour || accentColour,
+                              alignItems: "center",
+                              gap: 12,
+                              padding: "10px 22px",
+                              background: "#ffffff",
+                              borderRadius: 999,
+                              border: "1px solid #d4dce6",
+                              fontSize: 22,
+                              fontWeight: 700,
+                              color: "#111827",
+                            },
+                            children: [
+                              {
+                                type: "div",
+                                props: {
+                                  style: {
+                                    display: "flex",
+                                    width: 14,
+                                    height: 14,
+                                    borderRadius: 7,
+                                    background: partyChipColour || accentColour,
+                                  },
+                                },
+                              },
+                              {
+                                type: "div",
+                                props: { style: { display: "flex" }, children: partyChipLabel },
+                              },
+                            ],
+                          },
+                        }
+                      : null,
+                  ].filter(Boolean),
+                },
+              },
+              // Row 2: sister-sites strip
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          fontSize: 14,
+                          fontWeight: 700,
+                          letterSpacing: 1.6,
+                          color: "#667085",
+                          textTransform: "uppercase",
+                        },
+                        children: "Sister sites",
+                      },
+                    },
+                    // UKD chip
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "5px 12px",
+                          background: "rgba(79, 70, 229, 0.08)",
+                          border: "1px solid rgba(79, 70, 229, 0.28)",
+                          borderRadius: 999,
+                          fontSize: 14,
+                          fontWeight: 700,
+                          color: "#4f46e5",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                display: "flex",
+                                width: 7,
+                                height: 7,
+                                borderRadius: 999,
+                                background: "#4f46e5",
+                              },
                             },
                           },
-                        },
-                        {
-                          type: "div",
-                          props: { style: { display: "flex" }, children: partyChipLabel },
-                        },
-                      ],
+                          {
+                            type: "div",
+                            props: { style: { display: "flex" }, children: "ukdemographics.co.uk" },
+                          },
+                          {
+                            type: "div",
+                            props: {
+                              style: { display: "flex", color: "#667085", fontWeight: 500 },
+                              children: "· Population projections",
+                            },
+                          },
+                        ],
+                      },
                     },
-                  }
-                : null,
-            ].filter(Boolean),
+                    // AS chip
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "5px 12px",
+                          background: "rgba(6, 182, 212, 0.08)",
+                          border: "1px solid rgba(6, 182, 212, 0.28)",
+                          borderRadius: 999,
+                          fontSize: 14,
+                          fontWeight: 700,
+                          color: "#0e7490",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                display: "flex",
+                                width: 7,
+                                height: 7,
+                                borderRadius: 999,
+                                background: "#06b6d4",
+                              },
+                            },
+                          },
+                          {
+                            type: "div",
+                            props: { style: { display: "flex" }, children: "asylumstats.co.uk" },
+                          },
+                          {
+                            type: "div",
+                            props: {
+                              style: { display: "flex", color: "#667085", fontWeight: 500 },
+                              children: "· Asylum spending",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
           },
         },
       ].filter(Boolean),
