@@ -1,22 +1,18 @@
-# Codex paused — do not run autonomous Codex sessions on this repo
+# Codex pause lifted — 2026-05-08
 
-**Pause start:** 2026-04-25
-**Pause end:** 2026-05-08 (post-election)
-**Reason:** Tom directive — Claude takes control to ship national May 2026 coverage in 12 days.
+The pause originally ran 2026-04-25 through 2026-05-08 for the May 7 launch push.
+Pause ended on schedule.
 
-Last Codex commit on `main`: `9920019` (2026-04-22).
+Last Claude-led campaign on this repo (concluded 2026-05-19): site-wide
+elevation campaign — design tokens + dark mode + race-bar components +
+per-place mini-maps + Pagefind search + Satori OG cards. See `CLAUDE.md`
+for the current architecture snapshot.
 
-## What Codex must not do
+## If you're Codex picking this back up
 
-- Open new commits on `main` or any branch in this repo
-- Spawn new review workflows
-- Add new lib modules, scripts, or schemas
-- Refetch or restructure existing data
-
-## What Claude is doing instead
-
-See `.claude/plans/ukelections-finish.md` in `~/clawd/`. National scope (England + Wales May 7 2026), 12-day push.
-
-## Resume conditions
-
-After 2026-05-08, Codex may resume importer work for Stage 3 (HoC Library 2024, Boundary-Line, Senedd / Holyrood post-election) per the same plan doc.
+- Source of truth: `main` on `tompickup23/ukelections`.
+- Architecture summary: `CLAUDE.md`.
+- Design rules: `AGENTS.md` (12 rules, including "data is the visual" + "use tokens" + "verify in both modes").
+- Shared components live in `src/components/`. Don't reimplement; extend.
+- OG card pipeline is gated behind `BUILD_OG=1`. Iteration builds skip it.
+- Boundary data committed at `data/geography/` — three GeoJSONs (PCON24, LAD24, WD25) + their raw sources + the static-weight TTFs in `data/fonts/`.

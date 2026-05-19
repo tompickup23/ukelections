@@ -1,37 +1,47 @@
 # UK Elections Agent Guide
 
-> **2026-04-25 — CODEX PAUSED on this repo until 2026-05-08.** See `STOP-CODEX.md`.
-> Claude has control for the national May 7 2026 launch push. Plan: `~/clawd/.claude/plans/ukelections-finish.md`.
+> **2026-05-19 update**: Tier-A/B/C elevation campaign shipped. Site is now
+> data-first across every page (race bars, Commons horseshoe, choropleth,
+> mini-maps, dark mode, Pagefind search, 812 per-page Satori OG cards).
+> See `CLAUDE.md` for the architecture snapshot and `~/.claude/plans/swift-scribbling-gadget.md` for the plan.
 
 ## Product
 
-UK election intelligence site. The public product direction is candidates, historic results, boundaries, forecasts, confidence intervals, source notes, and transparent backtests.
+UK election intelligence site. The public product direction is candidates, historic results, boundaries, forecasts, confidence intervals, source notes, and transparent backtests. **Gold-standard rule (19 May 2026):** data should be rendered as the visual — never describe a stat in text where a chart can show it.
 
 ## Architecture
 
 - Astro static site
-- TypeScript helpers and tests
-- Cloudflare Pages production deployment
-- GitHub Pages fallback deployment
-- Production domain: `ukelections.co.uk`
+- TypeScript helpers + Vitest unit tests
+- Cloudflare Pages production deployment (custom domain `ukelections.co.uk`, behind Cloudflare Access)
+- GitHub Pages auto-mirror at `tompickup23.github.io/ukelections/`
+- Token-driven CSS in `src/styles/global.css` with system-preference dark mode
+- Build-time visualisation: d3-geo (maps), Satori (OG cards), Pagefind (search), inline SVG (charts)
 
 ## Commands
 
 ```bash
 npm test
 npm run check
-npm run build
+npm run build                  # iteration build, ~25s
+BUILD_OG=1 npm run build       # full build with 812 OG cards, ~3 min
+npm run ge:refresh             # polling refresh → GE pipeline → Restore Britain overlay
 ```
 
 ## Rules
 
-1. **Strict neutrality.** This is a public-utility election polling and information site. No partisan framing, no "watch" lists for any party, no editorial slant. Parties are listed alphabetically or by vote share, never by ideology. Surface every party that stands a candidate; show every contest equally.
-2. **UKD demographic modelling is the analytical core.** UK Demographics HP v7.0 ethnic projections + Census 2021 composition change since last contest are the primary signal that distinguishes our forecast from competitors. Document the demographic adjustment on every prediction page.
-3. Public copy must stand on official or named public sources.
-4. Forecasts need uncertainty, model version, input snapshot, and publication timestamp.
-5. Backtests are public product data, not internal notes.
-6. Boundary changes require explicit mapping or a clear caveat.
-7. Keep Cloudflare Pages as the production host unless the deployment plan is deliberately changed.
+1. **Strict neutrality.** Public-utility election information site. No partisan framing, no "watch" lists for any party, no editorial slant. Parties listed alphabetically or by vote share, never by ideology. Surface every party that stands a candidate.
+2. **Data is the visual.** Never render a stat in text where a chart can render the data. Reference: homepage hero, ConstituencyChoropleth, CommonsHorseshoe.
+3. **UKD demographic modelling is the analytical core.** UK Demographics HP v7.0 ethnic projections + Census 2021 composition change drive the forecast. Document the demographic adjustment on every prediction page.
+4. **Use design tokens.** `--space-*`, `--text-*`, `--accent-*`, `--status-*` in `src/styles/global.css`. Never hardcode hex literals or rem/px spacing in component CSS.
+5. **Verify in both modes.** Every component must render cleanly in light AND dark mode (`@media (prefers-color-scheme: dark)`).
+6. Public copy must stand on official or named public sources.
+7. Forecasts need uncertainty, model version, input snapshot, and publication timestamp.
+8. Backtests are public product data, not internal notes — surface them on every place page.
+9. Boundary changes require explicit mapping or a clear caveat (e.g. `TBC (Local Government Reorganisation)`).
+10. **Reuse shared components.** `<RaceBar />`, `<HeroClock />`, `<PartyBars />`, `<StatCard />`, `<MiniMap />`, `<PartyTrendChart />`, `<ConstituencyChoropleth />`, `<CommonsHorseshoe />`. Don't reimplement.
+11. **Reuse `partyColour()` + `shortPartyLabel()`** — single source of truth for the palette + display labels.
+12. Keep Cloudflare Pages as the production host unless deliberately changed.
 
 ## Data Priorities
 
