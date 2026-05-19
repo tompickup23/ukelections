@@ -37,7 +37,8 @@ import {
   shortPartyLabel,
   partySlugToName,
 } from "../../lib/siteData";
-import { renderOgCard } from "../../lib/ogRenderer";
+import { UK_WESTMINSTER_2026_APRIL_AVERAGE } from "../../lib/nationalPolling.js";
+import { renderOgCard, type OgShare } from "../../lib/ogRenderer";
 
 const BUILD_OG = process.env.BUILD_OG === "1";
 
@@ -46,9 +47,51 @@ interface Entry {
   eyebrow: string;
   headline: string;
   subline?: string;
+  shares?: OgShare[];
+  sharesCaption?: string;
   accentColour?: string;
   partyChipLabel?: string | null;
   partyChipColour?: string | null;
+}
+
+// Helper: convert {party → number} into the top-N OgShare list with
+// optional sub-labels (e.g. seat counts).
+function topShares(
+  rawShares: Record<string, number>,
+  topN: number,
+  subLabelOf?: (party: string, value: number) => string | undefined,
+): OgShare[] {
+  return Object.entries(rawShares)
+    .filter(([, v]) => (v as number) > 0)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .slice(0, topN)
+    .map(([party, value]) => ({
+      party,
+      partyLabel: shortPartyLabel(party),
+      pct: value as number,
+      colour: partyColour(party),
+      subLabel: subLabelOf ? subLabelOf(party, value as number) : undefined,
+    }));
+}
+
+// Normalise an absolute-value distribution (e.g. seat counts) into
+// 0..1 shares. Returns the same shape as topShares but with pct
+// renormalised so the bar fills 100%.
+function topSharesAbsolute(
+  rawCounts: Record<string, number>,
+  topN: number,
+  subLabelOf?: (party: string, count: number) => string | undefined,
+): OgShare[] {
+  const entries = Object.entries(rawCounts).filter(([, v]) => (v as number) > 0);
+  const sorted = entries.sort((a, b) => (b[1] as number) - (a[1] as number)).slice(0, topN);
+  const sum = sorted.reduce((s, [, v]) => s + (v as number), 0) || 1;
+  return sorted.map(([party, count]) => ({
+    party,
+    partyLabel: shortPartyLabel(party),
+    pct: (count as number) / sum,
+    colour: partyColour(party),
+    subLabel: subLabelOf ? subLabelOf(party, count as number) : `${(count as number).toLocaleString()} seats`,
+  }));
 }
 
 function pct(n: number, digits = 1): string {
@@ -64,11 +107,22 @@ function buildEntries(): Entry[] {
   const upcoming = loadUpcomingElections();
   const top = upcoming[0];
   if (top) {
+    const upcomingShares: OgShare[] = top.central_shares.slice(0, 5).map((s) => {
+      const cand = top.key_candidates.find((c) => c.party === s.party);
+      return {
+        party: s.party,
+        partyLabel: shortPartyLabel(s.party),
+        pct: s.pct,
+        colour: partyColour(s.party),
+        subLabel: cand?.candidate,
+      };
+    });
     out.push({
       slug: "index",
-      eyebrow: "UK Elections",
+      eyebrow: `Polling day · ${top.polling_day_short_label}`,
       headline: top.short_name,
-      subline: `${top.headline_summary}`,
+      shares: upcomingShares,
+      sharesCaption: "Central forecast — projected vote share",
       accentColour: partyColour(top.headline_winner || "Reform UK"),
       partyChipLabel: top.headline_winner
         ? `${shortPartyLabel(top.headline_winner)} forecast to win`
@@ -89,11 +143,20 @@ function buildEntries(): Entry[] {
   const geHead = loadGeHeadline();
   const geLeader = geHead.seat_tallies[0];
   if (geLeader) {
+    // Seats by party — top 6, normalised across the bar
+    const geSeatRaw: Record<string, number> = {};
+    for (const t of geHead.seat_tallies) geSeatRaw[t.party] = t.seats;
+    const geSeatShares = topSharesAbsolute(
+      geSeatRaw,
+      6,
+      (_p, n) => `${n.toLocaleString()} seats`,
+    );
     out.push({
       slug: "forecasts/general-election",
       eyebrow: "If a UK general election were held today",
       headline: `${shortPartyLabel(geLeader.party)} ${geLeader.seats} seats`,
-      subline: `${geHead.total_seats} UK constituencies · 326-seat majority threshold`,
+      shares: geSeatShares,
+      sharesCaption: `Projected Commons composition · 326-seat majority threshold`,
       accentColour: partyColour(geLeader.party),
       partyChipLabel: shortPartyLabel(geLeader.party),
       partyChipColour: partyColour(geLeader.party),
@@ -102,11 +165,22 @@ function buildEntries(): Entry[] {
 
   // 3. By-elections (Makerfield + any future ones from loadUpcomingElections)
   for (const u of upcoming) {
+    const ucShares: OgShare[] = u.central_shares.slice(0, 5).map((s) => {
+      const cand = u.key_candidates.find((c) => c.party === s.party);
+      return {
+        party: s.party,
+        partyLabel: shortPartyLabel(s.party),
+        pct: s.pct,
+        colour: partyColour(s.party),
+        subLabel: cand?.candidate,
+      };
+    });
     out.push({
       slug: `by-elections/${u.id.replace(/-\d{4}-\d{2}-\d{2}$/, "")}`,
       eyebrow: `Polling day · ${u.polling_day_short_label}`,
       headline: u.short_name,
-      subline: u.headline_summary,
+      shares: ucShares,
+      sharesCaption: "Central forecast — projected vote share",
       accentColour: partyColour(u.headline_winner || "Reform UK"),
       partyChipLabel: u.headline_winner ? shortPartyLabel(u.headline_winner) : null,
       partyChipColour: u.headline_winner ? partyColour(u.headline_winner) : null,
@@ -114,30 +188,49 @@ function buildEntries(): Entry[] {
   }
 
   // 4. Polling
+  const ukShares = (UK_WESTMINSTER_2026_APRIL_AVERAGE.shares || {}) as Record<string, number>;
+  const pollShares = topShares(ukShares, 6);
   out.push({
     slug: "polling",
-    eyebrow: "Polling transparency",
+    eyebrow: "Westminster polling — current",
     headline: "The numbers driving the forecast",
-    subline: "Current UK / Welsh / Scottish Westminster polling, refresh history, methodology",
+    shares: pollShares,
+    sharesCaption: "Wikipedia 14-day rolling average + Restore Britain overlay",
     accentColour: "#12b5cb",
   });
 
-  // 5. Past results
+  // 5 & 6. Past results + Councils hub — both share the same "council
+  // majorities by party" breakdown as the visual.
   const may7 = loadMay7Headline();
+  const controlSlugs = may7.control_by_party || {};
+  // The control_by_party dict is slug-keyed (lab / con / ref / etc.);
+  // expand to display names so the bar shares the partyColour palette.
+  const councilControlRaw: Record<string, number> = {};
+  for (const [slug, n] of Object.entries(controlSlugs)) {
+    const name = partySlugToName(slug);
+    councilControlRaw[name] = ((councilControlRaw[name] || 0) + (n as number));
+  }
+  const councilShares = topSharesAbsolute(
+    councilControlRaw,
+    6,
+    (_p, n) => `${n} ${n === 1 ? "council" : "councils"}`,
+  );
+
   out.push({
     slug: "past-results",
     eyebrow: "May 7 2026 · accuracy audit",
     headline: `${(may7.live_winner_accuracy * 100).toFixed(1)}% winners correct`,
-    subline: `${may7.reform_majorities} Reform majorities · ${may7.reform_seats_won.toLocaleString()} Reform seats won`,
+    shares: councilShares,
+    sharesCaption: "Council control after May 7",
     accentColour: partyColour("Reform UK"),
   });
 
-  // 6. Councils hub
   out.push({
     slug: "councils",
     eyebrow: "Council elections",
     headline: "Every council, before and after May 7",
-    subline: `${may7.contesting_councils} councils · sortable by control + next-vote date`,
+    shares: councilShares,
+    sharesCaption: `${may7.contesting_councils} contested · current control breakdown`,
     accentColour: "#1d4e89",
   });
 
@@ -146,20 +239,26 @@ function buildEntries(): Entry[] {
   const preds = ge.predictions || {};
   for (const [slug, p] of Object.entries(preds) as Array<[string, any]>) {
     if (!p?.prediction || !p?.name || !p?.winner) continue;
-    const winShare = p.prediction[p.winner]?.pct || 0;
+    const predRaw: Record<string, number> = {};
+    for (const [party, info] of Object.entries(p.prediction)) {
+      const pctShare = (info as any)?.pct;
+      if (typeof pctShare === "number" && pctShare > 0) predRaw[party] = pctShare;
+    }
+    const predShares = topShares(predRaw, 5);
     const margin = (p.majority_pct || 0) * 100;
     out.push({
       slug: `seats/parliament/${slug}`,
       eyebrow: "General election forecast",
       headline: p.name,
-      subline: `${shortPartyLabel(p.winner)} ${pct(winShare)} · ${margin.toFixed(1)}pp margin over ${shortPartyLabel(p.runner_up || "")}`,
+      shares: predShares,
+      sharesCaption: `Predicted vote share · ${margin.toFixed(1)}pp margin over ${shortPartyLabel(p.runner_up || "")}`,
       accentColour: partyColour(p.winner),
       partyChipLabel: shortPartyLabel(p.winner),
       partyChipColour: partyColour(p.winner),
     });
   }
 
-  // 8. Council pages (~360)
+  // 8. Council pages (~360) — show seats won by each party on May 7
   const identity = loadIdentity();
   const ctl = loadMay7Control();
   const ctlBySlug = new Map<string, any>();
@@ -174,13 +273,33 @@ function buildEntries(): Entry[] {
     const controllingName = controllingSlug
       ? partySlugToName(controllingSlug)
       : "No overall control";
+
+    // Build seats-won-by-party shares from may7_wins.by_party (slug-keyed)
+    const byPartySlug: Record<string, number> = (ctlRow?.may7_wins?.by_party || {}) as Record<string, number>;
+    const byPartyRaw: Record<string, number> = {};
+    for (const [slug, n] of Object.entries(byPartySlug)) {
+      const count = n as number;
+      if (count <= 0) continue;
+      const name = partySlugToName(slug);
+      byPartyRaw[name] = (byPartyRaw[name] || 0) + count;
+    }
+    const councilSeatShares = topSharesAbsolute(
+      byPartyRaw,
+      5,
+      (_p, n) => `${n} ${n === 1 ? "seat" : "seats"}`,
+    );
+
     out.push({
       slug: `seats/${w.council_slug}`,
       eyebrow: "Council · May 7 2026",
       headline: w.council_name || w.council_slug,
-      subline: controllingSlug
-        ? `${controllingName} majority · ${ctlRow?.reform?.won_seats || 0} Reform seats won`
-        : `No overall control · ${ctlRow?.reform?.won_seats || 0} Reform seats won`,
+      shares: councilSeatShares.length > 0 ? councilSeatShares : undefined,
+      sharesCaption: controllingSlug
+        ? `Seats won on May 7 · ${controllingName} majority`
+        : `Seats won on May 7 · No overall control`,
+      subline: councilSeatShares.length > 0
+        ? undefined
+        : `No seat data yet · ${ctlRow?.reform?.won_seats || 0} Reform seats won`,
       accentColour: partyColour(controllingName),
       partyChipLabel: controllingName,
       partyChipColour: partyColour(controllingName),

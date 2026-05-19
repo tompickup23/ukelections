@@ -32,12 +32,33 @@ function loadFonts(): any[] {
   return _fontCache;
 }
 
+export interface OgShare {
+  party: string;
+  partyLabel: string;
+  pct: number;          // 0..1
+  colour: string;
+  /** Optional secondary value to render under the % (e.g. seat count, candidate name) */
+  subLabel?: string;
+}
+
 export interface OgCardOpts {
   /** Big top-line eyebrow text (e.g. "GENERAL ELECTION FORECAST") */
   eyebrow: string;
   /** Big main headline (Sora display, the constituency/contest/council name) */
   headline: string;
-  /** One-line stat sub-headline ("Reform UK 38.7% · 13.0pp margin") */
+  /**
+   * Replaces the old text subline with a stacked horizontal race bar
+   * showing the top 5-6 party shares. Each segment is sized by `pct`
+   * and coloured by `colour`. When absent the card falls back to the
+   * old text subline.
+   */
+  shares?: OgShare[];
+  /**
+   * Caption for the shares unit — "Predicted vote share", "Seats won",
+   * "National polling", etc.
+   */
+  sharesCaption?: string;
+  /** Fallback text subline when no shares are provided */
   subline?: string;
   /** Background accent colour — usually partyColour() of the winner */
   accentColour?: string;
@@ -56,10 +77,24 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
     eyebrow,
     headline,
     subline,
+    shares,
+    sharesCaption,
     accentColour = "#1d4e89",
     partyChipLabel = null,
     partyChipColour = null,
   } = opts;
+
+  // Each share segment is sized by pct relative to the sum of all
+  // tracked shares — important because the input may not sum to 1
+  // (we typically pass top 5–6 parties, so others are excluded).
+  const trackedShares = (shares || []).filter((s) => s.pct > 0);
+  const sharesTotal = trackedShares.reduce((sum, s) => sum + s.pct, 0);
+  const hasShares = trackedShares.length > 0 && sharesTotal > 0;
+
+  // Inline label visible only on segments that occupy at least 11% of
+  // the bar — narrower segments still render the swatch + sit in the
+  // legend strip below.
+  const labelMinPct = 0.11;
 
   const fonts = loadFonts();
 
@@ -112,14 +147,17 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
             children: eyebrow,
           },
         },
-        // Headline (Sora 96)
+        // Headline (Sora 96) — slightly smaller when the shares bar is
+        // present, since the chart adds visual weight below.
         {
           type: "div",
           props: {
             style: {
               display: "flex",
               fontFamily: "Sora",
-              fontSize: headline.length > 24 ? 84 : 104,
+              fontSize: hasShares
+                ? headline.length > 22 ? 72 : 92
+                : headline.length > 24 ? 84 : 104,
               fontWeight: 800,
               lineHeight: 1.02,
               letterSpacing: -2,
@@ -129,23 +167,170 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
             children: headline,
           },
         },
-        // Subline
-        subline
+        // Shares bar (preferred) OR fallback subline text.
+        hasShares
           ? {
               type: "div",
               props: {
                 style: {
                   display: "flex",
-                  marginTop: 28,
-                  fontSize: 36,
-                  fontWeight: 600,
-                  color: "#374151",
+                  flexDirection: "column",
+                  marginTop: 36,
                   maxWidth: OG_WIDTH - 200,
                 },
-                children: subline,
+                children: [
+                  // Optional caption above the bar
+                  sharesCaption
+                    ? {
+                        type: "div",
+                        props: {
+                          style: {
+                            display: "flex",
+                            fontSize: 18,
+                            fontWeight: 700,
+                            letterSpacing: 2.4,
+                            color: "#475467",
+                            textTransform: "uppercase",
+                            marginBottom: 10,
+                          },
+                          children: sharesCaption,
+                        },
+                      }
+                    : null,
+                  // The stacked race bar itself
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        width: "100%",
+                        height: 56,
+                        borderRadius: 10,
+                        overflow: "hidden",
+                        boxShadow: "inset 0 0 0 1px rgba(15, 23, 42, 0.08)",
+                      },
+                      children: trackedShares.map((s) => {
+                        const rel = s.pct / sharesTotal;
+                        const wide = rel >= labelMinPct;
+                        return {
+                          type: "div",
+                          props: {
+                            style: {
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexBasis: `${(rel * 100).toFixed(2)}%`,
+                              background: s.colour,
+                              color: "#ffffff",
+                              fontSize: 18,
+                              fontWeight: 800,
+                              lineHeight: 1.05,
+                              padding: "0 4px",
+                            },
+                            children: wide
+                              ? [
+                                  {
+                                    type: "div",
+                                    props: {
+                                      style: { display: "flex", fontSize: 16, opacity: 0.92, letterSpacing: 0.8 },
+                                      children: s.partyLabel,
+                                    },
+                                  },
+                                  {
+                                    type: "div",
+                                    props: {
+                                      style: { display: "flex", fontSize: 22, marginTop: 1 },
+                                      children: `${(s.pct * 100).toFixed(1)}%`,
+                                    },
+                                  },
+                                ]
+                              : "",
+                          },
+                        };
+                      }),
+                    },
+                  },
+                  // Legend strip below the bar — every party + share + sub-label
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        flexWrap: "wrap",
+                        marginTop: 14,
+                        rowGap: 6,
+                        columnGap: 22,
+                      },
+                      children: trackedShares.map((s) => ({
+                        type: "div",
+                        props: {
+                          style: {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                            fontSize: 20,
+                          },
+                          children: [
+                            {
+                              type: "div",
+                              props: {
+                                style: {
+                                  display: "flex",
+                                  width: 12,
+                                  height: 12,
+                                  borderRadius: 3,
+                                  background: s.colour,
+                                },
+                              },
+                            },
+                            {
+                              type: "div",
+                              props: {
+                                style: { display: "flex", fontWeight: 700, color: "#0f172a" },
+                                children: s.partyLabel,
+                              },
+                            },
+                            {
+                              type: "div",
+                              props: {
+                                style: { display: "flex", fontWeight: 600, color: "#475467" },
+                                children: `${(s.pct * 100).toFixed(1)}%`,
+                              },
+                            },
+                            s.subLabel
+                              ? {
+                                  type: "div",
+                                  props: {
+                                    style: { display: "flex", color: "#667085" },
+                                    children: `· ${s.subLabel}`,
+                                  },
+                                }
+                              : null,
+                          ].filter(Boolean),
+                        },
+                      })),
+                    },
+                  },
+                ].filter(Boolean),
               },
             }
-          : null,
+          : subline
+            ? {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    marginTop: 28,
+                    fontSize: 36,
+                    fontWeight: 600,
+                    color: "#374151",
+                    maxWidth: OG_WIDTH - 200,
+                  },
+                  children: subline,
+                },
+              }
+            : null,
         // Spacer that pushes the footer to the bottom
         {
           type: "div",
