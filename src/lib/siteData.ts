@@ -231,6 +231,107 @@ export function formatNextElection(cycle: CouncilCycle | null): {
   };
 }
 
+// ---------- Upcoming elections ----------
+
+import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { resolve, dirname } from "node:path";
+
+export interface UpcomingContest {
+  id: string;
+  kind: "by_election" | "general_election" | "devolved";
+  name: string;
+  region: string;
+  polling_day_iso: string;
+  polling_day_label: string;
+  days_until: number;
+  headline_summary: string;
+  headline_winner: string | null;
+  headline_runner_up: string | null;
+  margin_pp: number | null;
+  classification: string | null;
+  href: string;
+  source_file: string | null;
+}
+
+function repoRoot(): string {
+  const here = dirname(fileURLToPath(import.meta.url));
+  return resolve(here, "../..");
+}
+
+function readJsonIfExists(rel: string): any | null {
+  const p = resolve(repoRoot(), rel);
+  if (!existsSync(p)) return null;
+  try {
+    return JSON.parse(readFileSync(p, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function daysUntil(iso: string, now: Date = new Date()): number {
+  const target = new Date(`${iso}T00:00:00Z`);
+  return Math.ceil((target.getTime() - now.getTime()) / 86_400_000);
+}
+
+function prettyDate(iso: string): string {
+  const d = new Date(`${iso}T00:00:00Z`);
+  return d.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+/**
+ * Returns every imminent UK contest the site currently models, ordered by
+ * polling day ascending. Skips contests whose polling day has already passed.
+ *
+ * Today's list (May 2026):
+ *  - Makerfield parliamentary by-election (18 Jun 2026)
+ *
+ * Add new entries here when a fresh by-election forecast file lands in
+ * data/predictions/by-elections/.
+ */
+export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[] {
+  const out: UpcomingContest[] = [];
+
+  // Makerfield by-election
+  const makerfield = readJsonIfExists("data/predictions/by-elections/makerfield-2026-06-18.json");
+  if (makerfield) {
+    const pollingDay: string = makerfield.contest?.polling_day || "2026-06-18";
+    const days = daysUntil(pollingDay, now);
+    if (days >= 0) {
+      const winner = makerfield.forecast?.winner || null;
+      const runnerUp = makerfield.forecast?.runner_up || null;
+      const marginPp = makerfield.forecast?.margin_pp != null
+        ? makerfield.forecast.margin_pp * 100
+        : null;
+      out.push({
+        id: "makerfield-2026-06-18",
+        kind: "by_election",
+        name: "Makerfield parliamentary by-election",
+        region: "Wigan borough, North West England",
+        polling_day_iso: pollingDay,
+        polling_day_label: prettyDate(pollingDay),
+        days_until: days,
+        headline_summary: makerfield.forecast?.headline ||
+          (winner && runnerUp ? `${winner} expected to beat ${runnerUp}` : "Forecast pending"),
+        headline_winner: winner,
+        headline_runner_up: runnerUp,
+        margin_pp: marginPp,
+        classification: makerfield.forecast?.classification || null,
+        href: "/by-elections/makerfield/",
+        source_file: "data/predictions/by-elections/makerfield-2026-06-18.json",
+      });
+    }
+  }
+
+  return out.sort((a, b) => a.days_until - b.days_until);
+}
+
 /**
  * Lower-cased two/three-letter slug → full party name. Council-control.json
  * keys its by_party tallies on slugs ("con", "lab", "ld", "ref", "green",
@@ -264,6 +365,7 @@ export function shortPartyLabel(party: string): string {
     case "Workers Party of Britain": return "Workers Party";
     case "Traditional Unionist Voice - TUV": return "TUV";
     case "Sinn Féin": return "Sinn Féin";
+    case "Restore Britain": return "Restore";
     default: return party;
   }
 }

@@ -4,118 +4,184 @@ import { partyColour } from "../lib/predictions";
 import {
   loadGeHeadline,
   loadMay7Headline,
+  loadUpcomingElections,
   shortPartyLabel,
-  partySlugToName,
 } from "../lib/siteData";
 
+const upcoming = loadUpcomingElections();
 const ge = loadGeHeadline();
 const may7 = loadMay7Headline();
-const topGe = ge.seat_tallies.slice(0, 4);
 
-// Council-majority tally — the four parties that won the most council majorities on May 7.
-const councilMajorities = Object.entries(may7.control_by_party)
-  .filter(([, n]) => (n as number) > 0)
-  .sort((a, b) => (b[1] as number) - (a[1] as number));
-const totalMajorities = councilMajorities.reduce((s, [, n]) => s + (n as number), 0);
+const topGe = ge.seat_tallies.slice(0, 6);
+const topNationalShares = ge.national_vote_share.slice(0, 6);
+const HALFWAY = 326;
+const leader = ge.seat_tallies[0];
+
+const heroContest = upcoming[0] ?? null;
+const heroWinner = heroContest?.headline_winner ?? null;
+const heroRunnerUp = heroContest?.headline_runner_up ?? null;
+const heroMargin = heroContest?.margin_pp ?? null;
+const heroClassification = heroContest?.classification ?? null;
+
+function classificationLabel(c: string | null | undefined): string {
+  switch (c) {
+    case "toss-up": return "Toss-up";
+    case "lean": return "Lean";
+    case "likely": return "Likely";
+    case "safe": return "Safe";
+    default: return c || "—";
+  }
+}
+
+const description = heroContest
+  ? `The Makerfield parliamentary by-election on ${heroContest.polling_day_label}, the rolling general-election forecast for every one of the 650 UK constituencies (now including Restore Britain), and an honest backtest of every prediction we've ever published.`
+  : "The rolling general-election forecast for every one of the 650 UK constituencies, plus an honest backtest of every prediction we've ever published.";
 ---
 
 <BaseLayout
-  title="UK Elections — every council, every constituency, every forecast"
-  description={`The May 7 2026 result and accuracy audit, the rolling forecast for every one of the 650 UK constituencies, and the next council election date (or "TBC" where Local Government Reorganisation is in play).`}
+  title="UK Elections — every constituency, every forecast, every backtest"
+  description={description}
 >
-  <section class="hero hero-v2">
-    <p class="eyebrow">May 7 shipped · GE forecast live · next council dates listed</p>
-    <h1>Every council, every constituency, every forecast.</h1>
-    <p class="lede">
-      The May 7 2026 result, our scored accuracy, the rolling forecast for all 650 UK general-election seats, and
-      the next election date for each council — including a clear <strong>TBC</strong> where Local Government
-      Reorganisation is in play, rather than a misleading date.
-    </p>
-    <div class="action-row" aria-label="Primary actions">
-      <a class="button primary" href="/your-area/">Find my ward</a>
-      <a class="button" href="/councils/">All councils</a>
-      <a class="button" href="/forecasts/general-election/">General election forecast</a>
-      <a class="button" href="/past-results/">May 7 results</a>
-    </div>
-  </section>
-
-  <section class="headline-grid" aria-label="Headline projections">
-    <article class="headline-card">
-      <header>
-        <span class="kicker">May 7 2026 — results in</span>
-        <h2>{may7.reform_majorities} Reform UK majorities, {may7.reform_seats_won.toLocaleString()} seats</h2>
-      </header>
-      <p class="card-lede">
-        {may7.contesting_councils} English and Welsh councils contested. {totalMajorities} councils now have a single-party
-        majority; {may7.noc_count} are in no-overall-control. Our locked forecast called the winner correctly in{" "}
-        <strong>{(may7.live_winner_accuracy * 100).toFixed(1)}%</strong> of evaluated wards.
+  {heroContest && (
+    <section class="hero hero-byelection">
+      <p class="eyebrow">Next UK election · {heroContest.polling_day_label}</p>
+      <h1>{heroContest.name}</h1>
+      <p class="lede">
+        {heroContest.headline_summary}
       </p>
-      <div class="party-bars">
-        {councilMajorities.slice(0, 4).map(([slug, n]) => {
-          const name = partySlugToName(slug);
-          const share = totalMajorities > 0 ? (n as number) / totalMajorities : 0;
-          return (
-            <div class="bar-row">
-              <span class="bar-label">{shortPartyLabel(name)}</span>
-              <div class="bar-track">
-                <div class="bar-fill" style={`width:${(share * 100).toFixed(1)}%; background:${partyColour(name)}`}></div>
-              </div>
-              <span class="bar-value">{(n as number).toLocaleString()}</span>
-            </div>
-          );
-        })}
+      <div class="hero-meta">
+        <span class="hero-chip days">
+          <strong>{heroContest.days_until}</strong> {heroContest.days_until === 1 ? "day" : "days"} to polling
+        </span>
+        {heroClassification && (
+          <span class="hero-chip class">{classificationLabel(heroClassification)}</span>
+        )}
+        {heroWinner && (
+          <span class="hero-chip winner">
+            <span class="party-pill" style={`background:${partyColour(heroWinner)}`}></span>
+            {shortPartyLabel(heroWinner)} forecast to win
+          </span>
+        )}
       </div>
-      <p class="caption">Councils with a single-party majority</p>
-      <a class="card-cta" href="/past-results/">See May 7 results and accuracy →</a>
-    </article>
+      <div class="action-row" aria-label="Primary actions">
+        <a class="button primary" href={heroContest.href}>Read the full forecast</a>
+        <a class="button" href="/forecasts/general-election/">General election forecast</a>
+        <a class="button" href="/past-results/">How accurate we are</a>
+      </div>
+    </section>
+  )}
 
-    <article class="headline-card">
-      <header>
-        <span class="kicker">If a UK general election were held today</span>
-        <h2>Reform UK projected to win {ge.seat_tallies[0]?.seats || 0} seats</h2>
-      </header>
-      <p class="card-lede">
-        All 650 UK parliamentary constituencies, refreshed daily from current Westminster polling.
-        This is what would happen if the country voted right now.
-      </p>
-      <div class="party-bars">
-        {topGe.map((t) => (
-          <div class="bar-row">
-            <span class="bar-label">{shortPartyLabel(t.party)}</span>
-            <div class="bar-track">
-              <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
+  {upcoming.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Upcoming elections</p>
+        <h2>Every UK contest with a confirmed polling day</h2>
+      </div>
+      <div class="upcoming-grid">
+        {upcoming.map((u) => (
+          <article class="upcoming-card">
+            <p class="upcoming-date">{u.polling_day_label}</p>
+            <h3><a href={u.href}>{u.name}</a></h3>
+            <p class="upcoming-region">{u.region}</p>
+            <p class="upcoming-headline">{u.headline_summary}</p>
+            <div class="upcoming-foot">
+              <span class="days-pill">{u.days_until} day{u.days_until === 1 ? "" : "s"} away</span>
+              {u.classification && (
+                <span class="class-pill">{classificationLabel(u.classification)}</span>
+              )}
             </div>
-            <span class="bar-value">{t.seats.toLocaleString()}</span>
-          </div>
+          </article>
         ))}
+        <article class="upcoming-card upcoming-aside">
+          <p class="upcoming-date">Date pending</p>
+          <h3>Other upcoming contests</h3>
+          <p class="upcoming-headline">
+            Local council by-elections happen most Thursdays — we track the
+            results in our archive once they're declared. We add a forecast
+            for any new parliamentary by-election here as soon as the writ
+            is moved.
+          </p>
+          <div class="upcoming-foot">
+            <a href="/past-results/">See our prediction history →</a>
+          </div>
+        </article>
       </div>
-      <p class="caption">Projected Westminster seats</p>
-      <a class="card-cta" href="/forecasts/general-election/">See general election forecast →</a>
-    </article>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">If a UK general election were held today</p>
+      <h2>{leader ? `${shortPartyLabel(leader.party)} projected to win ${leader.seats} of ${ge.total_seats} seats` : "Seat-by-seat forecast for every UK constituency"}</h2>
+    </div>
+    <p class="lede">
+      All <strong>{ge.total_seats.toLocaleString()}</strong> UK parliamentary constituencies, refreshed from the latest
+      named-pollster Westminster polling average. A majority needs <strong>{HALFWAY}</strong> seats.
+      {leader && leader.seats >= HALFWAY
+        ? ` ${shortPartyLabel(leader.party)} clears the line with ${(leader.seats - HALFWAY).toLocaleString()} seats to spare.`
+        : leader ? ` ${shortPartyLabel(leader.party)} is ${Math.abs(HALFWAY - leader.seats).toLocaleString()} seats short of an overall majority.` : ""}
+    </p>
+    <div class="party-bars party-bars-large">
+      {topGe.map((t) => (
+        <div class="bar-row">
+          <span class="bar-label">{shortPartyLabel(t.party)}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
+          </div>
+          <span class="bar-value">{t.seats.toLocaleString()} <span class="bar-share">({(t.share * 100).toFixed(1)}%)</span></span>
+        </div>
+      ))}
+    </div>
+    <p class="caption">Projected House of Commons composition (top {topGe.length} parties shown)</p>
+
+    <h3 style="margin-top:1.5rem">National vote share — current Westminster polling</h3>
+    <div class="party-bars">
+      {topNationalShares.map((s) => (
+        <div class="bar-row">
+          <span class="bar-label">{shortPartyLabel(s.party)}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style={`width:${(s.share * 100).toFixed(1)}%; background:${partyColour(s.party)}`}></div>
+          </div>
+          <span class="bar-value">{(s.share * 100).toFixed(1)}%</span>
+        </div>
+      ))}
+    </div>
+    <p class="caption">
+      Wikipedia 14-day rolling average + manual Restore Britain overlay (most pollsters embed Restore inside the
+      "Others" cell rather than breaking it out separately).
+    </p>
+    <p class="muted-row">
+      <a href="/forecasts/general-election/">See every constituency →</a>
+      · <a href="/your-area/">Look up my constituency →</a>
+    </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">How accurate were we?</p>
-      <h2>The May 7 forecast, scored against the actual count.</h2>
+      <p class="eyebrow">Past elections</p>
+      <h2>Every prediction we've published, scored against the actual count</h2>
     </div>
     <div class="accuracy-grid">
       <article>
         <span class="big-number">{(may7.live_winner_accuracy * 100).toFixed(1)}%</span>
-        <p class="big-number-label">winners called correctly on May 7 2026 (our locked, sha256-witnessed forecast)</p>
+        <p class="big-number-label">winners called correctly on 7 May 2026 — our locked, sha256-witnessed forecast across {may7.contesting_councils} councils</p>
       </article>
       <article>
         <span class="big-number">{(may7.live_major_party_mae * 100).toFixed(2)}pp</span>
-        <p class="big-number-label">average gap between our predicted vote share and the actual vote share, per party</p>
+        <p class="big-number-label">average gap between our predicted vote share and the actual count, per party</p>
       </article>
       <article>
         <span class="big-number">{(ge.backtest_winner_accuracy * 100).toFixed(0)}%</span>
-        <p class="big-number-label">winners called correctly when we replayed the GE model on the 2024 general election</p>
+        <p class="big-number-label">winners called correctly when we replayed the same general-election model on the 2024 result</p>
       </article>
     </div>
     <p class="muted-row">
-      <a href="/past-results/">Full May 7 audit →</a>
-      · <a href="/data-quality/">All backtests →</a>
+      Each constituency and council page carries its own forecast-vs-actual record so you can see exactly how the model behaved <em>for that place</em>, not just on average.
+    </p>
+    <p class="muted-row">
+      <a href="/past-results/">All past predictions →</a>
+      · <a href="/data-quality/ge-backtest/">2024 general election backtest →</a>
+      · <a href="/data-quality/2024-backtest/">2024 local backtest →</a>
     </p>
   </section>
 
@@ -126,18 +192,18 @@ const totalMajorities = councilMajorities.reduce((s, [, n]) => s + (n as number)
     </div>
     <div class="feature-list">
       <article>
-        <h3>Find your ward or constituency</h3>
-        <p>Type a UK postcode, town, or council and we'll show your specific contest — candidates, parties, the May 7 result where applicable, and the GE forecast.</p>
+        <h3>Find your constituency or ward</h3>
+        <p>Type a UK postcode, town, or council and we'll show your specific contest — candidates, parties, our prediction, and our track record for that place.</p>
         <p><a href="/your-area/">Find my ward →</a></p>
       </article>
       <article>
-        <h3>Browse every council</h3>
-        <p>The full list of {may7.contesting_councils} councils with the May 7 result, who controls them now, and when they next vote. Two-tier councils awaiting Local Government Reorganisation are marked <strong>TBC</strong>.</p>
+        <h3>Every council, every cycle</h3>
+        <p>The full list of every UK council with its May 7 result, who controls it now, and when it next votes. Two-tier councils awaiting Local Government Reorganisation are marked <strong>TBC</strong>.</p>
         <p><a href="/councils/">All councils →</a></p>
       </article>
       <article>
         <h3>Check our working</h3>
-        <p>Every prediction lists the model steps that produced it. The full method, every backtest, the data sources and open downloads live in <a href="/methodology/">About</a>. May 7 was scored after the count — see <a href="/past-results/">our accuracy audit</a>.</p>
+        <p>Every forecast carries the model steps that produced it. The full method, every backtest, the source data, and open downloads sit on <a href="/methodology/">the about page</a>.</p>
       </article>
     </div>
   </section>

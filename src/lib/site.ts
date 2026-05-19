@@ -22,9 +22,9 @@ export interface SearchEntry {
 }
 
 export const NAV_ITEMS = [
-  { href: "/councils/", label: "Councils" },
   { href: "/forecasts/general-election/", label: "General Election" },
-  { href: "/by-elections/makerfield/", label: "Makerfield" },
+  { href: "/by-elections/makerfield/", label: "Makerfield By-election" },
+  { href: "/councils/", label: "Councils" },
   { href: "/your-area/", label: "Find Your Ward" },
   { href: "/past-results/", label: "Past Results" },
   { href: "/methodology/", label: "About" },
