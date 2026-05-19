@@ -174,20 +174,27 @@ const aspectRatio = (height / width) * 100;
       </g>
     </svg>
     <div class="choropleth-tooltip" hidden>
-      <strong class="choropleth-tooltip-name"></strong>
-      <span class="choropleth-tooltip-winner"></span>
-      <span class="choropleth-tooltip-margin"></span>
+      <span class="choropleth-tooltip-strip"></span>
+      <div class="choropleth-tooltip-body">
+        <strong class="choropleth-tooltip-name"></strong>
+        <span class="choropleth-tooltip-winner"></span>
+        <span class="choropleth-tooltip-margin"></span>
+      </div>
     </div>
   </div>
 
   {showLegend && (
     <figcaption class="choropleth-legend">
+      <button type="button" class="cp-legend-item cp-legend-clear is-active" data-cp-filter="">
+        <span class="cp-legend-name">All</span>
+        <span class="cp-legend-count">{rendered.length}</span>
+      </button>
       {legend.map((l) => (
-        <span class="cp-legend-item">
+        <button type="button" class="cp-legend-item" data-cp-filter={l.party}>
           <span class="cp-legend-swatch" style={`background:${l.colour}`}></span>
           <span class="cp-legend-name">{shortPartyLabel(l.party)}</span>
           <span class="cp-legend-count">{l.n}</span>
-        </span>
+        </button>
       ))}
     </figcaption>
   )}
@@ -205,13 +212,16 @@ const aspectRatio = (height / width) * 100;
     const winnerEl = tooltip.querySelector(".choropleth-tooltip-winner") as HTMLElement;
     const marginEl = tooltip.querySelector(".choropleth-tooltip-margin") as HTMLElement;
 
+    const stripEl = tooltip.querySelector(".choropleth-tooltip-strip") as HTMLElement;
     const showFor = (path: SVGPathElement, clientX: number, clientY: number): void => {
       const name = path.dataset.name || "—";
       const winner = path.dataset.winner || "—";
       const margin = path.dataset.margin || "0.0";
+      const fill = path.getAttribute("fill") || "var(--ink-soft)";
       nameEl.textContent = name;
       winnerEl.textContent = winner;
       marginEl.textContent = `${margin}pp margin`;
+      if (stripEl) stripEl.style.background = fill;
       tooltip.removeAttribute("hidden");
       const stageRect = stage.getBoundingClientRect();
       // Position tooltip in stage-local coords with 14px offset; keep
@@ -242,6 +252,29 @@ const aspectRatio = (height / width) * 100;
       if (!(target instanceof SVGPathElement)) return;
       const slug = target.dataset.slug;
       if (slug) window.location.href = `/seats/parliament/${slug}/`;
+    });
+
+    // Legend filter — clicking a party chip dims every path that isn't
+    // that party so you can see one party's geography in isolation.
+    // Clicking again (or clicking "All") restores full saturation.
+    const legendButtons = fig.querySelectorAll<HTMLButtonElement>("[data-cp-filter]");
+    legendButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.cpFilter || "";
+        const isActive = btn.classList.contains("is-active");
+        if (isActive && filter !== "") {
+          // Clicking the already-active filter toggles back to "All"
+          fig.dataset.cpActive = "";
+          legendButtons.forEach((b) => b.classList.remove("is-active"));
+          (fig.querySelector("[data-cp-filter='']") as HTMLElement)?.classList.add("is-active");
+        } else {
+          fig.dataset.cpActive = filter;
+          legendButtons.forEach((b) => b.classList.remove("is-active"));
+          btn.classList.add("is-active");
+        }
+        // Apply the dim via a single attribute on the wrapper; the CSS
+        // does the rest via [data-cp-active] selectors.
+      });
     });
   }
 

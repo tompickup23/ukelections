@@ -1356,3 +1356,352 @@ table.council-table th {
     min-width: 7rem;
   }
 }
+
+/* === Hero by-election v2 — data-first redesign === */
+
+.hero-byelection-v2 {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: 3rem;
+  background:
+    radial-gradient(circle at 95% 0%, color-mix(in oklab, var(--ink-soft) 6%, transparent) 0%, transparent 35%),
+    radial-gradient(circle at 0% 90%, color-mix(in oklab, #12b5cb 8%, transparent) 0%, transparent 40%),
+    var(--surface);
+  overflow: hidden;
+}
+
+.hero-byelection-v2 .eyebrow {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-3);
+  margin-bottom: 0.9rem;
+}
+
+.hero-byelection-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+.hero-byelection-head h1 {
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.85rem;
+  /* Tighter tracking + lower line-height to feel like a magazine headline */
+}
+
+.hero-byelection-head .lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  color: var(--ink);
+  max-width: 48ch;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.hero-byelection-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  padding-left: 1rem;
+  border-left: 4px solid color-mix(in oklab, var(--accent-3) 35%, transparent);
+  font-family: "Sora", system-ui, sans-serif;
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-number {
+  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  line-height: 0.85;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.clock-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Race bar — the single most important visual element of the hero */
+
+.hero-race {
+  margin: 0 0 1.75rem;
+}
+
+.hero-race-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 0.65rem;
+}
+
+.hero-race-bar {
+  display: flex;
+  width: 100%;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.hero-race-segment {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  transition: filter 0.15s ease-out;
+  cursor: default;
+  /* Subtle inner shadow to separate from neighbours when colours are
+     similar (e.g. Reform light-blue next to Lib Dem yellow). */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+.hero-race-segment:last-child {
+  box-shadow: none;
+}
+
+.hero-race-segment:hover {
+  filter: brightness(1.08);
+}
+
+.hero-race-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  padding: 0 0.4rem;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.hero-race-party {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hero-race-pct {
+  font-size: 1rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* Yellow background needs dark text for contrast — partyColour Lib Dem
+   #f59e0b and SNP #fdf24e are both too light against white. Override
+   per-party via attribute selector on the closest segment? Simplest:
+   add a class via JS, but we want zero JS in the hero. Pragmatic: use
+   text-stroke-style backdrop. */
+.hero-race-segment[style*="#f59e0b"] .hero-race-label,
+.hero-race-segment[style*="#fdf24e"] .hero-race-label {
+  color: #1a1a1a;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+
+.hero-race-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.85rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+}
+
+.hero-race-legend li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.hero-race-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.hero-race-legend-party {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.hero-race-legend-pct {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.hero-race-legend-cand {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.hero-race-legend-cand::before {
+  content: "·";
+  margin-right: 0.4rem;
+  color: var(--border);
+}
+
+/* Mobile — stack the grid, shrink the clock, keep the race bar full-width */
+@media (max-width: 720px) {
+  .hero-byelection-grid {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .hero-byelection-clock {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding-left: 0;
+    border-left: none;
+    border-top: 3px solid color-mix(in oklab, var(--accent-3) 35%, transparent);
+    padding-top: 0.8rem;
+  }
+  .clock-number {
+    font-size: 3.25rem;
+  }
+  .clock-label {
+    font-size: 0.78rem;
+  }
+  .hero-race-bar {
+    height: 56px;
+  }
+}
+
+/* Hide labels in very narrow segments — already hidden via the wide
+   check in markup, but extra defence on very small viewports */
+@media (max-width: 480px) {
+  .hero-race-party { font-size: 0.65rem; }
+  .hero-race-pct  { font-size: 0.9rem; }
+}
+
+/* === Choropleth polish v2 — clickable legend, party-strip tooltip === */
+
+.choropleth-tooltip {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+  gap: 0;
+}
+
+.choropleth-tooltip-strip {
+  flex: 0 0 5px;
+  background: var(--ink-soft);
+}
+
+.choropleth-tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.55rem 0.8rem;
+}
+
+/* Clickable legend chips */
+
+.choropleth-legend button.cp-legend-item {
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 0.88rem;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.choropleth-legend button.cp-legend-item:hover {
+  background: color-mix(in oklab, var(--surface) 70%, var(--ink-soft) 8%);
+  border-color: color-mix(in oklab, var(--border) 60%, var(--ink-soft));
+}
+
+.choropleth-legend button.cp-legend-item.is-active {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+
+.choropleth-legend button.cp-legend-item.is-active .cp-legend-name,
+.choropleth-legend button.cp-legend-item.is-active .cp-legend-count {
+  color: var(--surface);
+}
+
+.cp-legend-clear {
+  font-weight: 800;
+}
+
+/* Filter behaviour: when a non-empty filter is active, dim all paths
+   whose data-winner doesn't match. Strong selector specificity so it
+   beats the default fill rules. */
+.choropleth[data-cp-active]:not([data-cp-active=""]) .choropleth-stage svg path {
+  opacity: 0.22;
+  filter: saturate(0.4);
+}
+
+.choropleth[data-cp-active="Reform UK"] .choropleth-stage svg path[data-winner="Reform UK"],
+.choropleth[data-cp-active="Labour"] .choropleth-stage svg path[data-winner="Labour"],
+.choropleth[data-cp-active="Conservative"] .choropleth-stage svg path[data-winner="Conservative"],
+.choropleth[data-cp-active="Liberal Democrats"] .choropleth-stage svg path[data-winner="Liberal Democrats"],
+.choropleth[data-cp-active="Green Party"] .choropleth-stage svg path[data-winner="Green Party"],
+.choropleth[data-cp-active="SNP"] .choropleth-stage svg path[data-winner="SNP"],
+.choropleth[data-cp-active="Plaid Cymru"] .choropleth-stage svg path[data-winner="Plaid Cymru"],
+.choropleth[data-cp-active="Restore Britain"] .choropleth-stage svg path[data-winner="Restore Britain"],
+.choropleth[data-cp-active="Sinn Féin"] .choropleth-stage svg path[data-winner="Sinn Féin"],
+.choropleth[data-cp-active="DUP"] .choropleth-stage svg path[data-winner="DUP"],
+.choropleth[data-cp-active="SDLP"] .choropleth-stage svg path[data-winner="SDLP"],
+.choropleth[data-cp-active="Alliance"] .choropleth-stage svg path[data-winner="Alliance"],
+.choropleth[data-cp-active="UUP"] .choropleth-stage svg path[data-winner="UUP"],
+.choropleth[data-cp-active="Traditional Unionist Voice - TUV"] .choropleth-stage svg path[data-winner="Traditional Unionist Voice - TUV"],
+.choropleth[data-cp-active="Independent"] .choropleth-stage svg path[data-winner="Independent"],
+.choropleth[data-cp-active="Workers Party of Britain"] .choropleth-stage svg path[data-winner="Workers Party of Britain"],
+.choropleth[data-cp-active="Speaker seeking re-election"] .choropleth-stage svg path[data-winner="Speaker seeking re-election"] {
+  opacity: 1;
+  filter: none;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 0.8;
+}
+
+/* When NO filter is active, ensure paths render at full saturation */
+.choropleth:not([data-cp-active]) .choropleth-stage svg path,
+.choropleth[data-cp-active=""] .choropleth-stage svg path {
+  opacity: 1;
+  filter: none;
+}
+
+/* Better hover state — replace the brightness darken with a stroke
+   highlight that doesn't change the perceived colour */
+.choropleth-stage svg path:hover {
+  filter: brightness(1.0) saturate(1.05);
+  stroke: rgba(0, 0, 0, 0.95);
+  stroke-width: 1.6;
+}
+

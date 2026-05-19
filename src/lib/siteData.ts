@@ -240,9 +240,11 @@ export interface UpcomingContest {
   id: string;
   kind: "by_election" | "general_election" | "devolved";
   name: string;
+  short_name: string;
   region: string;
   polling_day_iso: string;
   polling_day_label: string;
+  polling_day_short_label: string;
   days_until: number;
   headline_summary: string;
   headline_winner: string | null;
@@ -251,6 +253,9 @@ export interface UpcomingContest {
   classification: string | null;
   href: string;
   source_file: string | null;
+  central_shares: Array<{ party: string; pct: number }>;
+  key_candidates: Array<{ party: string; candidate: string }>;
+  trigger_note: string | null;
 }
 
 // Astro runs `astro build` from the project root, so process.cwd() is the
@@ -346,14 +351,37 @@ export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[]
       (constituencyName
         ? `${constituencyName} parliamentary by-election`
         : `${slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} by-election`);
+    const shortName: string = constituencyName
+      ? `${constituencyName} by-election`
+      : contestName;
+
+    // Pull central-share dict; sort descending and convert to array of
+    // {party, pct}. Filter to parties with >= 0.005 share so trivial
+    // independents don't bloat the hero.
+    const sharesDict: Record<string, number> = data.forecast?.central_shares || {};
+    const centralShares = Object.entries(sharesDict)
+      .filter(([, p]) => (p as number) > 0.005)
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
+      .map(([party, pct]) => ({ party, pct: pct as number }));
+
+    // Pull candidates whose party is in centralShares — gives us the
+    // race-bar a name to attach to each segment.
+    const partySet = new Set(centralShares.map((s) => s.party));
+    const keyCandidates: Array<{ party: string; candidate: string }> = (
+      (data.candidates || []) as any[]
+    )
+      .filter((c) => partySet.has(c.party) && c.candidate && c.candidate !== "to be confirmed")
+      .map((c) => ({ party: c.party, candidate: c.candidate }));
 
     out.push({
       id: stem,
       kind: "by_election",
       name: contestName,
+      short_name: shortName,
       region,
       polling_day_iso: pdIso,
       polling_day_label: prettyDate(pdIso),
+      polling_day_short_label: shortDate(pdIso),
       days_until: days,
       headline_summary:
         data.forecast?.headline ||
@@ -364,10 +392,23 @@ export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[]
       classification: data.forecast?.classification || null,
       href: `/by-elections/${slug}/`,
       source_file: `${dirRel}/${filename}`,
+      central_shares: centralShares,
+      key_candidates: keyCandidates,
+      trigger_note: data.contest?.trigger?.stated_reason || null,
     });
   }
 
   return out.sort((a, b) => a.days_until - b.days_until);
+}
+
+function shortDate(iso: string): string {
+  const d = new Date(`${iso}T00:00:00Z`);
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 /**
