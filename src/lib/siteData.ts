@@ -233,8 +233,8 @@ export function formatNextElection(cycle: CouncilCycle | null): {
 
 // ---------- Upcoming elections ----------
 
-import { readFileSync, existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { resolve, basename } from "node:path";
 
 export interface UpcomingContest {
   id: string;
@@ -287,44 +287,78 @@ function prettyDate(iso: string): string {
  * Returns every imminent UK contest the site currently models, ordered by
  * polling day ascending. Skips contests whose polling day has already passed.
  *
- * Today's list (May 2026):
- *  - Makerfield parliamentary by-election (18 Jun 2026)
+ * Auto-discovered from any forecast JSON in `data/predictions/by-elections/`
+ * whose filename matches `<slug>-YYYY-MM-DD.json` (skipping `.analysis.json`
+ * sidecars). The slug must also have a matching page at
+ * `/src/pages/by-elections/<slug>/index.astro` for the link to resolve.
  *
- * Add new entries here when a fresh by-election forecast file lands in
- * data/predictions/by-elections/.
+ * Forecast JSON shape (canonical):
+ *   {
+ *     contest: { polling_day: "YYYY-MM-DD", pcon24cd: "...", region: "..." },
+ *     forecast: { winner, runner_up, margin_pp, classification, headline }
+ *   }
+ *
+ * Drop a new file in that directory and a new `[slug]/index.astro` page —
+ * the homepage card appears with no further code changes.
  */
 export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[] {
-  const out: UpcomingContest[] = [];
+  const dirRel = "data/predictions/by-elections";
+  const dirAbs = resolve(process.cwd(), dirRel);
+  if (!existsSync(dirAbs)) return [];
 
-  // Makerfield by-election
-  const makerfield = readJsonIfExists("data/predictions/by-elections/makerfield-2026-06-18.json");
-  if (makerfield) {
-    const pollingDay: string = makerfield.contest?.polling_day || "2026-06-18";
-    const days = daysUntil(pollingDay, now);
-    if (days >= 0) {
-      const winner = makerfield.forecast?.winner || null;
-      const runnerUp = makerfield.forecast?.runner_up || null;
-      const marginPp = makerfield.forecast?.margin_pp != null
-        ? makerfield.forecast.margin_pp * 100
-        : null;
-      out.push({
-        id: "makerfield-2026-06-18",
-        kind: "by_election",
-        name: "Makerfield parliamentary by-election",
-        region: "Wigan borough, North West England",
-        polling_day_iso: pollingDay,
-        polling_day_label: prettyDate(pollingDay),
-        days_until: days,
-        headline_summary: makerfield.forecast?.headline ||
-          (winner && runnerUp ? `${winner} expected to beat ${runnerUp}` : "Forecast pending"),
-        headline_winner: winner,
-        headline_runner_up: runnerUp,
-        margin_pp: marginPp,
-        classification: makerfield.forecast?.classification || null,
-        href: "/by-elections/makerfield/",
-        source_file: "data/predictions/by-elections/makerfield-2026-06-18.json",
-      });
-    }
+  const out: UpcomingContest[] = [];
+  for (const filename of readdirSync(dirAbs)) {
+    if (!filename.endsWith(".json")) continue;
+    // Skip analysis sidecar files (e.g. makerfield-2026-06-18.analysis.json).
+    if (filename.endsWith(".analysis.json")) continue;
+
+    // Parse <slug>-YYYY-MM-DD.json. The slug may itself contain hyphens
+    // (e.g. "newcastle-upon-tyne-east-2026-...") so anchor on the trailing
+    // ISO date.
+    const stem = basename(filename, ".json");
+    const dateMatch = stem.match(/^(.+)-(\d{4}-\d{2}-\d{2})$/);
+    if (!dateMatch) continue;
+    const [, slug, pollingDay] = dateMatch;
+
+    const data = readJsonIfExists(`${dirRel}/${filename}`);
+    if (!data) continue;
+
+    const pdIso: string = data.contest?.polling_day || pollingDay;
+    const days = daysUntil(pdIso, now);
+    if (days < 0) continue;
+
+    const winner = data.forecast?.winner || null;
+    const runnerUp = data.forecast?.runner_up || null;
+    const marginPp = data.forecast?.margin_pp != null ? data.forecast.margin_pp * 100 : null;
+    const region: string =
+      data.contest?.region_label ||
+      data.contest?.region ||
+      data.contest?.country ||
+      "United Kingdom";
+    const contestName: string =
+      data.contest?.name ||
+      (data.contest?.pcon_name
+        ? `${data.contest.pcon_name} parliamentary by-election`
+        : `${slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} by-election`);
+
+    out.push({
+      id: stem,
+      kind: "by_election",
+      name: contestName,
+      region,
+      polling_day_iso: pdIso,
+      polling_day_label: prettyDate(pdIso),
+      days_until: days,
+      headline_summary:
+        data.forecast?.headline ||
+        (winner && runnerUp ? `${winner} expected to beat ${runnerUp}` : "Forecast pending"),
+      headline_winner: winner,
+      headline_runner_up: runnerUp,
+      margin_pp: marginPp,
+      classification: data.forecast?.classification || null,
+      href: `/by-elections/${slug}/`,
+      source_file: `${dirRel}/${filename}`,
+    });
   }
 
   return out.sort((a, b) => a.days_until - b.days_until);

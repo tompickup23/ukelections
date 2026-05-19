@@ -12,15 +12,30 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
   description="First public estimate of the 2026 Senedd Cymru election under the new closed-list PR system. 16 super-constituencies × 6 list seats = 96 seats."
 >
   <section class="page-hero">
-    <p class="eyebrow">Senedd Cymru 2026</p>
+    <p class="eyebrow">Senedd Cymru 2026 · Scaffold forecast</p>
     <h1>96 seats — new closed-list PR system</h1>
     <p class="lede">
       First public estimate under the Senedd Cymru (Members and Elections) Act 2024. 16 super-constituencies × 6 list seats.
     </p>
   </section>
 
+  <section class="section">
+    <div class="backtest-callout" style="border-left-color:#9a3412;background:#fff7ed">
+      <strong style="color:#9a3412">⚠ Scaffold forecast — Welsh polling is stale and the boundaries are brand new.</strong>
+      <span class="backtest-detail">
+        The polling input is a pre-launch placeholder (file metadata flags
+        <code>refresh_required_by: 2026-05-01</code>) and the 14-day Wikipedia rolling-average parser
+        hasn't found a fresh Welsh-only field in a month. There are also no prior election results on
+        the new 16 super-constituency boundaries to anchor a per-area forecast — the projection
+        applies a single Wales-wide swing uniformly. <strong>Treat the numbers below as illustrative</strong>
+        until we publish a calibrated v1 with current Beaufort/YouGov Wales/ITV Wales fields and the
+        2024 GE Welsh results re-aggregated to the new super-constituencies.
+      </span>
+    </div>
+  </section>
+
   <section class="section prose-block">
-    <h2>Important caveat</h2>
+    <h2>Methodology in brief</h2>
     <p>
       This is the first Senedd election under the new geography — there are no prior election results on these
       super-constituency boundaries to anchor a per-area forecast. The numbers below apply Welsh-wide vote

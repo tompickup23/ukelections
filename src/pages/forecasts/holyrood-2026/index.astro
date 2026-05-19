@@ -12,15 +12,29 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).total_central
   description="First public estimate of the May 2026 Scottish Parliament election. 73 constituency seats (FPTP) + 56 regional list seats (d'Hondt) = 129 seats."
 >
   <section class="page-hero">
-    <p class="eyebrow">Scottish Parliament 2026</p>
+    <p class="eyebrow">Scottish Parliament 2026 · Scaffold forecast</p>
     <h1>129 seats — Additional Member System</h1>
     <p class="lede">
       73 FPTP constituency seats + 56 d'Hondt regional list seats across 8 regions.
     </p>
   </section>
 
+  <section class="section">
+    <div class="backtest-callout" style="border-left-color:#9a3412;background:#fff7ed">
+      <strong style="color:#9a3412">⚠ Scaffold forecast — not yet calibrated against named Scottish polling.</strong>
+      <span class="backtest-detail">
+        This page is published as a methodology sketch only. The polling input is a pre-launch
+        placeholder (the file metadata flags <code>refresh_required_by: 2026-05-01</code>) and the
+        boundary mapping for the new Central Scotland and Lothians West / Edinburgh and Lothians East
+        regions is partial. <strong>Treat the seat totals below as illustrative</strong> until we
+        publish a calibrated v1 with a current Survation/Ipsos/YouGov Scotland field. Tracked under
+        the comprehensive model roadmap.
+      </span>
+    </div>
+  </section>
+
   <section class="section prose-block">
-    <h2>Important caveat</h2>
+    <h2>Methodology in brief</h2>
     <p>
       2026 brought boundary changes to the regional structure (a new "Central Scotland and Lothians West" + "Edinburgh and Lothians East" pair). The forecast applies current Scotland-wide polling uniformly per constituency,
       with constituency-level 2021 baselines where available, and runs d'Hondt per region with prior-seats
