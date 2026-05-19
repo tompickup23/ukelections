@@ -171,6 +171,25 @@ export function loadGeBacktestForSeat(slug: string): any | null {
   return _geBacktestBySlug[slug] || null;
 }
 
+let _may7BacktestByBallot: Record<string, any> | null = null;
+/**
+ * Returns the May 2026 postaudit row for a single ward, keyed by its
+ * Democracy Club ballot_paper_id (e.g. `local.burnley.bank-hall.2026-05-07`).
+ * Returns null if no postaudit row exists for the ballot — e.g. the
+ * declared result is missing or the ballot wasn't in the cohort. Used by
+ * /seats/[council]/[ward]/ to render the "How we did here" callout.
+ */
+export function loadMay7BacktestForWard(ballotPaperId: string): any | null {
+  if (!_may7BacktestByBallot) {
+    _may7BacktestByBallot = {};
+    const pa = loadMay7Postaudit();
+    for (const row of (pa.live?.rows || []) as any[]) {
+      if (row?.ballot_paper_id) _may7BacktestByBallot[row.ballot_paper_id] = row;
+    }
+  }
+  return _may7BacktestByBallot[ballotPaperId] || null;
+}
+
 let _may7BacktestByCouncil: Record<string, any> | null = null;
 /**
  * Aggregates the May 2026 ward-level postaudit rows up to council level,

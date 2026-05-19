@@ -1,0 +1,263 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { partyColour } from "../../lib/predictions";
+import { shortPartyLabel } from "../../lib/siteData";
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+import {
+  UK_WESTMINSTER_2026_APRIL_AVERAGE,
+  WELSH_2026_APRIL_AVERAGE,
+  SCOTTISH_2026_APRIL_AVERAGE,
+  UK_WESTMINSTER_2024_GE_RESULT,
+} from "../../lib/nationalPolling.js";
+
+// Live polling override + ledger — both written by scripts/refresh-polling.mjs.
+function readJsonIfExists(rel: string): any | null {
+  const p = resolve(process.cwd(), rel);
+  if (!existsSync(p)) return null;
+  try {
+    return JSON.parse(readFileSync(p, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+const overrideFile = readJsonIfExists("data/polling/override.json");
+const ledger: any[] = readJsonIfExists("data/polling/ledger.json") || [];
+
+const ukSnapshot = UK_WESTMINSTER_2026_APRIL_AVERAGE;
+const welshSnapshot = WELSH_2026_APRIL_AVERAGE;
+const scottishSnapshot = SCOTTISH_2026_APRIL_AVERAGE;
+const ge2024 = UK_WESTMINSTER_2024_GE_RESULT;
+
+type ShareRow = { party: string; share: number; vsGe2024?: number };
+function rankShares(shares: Record<string, number>, baseline?: Record<string, number>): ShareRow[] {
+  return Object.entries(shares)
+    .filter(([, s]) => s > 0.001)
+    .sort((a, b) => b[1] - a[1])
+    .map(([party, share]) => ({
+      party,
+      share,
+      vsGe2024: baseline ? share - (baseline[party] || 0) : undefined,
+    }));
+}
+
+const ukRows = rankShares(ukSnapshot.shares, ge2024.shares);
+const welshRows = rankShares(welshSnapshot.shares);
+const scottishRows = rankShares(scottishSnapshot.shares);
+
+// Ledger trend: show every refresh snapshot in reverse-chronological order.
+type LedgerRow = { date: string; polls_used: number; shares: Record<string, number> };
+const ledgerRows: LedgerRow[] = (ledger || [])
+  .map((e: any) => {
+    const uk = e?.sources?.uk_westminster;
+    return uk?.shares
+      ? {
+          date: e.generated_at,
+          polls_used: uk.polls_used || 0,
+          shares: uk.shares,
+        }
+      : null;
+  })
+  .filter((r): r is LedgerRow => r != null)
+  .reverse();
+
+const ledgerParties = ["Reform UK", "Labour", "Conservative", "Green Party", "Liberal Democrats"];
+
+function pct(x: number | undefined | null): string {
+  if (x == null) return "—";
+  return `${(x * 100).toFixed(1)}%`;
+}
+
+const ukMeta = ukSnapshot._meta || {};
+const overlay = ukMeta.restore_britain_overlay || null;
+const ukSourceSummary = overlay
+  ? `${ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average"} · plus Restore Britain overlay (${pct(overlay.share)}, ${overlay.source?.split("—")[0]?.trim()})`
+  : ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average";
+---
+
+<BaseLayout
+  title="UK polling — current Westminster average and how we use it"
+  description={`Where our forecast's national polling input comes from. Current Westminster rolling average, the Restore Britain overlay, plus every refresh on the ledger.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Polling transparency</p>
+    <h1>The numbers driving the forecast</h1>
+    <p class="lede">
+      Every UK Elections forecast applies a swing from the 2024 general-election result toward
+      the latest Westminster polling. This page shows exactly what polling we're using right now,
+      where it comes from, and how often it refreshes.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">UK Westminster vote intention — current</p>
+      <h2>What the polls say today</h2>
+    </div>
+    <div class="party-bars party-bars-large">
+      {ukRows.slice(0, 8).map((r) => (
+        <div class="bar-row">
+          <span class="bar-label">{shortPartyLabel(r.party)}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style={`width:${(r.share * 100).toFixed(1)}%; background:${partyColour(r.party)}`}></div>
+          </div>
+          <span class="bar-value">
+            {(r.share * 100).toFixed(1)}%
+            {r.vsGe2024 !== undefined && (
+              <span class={r.vsGe2024 > 0 ? "swing-up" : (r.vsGe2024 < 0 ? "swing-down" : "swing-flat")}>
+                {r.vsGe2024 > 0 ? "+" : ""}{(r.vsGe2024 * 100).toFixed(1)}pp
+              </span>
+            )}
+          </span>
+        </div>
+      ))}
+    </div>
+    <p class="caption">
+      Coloured number is the change from the 4 July 2024 general-election result.
+      Source: <strong>{ukSourceSummary}</strong>{ukMeta.fieldwork ? <>, fieldwork {ukMeta.fieldwork}</> : null}.
+      {ukMeta.source_url && (
+        <>{" "}· <a href={ukMeta.source_url} rel="external">Wikipedia source page</a>.</>
+      )}
+    </p>
+  </section>
+
+  {overlay && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Manual overlay</p>
+        <h2>Restore Britain isn't in the Wikipedia table</h2>
+      </div>
+      <div class="backtest-callout">
+        <strong>Restore Britain {pct(overlay.share)} — applied manually.</strong>
+        <span class="backtest-detail">
+          Most pollsters embed Restore Britain inside the "Others" cell rather than as a separate
+          column. Until the polling-refresh parser learns to read the embedded "(RB X%)" annotation,
+          we maintain this as a static overlay subtracted from "Other" to keep the total at 100%.
+        </span>
+      </div>
+      <p class="caption">
+        Overlay source: {overlay.source}. Retrieved {overlay.retrieved_at}.
+      </p>
+    </section>
+  )}
+
+  {ledgerRows.length > 1 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Refresh history</p>
+        <h2>What the rolling average has done</h2>
+      </div>
+      <p>
+        Every successful refresh of the polling parser writes a snapshot to the ledger. The table
+        below shows every refresh on record — newest first.
+      </p>
+      <table class="seat-table">
+        <thead>
+          <tr>
+            <th>Refresh</th>
+            <th class="num">Polls used</th>
+            {ledgerParties.map((p) => <th class="num">{shortPartyLabel(p)}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {ledgerRows.map((row) => (
+            <tr>
+              <td>{row.date.split("T")[0]}</td>
+              <td class="num">{row.polls_used}</td>
+              {ledgerParties.map((p) => (
+                <td class="num">{pct(row.shares[p])}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="caption">
+        Movement between rows is real polling drift, not model noise — the parser averages every UK
+        Westminster poll within a 14-day window per snapshot.
+      </p>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Devolved snapshots</p>
+      <h2>Welsh + Scottish vote intention</h2>
+    </div>
+    <p>
+      The Senedd 2026 and Holyrood 2026 forecasts use Wales-only and Scotland-only polling.
+      Sample sizes are smaller and refresh windows can be longer than the UK-wide tracker — be
+      cautious of inference until a fresh Welsh field lands.
+    </p>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Source</th>
+          <th>Fieldwork</th>
+          <th>Top party</th>
+          <th class="num">Top share</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wales</td>
+          <td class="muted">{welshSnapshot._meta?.source || welshSnapshot._meta?.label || "—"}</td>
+          <td class="muted">{welshSnapshot._meta?.fieldwork || "—"}</td>
+          <td>
+            <span class="party-pill" style={`background:${partyColour(welshRows[0]?.party || "")}`}></span>
+            {shortPartyLabel(welshRows[0]?.party || "—")}
+          </td>
+          <td class="num">{pct(welshRows[0]?.share)}</td>
+        </tr>
+        <tr>
+          <td>Scotland</td>
+          <td class="muted">{scottishSnapshot._meta?.source || scottishSnapshot._meta?.label || "—"}</td>
+          <td class="muted">{scottishSnapshot._meta?.fieldwork || "—"}</td>
+          <td>
+            <span class="party-pill" style={`background:${partyColour(scottishRows[0]?.party || "")}`}></span>
+            {shortPartyLabel(scottishRows[0]?.party || "—")}
+          </td>
+          <td class="num">{pct(scottishRows[0]?.share)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>From poll table to seat forecast</h2>
+    </div>
+    <ol class="numbered-list">
+      <li>
+        <strong>Scrape.</strong> Weekly, <code>scripts/refresh-polling.mjs</code> pulls the first
+        wikitable from Wikipedia's UK / Welsh / Scottish polling pages and parses every poll
+        published in the last 14 days.
+      </li>
+      <li>
+        <strong>Average.</strong> Each party's share is the mean across those polls. The snapshot
+        is written to <code>data/polling/override.json</code>; a copy lands in <code>ledger.json</code>.
+      </li>
+      <li>
+        <strong>Overlay.</strong> Restore Britain — which most pollsters bury inside "Others" —
+        is added back as a fixed 4% overlay subtracted from "Other".
+      </li>
+      <li>
+        <strong>Swing.</strong> The seat forecast computes (current share − 2024 share) per party
+        and applies a dampened version of that swing on top of each constituency's 2024 result.
+      </li>
+      <li>
+        <strong>Allocate.</strong> The party with the most predicted votes in each constituency
+        wins it. Seat tallies + national share roll up into <code>summary.json</code>.
+      </li>
+    </ol>
+    <p class="muted-row">
+      <a href="/methodology/">Full methodology →</a>
+      · <a href="/forecasts/general-election/">Current general-election forecast →</a>
+      {overrideFile?.generated_at && (
+        <>{" "}· Polling last refreshed <strong>{overrideFile.generated_at.split("T")[0]}</strong>.</>
+      )}
+    </p>
+  </section>
+</BaseLayout>

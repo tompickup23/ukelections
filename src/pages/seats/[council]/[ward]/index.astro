@@ -6,6 +6,7 @@ import {
   loadHistory,
   loadLaProj,
   loadLaImd,
+  loadMay7BacktestForWard,
   rankedShares,
   formatPct,
   partyColour,
@@ -50,6 +51,17 @@ const description = wp?.prediction
   : `${ward.ward_name} (${ward.council_name}) on Thursday 7 May 2026. ${wp?.cancelled ? "Election cancelled." : "No prediction available."}`;
 
 const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not available" }[wp?.confidence || "none"];
+
+// Per-ward 7 May 2026 backtest: did we call the winner correctly here?
+// Row keys are stable Democracy Club ballot IDs (local.<council>.<ward>.<date>).
+const wardBacktest = ward.ballot_paper_id ? loadMay7BacktestForWard(ward.ballot_paper_id) : null;
+const btParties: Array<{ party: string; pred: number; actual: number; delta: number }> = wardBacktest
+  ? [
+      { party: "Reform UK", pred: wardBacktest.reform_pred || 0, actual: wardBacktest.reform_actual || 0, delta: wardBacktest.reform_delta || 0 },
+      { party: "Labour", pred: wardBacktest.lab_pred || 0, actual: wardBacktest.lab_actual || 0, delta: wardBacktest.lab_delta || 0 },
+      { party: "Conservative", pred: wardBacktest.con_pred || 0, actual: wardBacktest.con_actual || 0, delta: wardBacktest.con_delta || 0 },
+    ].filter((r) => r.pred > 0 || r.actual > 0)
+  : [];
 ---
 
 <BaseLayout title={title} description={description}>
@@ -101,6 +113,50 @@ const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not
     <section class="section prose-block">
       <h2>No prediction available</h2>
       <p>{wp?.methodology?.[0]?.description || "We don't yet have enough prior contest results in this ward to produce a forecast — typically because the ward has been redrawn since 2016."}</p>
+    </section>
+  )}
+
+  {wardBacktest && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">How accurate was the model here?</p>
+        <h2>Our 7 May 2026 forecast for {ward.ward_name}</h2>
+      </div>
+      <div class="backtest-callout">
+        <strong>
+          {wardBacktest.winner_match ? "✓ Winner called correctly" : "✗ Winner missed"}
+        </strong>
+        — predicted <span class="party-pill" style={`background:${partyColour(wardBacktest.predicted_winner)}`}></span> {shortPartyLabel(wardBacktest.predicted_winner)},
+        actual <span class="party-pill" style={`background:${partyColour(wardBacktest.actual_winner)}`}></span> {shortPartyLabel(wardBacktest.actual_winner)}.
+        <span class="backtest-detail">
+          Major-party MAE: <strong>{((wardBacktest.major_party_mae || 0) * 100).toFixed(2)}pp</strong>
+          across the parties below.
+        </span>
+      </div>
+      {btParties.length > 0 && (
+        <table class="seat-table">
+          <thead><tr><th>Party</th><th class="num">Predicted</th><th class="num">Actual</th><th class="num">Gap</th></tr></thead>
+          <tbody>
+            {btParties.map((r) => (
+              <tr>
+                <td><span class="party-pill" style={`background:${partyColour(r.party)}`}></span> {shortPartyLabel(r.party)}</td>
+                <td class="num">{(r.pred * 100).toFixed(1)}%</td>
+                <td class="num">{(r.actual * 100).toFixed(1)}%</td>
+                <td class="num">
+                  <span class={r.delta > 0 ? "swing-up" : (r.delta < 0 ? "swing-down" : "swing-flat")}>
+                    {r.delta > 0 ? "+" : ""}{(r.delta * 100).toFixed(1)}pp
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <p class="caption">
+        Positive gap = we predicted that party would win more share than they did. See the {" "}
+        <a href={`/seats/${ward.council_slug}/`}>full {ward.council_name} accuracy summary</a> or{" "}
+        <a href="/past-results/">the national audit</a>.
+      </p>
     </section>
   )}
 

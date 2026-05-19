@@ -77,6 +77,7 @@ const STATIC_PATHS = [
   "/past-results/indicators/",
   "/forecasts/senedd-2026/",
   "/forecasts/holyrood-2026/",
+  "/polling/",
   "/data-quality/",
   "/methodology/",
   "/sources/",
@@ -107,6 +108,13 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Forecast for the Makerfield by-election triggered by Josh Simons' resignation to make way for Andy Burnham. Two scenarios (Burnham stands / withdraws), 1 May 2026 ward signal, Survation 14-15 May poll, 120-year historical anchor.",
     priority: 110
+  },
+  {
+    href: "/polling/",
+    title: "Polling — current Westminster average and how we use it",
+    kind: "page",
+    description: "Where our forecast's national polling input comes from. Current UK / Welsh / Scottish rolling 14-day average, the Restore Britain overlay, the refresh ledger, and how it flows into the seat forecast.",
+    priority: 107
   },
   {
     href: "/councils/",

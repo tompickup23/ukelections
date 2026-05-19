@@ -7,6 +7,7 @@ import {
   loadMay7Control,
   loadMay7Results,
   loadCouncilCycles,
+  loadMay7BacktestForCouncil,
   rankedShares,
   formatPct,
   partyColour,
@@ -79,29 +80,14 @@ const changeLabel = (() => {
   }
 })();
 
-// Per-ward winner accuracy for this council, computed on the fly.
-let ballotsScored = 0;
-let winnersCorrect = 0;
-let majorPartyAbsErrorSum = 0;
-let majorPartyAbsErrorN = 0;
-const MAJOR = ["Labour", "Conservative", "Liberal Democrats", "Reform UK", "Green Party"];
-for (const w of wards as any[]) {
-  const wp = predictions[w.ballot_paper_id];
-  const actual = resultsBy[w.ballot_paper_id];
-  if (!wp?.prediction || !actual) continue;
-  ballotsScored += 1;
-  const predicted = rankedShares(wp.prediction)[0]?.[0];
-  if (predicted && predicted === actual.winner_party_canonical) winnersCorrect += 1;
-  for (const p of MAJOR) {
-    const predShare = (wp.prediction[p]?.pct || 0) / 100;
-    const actShare = (actual.vote_shares?.[p] as number) || 0;
-    if (predShare === 0 && actShare === 0) continue;
-    majorPartyAbsErrorSum += Math.abs(predShare - actShare);
-    majorPartyAbsErrorN += 1;
-  }
-}
-const winnerAcc = ballotsScored ? winnersCorrect / ballotsScored : 0;
-const majorMae = majorPartyAbsErrorN ? majorPartyAbsErrorSum / majorPartyAbsErrorN : 0;
+// Per-council backtest stats sourced from the canonical postaudit ledger
+// (data/transparency/may-2026-postaudit-2026-05-10.json) via the shared
+// helper. Falls back to nulls where no postaudit row exists for this council.
+const councilBacktest = loadMay7BacktestForCouncil(council!);
+const ballotsScored = councilBacktest?.ballots_evaluated || 0;
+const winnersCorrect = councilBacktest?.winners_correct || 0;
+const winnerAcc = councilBacktest?.winner_accuracy || 0;
+const majorMae = councilBacktest?.major_party_mae_avg || 0;
 
 interface PartyRow { slug: string; name: string; seats: number; share: number; }
 const postMay7Rows: PartyRow[] = ctlRow?.post_may7?.by_party
