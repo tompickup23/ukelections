@@ -335,10 +335,16 @@ export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[]
       data.contest?.region ||
       data.contest?.country ||
       "United Kingdom";
+    // Forecast files use `contest.constituency_name` (canonical) or `pcon_name`
+    // historically. Prefer the proper name + "parliamentary by-election"
+    // suffix; fall back to slug-derived name only if no constituency name is
+    // present.
+    const constituencyName: string | null =
+      data.contest?.constituency_name || data.contest?.pcon_name || null;
     const contestName: string =
       data.contest?.name ||
-      (data.contest?.pcon_name
-        ? `${data.contest.pcon_name} parliamentary by-election`
+      (constituencyName
+        ? `${constituencyName} parliamentary by-election`
         : `${slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} by-election`);
 
     out.push({
