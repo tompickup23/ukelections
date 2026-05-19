@@ -9,6 +9,12 @@
  * (where you don't care about social previews) skip the ~20 min
  * full-site render cost. The production cron on vps-main sets
  * BUILD_OG=1.
+ *
+ * Standard layout (shared with ukdemographics.co.uk + asylumstats.co.uk):
+ *   Brand row top-left (40×40 logo tile + name + tagline)
+ *   Hero block (eyebrow + headline + optional shares race bar with
+ *               legend, OR fallback subline text)
+ *   Single-line footer (site URL + sourced-tagline, brand-colour rule)
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -18,16 +24,23 @@ import { Resvg } from "@resvg/resvg-js";
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 
+// Shared dark-surface palette across the three sites.
+const COLORS = {
+  bg: "#04070d",
+  surface: "#0b1220",
+  text: "#f5f7fb",
+  muted: "#91a7c4",
+  brand: "#12b5cb",         // UK Elections brand cyan (logo tile + footer URL)
+};
+
 let _fontCache: any[] | null = null;
 function loadFonts(): any[] {
   if (_fontCache) return _fontCache;
   const sora800 = readFileSync(resolve(process.cwd(), "data/fonts/Sora-ExtraBold.ttf"));
-  const manrope600 = readFileSync(resolve(process.cwd(), "data/fonts/Manrope-SemiBold.ttf"));
-  const manrope400 = readFileSync(resolve(process.cwd(), "data/fonts/Manrope-Regular.ttf"));
+  const manrope700 = readFileSync(resolve(process.cwd(), "data/fonts/Manrope-SemiBold.ttf"));
   _fontCache = [
     { name: "Sora", data: sora800, weight: 800, style: "normal" },
-    { name: "Manrope", data: manrope600, weight: 600, style: "normal" },
-    { name: "Manrope", data: manrope400, weight: 400, style: "normal" },
+    { name: "Manrope", data: manrope700, weight: 700, style: "normal" },
   ];
   return _fontCache;
 }
@@ -79,7 +92,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
     subline,
     shares,
     sharesCaption,
-    accentColour = "#1d4e89",
+    accentColour = COLORS.brand,
     partyChipLabel = null,
     partyChipColour = null,
   } = opts;
@@ -107,413 +120,76 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
       style: {
         display: "flex",
         flexDirection: "column",
+        justifyContent: "space-between",
         width: OG_WIDTH,
         height: OG_HEIGHT,
-        padding: 80,
-        background: "#ffffff",
-        backgroundImage: `linear-gradient(135deg, ${accentColour}14 0%, ${accentColour}04 50%, #ffffff 100%)`,
+        padding: "60px 70px",
+        background: `linear-gradient(135deg, ${COLORS.bg} 0%, ${COLORS.surface} 100%)`,
         fontFamily: "Manrope",
-        color: "#111827",
-        position: "relative",
+        color: COLORS.text,
       },
       children: [
-        // Coloured accent strip down the left edge
-        {
-          type: "div",
-          props: {
-            style: {
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: 14,
-              background: accentColour,
-            },
-          },
-        },
-        // Eyebrow
+        // Brand row — 40×40 logo tile + name + tagline. Shared across
+        // UKD / UKE / AS.
         {
           type: "div",
           props: {
             style: {
               display: "flex",
-              fontSize: 22,
-              fontWeight: 600,
-              letterSpacing: 3.2,
-              color: accentColour,
-              textTransform: "uppercase",
-              marginBottom: 24,
-            },
-            children: eyebrow,
-          },
-        },
-        // Headline (Sora 96) — slightly smaller when the shares bar is
-        // present, since the chart adds visual weight below.
-        {
-          type: "div",
-          props: {
-            style: {
-              display: "flex",
-              fontFamily: "Sora",
-              fontSize: hasShares
-                ? headline.length > 22 ? 72 : 92
-                : headline.length > 24 ? 84 : 104,
-              fontWeight: 800,
-              lineHeight: 1.02,
-              letterSpacing: -2,
-              color: "#0f172a",
-              maxWidth: OG_WIDTH - 200,
-            },
-            children: headline,
-          },
-        },
-        // Shares bar (preferred) OR fallback subline text.
-        hasShares
-          ? {
-              type: "div",
-              props: {
-                style: {
-                  display: "flex",
-                  flexDirection: "column",
-                  marginTop: 36,
-                  maxWidth: OG_WIDTH - 200,
-                },
-                children: [
-                  // Optional caption above the bar
-                  sharesCaption
-                    ? {
-                        type: "div",
-                        props: {
-                          style: {
-                            display: "flex",
-                            fontSize: 18,
-                            fontWeight: 700,
-                            letterSpacing: 2.4,
-                            color: "#475467",
-                            textTransform: "uppercase",
-                            marginBottom: 10,
-                          },
-                          children: sharesCaption,
-                        },
-                      }
-                    : null,
-                  // The stacked race bar itself
-                  {
-                    type: "div",
-                    props: {
-                      style: {
-                        display: "flex",
-                        width: "100%",
-                        height: 56,
-                        borderRadius: 10,
-                        overflow: "hidden",
-                        boxShadow: "inset 0 0 0 1px rgba(15, 23, 42, 0.08)",
-                      },
-                      children: trackedShares.map((s) => {
-                        const rel = s.pct / sharesTotal;
-                        const wide = rel >= labelMinPct;
-                        return {
-                          type: "div",
-                          props: {
-                            style: {
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexBasis: `${(rel * 100).toFixed(2)}%`,
-                              background: s.colour,
-                              color: "#ffffff",
-                              fontSize: 18,
-                              fontWeight: 800,
-                              lineHeight: 1.05,
-                              padding: "0 4px",
-                            },
-                            children: wide
-                              ? [
-                                  {
-                                    type: "div",
-                                    props: {
-                                      style: { display: "flex", fontSize: 16, opacity: 0.92, letterSpacing: 0.8 },
-                                      children: s.partyLabel,
-                                    },
-                                  },
-                                  {
-                                    type: "div",
-                                    props: {
-                                      style: { display: "flex", fontSize: 22, marginTop: 1 },
-                                      children: `${(s.pct * 100).toFixed(1)}%`,
-                                    },
-                                  },
-                                ]
-                              : "",
-                          },
-                        };
-                      }),
-                    },
-                  },
-                  // Legend strip below the bar — every party + share + sub-label
-                  {
-                    type: "div",
-                    props: {
-                      style: {
-                        display: "flex",
-                        flexWrap: "wrap",
-                        marginTop: 14,
-                        rowGap: 6,
-                        columnGap: 22,
-                      },
-                      children: trackedShares.map((s) => ({
-                        type: "div",
-                        props: {
-                          style: {
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 8,
-                            fontSize: 20,
-                          },
-                          children: [
-                            {
-                              type: "div",
-                              props: {
-                                style: {
-                                  display: "flex",
-                                  width: 12,
-                                  height: 12,
-                                  borderRadius: 3,
-                                  background: s.colour,
-                                },
-                              },
-                            },
-                            {
-                              type: "div",
-                              props: {
-                                style: { display: "flex", fontWeight: 700, color: "#0f172a" },
-                                children: s.partyLabel,
-                              },
-                            },
-                            {
-                              type: "div",
-                              props: {
-                                style: { display: "flex", fontWeight: 600, color: "#475467" },
-                                children: `${(s.pct * 100).toFixed(1)}%`,
-                              },
-                            },
-                            s.subLabel
-                              ? {
-                                  type: "div",
-                                  props: {
-                                    style: { display: "flex", color: "#667085" },
-                                    children: `· ${s.subLabel}`,
-                                  },
-                                }
-                              : null,
-                          ].filter(Boolean),
-                        },
-                      })),
-                    },
-                  },
-                ].filter(Boolean),
-              },
-            }
-          : subline
-            ? {
-                type: "div",
-                props: {
-                  style: {
-                    display: "flex",
-                    marginTop: 28,
-                    fontSize: 36,
-                    fontWeight: 600,
-                    color: "#374151",
-                    maxWidth: OG_WIDTH - 200,
-                  },
-                  children: subline,
-                },
-              }
-            : null,
-        // Spacer that pushes the footer to the bottom
-        {
-          type: "div",
-          props: { style: { display: "flex", flexGrow: 1 } },
-        },
-        // Footer block — primary row + sister-sites cross-promo strip
-        {
-          type: "div",
-          props: {
-            style: {
-              display: "flex",
-              flexDirection: "column",
-              gap: 14,
+              alignItems: "center",
+              gap: 12,
             },
             children: [
-              // Row 1: brand + optional party chip
               {
                 type: "div",
                 props: {
                   style: {
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: "#475467",
+                    justifyContent: "center",
+                    width: 40,
+                    height: 40,
+                    borderRadius: 10,
+                    background: COLORS.brand,
+                    color: COLORS.bg,
+                    fontFamily: "Sora",
+                    fontWeight: 800,
+                    fontSize: 16,
                   },
-                  children: [
-                    {
-                      type: "div",
-                      props: {
-                        style: { display: "flex" },
-                        children: "ukelections.co.uk",
-                      },
-                    },
-                    partyChipLabel
-                      ? {
-                          type: "div",
-                          props: {
-                            style: {
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 12,
-                              padding: "10px 22px",
-                              background: "#ffffff",
-                              borderRadius: 999,
-                              border: "1px solid #d4dce6",
-                              fontSize: 22,
-                              fontWeight: 700,
-                              color: "#111827",
-                            },
-                            children: [
-                              {
-                                type: "div",
-                                props: {
-                                  style: {
-                                    display: "flex",
-                                    width: 14,
-                                    height: 14,
-                                    borderRadius: 7,
-                                    background: partyChipColour || accentColour,
-                                  },
-                                },
-                              },
-                              {
-                                type: "div",
-                                props: { style: { display: "flex" }, children: partyChipLabel },
-                              },
-                            ],
-                          },
-                        }
-                      : null,
-                  ].filter(Boolean),
+                  children: "UKE",
                 },
               },
-              // Row 2: sister-sites strip
               {
                 type: "div",
                 props: {
                   style: {
                     display: "flex",
-                    alignItems: "center",
-                    gap: 12,
+                    flexDirection: "column",
                   },
                   children: [
                     {
-                      type: "div",
+                      type: "span",
                       props: {
                         style: {
                           display: "flex",
-                          fontSize: 14,
-                          fontWeight: 700,
-                          letterSpacing: 1.6,
-                          color: "#667085",
-                          textTransform: "uppercase",
+                          fontFamily: "Sora",
+                          fontWeight: 800,
+                          fontSize: 16,
+                          color: COLORS.text,
                         },
-                        children: "Sister sites",
+                        children: "UK Elections",
                       },
                     },
-                    // UKD chip
                     {
-                      type: "div",
+                      type: "span",
                       props: {
                         style: {
                           display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          padding: "5px 12px",
-                          background: "rgba(79, 70, 229, 0.08)",
-                          border: "1px solid rgba(79, 70, 229, 0.28)",
-                          borderRadius: 999,
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: "#4f46e5",
+                          fontSize: 11,
+                          color: COLORS.muted,
+                          letterSpacing: "0.05em",
                         },
-                        children: [
-                          {
-                            type: "div",
-                            props: {
-                              style: {
-                                display: "flex",
-                                width: 7,
-                                height: 7,
-                                borderRadius: 999,
-                                background: "#4f46e5",
-                              },
-                            },
-                          },
-                          {
-                            type: "div",
-                            props: { style: { display: "flex" }, children: "ukdemographics.co.uk" },
-                          },
-                          {
-                            type: "div",
-                            props: {
-                              style: { display: "flex", color: "#667085", fontWeight: 500 },
-                              children: "· Population projections",
-                            },
-                          },
-                        ],
-                      },
-                    },
-                    // AS chip
-                    {
-                      type: "div",
-                      props: {
-                        style: {
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          padding: "5px 12px",
-                          background: "rgba(6, 182, 212, 0.08)",
-                          border: "1px solid rgba(6, 182, 212, 0.28)",
-                          borderRadius: 999,
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: "#0e7490",
-                        },
-                        children: [
-                          {
-                            type: "div",
-                            props: {
-                              style: {
-                                display: "flex",
-                                width: 7,
-                                height: 7,
-                                borderRadius: 999,
-                                background: "#06b6d4",
-                              },
-                            },
-                          },
-                          {
-                            type: "div",
-                            props: { style: { display: "flex" }, children: "asylumstats.co.uk" },
-                          },
-                          {
-                            type: "div",
-                            props: {
-                              style: { display: "flex", color: "#667085", fontWeight: 500 },
-                              children: "· Asylum spending",
-                            },
-                          },
-                        ],
+                        children: "Forecasting every council and constituency",
                       },
                     },
                   ],
@@ -522,7 +198,292 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
             ],
           },
         },
-      ].filter(Boolean),
+        // Hero block — eyebrow + headline + race bar (or subline fallback).
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              justifyContent: "center",
+              maxWidth: OG_WIDTH - 200,
+            },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    letterSpacing: 2.8,
+                    color: accentColour,
+                    textTransform: "uppercase",
+                    marginBottom: 18,
+                  },
+                  children: eyebrow,
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    fontFamily: "Sora",
+                    fontSize: hasShares
+                      ? headline.length > 22 ? 64 : 84
+                      : headline.length > 24 ? 80 : 96,
+                    fontWeight: 800,
+                    lineHeight: 1.02,
+                    letterSpacing: -1.5,
+                    color: COLORS.text,
+                    marginBottom: hasShares ? 28 : 18,
+                  },
+                  children: headline,
+                },
+              },
+              // Shares bar (preferred) OR fallback subline text.
+              hasShares
+                ? {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        flexDirection: "column",
+                      },
+                      children: [
+                        // Optional caption above the bar
+                        sharesCaption
+                          ? {
+                              type: "div",
+                              props: {
+                                style: {
+                                  display: "flex",
+                                  fontSize: 16,
+                                  fontWeight: 700,
+                                  letterSpacing: 2,
+                                  color: COLORS.muted,
+                                  textTransform: "uppercase",
+                                  marginBottom: 10,
+                                },
+                                children: sharesCaption,
+                              },
+                            }
+                          : null,
+                        // The stacked race bar itself
+                        {
+                          type: "div",
+                          props: {
+                            style: {
+                              display: "flex",
+                              width: "100%",
+                              height: 56,
+                              borderRadius: 10,
+                              overflow: "hidden",
+                              boxShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.08)",
+                            },
+                            children: trackedShares.map((s) => {
+                              const rel = s.pct / sharesTotal;
+                              const wide = rel >= labelMinPct;
+                              return {
+                                type: "div",
+                                props: {
+                                  style: {
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flexBasis: `${(rel * 100).toFixed(2)}%`,
+                                    background: s.colour,
+                                    color: "#ffffff",
+                                    fontSize: 18,
+                                    fontWeight: 800,
+                                    lineHeight: 1.05,
+                                    padding: "0 4px",
+                                  },
+                                  children: wide
+                                    ? [
+                                        {
+                                          type: "div",
+                                          props: {
+                                            style: { display: "flex", fontSize: 16, opacity: 0.92, letterSpacing: 0.8 },
+                                            children: s.partyLabel,
+                                          },
+                                        },
+                                        {
+                                          type: "div",
+                                          props: {
+                                            style: { display: "flex", fontSize: 22, marginTop: 1 },
+                                            children: `${(s.pct * 100).toFixed(1)}%`,
+                                          },
+                                        },
+                                      ]
+                                    : "",
+                                },
+                              };
+                            }),
+                          },
+                        },
+                        // Legend strip below the bar — every party + share + sub-label
+                        {
+                          type: "div",
+                          props: {
+                            style: {
+                              display: "flex",
+                              flexWrap: "wrap",
+                              marginTop: 12,
+                              rowGap: 6,
+                              columnGap: 18,
+                            },
+                            children: trackedShares.map((s) => ({
+                              type: "div",
+                              props: {
+                                style: {
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 8,
+                                  fontSize: 18,
+                                },
+                                children: [
+                                  {
+                                    type: "div",
+                                    props: {
+                                      style: {
+                                        display: "flex",
+                                        width: 12,
+                                        height: 12,
+                                        borderRadius: 3,
+                                        background: s.colour,
+                                      },
+                                    },
+                                  },
+                                  {
+                                    type: "div",
+                                    props: {
+                                      style: { display: "flex", fontWeight: 700, color: COLORS.text },
+                                      children: s.partyLabel,
+                                    },
+                                  },
+                                  {
+                                    type: "div",
+                                    props: {
+                                      style: { display: "flex", fontWeight: 700, color: COLORS.muted },
+                                      children: `${(s.pct * 100).toFixed(1)}%`,
+                                    },
+                                  },
+                                  s.subLabel
+                                    ? {
+                                        type: "div",
+                                        props: {
+                                          style: { display: "flex", color: COLORS.muted },
+                                          children: `· ${s.subLabel}`,
+                                        },
+                                      }
+                                    : null,
+                                ].filter(Boolean),
+                              },
+                            })),
+                          },
+                        },
+                      ].filter(Boolean),
+                    },
+                  }
+                : subline
+                  ? {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          fontSize: 32,
+                          fontWeight: 700,
+                          color: COLORS.muted,
+                          maxWidth: OG_WIDTH - 200,
+                        },
+                        children: subline,
+                      },
+                    }
+                  : null,
+            ].filter(Boolean),
+          },
+        },
+        // Single-line footer — URL (brand colour) + tagline (muted),
+        // 2px brand-colour top border. Optional party-chip on the right
+        // replaces the tagline for party-winner cards.
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderTop: `2px solid ${COLORS.brand}`,
+              paddingTop: 16,
+            },
+            children: [
+              {
+                type: "span",
+                props: {
+                  style: {
+                    display: "flex",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: COLORS.brand,
+                  },
+                  children: "ukelections.co.uk",
+                },
+              },
+              partyChipLabel
+                ? {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        padding: "6px 14px",
+                        background: COLORS.surface,
+                        borderRadius: 999,
+                        border: `1px solid ${partyChipColour || accentColour}`,
+                        fontSize: 14,
+                        fontWeight: 700,
+                        color: COLORS.text,
+                      },
+                      children: [
+                        {
+                          type: "div",
+                          props: {
+                            style: {
+                              display: "flex",
+                              width: 8,
+                              height: 8,
+                              borderRadius: 999,
+                              background: partyChipColour || accentColour,
+                            },
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: { style: { display: "flex" }, children: partyChipLabel },
+                        },
+                      ],
+                    },
+                  }
+                : {
+                    type: "span",
+                    props: {
+                      style: {
+                        display: "flex",
+                        fontSize: 12,
+                        color: COLORS.muted,
+                      },
+                      children: "Every forecast backtested.",
+                    },
+                  },
+            ],
+          },
+        },
+      ],
     },
   };
 
