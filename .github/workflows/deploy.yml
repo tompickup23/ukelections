@@ -51,8 +51,15 @@ jobs:
             --quiet \
             --directory-prefix=dist \
             https://ukelections.co.uk/ || true
+          # Strip externally-linked files that wget --convert-links created.
+          # wget serialises off-site hrefs (e.g. embedded council moderngov URLs in
+          # seats/* pages) as local paths with colons. actions/upload-artifact@v7
+          # rejects colons because they are illegal on NTFS.
+          # Edit is pure shell — no GitHub event interpolation, no injection risk.
+          find dist -type f -name '*:*' -delete 2>/dev/null || true
+          find dist -type d -name '*:*' -prune -exec rm -rf {} + 2>/dev/null || true
           # Sanity: confirm a few critical pages landed.
-          for p in index.html forecasts/may-2026/index.html forecasts/general-election/index.html your-area/index.html seats/burnley/coal-clough-with-deerplay/index.html; do
+          for p in index.html past-results/index.html forecasts/general-election/index.html your-area/index.html seats/burnley/coal-clough-with-deerplay/index.html; do
             if [ ! -f "dist/$p" ]; then
               echo "::error::Mirror missing dist/$p — Cloudflare Pages production build may be incomplete or unreachable."
               exit 1
