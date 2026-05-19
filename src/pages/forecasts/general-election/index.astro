@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import CommonsHorseshoe from "../../../components/CommonsHorseshoe.astro";
+import ConstituencyChoropleth from "../../../components/ConstituencyChoropleth.astro";
 import { loadGePredictions, loadGeSummary, partyColour } from "../../../lib/predictions";
 import { loadGeHeadline, shortPartyLabel } from "../../../lib/siteData";
 
@@ -35,6 +36,19 @@ const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, nu
     <p class="lede">
       All {headline.total_seats.toLocaleString()} UK parliamentary constituencies. Refreshed daily from the latest UK Westminster polling.
       A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "—"} short of an overall majority.`}
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Every seat coloured by predicted winner</p>
+      <h2>The UK political map — if a general election were held today</h2>
+    </div>
+    <ConstituencyChoropleth />
+    <p class="caption">
+      Hover a constituency for its predicted winner and margin. Click to read the full seat forecast.
+      Northern Irish coastline and Highland sea-lochs are simplified to keep the file under 250 KB —
+      boundary data sourced from the ONS Open Geography Portal (PCS24 BUC, simplified with mapshaper).
     </p>
   </section>
 

@@ -1,0 +1,249 @@
+---
+/**
+ * ConstituencyChoropleth.astro — pre-rendered SVG choropleth of all 650
+ * UK parliamentary constituencies, coloured by predicted winner.
+ *
+ * Server-side render: d3-geo runs at `astro build` to project the
+ * simplified ONS 2024 boundaries to an inline SVG. The runtime gets no
+ * d3 dependency — just one inline SVG (~250KB of <path> markup) plus a
+ * ~30-line vanilla JS hover/click handler.
+ *
+ * Boundary source: ONS Open Geography Portal, Westminster Parliamentary
+ * Constituencies (July 2024) UK BUC, simplified with mapshaper @ 8%
+ * Visvalingam-Whyatt + 4dp coordinate precision. 218 KB on disk.
+ *
+ * Each <path> carries:
+ *   data-pcon-cd  ONS PCON24 code (e.g. E14001063)
+ *   data-slug     Democracy Club slug (e.g. aldershot)
+ *   data-name     Display name
+ *   data-winner   Predicted winning party
+ *   data-margin   Predicted majority percentage points
+ *
+ * The client handler reads these on mouseover to render the floating
+ * tooltip; on click it navigates to /seats/parliament/{slug}/.
+ *
+ * Props:
+ *   width       SVG viewBox width  (default 800)
+ *   height      SVG viewBox height (default 1000)
+ *   showLegend  boolean — render the legend below the map (default true)
+ */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { geoMercator, geoPath } from "d3-geo";
+import { loadGePredictions, loadGeIdentity, partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface Props {
+  width?: number;
+  height?: number;
+  showLegend?: boolean;
+}
+
+const { width = 800, height = 1000, showLegend = true } = Astro.props;
+
+// Load the simplified boundary file from disk at build time.
+const geojsonPath = resolve(process.cwd(), "data/geography/pcon24-simplified.geojson");
+const geo = JSON.parse(readFileSync(geojsonPath, "utf8")) as {
+  type: string;
+  features: Array<{ properties: { PCON24CD: string; PCON24NM: string }; geometry: any }>;
+};
+
+// Load predictions and build two lookup tables.
+// Primary: pcon24cd → prediction (works for England + Wales + Northern Ireland).
+// Fallback: normalised-name → prediction (covers Scotland's 57 seats, which
+// have `pcon24cd: null` in the current identity table). The boundary
+// GeoJSON's PCON24NM field matches the identity-table name almost
+// exactly — small punctuation differences are handled by the
+// normaliser.
+const ge = loadGePredictions();
+const identity = loadGeIdentity();
+const predictionBySlug: Record<string, any> = (ge.predictions || {}) as any;
+
+function normaliseName(s: string): string {
+  // Tolerate the punctuation, hyphenation and diacritic drift between
+  // the ONS PCON24NM field and the identity-table `name` field:
+  //   "Na h-Eileanan an Iar"               → "na h eileanan an iar"
+  //   "Inverness, Skye and West Ross-shire"→ "inverness skye and west ross shire"
+  //   "Ynys Môn"                           → "ynys mon"
+  return s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "") // strip combining diacritics (â → a)
+    .toLowerCase()
+    .replace(/[,'’]/g, "")
+    .replace(/[-‐‑‒–—]/g, " ")        // any flavour of hyphen → space
+    .replace(/&/g, "and")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const predictionByCd: Record<string, any> = {};
+const predictionByName: Record<string, any> = {};
+for (const row of (identity.pcons || []) as any[]) {
+  const slug = row?.slug;
+  if (!slug) continue;
+  const pred = predictionBySlug[slug];
+  if (!pred) continue;
+  const cd = row.pcon24cd;
+  const enriched = { ...pred, slug, pcon24cd: cd || pred.pcon24cd, name: pred.name || row.name };
+  if (cd) predictionByCd[cd] = enriched;
+  if (row.name) predictionByName[normaliseName(row.name)] = enriched;
+}
+
+// Mercator projection fitted to the bounding box of the geometry.
+const projection = geoMercator();
+projection.fitSize([width, height], geo as any);
+const pathGen = geoPath(projection);
+
+// Render every feature as a path with embedded data attributes.
+type Rendered = {
+  cd: string;
+  slug: string;
+  name: string;
+  winner: string;
+  fill: string;
+  margin: number;
+  d: string;
+};
+const rendered: Rendered[] = [];
+let missing = 0;
+for (const f of geo.features) {
+  const cd = f.properties.PCON24CD;
+  const nameRaw = f.properties.PCON24NM;
+  const pred =
+    predictionByCd[cd] ||
+    predictionByName[normaliseName(nameRaw)] ||
+    null;
+  if (!pred) missing += 1;
+  const winner = pred?.winner || "Unknown";
+  const slug = pred?.slug || "";
+  const name = pred?.name || nameRaw;
+  const margin = pred?.majority_pct != null ? pred.majority_pct * 100 : 0;
+  const d = pathGen(f as any);
+  if (!d) continue; // Skip degenerate geometries (NI sometimes simplifies away).
+  rendered.push({
+    cd,
+    slug,
+    name,
+    winner,
+    fill: partyColour(winner),
+    margin,
+    d,
+  });
+}
+if (missing > 0) {
+  // Diagnostic — should be 0. Logged at build time only.
+  // eslint-disable-next-line no-console
+  console.warn(`[ConstituencyChoropleth] ${missing} constituencies had no prediction match`);
+}
+
+// Legend: every party that has at least one seat on the map.
+const legendCounts: Record<string, number> = {};
+for (const r of rendered) legendCounts[r.winner] = (legendCounts[r.winner] || 0) + 1;
+const legend = Object.entries(legendCounts)
+  .sort((a, b) => b[1] - a[1])
+  .map(([party, n]) => ({ party, n, colour: partyColour(party) }));
+
+const aspectRatio = (height / width) * 100;
+---
+
+<figure class="choropleth" aria-label="Interactive map of 650 UK parliamentary constituencies coloured by predicted winner. Hover or click a constituency for detail.">
+  <div class="choropleth-stage" style={`padding-bottom:${aspectRatio.toFixed(2)}%`}>
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+    >
+      <title>Forecast winner by constituency</title>
+      <g class="choropleth-paths">
+        {rendered.map((r) => (
+          <path
+            d={r.d}
+            fill={r.fill}
+            stroke="rgba(255, 255, 255, 0.7)"
+            stroke-width="0.4"
+            data-pcon-cd={r.cd}
+            data-slug={r.slug}
+            data-name={r.name}
+            data-winner={r.winner}
+            data-margin={r.margin.toFixed(1)}
+          >
+            <title>{r.name} — {shortPartyLabel(r.winner)} predicted ({r.margin.toFixed(1)}pp margin)</title>
+          </path>
+        ))}
+      </g>
+    </svg>
+    <div class="choropleth-tooltip" hidden>
+      <strong class="choropleth-tooltip-name"></strong>
+      <span class="choropleth-tooltip-winner"></span>
+      <span class="choropleth-tooltip-margin"></span>
+    </div>
+  </div>
+
+  {showLegend && (
+    <figcaption class="choropleth-legend">
+      {legend.map((l) => (
+        <span class="cp-legend-item">
+          <span class="cp-legend-swatch" style={`background:${l.colour}`}></span>
+          <span class="cp-legend-name">{shortPartyLabel(l.party)}</span>
+          <span class="cp-legend-count">{l.n}</span>
+        </span>
+      ))}
+    </figcaption>
+  )}
+</figure>
+
+<script>
+  // Hover + click handler for the choropleth. Pure vanilla — no
+  // framework cost. Attached to every <figure.choropleth> on the page
+  // so multiple maps coexist cleanly.
+  function initChoropleth(fig: HTMLElement): void {
+    const stage = fig.querySelector(".choropleth-stage") as HTMLElement;
+    const tooltip = fig.querySelector(".choropleth-tooltip") as HTMLElement;
+    if (!stage || !tooltip) return;
+    const nameEl = tooltip.querySelector(".choropleth-tooltip-name") as HTMLElement;
+    const winnerEl = tooltip.querySelector(".choropleth-tooltip-winner") as HTMLElement;
+    const marginEl = tooltip.querySelector(".choropleth-tooltip-margin") as HTMLElement;
+
+    const showFor = (path: SVGPathElement, clientX: number, clientY: number): void => {
+      const name = path.dataset.name || "—";
+      const winner = path.dataset.winner || "—";
+      const margin = path.dataset.margin || "0.0";
+      nameEl.textContent = name;
+      winnerEl.textContent = winner;
+      marginEl.textContent = `${margin}pp margin`;
+      tooltip.removeAttribute("hidden");
+      const stageRect = stage.getBoundingClientRect();
+      // Position tooltip in stage-local coords with 14px offset; keep
+      // it inside the viewport.
+      let left = clientX - stageRect.left + 14;
+      let top = clientY - stageRect.top + 14;
+      const tw = tooltip.offsetWidth;
+      const th = tooltip.offsetHeight;
+      if (left + tw > stageRect.width - 8) left = clientX - stageRect.left - tw - 14;
+      if (top + th > stageRect.height - 8) top = clientY - stageRect.top - th - 14;
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    };
+
+    stage.addEventListener("mousemove", (e: MouseEvent) => {
+      const target = e.target as Element;
+      if (!(target instanceof SVGPathElement)) {
+        tooltip.setAttribute("hidden", "");
+        return;
+      }
+      showFor(target, e.clientX, e.clientY);
+    });
+
+    stage.addEventListener("mouseleave", () => tooltip.setAttribute("hidden", ""));
+
+    stage.addEventListener("click", (e: MouseEvent) => {
+      const target = e.target as Element;
+      if (!(target instanceof SVGPathElement)) return;
+      const slug = target.dataset.slug;
+      if (slug) window.location.href = `/seats/parliament/${slug}/`;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>(".choropleth").forEach(initChoropleth);
+</script>
