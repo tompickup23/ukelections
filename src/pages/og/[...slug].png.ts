@@ -321,11 +321,13 @@ export const GET: APIRoute = async ({ props }) => {
     eyebrow: entry.eyebrow,
     headline: entry.headline,
     subline: entry.subline,
+    shares: entry.shares,
+    sharesCaption: entry.sharesCaption,
     accentColour: entry.accentColour,
     partyChipLabel: entry.partyChipLabel,
     partyChipColour: entry.partyChipColour,
   });
-  return new Response(png, {
+  return new Response(new Uint8Array(png), {
     status: 200,
     headers: {
       "Content-Type": "image/png",
