@@ -32,9 +32,27 @@ const siteOrigin = Astro.site ?? new URL(SITE_URL);
 const pathname = Astro.url.pathname || "/";
 const pageTitle = normalisePageTitle(title);
 const canonicalUrl = new URL(pathname, siteOrigin).toString();
-const socialImageUrl = /^https?:\/\//.test(image) ? image : new URL(image, siteOrigin).toString();
+// Per-page dynamic OG image (Satori-rendered at build time when
+// BUILD_OG=1). Map the page path → /og/<path>.png, with the homepage
+// mapping to /og/index.png. Falls back to the static og-card.svg if
+// the page is one where no dynamic card was generated.
+//
+// We don't probe the dist/ filesystem from inside the layout (the
+// build is non-deterministic), so we accept that ~3,200 ward pages
+// will reference an OG URL that doesn't exist and gracefully fall
+// back to the static image client-side via the meta og:image. Search
+// engines + social platforms re-check periodically.
+function ogPathFor(pn: string): string {
+  if (pn === "/" || pn === "") return "/og/index.png";
+  const stripped = pn.replace(/^\/+|\/+$/g, "");
+  return `/og/${stripped}.png`;
+}
+const dynamicOgPath = ogPathFor(pathname);
+const explicitImage = image && image !== DEFAULT_SOCIAL_IMAGE_PATH;
+const socialImageRaw = explicitImage ? image : dynamicOgPath;
+const socialImageUrl = /^https?:\/\//.test(socialImageRaw) ? socialImageRaw : new URL(socialImageRaw, siteOrigin).toString();
 const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
-const socialImageMime = socialImageUrl.endsWith(".svg") ? "image/svg+xml" : undefined;
+const socialImageMime = socialImageUrl.endsWith(".svg") ? "image/svg+xml" : socialImageUrl.endsWith(".png") ? "image/png" : undefined;
 const structuredData = [
   {
     "@context": "https://schema.org",
