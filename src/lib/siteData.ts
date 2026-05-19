@@ -234,8 +234,7 @@ export function formatNextElection(cycle: CouncilCycle | null): {
 // ---------- Upcoming elections ----------
 
 import { readFileSync, existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { resolve, dirname } from "node:path";
+import { resolve } from "node:path";
 
 export interface UpcomingContest {
   id: string;
@@ -254,13 +253,12 @@ export interface UpcomingContest {
   source_file: string | null;
 }
 
-function repoRoot(): string {
-  const here = dirname(fileURLToPath(import.meta.url));
-  return resolve(here, "../..");
-}
-
+// Astro runs `astro build` from the project root, so process.cwd() is the
+// reliable anchor here — same pattern as predictions.ts. Don't switch this
+// to import.meta.url: Vite rewrites the JS bundle path during build and
+// loadUpcomingElections() then silently returns [] (no homepage hero).
 function readJsonIfExists(rel: string): any | null {
-  const p = resolve(repoRoot(), rel);
+  const p = resolve(process.cwd(), rel);
   if (!existsSync(p)) return null;
   try {
     return JSON.parse(readFileSync(p, "utf8"));
