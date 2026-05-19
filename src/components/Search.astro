@@ -1,0 +1,116 @@
+---
+/**
+ * Search.astro — Pagefind UI mount.
+ *
+ * Lazy-loads Pagefind UI on user interaction (click on the trigger, or
+ * `/` hotkey). Renders into a dialog backdrop above the page so the
+ * results don't reflow the main content.
+ *
+ * Pagefind UI is shipped as a static asset by astro-pagefind under
+ * /pagefind/pagefind-ui.js + pagefind-ui.css at build time.
+ *
+ * Pagefind UI docs: https://pagefind.app/docs/ui/
+ */
+---
+
+<button
+  type="button"
+  class="search-trigger"
+  aria-label="Open search (press / )"
+  data-search-open
+>
+  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+    <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6" />
+    <path d="m11 11 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+  </svg>
+  <span class="search-trigger-label">Search</span>
+  <kbd class="search-trigger-kbd">/</kbd>
+</button>
+
+<dialog class="search-dialog" id="ukelections-search-dialog" aria-label="Site search">
+  <form method="dialog" class="search-dialog-close-form">
+    <button type="submit" class="search-dialog-close" aria-label="Close search">×</button>
+  </form>
+  <div id="search-mount" class="search-mount"></div>
+</dialog>
+
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+
+<script>
+  // Lazy-load Pagefind UI on the first open. Once initialised, reuse
+  // the same instance.
+  let pagefindUI: any = null;
+
+  function loadPagefindScript(): Promise<any> {
+    return new Promise((resolveScript, rejectScript) => {
+      // Bypass Vite's static analyser by injecting a <script> tag.
+      // pagefind-ui.js exposes a global `PagefindUI` constructor.
+      const existing = document.getElementById("pagefind-ui-script");
+      if (existing) {
+        if ((window as any).PagefindUI) {
+          resolveScript((window as any).PagefindUI);
+          return;
+        }
+        existing.addEventListener("load", () => resolveScript((window as any).PagefindUI));
+        existing.addEventListener("error", rejectScript);
+        return;
+      }
+      const s = document.createElement("script");
+      s.src = "/pagefind/pagefind-ui.js";
+      s.id = "pagefind-ui-script";
+      s.defer = true;
+      s.onload = () => resolveScript((window as any).PagefindUI);
+      s.onerror = (e) => rejectScript(e);
+      document.head.appendChild(s);
+    });
+  }
+
+  async function initSearch(): Promise<void> {
+    if (pagefindUI) return;
+    const PagefindUI = await loadPagefindScript();
+    if (!PagefindUI) throw new Error("PagefindUI failed to load");
+    pagefindUI = new PagefindUI({
+      element: "#search-mount",
+      showImages: false,
+      showEmptyFilters: false,
+      showSubResults: false,
+      resetStyles: false,
+      autofocus: true,
+      pageSize: 8,
+      excerptLength: 24,
+      placeholder: "Search constituencies, councils, by-elections…",
+    });
+    // Focus the input
+    requestAnimationFrame(() => {
+      const input = document.querySelector(
+        "#search-mount input.pagefind-ui__search-input",
+      ) as HTMLInputElement | null;
+      if (input) input.focus();
+    });
+  }
+
+  function openSearch(): void {
+    const dlg = document.getElementById("ukelections-search-dialog") as HTMLDialogElement | null;
+    if (!dlg) return;
+    if (typeof dlg.showModal === "function") {
+      try { dlg.showModal(); } catch { /* already open */ }
+    } else {
+      dlg.setAttribute("open", "");
+    }
+    void initSearch();
+  }
+
+  // Click on the trigger
+  document.querySelectorAll<HTMLButtonElement>("[data-search-open]").forEach((btn) => {
+    btn.addEventListener("click", openSearch);
+  });
+
+  // `/` hotkey — but not when typing in an input/textarea
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target as HTMLElement | null;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    e.preventDefault();
+    openSearch();
+  });
+</script>

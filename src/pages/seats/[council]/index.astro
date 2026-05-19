@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import MiniMap from "../../../components/MiniMap.astro";
 import StatCard from "../../../components/StatCard.astro";
 import {
   loadIdentity,
@@ -121,6 +122,16 @@ const description = `${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp
 
 <BaseLayout title={title} description={description}>
   <section class="page-hero">
+    <div class="mini-map-side">
+      <MiniMap
+        focalName={councilName}
+        focalKind="lad"
+        focalColour={controllingParty ? partyColour(partySlugToName(controllingParty)) : "var(--accent-3)"}
+        width={240}
+        height={170}
+        ariaLabel={`Location map of ${councilName} on the UK map`}
+      />
+    </div>
     <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Council"} · {councilTypeLabel(cycle?.type)}</p>
     <h1>{councilName}</h1>
     <p class="lede">

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import MiniMap from "../../../../components/MiniMap.astro";
 import PartyBars from "../../../../components/PartyBars.astro";
 import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
 import { shortPartyLabel } from "../../../../lib/siteData";
@@ -92,6 +93,18 @@ const regionLabel = record.region?.replace(/_/g, " ");
   description={`If a UK general election were held this week, the model predicts ${shortPartyLabel(record.winner)} to win ${record.name} with a ${margin}pp margin over ${shortPartyLabel(record.runner_up)}.`}
 >
   <section class="page-hero">
+    {record.pcon24cd && (
+      <div class="mini-map-side">
+        <MiniMap
+          focalCode={record.pcon24cd}
+          focalKind="pcon"
+          focalColour={partyColour(record.winner)}
+          width={240}
+          height={170}
+          ariaLabel={`Location map of ${record.name} on the UK map`}
+        />
+      </div>
+    )}
     <p class="eyebrow">General election forecast</p>
     <h1>{record.name}</h1>
     <p class="lede">

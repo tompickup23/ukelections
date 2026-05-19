@@ -2008,3 +2008,150 @@ table.council-table th {
   text-transform: uppercase;
   color: var(--ink-soft);
 }
+
+/* === Search trigger + dialog === */
+
+.search-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-xs);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  margin-left: auto;
+}
+
+.search-trigger:hover {
+  background: var(--bg);
+  border-color: color-mix(in oklab, var(--border) 60%, var(--ink-soft));
+  color: var(--ink);
+}
+
+.search-trigger svg { display: block; }
+
+.search-trigger-label {
+  display: inline-block;
+}
+
+.search-trigger-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  padding: 0 0.3rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .search-trigger-label { display: none; }
+  .search-trigger-kbd  { display: none; }
+}
+
+.search-dialog {
+  position: fixed;
+  top: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, calc(100vw - 2 * var(--space-md)));
+  max-height: 80vh;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+}
+
+.search-dialog::backdrop {
+  background: color-mix(in oklab, var(--ink) 35%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.search-dialog-close-form {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  margin: 0;
+}
+
+.search-dialog-close {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.search-dialog-close:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.search-mount {
+  padding: var(--space-md);
+}
+
+/* Pagefind UI theme overrides — minimal: inherit our typography +
+   surfaces. Pagefind exposes CSS custom properties of its own. */
+.pagefind-ui {
+  --pagefind-ui-primary: var(--accent-3);
+  --pagefind-ui-text: var(--ink);
+  --pagefind-ui-background: var(--surface);
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: var(--surface-muted);
+  --pagefind-ui-border-radius: 12px;
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-image-border-radius: 8px;
+  --pagefind-ui-image-box-ratio: 3 / 2;
+  --pagefind-ui-font: "Manrope", system-ui, sans-serif;
+}
+
+/* === MiniMap component === */
+
+.mini-map {
+  margin: 0;
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.mini-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Place beside a hero — float right on wide viewports, full-width
+   stacked below the heading on mobile. */
+.mini-map-side {
+  float: right;
+  margin: 0 0 var(--space-sm) var(--space-md);
+  max-width: 240px;
+}
+
+@media (max-width: 720px) {
+  .mini-map-side {
+    float: none;
+    margin: var(--space-sm) 0;
+    max-width: 100%;
+  }
+}

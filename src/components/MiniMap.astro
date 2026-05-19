@@ -1,0 +1,226 @@
+---
+/**
+ * MiniMap.astro — tiny inline SVG thumbnail showing a single focal area
+ * (constituency / council / ward) highlighted in winner colour, with
+ * surrounding context features greyed.
+ *
+ * Server-rendered via d3-geo at build time. Boundaries are pre-loaded
+ * from the simplified GeoJSON files in `data/geography/` and indexed
+ * by code on first call. Per-build cost: ~2-4 ms per mini-map after
+ * the index warms.
+ *
+ * Props:
+ *   focalCode: the ONS code of the focal area (e.g. "E14001063" PCON,
+ *              "E07000088" LAD, "E05010000" WD)
+ *   focalKind: "pcon" | "lad" | "ward"
+ *   focalColour?: CSS colour for the focal fill (defaults to a calm blue)
+ *   width / height: SVG viewBox dimensions (default 220x150)
+ *   padding: bbox padding multiplier (1.0 = no padding, default 1.18)
+ *   ariaLabel: a11y label
+ *
+ * If the focal code can't be resolved (missing in boundary file), the
+ * component returns null gracefully and the calling page just sees no
+ * map.
+ */
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { geoMercator, geoPath, geoBounds } from "d3-geo";
+
+interface Props {
+  focalCode?: string;
+  focalName?: string;
+  focalKind: "pcon" | "lad" | "ward";
+  focalColour?: string;
+  width?: number;
+  height?: number;
+  padding?: number;
+  ariaLabel?: string;
+}
+
+const {
+  focalCode,
+  focalName,
+  focalKind,
+  focalColour = "var(--accent-3)",
+  width = 220,
+  height = 150,
+  padding = 1.18,
+  ariaLabel,
+} = Astro.props;
+
+// File registry — code field name + file path per kind
+const REGISTRY = {
+  pcon: {
+    file: "data/geography/pcon24-simplified.geojson",
+    codeField: "PCON24CD",
+    nameField: "PCON24NM",
+  },
+  lad: {
+    file: "data/geography/lad24-simplified.geojson",
+    codeField: "LAD24CD",
+    nameField: "LAD24NM",
+  },
+  ward: {
+    file: "data/geography/wd25-simplified.geojson",
+    codeField: "WD25CD",
+    nameField: "WD25NM",
+  },
+} as const;
+
+// Module-level cache so the GeoJSON files are loaded + indexed once
+// per Astro process, then shared across every per-page invocation.
+type GeoCache = {
+  features: Array<any>;
+  byCode: Map<string, any>;
+  byName: Map<string, any>;
+};
+const _cache = new Map<string, GeoCache>();
+
+function normName(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[,'’]/g, "")
+    .replace(/[-‐‑‒–—]/g, " ")
+    .replace(/&/g, "and")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function loadCache(kind: keyof typeof REGISTRY): GeoCache | null {
+  if (_cache.has(kind)) return _cache.get(kind)!;
+  const reg = REGISTRY[kind];
+  const p = resolve(process.cwd(), reg.file);
+  if (!existsSync(p)) return null;
+  const data = JSON.parse(readFileSync(p, "utf8")) as { features: any[] };
+  const byCode = new Map<string, any>();
+  const byName = new Map<string, any>();
+  for (const f of data.features) {
+    const code = f?.properties?.[reg.codeField];
+    const name = f?.properties?.[reg.nameField];
+    if (code) byCode.set(code, f);
+    if (name) byName.set(normName(name), f);
+  }
+  const cache: GeoCache = { features: data.features, byCode, byName };
+  _cache.set(kind, cache);
+  return cache;
+}
+
+const cache = loadCache(focalKind);
+let focal: any = null;
+if (cache) {
+  if (focalCode) focal = cache.byCode.get(focalCode);
+  if (!focal && focalName) focal = cache.byName.get(normName(focalName));
+}
+
+// If we can't find the focal area, render nothing.
+const hasFocal = !!focal;
+
+// Compute focal bbox + expand by `padding` to give the neighbour
+// context. Then pick every feature whose bbox intersects.
+type Bbox = [number, number, number, number];
+function expandBbox(b: Bbox, factor: number): Bbox {
+  const [x0, y0, x1, y1] = b;
+  const w = x1 - x0;
+  const h = y1 - y0;
+  const dx = (w * (factor - 1)) / 2;
+  const dy = (h * (factor - 1)) / 2;
+  return [x0 - dx, y0 - dy, x1 + dx, y1 + dy];
+}
+function bboxOf(feature: any): Bbox {
+  const b = geoBounds(feature);
+  return [b[0][0], b[0][1], b[1][0], b[1][1]];
+}
+function bboxIntersects(a: Bbox, b: Bbox): boolean {
+  return !(a[2] < b[0] || a[0] > b[2] || a[3] < b[1] || a[1] > b[3]);
+}
+
+let svgInner = "";
+let pathFocal = "";
+let pathContext = "";
+
+if (hasFocal) {
+  const focalBbox = expandBbox(bboxOf(focal), padding);
+
+  // Pick context features (excluding focal) whose bbox intersects ours.
+  // For ward kind we cap at 80 to keep the SVG svelte.
+  const contextFeatures: any[] = [];
+  for (const f of cache!.features) {
+    if (f === focal) continue;
+    const fb = bboxOf(f);
+    if (bboxIntersects(focalBbox, fb)) contextFeatures.push(f);
+    if (focalKind === "ward" && contextFeatures.length >= 80) break;
+  }
+
+  // Fit projection to the expanded bbox.
+  const projection = geoMercator().fitExtent(
+    [
+      [2, 2],
+      [width - 2, height - 2],
+    ],
+    {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [focalBbox[0], focalBbox[1]],
+                [focalBbox[2], focalBbox[1]],
+                [focalBbox[2], focalBbox[3]],
+                [focalBbox[0], focalBbox[3]],
+                [focalBbox[0], focalBbox[1]],
+              ],
+            ],
+          },
+        },
+      ],
+    } as any,
+  );
+
+  const path = geoPath(projection);
+
+  pathContext = contextFeatures
+    .map((f) => path(f as any) || "")
+    .filter((d) => d.length > 0)
+    .join(" ");
+
+  pathFocal = path(focal as any) || "";
+
+  svgInner = pathFocal; // placeholder, rendered inline below
+}
+
+const resolvedName = focal?.properties?.[REGISTRY[focalKind].nameField] || focalCode || focalName;
+const a11y = ariaLabel || `Location map showing ${resolvedName} highlighted relative to its neighbours.`;
+---
+
+{hasFocal && (
+  <figure class="mini-map" aria-label={a11y}>
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+    >
+      <title>{a11y}</title>
+      {pathContext && (
+        <path
+          d={pathContext}
+          fill="var(--surface-muted)"
+          stroke="var(--border)"
+          stroke-width="0.4"
+        />
+      )}
+      <path
+        d={pathFocal}
+        fill={focalColour}
+        stroke="rgba(0, 0, 0, 0.5)"
+        stroke-width="0.6"
+      />
+    </svg>
+  </figure>
+)}

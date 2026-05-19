@@ -1,5 +1,6 @@
 ---
 import { NAV_ITEMS } from "../lib/site";
+import Search from "./Search.astro";
 
 const pathname = Astro.url.pathname;
 
@@ -30,4 +31,6 @@ function isActive(href: string): boolean {
       </a>
     ))}
   </nav>
+
+  <Search />
 </header>
