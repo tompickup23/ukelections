@@ -151,6 +151,72 @@ export function loadGeAssumptions() { return loadGe().assumptions; }
 export function loadGeBacktest() { return loadGe().backtest; }
 export function loadGeIdentity() { return loadGe().identity; }
 
+let _geBacktestBySlug: Record<string, any> | null = null;
+/**
+ * Returns the GE2024 backtest row for a given parliamentary constituency
+ * slug (Democracy Club PCON slug). Returns null if no row was scored —
+ * e.g. boundary changes that produced a new constituency in 2024.
+ *
+ * Row shape: { slug, name, country, region, predicted: {party: share},
+ * actual: {party: share} }.
+ */
+export function loadGeBacktestForSeat(slug: string): any | null {
+  if (!_geBacktestBySlug) {
+    const bt = loadGeBacktest();
+    _geBacktestBySlug = {};
+    for (const row of (bt.rows || []) as any[]) {
+      if (row?.slug) _geBacktestBySlug[row.slug] = row;
+    }
+  }
+  return _geBacktestBySlug[slug] || null;
+}
+
+let _may7BacktestByCouncil: Record<string, any> | null = null;
+/**
+ * Aggregates the May 2026 ward-level postaudit rows up to council level,
+ * returning summary stats for a single council slug. Used to draw the
+ * "How we did on 7 May" callout on each council page.
+ */
+export function loadMay7BacktestForCouncil(slug: string): {
+  ballots_evaluated: number;
+  winners_correct: number;
+  winner_accuracy: number;
+  major_party_mae_avg: number;
+  reform_signed_bias_pp: number;
+  lab_signed_bias_pp: number;
+  con_signed_bias_pp: number;
+} | null {
+  if (!_may7BacktestByCouncil) {
+    _may7BacktestByCouncil = {};
+    const pa = loadMay7Postaudit();
+    const rows = (pa.live?.rows || []) as any[];
+    const grouped: Record<string, any[]> = {};
+    for (const r of rows) {
+      const cs = r.council_slug;
+      if (!cs) continue;
+      (grouped[cs] = grouped[cs] || []).push(r);
+    }
+    for (const [cs, rs] of Object.entries(grouped)) {
+      const n = rs.length;
+      const correct = rs.filter((r) => r.winner_match).length;
+      const maeSum = rs.reduce((s, r) => s + (r.major_party_mae || 0), 0);
+      const refBias = rs.reduce((s, r) => s + (r.reform_delta || 0), 0);
+      const labBias = rs.reduce((s, r) => s + (r.lab_delta || 0), 0);
+      const conBias = rs.reduce((s, r) => s + (r.con_delta || 0), 0);
+      _may7BacktestByCouncil[cs] = {
+        ballots_evaluated: n,
+        winners_correct: correct,
+        winner_accuracy: n > 0 ? correct / n : 0,
+        major_party_mae_avg: n > 0 ? maeSum / n : 0,
+        reform_signed_bias_pp: n > 0 ? (refBias / n) * 100 : 0,
+        lab_signed_bias_pp: n > 0 ? (labBias / n) * 100 : 0,
+        con_signed_bias_pp: n > 0 ? (conBias / n) * 100 : 0,
+      };
+    }
+  }
+  return _may7BacktestByCouncil[slug] || null;
+}
+
 let _wardDemo: any = null;
 export function loadWardDemographics() {
   if (_wardDemo) return _wardDemo;
@@ -172,6 +238,7 @@ export function partyColour(party: string): string {
     "Independent": "#888888",
     "Workers Party": "#a78bfa",
     "SDP": "#8c1f3a",
+    "Restore Britain": "#0f2545",
   };
   return map[party] || "#475467";
 }

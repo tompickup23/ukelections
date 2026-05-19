@@ -267,13 +267,60 @@ const SCOTTISH_2026_APRIL_AVERAGE_STATIC = {
   },
 };
 
+// Restore Britain — Rupert Lowe's party (formed November 2025).
+// Most pollsters embed RB inside the "Others" cell rather than giving it its
+// own column. Wikipedia rolling-average parser therefore can't pick it up
+// directly. The number below is a manual snapshot of the most recent named
+// pollster published in the last 14 days, applied as an overlay on top of the
+// auto-refreshed snapshot — subtracted from the "Other" cell so the total
+// still sums to 1.0.
+//
+// Refresh from: https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election
+// (look for the parenthetical "(RB X)" annotation inside the Others column).
+const RESTORE_BRITAIN_OVERLAY = {
+  share: 0.04,
+  source:
+    "YouGov 17-18 May 2026 + Find Out Now 6 May 2026 — RB 4% embedded in Wikipedia 'Others' column. " +
+    "Empirical context: Restore Britain's local affiliate Great Yarmouth First won all 9 Great " +
+    "Yarmouth divisions of Norfolk County Council and 1 of 39 Great Yarmouth Borough Council seats " +
+    "on 7 May 2026.",
+  retrieved_at: "2026-05-19",
+};
+
+function applyRestoreBritainOverlay(snapshot) {
+  // Only applies to UK Westminster — Welsh + Scottish samples are too small.
+  const restoreShare = RESTORE_BRITAIN_OVERLAY.share;
+  const currentOther = snapshot.shares["Other"] || 0;
+  if (currentOther < restoreShare) {
+    // Defensive: if Other is already smaller than the overlay, don't push it
+    // negative. This shouldn't happen in normal polling but the model breaks
+    // if any share goes below zero.
+    return snapshot;
+  }
+  return {
+    ...snapshot,
+    shares: {
+      ...snapshot.shares,
+      "Restore Britain": restoreShare,
+      "Other": Math.max(0, currentOther - restoreShare),
+    },
+    _meta: {
+      ...snapshot._meta,
+      restore_britain_overlay: RESTORE_BRITAIN_OVERLAY,
+    },
+  };
+}
+
 // Auto-override-aware exports: each 2026 placeholder is replaced at module
 // load time with the latest Wikipedia rolling average if data/polling/
 // override.json contains a successful auto-parsed entry. Otherwise the
-// static placeholder above is returned unchanged.
-export const UK_WESTMINSTER_2026_APRIL_AVERAGE = applyOverride(
-  "UK_WESTMINSTER_2026_APRIL_AVERAGE",
-  UK_WESTMINSTER_2026_APRIL_AVERAGE_STATIC,
+// static placeholder above is returned unchanged. After the override, the
+// UK Westminster snapshot is decorated with the Restore Britain overlay.
+export const UK_WESTMINSTER_2026_APRIL_AVERAGE = applyRestoreBritainOverlay(
+  applyOverride(
+    "UK_WESTMINSTER_2026_APRIL_AVERAGE",
+    UK_WESTMINSTER_2026_APRIL_AVERAGE_STATIC,
+  ),
 );
 export const WELSH_2026_APRIL_AVERAGE = applyOverride(
   "WELSH_2026_APRIL_AVERAGE",
