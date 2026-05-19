@@ -1083,3 +1083,143 @@ input:focus-visible,
   color: var(--ink-soft);
   font-size: 0.92rem;
 }
+
+/* === Tabular numerals — force numeric columns to line up vertically === */
+
+.num,
+.bar-value,
+.bar-share,
+.big-number,
+table.seat-table td,
+table.seat-table th,
+table.council-table td,
+table.council-table th {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* === Animated bar fills — bars expand from 0 → final width on first paint === */
+
+@keyframes uke-bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.bar-fill {
+  /* The width prop is the FINAL width. We scale the bar from 0 → 1
+     so the visual fills in. transform-origin is left so it grows
+     rightward, matching reading direction. */
+  transform-origin: left center;
+  animation: uke-bar-grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Stagger so multiple bars in a list fill in sequentially rather than
+   all at once. The nth-of-type targets .bar-row siblings; we delay
+   each by 60ms × index up to a cap. */
+.party-bars .bar-row:nth-of-type(1)  .bar-fill { animation-delay: 0s; }
+.party-bars .bar-row:nth-of-type(2)  .bar-fill { animation-delay: 0.08s; }
+.party-bars .bar-row:nth-of-type(3)  .bar-fill { animation-delay: 0.16s; }
+.party-bars .bar-row:nth-of-type(4)  .bar-fill { animation-delay: 0.24s; }
+.party-bars .bar-row:nth-of-type(5)  .bar-fill { animation-delay: 0.32s; }
+.party-bars .bar-row:nth-of-type(6)  .bar-fill { animation-delay: 0.40s; }
+.party-bars .bar-row:nth-of-type(7)  .bar-fill { animation-delay: 0.48s; }
+.party-bars .bar-row:nth-of-type(8)  .bar-fill { animation-delay: 0.56s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill { animation: none; }
+}
+
+/* === Commons horseshoe component === */
+
+.commons-horseshoe {
+  margin: 1.5rem auto;
+  max-width: 720px;
+  text-align: center;
+}
+
+.commons-horseshoe svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  color: var(--ink);
+  /* Subtle drop-shadow on the dot mass to lift it off the surface */
+  filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.04));
+}
+
+.commons-horseshoe-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 0.9rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.ch-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.ch-legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+.ch-legend-swatch-stack {
+  display: inline-flex;
+  width: auto;
+  height: 10px;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 1px;
+}
+
+.ch-legend-swatch-stack > span {
+  display: inline-block;
+  width: 5px;
+  height: 10px;
+  border-radius: 1px;
+}
+
+.ch-legend-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ch-legend-seats {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.ch-legend-other .ch-legend-name {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.commons-horseshoe-headline {
+  margin: 0.9rem auto 0;
+  max-width: 520px;
+  font-size: 0.98rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.commons-horseshoe-headline .ch-pill {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}

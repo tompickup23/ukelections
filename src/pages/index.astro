@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { partyColour } from "../lib/predictions";
+import CommonsHorseshoe from "../components/CommonsHorseshoe.astro";
+import { partyColour, loadGeSummary } from "../lib/predictions";
 import {
   loadGeHeadline,
   loadMay7Headline,
@@ -10,12 +11,13 @@ import {
 
 const upcoming = loadUpcomingElections();
 const ge = loadGeHeadline();
+const geSummary = loadGeSummary();
 const may7 = loadMay7Headline();
 
-const topGe = ge.seat_tallies.slice(0, 6);
 const topNationalShares = ge.national_vote_share.slice(0, 6);
 const HALFWAY = 326;
 const leader = ge.seat_tallies[0];
+const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, number>;
 
 const heroContest = upcoming[0] ?? null;
 const heroWinner = heroContest?.headline_winner ?? null;
@@ -121,18 +123,7 @@ const description = heroContest
         ? ` ${shortPartyLabel(leader.party)} clears the line with ${(leader.seats - HALFWAY).toLocaleString()} seats to spare.`
         : leader ? ` ${shortPartyLabel(leader.party)} is ${Math.abs(HALFWAY - leader.seats).toLocaleString()} seats short of an overall majority.` : ""}
     </p>
-    <div class="party-bars party-bars-large">
-      {topGe.map((t) => (
-        <div class="bar-row">
-          <span class="bar-label">{shortPartyLabel(t.party)}</span>
-          <div class="bar-track">
-            <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
-          </div>
-          <span class="bar-value">{t.seats.toLocaleString()} <span class="bar-share">({(t.share * 100).toFixed(1)}%)</span></span>
-        </div>
-      ))}
-    </div>
-    <p class="caption">Projected House of Commons composition (top {topGe.length} parties shown)</p>
+    <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
 
     <h3 style="margin-top:1.5rem">National vote share — current Westminster polling</h3>
     <div class="party-bars">

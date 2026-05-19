@@ -1,0 +1,262 @@
+---
+/**
+ * CommonsHorseshoe.astro — pure-SVG seat-projection visualisation.
+ *
+ * Renders the projected House of Commons composition as the classic
+ * horseshoe arrangement (concentric arcs of dots, mirrored across a
+ * vertical axis like the Wikipedia parliament composition diagrams).
+ * Each dot = one seat, coloured by winning party.
+ *
+ * Parties are placed by ideological order Left→Right within the
+ * horseshoe — that's the convention readers expect (Government on
+ * one side, Opposition on the other, fringe parties at the wings).
+ *
+ * Pure server-side: no client JS, no client CSS, no client data.
+ * The SVG is inlined into the HTML at build time. Works in dark mode
+ * and prints cleanly.
+ *
+ * Props:
+ *   seats    Record<string, number>  Party → seat count
+ *   total    number = 650            Total chamber size (also 60/96/129 etc)
+ *   majority number = 326            Majority threshold (drawn as a notch)
+ *   labelMinSeats number = 12        Don't label parties below this size
+ *   ariaLabel string                 a11y description
+ */
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface Props {
+  seats: Record<string, number>;
+  total?: number;
+  majority?: number;
+  labelMinSeats?: number;
+  ariaLabel?: string;
+}
+
+const {
+  seats,
+  total = 650,
+  majority = 326,
+  labelMinSeats = 15,
+  ariaLabel = "Projected House of Commons composition shown as a horseshoe of seats coloured by party.",
+} = Astro.props;
+
+// --- Ordering: ideological left-to-right within the horseshoe ---
+// Sinn Féin sit on the far left, Reform UK + DUP + Restore Britain
+// on the far right. Parties not listed here drop into the centre after
+// the explicitly-ordered ones. The order is the order the dots get
+// painted around the arc.
+const LEFT_TO_RIGHT_ORDER: string[] = [
+  "Sinn Féin",
+  "SDLP",
+  "Workers Party of Britain",
+  "Green Party",
+  "Plaid Cymru",
+  "SNP",
+  "Labour",
+  "Speaker seeking re-election",
+  "Independent",
+  "Alliance",
+  "UUP",
+  "Liberal Democrats",
+  "Conservative",
+  "Traditional Unionist Voice - TUV",
+  "DUP",
+  "Reform UK",
+  "Restore Britain",
+];
+
+const totalAllocated = Object.values(seats).reduce((s, n) => s + (n || 0), 0);
+const chamberSize = total || totalAllocated;
+
+// Filter parties with >0 seats; preserve ordering above; append anything
+// not in the order list at the end (centred).
+const orderedParties: string[] = [];
+const seen = new Set<string>();
+for (const p of LEFT_TO_RIGHT_ORDER) {
+  if ((seats[p] || 0) > 0) {
+    orderedParties.push(p);
+    seen.add(p);
+  }
+}
+for (const p of Object.keys(seats)) {
+  if (!seen.has(p) && (seats[p] || 0) > 0) {
+    orderedParties.push(p);
+  }
+}
+
+// --- Geometry: arcs ---
+// Number of concentric rows depends on chamber size. For 650 seats,
+// 9 rows feels right (~72 dots per row). For 96 (Senedd) use 4 rows.
+const ROWS = chamberSize >= 400 ? 9 : chamberSize >= 200 ? 6 : 4;
+
+const INNER_R = 110;
+const ROW_GAP = 18;
+const OUTER_R = INNER_R + (ROWS - 1) * ROW_GAP;
+const DOT_R = 6;
+const PAD = 28; // vertical padding under the horseshoe for the "majority" marker
+
+// Compute how many dots each row holds. Outer rows hold more dots
+// (arc length grows with radius). We distribute the chamber total
+// proportionally to circumference, then redistribute residuals so the
+// counts sum exactly to chamberSize.
+const rowRadii: number[] = Array.from({ length: ROWS }, (_, i) => INNER_R + i * ROW_GAP);
+const arcLengths = rowRadii.map((r) => Math.PI * r);
+const totalArc = arcLengths.reduce((s, a) => s + a, 0);
+let rowSeats = arcLengths.map((a) => Math.round((a / totalArc) * chamberSize));
+let drift = chamberSize - rowSeats.reduce((s, n) => s + n, 0);
+// Push the residual onto the largest row(s)
+let i = rowSeats.length - 1;
+while (drift !== 0) {
+  rowSeats[i] += drift > 0 ? 1 : -1;
+  drift += drift > 0 ? -1 : 1;
+  i = (i - 1 + rowSeats.length) % rowSeats.length;
+}
+
+// Build the full ordered list of seat-positions: (rowIdx, angleRad).
+// Angles go from π (left) to 0 (right) — i.e. anticlockwise across the
+// top of the horseshoe.
+type Pos = { row: number; angle: number };
+const positions: Pos[] = [];
+for (let row = 0; row < ROWS; row++) {
+  const n = rowSeats[row];
+  if (n <= 0) continue;
+  for (let k = 0; k < n; k++) {
+    // Even spacing: angle = π * (1 - (k + 0.5) / n)
+    const angle = Math.PI * (1 - (k + 0.5) / n);
+    positions.push({ row, angle });
+  }
+}
+// Sort positions left-to-right (angle = π is far left, angle = 0 is far right).
+// Then assign to parties in the left-to-right order.
+positions.sort((a, b) => b.angle - a.angle);
+
+const seatAssignments: Array<{ party: string; pos: Pos }> = [];
+let cursor = 0;
+for (const party of orderedParties) {
+  const n = seats[party] || 0;
+  for (let j = 0; j < n; j++) {
+    if (cursor >= positions.length) break;
+    seatAssignments.push({ party, pos: positions[cursor++] });
+  }
+}
+
+// --- SVG canvas sizing ---
+const VIEW_W = (OUTER_R + DOT_R + 4) * 2;
+const VIEW_H = OUTER_R + DOT_R + 4 + PAD;
+const CX = VIEW_W / 2;
+const CY = VIEW_H - PAD; // baseline of the horseshoe
+
+function dotXY(pos: Pos): { x: number; y: number } {
+  const r = rowRadii[pos.row];
+  const x = CX + r * Math.cos(pos.angle);
+  // y axis grows downward in SVG; horseshoe sits above the baseline.
+  const y = CY - r * Math.sin(pos.angle);
+  return { x, y };
+}
+
+// --- Below-horseshoe legend ---
+const legend = orderedParties.map((p) => ({
+  party: p,
+  short: shortPartyLabel(p),
+  seats: seats[p] || 0,
+  colour: partyColour(p),
+}));
+
+const leadingParty = legend[0]?.seats > 0
+  ? [...legend].sort((a, b) => b.seats - a.seats)[0]
+  : null;
+const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats >= majority : false;
+---
+
+<figure class="commons-horseshoe" aria-label={ariaLabel}>
+  <svg
+    role="img"
+    viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+    width="100%"
+    preserveAspectRatio="xMidYMid meet"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title>{ariaLabel}</title>
+
+    {/* Majority line — a faint vertical hash mark at the centre of the
+        baseline. Indicates the 326-seat threshold. */}
+    {majority > 0 && (
+      <g class="ch-majority">
+        <line
+          x1={CX}
+          x2={CX}
+          y1={CY - OUTER_R - 12}
+          y2={CY + 4}
+          stroke="currentColor"
+          stroke-opacity="0.15"
+          stroke-width="1"
+          stroke-dasharray="3 4"
+        />
+        <text
+          x={CX}
+          y={CY + 18}
+          text-anchor="middle"
+          font-size="10"
+          fill="currentColor"
+          fill-opacity="0.55"
+          style="font-family:inherit;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;"
+        >
+          {majority}-seat majority
+        </text>
+      </g>
+    )}
+
+    {/* The dots */}
+    <g class="ch-dots">
+      {seatAssignments.map(({ party, pos }) => {
+        const { x, y } = dotXY(pos);
+        return (
+          <circle
+            cx={x}
+            cy={y}
+            r={DOT_R}
+            fill={partyColour(party)}
+            stroke="rgba(255,255,255,0.55)"
+            stroke-width="0.5"
+          >
+            <title>{shortPartyLabel(party)}</title>
+          </circle>
+        );
+      })}
+    </g>
+  </svg>
+
+  <figcaption class="commons-horseshoe-legend">
+    {legend.filter((l) => l.seats >= labelMinSeats).map((l) => (
+      <span class="ch-legend-item">
+        <span class="ch-legend-swatch" style={`background:${l.colour}`}></span>
+        <span class="ch-legend-name">{l.short}</span>
+        <span class="ch-legend-seats">{l.seats}</span>
+      </span>
+    ))}
+    {legend.some((l) => l.seats > 0 && l.seats < labelMinSeats) && (
+      <span class="ch-legend-item ch-legend-other">
+        <span class="ch-legend-swatch ch-legend-swatch-stack" aria-hidden="true">
+          {legend.filter((l) => l.seats > 0 && l.seats < labelMinSeats).slice(0, 4).map((l) => (
+            <span style={`background:${l.colour}`}></span>
+          ))}
+        </span>
+        <span class="ch-legend-name">Other</span>
+        <span class="ch-legend-seats">
+          {legend.filter((l) => l.seats > 0 && l.seats < labelMinSeats).reduce((s, l) => s + l.seats, 0)}
+        </span>
+      </span>
+    )}
+  </figcaption>
+
+  {leadingParty && majority > 0 && (
+    <p class="commons-horseshoe-headline">
+      <span class="ch-pill" style={`background:${leadingParty.colour}`}></span>
+      <strong>{leadingParty.short}</strong>
+      {leadingClearsMajority
+        ? <> projected to clear the <strong>{majority}-seat</strong> majority line by {leadingParty.seats - majority}.</>
+        : <> {leadingParty.seats} seats — <strong>{majority - leadingParty.seats}</strong> short of an overall majority.</>}
+    </p>
+  )}
+</figure>

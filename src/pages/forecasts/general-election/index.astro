@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { loadGePredictions, partyColour } from "../../../lib/predictions";
+import CommonsHorseshoe from "../../../components/CommonsHorseshoe.astro";
+import { loadGePredictions, loadGeSummary, partyColour } from "../../../lib/predictions";
 import { loadGeHeadline, shortPartyLabel } from "../../../lib/siteData";
 
 const ge = loadGePredictions();
+const geSummary = loadGeSummary();
 const headline = loadGeHeadline();
 
 const predictions = ge.predictions || {};
@@ -16,6 +18,11 @@ const marginals = evaluated
 const top = headline.seat_tallies[0];
 const second = headline.seat_tallies[1];
 const HALFWAY = 326;
+
+// CommonsHorseshoe wants a flat {party: seats} map — feed it the raw
+// summary tallies (includes every party, even those below the top-6
+// shown in the bar chart).
+const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, number>;
 ---
 
 <BaseLayout
@@ -35,6 +42,14 @@ const HALFWAY = 326;
     <div class="section-head">
       <p class="eyebrow">Seats projection</p>
       <h2>How the new House of Commons would look</h2>
+    </div>
+    <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Seat tally — full breakdown</p>
+      <h2>Every party with a projected seat</h2>
     </div>
     <div class="party-bars party-bars-large">
       {headline.seat_tallies.map((t) => (

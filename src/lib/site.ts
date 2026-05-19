@@ -24,9 +24,9 @@ export interface SearchEntry {
 export const NAV_ITEMS = [
   { href: "/forecasts/general-election/", label: "General Election" },
   { href: "/by-elections/makerfield/", label: "Makerfield By-election" },
-  { href: "/councils/", label: "Councils" },
-  { href: "/your-area/", label: "Find Your Ward" },
+  { href: "/polling/", label: "Polling" },
   { href: "/past-results/", label: "Past Results" },
+  { href: "/your-area/", label: "Find Your Ward" },
   { href: "/methodology/", label: "About" },
 ] as const;
 
