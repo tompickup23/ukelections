@@ -1,0 +1,213 @@
+---
+/**
+ * PartyTrendChart.astro — server-rendered SVG line chart of party shares
+ * over time.
+ *
+ * Reads polling-ledger-style data — an ordered list of refresh snapshots
+ * each with a {party → share 0..1} dict. Renders one polyline per party
+ * coloured via partyColour().
+ *
+ * Why hand-rolled and not Observable Plot: 3–10 datapoints don't justify
+ * pulling in d3-scale + JSDOM SSR fiddle. The ledger may grow but a
+ * lightweight SVG handles it well past 100 datapoints.
+ *
+ * Props:
+ *   snapshots: ordered list of {date: ISO, shares: {party: pct}, polls?: number}
+ *   parties: which parties to plot (defaults to top 6 by latest share)
+ *   width / height: viewBox dimensions
+ *   showAxisLabels: bool, default true
+ *   showLegend: bool, default true
+ *   ariaLabel: a11y
+ */
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface Snapshot {
+  date: string;
+  shares: Record<string, number>;
+  polls?: number;
+}
+
+interface Props {
+  snapshots: Snapshot[];
+  parties?: string[];
+  width?: number;
+  height?: number;
+  showAxisLabels?: boolean;
+  showLegend?: boolean;
+  ariaLabel?: string;
+}
+
+const {
+  snapshots,
+  parties: partiesIn,
+  width = 720,
+  height = 280,
+  showAxisLabels = true,
+  showLegend = true,
+  ariaLabel = "Line chart of UK Westminster polling shares over time, one line per party",
+} = Astro.props;
+
+// Default party set — top 6 in the latest snapshot, sorted descending.
+const latest = snapshots[snapshots.length - 1];
+const parties: string[] = partiesIn ??
+  Object.entries(latest?.shares || {})
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .slice(0, 6)
+    .map(([party]) => party);
+
+// Y-axis: 0% to a ceiling that's 5pp above the maximum observed share
+// across all snapshots × tracked parties. Round to next 5pp.
+let maxShare = 0;
+for (const s of snapshots) {
+  for (const p of parties) {
+    if ((s.shares[p] ?? 0) > maxShare) maxShare = s.shares[p] as number;
+  }
+}
+const yCeil = Math.min(0.5, Math.ceil((maxShare + 0.05) * 20) / 20); // 5pp steps
+const yTicks: number[] = [];
+for (let v = 0; v <= yCeil + 0.001; v += 0.05) yTicks.push(parseFloat(v.toFixed(3)));
+
+// Margins
+const M_LEFT = 50;
+const M_RIGHT = 18;
+const M_TOP = 14;
+const M_BOTTOM = showAxisLabels ? 38 : 14;
+const innerW = width - M_LEFT - M_RIGHT;
+const innerH = height - M_TOP - M_BOTTOM;
+
+// X scale: evenly-spaced by snapshot index (ledger entries are
+// irregularly-dated so equal spacing is more informative than
+// time-proportional for a polling-refresh log).
+function xAt(i: number, n: number): number {
+  if (n <= 1) return M_LEFT + innerW / 2;
+  return M_LEFT + (i / (n - 1)) * innerW;
+}
+function yAt(share: number): number {
+  return M_TOP + innerH - (share / yCeil) * innerH;
+}
+
+// Build a polyline path per party.
+type Line = { party: string; d: string; pts: Array<{ x: number; y: number; v: number }> };
+const lines: Line[] = parties.map((party) => {
+  const pts = snapshots.map((s, i) => ({
+    x: xAt(i, snapshots.length),
+    y: yAt(s.shares[party] ?? 0),
+    v: s.shares[party] ?? 0,
+  }));
+  const d = pts.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`)).join("");
+  return { party, d, pts };
+});
+
+// Compact x-axis date labels — day + short month.
+function shortAxisDate(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+  });
+}
+
+const xLabels = snapshots.map((s) => shortAxisDate(s.date));
+---
+
+<figure class="party-trend-chart">
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    preserveAspectRatio="xMidYMid meet"
+    width="100%"
+    role="img"
+    aria-label={ariaLabel}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title>{ariaLabel}</title>
+
+    {/* Y-axis gridlines + labels */}
+    <g class="ptc-y-axis">
+      {yTicks.map((t) => (
+        <g>
+          <line
+            x1={M_LEFT}
+            x2={width - M_RIGHT}
+            y1={yAt(t)}
+            y2={yAt(t)}
+            stroke="currentColor"
+            stroke-opacity="0.08"
+            stroke-width="1"
+          />
+          <text
+            x={M_LEFT - 8}
+            y={yAt(t) + 4}
+            text-anchor="end"
+            font-size="11"
+            fill="currentColor"
+            fill-opacity="0.6"
+          >
+            {`${(t * 100).toFixed(0)}%`}
+          </text>
+        </g>
+      ))}
+    </g>
+
+    {/* X-axis dates */}
+    {showAxisLabels && (
+      <g class="ptc-x-axis">
+        {snapshots.map((s, i) => (
+          <text
+            x={xAt(i, snapshots.length)}
+            y={height - 12}
+            text-anchor="middle"
+            font-size="11"
+            fill="currentColor"
+            fill-opacity="0.65"
+          >
+            {xLabels[i]}
+          </text>
+        ))}
+      </g>
+    )}
+
+    {/* The party lines */}
+    <g class="ptc-lines">
+      {lines.map((line) => (
+        <g>
+          <path
+            d={line.d}
+            fill="none"
+            stroke={partyColour(line.party)}
+            stroke-width="2.4"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+          {line.pts.map((p) => (
+            <circle
+              cx={p.x}
+              cy={p.y}
+              r="3.4"
+              fill={partyColour(line.party)}
+              stroke="var(--surface, #fff)"
+              stroke-width="1.5"
+            >
+              <title>{`${shortPartyLabel(line.party)} ${(p.v * 100).toFixed(1)}%`}</title>
+            </circle>
+          ))}
+        </g>
+      ))}
+    </g>
+  </svg>
+
+  {showLegend && (
+    <figcaption class="party-trend-legend">
+      {parties.map((p) => (
+        <span class="ptc-legend-item">
+          <span class="ptc-legend-swatch" style={`background:${partyColour(p)}`}></span>
+          <span class="ptc-legend-name">{shortPartyLabel(p)}</span>
+          <span class="ptc-legend-latest">
+            {((latest?.shares[p] ?? 0) * 100).toFixed(1)}%
+          </span>
+        </span>
+      ))}
+    </figcaption>
+  )}
+</figure>

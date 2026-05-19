@@ -1864,3 +1864,147 @@ table.council-table th {
   line-height: 1.4;
 }
 
+
+/* === PartyTrendChart === */
+
+.party-trend-chart {
+  margin: var(--space-md) 0;
+  color: var(--ink);
+}
+
+.party-trend-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.party-trend-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2xs) var(--space-sm);
+  margin: var(--space-sm) 0 0;
+  font-size: var(--text-small);
+}
+
+.ptc-legend-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: var(--space-2xs) var(--space-xs);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.ptc-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.ptc-legend-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ptc-legend-latest {
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* === Inline sparkline (used in tables / stat cards) === */
+
+.spark-inline {
+  display: inline-block;
+  width: 72px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+/* === Scenario A / B comparison grid (Makerfield by-election detail) === */
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-sm);
+}
+
+.scenario-panel {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: var(--space-md);
+}
+
+.scenario-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.scenario-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  background: var(--accent-3);
+  color: var(--surface);
+  font-family: "Sora", system-ui, sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  letter-spacing: -0.02em;
+}
+
+.scenario-letter--b {
+  background: var(--accent);
+}
+
+.scenario-head h3 {
+  margin: 0;
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: var(--text-h3);
+  line-height: 1.2;
+  flex: 1;
+}
+
+.scenario-prob {
+  font-size: var(--text-small);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+/* === Backtest predicted-vs-actual side-by-side grid === */
+
+.backtest-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-sm);
+}
+
+.backtest-compare-panel {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: var(--space-md);
+}
+
+.backtest-compare-label {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--text-eyebrow);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}

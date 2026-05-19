@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PartyBars from "../../components/PartyBars.astro";
+import StatCard from "../../components/StatCard.astro";
 import {
   loadCouncilCycles,
   loadMay7Control,
@@ -10,6 +12,13 @@ import {
   partySlugToName,
 } from "../../lib/siteData";
 import { partyColour } from "../../lib/predictions";
+
+// Resolve the "No overall control" bucket to a neutral grey while
+// letting real parties fall through to the standard palette.
+function partyOrNocColour(name: string): string {
+  if (name === "No overall control") return "#808a99";
+  return partyColour(name);
+}
 
 const cycles = loadCouncilCycles();
 const ctl = loadMay7Control();
@@ -96,6 +105,27 @@ const counts = {
   ref_majority: rows.filter((r) => r.status_group === "ref_majority").length,
 };
 
+// Council-composition breakdown for the at-a-glance chart.
+// For each controlling-party slug, count how many councils that party
+// holds outright. NOC (no overall control) is a synthetic bucket.
+const compositionCounts: Record<string, number> = {};
+for (const r of rows) {
+  if (r.status_group === "noc" || r.control_party_slug == null) {
+    compositionCounts["No overall control"] = (compositionCounts["No overall control"] || 0) + 1;
+  } else {
+    const name = r.control_party_name || partySlugToName(r.control_party_slug);
+    compositionCounts[name] = (compositionCounts[name] || 0) + 1;
+  }
+}
+const compositionTotal = Object.values(compositionCounts).reduce((s, n) => s + n, 0);
+const compositionRows = Object.entries(compositionCounts)
+  .sort((a, b) => (b[1] as number) - (a[1] as number))
+  .map(([party, n]) => ({
+    party,
+    pct: compositionTotal > 0 ? (n as number) / compositionTotal : 0,
+    value: `${n} ${n === 1 ? "council" : "councils"}`,
+  }));
+
 const ePartyToColour = (slug: string | null) => {
   if (!slug) return "#9ca3af";
   switch (slug) {
@@ -134,20 +164,34 @@ const ePartyToColour = (slug: string | null) => {
       <p class="eyebrow">At a glance</p>
       <h2>{counts.ref_majority} Reform majorities, {counts.scheduled} next dates known, {counts.lgr} awaiting LGR</h2>
     </div>
-    <div class="accuracy-grid">
-      <article>
-        <span class="big-number">{head.reform_majorities}</span>
-        <p class="big-number-label">Reform UK overall majorities won on May 7</p>
-      </article>
-      <article>
-        <span class="big-number">{head.reform_seats_won.toLocaleString()}</span>
-        <p class="big-number-label">Reform UK seats won on May 7 (across all contesting councils)</p>
-      </article>
-      <article>
-        <span class="big-number">{counts.lgr}</span>
-        <p class="big-number-label">councils whose next election is on hold while Local Government Reorganisation is consulted</p>
-      </article>
+
+    <div class="stat-card-row">
+      <StatCard
+        value={String(head.reform_majorities)}
+        label="Reform UK overall majorities won on May 7"
+        accent={partyColour("Reform UK")}
+      />
+      <StatCard
+        value={head.reform_seats_won.toLocaleString()}
+        label="Reform UK seats won on May 7 (across all contesting councils)"
+        accent={partyColour("Reform UK")}
+      />
+      <StatCard
+        value={String(counts.lgr)}
+        label="councils whose next election is on hold while Local Government Reorganisation is consulted"
+      />
     </div>
+
+    <h3 style="margin-top:var(--space-lg)">Who runs each council now</h3>
+    <PartyBars
+      large={true}
+      rows={compositionRows}
+      colourOverride={partyOrNocColour}
+    />
+    <p class="caption">
+      Each bar shows the share of all {compositionTotal} contested councils now held by that
+      party. NOC = no overall control. Drill into individual councils via the table below.
+    </p>
   </section>
 
   <section class="section">

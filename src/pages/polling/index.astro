@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PartyBars from "../../components/PartyBars.astro";
+import PartyTrendChart from "../../components/PartyTrendChart.astro";
 import { partyColour } from "../../lib/predictions";
 import { shortPartyLabel } from "../../lib/siteData";
 import { readFileSync, existsSync } from "node:fs";
@@ -95,24 +97,17 @@ const ukSourceSummary = overlay
       <p class="eyebrow">UK Westminster vote intention — current</p>
       <h2>What the polls say today</h2>
     </div>
-    <div class="party-bars party-bars-large">
-      {ukRows.slice(0, 8).map((r) => (
-        <div class="bar-row">
-          <span class="bar-label">{shortPartyLabel(r.party)}</span>
-          <div class="bar-track">
-            <div class="bar-fill" style={`width:${(r.share * 100).toFixed(1)}%; background:${partyColour(r.party)}`}></div>
-          </div>
-          <span class="bar-value">
-            {(r.share * 100).toFixed(1)}%
-            {r.vsGe2024 !== undefined && (
-              <span class={r.vsGe2024 > 0 ? "swing-up" : (r.vsGe2024 < 0 ? "swing-down" : "swing-flat")}>
-                {r.vsGe2024 > 0 ? "+" : ""}{(r.vsGe2024 * 100).toFixed(1)}pp
-              </span>
-            )}
-          </span>
-        </div>
-      ))}
-    </div>
+    <PartyBars
+      large={true}
+      rows={ukRows.slice(0, 8).map((r) => ({
+        party: r.party,
+        pct: r.share,
+        annotation: r.vsGe2024 !== undefined
+          ? `${r.vsGe2024 > 0 ? "+" : ""}${(r.vsGe2024 * 100).toFixed(1)}pp`
+          : null,
+        annotationDirection: r.vsGe2024 == null ? "flat" : r.vsGe2024 > 0 ? "up" : r.vsGe2024 < 0 ? "down" : "flat",
+      }))}
+    />
     <p class="caption">
       Coloured number is the change from the 4 July 2024 general-election result.
       Source: <strong>{ukSourceSummary}</strong>{ukMeta.fieldwork ? <>, fieldwork {ukMeta.fieldwork}</> : null}.
@@ -148,9 +143,17 @@ const ukSourceSummary = overlay
         <p class="eyebrow">Refresh history</p>
         <h2>What the rolling average has done</h2>
       </div>
+      <PartyTrendChart
+        snapshots={ledgerRows.slice().reverse().map((r) => ({
+          date: r.date,
+          shares: r.shares,
+          polls: r.polls_used,
+        }))}
+        parties={ledgerParties}
+      />
       <p>
-        Every successful refresh of the polling parser writes a snapshot to the ledger. The table
-        below shows every refresh on record — newest first.
+        Every successful refresh of the polling parser writes a snapshot to the ledger. The line
+        chart above shows each party's share over time; the table below has the exact numbers.
       </p>
       <table class="seat-table">
         <thead>

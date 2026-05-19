@@ -1,5 +1,8 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import HeroClock from "../../../components/HeroClock.astro";
+import PartyBars from "../../../components/PartyBars.astro";
+import RaceBar from "../../../components/RaceBar.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
 import { readFileSync } from "node:fs";
@@ -54,6 +57,46 @@ const candidates = forecast.candidates as Array<any>;
 const pollingDay = forecast.contest.polling_day;
 const headline = forecast.forecast.headline;
 
+// Days-to-polling for the hero clock
+const _msPerDay = 86_400_000;
+const daysUntil = Math.max(0, Math.ceil((new Date(`${pollingDay}T00:00:00Z`).getTime() - Date.now()) / _msPerDay));
+const pollingDayLabel = new Date(`${pollingDay}T00:00:00Z`).toLocaleDateString("en-GB", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+// Sort central shares descending for the race bar
+const centralRanked = Object.entries(central)
+  .filter(([, p]) => (p as number) > 0.005)
+  .sort((a, b) => (b[1] as number) - (a[1] as number))
+  .map(([party, pct]) => ({ party, pct: pct as number }));
+
+// Pull candidate names per party for the race-bar legend
+const candidateByParty: Record<string, string> = {};
+for (const c of candidates as any[]) {
+  if (c.candidate && c.candidate !== "to be confirmed") {
+    candidateByParty[c.party] = c.candidate;
+  }
+}
+const candidateList = Object.entries(candidateByParty).map(([party, candidate]) => ({
+  party,
+  candidate,
+}));
+
+// Scenario A / B central-share rankings for the side-by-side bars
+function sortShares(shares: Record<string, number>) {
+  return Object.entries(shares)
+    .filter(([, p]) => (p as number) > 0.005)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .map(([party, pct]) => ({ party, pct: pct as number }));
+}
+const scenarioAShares = sortShares(scenarioA.central);
+const scenarioBShares = sortShares(scenarioB.central);
+const burnhamProb = (forecast.forecast.burnham_on_ballot_probability * 100).toFixed(0);
+
 function pct(x: number): string {
   return (x * 100).toFixed(1);
 }
@@ -82,19 +125,31 @@ function classificationLabel(c: string): string {
   title="Makerfield by-election — 18 June 2026 forecast"
   description={`Forecast for the 18 June 2026 Makerfield parliamentary by-election. Central forecast: ${shortPartyLabel(winner)} ${winnerPct}% vs ${shortPartyLabel(runnerUp)} ${runnerUpPct}% — a ${marginPp}pp ${classification}.`}
 >
-  <section class="page-hero">
-    <p class="eyebrow">By-election forecast · Polling day {pollingDay}</p>
-    <h1>Makerfield by-election</h1>
-    <p class="lede">
-      Central forecast:
-      <strong><span class="party-pill" style={`background:${partyColour(winner)}`}></span> {shortPartyLabel(winner)}</strong>
-      with <strong>{winnerPct}%</strong>,
-      <strong><span class="party-pill" style={`background:${partyColour(runnerUp)}`}></span> {shortPartyLabel(runnerUp)}</strong>
-      on {runnerUpPct}% — a <strong>{marginPp}pp</strong> margin. Classification: <strong>{classificationLabel(classification)}</strong>.
-    </p>
-    <p class="meta-row">
-      England · North West · Wigan borough · {forecast.contest.pcon24cd}
-    </p>
+  <section class="hero hero-byelection-v2">
+    <div class="hero-byelection-grid">
+      <header class="hero-byelection-head">
+        <p class="eyebrow">Polling day · {pollingDayLabel}</p>
+        <h1>Makerfield by-election</h1>
+        <p class="lede">
+          A <strong>{marginPp}pp {classificationLabel(classification).toLowerCase()}</strong>
+          between <strong>{shortPartyLabel(winner)}</strong> and
+          <strong>{shortPartyLabel(runnerUp)}</strong> — well inside the model's
+          confidence interval. Wigan borough · North West · {forecast.contest.pcon24cd}.
+        </p>
+      </header>
+
+      <HeroClock
+        value={daysUntil}
+        label={daysUntil === 1 ? "day to polling" : "days to polling"}
+        ariaLabel="Days until polling"
+      />
+    </div>
+
+    <RaceBar
+      shares={centralRanked}
+      candidates={candidateList}
+      title="Central forecast — probability-weighted projected vote share"
+    />
   </section>
 
   <section class="section">
@@ -119,35 +174,27 @@ function classificationLabel(c: string): string {
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Probability-weighted central forecast</p>
-      <h2>What the model expects on 18 June</h2>
+      <p class="eyebrow">Swing from GE2024</p>
+      <h2>How the model expects each party to move on 18 June</h2>
     </div>
-    <div class="party-bars party-bars-large">
-      {ranked.map((row) => {
+    <PartyBars
+      large={true}
+      rows={ranked.map((row) => {
         const swing = swingFromGe2024(row.party);
         const ge24 = ge2024Shares[row.party] || 0;
-        return (
-          <div class="bar-row">
-            <span class="bar-label">{shortPartyLabel(row.party)}</span>
-            <div class="bar-track">
-              <div class="bar-fill" style={`width:${(row.pct * 100).toFixed(1)}%; background:${partyColour(row.party)}`}></div>
-            </div>
-            <span class="bar-value">
-              {(row.pct * 100).toFixed(1)}%
-              {ge24 > 0 ? (
-                <span class={swing > 0 ? "swing-up" : (swing < 0 ? "swing-down" : "swing-flat")}>
-                  {swing > 0 ? "+" : ""}{(swing * 100).toFixed(1)}pp
-                </span>
-              ) : null}
-            </span>
-          </div>
-        );
+        return {
+          party: row.party,
+          pct: row.pct,
+          annotation: ge24 > 0
+            ? `${swing > 0 ? "+" : ""}${(swing * 100).toFixed(1)}pp`
+            : null,
+          annotationDirection: swing > 0 ? "up" : swing < 0 ? "down" : "flat",
+        };
       })}
-    </div>
+    />
     <p class="caption">
       Coloured number is the swing vs the 4 July 2024 general election result.
-      Blend = {(forecast.forecast.burnham_on_ballot_probability * 100).toFixed(0)}% Scenario A
-      (Burnham stands) + {((1 - forecast.forecast.burnham_on_ballot_probability) * 100).toFixed(0)}% Scenario B
+      Blend = {burnhamProb}% Scenario A (Burnham stands) + {(100 - parseInt(burnhamProb))}% Scenario B
       (Burnham withdraws).
     </p>
   </section>
@@ -167,31 +214,36 @@ function classificationLabel(c: string): string {
       Both agree Labour leads by 3pp with Burnham as candidate; they disagree on absolute
       levels (Survation Lab 45 / Ref 42; Britain Elects Lab 39 / Ref 36).
     </p>
-    <table class="seat-table">
-      <thead>
-        <tr>
-          <th>Party</th>
-          <th class="num">Scenario A — Burnham stands</th>
-          <th class="num">Scenario B — Burnham withdraws</th>
-          <th class="num">Blended (central)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {ranked.map((row) => {
-          const a = (scenarioA.central[row.party] || 0) * 100;
-          const b = (scenarioB.central[row.party] || 0) * 100;
-          const c = row.pct * 100;
-          return (
-            <tr>
-              <td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
-              <td class="num">{a.toFixed(1)}%</td>
-              <td class="num">{b.toFixed(1)}%</td>
-              <td class="num"><strong>{c.toFixed(1)}%</strong></td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div class="scenario-grid">
+      <div class="scenario-panel">
+        <div class="scenario-head">
+          <span class="scenario-letter">A</span>
+          <h3>Burnham stands</h3>
+          <span class="scenario-prob">P = {burnhamProb}%</span>
+        </div>
+        <RaceBar
+          shares={scenarioAShares}
+          height={56}
+          showLegend={true}
+          title={null}
+          ariaLabel="Scenario A — vote shares with Burnham on the ballot"
+        />
+      </div>
+      <div class="scenario-panel">
+        <div class="scenario-head">
+          <span class="scenario-letter scenario-letter--b">B</span>
+          <h3>Burnham withdraws</h3>
+          <span class="scenario-prob">P = {(100 - parseInt(burnhamProb))}%</span>
+        </div>
+        <RaceBar
+          shares={scenarioBShares}
+          height={56}
+          showLegend={true}
+          title={null}
+          ariaLabel="Scenario B — vote shares without Burnham on the ballot"
+        />
+      </div>
+    </div>
     <p class="caption">
       Scenario A blends both forecasts: 50/50 mean of Survation (Lab 45 / Ref 42) and
       Britain Elects (Lab 39 / Ref 36) for the major parties, with Survation's minor-party

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PartyBars from "../../components/PartyBars.astro";
+import StatCard from "../../components/StatCard.astro";
 import {
   loadMay7Control,
   loadMay7Postaudit,
@@ -30,6 +32,22 @@ const step9b = pa.step9b?.aggregate || {};
 const perParty = pa.live?.per_party || {};
 
 // Reform-majority councils, sorted by margin over the majority threshold.
+// Compute the per-party MAE rows once in the frontmatter so the JSX
+// body doesn't try to parse `Array<[string, any]>` as a tag.
+const perPartyEntries = Object.entries(perParty);
+const maxPartyMae = perPartyEntries.length
+  ? Math.max(...perPartyEntries.map(([, r]: [string, any]) => r.mae || 0))
+  : 0;
+const perPartyMaeRows = perPartyEntries
+  .sort((a, b) => ((b[1] as any).mae || 0) - ((a[1] as any).mae || 0))
+  .map(([party, row]: [string, any]) => ({
+    party,
+    pct: maxPartyMae > 0 ? (row.mae || 0) / maxPartyMae : 0,
+    value: `${(row.mae * 100).toFixed(2)}pp MAE`,
+    annotation: `${row.signed_bias > 0 ? "+" : ""}${(row.signed_bias * 100).toFixed(2)}pp bias`,
+    annotationDirection: (row.signed_bias > 0 ? "up" : row.signed_bias < 0 ? "down" : "flat") as "up" | "down" | "flat",
+  }));
+
 const reformMajorities = (ctl.councils as any[])
   .filter((c) => c.reform?.has_majority)
   .map((c) => ({
@@ -63,23 +81,26 @@ const reformMajorities = (ctl.councils as any[])
       <p class="eyebrow">Headline</p>
       <h2>What happened on the night</h2>
     </div>
-    <div class="accuracy-grid">
-      <article>
-        <span class="big-number">{head.reform_majorities}</span>
-        <p class="big-number-label">Reform UK overall majorities</p>
-      </article>
-      <article>
-        <span class="big-number">{head.reform_seats_won.toLocaleString()}</span>
-        <p class="big-number-label">Reform UK seats won (across all contesting councils)</p>
-      </article>
-      <article>
-        <span class="big-number">{head.reform_largest_noc}</span>
-        <p class="big-number-label">councils where Reform UK is now largest party without a majority</p>
-      </article>
-      <article>
-        <span class="big-number">{head.noc_count}</span>
-        <p class="big-number-label">councils with no overall control</p>
-      </article>
+    <div class="stat-card-row">
+      <StatCard
+        value={String(head.reform_majorities)}
+        label="Reform UK overall majorities"
+        accent={partyColour("Reform UK")}
+      />
+      <StatCard
+        value={head.reform_seats_won.toLocaleString()}
+        label="Reform UK seats won (across all contesting councils)"
+        accent={partyColour("Reform UK")}
+      />
+      <StatCard
+        value={String(head.reform_largest_noc)}
+        label="councils where Reform UK is now largest party without a majority"
+        accent={partyColour("Reform UK")}
+      />
+      <StatCard
+        value={String(head.noc_count)}
+        label="councils with no overall control"
+      />
     </div>
 
     <h3 style="margin-top:1.5rem">All seats won on May 7</h3>
@@ -135,35 +156,14 @@ const reformMajorities = (ctl.councils as any[])
       </tbody>
     </table>
 
-    {Object.keys(perParty).length > 0 && (
+    {perPartyMaeRows.length > 0 && (
       <>
-        <h3 style="margin-top:1.5rem">Per-party vote-share error (live)</h3>
-        <table class="seat-table">
-          <thead>
-            <tr>
-              <th scope="col">Party</th>
-              <th scope="col">Wards evaluated</th>
-              <th scope="col">MAE</th>
-              <th scope="col">Signed bias</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(perParty).map(([party, row]: [string, any]) => (
-              <tr>
-                <td>
-                  <span class="party-swatch" style={`background:${partyColour(party)}; display:inline-block;width:.75rem;height:.75rem;border-radius:2px;margin-right:.4rem;vertical-align:middle`}></span>
-                  {shortPartyLabel(party)}
-                </td>
-                <td class="num">{row.n?.toLocaleString?.() || row.n}</td>
-                <td class="num">{(row.mae * 100).toFixed(2)}pp</td>
-                <td class="num">{row.signed_bias > 0 ? "+" : ""}{(row.signed_bias * 100).toFixed(2)}pp</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h3 style="margin-top:var(--space-lg)">Per-party vote-share error (live)</h3>
+        <PartyBars rows={perPartyMaeRows} large={true} />
         <p class="caption">
-          A positive signed bias means we predicted that party would win <em>more</em> share than they did.
-          Reform is +3.35pp (we ran them slightly hot on average) — Greens are -4.04pp (we ran them cold).
+          Bar width = MAE relative to the worst per-party error. A positive signed bias (red) means we
+          predicted that party would win <em>more</em> share than they did; negative (blue) means we
+          ran them <em>cold</em>. Reform was +3.35pp (slightly hot); Greens were −4.04pp (cold).
         </p>
       </>
     )}

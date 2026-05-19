@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import StatCard from "../../../components/StatCard.astro";
 import {
   loadIdentity,
   loadPredictions,
@@ -211,22 +212,29 @@ const description = `${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp
         <p class="eyebrow">How accurate was the model here?</p>
         <h2>Our 7 May 2026 forecast for {councilName}</h2>
       </div>
-      <p>
-        We scored our locked, sha256-witnessed May 7 forecast against the actual count across the {ballotsScored}{" "}
-        {ballotsScored === 1 ? "ward" : "wards"} we have results for in {councilName}.
-      </p>
-      <div class="backtest-callout">
-        <strong>
-          {winnerAcc >= 0.5 ? "✓" : "✗"} Winners called correctly in {(winnerAcc * 100).toFixed(0)}%
-          of {councilName}'s wards
-        </strong>
-        — that's {winnersCorrect} out of {ballotsScored}.
-        <span class="backtest-detail">
-          Major-party MAE: <strong>{(majorMae * 100).toFixed(2)}pp</strong> — the average gap between
-          our predicted vote share and the actual share, per major party.
-        </span>
+      <div class="stat-card-row">
+        <StatCard
+          value={`${(winnerAcc * 100).toFixed(0)}%`}
+          label="winners called correctly across this council's wards"
+          accent={winnerAcc >= 0.7 ? "var(--status-good-text)" : winnerAcc >= 0.4 ? undefined : "var(--status-bad-text)"}
+          trend={`${winnersCorrect} / ${ballotsScored}`}
+          trendDirection="flat"
+        />
+        <StatCard
+          value={`${(majorMae * 100).toFixed(2)}pp`}
+          label="major-party MAE — average gap between predicted and actual share"
+        />
+        {councilBacktest && (
+          <StatCard
+            value={`${(councilBacktest.reform_signed_bias_pp >= 0 ? "+" : "")}${councilBacktest.reform_signed_bias_pp.toFixed(2)}pp`}
+            label="Reform UK signed bias — positive = predicted hot, negative = predicted cold"
+            accent={partyColour("Reform UK")}
+            trendDirection={councilBacktest.reform_signed_bias_pp > 0 ? "up" : councilBacktest.reform_signed_bias_pp < 0 ? "down" : "flat"}
+          />
+        )}
       </div>
-      <p class="muted-row">
+      <p class="muted-row" style="margin-top:var(--space-md)">
+        Locked, sha256-witnessed forecast scored against the actual count.
         <a href="/past-results/">See the full national accuracy audit →</a>
       </p>
     </section>

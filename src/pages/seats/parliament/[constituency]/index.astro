@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import PartyBars from "../../../../components/PartyBars.astro";
 import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
 import { shortPartyLabel } from "../../../../lib/siteData";
 
@@ -193,23 +194,25 @@ const regionLabel = record.region?.replace(/_/g, " ");
           Major-party MAE: <strong>{(backtestMae * 100).toFixed(2)}pp</strong> — the average gap between our predicted vote share and the actual share, per major party.
         </span>
       </div>
-      <table class="seat-table">
-        <thead><tr><th>Party</th><th class="num">Predicted</th><th class="num">Actual</th><th class="num">Gap</th></tr></thead>
-        <tbody>
-          {backtestRows.map((r) => (
-            <tr>
-              <td><span class="party-pill" style={`background:${partyColour(r.party)}`}></span> {shortPartyLabel(r.party)}</td>
-              <td class="num">{(r.predicted * 100).toFixed(1)}%</td>
-              <td class="num">{(r.actual * 100).toFixed(1)}%</td>
-              <td class="num">
-                <span class={r.delta > 0 ? "swing-up" : (r.delta < 0 ? "swing-down" : "swing-flat")}>
-                  {r.delta > 0 ? "+" : ""}{(r.delta * 100).toFixed(1)}pp
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div class="backtest-compare-grid">
+        <div class="backtest-compare-panel">
+          <p class="backtest-compare-label">Predicted</p>
+          <PartyBars
+            rows={backtestRows.map((r) => ({ party: r.party, pct: r.predicted }))}
+          />
+        </div>
+        <div class="backtest-compare-panel">
+          <p class="backtest-compare-label">Actual on 4 July 2024</p>
+          <PartyBars
+            rows={backtestRows.map((r) => ({
+              party: r.party,
+              pct: r.actual,
+              annotation: `${r.delta > 0 ? "+" : ""}${(r.delta * 100).toFixed(1)}pp`,
+              annotationDirection: r.delta > 0 ? "up" : r.delta < 0 ? "down" : "flat",
+            }))}
+          />
+        </div>
+      </div>
       <p class="caption">
         Positive gap = we predicted that party would win more share than they did. See the {" "}
         <a href="/data-quality/ge-backtest/">full GE backtest across all 650 seats</a> for the model's national accuracy.
