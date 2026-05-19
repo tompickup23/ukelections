@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
-import { loadGePredictions, partyColour } from "../../../../lib/predictions";
+import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
 import { shortPartyLabel } from "../../../../lib/siteData";
 
 export async function getStaticPaths() {
@@ -8,12 +8,63 @@ export async function getStaticPaths() {
   const out = [] as any[];
   for (const [slug, p] of Object.entries(ge.predictions || {})) {
     if (!(p as any)?.prediction) continue;
-    out.push({ params: { constituency: slug }, props: { record: p } });
+    out.push({
+      params: { constituency: slug },
+      props: { record: p, backtest: loadGeBacktestForSeat(slug) },
+    });
   }
   return out;
 }
 
-const { record } = Astro.props as { record: any };
+const { record, backtest } = Astro.props as { record: any; backtest: any };
+
+// Compute per-seat backtest stats (model's predicted shares vs actual on
+// 4 July 2024). Falls back to null where no backtest row exists — e.g.
+// new boundary-change constituencies.
+type BtRow = {
+  party: string;
+  predicted: number;
+  actual: number;
+  delta: number;
+};
+let backtestRows: BtRow[] = [];
+let backtestPredictedWinner: string | null = null;
+let backtestActualWinner: string | null = null;
+let backtestWinnerCorrect = false;
+let backtestMae = 0;
+if (backtest?.predicted && backtest?.actual) {
+  const parties = new Set<string>([
+    ...Object.keys(backtest.predicted),
+    ...Object.keys(backtest.actual),
+  ]);
+  const tracked = Array.from(parties).filter(
+    (p) => (backtest.predicted[p] || 0) > 0.005 || (backtest.actual[p] || 0) > 0.005,
+  );
+  backtestRows = tracked
+    .map((p) => ({
+      party: p,
+      predicted: backtest.predicted[p] || 0,
+      actual: backtest.actual[p] || 0,
+      delta: (backtest.predicted[p] || 0) - (backtest.actual[p] || 0),
+    }))
+    .sort((a, b) => b.actual - a.actual);
+  const winnerOf = (m: Record<string, number>) =>
+    Object.entries(m).sort((a, b) => (b[1] as number) - (a[1] as number))[0]?.[0] || null;
+  backtestPredictedWinner = winnerOf(backtest.predicted);
+  backtestActualWinner = winnerOf(backtest.actual);
+  backtestWinnerCorrect = backtestPredictedWinner === backtestActualWinner;
+  // MAE over the four major parties (Lab/Con/LD/Reform/Green) that are
+  // present in either predicted or actual.
+  const major = ["Labour", "Conservative", "Reform UK", "Liberal Democrats", "Green Party"];
+  const maeRows = major.filter(
+    (p) => (backtest.predicted[p] || 0) > 0 || (backtest.actual[p] || 0) > 0,
+  );
+  const maeSum = maeRows.reduce(
+    (s, p) => s + Math.abs((backtest.predicted[p] || 0) - (backtest.actual[p] || 0)),
+    0,
+  );
+  backtestMae = maeRows.length ? maeSum / maeRows.length : 0;
+}
 const ranked = Object.entries(record.prediction || {})
   .sort((a: any, b: any) => (b[1].pct || 0) - (a[1].pct || 0));
 const ge2024Ranked = (record.ge2024?.candidates || [])
@@ -120,6 +171,51 @@ const regionLabel = record.region?.replace(/_/g, " ");
       <p class="caption">Source: <a href={record.ge2024.source_url}>Returning officer declaration</a></p>
     )}
   </section>
+
+  {backtestRows.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">How accurate is the model here?</p>
+        <h2>Our 2024 backtest for this constituency</h2>
+      </div>
+      <p>
+        We replayed the same model architecture against the 4 July 2024 general election using only the data a
+        forecaster running the model in May 2024 would have known. Here's what it would have predicted for
+        {" "}<strong>{record.name}</strong> — and what actually happened.
+      </p>
+      <div class="backtest-callout">
+        <strong>
+          {backtestWinnerCorrect ? "✓ Winner called correctly" : "✗ Winner missed"}
+        </strong>
+        — predicted <span class="party-pill" style={`background:${partyColour(backtestPredictedWinner ?? "")}`}></span> {shortPartyLabel(backtestPredictedWinner ?? "")},
+        actual <span class="party-pill" style={`background:${partyColour(backtestActualWinner ?? "")}`}></span> {shortPartyLabel(backtestActualWinner ?? "")}.
+        <span class="backtest-detail">
+          Major-party MAE: <strong>{(backtestMae * 100).toFixed(2)}pp</strong> — the average gap between our predicted vote share and the actual share, per major party.
+        </span>
+      </div>
+      <table class="seat-table">
+        <thead><tr><th>Party</th><th class="num">Predicted</th><th class="num">Actual</th><th class="num">Gap</th></tr></thead>
+        <tbody>
+          {backtestRows.map((r) => (
+            <tr>
+              <td><span class="party-pill" style={`background:${partyColour(r.party)}`}></span> {shortPartyLabel(r.party)}</td>
+              <td class="num">{(r.predicted * 100).toFixed(1)}%</td>
+              <td class="num">{(r.actual * 100).toFixed(1)}%</td>
+              <td class="num">
+                <span class={r.delta > 0 ? "swing-up" : (r.delta < 0 ? "swing-down" : "swing-flat")}>
+                  {r.delta > 0 ? "+" : ""}{(r.delta * 100).toFixed(1)}pp
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="caption">
+        Positive gap = we predicted that party would win more share than they did. See the {" "}
+        <a href="/data-quality/ge-backtest/">full GE backtest across all 650 seats</a> for the model's national accuracy.
+      </p>
+    </section>
+  )}
 
   <details class="section method-details">
     <summary>How this forecast was built</summary>
