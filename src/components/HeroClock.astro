@@ -1,0 +1,31 @@
+---
+/**
+ * HeroClock.astro — giant tabular numeral countdown / count-up.
+ *
+ * Use on every page where a date-relative number is the headline stat:
+ *   - Homepage hero ("30 days to polling")
+ *   - Makerfield detail hero
+ *   - Future by-election pages
+ *
+ * Props:
+ *   value: number or string ("30", "1,234", "Today")
+ *   label: descriptor below the number ("days to polling")
+ *   ariaLabel: optional override of the wrapping <aside> aria-label
+ *
+ * Layout responsibility is OUTSIDE this component — wrap it in a grid
+ * cell. On desktop, the .hero-byelection-grid puts the clock to the
+ * right of the headline; on mobile it stacks below.
+ */
+interface Props {
+  value: number | string;
+  label: string;
+  ariaLabel?: string;
+}
+
+const { value, label, ariaLabel = "Headline stat" } = Astro.props;
+---
+
+<aside class="hero-byelection-clock" aria-label={ariaLabel}>
+  <span class="clock-number">{value}</span>
+  <span class="clock-label">{label}</span>
+</aside>

@@ -1,0 +1,82 @@
+---
+/**
+ * StatCard.astro — a single big-number card with label + optional
+ * sparkline / icon / trend annotation.
+ *
+ * Replaces the existing .accuracy-grid > article patterns scattered
+ * across /past-results/, /councils/ "At a glance", /seats/[council]/
+ * status grid etc. Same data shape, polished aesthetic.
+ *
+ * Props:
+ *   value: the big number, formatted by the caller (e.g. "55.2%")
+ *   label: the small descriptor below
+ *   accent: optional CSS colour for the value (e.g. partyColour())
+ *   trend: optional small-delta annotation like "+2.5pp" / "-3.1pp"
+ *   trendDirection: "up" | "down" | "flat"
+ *   sparkline: optional array of numbers — renders an inline SVG
+ *              sparkline above the label. Use for trend-over-time cards.
+ *   sparklineColor: optional CSS colour for the sparkline stroke
+ *
+ * Placement: drop into a CSS grid container (the existing
+ * .accuracy-grid + .stat-card-row classes both work).
+ */
+interface Props {
+  value: string;
+  label: string;
+  accent?: string | null;
+  trend?: string | null;
+  trendDirection?: "up" | "down" | "flat";
+  sparkline?: number[] | null;
+  sparklineColor?: string | null;
+}
+
+const {
+  value,
+  label,
+  accent = null,
+  trend = null,
+  trendDirection = "flat",
+  sparkline = null,
+  sparklineColor = "var(--accent-3)",
+} = Astro.props;
+
+// Compute sparkline path if data given. Use a fixed viewBox so the
+// SVG always sits in a 80×24 box; map data linearly into that range.
+function sparklinePath(values: number[]): string {
+  if (!values || values.length < 2) return "";
+  const W = 80, H = 24, PAD = 2;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const innerW = W - PAD * 2;
+  const innerH = H - PAD * 2;
+  const stepX = innerW / (values.length - 1);
+  const points = values.map((v, i) => {
+    const x = PAD + i * stepX;
+    const y = PAD + innerH - ((v - min) / range) * innerH;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  return `M${points.join(" L")}`;
+}
+
+const sparkD = sparkline ? sparklinePath(sparkline) : null;
+---
+
+<article class="stat-card">
+  <span class="stat-card-value" style={accent ? `color:${accent}` : undefined}>
+    {value}
+  </span>
+  {trend && (
+    <span
+      class={`stat-card-trend ${trendDirection === "up" ? "swing-up" : trendDirection === "down" ? "swing-down" : "swing-flat"}`}
+    >
+      {trend}
+    </span>
+  )}
+  {sparkD && (
+    <svg class="stat-card-spark" viewBox="0 0 80 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d={sparkD} fill="none" stroke={sparklineColor} stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" />
+    </svg>
+  )}
+  <span class="stat-card-label">{label}</span>
+</article>

@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CommonsHorseshoe from "../components/CommonsHorseshoe.astro";
+import HeroClock from "../components/HeroClock.astro";
+import PartyBars from "../components/PartyBars.astro";
+import RaceBar from "../components/RaceBar.astro";
 import { partyColour, loadGeSummary } from "../lib/predictions";
 import {
   loadGeHeadline,
@@ -57,49 +60,18 @@ const description = heroContest
           </p>
         </header>
 
-        <aside class="hero-byelection-clock" aria-label="Days until polling">
-          <span class="clock-number">{heroContest.days_until}</span>
-          <span class="clock-label">{heroContest.days_until === 1 ? "day to polling" : "days to polling"}</span>
-        </aside>
+        <HeroClock
+          value={heroContest.days_until}
+          label={heroContest.days_until === 1 ? "day to polling" : "days to polling"}
+          ariaLabel="Days until polling"
+        />
       </div>
 
       {heroContest.central_shares.length > 0 && (
-        <div class="hero-race">
-          <p class="hero-race-title">Central forecast — projected vote share</p>
-          <div class="hero-race-bar" role="img" aria-label="Stacked bar chart of projected vote shares by party">
-            {heroContest.central_shares.map((s) => {
-              const cand = heroContest.key_candidates.find((c) => c.party === s.party);
-              const wide = s.pct >= 0.08;
-              return (
-                <div
-                  class="hero-race-segment"
-                  style={`flex-basis:${(s.pct * 100).toFixed(2)}%; background:${partyColour(s.party)}`}
-                  title={`${shortPartyLabel(s.party)} ${(s.pct * 100).toFixed(1)}%${cand ? ` — ${cand.candidate}` : ""}`}
-                >
-                  {wide && (
-                    <span class="hero-race-label">
-                      <span class="hero-race-party">{shortPartyLabel(s.party)}</span>
-                      <span class="hero-race-pct">{(s.pct * 100).toFixed(1)}%</span>
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <ul class="hero-race-legend">
-            {heroContest.central_shares.map((s) => {
-              const cand = heroContest.key_candidates.find((c) => c.party === s.party);
-              return (
-                <li>
-                  <span class="hero-race-swatch" style={`background:${partyColour(s.party)}`}></span>
-                  <span class="hero-race-legend-party">{shortPartyLabel(s.party)}</span>
-                  <span class="hero-race-legend-pct">{(s.pct * 100).toFixed(1)}%</span>
-                  {cand && <span class="hero-race-legend-cand">{cand.candidate}</span>}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <RaceBar
+          shares={heroContest.central_shares}
+          candidates={heroContest.key_candidates}
+        />
       )}
 
       <div class="action-row" aria-label="Primary actions">
@@ -125,17 +97,8 @@ const description = heroContest
     <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
 
     <h3 style="margin-top:1.5rem">National vote share — current Westminster polling</h3>
-    <div class="party-bars">
-      {topNationalShares.map((s) => (
-        <div class="bar-row">
-          <span class="bar-label">{shortPartyLabel(s.party)}</span>
-          <div class="bar-track">
-            <div class="bar-fill" style={`width:${(s.share * 100).toFixed(1)}%; background:${partyColour(s.party)}`}></div>
-          </div>
-          <span class="bar-value">{(s.share * 100).toFixed(1)}%</span>
-        </div>
-      ))}
-    </div>
+    <PartyBars rows={topNationalShares.map(s => ({ party: s.party, pct: s.share }))} />
+
     <p class="caption">
       Wikipedia 14-day rolling average + manual Restore Britain overlay (most pollsters embed Restore inside the
       "Others" cell rather than breaking it out separately).

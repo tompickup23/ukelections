@@ -20,8 +20,8 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
   </section>
 
   <section class="section">
-    <div class="backtest-callout" style="border-left-color:#9a3412;background:#fff7ed">
-      <strong style="color:#9a3412">⚠ Scaffold forecast — Welsh polling is stale and the boundaries are brand new.</strong>
+    <div class="backtest-callout backtest-callout--warn">
+      <strong>⚠ Scaffold forecast — Welsh polling is stale and the boundaries are brand new.</strong>
       <span class="backtest-detail">
         The polling input is a pre-launch placeholder (file metadata flags
         <code>refresh_required_by: 2026-05-01</code>) and the 14-day Wikipedia rolling-average parser

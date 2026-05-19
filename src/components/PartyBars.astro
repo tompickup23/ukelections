@@ -1,0 +1,77 @@
+---
+/**
+ * PartyBars.astro — vertical list of horizontal party-share bars.
+ *
+ * This is the workhorse chart of the site. Used on:
+ *   - Homepage National vote share
+ *   - /forecasts/general-election/ seat tally + national share
+ *   - /seats/[council]/ post-May-7 composition
+ *   - /past-results/ seats-won + per-party MAE
+ *   - /by-elections/makerfield/ probability-weighted central forecast
+ *
+ * Each row: party-label (left) + filled track (centre) + value (right).
+ * Annotation field is optional for swing/delta callouts.
+ *
+ * Props:
+ *   rows: ordered list of {party, pct, value?, annotation?} where pct
+ *         is 0..1 (used for bar width). value is the right-hand string
+ *         (defaults to formatted percentage). annotation is a small
+ *         swing pill like "+2.5pp".
+ *   large: bool — use the .party-bars-large variant (taller bars)
+ *   colourOverride: optional fn(party) -> CSS color (otherwise partyColour)
+ */
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface Row {
+  party: string;
+  pct: number;
+  value?: string | null;
+  annotation?: string | null;
+  annotationDirection?: "up" | "down" | "flat";
+}
+
+interface Props {
+  rows: Row[];
+  large?: boolean;
+  colourOverride?: ((party: string) => string) | null;
+}
+
+const { rows, large = false, colourOverride = null } = Astro.props;
+
+function fmtValue(r: Row): string {
+  if (r.value !== undefined && r.value !== null) return r.value;
+  return `${(r.pct * 100).toFixed(1)}%`;
+}
+
+const colourOf = (party: string): string =>
+  colourOverride ? colourOverride(party) : partyColour(party);
+---
+
+<div class={`party-bars ${large ? "party-bars-large" : ""}`}>
+  {rows.map((r) => (
+    <div class="bar-row">
+      <span class="bar-label">{shortPartyLabel(r.party)}</span>
+      <div class="bar-track">
+        <div
+          class="bar-fill"
+          style={`width:${Math.max(0, Math.min(100, r.pct * 100)).toFixed(1)}%; background:${colourOf(r.party)}`}
+        ></div>
+      </div>
+      <span class="bar-value">
+        {fmtValue(r)}
+        {r.annotation && (
+          <span
+            class={
+              r.annotationDirection === "up"
+                ? "swing-up"
+                : r.annotationDirection === "down"
+                  ? "swing-down"
+                  : "swing-flat"
+            }
+          >{r.annotation}</span>
+        )}
+      </span>
+    </div>
+  ))}
+</div>

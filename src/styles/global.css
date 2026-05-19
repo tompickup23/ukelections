@@ -2,17 +2,90 @@
 @import "@fontsource-variable/sora";
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
+
+  /* === Surfaces + text === */
   --bg: #f6f8fb;
   --surface: #ffffff;
+  --surface-muted: #f7f7f5;
   --ink: #111827;
   --ink-soft: #273447;
   --muted: #667085;
   --border: #d4dce6;
-  --accent: #c1121f;
-  --accent-2: #138a52;
-  --accent-3: #1d4e89;
   --shadow: 0 10px 28px rgba(17, 24, 39, 0.1);
+
+  /* === Party-aligned accents === */
+  --accent: #c1121f;            /* Labour red (primary brand accent) */
+  --accent-2: #138a52;          /* Green party / verdant secondary */
+  --accent-3: #1d4e89;          /* Conservative blue / hero accent */
+  --accent-teal: #12b5cb;       /* Reform UK / cyan secondary */
+  --accent-teal-deep: #0a6c7a;  /* Reform UK shadowed companion */
+  --reform-success: #0e7c4a;    /* Reform-majority success indicator */
+
+  /* === Status palette === */
+  --status-warn-bg: #fff7ed;
+  --status-warn-border: #fdba74;
+  --status-warn-text: #9a3412;
+  --status-warn-dark: #78350f;
+  --status-warn-tint: #fef3c7;
+  --status-good-text: #167d3a;
+  --status-bad-text: #b5331f;
+
+  /* === Tooltip / inverted surfaces (kept explicit for dark-mode flip) === */
+  --tooltip-bg: #111827;
+  --tooltip-fg: #ffffff;
+
+  /* === Spacing scale === */
+  --space-2xs: 0.25rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+
+  /* === Type scale anchors (fluid where it matters) === */
+  --text-display: clamp(2.2rem, 6vw, 4rem);
+  --text-h1:      clamp(1.8rem, 4.5vw, 2.75rem);
+  --text-h2:      clamp(1.4rem, 2.8vw, 1.8rem);
+  --text-h3:      1.2rem;
+  --text-body:    1rem;
+  --text-small:   0.88rem;
+  --text-eyebrow: 0.78rem;
+
+  /* === Focus ring === */
+  --focus-ring: rgba(29, 78, 137, 0.8);
+}
+
+/* === Dark mode (system preference; no manual toggle in v1) === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-muted: #1c2128;
+    --ink: #e6edf3;
+    --ink-soft: #9ba6b3;
+    --muted: #6e7681;
+    --border: #30363d;
+    --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+
+    /* Tooltip stays high-contrast — flip to a light surface in dark mode */
+    --tooltip-bg: #e6edf3;
+    --tooltip-fg: #0d1117;
+
+    /* Status palette: tone for dark backgrounds */
+    --status-warn-bg: rgba(252, 211, 77, 0.08);
+    --status-warn-border: rgba(252, 211, 77, 0.45);
+    --status-warn-text: #fbbf24;
+    --status-warn-tint: rgba(252, 211, 77, 0.14);
+    --status-warn-dark: #fde68a;
+    --status-good-text: #4ade80;
+    --status-bad-text: #f87171;
+
+    /* Focus ring stays visible on dark */
+    --focus-ring: rgba(125, 211, 252, 0.9);
+  }
 }
 
 * {
@@ -28,9 +101,23 @@ body {
   min-height: 100vh;
   color: var(--ink);
   font-family: "Manrope", system-ui, sans-serif;
-  background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 48%, #edf7f1 100%);
+  background:
+    linear-gradient(180deg,
+      var(--bg) 0%,
+      var(--surface) 48%,
+      color-mix(in oklab, var(--accent-2) 8%, var(--surface)) 100%
+    );
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background:
+      radial-gradient(circle at 0% 0%, color-mix(in oklab, var(--accent-teal) 6%, transparent) 0%, transparent 35%),
+      radial-gradient(circle at 100% 100%, color-mix(in oklab, var(--accent-3) 8%, transparent) 0%, transparent 40%),
+      var(--bg);
+  }
 }
 
 a {
@@ -41,7 +128,7 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 [tabindex]:focus-visible {
-  outline: 3px solid rgba(29, 78, 137, 0.8);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -530,8 +617,8 @@ input:focus-visible,
   font-size: 0.88em;
 }
 
-.swing-up { color: #167d3a; font-weight: 800; }
-.swing-down { color: #b5331f; font-weight: 800; }
+.swing-up { color: var(--status-good-text); font-weight: 800; }
+.swing-down { color: var(--status-bad-text); font-weight: 800; }
 .swing-flat { color: var(--muted); }
 
 /* Big-number accuracy grid */
@@ -859,9 +946,9 @@ input:focus-visible,
   display: inline-block;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  background: #fef3c7;
-  border: 1px solid #f59e0b;
-  color: #78350f;
+  background: var(--status-warn-tint);
+  border: 1px solid var(--status-warn-border);
+  color: var(--status-warn-dark);
   font-size: 0.8rem;
   font-weight: 700;
   white-space: nowrap;
@@ -874,7 +961,7 @@ input:focus-visible,
 
 .reform-majority-cell {
   font-weight: 800;
-  color: #0e7c4a;
+  color: var(--reform-success);
 }
 
 .council-table td a {
@@ -960,9 +1047,9 @@ input:focus-visible,
 }
 
 .hero-chip.class {
-  background: #fff7ed;
-  border-color: #fdba74;
-  color: #9a3412;
+  background: var(--status-warn-bg);
+  border-color: var(--status-warn-border);
+  color: var(--status-warn-text);
 }
 
 /* === Upcoming elections grid (homepage section) === */
@@ -1034,27 +1121,27 @@ input:focus-visible,
 .upcoming-card .days-pill {
   display: inline-block;
   padding: 0.25rem 0.65rem;
-  background: rgba(18, 181, 203, 0.12);
-  border: 1px solid rgba(18, 181, 203, 0.4);
+  background: color-mix(in oklab, var(--accent-teal) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent-teal) 40%, transparent);
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 800;
-  color: #0a6c7a;
+  color: var(--accent-teal-deep);
 }
 
 .upcoming-card .class-pill {
   display: inline-block;
   padding: 0.25rem 0.65rem;
-  background: #fff7ed;
-  border: 1px solid #fdba74;
+  background: var(--status-warn-bg);
+  border: 1px solid var(--status-warn-border);
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #9a3412;
+  color: var(--status-warn-text);
 }
 
 .upcoming-aside {
-  background: var(--surface-muted, #f7f7f5);
+  background: var(--surface-muted);
   border-style: dashed;
 }
 
@@ -1067,9 +1154,18 @@ input:focus-visible,
 .backtest-callout {
   border-left: 4px solid var(--accent-3);
   padding: 0.85rem 1.1rem;
-  background: rgba(18, 181, 203, 0.05);
+  background: color-mix(in oklab, var(--accent-teal) 5%, transparent);
   border-radius: 0 8px 8px 0;
   margin: 0.75rem 0;
+}
+
+.backtest-callout--warn {
+  border-left-color: var(--status-warn-text);
+  background: var(--status-warn-bg);
+}
+
+.backtest-callout--warn strong {
+  color: var(--status-warn-text);
 }
 
 .backtest-callout strong {
@@ -1275,8 +1371,8 @@ table.council-table th {
   position: absolute;
   z-index: 5;
   pointer-events: none;
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
   padding: 0.55rem 0.8rem;
   border-radius: 8px;
   font-size: 0.88rem;
@@ -1367,7 +1463,7 @@ table.council-table th {
   margin-bottom: 3rem;
   background:
     radial-gradient(circle at 95% 0%, color-mix(in oklab, var(--ink-soft) 6%, transparent) 0%, transparent 35%),
-    radial-gradient(circle at 0% 90%, color-mix(in oklab, #12b5cb 8%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 0% 90%, color-mix(in oklab, var(--accent-teal) 8%, transparent) 0%, transparent 40%),
     var(--surface);
   overflow: hidden;
 }
@@ -1703,5 +1799,68 @@ table.council-table th {
   filter: brightness(1.0) saturate(1.05);
   stroke: rgba(0, 0, 0, 0.95);
   stroke-width: 1.6;
+}
+
+
+/* === StatCard component === */
+
+.stat-card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.stat-card {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.6rem;
+  align-items: baseline;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.stat-card-value {
+  grid-column: 1 / 2;
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.stat-card-trend {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  align-self: center;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.04);
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.stat-card-spark {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  align-self: center;
+  width: 80px;
+  height: 24px;
+  display: block;
+}
+
+.stat-card-label {
+  grid-column: 1 / -1;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
 }
 

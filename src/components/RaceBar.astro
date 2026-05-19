@@ -1,0 +1,102 @@
+---
+/**
+ * RaceBar.astro — horizontal stacked-bar race showing party vote shares.
+ *
+ * Lifted from the homepage hero v2. Now reusable across:
+ *   - Homepage Makerfield hero
+ *   - /by-elections/makerfield/ hero + Scenario A vs B side-by-side
+ *   - /past-results/ per-party MAE visualisation (where bars represent
+ *     error magnitude rather than vote share)
+ *
+ * Props:
+ *   shares: ordered list of {party, pct} where pct is 0..1
+ *   candidates: optional {party, candidate} list shown in the legend
+ *   height: px; default 64
+ *   showLegend: bool, default true
+ *   title: optional title rendered above the bar
+ *   ariaLabel: a11y label for the bar
+ *   labelMinPct: hide inline party label in segments narrower than this (default 0.08)
+ *
+ * Notes:
+ *   - Segment fills inherit from partyColour() for consistency
+ *   - Yellow-on-white parties (LD, SNP) get dark text via the
+ *     attribute-selector rule in global.css
+ *   - Tooltip via <title> child on each segment (browser-native)
+ */
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface Share {
+  party: string;
+  pct: number;
+}
+
+interface Candidate {
+  party: string;
+  candidate: string;
+}
+
+interface Props {
+  shares: Share[];
+  candidates?: Candidate[];
+  height?: number;
+  showLegend?: boolean;
+  title?: string | null;
+  ariaLabel?: string;
+  labelMinPct?: number;
+}
+
+const {
+  shares,
+  candidates = [],
+  height = 64,
+  showLegend = true,
+  title = "Central forecast — projected vote share",
+  ariaLabel = "Stacked bar chart of projected vote shares by party",
+  labelMinPct = 0.08,
+} = Astro.props;
+---
+
+<div class="hero-race">
+  {title && <p class="hero-race-title">{title}</p>}
+  <div
+    class="hero-race-bar"
+    role="img"
+    aria-label={ariaLabel}
+    style={`height:${height}px`}
+  >
+    {shares.map((s) => {
+      const cand = candidates.find((c) => c.party === s.party);
+      const wide = s.pct >= labelMinPct;
+      return (
+        <div
+          class="hero-race-segment"
+          style={`flex-basis:${(s.pct * 100).toFixed(2)}%; background:${partyColour(s.party)}`}
+          title={`${shortPartyLabel(s.party)} ${(s.pct * 100).toFixed(1)}%${cand ? ` — ${cand.candidate}` : ""}`}
+        >
+          {wide && (
+            <span class="hero-race-label">
+              <span class="hero-race-party">{shortPartyLabel(s.party)}</span>
+              <span class="hero-race-pct">{(s.pct * 100).toFixed(1)}%</span>
+            </span>
+          )}
+        </div>
+      );
+    })}
+  </div>
+  {showLegend && (
+    <ul class="hero-race-legend">
+      {shares.map((s) => {
+        const cand = candidates.find((c) => c.party === s.party);
+        return (
+          <li>
+            <span class="hero-race-swatch" style={`background:${partyColour(s.party)}`}></span>
+            <span class="hero-race-legend-party">{shortPartyLabel(s.party)}</span>
+            <span class="hero-race-legend-pct">{(s.pct * 100).toFixed(1)}%</span>
+            {cand && <span class="hero-race-legend-cand">{cand.candidate}</span>}
+          </li>
+        );
+      })}
+    </ul>
+  )}
+</div>
