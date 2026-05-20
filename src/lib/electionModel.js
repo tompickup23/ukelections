@@ -17,6 +17,7 @@ import { applyStrongTransitionSwing as applyStrongTransitionSwingExternal } from
 import { applyTacticalVoting as applyTacticalVotingExternal } from './tacticalVoting.js';
 import { applyIncumbencyAdjustment as applyIncumbencyAdjustmentExternal } from './incumbencyTracker.js';
 import { applyReformDemographicCeiling, applyIndependentCeiling, applyEnglishIdentityFloor, applyAgeStructureAdjustment } from './pconDemographicCeilings.js';
+import { blendPredecessorShares } from './wardPredecessors.ts';
 
 // ---------------------------------------------------------------------------
 // Default assumptions (user can override via UI sliders)
@@ -595,15 +596,42 @@ export function predictWard(
   candidates2026 = null,
   ethnicProjections = null,
   besPrior = null,
+  wardContext = null,
 ) {
   const methodology = [];
 
   // Step 1: Baseline
-  const baseline = getBaseline(wardData, 'borough');
+  let baseline = getBaseline(wardData, 'borough');
+  let baselineSource = 'direct';
+
+  // 20 May 2026 — ward predecessor inheritance. When a ward has no
+  // historical baseline AND `wardContext` supplies a wardKey + a lookup
+  // into a sibling-ward shares table, blend predecessor wards' shares
+  // per data/identity/ward-predecessors.json. Closes the post-Wigan-2023
+  // blind spot (Bryn-with-Ashton-North over-performed by +5pp).
+  // See .claude/rules/lessons.md.
+  if (!baseline && wardContext?.wardKey && typeof wardContext.predecessorLookup === 'function') {
+    const blended = blendPredecessorShares(wardContext.wardKey, wardContext.predecessorLookup);
+    if (blended && Object.keys(blended).length > 0) {
+      const blendedYear = wardContext.blendedYear || new Date().getFullYear() - 3;
+      const blendedDate = wardContext.blendedDate || `${blendedYear}-05-01`;
+      baseline = {
+        parties: blended,
+        date: blendedDate,
+        year: blendedYear,
+        turnout: null,
+        turnoutVotes: null,
+        electorate: null,
+        staleness: Math.max(0, new Date().getFullYear() - blendedYear),
+      };
+      baselineSource = 'predecessor_blend';
+    }
+  }
+
   if (!baseline) {
     return {
       prediction: null,
-      methodology: [{ step: 1, name: 'Baseline', description: 'No historical election data for this ward' }],
+      methodology: [{ step: 1, name: 'Baseline', description: 'No historical election data for this ward (and no predecessor mapping)' }],
       confidence: 'none',
     };
   }
@@ -611,9 +639,11 @@ export function predictWard(
   methodology.push({
     step: 1,
     name: 'Baseline',
-    description: `Most recent borough result (${baseline.date})` +
-      (baseline.staleness > 8 ? `. ${baseline.staleness} years old, applying stale baseline decay` : ''),
-    data: { ...baseline.parties },
+    description: baselineSource === 'predecessor_blend'
+      ? `Predecessor-blended baseline (no direct history; see ward-predecessors.json)`
+      : `Most recent borough result (${baseline.date})` +
+        (baseline.staleness > 8 ? `. ${baseline.staleness} years old, applying stale baseline decay` : ''),
+    data: { ...baseline.parties, _source: baselineSource },
   });
 
   // Tag wardData with staleness for incumbency calculation
@@ -887,9 +917,33 @@ export function findDefenderIndex(holders, defender) {
   return 0;
 }
 
-export function predictCouncil(electionsData, wardsUp, assumptions, nationalPolling, ge2024Result, demographicsMap, deprivationMap, constituencyMap, lcc2025, modelParams, fiscalData, integrityData, candidates2026Map, ethnicProjectionMap, lcc2025Reference, besPriorMap = null) {
+export function predictCouncil(electionsData, wardsUp, assumptions, nationalPolling, ge2024Result, demographicsMap, deprivationMap, constituencyMap, lcc2025, modelParams, fiscalData, integrityData, candidates2026Map, ethnicProjectionMap, lcc2025Reference, besPriorMap = null, councilSlug = null) {
   const wardResults = {};
   const seatTotals = {};
+
+  // 20 May 2026 — ward predecessor inheritance lookup. Resolves `<council>/<ward>`
+  // predecessor keys to the most recent shares record from electionsData.wards.
+  // Used only when a ward has no direct baseline; the council slug is best-effort
+  // (callers may pass it explicitly or it falls back to electionsData.meta.council_slug).
+  const resolvedCouncilSlug = councilSlug || electionsData.meta?.council_slug || electionsData.meta?.councilSlug || null;
+  const predecessorLookup = resolvedCouncilSlug
+    ? (key) => {
+      if (!key) return null;
+      // key is `<council>/<ward-slug>` — but electionsData.wards keys are ward names.
+      // Try both: strip council prefix and look up by trailing token (sluggified).
+      const parts = key.split('/');
+      const wardTail = parts[parts.length - 1];
+      const wards = electionsData.wards || {};
+      for (const [wname, wdata] of Object.entries(wards)) {
+        const wslug = String(wname).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        if (wslug === wardTail) {
+          const b = getBaseline(wdata, 'borough');
+          return b?.parties || null;
+        }
+      }
+      return null;
+    }
+    : null;
 
   // Get current seat counts: retained seats from non-contested wards,
   // and non-defending holders in contested wards (thirds rotation).
@@ -933,6 +987,11 @@ export function predictCouncil(electionsData, wardsUp, assumptions, nationalPoll
       ? { ...lcc2025, wardDivisionData }
       : wardDivisionData ? { wardDivisionData } : null;
 
+    const wardSlug = String(wardName).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const wardKey = resolvedCouncilSlug ? `${resolvedCouncilSlug}/${wardSlug}` : null;
+    const wardContext = wardKey && predecessorLookup
+      ? { wardKey, predecessorLookup, councilSlug: resolvedCouncilSlug }
+      : null;
     const result = predictWard(
       wardData,
       assumptions,
@@ -947,6 +1006,7 @@ export function predictCouncil(electionsData, wardsUp, assumptions, nationalPoll
       candidates2026Map?.[wardName] || null,
       ethnicProjectionMap?.[wardName] || null,
       besPriorMap?.[wardName] || null,
+      wardContext,
     );
 
     // Apply integrity adjustment if data provided (Step 4.5)
