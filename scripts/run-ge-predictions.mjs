@@ -130,7 +130,11 @@ function main() {
   try { pconDemographics = readJson("data/features/pcon-demographics.json"); } catch {}
   let standingDown = null;
   try { standingDown = readJson("data/identity/mps-standing-down.json"); } catch {}
+  // 20 May 2026 — local-party register (per-LAD Independent ceiling override)
+  let localRegister = null;
+  try { localRegister = readJson("data/identity/local-party-register.json"); } catch {}
   console.log(`  ${pcons.length} PCONs loaded`);
+  if (localRegister) console.log(`  ${localRegister.register?.length || 0} local-party register entries available`);
   if (pconPriors) console.log(`  ${Object.keys(pconPriors.priors || {}).length} PCON-level BES priors available (preferred)`);
   if (ladPriors) console.log(`  ${Object.keys(ladPriors.priors || {}).length} LAD-level BES priors available (fallback)`);
   if (pconDemographics) console.log(`  ${Object.keys(pconDemographics.by_pcon || {}).length} PCONs with Census 2021 demographics`);
@@ -205,6 +209,9 @@ function main() {
       byElectionWeight: 0.30,
       demographics: pcon.pcon24cd ? pconDemographics?.by_pcon?.[pcon.pcon24cd] || null : null,
       allowHighIndependent: standingDownMap[pcon.slug]?.allow_high_independent === true,
+      // PCON's primary LAD (first of lad24cds); register lookup is per-LAD.
+      lad24cd: Array.isArray(pcon.lad24cds) && pcon.lad24cds.length > 0 ? pcon.lad24cds[0] : null,
+      localRegister,
     };
     const result = predictConstituencyGE(constituency, polling, {}, opts);
     if (!result?.prediction) {
