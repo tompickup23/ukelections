@@ -4,6 +4,17 @@ import { loadPredictions, loadBacktest } from "../../../lib/predictions";
 
 const p = loadPredictions();
 const b = loadBacktest();
+
+// Defensive accessors so a missing backtest field never renders as
+// "undefined" or "NaN%" in the headline-accuracy paragraph. If any of
+// these three numbers is unavailable we drop the whole sentence.
+const backtestPredicted = typeof b?.totals?.predicted === "number" ? b.totals.predicted : null;
+const backtestWinnerAcc = typeof b?.winner_accuracy === "number" ? b.winner_accuracy : null;
+const backtestMaeAvg = typeof b?.overall_mae?.major_parties_avg === "number"
+  ? b.overall_mae.major_parties_avg
+  : null;
+const hasBacktestHeadline =
+  backtestPredicted !== null && backtestWinnerAcc !== null && backtestMaeAvg !== null;
 ---
 
 <BaseLayout
@@ -20,12 +31,20 @@ const b = loadBacktest();
 
   <section class="section prose-block">
     <h2>Headline accuracy</h2>
-    <p>
-      Calibrated against the May 2024 actual results across <strong>{b.totals.predicted.toLocaleString()} ward-elections</strong>:
-      <strong>{(b.winner_accuracy * 100).toFixed(1)}% winner accuracy</strong> and
-      <strong>{(b.overall_mae.major_parties_avg * 100).toFixed(2)}pp average per-party share error</strong> on the five major parties.
-      The same backtest, same code, same metric: <a href="/data-quality/2024-backtest/">/data-quality/2024-backtest/</a>.
-    </p>
+    {hasBacktestHeadline ? (
+      <p>
+        Calibrated against the May 2024 actual results across <strong>{backtestPredicted!.toLocaleString()} ward-elections</strong>:
+        <strong>{(backtestWinnerAcc! * 100).toFixed(1)}% winner accuracy</strong> and
+        <strong>{(backtestMaeAvg! * 100).toFixed(2)}pp average per-party share error</strong> on the five major parties.
+        The same backtest, same code, same metric: <a href="/data-quality/2024-backtest/">/data-quality/2024-backtest/</a>.
+      </p>
+    ) : (
+      <p>
+        The full backtest summary is regenerated each pipeline run. See
+        <a href="/data-quality/2024-backtest/">/data-quality/2024-backtest/</a> for the latest
+        winner-accuracy and per-party share error figures.
+      </p>
+    )}
 
     <h2>Model lineage</h2>
     <p>

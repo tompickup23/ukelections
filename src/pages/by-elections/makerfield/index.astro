@@ -30,6 +30,18 @@ const comparatorsWithData = comparators.filter((c: any) => c.council_2026);
 const compAvgLead = indicators.comparator_average_reform_lead_pp;
 const makerfieldLead = indicators.makerfield_reform_lead_pp;
 
+// Pull Abram 2024 → 2026 figures live from the dossier rather than
+// hardcoding them in prose. If the dossier shape ever changes upstream,
+// the narrative falls back to a neutral mention instead of leaking
+// undefined / NaN into the page.
+const abram = wardDossier.find((w: any) => w?.name === "Abram") || null;
+const abramInd2024 = abram?.result_2024_council?.shares?.["Independent"];
+const abramRef2026 = abram?.result_2026_council?.shares?.["Reform UK"];
+const abramHasData = typeof abramInd2024 === "number" && typeof abramRef2026 === "number";
+const abramInd2024Pct = abramHasData ? (abramInd2024 * 100).toFixed(1) : null;
+const abramRef2026Pct = abramHasData ? (abramRef2026 * 100).toFixed(1) : null;
+const abramSwingPp = abramHasData ? ((abramRef2026 - abramInd2024) * 100).toFixed(1) : null;
+
 const central = forecast.forecast.central_shares as Record<string, number>;
 const ranked = (forecast.forecast.ranked || []) as Array<{ party: string; pct: number }>;
 const winner = forecast.forecast.winner as string;
@@ -423,14 +435,19 @@ function classificationLabel(c: string): string {
     <p class="caption">
       <strong>n/c</strong> = "no contest": Reform UK did not stand under their own
       party label in this ward at the 2024 council elections, so a clean 2024 → 2026
-      swing is undefined. In several of these wards the 2026 Reform candidate stood
-      in 2024 as an Independent (notably David Bowker in Abram, ~30% as Independent
-      in 2024 → 56.1% as Reform in 2026, so the de-facto swing is closer to +26pp than
-      the headline-blank suggests). IMD = Indices of Multiple Deprivation 2019,
-      average decile across LSOAs in the ward (1 = most deprived, 10 = least).
-      Demographics from Census 2021 (TS021/030/054/066/067/004). 2024 turnout was
-      ~23%; 2026 turnout ~37%, so the swing in wards where Reform did stand also
-      captures higher mobilisation of the Reform-leaning electorate.
+      swing is undefined.
+      {abramHasData && (
+        <> In several of these wards the 2026 Reform candidate stood in 2024 as an
+        Independent (notably David Bowker in Abram, <strong>{abramInd2024Pct}%</strong>{" "}
+        as Independent in 2024, <strong>{abramRef2026Pct}%</strong> as Reform in 2026,
+        so the de-facto swing is closer to <strong>+{abramSwingPp}pp</strong> than the
+        headline-blank suggests).</>
+      )}
+      {" "}IMD = Indices of Multiple Deprivation 2019, average decile across LSOAs
+      in the ward (1 = most deprived, 10 = least). Demographics from Census 2021
+      (TS021/030/054/066/067/004). 2024 turnout was ~23%; 2026 turnout ~37%, so the
+      swing in wards where Reform did stand also captures higher mobilisation of the
+      Reform-leaning electorate.
     </p>
 
     <h3 style="margin-top:1.5rem;">What the demographics predict</h3>

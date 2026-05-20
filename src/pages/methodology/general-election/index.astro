@@ -4,6 +4,17 @@ import { loadGeAssumptions, loadGeBacktest } from "../../../lib/predictions";
 
 const a = loadGeAssumptions();
 const b = loadGeBacktest();
+
+// Defensive accessors: if the GE backtest file is missing or schema-shifted,
+// we drop the headline numbers and show a pointer to the full backtest page.
+const backtestRows = Array.isArray(b?.rows) ? b.rows.length : null;
+const unsAcc = typeof b?.summary?.uns?.winner_accuracy === "number" ? b.summary.uns.winner_accuracy : null;
+const unsMae = typeof b?.summary?.uns?.major_party_mae_avg === "number" ? b.summary.uns.major_party_mae_avg : null;
+const stmAcc = typeof b?.summary?.stm?.winner_accuracy === "number" ? b.summary.stm.winner_accuracy : null;
+const stmMae = typeof b?.summary?.stm?.major_party_mae_avg === "number" ? b.summary.stm.major_party_mae_avg : null;
+const stmLift = typeof b?.summary?.stm_lift_over_uns_pp === "number" ? b.summary.stm_lift_over_uns_pp : null;
+const hasBacktestFigures =
+  backtestRows !== null && unsAcc !== null && unsMae !== null && stmAcc !== null && stmMae !== null;
 ---
 
 <BaseLayout
@@ -45,14 +56,26 @@ const b = loadGeBacktest();
       <p class="eyebrow">Backtest</p>
       <h2>How the model performs on GE2024</h2>
     </div>
-    <p>
-      Predicting GE2024 from the GE2019 baseline + actual GE2024 national polling, evaluated on
-      <strong>{b.rows?.length}</strong> boundary-stable PCONs:
-    </p>
-    <ul>
-      <li>Uniform National Swing baseline: <strong>{((b.summary?.uns?.winner_accuracy ?? 0) * 100).toFixed(1)}%</strong> winner accuracy, <strong>{((b.summary?.uns?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</strong> major-party MAE.</li>
-      <li>Strong Transition Model: <strong>{((b.summary?.stm?.winner_accuracy ?? 0) * 100).toFixed(1)}%</strong> winner accuracy, <strong>{((b.summary?.stm?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</strong> major-party MAE, a <strong>{b.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp</strong> lift over UNS.</li>
-    </ul>
+    {hasBacktestFigures ? (
+      <>
+        <p>
+          Predicting GE2024 from the GE2019 baseline + actual GE2024 national polling, evaluated on
+          <strong>{backtestRows!.toLocaleString()}</strong> boundary-stable PCONs:
+        </p>
+        <ul>
+          <li>Uniform National Swing baseline: <strong>{(unsAcc! * 100).toFixed(1)}%</strong> winner accuracy, <strong>{(unsMae! * 100).toFixed(2)}pp</strong> major-party MAE.</li>
+          <li>
+            Strong Transition Model: <strong>{(stmAcc! * 100).toFixed(1)}%</strong> winner accuracy, <strong>{(stmMae! * 100).toFixed(2)}pp</strong> major-party MAE
+            {stmLift !== null ? <>, a <strong>{stmLift.toFixed(2)}pp</strong> lift over UNS.</> : "."}
+          </li>
+        </ul>
+      </>
+    ) : (
+      <p>
+        Backtest figures are regenerated each pipeline run; the full tables live at
+        <a href="/data-quality/ge-backtest/">/data-quality/ge-backtest/</a>.
+      </p>
+    )}
     <p style="color: var(--muted)">
       For comparison: Survation's published 2024 MRP RMSE was 5.55pp; YouGov's 2024 fared paper reported 92% winner accuracy. Our 78% on the boundary-stable 439-PCON subset is the floor, adding the new-boundary 211 PCONs once notional 2019 results are ingested, plus campaign-period polling, should close the gap.
     </p>
