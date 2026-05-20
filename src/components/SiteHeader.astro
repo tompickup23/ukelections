@@ -33,28 +33,6 @@ function isActive(href: string): boolean {
   </nav>
 
   <div class="header-extras">
-    <a
-      class="sister-pill sister-pill--ukd"
-      href="https://ukdemographics.co.uk"
-      target="_blank"
-      rel="noopener"
-      title="Sister site — population projections"
-    >
-      <span class="sister-pill-dot" aria-hidden="true"></span>
-      <span class="sister-pill-label">ukdemographics.co.uk</span>
-      <span class="sister-pill-arrow" aria-hidden="true">&#8599;</span>
-    </a>
-    <a
-      class="sister-pill sister-pill--as"
-      href="https://asylumstats.co.uk"
-      target="_blank"
-      rel="noopener"
-      title="Sister site — asylum spending data"
-    >
-      <span class="sister-pill-dot" aria-hidden="true"></span>
-      <span class="sister-pill-label">asylumstats.co.uk</span>
-      <span class="sister-pill-arrow" aria-hidden="true">&#8599;</span>
-    </a>
     <Search />
   </div>
 </header>
@@ -65,70 +43,5 @@ function isActive(href: string): boolean {
     align-items: center;
     gap: 0.6rem;
     flex-wrap: nowrap;
-  }
-  .sister-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.35rem 0.7rem;
-    font-size: 0.78rem;
-    font-weight: 600;
-    border-radius: 999px;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background 180ms, border-color 180ms, transform 180ms;
-  }
-  .sister-pill:hover { transform: translateY(-1px); }
-  .sister-pill-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-  }
-  .sister-pill-arrow { font-size: 0.82rem; opacity: 0.7; }
-  /* UKD = indigo */
-  .sister-pill--ukd {
-    color: #4f46e5;
-    background: rgba(79, 70, 229, 0.08);
-    border: 1px solid rgba(79, 70, 229, 0.28);
-  }
-  .sister-pill--ukd:hover {
-    background: rgba(79, 70, 229, 0.16);
-    border-color: rgba(79, 70, 229, 0.5);
-  }
-  .sister-pill--ukd .sister-pill-dot {
-    background: #4f46e5;
-    box-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
-  }
-  /* AS = cyan */
-  .sister-pill--as {
-    color: #0e7490;
-    background: rgba(6, 182, 212, 0.08);
-    border: 1px solid rgba(6, 182, 212, 0.28);
-  }
-  .sister-pill--as:hover {
-    background: rgba(6, 182, 212, 0.16);
-    border-color: rgba(6, 182, 212, 0.5);
-  }
-  .sister-pill--as .sister-pill-dot {
-    background: #06b6d4;
-    box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
-  }
-  @media (prefers-color-scheme: dark) {
-    .sister-pill--ukd { color: #a5b4fc; }
-    .sister-pill--as { color: #67e8f9; }
-  }
-  @media (max-width: 1100px) {
-    .sister-pill--as .sister-pill-label { display: none; }
-    .sister-pill--as { padding: 0.35rem 0.55rem; }
-  }
-  @media (max-width: 980px) {
-    .sister-pill-label { display: none; }
-    .sister-pill { padding: 0.35rem 0.55rem; }
-  }
-  @media (max-width: 720px) {
-    .sister-pill--as { display: none; }
-  }
-  @media (max-width: 560px) {
-    .sister-pill { display: none; }
   }
 </style>
