@@ -1,0 +1,47 @@
+{
+  "snapshot": {
+    "generated_at": "2026-05-20",
+    "source": "Hand-seeded from known LGBCE boundary reviews + Makerfield/Wigan dossier. Predecessor maps tell the model: when a new ward has no historical baseline, inherit from this list of predecessor wards.",
+    "coverage_note": "Seed set: Wigan 2023 review (9 wards). Other reviews to be added as we onboard their councils."
+  },
+  "predecessors": {
+    "wigan/ashton-in-makerfield-south": {
+      "predecessors": [
+        "wigan/ashton"
+      ],
+      "mix_weights": [
+        1.0
+      ],
+      "source": "Wigan LGBCE 2023 review; Ashton ward split into Ashton-in-Makerfield North + South"
+    },
+    "wigan/bryn-with-ashton-in-makerfield-north": {
+      "predecessors": [
+        "wigan/bryn",
+        "wigan/ashton"
+      ],
+      "mix_weights": [
+        0.6,
+        0.4
+      ],
+      "source": "Wigan LGBCE 2023 review; merged Bryn with north Ashton"
+    },
+    "wigan/hindley": {
+      "predecessors": [
+        "wigan/hindley"
+      ],
+      "mix_weights": [
+        1.0
+      ],
+      "source": "Wigan LGBCE 2023 review; Hindley boundary recut but kept name (geographic split with Hindley Green)"
+    },
+    "wigan/hindley-green": {
+      "predecessors": [
+        "wigan/hindley"
+      ],
+      "mix_weights": [
+        1.0
+      ],
+      "source": "Wigan LGBCE 2023 review; Hindley Green carved from larger Hindley"
+    }
+  }
+}

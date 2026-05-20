@@ -211,15 +211,27 @@ const hasBacktestHeadline =
         East/West Sussex, Surrey, Wokingham etc.), multiplier 0.85.
         Polling shows Reform there ~22%, slightly below the calibration
         source.</li>
-      <li><strong>London boroughs</strong>, multiplier 0.50. London polling
-        is markedly less Reform-leaning across all demographic profiles
-        than equivalent areas outside the capital.</li>
+      <li><strong>London boroughs</strong>, multiplier <strong>0.00</strong>.
+        The 7 May 2026 post-audit (n=218 London wards) found the previous
+        0.50 multiplier made Reform predictions hotter by an average of
+        6.66pp. Pre-uplift signed bias was +2.85pp (already slightly hot);
+        post-uplift bias was +9.51pp. Live MAE was 10.86pp vs shadow 7.43pp.
+        London now falls through to the hard plausibility ceiling instead.</li>
     </ul>
     <p>
-      The lift is applied as an upward floor only, never reduces an
-      existing Reform share. Other parties are scaled pro-rata so each
-      ward sums to 100%. Step 10 (demographic ceiling) is then re-applied
-      via the Final-C national-share calibration as a safety net.
+      The lift is applied as an upward floor in most tiers (never reduces
+      an existing Reform share). The new <strong>hard plausibility ceiling</strong>
+      added 20 May 2026 is the exception, it can pull Reform <em>down</em>
+      regardless of upstream prediction:
+    </p>
+    <ul>
+      <li>Asian % &gt; 40% OR Muslim % &gt; 30% &rArr; Reform &le; 15%</li>
+      <li>Asian % &gt; 25% AND degree % &gt; 35% &rArr; Reform &le; 18%</li>
+      <li>Degree % &gt; 45% &rArr; Reform &le; 25%</li>
+    </ul>
+    <p>
+      Other parties are scaled pro-rata so each ward sums to 100%. Step 10
+      (the older Muslim-only ceiling) is then re-applied as a safety net.
     </p>
     <p style="font-size: 0.95rem">
       The step is gated by an environment flag and is <strong>not</strong>

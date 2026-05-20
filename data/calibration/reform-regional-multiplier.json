@@ -1,0 +1,71 @@
+{
+  "snapshot": {
+    "generated_at": "2026-05-20",
+    "source": "7 May 2026 step-9b post-audit (live vs shadow MAE per multiplier tier)",
+    "method": "per-tier multiplier left at value where live_mae < shadow_mae and live_signed_bias near zero; London tier set to 0.0 because audit showed live MAE 10.86pp vs shadow 7.43pp (uplift made London bias worse by 3.43pp)"
+  },
+  "tiers": {
+    "london": {
+      "multiplier": 0.0,
+      "audit_evidence": {
+        "n_wards": 218,
+        "pre_uplift_mae_pp": 7.43,
+        "post_uplift_mae_pp": 10.86,
+        "pre_uplift_bias_pp": 2.85,
+        "post_uplift_bias_pp": 9.51,
+        "verdict": "uplift hurt; set to zero"
+      }
+    },
+    "metropolitan": {
+      "multiplier": 0.75,
+      "audit_evidence": {
+        "n_wards": 528,
+        "pre_uplift_mae_pp": 18.56,
+        "post_uplift_mae_pp": 9.31,
+        "pre_uplift_bias_pp": -18.38,
+        "post_uplift_bias_pp": -1.18,
+        "verdict": "uplift helped; retain at 0.75"
+      }
+    },
+    "southern_other": {
+      "multiplier": 0.85,
+      "audit_evidence": {
+        "n_wards": 750,
+        "pre_uplift_mae_pp": 17.69,
+        "post_uplift_mae_pp": 8.45,
+        "pre_uplift_bias_pp": -17.22,
+        "post_uplift_bias_pp": 5.06,
+        "verdict": "uplift helped; retain at 0.85"
+      }
+    },
+    "northern_unitary_county_district": {
+      "multiplier": 1.0,
+      "audit_evidence": {
+        "n_wards": 77,
+        "pre_uplift_mae_pp": 21.17,
+        "post_uplift_mae_pp": 6.98,
+        "pre_uplift_bias_pp": -21.17,
+        "post_uplift_bias_pp": 0.12,
+        "verdict": "uplift helped; retain at 1.0"
+      }
+    }
+  },
+  "hard_plausibility_ceiling": {
+    "description": "Override that caps Reform UK predicted share regardless of region multiplier. Applied AFTER the uplift step.",
+    "rules": [
+      {
+        "condition": "asian_pct > 0.40 OR muslim_pct > 0.30",
+        "reform_ceiling": 0.15
+      },
+      {
+        "condition": "degree_pct > 0.45 AND not above",
+        "reform_ceiling": 0.25
+      },
+      {
+        "condition": "asian_pct > 0.25 AND degree_pct > 0.35",
+        "reform_ceiling": 0.18
+      }
+    ],
+    "rationale": "7 May post-audit found Reform predicted shares >25% in wards where actual Reform was 0-8%. Those wards all had asian_pct > 0.40 or were inner-suburb high-degree London wards. The hard ceiling forces Reform to demographic-plausibility regardless of upstream model drift."
+  }
+}
