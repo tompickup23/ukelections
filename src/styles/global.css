@@ -71,9 +71,9 @@
 
 /* === Dark mode ===
    Two activation paths:
-   1. Explicit `data-theme="dark"` on :root — set by the inline theme script in
+   1. Explicit `data-theme="dark"` on :root, set by the inline theme script in
       BaseLayout from localStorage OR from system preference if no saved choice.
-   2. `prefers-color-scheme: dark` media query — no-JS fallback only; an
+   2. `prefers-color-scheme: dark` media query, no-JS fallback only; an
       explicit `data-theme="light"` always wins to honour a user's manual choice.
 */
 :root[data-theme="dark"] {
@@ -541,7 +541,7 @@ input:focus-visible,
   text-decoration: none;
 }
 
-/* === Aesthetic upgrade — headline cards, party bars, big numbers === */
+/* === Aesthetic upgrade, headline cards, party bars, big numbers === */
 
 .hero-v2 .eyebrow {
   display: inline-block;
@@ -779,7 +779,7 @@ input:focus-visible,
   margin-bottom: 0.75rem;
 }
 
-/* Tables — share-bar friendly + tabular-aligned */
+/* Tables, share-bar friendly + tabular-aligned */
 
 .seat-table,
 .council-table,
@@ -930,7 +930,7 @@ input:focus-visible,
   }
 }
 
-/* Council index — filter bar, chips, TBC pill */
+/* Council index, filter bar, chips, TBC pill */
 
 .visually-hidden {
   position: absolute;
@@ -1235,7 +1235,7 @@ input:focus-visible,
   font-size: 0.92rem;
 }
 
-/* === Tabular numerals — force numeric columns to line up vertically === */
+/* === Tabular numerals, force numeric columns to line up vertically === */
 
 .num,
 .bar-value,
@@ -1249,7 +1249,7 @@ table.council-table th {
   font-feature-settings: "tnum" 1;
 }
 
-/* === Animated bar fills — bars expand from 0 → final width on first paint === */
+/* === Animated bar fills, bars expand from 0 → final width on first paint === */
 
 @keyframes uke-bar-grow {
   from { transform: scaleX(0); }
@@ -1418,7 +1418,7 @@ table.council-table th {
   filter: brightness(0.92) saturate(1.2);
   stroke: rgba(0, 0, 0, 0.65);
   stroke-width: 1;
-  /* lift via z-index by raising the parent group — paths can't reorder
+  /* lift via z-index by raising the parent group, paths can't reorder
      mid-render so we use a strong stroke to "outline" the hovered region */
 }
 
@@ -1499,7 +1499,7 @@ table.council-table th {
   font-variant-numeric: tabular-nums;
 }
 
-/* Mobile — collapse tooltip to a smaller card and pin to top of stage */
+/* Mobile, collapse tooltip to a smaller card and pin to top of stage */
 @media (max-width: 540px) {
   .choropleth-tooltip {
     font-size: 0.8rem;
@@ -1508,7 +1508,7 @@ table.council-table th {
   }
 }
 
-/* === Hero by-election v2 — data-first redesign === */
+/* === Hero by-election v2, data-first redesign === */
 
 .hero-byelection-v2 {
   position: relative;
@@ -1590,7 +1590,7 @@ table.council-table th {
   color: var(--ink-soft);
 }
 
-/* Race bar — the single most important visual element of the hero */
+/* Race bar, the single most important visual element of the hero */
 
 .hero-race {
   margin: 0 0 1.75rem;
@@ -1666,7 +1666,7 @@ table.council-table th {
   white-space: nowrap;
 }
 
-/* Yellow background needs dark text for contrast — partyColour Lib Dem
+/* Yellow background needs dark text for contrast, partyColour Lib Dem
    #f59e0b and SNP #fdf24e are both too light against white. Override
    per-party via attribute selector on the closest segment? Simplest:
    add a class via JS, but we want zero JS in the hero. Pragmatic: use
@@ -1723,7 +1723,7 @@ table.council-table th {
   color: var(--border);
 }
 
-/* Mobile — stack the grid, shrink the clock, keep the race bar full-width */
+/* Mobile, stack the grid, shrink the clock, keep the race bar full-width */
 @media (max-width: 720px) {
   .hero-byelection-grid {
     grid-template-columns: 1fr;
@@ -1749,14 +1749,14 @@ table.council-table th {
   }
 }
 
-/* Hide labels in very narrow segments — already hidden via the wide
+/* Hide labels in very narrow segments, already hidden via the wide
    check in markup, but extra defence on very small viewports */
 @media (max-width: 480px) {
   .hero-race-party { font-size: 0.65rem; }
   .hero-race-pct  { font-size: 0.9rem; }
 }
 
-/* === Choropleth polish v2 — clickable legend, party-strip tooltip === */
+/* === Choropleth polish v2, clickable legend, party-strip tooltip === */
 
 .choropleth-tooltip {
   display: flex;
@@ -1848,7 +1848,7 @@ table.council-table th {
   filter: none;
 }
 
-/* Better hover state — replace the brightness darken with a stroke
+/* Better hover state, replace the brightness darken with a stroke
    highlight that doesn't change the perceived colour */
 .choropleth-stage svg path:hover {
   filter: brightness(1.0) saturate(1.05);
@@ -2162,7 +2162,7 @@ table.council-table th {
   padding: var(--space-md);
 }
 
-/* Pagefind UI theme overrides — minimal: inherit our typography +
+/* Pagefind UI theme overrides, minimal: inherit our typography +
    surfaces. Pagefind exposes CSS custom properties of its own. */
 .pagefind-ui {
   --pagefind-ui-primary: var(--accent-3);
@@ -2195,7 +2195,7 @@ table.council-table th {
   height: auto;
 }
 
-/* Place beside a hero — float right on wide viewports, full-width
+/* Place beside a hero, float right on wide viewports, full-width
    stacked below the heading on mobile. */
 .mini-map-side {
   float: right;

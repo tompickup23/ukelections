@@ -122,8 +122,8 @@ function classificationLabel(c: string): string {
 ---
 
 <BaseLayout
-  title="Makerfield by-election — 18 June 2026 forecast"
-  description={`Forecast for the 18 June 2026 Makerfield parliamentary by-election. Central forecast: ${shortPartyLabel(winner)} ${winnerPct}% vs ${shortPartyLabel(runnerUp)} ${runnerUpPct}% — a ${marginPp}pp ${classification}.`}
+  title="Makerfield by-election. 18 June 2026 forecast"
+  description={`Forecast for the 18 June 2026 Makerfield parliamentary by-election. Central forecast: ${shortPartyLabel(winner)} ${winnerPct}% vs ${shortPartyLabel(runnerUp)} ${runnerUpPct}%, a ${marginPp}pp ${classification}.`}
 >
   <section class="hero hero-byelection-v2">
     <div class="hero-byelection-grid">
@@ -133,7 +133,7 @@ function classificationLabel(c: string): string {
         <p class="lede">
           A <strong>{marginPp}pp {classificationLabel(classification).toLowerCase()}</strong>
           between <strong>{shortPartyLabel(winner)}</strong> and
-          <strong>{shortPartyLabel(runnerUp)}</strong> — well inside the model's
+          <strong>{shortPartyLabel(runnerUp)}</strong>. Well inside the model's
           confidence interval. Wigan borough · North West · {forecast.contest.pcon24cd}.
         </p>
       </header>
@@ -148,7 +148,7 @@ function classificationLabel(c: string): string {
     <RaceBar
       shares={centralRanked}
       candidates={candidateList}
-      title="Central forecast — probability-weighted projected vote share"
+      title="Central forecast (probability-weighted projected vote share)"
     />
   </section>
 
@@ -206,8 +206,8 @@ function classificationLabel(c: string): string {
     </div>
     <p>
       The headline forecast hinges almost entirely on whether Burnham appears on the ballot.
-      Two independent forecasts were published on 15 May 2026 — Survation and Britain Elects
-      (Ben Walker). <strong>Neither is a fieldwork-based constituency poll</strong> — Survation
+      Two independent forecasts were published on 15 May 2026: Survation and Britain Elects
+      (Ben Walker). <strong>Neither is a fieldwork-based constituency poll.</strong> Survation
       transfers the Burnham effect from their Gorton &amp; Denton post-by-election poll
       (n=501, 9 Mar 2026) re-weighted for Makerfield demographics, while Britain Elects
       applies a North West regional Burnham favourability adjustment to the GE2024 baseline.
@@ -226,7 +226,7 @@ function classificationLabel(c: string): string {
           height={56}
           showLegend={true}
           title={null}
-          ariaLabel="Scenario A — vote shares with Burnham on the ballot"
+          ariaLabel="Scenario A: vote shares with Burnham on the ballot"
         />
       </div>
       <div class="scenario-panel">
@@ -240,7 +240,7 @@ function classificationLabel(c: string): string {
           height={56}
           showLegend={true}
           title={null}
-          ariaLabel="Scenario B — vote shares without Burnham on the ballot"
+          ariaLabel="Scenario B: vote shares without Burnham on the ballot"
         />
       </div>
     </div>
@@ -271,7 +271,7 @@ function classificationLabel(c: string): string {
       votes (turnout {turnoutPct}%), Reform led Labour by <strong>{reformLead}pp</strong>:
     </p>
     <p class="caption">
-      Survation's note references 8 wards / Reform 7-of-8 — that's the pre-2023 Wigan
+      Survation's note references 8 wards / Reform 7-of-8. That's the pre-2023 Wigan
       boundary layout, before Hindley split into Hindley + Hindley Green. Our 9-ward
       aggregate uses the current (May 2023+) boundaries, which is what was actually voted
       on 7 May 2026.
@@ -293,11 +293,11 @@ function classificationLabel(c: string): string {
           <tr>
             <td>{w.ward_slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}</td>
             <td class="num">{(w.turnout_pct * 100).toFixed(1)}%</td>
-            <td class="num">{w.vote_shares["Reform UK"] ? (w.vote_shares["Reform UK"] * 100).toFixed(1) + "%" : "—"}</td>
-            <td class="num">{w.vote_shares["Labour"] ? (w.vote_shares["Labour"] * 100).toFixed(1) + "%" : "—"}</td>
-            <td class="num">{w.vote_shares["Green Party"] ? (w.vote_shares["Green Party"] * 100).toFixed(1) + "%" : "—"}</td>
-            <td class="num">{w.vote_shares["Conservative"] ? (w.vote_shares["Conservative"] * 100).toFixed(1) + "%" : "—"}</td>
-            <td class="num">{w.vote_shares["Liberal Democrats"] ? (w.vote_shares["Liberal Democrats"] * 100).toFixed(1) + "%" : "—"}</td>
+            <td class="num">{w.vote_shares["Reform UK"] ? (w.vote_shares["Reform UK"] * 100).toFixed(1) + "%" : "n/a"}</td>
+            <td class="num">{w.vote_shares["Labour"] ? (w.vote_shares["Labour"] * 100).toFixed(1) + "%" : "n/a"}</td>
+            <td class="num">{w.vote_shares["Green Party"] ? (w.vote_shares["Green Party"] * 100).toFixed(1) + "%" : "n/a"}</td>
+            <td class="num">{w.vote_shares["Conservative"] ? (w.vote_shares["Conservative"] * 100).toFixed(1) + "%" : "n/a"}</td>
+            <td class="num">{w.vote_shares["Liberal Democrats"] ? (w.vote_shares["Liberal Democrats"] * 100).toFixed(1) + "%" : "n/a"}</td>
           </tr>
         ))}
         <tr>
@@ -325,7 +325,7 @@ function classificationLabel(c: string): string {
           <tr>
             <td><span class="party-pill" style={`background:${partyColour(c.party)}`}></span> {shortPartyLabel(c.party)}</td>
             <td>{c.candidate}</td>
-            <td>{c.status}{c.note ? <> — <span class="muted">{c.note}</span></> : null}</td>
+            <td>{c.status}{c.note ? <>: <span class="muted">{c.note}</span></> : null}</td>
           </tr>
         ))}
       </tbody>
@@ -371,7 +371,7 @@ function classificationLabel(c: string): string {
     </div>
     <p>
       The nine Makerfield wards are demographically homogeneous on ethnicity
-      (all 90%+ White British, 0.6-1.8% Asian — these levers have no variance
+      (all 90%+ White British, 0.6-1.8% Asian; these levers have no variance
       here and don't predict anything inside the seat). The wards diverge
       sharply on <strong>educational attainment, deprivation, retired-share
       and social-rent</strong>. The table below joins Census 2021 demographics
@@ -413,7 +413,7 @@ function classificationLabel(c: string): string {
                   <span class={swing > 0 ? "swing-up" : (swing < 0 ? "swing-down" : "swing-flat")}>
                     {swing > 0 ? "+" : ""}{swing.toFixed(1)}pp
                   </span>
-                ) : <span class="muted">—</span>}
+                ) : <span class="muted">n/a</span>}
               </td>
             </tr>
           );
@@ -425,11 +425,11 @@ function classificationLabel(c: string): string {
       party label in this ward at the 2024 council elections, so a clean 2024 → 2026
       swing is undefined. In several of these wards the 2026 Reform candidate stood
       in 2024 as an Independent (notably David Bowker in Abram, ~30% as Independent
-      in 2024 → 56.1% as Reform in 2026 — the de-facto swing is closer to +26pp than
+      in 2024 → 56.1% as Reform in 2026, so the de-facto swing is closer to +26pp than
       the headline-blank suggests). IMD = Indices of Multiple Deprivation 2019,
       average decile across LSOAs in the ward (1 = most deprived, 10 = least).
       Demographics from Census 2021 (TS021/030/054/066/067/004). 2024 turnout was
-      ~23%; 2026 turnout ~37% — the swing in wards where Reform did stand also
+      ~23%; 2026 turnout ~37%, so the swing in wards where Reform did stand also
       captures higher mobilisation of the Reform-leaning electorate.
     </p>
 
@@ -437,8 +437,8 @@ function classificationLabel(c: string): string {
     <p>
       Running a multiple regression of <strong>Reform 2026 vote share</strong>
       on (no-quals %, IMD decile, retired %, social-rent %) across the nine
-      wards yields R² = <strong>{regression.multiple_regression.r_squared}</strong>
-      — 72% of the cross-ward variation in Reform vote is explained by those
+      wards yields R² = <strong>{regression.multiple_regression.r_squared}</strong>.
+      That's 72% of the cross-ward variation in Reform vote explained by those
       four demographic axes alone. Single-predictor Pearson correlations:
     </p>
     <table class="seat-table">
@@ -461,7 +461,7 @@ function classificationLabel(c: string): string {
     <p>
       The strongest single predictor is the <strong>degree-holder share
       (r = -0.853)</strong>. Reform wins big in low-education wards
-      (Pemberton, Hindley, Abram — all 25%+ no-quals, Reform 52-56%) and
+      (Pemberton, Hindley, Abram, all 25%+ no-quals, Reform 52-56%) and
       collapses in graduate-rich wards (Orrell 33% graduates → Reform
       39.9%). Asian % and White British % are not in the regression
       because all nine wards cluster too tightly to discriminate.
@@ -495,18 +495,18 @@ function classificationLabel(c: string): string {
       </tbody>
     </table>
     <p class="caption">
-      <strong>Bryn-with-Ashton-North</strong> over-performs the model by +5pp
-      — the biggest residual in the seat. Worth flagging as a candidate /
+      <strong>Bryn-with-Ashton-North</strong> over-performs the model by +5pp,
+      the biggest residual in the seat. Worth flagging as a candidate /
       local-organisation effect rather than fundamentals. Conversely
       <strong>Orrell</strong> (-3.4pp) is where Reform are weakest relative
-      to its high-IMD / high-degree profile — the kind of ward Burnham's
+      to its high-IMD / high-degree profile. That's the kind of ward Burnham's
       personal vote should pull hardest in.
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Comparator seats — the seven closest Lab-vs-Reform 2024 marginals</p>
+      <p class="eyebrow">Comparator seats. The seven closest Lab-vs-Reform 2024 marginals</p>
       <h2>How similar seats moved on 1 May 2026</h2>
     </div>
     <p>
@@ -535,14 +535,14 @@ function classificationLabel(c: string): string {
             <td>{c.region}</td>
             <td class="num">{(c.maj_pct * 100).toFixed(1)}pp</td>
             <td>{c.council_2026 ? c.host_council : <span class="muted">{c.reason || "n/a"}</span>}</td>
-            <td class="num">{c.council_2026 ? (c.council_2026.reform_pct * 100).toFixed(1) + "%" : "—"}</td>
-            <td class="num">{c.council_2026 ? (c.council_2026.labour_pct * 100).toFixed(1) + "%" : "—"}</td>
+            <td class="num">{c.council_2026 ? (c.council_2026.reform_pct * 100).toFixed(1) + "%" : "n/a"}</td>
+            <td class="num">{c.council_2026 ? (c.council_2026.labour_pct * 100).toFixed(1) + "%" : "n/a"}</td>
             <td class="num">
               {c.council_2026 ? (
                 <span class={c.council_2026.reform_lead_pp > 0 ? "swing-up" : "swing-down"}>
                   {c.council_2026.reform_lead_pp > 0 ? "+" : ""}{c.council_2026.reform_lead_pp.toFixed(1)}pp
                 </span>
-              ) : "—"}
+              ) : "n/a"}
             </td>
           </tr>
         ))}
@@ -561,25 +561,25 @@ function classificationLabel(c: string): string {
     <h3 style="margin-top:1.5rem;">What the comparators tell us</h3>
     <ul class="plain-list">
       <li>
-        <strong>Great Grimsby &amp; Cleethorpes (NE Lincs):</strong> Reform 45.9 / Lab 14.2 —
+        <strong>Great Grimsby &amp; Cleethorpes (NE Lincs):</strong> Reform 45.9 / Lab 14.2,
         a <strong>31.7pp</strong> Reform lead, winning 14 of 15 wards. The closest demographic
         twin to Makerfield (ex-fishing / ex-heavy-industry, 90%+ White British, low
         graduate share) and the most extreme Labour collapse in the comparator set.
       </li>
       <li>
-        <strong>Barnsley South (Barnsley MBC):</strong> Reform 42.0 / Lab 32.3 —
+        <strong>Barnsley South (Barnsley MBC):</strong> Reform 42.0 / Lab 32.3,
         a <strong>9.7pp</strong> Reform lead. Reform won the council outright (15 majorities
         nationally include Barnsley). Labour held up better than in Grimsby thanks to
-        stronger local-government incumbency and ex-NUM organisational depth — but
+        stronger local-government incumbency and ex-NUM organisational depth, but
         still a 9.7pp deficit.
       </li>
       <li>
-        <strong>Bradford South (Bradford MBC):</strong> Reform 22.6 / Lab 21.5 / Green 21.4 —
+        <strong>Bradford South (Bradford MBC):</strong> Reform 22.6 / Lab 21.5 / Green 21.4,
         a <strong>1.1pp</strong> Reform lead but a four-way split. Bradford South is a
         structural outlier in this comparator set because its high Pakistani-heritage
         population dampens Reform's ceiling and splits the non-Reform vote between
-        Lab + Green + independents. <strong>Makerfield does not have this dynamic</strong> —
-        the comparison should be read with caution.
+        Lab + Green + independents. <strong>Makerfield does not have this dynamic</strong>,
+        so the comparison should be read with caution.
       </li>
       <li>
         <strong>Llanelli, Amber Valley, Hull East, North Durham, Montgomeryshire &amp; Glyndwr:</strong>
@@ -591,23 +591,23 @@ function classificationLabel(c: string): string {
     <p>
       Across the three comparators with usable data, Reform's average council lead is
       <strong>{compAvgLead}pp</strong>. Makerfield's <strong>{makerfieldLead.toFixed(1)}pp</strong>
-      sits above that mean — nearly double the comparator average — and is closer to
+      sits above that mean (nearly double the comparator average) and is closer to
       Grimsby's 31.7pp than to Barnsley's 9.7pp or Bradford's 1.1pp. The local-election
       fundamentals are <em>worse</em> for Labour in Makerfield than in most of its
-      Lab-Reform-marginal peer group. <strong>Only Burnham's personal vote closes the gap</strong> —
+      Lab-Reform-marginal peer group. <strong>Only Burnham's personal vote closes the gap</strong>,
       which is exactly what Survation and Britain Elects model.
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Burnham personal vote — calibration</p>
+      <p class="eyebrow">Burnham personal vote. Calibration</p>
       <h2>Where the +20.7pp Labour uplift comes from</h2>
     </div>
     <p>
       In the 1 May 2024 Greater Manchester mayoral election, Burnham scored
       <strong>{(forecast.inputs.burnham_mayoral_baseline.wigan_first_pref_2024 * 100).toFixed(1)}%</strong>
-      first-preference vote across <em>Wigan borough</em> — the local authority that contains every
+      first-preference vote across <em>Wigan borough</em>, the local authority that contains every
       Makerfield ward. National Labour's brand on the same day stood at
       <strong>{(forecast.inputs.burnham_mayoral_baseline.national_lab_share_2024 * 100).toFixed(1)}%</strong>.
       That gives Burnham a measured <strong>+26.5pp personal-vote uplift</strong> over the Labour brand
@@ -617,7 +617,7 @@ function classificationLabel(c: string): string {
       The model discounts that to <strong>+20.7pp</strong> (78% of the mayoral uplift) to reflect that
       a Westminster by-election is more partisan than an executive mayoral race and that the Starmer
       government's record is also on the ballot. Applied to the 24.3% ward baseline, this lands
-      Labour at 45.0% — within rounding of Survation's published 45%.
+      Labour at 45.0%, within rounding of Survation's published 45%.
     </p>
   </section>
 
@@ -627,7 +627,7 @@ function classificationLabel(c: string): string {
       {forecast.methodology.map((m: any) => (
         <li>
           <strong>{m.name}</strong>
-          {m.description ? <> — {m.description}</> : null}
+          {m.description ? <>: {m.description}</> : null}
         </li>
       ))}
     </ol>

@@ -1,11 +1,11 @@
 ---
 /**
- * ConstituencyChoropleth.astro — pre-rendered SVG choropleth of all 650
+ * ConstituencyChoropleth.astro. pre-rendered SVG choropleth of all 650
  * UK parliamentary constituencies, coloured by predicted winner.
  *
  * Server-side render: d3-geo runs at `astro build` to project the
  * simplified ONS 2024 boundaries to an inline SVG. The runtime gets no
- * d3 dependency — just one inline SVG (~250KB of <path> markup) plus a
+ * d3 dependency. just one inline SVG (~250KB of <path> markup) plus a
  * ~30-line vanilla JS hover/click handler.
  *
  * Boundary source: ONS Open Geography Portal, Westminster Parliamentary
@@ -25,7 +25,7 @@
  * Props:
  *   width       SVG viewBox width  (default 800)
  *   height      SVG viewBox height (default 1000)
- *   showLegend  boolean — render the legend below the map (default true)
+ *   showLegend  boolean. render the legend below the map (default true)
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -53,7 +53,7 @@ const geo = JSON.parse(readFileSync(geojsonPath, "utf8")) as {
 // Fallback: normalised-name → prediction (covers Scotland's 57 seats, which
 // have `pcon24cd: null` in the current identity table). The boundary
 // GeoJSON's PCON24NM field matches the identity-table name almost
-// exactly — small punctuation differences are handled by the
+// exactly. small punctuation differences are handled by the
 // normaliser.
 const ge = loadGePredictions();
 const identity = loadGeIdentity();
@@ -70,7 +70,7 @@ function normaliseName(s: string): string {
     .replace(/[̀-ͯ]/g, "") // strip combining diacritics (â → a)
     .toLowerCase()
     .replace(/[,'’]/g, "")
-    .replace(/[-‐‑‒–—]/g, " ")        // any flavour of hyphen → space
+    .replace(/[-‐‑‒–.]/g, " ")        // any flavour of hyphen → space
     .replace(/&/g, "and")
     .replace(/\s+/g, " ")
     .trim();
@@ -131,7 +131,7 @@ for (const f of geo.features) {
   });
 }
 if (missing > 0) {
-  // Diagnostic — should be 0. Logged at build time only.
+  // Diagnostic. should be 0. Logged at build time only.
   // eslint-disable-next-line no-console
   console.warn(`[ConstituencyChoropleth] ${missing} constituencies had no prediction match`);
 }
@@ -168,7 +168,7 @@ const aspectRatio = (height / width) * 100;
             data-winner={r.winner}
             data-margin={r.margin.toFixed(1)}
           >
-            <title>{r.name} — {shortPartyLabel(r.winner)} predicted ({r.margin.toFixed(1)}pp margin)</title>
+            <title>{r.name}. {shortPartyLabel(r.winner)} predicted ({r.margin.toFixed(1)}pp margin)</title>
           </path>
         ))}
       </g>
@@ -201,7 +201,7 @@ const aspectRatio = (height / width) * 100;
 </figure>
 
 <script>
-  // Hover + click handler for the choropleth. Pure vanilla — no
+  // Hover + click handler for the choropleth. Pure vanilla. no
   // framework cost. Attached to every <figure.choropleth> on the page
   // so multiple maps coexist cleanly.
   function initChoropleth(fig: HTMLElement): void {
@@ -214,8 +214,8 @@ const aspectRatio = (height / width) * 100;
 
     const stripEl = tooltip.querySelector(".choropleth-tooltip-strip") as HTMLElement;
     const showFor = (path: SVGPathElement, clientX: number, clientY: number): void => {
-      const name = path.dataset.name || "—";
-      const winner = path.dataset.winner || "—";
+      const name = path.dataset.name || "n/a";
+      const winner = path.dataset.winner || "n/a";
       const margin = path.dataset.margin || "0.0";
       const fill = path.getAttribute("fill") || "var(--ink-soft)";
       nameEl.textContent = name;
@@ -254,7 +254,7 @@ const aspectRatio = (height / width) * 100;
       if (slug) window.location.href = `/seats/parliament/${slug}/`;
     });
 
-    // Legend filter — clicking a party chip dims every path that isn't
+    // Legend filter. clicking a party chip dims every path that isn't
     // that party so you can see one party's geography in isolation.
     // Clicking again (or clicking "All") restores full saturation.
     const legendButtons = fig.querySelectorAll<HTMLButtonElement>("[data-cp-filter]");

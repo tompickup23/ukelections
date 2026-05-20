@@ -1,6 +1,6 @@
 ---
 /**
- * CommonsHorseshoe.astro — pure-SVG seat-projection visualisation.
+ * CommonsHorseshoe.astro. pure-SVG seat-projection visualisation.
  *
  * Renders the projected House of Commons composition as the classic
  * horseshoe arrangement (concentric arcs of dots, mirrored across a
@@ -8,7 +8,7 @@
  * Each dot = one seat, coloured by winning party.
  *
  * Parties are placed by ideological order Left→Right within the
- * horseshoe — that's the convention readers expect (Government on
+ * horseshoe. that's the convention readers expect (Government on
  * one side, Opposition on the other, fringe parties at the wings).
  *
  * Pure server-side: no client JS, no client CSS, no client data.
@@ -114,7 +114,7 @@ while (drift !== 0) {
 }
 
 // Build the full ordered list of seat-positions: (rowIdx, angleRad).
-// Angles go from π (left) to 0 (right) — i.e. anticlockwise across the
+// Angles go from π (left) to 0 (right). i.e. anticlockwise across the
 // top of the horseshoe.
 type Pos = { row: number; angle: number };
 const positions: Pos[] = [];
@@ -179,7 +179,7 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
   >
     <title>{ariaLabel}</title>
 
-    {/* Majority line — a faint vertical hash mark at the centre of the
+    {/* Majority line, a faint vertical hash mark at the centre of the
         baseline. Indicates the 326-seat threshold. */}
     {majority > 0 && (
       <g class="ch-majority">
@@ -256,7 +256,7 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
       <strong>{leadingParty.short}</strong>
       {leadingClearsMajority
         ? <> projected to clear the <strong>{majority}-seat</strong> majority line by {leadingParty.seats - majority}.</>
-        : <> {leadingParty.seats} seats — <strong>{majority - leadingParty.seats}</strong> short of an overall majority.</>}
+        : <> {leadingParty.seats} seats. <strong>{majority - leadingParty.seats}</strong> short of an overall majority.</>}
     </p>
   )}
 </figure>

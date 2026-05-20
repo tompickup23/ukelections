@@ -1,7 +1,7 @@
 /**
- * antiAttenuation.js — moments-matched "unwinding" against historic spread.
+ * antiAttenuation.js. moments-matched "unwinding" against historic spread.
  *
- * MRP and other models tend to over-shrink (attenuation bias) — the predicted
+ * MRP and other models tend to over-shrink (attenuation bias). the predicted
  * distribution of constituency vote shares is "flatter" than the historic
  * one. YouGov's 2024 unwinding algorithm calibrates the posterior spread per
  * party so it matches the historic between-PCON variance for that party.

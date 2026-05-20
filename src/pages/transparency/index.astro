@@ -25,7 +25,7 @@ const identity = loadGeIdentity();
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Latest forecast manifest</p>
-      <h2>General election — next-GE-as-if-held-this-week</h2>
+      <h2>General election, next-GE-as-if-held-this-week</h2>
     </div>
     <p>Each row is a downloadable JSON file with a sha256 commitment to its contents.</p>
     <table class="seat-table">
@@ -67,7 +67,7 @@ const identity = loadGeIdentity();
     </div>
     <ul>
       {(summary.snapshot?.sources || []).map((src: any) => (
-        <li><code>{src.path}</code> — {src.role}</li>
+        <li><code>{src.path}</code>. {src.role}</li>
       ))}
     </ul>
     <p class="caption">

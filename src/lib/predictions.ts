@@ -1,5 +1,5 @@
 // Build-time loader for the 2026 prediction bundle.
-// Pure functions — usable from getStaticPaths and from page components.
+// Pure functions. usable from getStaticPaths and from page components.
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -154,7 +154,7 @@ export function loadGeIdentity() { return loadGe().identity; }
 let _geBacktestBySlug: Record<string, any> | null = null;
 /**
  * Returns the GE2024 backtest row for a given parliamentary constituency
- * slug (Democracy Club PCON slug). Returns null if no row was scored —
+ * slug (Democracy Club PCON slug). Returns null if no row was scored .
  * e.g. boundary changes that produced a new constituency in 2024.
  *
  * Row shape: { slug, name, country, region, predicted: {party: share},
@@ -175,7 +175,7 @@ let _may7BacktestByBallot: Record<string, any> | null = null;
 /**
  * Returns the May 2026 postaudit row for a single ward, keyed by its
  * Democracy Club ballot_paper_id (e.g. `local.burnley.bank-hall.2026-05-07`).
- * Returns null if no postaudit row exists for the ballot — e.g. the
+ * Returns null if no postaudit row exists for the ballot. e.g. the
  * declared result is missing or the ballot wasn't in the cohort. Used by
  * /seats/[council]/[ward]/ to render the "How we did here" callout.
  */
@@ -263,7 +263,7 @@ export function partyColour(party: string): string {
 }
 
 export function formatPct(p: number | null | undefined): string {
-  if (p == null || Number.isNaN(p)) return "—";
+  if (p == null || Number.isNaN(p)) return "n/a";
   return `${(p * 100).toFixed(1)}%`;
 }
 

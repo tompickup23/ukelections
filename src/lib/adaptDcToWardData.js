@@ -1,5 +1,5 @@
 /**
- * adaptDcToWardData.js — convert Democracy Club ingest into the AI DOGE
+ * adaptDcToWardData.js. convert Democracy Club ingest into the AI DOGE
  * election model's wardData shape.
  *
  * Inputs:
@@ -27,7 +27,7 @@
  * Translate Democracy Club party display names into the canonical
  * party labels the AI DOGE election model and nationalPolling snapshots
  * use as keys. The model also runs its own normalizePartyName for
- * Labour-Coop / UKIP / etc. variants — this mapping handles the few
+ * Labour-Coop / UKIP / etc. variants. this mapping handles the few
  * DC-specific naming quirks before that runs.
  */
 function dcPartyToCanonical(dcName) {
@@ -228,7 +228,7 @@ export function restrictToBallot(prediction, partiesOnBallotCanonicalSet) {
     }
   }
   if (keptSumPct <= 0) {
-    // No overlap between predicted and standing — fall back to flat-equal across
+    // No overlap between predicted and standing. fall back to flat-equal across
     // the standing parties (rare; happens when a baseline only listed parties
     // that all withdrew). Keep votes 0 to flag uncertainty.
     const flat = 1 / Math.max(1, partiesOnBallotCanonicalSet.size);
@@ -239,7 +239,7 @@ export function restrictToBallot(prediction, partiesOnBallotCanonicalSet) {
   // Re-normalise kept shares so they sum to 1.0
   for (const p of Object.keys(kept)) kept[p].pct = kept[p].pct / keptSumPct;
   // Re-scale votes proportionally (the absolute totals were derived from
-  // the same baseline turnout — keeping the ratio is the cleanest answer).
+  // the same baseline turnout. keeping the ratio is the cleanest answer).
   let keptVotes = 0;
   for (const p of Object.keys(kept)) keptVotes += kept[p].votes || 0;
   const droppedVotes = dropped.reduce((s, d) => s + (d.votes || 0), 0);

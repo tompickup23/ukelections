@@ -1,12 +1,12 @@
 /**
- * /og/[...slug].png — dynamic per-page Open Graph card endpoint.
+ * /og/[...slug].png. dynamic per-page Open Graph card endpoint.
  *
  * Each path enumerated in getStaticPaths emits a 1200×630 PNG rendered
  * by Satori (text + flex layout → SVG) and Resvg (SVG → PNG). Per-card
  * cost is roughly 300-400ms on a modern Mac.
  *
  * Gated behind BUILD_OG=1. When unset, getStaticPaths returns []
- * which means no OG endpoints are generated — iteration builds stay
+ * which means no OG endpoints are generated. iteration builds stay
  * sub-10s. The production cron on vps-main sets BUILD_OG=1.
  *
  * Slug shape:
@@ -43,7 +43,7 @@ import { renderOgCard, type OgShare } from "../../lib/ogRenderer";
 const BUILD_OG = process.env.BUILD_OG === "1";
 
 interface Entry {
-  slug: string; // url path WITHOUT leading /og and trailing .png — e.g. "index" or "seats/parliament/wigan"
+  slug: string; // url path WITHOUT leading /og and trailing .png, e.g. "index" or "seats/parliament/wigan"
   eyebrow: string;
   headline: string;
   subline?: string;
@@ -103,7 +103,7 @@ function buildEntries(): Entry[] {
 
   const out: Entry[] = [];
 
-  // 1. Homepage — promote whatever the soonest upcoming contest is
+  // 1. Homepage. promote whatever the soonest upcoming contest is
   const upcoming = loadUpcomingElections();
   const top = upcoming[0];
   if (top) {
@@ -122,7 +122,7 @@ function buildEntries(): Entry[] {
       eyebrow: `Polling day · ${top.polling_day_short_label}`,
       headline: top.short_name,
       shares: upcomingShares,
-      sharesCaption: "Central forecast — projected vote share",
+      sharesCaption: "Central forecast, projected vote share",
       accentColour: partyColour(top.headline_winner || "Reform UK"),
       partyChipLabel: top.headline_winner
         ? `${shortPartyLabel(top.headline_winner)} forecast to win`
@@ -143,7 +143,7 @@ function buildEntries(): Entry[] {
   const geHead = loadGeHeadline();
   const geLeader = geHead.seat_tallies[0];
   if (geLeader) {
-    // Seats by party — top 6, normalised across the bar
+    // Seats by party. top 6, normalised across the bar
     const geSeatRaw: Record<string, number> = {};
     for (const t of geHead.seat_tallies) geSeatRaw[t.party] = t.seats;
     const geSeatShares = topSharesAbsolute(
@@ -180,7 +180,7 @@ function buildEntries(): Entry[] {
       eyebrow: `Polling day · ${u.polling_day_short_label}`,
       headline: u.short_name,
       shares: ucShares,
-      sharesCaption: "Central forecast — projected vote share",
+      sharesCaption: "Central forecast, projected vote share",
       accentColour: partyColour(u.headline_winner || "Reform UK"),
       partyChipLabel: u.headline_winner ? shortPartyLabel(u.headline_winner) : null,
       partyChipColour: u.headline_winner ? partyColour(u.headline_winner) : null,
@@ -192,14 +192,14 @@ function buildEntries(): Entry[] {
   const pollShares = topShares(ukShares, 6);
   out.push({
     slug: "polling",
-    eyebrow: "Westminster polling — current",
+    eyebrow: "Westminster polling, current",
     headline: "The numbers driving the forecast",
     shares: pollShares,
     sharesCaption: "Wikipedia 14-day rolling average + Restore Britain overlay",
     accentColour: "#12b5cb",
   });
 
-  // 5 & 6. Past results + Councils hub — both share the same "council
+  // 5 & 6. Past results + Councils hub. both share the same "council
   // majorities by party" breakdown as the visual.
   const may7 = loadMay7Headline();
   const controlSlugs = may7.control_by_party || {};
@@ -258,7 +258,7 @@ function buildEntries(): Entry[] {
     });
   }
 
-  // 8. Council pages (~360) — show seats won by each party on May 7
+  // 8. Council pages (~360). show seats won by each party on May 7
   const identity = loadIdentity();
   const ctl = loadMay7Control();
   const ctlBySlug = new Map<string, any>();

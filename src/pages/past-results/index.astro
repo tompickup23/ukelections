@@ -62,16 +62,16 @@ const reformMajorities = (ctl.councils as any[])
 ---
 
 <BaseLayout
-  title="May 7 2026 results — how the model did, who's in charge now"
-  description={`Post-audit of our May 7 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "—"} declared ballots (${((head.declared_coverage_pct || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
+  title="May 7 2026 results. How the model did, who's in charge now"
+  description={`Post-audit of our May 7 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "n/a"} declared ballots (${((head.declared_coverage_pct || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Past results · May 7 2026</p>
     <h1>Results, and how we did</h1>
     <p class="lede">
       Our locked pre-election forecast, scored against the actual count.
-      Reform UK won {head.reform_majorities} council majorities and {head.reform_seats_won.toLocaleString()} seats —
-      we called the winner correctly in <strong>{(head.live_winner_accuracy * 100).toFixed(1)}%</strong>{" "}
+      Reform UK won {head.reform_majorities} council majorities and {head.reform_seats_won.toLocaleString()} seats.
+      We called the winner correctly in <strong>{(head.live_winner_accuracy * 100).toFixed(1)}%</strong>{" "}
       of the {pa.live?.summary?.ballots_evaluated?.toLocaleString() || "evaluated"} wards we have results for.
     </p>
   </section>
@@ -132,7 +132,7 @@ const reformMajorities = (ctl.councils as any[])
     </div>
     <p>
       Two forecasts were live for May 7. The pre-registration (sha256-witnessed 11 days before polling day) and
-      the as-served forecast which added one extra step — a Reform realignment uplift — calibrated on the morning
+      the as-served forecast, which added one extra step (a Reform realignment uplift) calibrated on the morning
       of polling day after we spotted a structural undershoot in northern unitaries.
     </p>
     <table class="seat-table">
@@ -177,12 +177,12 @@ const reformMajorities = (ctl.councils as any[])
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Methodology audit</p>
-        <h2>Step 9b — the Reform realignment uplift</h2>
+        <h2>Step 9b: the Reform realignment uplift</h2>
       </div>
       <p>
         On polling day, after spotting Blackburn-with-Darwen at 4.8% Reform across 17 wards while Burnley/Hyndburn/Pendle
         next door were at 30-40%, we added a per-ward "realignment uplift" calibrated on Asian-population share against
-        observed Reform share in Lancashire. It was applied as an upward floor only — never reduced a predicted Reform
+        observed Reform share in Lancashire. It was applied as an upward floor only, so it never reduced a predicted Reform
         share. The shadow column shows what would have happened without it.
       </p>
       <table class="seat-table">
@@ -208,7 +208,7 @@ const reformMajorities = (ctl.councils as any[])
         </tbody>
       </table>
       <p class="caption">
-        Verdict: net positive nationally, but the London (0.50 multiplier) tier hurt Reform MAE by 3.43pp — that tier
+        Verdict: net positive nationally, but the London (0.50 multiplier) tier hurt Reform MAE by 3.43pp; that tier
         needs a downward retune. Full audit JSON: {" "}
         <a href="/data/transparency/may-2026-postaudit-2026-05-10.json"><code>postaudit-2026-05-10.json</code></a>.
       </p>
@@ -237,13 +237,13 @@ const reformMajorities = (ctl.councils as any[])
             <td class="num"><strong style="color:#0e7c4a">{c.seats}</strong></td>
             <td class="num">{c.total}</td>
             <td class="num">+{c.margin}</td>
-            <td class="muted">{c.pre_control ? partySlugToName(c.pre_control) : "—"}</td>
+            <td class="muted">{c.pre_control ? partySlugToName(c.pre_control) : "n/a"}</td>
           </tr>
         ))}
       </tbody>
     </table>
     <p class="caption">
-      Full Reform-controlled-councils dataset (incl. largest-party-NOC and breakthrough seats):{" "}
+      Full Reform-controlled-councils dataset (incl, largest-party-NOC and breakthrough seats):{" "}
       <a href="/data/transparency/may-2026-reform-controlled-councils.md">markdown</a> ·{" "}
       <a href="/data/transparency/may-2026-reform-controlled-councils.json">JSON</a> ·{" "}
       <a href="/data/transparency/may-2026-reform-controlled-councils.csv">CSV</a>.

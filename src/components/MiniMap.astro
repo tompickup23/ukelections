@@ -1,6 +1,6 @@
 ---
 /**
- * MiniMap.astro — tiny inline SVG thumbnail showing a single focal area
+ * MiniMap.astro. tiny inline SVG thumbnail showing a single focal area
  * (constituency / council / ward) highlighted in winner colour, with
  * surrounding context features greyed.
  *
@@ -29,7 +29,7 @@ import { geoMercator, geoPath } from "d3-geo";
 // We intentionally don't use d3-geo's `geoBounds` here. ONS simplified
 // boundaries ship with clockwise outer-ring winding, which d3-geo's
 // spherical bbox calculation interprets as "this polygon covers the
-// outside of the planet" — every feature comes back with bbox
+// outside of the planet". every feature comes back with bbox
 // `[[-180,-90],[180,90]]`. A plain coordinate min/max works for our
 // neighbour-bbox intersection check.
 function flatBbox(feature: any): [number, number, number, number] {
@@ -113,7 +113,7 @@ function deltaColour(delta: number, maxAbs: number): string | null {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// File registry — code field name + file path per kind
+// File registry. code field name + file path per kind
 const REGISTRY = {
   pcon: {
     file: "data/geography/pcon24-simplified.geojson",
@@ -147,7 +147,7 @@ function normName(s: string): string {
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[,'’]/g, "")
-    .replace(/[-‐‑‒–—]/g, " ")
+    .replace(/[-‐‑‒–.]/g, " ")
     .replace(/&/g, "and")
     .replace(/\s+/g, " ")
     .trim();

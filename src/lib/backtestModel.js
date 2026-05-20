@@ -1,5 +1,5 @@
 /**
- * backtestModel.js — Walk-forward backtesting engine for election predictions.
+ * backtestModel.js. Walk-forward backtesting engine for election predictions.
  *
  * Tests the model against historical results with strict temporal boundaries:
  * only data available at prediction time is used.

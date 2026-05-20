@@ -1,5 +1,5 @@
 /**
- * county2025Winners.js — cross-tier candidate-continuity detection.
+ * county2025Winners.js. cross-tier candidate-continuity detection.
  *
  * For each 2025 county-cycle winner (LCC, Kent CC, Hants CC, etc.), record
  * the candidate name + party + votes. When a 2026 borough candidate has the
@@ -73,7 +73,7 @@ export function buildCounty2025WinnerIndex(historyBundle) {
 
 /**
  * For a 2026 borough candidate, check if their surname + party matches a
- * 2025 county-cycle winner — AND the 2025 division geographically overlaps
+ * 2025 county-cycle winner. AND the 2025 division geographically overlaps
  * the 2026 borough ward.
  *
  * For Lancashire: use the AI DOGE LCC 2025 reference to look up which LCC
@@ -84,7 +84,7 @@ export function buildCounty2025WinnerIndex(historyBundle) {
  *
  * For other counties: until per-county division→ward mappings exist, restrict
  * to same-council slug only (i.e. the 2025 winner must have stood in a
- * division that matches this council's slug — which is true only for
+ * division that matches this council's slug. which is true only for
  * unitaries that had 2025 cycles directly).
  *
  * Returns { matched, winner, county_slug, geography_check }.
@@ -124,16 +124,16 @@ export function findCounty2025Match(candidate, councilSlug, wardName, county2025
           geographyOk = true;
           geographyCheck = `LCC division ${w.ward_slug} covers this ward`;
         } else {
-          geographyCheck = `LCC division ${w.ward_slug} does NOT cover this ward (covered by ${wardLccDivisionSlug}) — match rejected as geographically irrelevant`;
+          geographyCheck = `LCC division ${w.ward_slug} does NOT cover this ward (covered by ${wardLccDivisionSlug}), match rejected as geographically irrelevant`;
         }
       } else if (slug === councilSlug) {
-        // Same-council unitary/met (Doncaster, Northumberland etc.) — accept
+        // Same-council unitary/met (Doncaster, Northumberland etc.). accept
         geographyOk = true;
         geographyCheck = `Same council slug (${slug})`;
       } else {
-        // Non-Lancashire 2-tier county where we don't have division→ward mapping —
+        // Non-Lancashire 2-tier county where we don't have division→ward mapping .
         // reject by default (avoid the Pendle Hill / Coal Clough false positive).
-        geographyCheck = `No division→ward overlap data for county ${slug} — match rejected`;
+        geographyCheck = `No division→ward overlap data for county ${slug}, match rejected`;
       }
       if (geographyOk) {
         return { matched: true, winner: w, county_slug: slug, geography_check: geographyCheck };

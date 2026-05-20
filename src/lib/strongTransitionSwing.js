@@ -1,5 +1,5 @@
 /**
- * strongTransitionSwing.js — Martin Baxter's Strong Transition Model (STM).
+ * strongTransitionSwing.js. Martin Baxter's Strong Transition Model (STM).
  *
  * Why: replaces additive uniform-national-swing (UNS) for predicting
  * constituency vote shares from a baseline + national change. UNS is
@@ -22,7 +22,7 @@
  * @param {Object<string,number>} localBaseline - per-party SHARE 0..1 in this PCON
  * @param {Object<string,number>} nationalNow   - per-party national SHARE 0..1
  * @param {Object<string,number>} nationalPast  - per-party past national SHARE
- * @param {Object} [opts] - { dampening?: 0..1 — apply *dampening* to the national delta
+ * @param {Object} [opts] - { dampening?: 0..1. apply *dampening* to the national delta
  *                            before propagation (default 1.0 = full national swing) }
  * @returns {{ shares: Object<string,number>, swingsApplied: Object<string,{delta:number,localChange:number}> }}
  */

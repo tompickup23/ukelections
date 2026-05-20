@@ -1,6 +1,6 @@
 ---
 /**
- * Search.astro — Pagefind UI mount.
+ * Search.astro. Pagefind UI mount.
  *
  * Lazy-loads Pagefind UI on user interaction (click on the trigger, or
  * `/` hotkey). Renders into a dialog backdrop above the page so the
@@ -105,7 +105,7 @@
     btn.addEventListener("click", openSearch);
   });
 
-  // `/` hotkey — but not when typing in an input/textarea
+  // `/` hotkey. but not when typing in an input/textarea
   document.addEventListener("keydown", (e) => {
     if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target as HTMLElement | null;

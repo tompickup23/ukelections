@@ -30,7 +30,7 @@ const councilIndex = [...councils.values()].sort((a, b) => a.council.localeCompa
 const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
 ---
 
-<BaseLayout title="Your Area — find your ward" description="Look up your ward forecast for May 7 2026 by postcode, town, or council name.">
+<BaseLayout title="Your Area, find your ward" description="Look up your ward forecast for May 7 2026 by postcode, town, or council name.">
   <section class="page-hero">
     <p class="eyebrow">Your Area</p>
     <h1>Find your ward forecast</h1>
@@ -103,7 +103,7 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
           const strong = document.createElement("strong");
           strong.textContent = m.ward;
           a.appendChild(strong);
-          a.appendChild(document.createTextNode(" — " + m.council));
+          a.appendChild(document.createTextNode("n/a" + m.council));
         } else {
           const strong = document.createElement("strong");
           strong.textContent = m.council;
@@ -114,7 +114,7 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
       });
       if (items.length > 12) {
         resultsOverflow.hidden = false;
-        resultsOverflow.textContent = "Showing 12 of " + items.length + " matches — refine your search.";
+        resultsOverflow.textContent = "Showing 12 of " + items.length + " matches, refine your search.";
       } else {
         resultsOverflow.hidden = true;
       }
@@ -164,7 +164,7 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
             setStatus(district + " is not on the May 2026 ballot. No forecast available.");
           } else {
             renderResults(districtMatches);
-            setStatus(district + " is on the ballot — pick your specific ward from the list.");
+            setStatus(district + " is on the ballot, pick your specific ward from the list.");
           }
         } else {
           window.location.href = matches[0].href;

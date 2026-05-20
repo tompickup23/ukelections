@@ -24,14 +24,14 @@ const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1
 ---
 
 <BaseLayout
-  title="GE backtest — data quality"
+  title="GE backtest, data quality"
   description={`Validation of the GE constituency model: predict GE2024 from GE2019 + national polling. ${rows.length} boundary-stable constituencies evaluated.`}
 >
   <section class="page-hero">
-    <p class="eyebrow">Data quality — backtest</p>
+    <p class="eyebrow">Data quality, backtest</p>
     <h1>GE2024 backtest</h1>
     <p class="lede">
-      Predicting GE2024 from the GE2019 baseline and the actual GE2024 polling — measuring whether our swing model adds value over Uniform National Swing.
+      Predicting GE2024 from the GE2019 baseline and the actual GE2024 polling, measuring whether our swing model adds value over Uniform National Swing.
     </p>
     <p style="color: var(--muted)">
       Generated {b.snapshot?.generated_at?.slice(0, 10)} · {rows.length} boundary-stable constituencies evaluated
@@ -45,7 +45,7 @@ const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1
     </div>
     <h3 style="margin-top: 1.5rem">Real-polling forecast test (genuine pre-election simulation)</h3>
     <p style="color: var(--muted); margin-bottom: 0.5rem">
-      Uses ACTUAL May 2024 polling averages (Lab 44%, Con 24%, Reform 12%) — what a forecaster running this model in May 2024 would have produced. The most honest forecaster comparison.
+      Uses ACTUAL May 2024 polling averages (Lab 44%, Con 24%, Reform 12%), what a forecaster running this model in May 2024 would have produced. The most honest forecaster comparison.
     </p>
     <table class="seat-table">
       <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier</th></tr></thead>

@@ -1,5 +1,5 @@
 /**
- * lancashireLcc2025.js — load AI DOGE's per-ward LCC 2025 reference for the
+ * lancashireLcc2025.js. load AI DOGE's per-ward LCC 2025 reference for the
  * 14 Lancashire districts (Burnley, Blackburn, Blackpool, Chorley, Fylde,
  * Hyndburn, Lancaster, Pendle, Preston, Ribble Valley, Rossendale, South
  * Ribble, West Lancashire, Wyre).
@@ -10,7 +10,7 @@
  *   { wardDivisionData: { division, reform_pct }, results: {...} }
  *
  * Critical for Burnley wards like Cliviger with Worsthorne whose most-recent
- * borough contest is 2019 — without per-division LCC2025, the model never
+ * borough contest is 2019. without per-division LCC2025, the model never
  * sees Reform's 2025 county breakthrough.
  */
 

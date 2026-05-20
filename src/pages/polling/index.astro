@@ -14,7 +14,7 @@ import {
 } from "../../lib/nationalPolling.js";
 import { countOverrides, listOverrides } from "../../lib/restoreBritain";
 
-// Live polling override + ledger — both written by scripts/refresh-polling.mjs.
+// Live polling override + ledger. Both written by scripts/refresh-polling.mjs.
 function readJsonIfExists(rel: string): any | null {
   const p = resolve(process.cwd(), rel);
   if (!existsSync(p)) return null;
@@ -68,19 +68,19 @@ const ledgerRows: LedgerRow[] = (ledger || [])
 const ledgerParties = ["Reform UK", "Labour", "Conservative", "Green Party", "Liberal Democrats"];
 
 function pct(x: number | undefined | null): string {
-  if (x == null) return "—";
+  if (x == null) return "n/a";
   return `${(x * 100).toFixed(1)}%`;
 }
 
 const ukMeta = ukSnapshot._meta || {};
 const overlay = ukMeta.restore_britain_overlay || null;
 const ukSourceSummary = overlay
-  ? `${ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average"} · plus Restore Britain overlay (${pct(overlay.share)}, ${overlay.source?.split("—")[0]?.trim()})`
+  ? `${ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average"} · plus Restore Britain overlay (${pct(overlay.share)}, ${overlay.source?.split(".")[0]?.trim()})`
   : ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average";
 ---
 
 <BaseLayout
-  title="UK polling — current Westminster average and how we use it"
+  title="UK polling. Current Westminster average and how we use it"
   description={`Where our forecast's national polling input comes from. Current Westminster rolling average, the Restore Britain overlay, plus every refresh on the ledger.`}
 >
   <section class="page-hero">
@@ -95,7 +95,7 @@ const ukSourceSummary = overlay
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">UK Westminster vote intention — current</p>
+      <p class="eyebrow">UK Westminster vote intention, current</p>
       <h2>What the polls say today</h2>
     </div>
     <PartyBars
@@ -125,7 +125,7 @@ const ukSourceSummary = overlay
         <h2>Restore Britain isn't in the Wikipedia table</h2>
       </div>
       <div class="backtest-callout">
-        <strong>Restore Britain {pct(overlay.share)} — applied as a national overlay.</strong>
+        <strong>Restore Britain {pct(overlay.share)}, applied as a national overlay.</strong>
         <span class="backtest-detail">
           Most pollsters embed Restore Britain inside the "Others" cell rather than as a separate
           column. We subtract the overlay from "Other" so the total still sums to 100%. The
@@ -202,7 +202,7 @@ const ukSourceSummary = overlay
         </tbody>
       </table>
       <p class="caption">
-        Movement between rows is real polling drift, not model noise — the parser averages every UK
+        Movement between rows is real polling drift, not model noise. The parser averages every UK
         Westminster poll within a 14-day window per snapshot.
       </p>
     </section>
@@ -215,7 +215,7 @@ const ukSourceSummary = overlay
     </div>
     <p>
       The Senedd 2026 and Holyrood 2026 forecasts use Wales-only and Scotland-only polling.
-      Sample sizes are smaller and refresh windows can be longer than the UK-wide tracker — be
+      Sample sizes are smaller and refresh windows can be longer than the UK-wide tracker. Be
       cautious of inference until a fresh Welsh field lands.
     </p>
     <table class="seat-table">
@@ -231,21 +231,21 @@ const ukSourceSummary = overlay
       <tbody>
         <tr>
           <td>Wales</td>
-          <td class="muted">{welshSnapshot._meta?.source || welshSnapshot._meta?.label || "—"}</td>
-          <td class="muted">{welshSnapshot._meta?.fieldwork || "—"}</td>
+          <td class="muted">{welshSnapshot._meta?.source || welshSnapshot._meta?.label || "n/a"}</td>
+          <td class="muted">{welshSnapshot._meta?.fieldwork || "n/a"}</td>
           <td>
             <span class="party-pill" style={`background:${partyColour(welshRows[0]?.party || "")}`}></span>
-            {shortPartyLabel(welshRows[0]?.party || "—")}
+            {shortPartyLabel(welshRows[0]?.party || "n/a")}
           </td>
           <td class="num">{pct(welshRows[0]?.share)}</td>
         </tr>
         <tr>
           <td>Scotland</td>
-          <td class="muted">{scottishSnapshot._meta?.source || scottishSnapshot._meta?.label || "—"}</td>
-          <td class="muted">{scottishSnapshot._meta?.fieldwork || "—"}</td>
+          <td class="muted">{scottishSnapshot._meta?.source || scottishSnapshot._meta?.label || "n/a"}</td>
+          <td class="muted">{scottishSnapshot._meta?.fieldwork || "n/a"}</td>
           <td>
             <span class="party-pill" style={`background:${partyColour(scottishRows[0]?.party || "")}`}></span>
-            {shortPartyLabel(scottishRows[0]?.party || "—")}
+            {shortPartyLabel(scottishRows[0]?.party || "n/a")}
           </td>
           <td class="num">{pct(scottishRows[0]?.share)}</td>
         </tr>
@@ -269,7 +269,7 @@ const ukSourceSummary = overlay
         is written to <code>data/polling/override.json</code>; a copy lands in <code>ledger.json</code>.
       </li>
       <li>
-        <strong>Overlay.</strong> Restore Britain — which most pollsters bury inside "Others" —
+        <strong>Overlay.</strong> Restore Britain (which most pollsters bury inside "Others")
         is added back as a fixed 4% overlay subtracted from "Other".
       </li>
       <li>
