@@ -1,11 +1,14 @@
 ---
-import { NAV_ITEMS } from "../lib/site";
+import { NAV_GROUPS, type NavGroup } from "../lib/site";
 import Search from "./Search.astro";
 
 const pathname = Astro.url.pathname;
 
-function isActive(href: string): boolean {
+function isActiveItem(href: string): boolean {
   return pathname === href || pathname.startsWith(href);
+}
+function isActiveGroup(group: NavGroup): boolean {
+  return group.items.some((item) => isActiveItem(item.href));
 }
 ---
 
@@ -24,24 +27,427 @@ function isActive(href: string): boolean {
     </span>
   </a>
 
-  <nav class="site-nav" aria-label="Primary">
-    {NAV_ITEMS.map((item) => (
-      <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
-        {item.label}
-      </a>
+  <nav class="site-nav-mega" aria-label="Primary">
+    {NAV_GROUPS.map((group) => (
+      <details class="mega-group" data-active={isActiveGroup(group) ? "true" : "false"}>
+        <summary class="mega-trigger">
+          <span>{group.label}</span>
+          <span class="mega-caret" aria-hidden="true">
+            <svg viewBox="0 0 10 6" width="10" height="6" fill="none">
+              <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </summary>
+        <div class="mega-panel" role="menu">
+          {group.items.map((item) => (
+            <a
+              href={item.href}
+              class="mega-item"
+              role="menuitem"
+              aria-current={isActiveItem(item.href) ? "page" : undefined}
+            >
+              <span class="mega-item-label">{item.label}</span>
+              <span class="mega-item-desc">{item.desc}</span>
+            </a>
+          ))}
+        </div>
+      </details>
     ))}
   </nav>
 
   <div class="header-extras">
+    <button
+      class="mobile-menu-btn"
+      type="button"
+      data-mobile-menu-toggle
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
     <Search />
   </div>
 </header>
 
+<div class="mobile-drawer" data-mobile-drawer hidden>
+  <div class="mobile-drawer-backdrop" data-mobile-drawer-close></div>
+  <nav class="mobile-drawer-panel" aria-label="Mobile navigation">
+    <div class="mobile-drawer-head">
+      <span class="mobile-drawer-title">Menu</span>
+      <button type="button" class="mobile-drawer-close" data-mobile-drawer-close aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-drawer-body">
+      {NAV_GROUPS.map((group) => (
+        <details class="mobile-group" open={isActiveGroup(group)}>
+          <summary class="mobile-group-trigger">
+            <span>{group.label}</span>
+            <span class="mobile-group-caret" aria-hidden="true">
+              <svg viewBox="0 0 10 6" width="10" height="6" fill="none">
+                <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </summary>
+          <div class="mobile-group-items">
+            {group.items.map((item) => (
+              <a
+                href={item.href}
+                class="mobile-group-item"
+                aria-current={isActiveItem(item.href) ? "page" : undefined}
+              >
+                <span class="mobile-item-label">{item.label}</span>
+                <span class="mobile-item-desc">{item.desc}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+      ))}
+    </div>
+  </nav>
+</div>
+
+<script>
+  const groups = Array.from(document.querySelectorAll<HTMLDetailsElement>(".site-nav-mega .mega-group"));
+
+  // Close other open mega-menus when one opens.
+  groups.forEach((g) => {
+    g.addEventListener("toggle", () => {
+      if (g.open) {
+        groups.forEach((other) => {
+          if (other !== g) other.open = false;
+        });
+      }
+    });
+  });
+
+  // Close mega-menus on outside click + Escape.
+  document.addEventListener("click", (e) => {
+    const target = e.target as Node;
+    if (!groups.some((g) => g.contains(target))) {
+      groups.forEach((g) => (g.open = false));
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") groups.forEach((g) => (g.open = false));
+  });
+
+  // Mobile drawer toggle.
+  const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-menu-toggle]");
+  const drawer = document.querySelector<HTMLDivElement>("[data-mobile-drawer]");
+  const closers = document.querySelectorAll<HTMLElement>("[data-mobile-drawer-close]");
+
+  function openDrawer() {
+    if (!drawer) return;
+    drawer.removeAttribute("hidden");
+    toggle?.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.setAttribute("hidden", "");
+    toggle?.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+
+  toggle?.addEventListener("click", openDrawer);
+  closers.forEach((c) => c.addEventListener("click", closeDrawer));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer && !drawer.hasAttribute("hidden")) closeDrawer();
+  });
+</script>
+
 <style>
+  .site-nav-mega {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .mega-group {
+    position: relative;
+  }
+  .mega-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    list-style: none;
+    transition: color 180ms, background 180ms;
+    user-select: none;
+  }
+  .mega-trigger::-webkit-details-marker { display: none; }
+  .mega-trigger::marker { content: ""; }
+  .mega-trigger:hover {
+    color: var(--ink);
+    background: rgba(0, 0, 0, 0.04);
+  }
+  .mega-group[open] .mega-trigger {
+    color: var(--ink);
+    background: rgba(0, 0, 0, 0.06);
+  }
+  .mega-group[data-active="true"] .mega-trigger {
+    color: var(--ink);
+  }
+  .mega-group[data-active="true"] .mega-trigger::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0.85rem;
+    right: 0.85rem;
+    height: 2px;
+    border-radius: 1px;
+    background: #c1121f;
+  }
+  .mega-caret {
+    display: inline-flex;
+    transition: transform 180ms;
+    opacity: 0.7;
+  }
+  .mega-group[open] .mega-caret { transform: rotate(180deg); }
+
+  .mega-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 340px;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.55rem;
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.04);
+    z-index: 60;
+    animation: megaFadeIn 180ms ease-out;
+  }
+  /* Right-align the last group's panel so it stays on screen */
+  .mega-group:last-of-type .mega-panel {
+    left: auto;
+    right: 0;
+  }
+
+  @keyframes megaFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mega-item {
+    display: block;
+    padding: 0.7rem 0.85rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 180ms;
+  }
+  .mega-item:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+  .mega-item[aria-current="page"] {
+    background: rgba(193, 18, 31, 0.08);
+  }
+  .mega-item-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink, #111827);
+    line-height: 1.2;
+  }
+  .mega-item[aria-current="page"] .mega-item-label {
+    color: #c1121f;
+  }
+  .mega-item-desc {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted, #5b6b80);
+    line-height: 1.4;
+    margin-top: 0.2rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .mega-trigger:hover, .mega-group[open] .mega-trigger {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .mega-panel {
+      background: #0d1117;
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .mega-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .mega-item[aria-current="page"] {
+      background: rgba(193, 18, 31, 0.16);
+    }
+  }
+
   .header-extras {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
     flex-wrap: nowrap;
+  }
+  .mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    color: var(--ink-soft, currentColor);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 180ms;
+  }
+  .mobile-menu-btn:hover { background: rgba(0, 0, 0, 0.06); }
+  @media (prefers-color-scheme: dark) {
+    .mobile-menu-btn:hover { background: rgba(255, 255, 255, 0.06); }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-mega { display: none; }
+    .mobile-menu-btn { display: inline-flex; }
+  }
+
+  /* Mobile drawer */
+  .mobile-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  }
+  .mobile-drawer[hidden] { display: none; }
+  .mobile-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    animation: drawerFadeIn 200ms ease-out;
+  }
+  .mobile-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(92vw, 380px);
+    background: var(--surface, #ffffff);
+    border-left: 1px solid var(--border, #e5e7eb);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow-y: auto;
+    animation: drawerSlideIn 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes drawerFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes drawerSlideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  .mobile-drawer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border, #e5e7eb);
+  }
+  .mobile-drawer-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mobile-drawer-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .mobile-drawer-close:hover { background: rgba(0, 0, 0, 0.06); }
+  .mobile-drawer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .mobile-group { border-bottom: 1px solid var(--border, #e5e7eb); }
+  .mobile-group:last-of-type { border-bottom: none; }
+  .mobile-group-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+  }
+  .mobile-group-trigger::-webkit-details-marker { display: none; }
+  .mobile-group-caret { transition: transform 180ms; opacity: 0.6; }
+  .mobile-group[open] .mobile-group-caret { transform: rotate(180deg); }
+  .mobile-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0 0 0.5rem;
+  }
+  .mobile-group-item {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .mobile-group-item:hover { background: rgba(0, 0, 0, 0.04); }
+  .mobile-group-item[aria-current="page"] {
+    background: rgba(193, 18, 31, 0.08);
+    color: #c1121f;
+  }
+  .mobile-item-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .mobile-item-desc {
+    display: block;
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.35;
+    margin-top: 0.15rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .mobile-drawer-panel {
+      background: #0d1117;
+      border-left-color: rgba(255, 255, 255, 0.1);
+    }
+    .mobile-drawer-head { border-bottom-color: rgba(255, 255, 255, 0.08); }
+    .mobile-group { border-bottom-color: rgba(255, 255, 255, 0.08); }
+    .mobile-drawer-close:hover, .mobile-group-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
   }
 </style>
