@@ -122,12 +122,19 @@ const STATIC_PATHS = [
   "/forecasts/holyrood-2026/",
   "/polling/",
   "/data-quality/",
+  "/data-quality/2024-backtest/",
+  "/data-quality/ge-backtest/",
   "/methodology/",
+  "/methodology/general-election/",
+  "/methodology/national-model/",
   "/sources/",
   "/releases/",
   "/privacy/",
   "/terms/",
-  "/accessibility/"
+  "/accessibility/",
+  "/coverage/",
+  "/past-results/by-region/",
+  "/transparency/"
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
@@ -214,6 +221,55 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Planned primary, secondary, and internal data sources with ingestion status.",
     priority: 80
+  },
+  {
+    href: "/coverage/",
+    title: "Coverage, what we are and aren't predicting",
+    kind: "page",
+    description: "Which contests are in scope, which wards have direct baselines vs predecessor blends, and which categories of seat we don't forecast.",
+    priority: 86
+  },
+  {
+    href: "/data-quality/2024-backtest/",
+    title: "2024 backtest, predicted vs actual",
+    kind: "page",
+    description: "How accurate the model was on the last cycle. Per-party MAE and seat winner accuracy for 1 May 2024.",
+    priority: 84
+  },
+  {
+    href: "/data-quality/ge-backtest/",
+    title: "GE2024 backtest",
+    kind: "page",
+    description: "Backtest of the general-election seat model against the 4 July 2024 result. Per-party MAE and confidence calibration.",
+    priority: 83
+  },
+  {
+    href: "/methodology/general-election/",
+    title: "General election forecast, methodology",
+    kind: "page",
+    description: "How we forecast 650 constituencies: BES priors, swing models, demographic ceilings, by-election overlays, and tactical voting.",
+    priority: 82
+  },
+  {
+    href: "/methodology/national-model/",
+    title: "Methodology, national model",
+    kind: "page",
+    description: "How the May 2026 model works step-by-step: baseline, swing, demographics, incumbency, Reform proxy, and the audit-driven Step 9b corrections.",
+    priority: 81
+  },
+  {
+    href: "/past-results/by-region/",
+    title: "Reform UK by region, 7 May 2026",
+    kind: "page",
+    description: "Reform UK share by English region on 7 May 2026: actual vote share, council seats won, and the regional spread of the swing.",
+    priority: 79
+  },
+  {
+    href: "/transparency/",
+    title: "Pre-registration and audit log",
+    kind: "page",
+    description: "Locked forecasts, model parameter snapshots, post-audit changelog, and corrections SLA. The pre-registration record for every published forecast.",
+    priority: 78
   }
 ];
 
