@@ -167,16 +167,19 @@ const ePartyToColour = (slug: string | null) => {
 
     <div class="stat-card-row">
       <StatCard
+        icon="crown"
         value={String(head.reform_majorities)}
         label="Reform UK overall majorities won on May 7"
         accent={partyColour("Reform UK")}
       />
       <StatCard
+        icon="vote"
         value={head.reform_seats_won.toLocaleString()}
         label="Reform UK seats won on May 7 (across all contesting councils)"
         accent={partyColour("Reform UK")}
       />
       <StatCard
+        icon="pause"
         value={String(counts.lgr)}
         label="councils whose next election is on hold while Local Government Reorganisation is consulted"
       />
@@ -211,22 +214,37 @@ const ePartyToColour = (slug: string | null) => {
       </div>
     </div>
 
-    <table class="council-table">
+    <table class="council-table is-sortable" id="council-table">
       <thead>
         <tr>
-          <th scope="col">Council</th>
-          <th scope="col">Type</th>
-          <th scope="col">Control after May 7</th>
-          <th scope="col">Reform seats</th>
-          <th scope="col">Next election</th>
+          <th scope="col" class="th-sort" data-sort-key="name" data-sort-type="text" aria-sort="ascending">
+            <button type="button" class="th-sort-btn">Council<span class="th-sort-caret" aria-hidden="true"></span></button>
+          </th>
+          <th scope="col" class="th-sort" data-sort-key="type" data-sort-type="text" aria-sort="none">
+            <button type="button" class="th-sort-btn">Type<span class="th-sort-caret" aria-hidden="true"></span></button>
+          </th>
+          <th scope="col" class="th-sort" data-sort-key="control" data-sort-type="text" aria-sort="none">
+            <button type="button" class="th-sort-btn">Control after May 7<span class="th-sort-caret" aria-hidden="true"></span></button>
+          </th>
+          <th scope="col" class="th-sort num-col" data-sort-key="reform" data-sort-type="number" aria-sort="none">
+            <button type="button" class="th-sort-btn">Reform seats<span class="th-sort-caret" aria-hidden="true"></span></button>
+          </th>
+          <th scope="col" class="th-sort" data-sort-key="next" data-sort-type="date" aria-sort="none">
+            <button type="button" class="th-sort-btn">Next election<span class="th-sort-caret" aria-hidden="true"></span></button>
+          </th>
         </tr>
       </thead>
       <tbody id="council-table-body">
         {rows.map((r) => (
           <tr
             data-name={r.name.toLowerCase()}
+            data-name-sort={r.name.toLowerCase()}
             data-status={r.status_group}
             data-lgr={r.next_is_tbc ? "1" : "0"}
+            data-type-sort={r.type_label.toLowerCase()}
+            data-control-sort={r.control_label.toLowerCase()}
+            data-reform-sort={r.total_seats > 0 ? r.reform_post.toString() : "-1"}
+            data-next-sort={r.next_iso ?? "9999-12-31"}
           >
             <td><a href={`/seats/${r.slug}/`}>{r.name}</a></td>
             <td class="muted-cell">{r.type_label}</td>
@@ -234,7 +252,7 @@ const ePartyToColour = (slug: string | null) => {
               <span class="party-pill" style={`background:${ePartyToColour(r.control_party_slug)}`} aria-hidden="true"></span>
               {r.control_label}
             </td>
-            <td>
+            <td class="num-col">
               {r.total_seats > 0
                 ? <span class={r.reform_majority ? "reform-majority-cell" : ""}>{r.reform_post}/{r.total_seats}</span>
                 : <span class="muted-cell">—</span>}
@@ -279,12 +297,15 @@ const ePartyToColour = (slug: string | null) => {
 <script is:inline>
   (function () {
     const search = document.getElementById("council-search");
+    const table = document.getElementById("council-table");
     const tbody = document.getElementById("council-table-body");
     const chips = document.querySelectorAll(".council-filter-chips .chip");
-    if (!search || !tbody) return;
+    if (!search || !tbody || !table) return;
 
     let activeFilter = "all";
     let query = "";
+    let sortKey = "name";
+    let sortDir = "asc"; // "asc" | "desc"
 
     function applyFilter() {
       const rows = tbody.querySelectorAll("tr");
@@ -300,6 +321,29 @@ const ePartyToColour = (slug: string | null) => {
       });
     }
 
+    function applySort() {
+      const ths = table.querySelectorAll("th.th-sort");
+      ths.forEach((th) => {
+        const k = th.getAttribute("data-sort-key");
+        th.setAttribute("aria-sort", k === sortKey ? (sortDir === "asc" ? "ascending" : "descending") : "none");
+      });
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const attr = `data-${sortKey}-sort`;
+      const type = (table.querySelector(`th[data-sort-key="${sortKey}"]`) || {}).getAttribute?.("data-sort-type") || "text";
+      const dirFactor = sortDir === "asc" ? 1 : -1;
+      rows.sort((a, b) => {
+        const av = a.getAttribute(attr) || "";
+        const bv = b.getAttribute(attr) || "";
+        if (type === "number") {
+          return (parseFloat(av) - parseFloat(bv)) * dirFactor;
+        }
+        return av.localeCompare(bv) * dirFactor;
+      });
+      const frag = document.createDocumentFragment();
+      rows.forEach((r) => frag.appendChild(r));
+      tbody.appendChild(frag);
+    }
+
     search.addEventListener("input", (e) => {
       query = (e.target.value || "").toLowerCase().trim();
       applyFilter();
@@ -313,5 +357,71 @@ const ePartyToColour = (slug: string | null) => {
         applyFilter();
       });
     });
+
+    table.querySelectorAll("th.th-sort .th-sort-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const th = btn.closest("th");
+        const key = th && th.getAttribute("data-sort-key");
+        if (!key) return;
+        if (key === sortKey) {
+          sortDir = sortDir === "asc" ? "desc" : "asc";
+        } else {
+          sortKey = key;
+          sortDir = "asc";
+        }
+        applySort();
+      });
+    });
   })();
 </script>
+
+<style>
+  .council-table.is-sortable .th-sort {
+    padding: 0;
+  }
+  .council-table.is-sortable .th-sort-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .council-table.is-sortable .th-sort-btn:hover {
+    background: var(--hover-overlay-soft);
+  }
+  .council-table.is-sortable .num-col .th-sort-btn {
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .council-table.is-sortable td.num-col {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .th-sort-caret {
+    display: inline-block;
+    width: 0.6em;
+    height: 0.6em;
+    opacity: 0.35;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 15 5 5 5-5'/%3E%3Cpath d='m7 9 5-5 5 5'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 15 5 5 5-5'/%3E%3Cpath d='m7 9 5-5 5 5'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  .th-sort[aria-sort="ascending"] .th-sort-caret {
+    opacity: 1;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 14 5-5 5 5'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 14 5-5 5 5'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  .th-sort[aria-sort="descending"] .th-sort-caret {
+    opacity: 1;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+</style>

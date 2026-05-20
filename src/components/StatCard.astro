@@ -1,24 +1,10 @@
 ---
+import { ICONS, type IconName } from "../lib/icons";
+
 /**
  * StatCard.astro — a single big-number card with label + optional
- * sparkline / icon / trend annotation.
- *
- * Replaces the existing .accuracy-grid > article patterns scattered
- * across /past-results/, /councils/ "At a glance", /seats/[council]/
- * status grid etc. Same data shape, polished aesthetic.
- *
- * Props:
- *   value: the big number, formatted by the caller (e.g. "55.2%")
- *   label: the small descriptor below
- *   accent: optional CSS colour for the value (e.g. partyColour())
- *   trend: optional small-delta annotation like "+2.5pp" / "-3.1pp"
- *   trendDirection: "up" | "down" | "flat"
- *   sparkline: optional array of numbers — renders an inline SVG
- *              sparkline above the label. Use for trend-over-time cards.
- *   sparklineColor: optional CSS colour for the sparkline stroke
- *
- * Placement: drop into a CSS grid container (the existing
- * .accuracy-grid + .stat-card-row classes both work).
+ * sparkline / icon / trend annotation. Lucide icon set lives in
+ * `src/lib/icons.ts` — keep its list short to bound bundle bytes.
  */
 interface Props {
   value: string;
@@ -28,6 +14,7 @@ interface Props {
   trendDirection?: "up" | "down" | "flat";
   sparkline?: number[] | null;
   sparklineColor?: string | null;
+  icon?: IconName | null;
 }
 
 const {
@@ -38,7 +25,10 @@ const {
   trendDirection = "flat",
   sparkline = null,
   sparklineColor = "var(--accent-3)",
+  icon = null,
 } = Astro.props;
+
+const iconSvg = icon ? ICONS[icon] : null;
 
 // Compute sparkline path if data given. Use a fixed viewBox so the
 // SVG always sits in a 80×24 box; map data linearly into that range.
@@ -63,6 +53,14 @@ const sparkD = sparkline ? sparklinePath(sparkline) : null;
 ---
 
 <article class="stat-card">
+  {iconSvg && (
+    <span
+      class="stat-card-icon"
+      style={accent ? `color:${accent}` : undefined}
+      aria-hidden="true"
+      set:html={iconSvg}
+    />
+  )}
   <span class="stat-card-value" style={accent ? `color:${accent}` : undefined}>
     {value}
   </span>
@@ -80,3 +78,26 @@ const sparkD = sparkline ? sparklinePath(sparkline) : null;
   )}
   <span class="stat-card-label">{label}</span>
 </article>
+
+<style>
+  .stat-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-bottom: var(--space-xs, 0.5rem);
+    opacity: 0.85;
+  }
+  .stat-card-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .stat-card-icon :global(svg) path,
+  .stat-card-icon :global(svg) circle,
+  .stat-card-icon :global(svg) line,
+  .stat-card-icon :global(svg) polyline,
+  .stat-card-icon :global(svg) rect {
+    stroke: currentColor;
+  }
+</style>

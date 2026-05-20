@@ -1,0 +1,300 @@
+---
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { geoMercator, geoPath } from "d3-geo";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import StatCard from "../../../components/StatCard.astro";
+import { loadMay7Control, partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+
+const SLUG_TO_LAD = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data/identity/council-slug-to-lad24.json"), "utf8"),
+).map;
+const LAD_TO_REGION = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data/geography/lad24-to-region.json"), "utf8"),
+);
+const lads = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data/geography/lad24-simplified.geojson"), "utf8"),
+) as { features: Array<{ properties: { LAD24CD: string; LAD24NM: string }; geometry: any }> };
+
+const ctl = loadMay7Control();
+
+// Aggregate may7 results by region. Counts: seats won + total contested per
+// party per region; share = ref_seats_won / total_seats_won_in_region.
+type RegionAgg = {
+  code: string;
+  name: string;
+  council_count: number;
+  ref_seats_won: number;
+  ref_majorities: number;
+  total_contested_seats: number;
+  total_seats_won: number;
+  by_party: Record<string, number>;
+  reform_share: number; // ref_seats / total_seats_won
+  reform_majority_rate: number; // ref_majorities / council_count
+};
+const byRegion = new Map<string, RegionAgg>();
+let unmapped = 0;
+for (const c of ctl.councils as any[]) {
+  const slug = c.council_slug as string;
+  const lad = (SLUG_TO_LAD[slug] || {}).lad24cd as string | undefined;
+  if (!lad) {
+    unmapped++;
+    continue;
+  }
+  const region = LAD_TO_REGION[lad];
+  if (!region) {
+    unmapped++;
+    continue;
+  }
+  const code = region.region_code as string;
+  const wins = c.may7_wins?.by_party || {};
+  const refWon = wins.ref || 0;
+  const totalWon = c.may7_wins?.seats_won_total || 0;
+  const totalContested = c.cycle?.seats_up || 0;
+  const isRefMajority = !!c.reform?.has_majority;
+  let agg = byRegion.get(code);
+  if (!agg) {
+    agg = {
+      code,
+      name: region.region_name as string,
+      council_count: 0,
+      ref_seats_won: 0,
+      ref_majorities: 0,
+      total_contested_seats: 0,
+      total_seats_won: 0,
+      by_party: {},
+      reform_share: 0,
+      reform_majority_rate: 0,
+    };
+    byRegion.set(code, agg);
+  }
+  agg.council_count += 1;
+  agg.ref_seats_won += refWon;
+  agg.total_contested_seats += totalContested;
+  agg.total_seats_won += totalWon;
+  if (isRefMajority) agg.ref_majorities += 1;
+  for (const [p, n] of Object.entries(wins)) {
+    if (typeof n === "number") agg.by_party[p] = (agg.by_party[p] || 0) + n;
+  }
+}
+for (const agg of byRegion.values()) {
+  agg.reform_share = agg.total_seats_won > 0 ? agg.ref_seats_won / agg.total_seats_won : 0;
+  agg.reform_majority_rate = agg.council_count > 0 ? agg.ref_majorities / agg.council_count : 0;
+}
+
+const regions = Array.from(byRegion.values()).sort((a, b) => b.reform_share - a.reform_share);
+const topRegion = regions[0];
+const bottomRegion = regions[regions.length - 1];
+
+// Build choropleth. Each LAD shaded by its region's Reform share — saturation
+// rises with share. Out-of-data LADs get the neutral surface-muted tone.
+const REFORM_BASE = [193, 18, 31] as const; // matches partyColour("Reform UK") ramp endpoint
+const NEUTRAL = "var(--surface-muted)";
+function tintForShare(share: number): string {
+  // 0 → very pale; 0.5+ → near-saturated brand red.
+  const ratio = Math.min(1, Math.max(0, share / 0.5));
+  const eased = Math.pow(ratio, 0.65);
+  const r = Math.round(245 + (REFORM_BASE[0] - 245) * eased);
+  const g = Math.round(235 + (REFORM_BASE[1] - 235) * eased);
+  const b = Math.round(235 + (REFORM_BASE[2] - 235) * eased);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+const WIDTH = 800;
+const HEIGHT = 1000;
+const projection = geoMercator();
+projection.fitSize([WIDTH, HEIGHT], lads as any);
+const pathGen = geoPath(projection);
+
+type LadPath = { code: string; name: string; regionCode: string; regionName: string; fill: string; share: number; d: string };
+const ladPaths: LadPath[] = [];
+for (const f of lads.features) {
+  const code = f.properties.LAD24CD;
+  const name = f.properties.LAD24NM;
+  const reg = LAD_TO_REGION[code];
+  const agg = reg ? byRegion.get(reg.region_code) : undefined;
+  const d = pathGen(f as any);
+  if (!d) continue;
+  if (!agg) {
+    ladPaths.push({ code, name, regionCode: "", regionName: "", fill: NEUTRAL, share: 0, d });
+  } else {
+    ladPaths.push({ code, name, regionCode: agg.code, regionName: agg.name, fill: tintForShare(agg.reform_share), share: agg.reform_share, d });
+  }
+}
+
+const description =
+  `Regional aggregation of the 7 May 2026 council elections. Reform UK seat share by ` +
+  `English region and devolved country, rendered as a tinted LAD choropleth.`;
+---
+
+<BaseLayout title="Reform share by region — May 7 results" description={description}>
+  <section class="page-hero">
+    <p class="eyebrow">Past results · Regional view</p>
+    <h1>Reform UK by region, 7 May 2026</h1>
+    <p class="lede">
+      Each local authority is shaded by its region's overall Reform UK seat share on May 7.
+      Twelve regions covered: nine ONS English regions plus Wales, Scotland and Northern Ireland.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Where Reform UK ran hottest</p>
+      <h2>Top and bottom region</h2>
+    </div>
+    <div class="stat-card-row">
+      {topRegion && (
+        <StatCard
+          icon="trending-up"
+          value={`${(topRegion.reform_share * 100).toFixed(1)}%`}
+          label={`Reform UK seat share in ${topRegion.name} — the strongest region of the night`}
+          accent={partyColour("Reform UK")}
+          trend={`${topRegion.ref_seats_won.toLocaleString()} of ${topRegion.total_seats_won.toLocaleString()} seats`}
+          trendDirection="up"
+        />
+      )}
+      {bottomRegion && (
+        <StatCard
+          icon="trending-down"
+          value={`${(bottomRegion.reform_share * 100).toFixed(1)}%`}
+          label={`Reform UK seat share in ${bottomRegion.name} — the weakest region on the map`}
+          accent="var(--muted)"
+          trend={`${bottomRegion.ref_seats_won.toLocaleString()} of ${bottomRegion.total_seats_won.toLocaleString()} seats`}
+          trendDirection="down"
+        />
+      )}
+      <StatCard
+        icon="map"
+        value={String(regions.length)}
+        label={`regions with at least one council contesting on May 7 (${unmapped} councils unmapped to a region)`}
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Map</p>
+      <h2>Reform seat share, by region</h2>
+    </div>
+    <figure class="region-choropleth" aria-label="Choropleth of UK local authorities shaded by region-level Reform UK seat share on 7 May 2026.">
+      <div class="region-choropleth-stage" style={`padding-bottom:${((HEIGHT / WIDTH) * 100).toFixed(2)}%`}>
+        <svg
+          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+          preserveAspectRatio="xMidYMid meet"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+        >
+          <title>Reform UK seat share by region, 7 May 2026.</title>
+          <g class="region-choropleth-paths">
+            {ladPaths.map((p) => (
+              <path
+                d={p.d}
+                fill={p.fill}
+                stroke="rgba(255, 255, 255, 0.55)"
+                stroke-width="0.35"
+              >
+                <title>
+                  {p.name}
+                  {p.regionName ? ` — ${p.regionName}: Reform ${(p.share * 100).toFixed(1)}%` : ""}
+                </title>
+              </path>
+            ))}
+          </g>
+        </svg>
+      </div>
+      <figcaption class="region-choropleth-legend">
+        <span class="rc-legend-label">Reform UK seat share</span>
+        <span class="rc-legend-ramp" style={`background: linear-gradient(90deg, ${tintForShare(0)}, ${tintForShare(0.25)}, ${tintForShare(0.5)});`}></span>
+        <span class="rc-legend-tick">0%</span>
+        <span class="rc-legend-tick">25%</span>
+        <span class="rc-legend-tick">50%+</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Full table</p>
+      <h2>Every region, ranked</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col" class="num">Councils</th>
+          <th scope="col" class="num">Reform seats won</th>
+          <th scope="col" class="num">Of total declared</th>
+          <th scope="col" class="num">Reform share</th>
+          <th scope="col" class="num">Reform majorities</th>
+        </tr>
+      </thead>
+      <tbody>
+        {regions.map((r) => (
+          <tr>
+            <td>
+              <span class="party-swatch" style={`background:${tintForShare(r.reform_share)}; border:1px solid var(--border)`}></span>
+              {r.name}
+            </td>
+            <td class="num">{r.council_count}</td>
+            <td class="num">{r.ref_seats_won.toLocaleString()}</td>
+            <td class="num">{r.total_seats_won.toLocaleString()}</td>
+            <td class="num"><strong>{(r.reform_share * 100).toFixed(1)}%</strong></td>
+            <td class="num">{r.ref_majorities}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Regional aggregation uses the ONS 2024 LAD-to-Region lookup for England, plus a synthetic
+      "region" for each devolved nation. {unmapped} councils were excluded because they couldn't be
+      matched to an LAD24CD (typically pending Local Government Reorganisation or county-tier
+      slugs that don't have a direct LAD analogue). See
+      <a href="/past-results/">the headline accuracy audit</a> for the per-council numbers.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .region-choropleth {
+    margin: 0;
+  }
+  .region-choropleth-stage {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .region-choropleth-stage svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .region-choropleth-legend {
+    margin-top: var(--space-md, 1rem);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-small, 0.88rem);
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .rc-legend-label {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .rc-legend-ramp {
+    display: inline-block;
+    width: 9rem;
+    height: 0.65rem;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  .rc-legend-tick {
+    font-variant-numeric: tabular-nums;
+  }
+</style>

@@ -56,11 +56,56 @@
 
   /* === Focus ring === */
   --focus-ring: rgba(29, 78, 137, 0.8);
+
+  /* === Theme-flippable overlays + panel chrome ===
+     Used by header, drawer, mega-menu, sister cards. Flipping these via
+     tokens keeps component CSS free of duplicate dark-mode media queries. */
+  --hover-overlay: rgba(0, 0, 0, 0.06);
+  --hover-overlay-soft: rgba(0, 0, 0, 0.04);
+  --panel-bg: var(--surface);
+  --panel-border: var(--border);
+  --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.04);
+  --card-bg-soft: var(--surface);
+  --card-border-soft: var(--border);
 }
 
-/* === Dark mode (system preference; no manual toggle in v1) === */
+/* === Dark mode ===
+   Two activation paths:
+   1. Explicit `data-theme="dark"` on :root — set by the inline theme script in
+      BaseLayout from localStorage OR from system preference if no saved choice.
+   2. `prefers-color-scheme: dark` media query — no-JS fallback only; an
+      explicit `data-theme="light"` always wins to honour a user's manual choice.
+*/
+:root[data-theme="dark"] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-muted: #1c2128;
+  --ink: #e6edf3;
+  --ink-soft: #9ba6b3;
+  --muted: #6e7681;
+  --border: #30363d;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --tooltip-bg: #e6edf3;
+  --tooltip-fg: #0d1117;
+  --status-warn-bg: rgba(252, 211, 77, 0.08);
+  --status-warn-border: rgba(252, 211, 77, 0.45);
+  --status-warn-text: #fbbf24;
+  --status-warn-tint: rgba(252, 211, 77, 0.14);
+  --status-warn-dark: #fde68a;
+  --status-good-text: #4ade80;
+  --status-bad-text: #f87171;
+  --focus-ring: rgba(125, 211, 252, 0.9);
+  --hover-overlay: rgba(255, 255, 255, 0.06);
+  --hover-overlay-soft: rgba(255, 255, 255, 0.05);
+  --panel-bg: #0d1117;
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+  --card-bg-soft: rgba(255, 255, 255, 0.03);
+  --card-border-soft: rgba(255, 255, 255, 0.08);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0d1117;
     --surface: #161b22;
     --surface-muted: #1c2128;
@@ -69,12 +114,8 @@
     --muted: #6e7681;
     --border: #30363d;
     --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-
-    /* Tooltip stays high-contrast — flip to a light surface in dark mode */
     --tooltip-bg: #e6edf3;
     --tooltip-fg: #0d1117;
-
-    /* Status palette: tone for dark backgrounds */
     --status-warn-bg: rgba(252, 211, 77, 0.08);
     --status-warn-border: rgba(252, 211, 77, 0.45);
     --status-warn-text: #fbbf24;
@@ -82,9 +123,14 @@
     --status-warn-dark: #fde68a;
     --status-good-text: #4ade80;
     --status-bad-text: #f87171;
-
-    /* Focus ring stays visible on dark */
     --focus-ring: rgba(125, 211, 252, 0.9);
+    --hover-overlay: rgba(255, 255, 255, 0.06);
+    --hover-overlay-soft: rgba(255, 255, 255, 0.05);
+    --panel-bg: #0d1117;
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+    --card-bg-soft: rgba(255, 255, 255, 0.03);
+    --card-border-soft: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -111,8 +157,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+:root[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in oklab, var(--accent-teal) 6%, transparent) 0%, transparent 35%),
+    radial-gradient(circle at 100% 100%, color-mix(in oklab, var(--accent-3) 8%, transparent) 0%, transparent 40%),
+    var(--bg);
+}
 @media (prefers-color-scheme: dark) {
-  body {
+  :root:not([data-theme="light"]) body {
     background:
       radial-gradient(circle at 0% 0%, color-mix(in oklab, var(--accent-teal) 6%, transparent) 0%, transparent 35%),
       radial-gradient(circle at 100% 100%, color-mix(in oklab, var(--accent-3) 8%, transparent) 0%, transparent 40%),

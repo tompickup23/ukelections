@@ -83,21 +83,25 @@ const reformMajorities = (ctl.councils as any[])
     </div>
     <div class="stat-card-row">
       <StatCard
+        icon="crown"
         value={String(head.reform_majorities)}
         label="Reform UK overall majorities"
         accent={partyColour("Reform UK")}
       />
       <StatCard
+        icon="vote"
         value={head.reform_seats_won.toLocaleString()}
         label="Reform UK seats won (across all contesting councils)"
         accent={partyColour("Reform UK")}
       />
       <StatCard
+        icon="flag"
         value={String(head.reform_largest_noc)}
         label="councils where Reform UK is now largest party without a majority"
         accent={partyColour("Reform UK")}
       />
       <StatCard
+        icon="scale"
         value={String(head.noc_count)}
         label="councils with no overall control"
       />

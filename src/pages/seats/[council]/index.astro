@@ -225,6 +225,7 @@ const description = `${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp
       </div>
       <div class="stat-card-row">
         <StatCard
+          icon="circle-check"
           value={`${(winnerAcc * 100).toFixed(0)}%`}
           label="winners called correctly across this council's wards"
           accent={winnerAcc >= 0.7 ? "var(--status-good-text)" : winnerAcc >= 0.4 ? undefined : "var(--status-bad-text)"}
@@ -232,11 +233,13 @@ const description = `${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp
           trendDirection="flat"
         />
         <StatCard
+          icon="target"
           value={`${(majorMae * 100).toFixed(2)}pp`}
           label="major-party MAE — average gap between predicted and actual share"
         />
         {councilBacktest && (
           <StatCard
+            icon={councilBacktest.reform_signed_bias_pp > 0 ? "trending-up" : councilBacktest.reform_signed_bias_pp < 0 ? "trending-down" : "gauge"}
             value={`${(councilBacktest.reform_signed_bias_pp >= 0 ? "+" : "")}${councilBacktest.reform_signed_bias_pp.toFixed(2)}pp`}
             label="Reform UK signed bias — positive = predicted hot, negative = predicted cold"
             accent={partyColour("Reform UK")}

@@ -1,5 +1,26 @@
 name: Site checks
 
+# Lite-CI lane for pull requests.
+#
+# Runs the cheap, data-independent checks that catch regressions without
+# requiring the gitignored ~74 MB AI DOGE / HP v7.0 / DC historic-results
+# data corpus. Specifically:
+#
+#   - vitest unit tests       — pure JS/TS logic
+#   - validate:backend        — structural validation of committed data
+#   - astro check             — full TypeScript + .astro typecheck
+#
+# We deliberately do NOT run `npm run build` here. The full build needs
+# the gitignored historic data and is reproduced on vps-main daily at
+# 04:30 UTC, then deployed to Cloudflare Pages. Branch protection treats
+# this lane as the PR-time gate; the canonical build acceptance happens
+# on push-to-main via the GH Pages mirror in deploy.yml.
+#
+# Security note: every `run:` step below is pure npm/shell invocation
+# against checked-in package.json scripts — no `${{ github.event.* }}`
+# interpolation, no untrusted PR data flows into a shell argument, so
+# there is no command-injection surface.
+
 on:
   pull_request:
   workflow_dispatch:
@@ -17,11 +38,3 @@ jobs:
       - run: npm test
       - run: npm run validate:backend
       - run: npm run check
-      - run: npm run build
-      - uses: actions/upload-artifact@v7
-        if: failure()
-        with:
-          name: build-diagnostics
-          path: |
-            dist
-            .astro

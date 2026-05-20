@@ -24,7 +24,30 @@
  */
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
-import { geoMercator, geoPath, geoBounds } from "d3-geo";
+import { geoMercator, geoPath } from "d3-geo";
+
+// We intentionally don't use d3-geo's `geoBounds` here. ONS simplified
+// boundaries ship with clockwise outer-ring winding, which d3-geo's
+// spherical bbox calculation interprets as "this polygon covers the
+// outside of the planet" — every feature comes back with bbox
+// `[[-180,-90],[180,90]]`. A plain coordinate min/max works for our
+// neighbour-bbox intersection check.
+function flatBbox(feature: any): [number, number, number, number] {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  const visit = (n: any): void => {
+    if (typeof n[0] === "number" && typeof n[1] === "number") {
+      if (n[0] < x0) x0 = n[0];
+      if (n[1] < y0) y0 = n[1];
+      if (n[0] > x1) x1 = n[0];
+      if (n[1] > y1) y1 = n[1];
+      return;
+    }
+    for (const c of n) visit(c);
+  };
+  visit(feature.geometry?.coordinates ?? []);
+  if (!Number.isFinite(x0)) return [0, 0, 0, 0];
+  return [x0, y0, x1, y1];
+}
 
 interface Props {
   focalCode?: string;
@@ -35,6 +58,18 @@ interface Props {
   height?: number;
   padding?: number;
   ariaLabel?: string;
+  /**
+   * Optional neighbour delta overlay. When supplied alongside `focalShare`,
+   * each neighbour feature is rendered with its own colour band based on
+   * `neighbourShares.get(<ons-code>) - focalShare`:
+   *   - red band  → neighbour higher (potential opportunity / contagion)
+   *   - blue band → neighbour lower (focal is the local high-water mark)
+   *   - grey     → no data / within ±neighbourDeltaTolerance of focal
+   * Designed for ward maps showing Reform-share differential.
+   */
+  neighbourShares?: Map<string, number> | Record<string, number> | null;
+  focalShare?: number | null;
+  neighbourDeltaTolerance?: number;
 }
 
 const {
@@ -46,7 +81,37 @@ const {
   height = 150,
   padding = 1.18,
   ariaLabel,
+  neighbourShares = null,
+  focalShare = null,
+  neighbourDeltaTolerance = 0.02,
 } = Astro.props;
+
+function lookupNeighbourShare(code: string): number | undefined {
+  if (!neighbourShares) return undefined;
+  if (neighbourShares instanceof Map) return neighbourShares.get(code);
+  return (neighbourShares as Record<string, number>)[code];
+}
+
+// Diverging colour ramp around focalShare. Returns a CSS rgb() string.
+// Positive delta (neighbour higher) trends red; negative trends blue;
+// within tolerance returns null to keep the neutral grey treatment.
+function deltaColour(delta: number, maxAbs: number): string | null {
+  if (Math.abs(delta) <= neighbourDeltaTolerance) return null;
+  const ratio = Math.min(1, Math.abs(delta) / Math.max(maxAbs, 0.001));
+  const eased = Math.pow(ratio, 0.7);
+  if (delta > 0) {
+    // Red ramp: 245,228,224 -> 193,18,31
+    const r = Math.round(245 + (193 - 245) * eased);
+    const g = Math.round(228 + (18 - 228) * eased);
+    const b = Math.round(224 + (31 - 224) * eased);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  // Blue ramp: 224,232,245 -> 29,78,137
+  const r = Math.round(224 + (29 - 224) * eased);
+  const g = Math.round(232 + (78 - 232) * eased);
+  const b = Math.round(245 + (137 - 245) * eased);
+  return `rgb(${r}, ${g}, ${b})`;
+}
 
 // File registry — code field name + file path per kind
 const REGISTRY = {
@@ -129,16 +194,17 @@ function expandBbox(b: Bbox, factor: number): Bbox {
   return [x0 - dx, y0 - dy, x1 + dx, y1 + dy];
 }
 function bboxOf(feature: any): Bbox {
-  const b = geoBounds(feature);
-  return [b[0][0], b[0][1], b[1][0], b[1][1]];
+  return flatBbox(feature);
 }
 function bboxIntersects(a: Bbox, b: Bbox): boolean {
   return !(a[2] < b[0] || a[0] > b[2] || a[3] < b[1] || a[1] > b[3]);
 }
 
-let svgInner = "";
 let pathFocal = "";
 let pathContext = "";
+type DeltaPath = { d: string; fill: string; code: string };
+let deltaPaths: DeltaPath[] = [];
+const useDeltaOverlay = !!neighbourShares && typeof focalShare === "number";
 
 if (hasFocal) {
   const focalBbox = expandBbox(bboxOf(focal), padding);
@@ -183,18 +249,55 @@ if (hasFocal) {
   );
 
   const path = geoPath(projection);
+  const kindKey = focalKind as keyof typeof REGISTRY;
+  const codeField = REGISTRY[kindKey].codeField;
 
-  pathContext = contextFeatures
-    .map((f) => path(f as any) || "")
-    .filter((d) => d.length > 0)
-    .join(" ");
+  if (useDeltaOverlay) {
+    // Match a context feature against the neighbour-share map via ONS code
+    // first, then fall back to normalised name. Different councils ship
+    // identity codes that don't always match the GeoJSON's WD25CD (e.g.
+    // councils with no post-2018 review keep older codes in WD25 even
+    // though Democracy Club's identity table assigns newer ones).
+    const nameField = REGISTRY[kindKey].nameField;
+    function resolveShare(f: any): number | undefined {
+      const code = f?.properties?.[codeField];
+      const direct = code ? lookupNeighbourShare(code) : undefined;
+      if (typeof direct === "number") return direct;
+      const name = f?.properties?.[nameField];
+      if (!name) return undefined;
+      return lookupNeighbourShare(`name:${normName(name)}`);
+    }
+
+    let maxAbs = 0.05;
+    for (const f of contextFeatures) {
+      const share = resolveShare(f);
+      if (typeof share === "number") {
+        const d = share - (focalShare as number);
+        if (Math.abs(d) > maxAbs) maxAbs = Math.abs(d);
+      }
+    }
+    for (const f of contextFeatures) {
+      const code = f?.properties?.[codeField];
+      const d = path(f as any) || "";
+      if (!d) continue;
+      const share = resolveShare(f);
+      const fill =
+        typeof share === "number"
+          ? (deltaColour(share - (focalShare as number), maxAbs) || "var(--surface-muted)")
+          : "var(--surface-muted)";
+      deltaPaths.push({ d, fill, code: code || "" });
+    }
+  } else {
+    pathContext = contextFeatures
+      .map((f) => path(f as any) || "")
+      .filter((d) => d.length > 0)
+      .join(" ");
+  }
 
   pathFocal = path(focal as any) || "";
-
-  svgInner = pathFocal; // placeholder, rendered inline below
 }
 
-const resolvedName = focal?.properties?.[REGISTRY[focalKind].nameField] || focalCode || focalName;
+const resolvedName = focal?.properties?.[REGISTRY[focalKind as keyof typeof REGISTRY].nameField] || focalCode || focalName;
 const a11y = ariaLabel || `Location map showing ${resolvedName} highlighted relative to its neighbours.`;
 ---
 
@@ -207,14 +310,23 @@ const a11y = ariaLabel || `Location map showing ${resolvedName} highlighted rela
       role="img"
     >
       <title>{a11y}</title>
-      {pathContext && (
-        <path
-          d={pathContext}
-          fill="var(--surface-muted)"
-          stroke="var(--border)"
-          stroke-width="0.4"
-        />
-      )}
+      {useDeltaOverlay
+        ? deltaPaths.map((p) => (
+            <path
+              d={p.d}
+              fill={p.fill}
+              stroke="var(--border)"
+              stroke-width="0.4"
+            />
+          ))
+        : pathContext && (
+            <path
+              d={pathContext}
+              fill="var(--surface-muted)"
+              stroke="var(--border)"
+              stroke-width="0.4"
+            />
+          )}
       <path
         d={pathFocal}
         fill={focalColour}
