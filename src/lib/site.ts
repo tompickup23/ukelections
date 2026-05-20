@@ -48,6 +48,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     label: "Past Results",
     items: [
       { href: "/past-results/", label: "All Past Results", desc: "Every contest we've forecast" },
+      { href: "/past-results/by-region/", label: "By Region", desc: "Reform UK share heatmap across the 12 regions" },
       { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: "7-May backtest · 5.7pp MAE" },
       { href: "/data-quality/", label: "Data Quality", desc: "Sources, coverage, gaps" },
     ],

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import MiniMap from "../../../../components/MiniMap.astro";
 import {
   loadIdentity,
   loadPredictions,
@@ -52,6 +53,40 @@ const description = wp?.prediction
 
 const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not available" }[wp?.confidence || "none"];
 
+// Build neighbour Reform-share map for the mini-map delta overlay.
+// Only show the overlay when we have at least 3 mapped neighbours so
+// the diverging palette has something to compare. We key the map by both
+// ONS code AND normalised name (with a `name:` prefix) so MiniMap can
+// fall through name-based when identity-vs-WD25CD codes diverge — which
+// happens for councils whose ward boundary hasn't changed since 2018
+// (their WD25CD entries keep the older E05000xxx code even though
+// Democracy Club's identity table assigns a newer one).
+const identity = loadIdentity();
+function normWardName(s: string): string {
+  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    .replace(/[,'’]/g, "").replace(/[-‐‑‒–—]/g, " ")
+    .replace(/&/g, "and").replace(/\s+/g, " ").trim();
+}
+const neighbourSharesMap: Record<string, number> = {};
+let neighbourMapSize = 0;
+let focalReformShare: number | null = null;
+const focalReformPct = wp?.prediction?.["Reform UK"]?.pct;
+if (typeof focalReformPct === "number") focalReformShare = focalReformPct;
+if (lad24 && ward.gss_code) {
+  for (const w of identity.wards) {
+    const wpOther = predictions[w.ballot_paper_id];
+    if (!wpOther || wpOther.lad24cd !== lad24) continue;
+    const sh = wpOther.prediction?.["Reform UK"]?.pct;
+    if (typeof sh !== "number") continue;
+    if (w.gss_code) neighbourSharesMap[w.gss_code] = sh;
+    if (w.ward_name) neighbourSharesMap[`name:${normWardName(w.ward_name)}`] = sh;
+    neighbourMapSize++;
+  }
+}
+const showMiniMap = !!ward.gss_code && neighbourMapSize >= 3 && focalReformShare !== null;
+const winnerParty = top?.[0];
+const focalColour = winnerParty ? partyColour(winnerParty) : "var(--accent-3)";
+
 // Per-ward 7 May 2026 backtest: did we call the winner correctly here?
 // Row keys are stable Democracy Club ballot IDs (local.<council>.<ward>.<date>).
 const wardBacktest = ward.ballot_paper_id ? loadMay7BacktestForWard(ward.ballot_paper_id) : null;
@@ -65,17 +100,36 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
 ---
 
 <BaseLayout title={title} description={description}>
-  <section class="page-hero">
-    <p class="eyebrow">{tierLabel} · {ward.council_name}</p>
-    <h1>{ward.ward_name}</h1>
-    <p class="lede">
-      {ward.winner_count} {ward.winner_count === 1 ? "seat" : "seats"} contested on Thursday 7 May 2026.
-      {ward.candidate_count} candidates from {ward.parties_standing.length} {ward.parties_standing.length === 1 ? "party" : "parties"}.
-    </p>
-    <p class="meta-row">
-      Confidence in the forecast: <strong>{confidenceLabel}</strong>
-      {ward.sopn_url && (<>{" · "}<a href={ward.sopn_url}>Official Statement of Persons Nominated (PDF)</a></>)}
-    </p>
+  <section class="page-hero ward-hero">
+    <div class="ward-hero-text">
+      <p class="eyebrow">{tierLabel} · {ward.council_name}</p>
+      <h1>{ward.ward_name}</h1>
+      <p class="lede">
+        {ward.winner_count} {ward.winner_count === 1 ? "seat" : "seats"} contested on Thursday 7 May 2026.
+        {ward.candidate_count} candidates from {ward.parties_standing.length} {ward.parties_standing.length === 1 ? "party" : "parties"}.
+      </p>
+      <p class="meta-row">
+        Confidence in the forecast: <strong>{confidenceLabel}</strong>
+        {ward.sopn_url && (<>{" · "}<a href={ward.sopn_url}>Official Statement of Persons Nominated (PDF)</a></>)}
+      </p>
+    </div>
+    {showMiniMap && (
+      <div class="ward-hero-map">
+        <MiniMap
+          focalCode={ward.gss_code!}
+          focalKind="ward"
+          focalColour={focalColour}
+          width={260}
+          height={200}
+          neighbourShares={neighbourSharesMap}
+          focalShare={focalReformShare}
+          ariaLabel={`Ward locator for ${ward.ward_name}; neighbouring wards shaded by Reform UK vote-share difference vs this ward.`}
+        />
+        <p class="ward-hero-map-caption">
+          Neighbours shaded by <strong>Reform UK share vs this ward</strong> — red = higher, blue = lower.
+        </p>
+      </div>
+    )}
   </section>
 
   {wp?.cancelled && (
@@ -256,4 +310,35 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
 <style>
 .party-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
 .party-list li { background: var(--surface); padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); }
+
+.ward-hero {
+  max-width: 64rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-xl, 2rem);
+  align-items: center;
+}
+.ward-hero-text { min-width: 0; }
+.ward-hero-map { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs, 0.5rem); }
+.ward-hero-map :global(.mini-map) {
+  margin: 0;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0.5rem;
+  box-shadow: var(--shadow);
+}
+.ward-hero-map-caption {
+  margin: 0;
+  max-width: 17rem;
+  color: var(--muted);
+  font-size: var(--text-small, 0.88rem);
+  text-align: right;
+  line-height: 1.4;
+}
+@media (max-width: 820px) {
+  .ward-hero { grid-template-columns: 1fr; }
+  .ward-hero-map { align-items: flex-start; }
+  .ward-hero-map-caption { text-align: left; max-width: 100%; }
+}
 </style>

@@ -105,6 +105,24 @@ const structuredData = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script is:inline>
+      // Sync theme before paint to avoid FOUC. Saved preference (localStorage)
+      // wins; otherwise default to system preference.
+      (function () {
+        try {
+          var saved = localStorage.getItem("uke-theme");
+          var theme =
+            saved === "dark" || saved === "light"
+              ? saved
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (_) {
+          /* localStorage disabled — leave CSS media query to handle it */
+        }
+      })();
+    </script>
     <meta name="description" content={description} />
     <meta name="robots" content={robotsContent} />
     <meta name="theme-color" content="#f7f4ef" media="(prefers-color-scheme: light)" />
@@ -217,8 +235,8 @@ const structuredData = [
         padding: 0.85rem 1rem;
         border-radius: 14px;
         text-decoration: none;
-        border: 1px solid var(--border, #d4dce6);
-        background: var(--bg-soft, #ffffff);
+        border: 1px solid var(--card-border-soft, var(--border, #d4dce6));
+        background: var(--card-bg-soft, var(--surface, #ffffff));
         transition: transform 180ms, border-color 180ms, box-shadow 180ms;
       }
       .footer-sister-card:hover {
@@ -274,12 +292,11 @@ const structuredData = [
       .footer-sister-card--as:hover {
         border-color: rgba(6, 182, 212, 0.55);
       }
+      :root[data-theme="dark"] .footer-sister-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      }
       @media (prefers-color-scheme: dark) {
-        .footer-sister-card {
-          background: rgba(255, 255, 255, 0.03);
-          border-color: rgba(255, 255, 255, 0.08);
-        }
-        .footer-sister-card:hover {
+        :root:not([data-theme="light"]) .footer-sister-card:hover {
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
       }

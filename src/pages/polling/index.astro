@@ -12,6 +12,7 @@ import {
   SCOTTISH_2026_APRIL_AVERAGE,
   UK_WESTMINSTER_2024_GE_RESULT,
 } from "../../lib/nationalPolling.js";
+import { countOverrides, listOverrides } from "../../lib/restoreBritain";
 
 // Live polling override + ledger — both written by scripts/refresh-polling.mjs.
 function readJsonIfExists(rel: string): any | null {
@@ -124,16 +125,41 @@ const ukSourceSummary = overlay
         <h2>Restore Britain isn't in the Wikipedia table</h2>
       </div>
       <div class="backtest-callout">
-        <strong>Restore Britain {pct(overlay.share)} — applied manually.</strong>
+        <strong>Restore Britain {pct(overlay.share)} — applied as a national overlay.</strong>
         <span class="backtest-detail">
           Most pollsters embed Restore Britain inside the "Others" cell rather than as a separate
-          column. Until the polling-refresh parser learns to read the embedded "(RB X%)" annotation,
-          we maintain this as a static overlay subtracted from "Other" to keep the total at 100%.
+          column. We subtract the overlay from "Other" so the total still sums to 100%. The
+          per-seat parser at <code>scripts/fetch-rb-annotations.mjs</code> scans Wikipedia
+          constituency pages for tabulated RB results; where it finds one, the per-seat share
+          replaces the national overlay for that constituency.
         </span>
       </div>
       <p class="caption">
         Overlay source: {overlay.source}. Retrieved {overlay.retrieved_at}.
+        {countOverrides() > 0 ? (
+          <> · Per-seat overrides currently active for <strong>{countOverrides()}</strong> constituencies.</>
+        ) : (
+          <> · No per-seat overrides yet; run <code>node scripts/fetch-rb-annotations.mjs</code> to refresh.</>
+        )}
       </p>
+      {countOverrides() > 0 && (
+        <table class="seat-table" style="margin-top:var(--space-md)">
+          <thead><tr><th>PCON</th><th class="num">RB share</th><th>Source</th></tr></thead>
+          <tbody>
+            {listOverrides().map((o) => (
+              <tr>
+                <td><code>{o.pcon24cd}</code></td>
+                <td class="num">{(o.share * 100).toFixed(1)}%</td>
+                <td>
+                  {o.wikipedia
+                    ? <a href={o.wikipedia} rel="external">{o.source}</a>
+                    : <span>{o.source}</span>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </section>
   )}
 
