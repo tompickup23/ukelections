@@ -20,14 +20,14 @@ const top = headline.seat_tallies[0];
 const second = headline.seat_tallies[1];
 const HALFWAY = 326;
 
-// CommonsHorseshoe wants a flat {party: seats} map — feed it the raw
+// CommonsHorseshoe wants a flat {party: seats} map. Feed it the raw
 // summary tallies (includes every party, even those below the top-6
 // shown in the bar chart).
 const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, number>;
 ---
 
 <BaseLayout
-  title="General election forecast — every UK constituency"
+  title="General election forecast. Every UK constituency"
   description={`Forecast for all ${headline.total_seats} UK constituencies if a general election were held today. Headline: ${top ? `${shortPartyLabel(top.party)} ${top.seats}` : "no clear lead"}.`}
 >
   <section class="page-hero">
@@ -35,20 +35,20 @@ const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, nu
     <h1>{top ? `${shortPartyLabel(top.party)} projected to win ${top.seats} seats` : "Every UK constituency, forecast"}</h1>
     <p class="lede">
       All {headline.total_seats.toLocaleString()} UK parliamentary constituencies. Refreshed daily from the latest UK Westminster polling.
-      A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "—"} short of an overall majority.`}
+      A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Every seat coloured by predicted winner</p>
-      <h2>The UK political map — if a general election were held today</h2>
+      <h2>The UK political map, if a general election were held today</h2>
     </div>
     <ConstituencyChoropleth />
     <p class="caption">
       Hover a constituency for its predicted winner and margin. Click to read the full seat forecast.
-      Northern Irish coastline and Highland sea-lochs are simplified to keep the file under 250 KB —
-      boundary data sourced from the ONS Open Geography Portal (PCS24 BUC, simplified with mapshaper).
+      Northern Irish coastline and Highland sea-lochs are simplified to keep the file under 250 KB.
+      Boundary data sourced from the ONS Open Geography Portal (PCS24 BUC, simplified with mapshaper).
     </p>
   </section>
 
@@ -62,7 +62,7 @@ const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, nu
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Seat tally — full breakdown</p>
+      <p class="eyebrow">Seat tally, full breakdown</p>
       <h2>Every party with a projected seat</h2>
     </div>
     <div class="party-bars party-bars-large">
@@ -107,7 +107,7 @@ const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, nu
       <h2>Top 50 marginals</h2>
     </div>
     <p class="caption">
-      The closest predicted contests on this forecast — these are the seats most likely to flip if the polling moves.
+      The closest predicted contests on this forecast. These are the seats most likely to flip if the polling moves.
     </p>
     <table class="seat-table">
       <thead><tr><th>Constituency</th><th>Predicted winner</th><th>Margin</th><th>Country</th></tr></thead>
@@ -146,10 +146,10 @@ const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, nu
       <h2>What this forecast does and doesn't try to do</h2>
     </div>
     <ul class="plain-list">
-      <li><strong>It assumes a notional election held this week</strong>, using current Westminster polling. The next general election may be months or years away — the forecast will move with the polls.</li>
+      <li><strong>It assumes a notional election held this week</strong>, using current Westminster polling. The next general election may be months or years away; the forecast will move with the polls.</li>
       <li><strong>It does not predict turnout swings</strong> or campaign effects beyond what's already reflected in the polls. Late-campaign movement can be substantial.</li>
       <li><strong>It does not assume tactical voting beyond the pattern observed in 2024.</strong> A formal pact between Labour and the Liberal Democrats, for example, is not modelled.</li>
-      <li><strong>Confidence intervals are not yet shown per seat.</strong> A future release will publish a high–low band on each constituency.</li>
+      <li><strong>Confidence intervals are not yet shown per seat.</strong> A future release will publish a high/low band on each constituency.</li>
     </ul>
     <p class="caption">
       Read about the model at <a href="/methodology/">About</a>, see <a href="/polling/">the exact polling numbers feeding the forecast</a>, or look up your own constituency at <a href="/your-area/">Find your ward</a>.

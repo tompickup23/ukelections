@@ -87,7 +87,7 @@ const regions = Array.from(byRegion.values()).sort((a, b) => b.reform_share - a.
 const topRegion = regions[0];
 const bottomRegion = regions[regions.length - 1];
 
-// Build choropleth. Each LAD shaded by its region's Reform share — saturation
+// Build choropleth. Each LAD shaded by its region's Reform share. Saturation
 // rises with share. Out-of-data LADs get the neutral surface-muted tone.
 const REFORM_BASE = [193, 18, 31] as const; // matches partyColour("Reform UK") ramp endpoint
 const NEUTRAL = "var(--surface-muted)";
@@ -128,7 +128,7 @@ const description =
   `English region and devolved country, rendered as a tinted LAD choropleth.`;
 ---
 
-<BaseLayout title="Reform share by region — May 7 results" description={description}>
+<BaseLayout title="Reform share by region. May 7 results" description={description}>
   <section class="page-hero">
     <p class="eyebrow">Past results · Regional view</p>
     <h1>Reform UK by region, 7 May 2026</h1>
@@ -148,7 +148,7 @@ const description =
         <StatCard
           icon="trending-up"
           value={`${(topRegion.reform_share * 100).toFixed(1)}%`}
-          label={`Reform UK seat share in ${topRegion.name} — the strongest region of the night`}
+          label={`Reform UK seat share in ${topRegion.name}, the strongest region of the night`}
           accent={partyColour("Reform UK")}
           trend={`${topRegion.ref_seats_won.toLocaleString()} of ${topRegion.total_seats_won.toLocaleString()} seats`}
           trendDirection="up"
@@ -158,7 +158,7 @@ const description =
         <StatCard
           icon="trending-down"
           value={`${(bottomRegion.reform_share * 100).toFixed(1)}%`}
-          label={`Reform UK seat share in ${bottomRegion.name} — the weakest region on the map`}
+          label={`Reform UK seat share in ${bottomRegion.name}, the weakest region on the map`}
           accent="var(--muted)"
           trend={`${bottomRegion.ref_seats_won.toLocaleString()} of ${bottomRegion.total_seats_won.toLocaleString()} seats`}
           trendDirection="down"
@@ -196,7 +196,7 @@ const description =
               >
                 <title>
                   {p.name}
-                  {p.regionName ? ` — ${p.regionName}: Reform ${(p.share * 100).toFixed(1)}%` : ""}
+                  {p.regionName ? `: ${p.regionName}, Reform ${(p.share * 100).toFixed(1)}%` : ""}
                 </title>
               </path>
             ))}

@@ -13,7 +13,7 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).total_central
 >
   <section class="page-hero">
     <p class="eyebrow">Scottish Parliament 2026 · Scaffold forecast</p>
-    <h1>129 seats — Additional Member System</h1>
+    <h1>129 seats. Additional Member System</h1>
     <p class="lede">
       73 FPTP constituency seats + 56 d'Hondt regional list seats across 8 regions.
     </p>
@@ -21,7 +21,7 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).total_central
 
   <section class="section">
     <div class="backtest-callout backtest-callout--warn">
-      <strong>⚠ Scaffold forecast — not yet calibrated against named Scottish polling.</strong>
+      <strong>⚠ Scaffold forecast, not yet calibrated against named Scottish polling.</strong>
       <span class="backtest-detail">
         This page is published as a methodology sketch only. The polling input is a pre-launch
         placeholder (the file metadata flags <code>refresh_required_by: 2026-05-01</code>) and the
@@ -92,7 +92,7 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).total_central
       return (
         <div class="region-card">
           <h3>{r.region}</h3>
-          <p style="font-size: 0.875rem; color: var(--muted)">7 list seats — central allocation:</p>
+          <p style="font-size: 0.875rem; color: var(--muted)">7 list seats, central allocation:</p>
           <div>
             {central.length === 0 && <span style="color: var(--muted)">All 7 list seats projected to constituency winners (no list compensation needed)</span>}
             {central.map(([party, seats]) => (

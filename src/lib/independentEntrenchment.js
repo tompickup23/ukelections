@@ -1,5 +1,5 @@
 /**
- * independentEntrenchment.js — handle wards where the most recent borough
+ * independentEntrenchment.js. handle wards where the most recent borough
  * cycle was won decisively by a non-major-party candidate (Independent,
  * Workers Party, etc.) whose personal vote is hyperlocal and is NOT
  * represented in cross-tier county-cycle results.
@@ -9,7 +9,7 @@
  *   1. **2025 county-cycle anchor wash-out.** The Final-B step blends
  *      borough predictions toward the parent county's May 2025 result at
  *      a default 0.45 weight. County divisions are 4× the size of borough
- *      wards and tend to have major-party candidates only — there's no
+ *      wards and tend to have major-party candidates only. there's no
  *      Independent on the 2025 LCC ballot for Bank Hall, Daneshouse, or
  *      Queensgate. Blending in the LCC result therefore drags the local
  *      Independent share back DOWN toward Labour/Reform. The fix is to
@@ -20,7 +20,7 @@
  *      like Bank Hall and Daneshouse moved from Labour ~80% in 2023 to
  *      Labour ~25% in 2024 (the rest going to Independents over Gaza).
  *      The 2024 result IS the model's baseline, so the shift is captured
- *      for THAT cycle — but the model otherwise treats 2024 as the
+ *      for THAT cycle. but the model otherwise treats 2024 as the
  *      starting point of a normal regression to a major-party share. Tom
  *      observes the trend will continue (sitting Independents have built
  *      a personal vote and are entrenched, not regressing). We need to
@@ -45,7 +45,7 @@ const MAJOR_CANONICAL = new Set([
  * { entrenched: bool, party: string|null, share: number, name: string|null }.
  *
  * `entrenched=true` means a single non-major-party candidate took ≥40%
- * of the vote — the kind of personal-vote stronghold whose share will
+ * of the vote. the kind of personal-vote stronghold whose share will
  * NOT show up in a county-cycle anchor.
  */
 export function detectLocalNonMajorEntrenchment(historyRows, threshold = 0.40) {
@@ -58,7 +58,7 @@ export function detectLocalNonMajorEntrenchment(historyRows, threshold = 0.40) {
     return { entrenched: false, party: null, share: 0, name: null };
   }
   // Find the largest non-major candidate. Independents share a label so we
-  // don't sum across separate Independents — only the leading individual.
+  // don't sum across separate Independents. only the leading individual.
   let leader = null;
   for (const c of latest.candidates) {
     if (MAJOR_CANONICAL.has(c.party)) continue;
@@ -119,7 +119,7 @@ export function detectDefectionCrystallisation(historyRows) {
   const drop = priorShare - latestShare;
   if (drop < 0.25) return fail;
 
-  // Find the non-major recipient — the highest non-major share in `latest`
+  // Find the non-major recipient. the highest non-major share in `latest`
   let recipient = null;
   for (const c of latest.candidates) {
     if (MAJOR_CANONICAL.has(c.party)) continue;
@@ -156,7 +156,7 @@ export function applyDefectionBonus(prediction, signal, partiesOnBallot) {
   const bonus = Math.min(signal.drop_pp / 2, 0.10);
   const out = { ...prediction };
   const recipientCurrent = (out[signal.recipient]?.pct ?? out[signal.recipient]) || 0;
-  // Determine the share value type — some callers pass `{ Party: 0.43 }`,
+  // Determine the share value type. some callers pass `{ Party: 0.43 }`,
   // some pass `{ Party: { pct: 0.43, votes: ... } }`. Detect once.
   const isObjectShape = typeof out[signal.recipient] === "object" && out[signal.recipient] !== null;
 

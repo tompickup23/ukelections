@@ -1,5 +1,5 @@
 /**
- * reformRealignmentUplift.js — national Reform-realignment uplift for councils
+ * reformRealignmentUplift.js. national Reform-realignment uplift for councils
  * with no parent-county 2025 cycle anchor.
  *
  * Background
@@ -30,7 +30,7 @@
  * curve is empirically derived from Burnley 2026 ward-level forecasts (the
  * 2-tier district that DID receive the May-2025 LCC realignment lift, with
  * a clean monotone Asian%-vs-Reform% relationship). Apply only as an upward
- * floor — never reduce existing Reform share. Re-apply the demographic
+ * floor. never reduce existing Reform share. Re-apply the demographic
  * ceiling afterwards as a safety net.
  *
  * Regional dampening attenuates the lift outside areas where the May-2025
@@ -117,16 +117,16 @@ function regionalMultiplier(councilSlug, regionTag) {
   if (regionTag === "county_district") return 1.00;
   // Southern unitaries / districts in counties that did NOT contest May
   // 2025 (Hampshire, Sussex, Surrey, etc.). Polling shows Reform there
-  // ~22% — slightly below the calibration source. Use 0.85.
+  // ~22%. slightly below the calibration source. Use 0.85.
   return 0.85;
 }
 
 /**
  * Apply the realignment uplift to a single ward's prediction.
  *
- * @param {object} prediction — current per-party prediction (from prior steps)
- * @param {object} demo — ward demographics (must include asian_pct, optionally muslim_pct)
- * @param {object} ctx — { councilSlug, regionTag, hasCountyAnchor, enabled }
+ * @param {object} prediction. current per-party prediction (from prior steps)
+ * @param {object} demo. ward demographics (must include asian_pct, optionally muslim_pct)
+ * @param {object} ctx. { councilSlug, regionTag, hasCountyAnchor, enabled }
  * @returns {{ prediction, applied: object|null }}
  */
 export function applyReformRealignmentUplift(prediction, demo, ctx) {

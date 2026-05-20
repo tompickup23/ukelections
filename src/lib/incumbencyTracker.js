@@ -1,5 +1,5 @@
 /**
- * incumbencyTracker.js — sitting MP / standing-down / defected adjustments
+ * incumbencyTracker.js. sitting MP / standing-down / defected adjustments
  * for general election forecasts.
  *
  * Empirical effect sizes (post-2024 evidence):
@@ -47,7 +47,7 @@ export function applyIncumbencyAdjustment(shares, mp) {
     return { shares: out, applied: { party: mp.party, delta: -retirementDrag, reason: `retiring after ${tenure}yr tenure` } };
   }
 
-  // Defected/suspended — treat as open seat: strip 1.5pp from former party
+  // Defected/suspended. treat as open seat: strip 1.5pp from former party
   if ((status === "defected" || status === "suspended") && (out[mp.party] ?? 0) > 0) {
     const drag = 0.015;
     out[mp.party] = Math.max(0, (out[mp.party] || 0) - drag);
@@ -108,7 +108,7 @@ export function buildMpRosterFromGe2024(pcons, byElectionResults = [], standingD
     let defectionDate = null;
     // Tory→Reform / Lab→Independent / etc defections: the sitting MP is now
     // the incumbent of new_party (short tenure since defection date). The
-    // old-party baseline still applies via the STM swing — we DON'T double-
+    // old-party baseline still applies via the STM swing. we DON'T double-
     // dock by also applying open-seat drag.
     if (override?.new_party && override?.as_of) {
       effectiveParty = override.new_party;

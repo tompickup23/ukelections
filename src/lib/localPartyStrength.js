@@ -1,5 +1,5 @@
 /**
- * localPartyStrength.js — multi-cycle local-party-strength + candidate-continuity
+ * localPartyStrength.js. multi-cycle local-party-strength + candidate-continuity
  * + time-decay baseline blending.
  *
  * Why: model currently uses ONLY the most-recent borough contest as baseline.
@@ -23,7 +23,7 @@ const ANCHOR_WEIGHT = 0.65;         // 65% historical mean + 35% model
 const SAME_INDIVIDUAL_BONUS = 0.05;
 const SAME_INDIVIDUAL_INCUMBENT_BONUS = 0.05; // additive
 // Family-name continuity: surname matches historic candidate but first name
-// differs — partial brand recognition (Pippa Lishman → daughter of Margaret/
+// differs. partial brand recognition (Pippa Lishman → daughter of Margaret/
 // Arthur Lishman, not the same personal vote).
 const FAMILY_NAME_BONUS = 0.02;
 const FAMILY_NAME_INCUMBENT_FAMILY_BONUS = 0.01; // tiny incumbency-by-association
@@ -70,9 +70,9 @@ function firstName(name) {
 
 /**
  * Returns one of:
- *   "same_individual" — first AND last name match
- *   "family"           — surname match but first name differs (or compound first-name overlap)
- *   "none"             — no match
+ *   "same_individual". first AND last name match
+ *   "family"          . surname match but first name differs (or compound first-name overlap)
+ *   "none"            . no match
  */
 function nameMatchType(a, b) {
   const fa = firstName(a);
@@ -82,7 +82,7 @@ function nameMatchType(a, b) {
   if (!la || !lb || la !== lb) return "none";
   if (fa && fb && fa === fb) return "same_individual";
   // Could also match if first-name is a known nickname pair (Pippa↔Philippa,
-  // Bill↔William, Bob↔Robert, Jeff↔Jeffrey) — left as a future refinement.
+  // Bill↔William, Bob↔Robert, Jeff↔Jeffrey). left as a future refinement.
   return "family";
 }
 
@@ -207,13 +207,13 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026, re
 
   // Detect stronghold collapse from two independent signals.
   //
-  // Signal 1 — most-recent contest collapse: if the latest contest of any
+  // Signal 1. most-recent contest collapse: if the latest contest of any
   // kind (including by-elections, which computeLocalStrength filters out)
   // shows a historical-stronghold party at ≤25% AND cycle mean was ≥40%,
   // the pre-2024 stronghold is broken. Lanehead Nov 2025 by-election:
   // Labour collapsed to 16.5% after averaging ~55% over 7 cycle contests.
   //
-  // Signal 2 — May 2025 local-equivalent collapse: if the most recent
+  // Signal 2. May 2025 local-equivalent collapse: if the most recent
   // county / LCC division contest shows a historic-stronghold party at
   // <70% of its cycle mean, the post-2024 realignment has detached this
   // ward from its earlier voting pattern. Lancashire wards under
@@ -254,7 +254,7 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026, re
       }
     }
   }
-  // Signal 3 — Reform won the parent May 2025 contest. The realignment is
+  // Signal 3. Reform won the parent May 2025 contest. The realignment is
   // established at the local-equivalent level, so the cycle-history anchor
   // for non-Reform stronghold parties is no longer predictive of the 2026
   // borough cycle. Suppress those anchors so the Step 5 + Step 6 LCC-proxy
@@ -267,7 +267,7 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026, re
       if (party === "Reform UK") continue;
       collapsedParties.add(party);
       if (!collapseReasons[party]) {
-        collapseReasons[party] = `Reform UK won the May 2025 local-equivalent contest — ${party} stronghold anchor suppressed under realignment rule`;
+        collapseReasons[party] = `Reform UK won the May 2025 local-equivalent contest. ${party} stronghold anchor suppressed under realignment rule`;
       }
     }
   }
@@ -277,7 +277,7 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026, re
     const s = strength.byParty[party];
     if (!s?.is_stronghold) continue;
     if (collapsedParties.has(party)) {
-      applied.push(`${party} stronghold collapsed (${collapseReasons[party] || "signal threshold"}) — anchor skipped`);
+      applied.push(`${party} stronghold collapsed (${collapseReasons[party] || "signal threshold"}), anchor skipped`);
       continue;
     }
     const original = payload.pct || 0;
@@ -297,7 +297,7 @@ export function applyLocalStrength({ prediction, historyRows, candidates2026, re
       label = info.matchedHistoricElected ? "incumbent + same-individual continuity" : "same-individual continuity";
     } else if (info.matchType === "family") {
       // Family-name brand recognition (e.g. Pippa Lishman as daughter of
-      // Margaret/Arthur Lishman) — much weaker than same-individual.
+      // Margaret/Arthur Lishman). much weaker than same-individual.
       bonus = info.matchedHistoricElected ? FAMILY_NAME_BONUS + FAMILY_NAME_INCUMBENT_FAMILY_BONUS : FAMILY_NAME_BONUS;
       label = `family-name brand (matches ${info.matchedHistoricName})`;
     }

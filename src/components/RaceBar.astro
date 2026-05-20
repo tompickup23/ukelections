@@ -1,6 +1,6 @@
 ---
 /**
- * RaceBar.astro — horizontal stacked-bar race showing party vote shares.
+ * RaceBar.astro. horizontal stacked-bar race showing party vote shares.
  *
  * Lifted from the homepage hero v2. Now reusable across:
  *   - Homepage Makerfield hero
@@ -51,7 +51,7 @@ const {
   candidates = [],
   height = 64,
   showLegend = true,
-  title = "Central forecast — projected vote share",
+  title = "Central forecast, projected vote share",
   ariaLabel = "Stacked bar chart of projected vote shares by party",
   labelMinPct = 0.08,
 } = Astro.props;
@@ -72,7 +72,7 @@ const {
         <div
           class="hero-race-segment"
           style={`flex-basis:${(s.pct * 100).toFixed(2)}%; background:${partyColour(s.party)}`}
-          title={`${shortPartyLabel(s.party)} ${(s.pct * 100).toFixed(1)}%${cand ? ` — ${cand.candidate}` : ""}`}
+          title={`${shortPartyLabel(s.party)} ${(s.pct * 100).toFixed(1)}%${cand ? `. ${cand.candidate}` : ""}`}
         >
           {wide && (
             <span class="hero-race-label">

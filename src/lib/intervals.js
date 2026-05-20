@@ -1,5 +1,5 @@
 /**
- * intervals.js — bootstrap P10/P50/P90 intervals on per-ward predictions
+ * intervals.js. bootstrap P10/P50/P90 intervals on per-ward predictions
  * using the per-party residual SDs from the 2024 backtest.
  *
  * For each ward prediction:

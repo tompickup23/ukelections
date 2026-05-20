@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="About — UK Elections"
+  title="About. UK Elections"
   description="How UK Elections forecasts every UK contest. Plain-English explanation of the model, the data sources, and how we test ourselves."
 >
   <section class="page-hero">
@@ -35,8 +35,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <ol class="numbered-list">
       <li><strong>Baseline.</strong> Start from the most recent real result for that ward or constituency. For wards redrawn since 2016, we reconstruct a notional baseline from neighbouring wards.</li>
       <li><strong>National swing.</strong> Adjust each party's share by how much it's moved in the latest UK or country-level polling.</li>
-      <li><strong>Strong Transition Model.</strong> Apply the swing as a multiplicative move on each party's vote rather than a simple addition — bigger parties move more, smaller parties move less, and no party can go below zero.</li>
-      <li><strong>Local-party-strength anchor.</strong> Where a party has a long history in a ward (e.g. a Lib Dem stronghold), the prediction is partly anchored to that history, not just the national swing.</li>
+      <li><strong>Strong Transition Model.</strong> Apply the swing as a multiplicative move on each party's vote rather than a simple addition, bigger parties move more, smaller parties move less, and no party can go below zero.</li>
+      <li><strong>Local-party-strength anchor.</strong> Where a party has a long history in a ward (e.g, a Lib Dem stronghold), the prediction is partly anchored to that history, not just the national swing.</li>
       <li><strong>Incumbency and standing-down.</strong> Sitting MPs get a small personal-vote bonus. MPs standing down or defecting lose theirs. Anti-incumbency penalties apply to the party that lost the seat last time.</li>
       <li><strong>Tactical voting.</strong> A small Labour ↔ Lib Dem ↔ Green progressive transfer is applied in the closest three-way contests, calibrated against the 2017 and 2024 elections.</li>
       <li><strong>Demographic floors and ceilings.</strong> Reform UK gets a small lift in areas with high English national identity and high 65+ population; Reform is capped in areas with high Muslim population, where its empirical historical ceiling is around 10–15%.</li>
@@ -64,7 +64,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <li><strong>British Election Study</strong> Wave 1–30 panel data for the per-constituency prior used in the general election forecast.</li>
     </ul>
     <p class="caption">
-      A full machine-readable manifest of every file that fed the latest forecast — including its sha256 — is on the
+      A full machine-readable manifest of every file that fed the latest forecast, including its sha256, is on the
       <a href="/transparency/">Transparency page</a>.
     </p>
   </section>
@@ -97,7 +97,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="feature-list">
       <article>
         <h3>National model</h3>
-        <p>The full nine-step methodology used for English locals, mayoralties, the Senedd and Holyrood — with academic citations.</p>
+        <p>The full nine-step methodology used for English locals, mayoralties, the Senedd and Holyrood, with academic citations.</p>
         <p><a href="/methodology/national-model/">Read the national model →</a></p>
       </article>
       <article>

@@ -16,7 +16,7 @@ const PARTIES = ["Reform UK", "Labour", "Conservative", "Liberal Democrats", "Gr
 const PREDICTORS = ["imd", "white_british", "asian", "no_quals", "degree", "retired"];
 
 function fmtR(r: number): string {
-  if (r == null) return "—";
+  if (r == null) return "n/a";
   return (r >= 0 ? "+" : "") + r.toFixed(3);
 }
 
@@ -41,12 +41,12 @@ const n2026 = data.summary.n_councils_2026;
 ---
 
 <BaseLayout
-  title="Demographic indicators — backtest 2025 → 2026"
+  title="Demographic indicators, backtest 2025 → 2026"
   description={`Backtest of the demographic theories of British council voting against the 2026 local elections (n=${n2026} councils). Reform's degree-share signal is the most stable relationship; Labour's coalition reshuffled hard between 2025 and 2026; Conservatives have lost demographic predictability.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Past results · Indicator backtest</p>
-    <h1>What predicts vote share — and does it hold up across elections?</h1>
+    <h1>What predicts vote share, and does it hold up across elections?</h1>
     <p class="lede">
       We ran the same demographic regression on the <strong>1 May 2025</strong>
       county council elections (n={n2025} councils) and the <strong>1 May 2026</strong>
@@ -54,7 +54,7 @@ const n2026 = data.summary.n_councils_2026;
       <strong>Reform UK's correlation with degree-holder share (r ≈ −0.85) is
       the single most stable, lawful demographic relationship in modern English
       local elections.</strong> Other parties' coefficients moved meaningfully
-      between the two years — diagnostic of real coalitional reshuffling, not noise.
+      between the two years, diagnostic of real coalitional reshuffling, not noise.
     </p>
     <p class="meta-row">
       Predictors: IMD decile, White British %, Asian %, no-qualifications %,
@@ -66,7 +66,7 @@ const n2026 = data.summary.n_councils_2026;
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Per-party best single indicator</p>
-      <h2>One number per party — what to look at first</h2>
+      <h2>One number per party, what to look at first</h2>
     </div>
     <p>
       Across the much larger 2026 panel (n={n2026}), the strongest single demographic
@@ -101,7 +101,7 @@ const n2026 = data.summary.n_councils_2026;
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Backtest A — coefficient stability 2025 → 2026</p>
+      <p class="eyebrow">Backtest A, coefficient stability 2025 → 2026</p>
       <h2>Which correlations held up, and which moved?</h2>
     </div>
     <p>
@@ -127,7 +127,7 @@ const n2026 = data.summary.n_councils_2026;
             const v25 = r25[pred];
             const v26 = r26[pred];
             const delta = (v25 != null && v26 != null) ? Math.abs(v25 - v26) : null;
-            const stab = delta == null ? "—" : delta < 0.1 ? "stable" : delta < 0.3 ? "moderate shift" : "large shift";
+            const stab = delta == null ? "n/a" : delta < 0.1 ? "stable" : delta < 0.3 ? "moderate shift" : "large shift";
             return (
               <tr>
                 {i === 0 ? <td rowspan={PREDICTORS.length}><strong><span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}</strong></td> : null}
@@ -158,11 +158,11 @@ const n2026 = data.summary.n_councils_2026;
       (−0.56 → +0.18), and its IMD correlation strengthened (−0.29 → −0.64). Labour
       in 2026 is now "younger graduates in more-deprived urban areas" rather than
       the cross-class coalition it was in 2025. The R² of the same regression also
-      fell (0.77 → 0.59) — Labour's vote is now less demographically predictable.
+      fell (0.77 → 0.59). Labour's vote is now less demographically predictable.
     </p>
     <p>
       <strong>Conservatives have minimal demographic predictability either year</strong>
-      (R² ≈ 0.40 both years) — their vote depends much more on local incumbency,
+      (R² ≈ 0.40 both years), their vote depends much more on local incumbency,
       candidate quality, and tactical voting than on any of these axes. The one
       meaningful shift is on IMD: it flipped from near-zero (−0.025) in 2025 to
       strongly positive (+0.50) in 2026, consistent with the Conservatives becoming
@@ -172,7 +172,7 @@ const n2026 = data.summary.n_councils_2026;
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Backtest B — predictive accuracy</p>
+      <p class="eyebrow">Backtest B, predictive accuracy</p>
       <h2>Train on 2025 coefficients, predict 2026 vote share</h2>
     </div>
     <p>
@@ -200,8 +200,8 @@ const n2026 = data.summary.n_councils_2026;
           return (
             <tr>
               <td><span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}</td>
-              <td class="num">{r25 ? fmtPct(r25.mean_share) : "—"}</td>
-              <td class="num">{r26 ? fmtPct(r26.mean_share) : "—"}</td>
+              <td class="num">{r25 ? fmtPct(r25.mean_share) : "n/a"}</td>
+              <td class="num">{r26 ? fmtPct(r26.mean_share) : "n/a"}</td>
               <td class="num">{pred.mae_pp.toFixed(2)}pp</td>
               <td class="num">{pred.rmse_pp.toFixed(2)}pp</td>
               <td class="num">{fmtR(pred.correlation)}</td>
@@ -219,14 +219,14 @@ const n2026 = data.summary.n_councils_2026;
     </p>
     <p>
       <strong>Conservatives have the worst predictive accuracy</strong>
-      (MAE 11.5pp, r=+0.26) — using 2025 coefficients massively over-predicts
+      (MAE 11.5pp, r=+0.26), using 2025 coefficients massively over-predicts
       Conservative vote in 2026 in places where the demographic profile looked
       "Tory" on paper but Reform actually swept. This is direct quantitative
       evidence of the Conservative-to-Reform vote shift.
     </p>
     <p>
       <strong>Liberal Democrats have a large MAE (12.2pp) but decent correlation
-      (r=+0.53)</strong> — the demographic ranking is right but the absolute
+      (r=+0.53)</strong>, the demographic ranking is right but the absolute
       levels rose in 2026 (LDs gained vote share generally). A 2026-trained
       model would do better in level, even if 2025-trained captures the
       cross-council ranking.
@@ -247,7 +247,7 @@ const n2026 = data.summary.n_councils_2026;
             <span class="party-pill" style={`background:${partyColour(p)}`}></span> {shortPartyLabel(p)}
           </h3>
           <p>
-            <strong>2025 R² = {r25?.r_squared ?? "—"} · 2026 R² = {r26?.r_squared ?? "—"}</strong>
+            <strong>2025 R² = {r25?.r_squared ?? "n/a"} · 2026 R² = {r26?.r_squared ?? "n/a"}</strong>
             {r25 && r26 ? (
               <span> · 2025 mean vote {fmtPct(r25.mean_share)} → 2026 mean vote {fmtPct(r26.mean_share)}</span>
             ) : null}
@@ -294,8 +294,8 @@ const n2026 = data.summary.n_councils_2026;
         coefficient pattern looks nothing like 2025: no-quals dropped from
         +0.78 to +0.20, degree flipped from −0.56 to +0.18, retired from
         −0.11 to −0.56. Labour 2026 is "younger graduates in more-deprived
-        urban areas" — fundamentally a different coalition. Labour's R²
-        also dropped (0.77 → 0.59) — its vote is now less demographically
+        urban areas", fundamentally a different coalition. Labour's R²
+        also dropped (0.77 → 0.59), its vote is now less demographically
         predictable.
       </li>
       <li>
@@ -303,7 +303,7 @@ const n2026 = data.summary.n_councils_2026;
         (R² ≈ 0.40 both years). Their vote is now driven more by local
         incumbency, candidate quality, and tactical voting than by any
         demographic axis. Their training-on-2025 prediction accuracy for 2026
-        is the worst of all parties (MAE 11.5pp, r=0.26) — direct evidence
+        is the worst of all parties (MAE 11.5pp, r=0.26), direct evidence
         of the Conservative-to-Reform shift.
       </li>
       <li>
@@ -316,7 +316,7 @@ const n2026 = data.summary.n_councils_2026;
       <li>
         <strong>For ward-level Reform forecasting, no-quals % is the most
         practical proxy</strong> (degree % is nearly perfectly anti-correlated;
-        either works). At LA / council level, the choice is irrelevant — both
+        either works). At LA / council level, the choice is irrelevant, both
         deliver the same ranking. The implementation question is which is
         available in the ward demographic file (both are, but no-quals
         intuitively maps to the Reform coalition better in narrative terms).
@@ -328,7 +328,7 @@ const n2026 = data.summary.n_councils_2026;
     <summary>Methodology</summary>
     <ul class="plain-list">
       <li><strong>Sample.</strong> 1 May 2025: 24 councils (11 unitaries + 14 county councils). 1 May 2026: 136 councils (all tier-local contests where a slug → LAD24 mapping resolves).</li>
-      <li><strong>Demographics.</strong> Population-weighted aggregation of constituent LAD24 demographics — IMD 2019 (mean of LSOA deciles), 2026 ethnic projections (linear interpolation between Census 2021 + 2031 ONS midpoint), Census 2021 (TS021/030/054/066/067/004) aggregated to LAD by resident-population weight.</li>
+      <li><strong>Demographics.</strong> Population-weighted aggregation of constituent LAD24 demographics. IMD 2019 (mean of LSOA deciles), 2026 ethnic projections (linear interpolation between Census 2021 + 2031 ONS midpoint), Census 2021 (TS021/030/054/066/067/004) aggregated to LAD by resident-population weight.</li>
       <li><strong>Regression.</strong> OLS on the council panel. Predictors: intercept + IMD + white_british % + asian % + no_quals % + degree %. R², single-predictor Pearson correlations, and coefficient stability across years reported.</li>
       <li><strong>Predictive backtest.</strong> 2025 fitted coefficients applied to every 2026 council's demographics; predicted vote share compared to actual; MAE, RMSE, and Pearson r reported per party.</li>
       <li><strong>Caveats.</strong> County-council aggregation for 2-tier shires uses average district demographics weighted by ward-level resident totals; this approximates a true county-wide average but treats districts as equal-weight inside each county.</li>

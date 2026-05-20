@@ -1,5 +1,5 @@
 /**
- * ogRenderer.ts — Satori + Resvg rendering pipeline for per-page
+ * ogRenderer.ts. Satori + Resvg rendering pipeline for per-page
  * Open Graph cards.
  *
  * Loaded once per build process. Fonts (Sora + Manrope) live in
@@ -67,13 +67,13 @@ export interface OgCardOpts {
    */
   shares?: OgShare[];
   /**
-   * Caption for the shares unit — "Predicted vote share", "Seats won",
+   * Caption for the shares unit. "Predicted vote share", "Seats won",
    * "National polling", etc.
    */
   sharesCaption?: string;
   /** Fallback text subline when no shares are provided */
   subline?: string;
-  /** Background accent colour — usually partyColour() of the winner */
+  /** Background accent colour. usually partyColour() of the winner */
   accentColour?: string;
   /** Optional party-pill chip in the corner (party display name) */
   partyChipLabel?: string | null;
@@ -98,21 +98,21 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
   } = opts;
 
   // Each share segment is sized by pct relative to the sum of all
-  // tracked shares — important because the input may not sum to 1
+  // tracked shares. important because the input may not sum to 1
   // (we typically pass top 5–6 parties, so others are excluded).
   const trackedShares = (shares || []).filter((s) => s.pct > 0);
   const sharesTotal = trackedShares.reduce((sum, s) => sum + s.pct, 0);
   const hasShares = trackedShares.length > 0 && sharesTotal > 0;
 
   // Inline label visible only on segments that occupy at least 11% of
-  // the bar — narrower segments still render the swatch + sit in the
+  // the bar. narrower segments still render the swatch + sit in the
   // legend strip below.
   const labelMinPct = 0.11;
 
   const fonts = loadFonts();
 
   // The card uses a Satori-flavoured Flexbox layout. Satori doesn't
-  // accept JSX in this entry — we feed it a plain element tree (the
+  // accept JSX in this entry. we feed it a plain element tree (the
   // shape satori expects under the hood).
   const tree: any = {
     type: "div",
@@ -129,7 +129,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
         color: COLORS.text,
       },
       children: [
-        // Brand row — 40×40 logo tile + name + tagline. Shared across
+        // Brand row. 40×40 logo tile + name + tagline. Shared across
         // UKD / UKE / AS.
         {
           type: "div",
@@ -198,7 +198,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
             ],
           },
         },
-        // Hero block — eyebrow + headline + race bar (or subline fallback).
+        // Hero block. eyebrow + headline + race bar (or subline fallback).
         {
           type: "div",
           props: {
@@ -325,7 +325,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                             }),
                           },
                         },
-                        // Legend strip below the bar — every party + share + sub-label
+                        // Legend strip below the bar. every party + share + sub-label
                         {
                           type: "div",
                           props: {
@@ -407,7 +407,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
             ].filter(Boolean),
           },
         },
-        // Single-line footer — URL (brand colour) + tagline (muted),
+        // Single-line footer. URL (brand colour) + tagline (muted),
         // 2px brand-colour top border. Optional party-chip on the right
         // replaces the tagline for party-winner cards.
         {

@@ -1,5 +1,5 @@
 /**
- * tacticalVoting.js — Curtice/Fisher-style tactical voting overlay.
+ * tacticalVoting.js. Curtice/Fisher-style tactical voting overlay.
  *
  * Empirical pattern (BES 2024): Lab/LD/Green voters in seats where their
  * preferred party is well behind in 3rd place are more likely to vote for

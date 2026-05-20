@@ -142,8 +142,8 @@ const ePartyToColour = (slug: string | null) => {
 ---
 
 <BaseLayout
-  title="Council elections — every council, last result and next vote"
-  description="Every English council, London borough, metropolitan borough and unitary authority — May 7 2026 result, who controls it now, and when residents vote again. Two-tier councils awaiting Local Government Reorganisation are marked TBC."
+  title="Council elections. Every council, last result and next vote"
+  description="Every English council, London borough, metropolitan borough and unitary authority. May 7 2026 result, who controls it now, and when residents vote again. Two-tier councils awaiting Local Government Reorganisation are marked TBC."
 >
   <section class="page-hero">
     <p class="eyebrow">Council elections</p>
@@ -255,7 +255,7 @@ const ePartyToColour = (slug: string | null) => {
             <td class="num-col">
               {r.total_seats > 0
                 ? <span class={r.reform_majority ? "reform-majority-cell" : ""}>{r.reform_post}/{r.total_seats}</span>
-                : <span class="muted-cell">—</span>}
+                : <span class="muted-cell">n/a</span>}
             </td>
             <td>
               {r.next_is_tbc

@@ -1,10 +1,10 @@
 /**
- * dhondt.js — d'Hondt highest-averages list-PR allocator.
+ * dhondt.js. d'Hondt highest-averages list-PR allocator.
  *
  * Used for:
  *   - Senedd Cymru 2026: 16 super-constituencies × 6 list seats (closed list)
  *   - Holyrood 2026 regions: 8 regions × 7 list seats (each region has
- *     constituency seats already won — list seats compensate using
+ *     constituency seats already won. list seats compensate using
  *     d'Hondt over (party_votes / (1 + constituency_seats_won + iter)))
  *
  * Pure functions. No external dependencies.
@@ -16,7 +16,7 @@
  * @param {number} seats - total seats to allocate
  * @param {Object} [opts]
  * @param {Object<string, number>} [opts.priorSeats] - constituency seats already won by each party
- *   (Holyrood regional list mode — the divisor starts at 1 + priorSeats[party]).
+ *   (Holyrood regional list mode. the divisor starts at 1 + priorSeats[party]).
  * @returns {{ allocations: Object<string, number>, sequence: Array<{step:number, party:string, quotient:number}> }}
  */
 export function allocateDhondt(votes, seats, opts = {}) {

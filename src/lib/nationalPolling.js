@@ -1,5 +1,5 @@
 /**
- * nationalPolling.js — versioned snapshots of national vote-intention.
+ * nationalPolling.js, versioned snapshots of national vote-intention.
  *
  * Each snapshot has shares (0..1) per party + a `_meta` block recording
  * source, fieldwork window, sample size, method. The model's swing step
@@ -8,7 +8,7 @@
  * remainder as an additive adjustment to baseline shares.
  *
  * Two-tier resolution:
- *   1. data/polling/override.json — auto-refreshed weekly by
+ *   1. data/polling/override.json, auto-refreshed weekly by
  *      scripts/refresh-polling.mjs (Wikipedia rolling-average parser).
  *      If present and the relevant constant has a successful
  *      auto-parsed entry, it overrides the static snapshot below.
@@ -63,7 +63,7 @@ function applyOverride(constantName, snapshot) {
       fieldwork: ov.fieldwork_window
         ? `${ov.fieldwork_window.earliest} to ${ov.fieldwork_window.latest}`
         : snapshot._meta?.fieldwork,
-      source: `Wikipedia rolling 14-day average — ${ov.polls_used} polls`,
+      source: `Wikipedia rolling 14-day average, ${ov.polls_used} polls`,
       source_url: `https://en.wikipedia.org/wiki/${ov.page}`,
       review_status: "auto_refreshed",
       retrieved_at: ov.retrieved_at,
@@ -72,7 +72,7 @@ function applyOverride(constantName, snapshot) {
 }
 
 export const UK_WESTMINSTER_2019_GE_RESULT = {
-  // GE2019 — used as the prior-baseline for the 2024 backtest run.
+  // GE2019, used as the prior-baseline for the 2024 backtest run.
   shares: {
     "Conservative": 0.436,
     "Labour": 0.321,
@@ -93,7 +93,7 @@ export const UK_WESTMINSTER_2019_GE_RESULT = {
 };
 
 export const UK_WESTMINSTER_2024_MAY_AVERAGE = {
-  // May 2024 (just before May 2 local elections) — used as nationalPolling for the 2024 backtest.
+  // May 2024 (just before May 2 local elections), used as nationalPolling for the 2024 backtest.
   shares: {
     "Labour": 0.440,
     "Conservative": 0.240,
@@ -105,16 +105,16 @@ export const UK_WESTMINSTER_2024_MAY_AVERAGE = {
     "Other": 0.005,
   },
   _meta: {
-    label: "UK Westminster vote intention — May 2024 average (pre-local-elections)",
+    label: "UK Westminster vote intention. May 2024 average (pre-local-elections)",
     fieldwork: "2024-04-15 to 2024-05-01",
-    source: "Cross-pollster average (YouGov, Opinium, Savanta, Redfield) — historical reference",
+    source: "Cross-pollster average (YouGov, Opinium, Savanta, Redfield). Historical reference.",
     source_url: null,
     licence: null,
   },
 };
 
 export const UK_WESTMINSTER_2025_MAY_AVERAGE = {
-  // May 2025 average — used as the "national context at time of 2025 county
+  // May 2025 average, used as the "national context at time of 2025 county
   // elections" snapshot, so the county-2025 anchor can compute swing-since-2025.
   shares: {
     "Reform UK": 0.255,
@@ -127,9 +127,9 @@ export const UK_WESTMINSTER_2025_MAY_AVERAGE = {
     "Other": 0.030,
   },
   _meta: {
-    label: "UK Westminster vote intention — May 2025 average",
+    label: "UK Westminster vote intention. May 2025 average",
     fieldwork: "2025-04-15 to 2025-05-01",
-    source: "Cross-pollster average — historical reference",
+    source: "Cross-pollster average. Historical reference.",
   },
 };
 
@@ -170,9 +170,9 @@ const UK_WESTMINSTER_2026_APRIL_AVERAGE_STATIC = {
     "Other": 0.037,
   },
   _meta: {
-    label: "UK Westminster vote intention — April 2026 rolling average (placeholder)",
+    label: "UK Westminster vote intention. April 2026 rolling average (placeholder)",
     fieldwork: "2026-04-15 to 2026-04-25",
-    source: "PLACEHOLDER — refresh from named pollster average before model run",
+    source: "PLACEHOLDER. Refresh from named pollster average before model run.",
     source_url: null,
     licence: null,
     review_status: "draft_placeholder",
@@ -194,7 +194,7 @@ export const WELSH_2024_GE_RESULT = {
   _meta: {
     label: "Welsh GE2024 vote share (32 constituencies aggregated)",
     fieldwork: "2024-07-04",
-    source: "House of Commons Library — derived from CBP-10009 Welsh subset",
+    source: "House of Commons Library, CBP-10009 Welsh subset",
     licence: "Open Parliament Licence",
   },
 };
@@ -211,9 +211,9 @@ const WELSH_2026_APRIL_AVERAGE_STATIC = {
     "Other": 0.050,
   },
   _meta: {
-    label: "Welsh vote intention — April 2026 placeholder (refresh required)",
+    label: "Welsh vote intention. April 2026 placeholder (refresh required)",
     fieldwork: "2026-04",
-    source: "PLACEHOLDER — refresh from Beaufort / YouGov Wales / ITV Wales poll before launch",
+    source: "PLACEHOLDER. Refresh from Beaufort / YouGov Wales / ITV Wales poll before launch.",
     review_status: "draft_placeholder",
     refresh_required_by: "2026-05-01",
   },
@@ -259,20 +259,20 @@ const SCOTTISH_2026_APRIL_AVERAGE_STATIC = {
     "Other": 0.020,
   },
   _meta: {
-    label: "Scottish vote intention — April 2026 placeholder (refresh required)",
+    label: "Scottish vote intention. April 2026 placeholder (refresh required)",
     fieldwork: "2026-04",
-    source: "PLACEHOLDER — refresh from Survation / Ipsos / YouGov Scotland poll before launch",
+    source: "PLACEHOLDER. Refresh from Survation / Ipsos / YouGov Scotland poll before launch.",
     review_status: "draft_placeholder",
     refresh_required_by: "2026-05-01",
   },
 };
 
-// Restore Britain — Rupert Lowe's party (formed November 2025).
+// Restore Britain, Rupert Lowe's party (formed November 2025).
 // Most pollsters embed RB inside the "Others" cell rather than giving it its
 // own column. Wikipedia rolling-average parser therefore can't pick it up
 // directly. The number below is a manual snapshot of the most recent named
 // pollster published in the last 14 days, applied as an overlay on top of the
-// auto-refreshed snapshot — subtracted from the "Other" cell so the total
+// auto-refreshed snapshot, subtracted from the "Other" cell so the total
 // still sums to 1.0.
 //
 // Refresh from: https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election
@@ -280,7 +280,7 @@ const SCOTTISH_2026_APRIL_AVERAGE_STATIC = {
 const RESTORE_BRITAIN_OVERLAY = {
   share: 0.04,
   source:
-    "YouGov 17-18 May 2026 + Find Out Now 6 May 2026 — RB 4% embedded in Wikipedia 'Others' column. " +
+    "YouGov 17-18 May 2026 + Find Out Now 6 May 2026. RB 4% embedded in Wikipedia 'Others' column. " +
     "Empirical context: Restore Britain's local affiliate Great Yarmouth First won all 9 Great " +
     "Yarmouth divisions of Norfolk County Council and 1 of 39 Great Yarmouth Borough Council seats " +
     "on 7 May 2026.",
@@ -288,7 +288,7 @@ const RESTORE_BRITAIN_OVERLAY = {
 };
 
 function applyRestoreBritainOverlay(snapshot) {
-  // Only applies to UK Westminster — Welsh + Scottish samples are too small.
+  // Only applies to UK Westminster, Welsh + Scottish samples are too small.
   const restoreShare = RESTORE_BRITAIN_OVERLAY.share;
   const currentOther = snapshot.shares["Other"] || 0;
   if (currentOther < restoreShare) {

@@ -34,7 +34,7 @@ function classificationLabel(c: string | null | undefined): string {
     case "lean": return "Lean";
     case "likely": return "Likely";
     case "safe": return "Safe";
-    default: return c || "—";
+    default: return c || "TBC";
   }
 }
 
@@ -44,7 +44,7 @@ const description = heroContest
 ---
 
 <BaseLayout
-  title="UK Elections — every constituency, every forecast, every backtest"
+  title="UK Elections. Every constituency, every forecast, every backtest"
   description={description}
 >
   {heroContest && (
@@ -55,7 +55,7 @@ const description = heroContest
           <h1>{heroContest.short_name}</h1>
           <p class="lede">
             {heroClassification === "toss-up" && heroContest.headline_winner && heroContest.headline_runner_up && heroContest.margin_pp != null
-              ? <>A <strong>{heroContest.margin_pp.toFixed(1)}pp {classificationLabel(heroClassification).toLowerCase()}</strong> between {shortPartyLabel(heroContest.headline_winner)} and {shortPartyLabel(heroContest.headline_runner_up)} — well inside the model's confidence interval.</>
+              ? <><strong>{heroContest.margin_pp.toFixed(1)}pp {classificationLabel(heroClassification).toLowerCase()}</strong> between {shortPartyLabel(heroContest.headline_winner)} and {shortPartyLabel(heroContest.headline_runner_up)}. Well inside the model's confidence interval.</>
               : heroContest.headline_summary}
           </p>
         </header>
@@ -96,7 +96,7 @@ const description = heroContest
     </p>
     <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
 
-    <h3 style="margin-top:1.5rem">National vote share — current Westminster polling</h3>
+    <h3 style="margin-top:1.5rem">National vote share, current Westminster polling</h3>
     <PartyBars rows={topNationalShares.map(s => ({ party: s.party, pct: s.share }))} />
 
     <p class="caption">
@@ -117,7 +117,7 @@ const description = heroContest
     <div class="accuracy-grid">
       <article>
         <span class="big-number">{(may7.live_winner_accuracy * 100).toFixed(1)}%</span>
-        <p class="big-number-label">winners called correctly on 7 May 2026 — our locked, sha256-witnessed forecast across {may7.contesting_councils} councils</p>
+        <p class="big-number-label">winners called correctly on 7 May 2026. Our locked, sha256-witnessed forecast across {may7.contesting_councils} councils.</p>
       </article>
       <article>
         <span class="big-number">{(may7.live_major_party_mae * 100).toFixed(2)}pp</span>
@@ -146,7 +146,7 @@ const description = heroContest
     <div class="feature-list">
       <article>
         <h3>Find your constituency or ward</h3>
-        <p>Type a UK postcode, town, or council and we'll show your specific contest — candidates, parties, our prediction, and our track record for that place.</p>
+        <p>Type a UK postcode, town, or council. We'll show your specific contest: candidates, parties, our prediction, and our track record for that place.</p>
         <p><a href="/your-area/">Find my ward →</a></p>
       </article>
       <article>

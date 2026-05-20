@@ -1,5 +1,5 @@
 /**
- * councilGe2024.js — derive a per-council GE2024 vote-share aggregate by
+ * councilGe2024.js. derive a per-council GE2024 vote-share aggregate by
  * matching DC parl.* ballot slugs against the council slug.
  *
  * Strategy: for each council we look for parl ballots whose slug:
@@ -7,13 +7,13 @@
  *   2. Starts with the council slug + "-" or "-and-" (e.g. "barking-and-dagenham"
  *      maps to council "barking-and-dagenham")
  *   3. Contains the council slug as a token boundary (covers councils whose
- *      area is split across multiple constituencies — e.g. "manchester" matches
+ *      area is split across multiple constituencies. e.g. "manchester" matches
  *      "manchester-central", "manchester-rusholme", etc.)
  *
  * Aggregation: weighted average of per-party vote share, weighted by total
  * votes cast in each constituency.
  *
- * Output is the constituencyResult arg for the model — used in step 1.5
+ * Output is the constituencyResult arg for the model. used in step 1.5
  * (stale-baseline decay) and step 5 (Reform UK new-party entry proxy).
  *
  * Pure functions.

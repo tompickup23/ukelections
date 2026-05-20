@@ -1,5 +1,5 @@
 /**
- * wardDemographicAdjustments.js — generic, nationwide, per-ward demographic
+ * wardDemographicAdjustments.js. generic, nationwide, per-ward demographic
  * adjustment module. Replaces / supersedes the AI DOGE LA-aggregate
  * adjustments for non-Lancashire wards using ONS Census 2021 ward-level
  * data (TS021 ethnicity, TS030 religion, TS054 tenure, TS066 economic
@@ -10,7 +10,7 @@
  * output AFTER the AI DOGE model's own demographic step.
  *
  * Why this exists: Tom flagged that high-Muslim wards (Daneshouse 75%
- * Muslim) were predicting Reform UK 43% top — implausible. Reform
+ * Muslim) were predicting Reform UK 43% top. implausible. Reform
  * empirically does not exceed ~10% in 50%+ Muslim wards. The AI DOGE
  * generic Asian-percentage tier system applies the right adjustment
  * but only fires off LA-level ethnicity data in the port. This module
@@ -119,7 +119,7 @@ export function computeWardDemographicAdjustments(demo) {
 }
 
 /**
- * Apply per-ward demographic ceilings — caps a party's predicted share at a
+ * Apply per-ward demographic ceilings. caps a party's predicted share at a
  * demographically-plausible maximum. Currently:
  *   - Reform UK ≤ 12% if Muslim > 50%
  *   - Reform UK ≤ 22% if Muslim > 30%
@@ -142,7 +142,7 @@ export function applyDemographicCeilings(prediction, demo) {
     const before = out["Reform UK"].pct;
     const excess = before - reformCap;
     out["Reform UK"] = { ...out["Reform UK"], pct: reformCap };
-    capped.push({ party: "Reform UK", before, after: reformCap, excess, reason: `Muslim ${(muslim * 100).toFixed(0)}% — Reform demographic ceiling` });
+    capped.push({ party: "Reform UK", before, after: reformCap, excess, reason: `Muslim ${(muslim * 100).toFixed(0)}%. Reform demographic ceiling` });
     // Redistribute excess pro-rata to other parties
     const others = Object.keys(out).filter((p) => p !== "Reform UK");
     const otherSum = others.reduce((s, p) => s + (out[p].pct || 0), 0);

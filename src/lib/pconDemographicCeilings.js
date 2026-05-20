@@ -1,8 +1,8 @@
 /**
- * pconDemographicCeilings.js — apply demographic ceilings to GE constituency
+ * pconDemographicCeilings.js. apply demographic ceilings to GE constituency
  * predictions, calibrated against empirical 2014-2024 results.
  *
- * Calibration source: Sobolewska & Ford (Brexitland 2020) — Reform/UKIP/BNP
+ * Calibration source: Sobolewska & Ford (Brexitland 2020). Reform/UKIP/BNP
  * empirically never exceeded ~10% in 50%+ Muslim wards across England
  * 2014-2024. Same pattern (with looser caps) applies to Independent vote in
  * non-marginal seats.
@@ -13,7 +13,7 @@
  *   15-30% Muslim → cap at 30%
  *
  * Independent ceiling: 8% in any PCON unless an explicit override flag is
- * set (covers cases like Galloway, Corbyn, Jeremy etc.) — handled by the
+ * set (covers cases like Galloway, Corbyn, Jeremy etc.). handled by the
  * caller via opts.allowHighIndependent.
  *
  * Excess vote share is redistributed pro-rata to the other parties.
@@ -53,7 +53,7 @@ export function applyReformDemographicCeiling(shares, demographics, opts = {}) {
 }
 
 /**
- * applyEnglishIdentityFloor — boost Reform vote in PCONs where the
+ * applyEnglishIdentityFloor. boost Reform vote in PCONs where the
  * "English (only / English-and-British)" Census 2021 share is high.
  *
  * Frontiers (2025) "The drivers of Reform UK support" finds English
@@ -72,7 +72,7 @@ export function applyReformDemographicCeiling(shares, demographics, opts = {}) {
  *
  * Bonus is taken pro-rata from non-Reform parties (mirrors the
  * Muslim-cap redistribution logic in reverse). The existing
- * Muslim-share ceiling continues to apply downstream — if a high-
+ * Muslim-share ceiling continues to apply downstream. if a high-
  * English-identity PCON also has a meaningful Muslim share, the
  * Reform cap will trim the boost.
  */
@@ -105,7 +105,7 @@ export function applyEnglishIdentityFloor(shares, demographics) {
 }
 
 /**
- * applyAgeStructureAdjustment — small Reform + Conservative bonus in
+ * applyAgeStructureAdjustment. small Reform + Conservative bonus in
  * PCONs with a high 65+ population. Pre-2024 BES wave 25 + GE2024
  * post-election panel both show Reform vote share rises ~0.4pp per
  * extra percentage point of 65+ population, controlling for
@@ -119,7 +119,7 @@ export function applyEnglishIdentityFloor(shares, demographics) {
  *
  * The base age effect is already implicit in BES priors for the 482
  * PCONs that have one, so this function supplies the lift only for
- * the 168 PCONs without a BES prior — call with opts.hasBesPrior to
+ * the 168 PCONs without a BES prior. call with opts.hasBesPrior to
  * dampen by 0.4 when a prior is in play.
  */
 export function applyAgeStructureAdjustment(shares, demographics, opts = {}) {
@@ -158,7 +158,7 @@ export function applyAgeStructureAdjustment(shares, demographics, opts = {}) {
 }
 
 /**
- * Independent ceiling — caps Independent vote at `cap` (default 8%) in
+ * Independent ceiling. caps Independent vote at `cap` (default 8%) in
  * regular contests. Bypassed when `opts.allowHighIndependent` is true.
  */
 export function applyIndependentCeiling(shares, opts = {}) {

@@ -1,5 +1,5 @@
 /**
- * snapshot.js — shared helpers for audit-grade snapshot blocks.
+ * snapshot.js. shared helpers for audit-grade snapshot blocks.
  *
  * Every prediction or feature file should embed a snapshot like:
  *   {
@@ -37,7 +37,7 @@ export function buildSources(inputs) {
       size = buf.byteLength;
       mtime = statSync(src.path).mtime.toISOString();
     } catch {
-      // Source missing — surface in the snapshot so downstream code can warn
+      // Source missing. surface in the snapshot so downstream code can warn
     }
     return {
       ...src,
@@ -51,7 +51,7 @@ export function buildSources(inputs) {
 /**
  * Build a snapshot block ready to embed into an output file.
  * payload should be the rest of the JSON (pre-snapshot). After the call,
- * write the file with both the snapshot AND the payload — the snapshot's
+ * write the file with both the snapshot AND the payload. the snapshot's
  * own sha256 represents the FULL file (snapshot + payload).
  */
 export function buildSnapshot({ snapshot_id, sources = [], licence = null, extra = {}, payload = {} }) {

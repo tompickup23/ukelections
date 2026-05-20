@@ -133,28 +133,28 @@ const STATIC_PATHS = [
 export const SEARCH_ENTRIES: SearchEntry[] = [
   {
     href: "/past-results/indicators/",
-    title: "Demographic indicators — backtest 2025 → 2026",
+    title: "Demographic indicators, backtest 2025 → 2026",
     kind: "page",
     description: "What predicts vote share for each major party across both the 1 May 2025 and 1 May 2026 council elections. Reform's degree-share correlation (−0.85) is the most stable lawful relationship in modern English local elections. Labour's coalition reshuffled hard between 2025 and 2026. Train-2025 predict-2026 MAE per party.",
     priority: 109
   },
   {
     href: "/past-results/may-2025/",
-    title: "1 May 2025 council elections — full review",
+    title: "1 May 2025 council elections, full review",
     kind: "page",
     description: "Comprehensive analytical review of the 1 May 2025 county council elections. 24 councils, 1,400 seats, 547 Reform UK seats (39.1%), 9 Reform majorities, with the demographic regression that explains 84% of cross-council Reform vote variance (no-quals r = +0.905; degree r = -0.896).",
     priority: 108
   },
   {
     href: "/by-elections/makerfield/",
-    title: "Makerfield by-election — 18 June 2026",
+    title: "Makerfield by-election. 18 June 2026",
     kind: "page",
     description: "Forecast for the Makerfield by-election triggered by Josh Simons' resignation to make way for Andy Burnham. Two scenarios (Burnham stands / withdraws), 1 May 2026 ward signal, Survation 14-15 May poll, 120-year historical anchor.",
     priority: 110
   },
   {
     href: "/polling/",
-    title: "Polling — current Westminster average and how we use it",
+    title: "Polling, current Westminster average and how we use it",
     kind: "page",
     description: "Where our forecast's national polling input comes from. Current UK / Welsh / Scottish rolling 14-day average, the Restore Britain overlay, the refresh ledger, and how it flows into the seat forecast.",
     priority: 107
@@ -168,7 +168,7 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
   },
   {
     href: "/past-results/",
-    title: "Past Results — May 7 2026",
+    title: "Past Results. May 7 2026",
     kind: "page",
     description: "Locked May 7 2026 forecast scored against actual count. Per-party MAE, Step 9b isolation audit, and the 15 Reform UK majorities.",
     priority: 101

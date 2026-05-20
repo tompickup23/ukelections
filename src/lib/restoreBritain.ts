@@ -1,5 +1,5 @@
 /**
- * Restore Britain — per-seat overlay lookup.
+ * Restore Britain. per-seat overlay lookup.
  *
  * Where Wikipedia (or another verifiable public source) records an RB
  * candidate result for a constituency, we surface that share directly.
@@ -50,7 +50,7 @@ export function nationalFallbackSource(): string | undefined {
  * Look up the Restore Britain share for a constituency by PCON24CD. Returns
  * the per-seat share when known, otherwise the national fallback. Pass
  * `strict: true` to get `null` instead of the fallback when no per-seat
- * data exists — useful when you want to render UI only where the override
+ * data exists. useful when you want to render UI only where the override
  * actually fired.
  */
 export function shareFor(pcon24cd: string | null | undefined, opts?: { strict?: boolean }): number | null {

@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 const { record, backtest } = Astro.props as { record: any; backtest: any };
 
 // Compute per-seat backtest stats (model's predicted shares vs actual on
-// 4 July 2024). Falls back to null where no backtest row exists — e.g.
+// 4 July 2024). Falls back to null where no backtest row exists. e.g.
 // new boundary-change constituencies.
 type BtRow = {
   party: string;
@@ -74,7 +74,7 @@ const ge2024Ranked = (record.ge2024?.candidates || [])
 
 const mp = record.mp;
 const slug = record.slug;
-// Off-site cross-links — only public, party-neutral references.
+// Off-site cross-links. only public, party-neutral references.
 const sisterLinks = [
   mp?.party === "Labour" || mp?.party === "Labour and Co-operative Party"
     ? { label: "Labour Tracker MP page", href: `https://labourtracker.co.uk/your-mp/${slug}/` }
@@ -89,7 +89,7 @@ const regionLabel = record.region?.replace(/_/g, " ");
 ---
 
 <BaseLayout
-  title={`${record.name} — General election forecast`}
+  title={`${record.name}. General election forecast`}
   description={`If a UK general election were held this week, the model predicts ${shortPartyLabel(record.winner)} to win ${record.name} with a ${margin}pp margin over ${shortPartyLabel(record.runner_up)}.`}
 >
   <section class="page-hero">
@@ -173,7 +173,7 @@ const regionLabel = record.region?.replace(/_/g, " ");
       <tbody>
         {ge2024Ranked.slice(0, 8).map((c: any) => (
           <tr>
-            <td>{c.name || "—"}</td>
+            <td>{c.name || "n/a"}</td>
             <td><span class="party-pill" style={`background:${partyColour(c.party_name)}`}></span> {shortPartyLabel(c.party_name)}</td>
             <td class="num">{(c.votes || 0).toLocaleString()}</td>
             <td class="num">{((c.pct || 0) * 100).toFixed(1)}%</td>
@@ -195,16 +195,16 @@ const regionLabel = record.region?.replace(/_/g, " ");
       <p>
         We replayed the same model architecture against the 4 July 2024 general election using only the data a
         forecaster running the model in May 2024 would have known. Here's what it would have predicted for
-        {" "}<strong>{record.name}</strong> — and what actually happened.
+        {" "}<strong>{record.name}</strong>, and what actually happened.
       </p>
       <div class="backtest-callout">
         <strong>
           {backtestWinnerCorrect ? "✓ Winner called correctly" : "✗ Winner missed"}
         </strong>
-        — predicted <span class="party-pill" style={`background:${partyColour(backtestPredictedWinner ?? "")}`}></span> {shortPartyLabel(backtestPredictedWinner ?? "")},
+       , predicted <span class="party-pill" style={`background:${partyColour(backtestPredictedWinner ?? "")}`}></span> {shortPartyLabel(backtestPredictedWinner ?? "")},
         actual <span class="party-pill" style={`background:${partyColour(backtestActualWinner ?? "")}`}></span> {shortPartyLabel(backtestActualWinner ?? "")}.
         <span class="backtest-detail">
-          Major-party MAE: <strong>{(backtestMae * 100).toFixed(2)}pp</strong> — the average gap between our predicted vote share and the actual share, per major party.
+          Major-party MAE: <strong>{(backtestMae * 100).toFixed(2)}pp</strong>, the average gap between our predicted vote share and the actual share, per major party.
         </span>
       </div>
       <div class="backtest-compare-grid">
@@ -237,7 +237,7 @@ const regionLabel = record.region?.replace(/_/g, " ");
     <summary>How this forecast was built</summary>
     <ol class="numbered-list">
       {record.methodology?.map((m: any) => (
-        <li><strong>{m.name}</strong>{m.description ? <> — {m.description}</> : null}</li>
+        <li><strong>{m.name}</strong>{m.description ? <>. {m.description}</> : null}</li>
       ))}
     </ol>
     <p class="muted-row">

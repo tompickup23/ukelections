@@ -1,10 +1,10 @@
 /**
- * county2025.js — Use May 2025 county-cycle election results as a recent-local
+ * county2025.js. Use May 2025 county-cycle election results as a recent-local
  * baseline reference for May 2026 district predictions.
  *
  * Why: the AI DOGE model's Reform-entry step only fires when the ward's
  * baseline Reform share is < 1%. If Reform stood in 2024 with even 5%, the
- * model relies on dampened national swing — which significantly under-weights
+ * model relies on dampened national swing. which significantly under-weights
  * Reform's actual 2025 county-level breakthroughs (Reform topped 9 county
  * councils in May 2025 with 30-42% shares).
  *
@@ -32,7 +32,7 @@ export const DISTRICT_TO_PARENT_COUNTY_2025 = {
   "huntingdonshire": "cambridgeshire",
   "south-cambridgeshire": "cambridgeshire",
 
-  // Derbyshire (Derby is unitary — excluded)
+  // Derbyshire (Derby is unitary. excluded)
   "amber-valley": "derbyshire",
   "bolsover": "derbyshire",
   "chesterfield": "derbyshire",
@@ -86,7 +86,7 @@ export const DISTRICT_TO_PARENT_COUNTY_2025 = {
   "tonbridge-and-malling": "kent",
   "tunbridge-wells": "kent",
 
-  // Lancashire — own AI DOGE per-ward LCC reference handled separately for
+  // Lancashire. own AI DOGE per-ward LCC reference handled separately for
   // burnley/blackburn/blackpool/chorley/fylde/hyndburn/lancaster/pendle/preston/
   // ribble-valley/rossendale/south-ribble/west-lancashire/wyre. We still keep
   // them in this map so the county-wide fallback applies if AI DOGE ref is

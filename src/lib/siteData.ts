@@ -1,5 +1,5 @@
 /**
- * siteData.ts — shared headline data shown across the public surface.
+ * siteData.ts. shared headline data shown across the public surface.
  *
  * One canonical source for every page so headline numbers can never disagree
  * between, say, the homepage and the May 7 forecast page. Every page that
@@ -259,7 +259,7 @@ export interface UpcomingContest {
 }
 
 // Astro runs `astro build` from the project root, so process.cwd() is the
-// reliable anchor here — same pattern as predictions.ts. Don't switch this
+// reliable anchor here. same pattern as predictions.ts. Don't switch this
 // to import.meta.url: Vite rewrites the JS bundle path during build and
 // loadUpcomingElections() then silently returns [] (no homepage hero).
 function readJsonIfExists(rel: string): any | null {
@@ -303,7 +303,7 @@ function prettyDate(iso: string): string {
  *     forecast: { winner, runner_up, margin_pp, classification, headline }
  *   }
  *
- * Drop a new file in that directory and a new `[slug]/index.astro` page —
+ * Drop a new file in that directory and a new `[slug]/index.astro` page .
  * the homepage card appears with no further code changes.
  */
 export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[] {
@@ -364,7 +364,7 @@ export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[]
       .sort((a, b) => (b[1] as number) - (a[1] as number))
       .map(([party, pct]) => ({ party, pct: pct as number }));
 
-    // Pull candidates whose party is in centralShares — gives us the
+    // Pull candidates whose party is in centralShares. gives us the
     // race-bar a name to attach to each segment.
     const partySet = new Set(centralShares.map((s) => s.party));
     const keyCandidates: Array<{ party: string; candidate: string }> = (

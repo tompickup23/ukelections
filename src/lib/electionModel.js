@@ -1,5 +1,5 @@
 /**
- * electionModel.js — Pure election prediction engine for AI DOGE
+ * electionModel.js. Pure election prediction engine for AI DOGE
  *
  * Composite Ward-Level Prediction Model:
  * 1. Baseline: Most recent same-type election result
@@ -27,7 +27,7 @@ export const DEFAULT_ASSUMPTIONS = {
   incumbencyBonusPct: 0.05,
   retirementPenaltyPct: -0.02,
   reformProxyWeights: { ge: 0.25, lcc: 0.75 },
-  reformBoroughDampening: 0.95,  // LCC 2025 was already local — minimal further dampening
+  reformBoroughDampening: 0.95,  // LCC 2025 was already local, minimal further dampening
   turnoutAdjustment: 0,        // user can adjust ±5pp
   swingMultiplier: 1.0,         // user can scale swing 0.5× to 1.5×
   reformStandsInAllWards: true, // toggle: Reform stands everywhere
@@ -47,7 +47,7 @@ function getBaseline(wardData, electionType = 'borough') {
   if (!wardData?.history?.length) return null;
 
   // Find most recent election of the right type (or any if no match)
-  // By-elections are always valid — they're the most recent actual vote in that ward
+  // By-elections are always valid. they're the most recent actual vote in that ward
   const matching = wardData.history
     .filter(e => !electionType || e.type?.includes(electionType) || e.type === 'by-election')
     .sort((a, b) => b.date.localeCompare(a.date));
@@ -65,7 +65,7 @@ function getBaseline(wardData, electionType = 'borough') {
     }
   }
 
-  // Calculate staleness — how many years since this baseline election
+  // Calculate staleness. how many years since this baseline election
   const baselineYear = election.year || parseInt(election.date?.substring(0, 4)) || 2020;
   const currentYear = new Date().getFullYear();
   const staleness = currentYear - baselineYear;
@@ -223,15 +223,15 @@ function calculateDemographicAdjustments(demographics, deprivation, params, ethn
     factors.push(`High over-65 (${(demographics.age_65_plus_pct * 100).toFixed(0)}%): Conservative +${(demoParams.over65_conservative_bonus * 100).toFixed(1)}pp, Reform +${(demoParams.over65_reform_bonus * 100).toFixed(0)}pp`);
   }
 
-  // High white British > 85% — strong Reform territory (LCC 2025 evidence)
+  // High white British > 85%. strong Reform territory (LCC 2025 evidence)
   if (demographics?.white_british_pct && demographics.white_british_pct > 0.85) {
     adjustments['Reform UK'] = (adjustments['Reform UK'] || 0) + demoParams.high_white_british_reform_bonus;
     factors.push(`High white British (${(demographics.white_british_pct * 100).toFixed(0)}%): Reform +${(demoParams.high_white_british_reform_bonus * 100).toFixed(0)}pp`);
   }
 
-  // Asian heritage > 20% (East Lancashire specific) — Reform penalty + Independent bonus
+  // Asian heritage > 20% (East Lancashire specific). Reform penalty + Independent bonus
   // Scaled by concentration: higher Asian % → stronger effect (community bloc voting)
-  // Penalties reduced from original model — UKIP proved 40-50% achievable in
+  // Penalties reduced from original model. UKIP proved 40-50% achievable in
   // majority-Asian wards (Daneshouse 49.2% 2015, 43.5% 2019) by mobilising non-Asian vote
   if (demographics?.asian_pct && demographics.asian_pct > 0.20) {
     const asianPct = demographics.asian_pct;
@@ -313,7 +313,7 @@ export function calculateFiscalStressAdjustment(fiscalData, wardName) {
     adjustments['Reform UK'] = (adjustments['Reform UK'] || 0) + 0.02;
     adjustments['Labour'] = (adjustments['Labour'] || 0) + 0.01;
     adjustments['Conservative'] = (adjustments['Conservative'] || 0) - 0.02;
-    factors.push(`Severe fiscal stress (score ${fiscalScore}/100): Reform +2pp, Labour +1pp, Conservative -2pp — anti-incumbent protest pattern`);
+    factors.push(`Severe fiscal stress (score ${fiscalScore}/100): Reform +2pp, Labour +1pp, Conservative -2pp, anti-incumbent protest pattern`);
   } else if (fiscalScore != null && fiscalScore <= 50) {
     adjustments['Reform UK'] = (adjustments['Reform UK'] || 0) + 0.01;
     adjustments['Conservative'] = (adjustments['Conservative'] || 0) - 0.01;
@@ -323,7 +323,7 @@ export function calculateFiscalStressAdjustment(fiscalData, wardName) {
   // 2. High service demand pressure → Reform UK boost (anti-establishment)
   if (serviceScore != null && serviceScore >= 80) {
     adjustments['Reform UK'] = (adjustments['Reform UK'] || 0) + 0.015;
-    factors.push(`High service demand (score ${serviceScore}/100): Reform +1.5pp — services under strain drives protest voting`);
+    factors.push(`High service demand (score ${serviceScore}/100): Reform +1.5pp, services under strain drives protest voting`);
   }
 
   // 3. "Structurally Deficit" risk category → strong anti-incumbent signal
@@ -331,10 +331,10 @@ export function calculateFiscalStressAdjustment(fiscalData, wardName) {
     adjustments['Reform UK'] = (adjustments['Reform UK'] || 0) + 0.01;
     adjustments['Labour'] = (adjustments['Labour'] || 0) - 0.01;
     adjustments['Conservative'] = (adjustments['Conservative'] || 0) - 0.01;
-    factors.push(`Structurally deficit authority: Reform +1pp — systemic fiscal failure drives establishment rejection`);
+    factors.push(`Structurally deficit authority: Reform +1pp, systemic fiscal failure drives establishment rejection`);
   }
 
-  // 4. Ward in pressure zones — hyper-deprived micro-climate amplification
+  // 4. Ward in pressure zones. hyper-deprived micro-climate amplification
   if (wardName && fiscalData.pressure_zones?.length) {
     const wardPressure = fiscalData.pressure_zones.find(
       pz => pz.ward?.toLowerCase() === wardName.toLowerCase()
@@ -350,7 +350,7 @@ export function calculateFiscalStressAdjustment(fiscalData, wardName) {
   const criticalThreats = (fiscalData.threats || []).filter(t => t.severity === 'critical').length;
   if (criticalThreats >= 3) {
     adjustments['Reform UK'] = (adjustments['Reform UK'] || 0) + 0.01;
-    factors.push(`${criticalThreats} critical fiscal threats: Reform +1pp — multiple cascading risks amplify protest signal`);
+    factors.push(`${criticalThreats} critical fiscal threats: Reform +1pp, multiple cascading risks amplify protest signal`);
   }
 
   return {
@@ -399,7 +399,7 @@ function calculateIncumbencyAdjustment(wardData, assumptions) {
     const baselineAge = wardData._baselineStaleness || 0;
     if (baselineAge > 10) {
       bonus = bonus * 0.5; // Halve the bonus for very stale wards
-      factors.push(`Incumbent party (${incumbentParty}): +${(bonus * 100).toFixed(1)}pp (reduced — baseline ${baselineAge}yr old)`);
+      factors.push(`Incumbent party (${incumbentParty}): +${(bonus * 100).toFixed(1)}pp (reduced, baseline ${baselineAge}yr old)`);
     } else {
       factors.push(`Incumbent party (${incumbentParty}): +${(bonus * 100).toFixed(0)}pp incumbency bonus`);
     }
@@ -450,7 +450,7 @@ function calculateReformEntry(baseline, constituencyResult, lcc2025, assumptions
       reformEstimate: baseline['Reform UK'],
       methodology: {
         step: 5, name: 'New Party Entry',
-        description: 'Reform UK has existing baseline — no proxy needed',
+        description: 'Reform UK has existing baseline, no proxy needed',
         factors: [],
       },
     };
@@ -473,7 +473,7 @@ function calculateReformEntry(baseline, constituencyResult, lcc2025, assumptions
 
   // GE2024 Reform result for this constituency
   const geReform = constituencyResult?.['Reform UK'] || 0;
-  // LCC 2025 Reform result — prefer per-ward division data over aggregate
+  // LCC 2025 Reform result. prefer per-ward division data over aggregate
   const lccWardReform = lcc2025?.wardDivisionData?.reform_pct;
   const lccReform = lccWardReform ?? lcc2025?.results?.['Reform UK']?.pct ?? 0;
   const lccSource = lccWardReform != null
@@ -503,7 +503,7 @@ function calculateReformEntry(baseline, constituencyResult, lcc2025, assumptions
     adjustments['Reform UK'] = additionalReform;
 
     // Deduct from other parties proportionally based on their CURRENT shares (post-swing),
-    // not original baselines — this properly reduces dominant parties
+    // not original baselines. this properly reduces dominant parties
     const sharesForDeduction = currentShares || baseline;
     const totalOther = Object.entries(sharesForDeduction)
       .filter(([p]) => p !== 'Reform UK')
@@ -555,7 +555,7 @@ function calculateReformEntry(baseline, constituencyResult, lcc2025, assumptions
 function normaliseShares(shares) {
   const total = Object.values(shares).reduce((s, v) => s + Math.max(0, v), 0);
   if (total <= 0) {
-    // All-zero shares — distribute equally
+    // All-zero shares. distribute equally
     const n = Object.keys(shares).length;
     if (n === 0) return shares;
     const equal = 1 / n;
@@ -612,14 +612,14 @@ export function predictWard(
     step: 1,
     name: 'Baseline',
     description: `Most recent borough result (${baseline.date})` +
-      (baseline.staleness > 8 ? ` — ${baseline.staleness} years old, applying stale baseline decay` : ''),
+      (baseline.staleness > 8 ? `. ${baseline.staleness} years old, applying stale baseline decay` : ''),
     data: { ...baseline.parties },
   });
 
   // Tag wardData with staleness for incumbency calculation
   const wardDataWithStaleness = { ...wardData, _baselineStaleness: baseline.staleness };
 
-  // Start with baseline shares — apply staleness decay if baseline is very old
+  // Start with baseline shares. apply staleness decay if baseline is very old
   let shares = { ...baseline.parties };
 
   // Stale baseline adjustment: when data is >8 years old, blend historical
@@ -642,12 +642,12 @@ export function predictWard(
     methodology.push({
       step: 1.5,
       name: 'Stale Baseline Decay',
-      description: `Baseline is ${baseline.staleness} years old — blending ${(decayFactor * 100).toFixed(0)}% historical + ${(freshWeight * 100).toFixed(0)}% GE2024 constituency data`,
+      description: `Baseline is ${baseline.staleness} years old, blending ${(decayFactor * 100).toFixed(0)}% historical + ${(freshWeight * 100).toFixed(0)}% GE2024 constituency data`,
       data: { decayFactor, freshWeight, stalenessYears: baseline.staleness },
     });
   }
 
-  // Step 1.7: BES MRP Prior — pull baseline ~15% toward the BES Wave 1-30
+  // Step 1.7: BES MRP Prior. pull baseline ~15% toward the BES Wave 1-30
   // post-stratified prior for this LAD. Anchors stale baselines on current
   // demographically-appropriate vote intention. Skipped where the prior is
   // unavailable (Northern Ireland or LADs without sufficient BES coverage).
@@ -699,7 +699,7 @@ export function predictWard(
     shares[party] = (shares[party] || 0) + adj;
   }
 
-  // Step 5: Reform UK entry — skip if candidate data shows Reform not standing
+  // Step 5: Reform UK entry. skip if candidate data shows Reform not standing
   const reformStanding = !candidates2026?.length || candidates2026.some(c => normalizePartyName(c.party) === 'Reform UK');
   if (reformStanding) {
     const reform = calculateReformEntry(baseline.parties, constituencyResult, lcc2025, assumptions, nationalPolling, ge2024Result, { ...shares }, baseline.staleness);
@@ -726,7 +726,7 @@ export function predictWard(
     ),
   });
 
-  // Step 6.5: Candidacy Filter — remove parties not actually standing in 2026
+  // Step 6.5: Candidacy Filter. remove parties not actually standing in 2026
   if (candidates2026?.length > 0) {
     const standing = new Set(candidates2026.map(c => normalizePartyName(c.party)));
     const removed = [];
@@ -764,7 +764,7 @@ export function predictWard(
       methodology.push({
         step: 6.5,
         name: 'Candidacy Filter',
-        description: `All ${standing.size} predicted parties are standing — no filtering needed`,
+        description: `All ${standing.size} predicted parties are standing, no filtering needed`,
         data: { standing: [...standing] },
       });
     }
@@ -795,7 +795,7 @@ export function predictWard(
     ? prediction[winner].votes - prediction[runnerUp].votes
     : 0;
 
-  // Confidence based on majority size — reduce for stale baselines
+  // Confidence based on majority size. reduce for stale baselines
   const majorityPct = totalVotes > 0 ? majority / totalVotes : 0;
   let confidence = 'low';
   if (baseline.staleness > 10) {
@@ -843,7 +843,7 @@ function normaliseCouncillorName(name) {
  */
 export function findDefenderIndex(holders, defender) {
   if (!holders?.length) return -1;
-  if (!defender?.name) return 0; // no defender info — skip first holder to keep arithmetic correct
+  if (!defender?.name) return 0; // no defender info, skip first holder to keep arithmetic correct
   const dNorm = normaliseCouncillorName(defender.name);
   const dToks = dNorm.split(' ').filter(Boolean);
   const dFirst = dToks[0] || '';
@@ -868,19 +868,19 @@ export function findDefenderIndex(holders, defender) {
     return t.length >= 2 && t[t.length - 1] === dLast && t[0][0] === dFirst[0];
   });
   if (i >= 0) return i;
-  // 5) Last-token only (surname — handles middle-name reorders)
+  // 5) Last-token only (surname. handles middle-name reorders)
   i = holders.findIndex(h => {
     const t = normaliseCouncillorName(h.name).split(' ').filter(Boolean);
     return t.length >= 1 && t[t.length - 1] === dLast;
   });
   if (i >= 0) return i;
-  // 6) Party match — single holder with matching party
+  // 6) Party match. single holder with matching party
   if (dParty) {
     const matches = holders
       .map((h, idx) => ({ idx, party: normalizePartyName(h.party || '') }))
       .filter(x => x.party === dParty);
     if (matches.length === 1) return matches[0].idx;
-    if (matches.length > 1) return matches[0].idx; // arbitrary — any same-party skip gives same party tally
+    if (matches.length > 1) return matches[0].idx; // arbitrary, any same-party skip gives same party tally
   }
   // 7) Defender party not present (defection / data noise): skip first holder
   // so ward arithmetic stays at (holders.length - 1) retained + 1 predicted.
@@ -899,13 +899,13 @@ export function predictCouncil(electionsData, wardsUp, assumptions, nationalPoll
   for (const [wardName, wardData] of Object.entries(electionsData.wards || {})) {
     const holders = wardData.current_holders || [];
     if (!wardsUp.includes(wardName)) {
-      // Ward NOT contested — all seats retained
+      // Ward NOT contested. all seats retained
       for (const holder of holders) {
         const party = normalizePartyName(holder.party || 'Unknown');
         seatTotals[party] = (seatTotals[party] || 0) + 1;
       }
     } else if (isThirds && holders.length > 1) {
-      // Ward IS contested in thirds — exactly one seat is up, rest retained.
+      // Ward IS contested in thirds. exactly one seat is up, rest retained.
       // Identify which holder's seat is being defended so we skip it from the
       // retained tally (the prediction loop below will re-award it). Defender
       // name may not match holder name exactly (honorifics, diminutives,
@@ -1123,7 +1123,7 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
     data: { ...ge2024Baseline },
   });
 
-  // National swing from polling — Strong Transition Model (multiplicative,
+  // National swing from polling. Strong Transition Model (multiplicative,
   // bounded). Replaces the previous additive UNS that could produce negative
   // shares for declining parties in their weak seats. Reference: Baxter /
   // Electoral Calculus STM.
@@ -1149,7 +1149,7 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
     }
     methodology.push({
       step: 2, name: 'National Swing (Strong Transition Model)',
-      description: 'Multiplicative bounded swing — losers shed in proportion to local share, gainers absorb pro-rata national gain. Replaces additive UNS.',
+      description: 'Multiplicative bounded swing, losers shed in proportion to local share, gainers absorb pro-rata national gain. Replaces additive UNS.',
       details: stmOut.swingsApplied,
     });
   } else {
@@ -1218,7 +1218,7 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
 
   // Step 2.5: Demographic ceilings + floors (PCON-level Census 2021).
   if (opts.demographics) {
-    // 2.5a: English-identity floor (TS027) — Reform's strongest demographic
+    // 2.5a: English-identity floor (TS027). Reform's strongest demographic
     // predictor (Frontiers 2025, β≈0.45). Boost Reform 1-3pp in high-English-
     // identity PCONs before the Muslim cap fires, so the cap can still trim
     // any over-shoot in the rare overlap PCONs.
@@ -1231,7 +1231,7 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
         data: engFloor.applied,
       });
     }
-    // 2.51: Age-structure adjustment (TS007A) — Reform/Con lift in 65+-heavy
+    // 2.51: Age-structure adjustment (TS007A). Reform/Con lift in 65+-heavy
     // PCONs. Dampened to 0.4× when a BES prior is already shaping the
     // posterior, since BES respondents implicitly carry the age signal.
     const ageAdj = applyAgeStructureAdjustment(shares, opts.demographics, {
@@ -1281,14 +1281,14 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
     });
   }
 
-  // Legacy "Step 2b" (incumbent-loss heuristic) — retained for backward
+  // Legacy "Step 2b" (incumbent-loss heuristic). retained for backward
   // compatibility with the existing test suite. Skipped if the caller has
   // supplied `opts.mp` (which uses the canonical incumbencyTracker layer).
   if (opts.mp) {
     return finishConstituencyGE(constituency, ge2024Baseline, shares, methodology);
   }
 
-  // Step 2b (legacy): Incumbent loss effect — when the GE2024 incumbent lost their seat,
+  // Step 2b (legacy): Incumbent loss effect. when the GE2024 incumbent lost their seat,
   // their party's personal vote evaporates for the next election. Long-serving MPs
   // (like Nigel Evans, 32 years in Ribble Valley) inflate their party's baseline.
   // Detect via explicit previous_mp_party field OR heuristic (runner-up with
@@ -1318,7 +1318,7 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
     }
     methodology.push({
       step: 2.5, name: 'Incumbent Loss Effect',
-      description: `${prevIncumbentParty} lost seat in GE2024${tenure ? ` after ${tenure}yr tenure` : ''} — personal vote penalty of ${(basePenalty * 100).toFixed(0)}pp, redistributed to challenger parties`,
+      description: `${prevIncumbentParty} lost seat in GE2024${tenure ? ` after ${tenure}yr tenure` : ''}, personal vote penalty of ${(basePenalty * 100).toFixed(0)}pp, redistributed to challenger parties`,
     });
   }
 
@@ -1343,7 +1343,7 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
     swing[party] = Math.round((share - (ge2024Baseline[party] || 0)) * 1000) / 1000;
   }
 
-  // Confidence — constituency predictions are inherently less certain
+  // Confidence. constituency predictions are inherently less certain
   let confidence = 'low';
   if (majorityPct > 0.15) confidence = 'high';
   else if (majorityPct > 0.08) confidence = 'medium';
@@ -1372,10 +1372,10 @@ export function normalizePartyName(party) {
   if (/^(The\s+)?Conservative/i.test(p)) return 'Conservative'
   // Green variants
   if (/^Green/i.test(p)) return 'Green Party'
-  // Reform / UKIP variants — UKIP is the electoral predecessor to Reform UK
+  // Reform / UKIP variants. UKIP is the electoral predecessor to Reform UK
   if (/^Reform/i.test(p)) return 'Reform UK'
   if (/^UKIP|^UK\s*Independence/i.test(p)) return 'Reform UK'
-  // Local independents — group under "Independent" umbrella for LGR modelling
+  // Local independents. group under "Independent" umbrella for LGR modelling
   if (/independent/i.test(p) || p === 'Our West Lancashire' || p === '4 BwD' ||
       p === 'Morecambe Bay Independents' || p === 'Wyre Independent Group' ||
       /^Ashton Ind/i.test(p) || /^Pendle.*True/i.test(p)) return 'Independent'
@@ -1481,7 +1481,7 @@ function adjustForIntegrity(shares, wardData, integrityData) {
     const flags = cllr.red_flags || [];
     const highFlags = flags.filter(f => ['critical', 'high', 'elevated'].includes(f.severity));
 
-    // Disqualification check — remove from prediction entirely
+    // Disqualification check. remove from prediction entirely
     const disqualified = flags.some(f =>
       f.type?.includes('disqualified') || f.type?.includes('insolvency') ||
       f.type?.includes('fca_prohibition') || f.type?.includes('bankruptcy')
@@ -1490,17 +1490,17 @@ function adjustForIntegrity(shares, wardData, integrityData) {
     if (disqualified) {
       // Party loses incumbency entirely for this ward
       adjustedShares[party] = Math.max(0, (adjustedShares[party] || 0) - 0.05);
-      factors.push(`${cllr.name} (${party}) DISQUALIFIED — incumbency removed, -5pp`);
+      factors.push(`${cllr.name} (${party}) DISQUALIFIED, incumbency removed, -5pp`);
       continue;
     }
 
     // High-risk councillor penalty
     if (riskLevel === 'high' && highFlags.length >= 3) {
       adjustedShares[party] = Math.max(0, (adjustedShares[party] || 0) - 0.02);
-      factors.push(`${cllr.name} (${party}) HIGH RISK (${highFlags.length} flags) — -2pp penalty`);
+      factors.push(`${cllr.name} (${party}) HIGH RISK (${highFlags.length} flags). -2pp penalty`);
     } else if (riskLevel === 'elevated' && highFlags.length >= 2) {
       adjustedShares[party] = Math.max(0, (adjustedShares[party] || 0) - 0.01);
-      factors.push(`${cllr.name} (${party}) ELEVATED (${highFlags.length} flags) — -1pp penalty`);
+      factors.push(`${cllr.name} (${party}) ELEVATED (${highFlags.length} flags). -1pp penalty`);
     }
   }
 
@@ -1519,8 +1519,8 @@ function adjustForIntegrity(shares, wardData, integrityData) {
   for (const [party, flagged] of Object.entries(partyFlagCounts)) {
     const total = partyTotals[party] || 1;
     if (flagged / total > 0.20 && adjustedShares[party]) {
-      // Already applied individual penalty — this is a council-wide factor note
-      factors.push(`${party}: ${flagged}/${total} (${Math.round(flagged / total * 100)}%) councillors flagged — party-wide concern`);
+      // Already applied individual penalty. this is a council-wide factor note
+      factors.push(`${party}: ${flagged}/${total} (${Math.round(flagged / total * 100)}%) councillors flagged, party-wide concern`);
     }
   }
 

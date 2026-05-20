@@ -8,7 +8,7 @@ const majorMae = major.map((p) => ({ party: p, mae: b.overall_mae.per_party[p] |
 ---
 
 <BaseLayout
-  title="2024 backtest — predicted vs actual"
+  title="2024 backtest, predicted vs actual"
   description={`The same model run forward to 2026, replayed against the actual May 2024 results. Winner accuracy ${(b.winner_accuracy * 100).toFixed(1)}%, average per-party share error ${(b.overall_mae.major_parties_avg * 100).toFixed(2)}pp.`}
 >
   <section class="page-hero">
@@ -89,7 +89,7 @@ const majorMae = major.map((p) => ({ party: p, mae: b.overall_mae.per_party[p] |
     <p>
       Every forecast site claims accuracy. Few publish their errors. The
       <strong>{(b.overall_mae.major_parties_avg * 100).toFixed(2)}pp average share error</strong> and
-      <strong>{(b.winner_accuracy * 100).toFixed(1)}% winner accuracy</strong> on May 2024 are the credibility floor —
+      <strong>{(b.winner_accuracy * 100).toFixed(1)}% winner accuracy</strong> on May 2024 are the credibility floor .
       we'll publish the same backtest against May 2026 actuals after the count, so you can see whether the model
       improves or degrades over time.
     </p>

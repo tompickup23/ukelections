@@ -13,7 +13,7 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
 >
   <section class="page-hero">
     <p class="eyebrow">Senedd Cymru 2026 · Scaffold forecast</p>
-    <h1>96 seats — new closed-list PR system</h1>
+    <h1>96 seats, new closed-list PR system</h1>
     <p class="lede">
       First public estimate under the Senedd Cymru (Members and Elections) Act 2024. 16 super-constituencies × 6 list seats.
     </p>
@@ -21,12 +21,12 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
 
   <section class="section">
     <div class="backtest-callout backtest-callout--warn">
-      <strong>⚠ Scaffold forecast — Welsh polling is stale and the boundaries are brand new.</strong>
+      <strong>⚠ Scaffold forecast. Welsh polling is stale and the boundaries are brand new.</strong>
       <span class="backtest-detail">
         The polling input is a pre-launch placeholder (file metadata flags
         <code>refresh_required_by: 2026-05-01</code>) and the 14-day Wikipedia rolling-average parser
         hasn't found a fresh Welsh-only field in a month. There are also no prior election results on
-        the new 16 super-constituency boundaries to anchor a per-area forecast — the projection
+        the new 16 super-constituency boundaries to anchor a per-area forecast, the projection
         applies a single Wales-wide swing uniformly. <strong>Treat the numbers below as illustrative</strong>
         until we publish a calibrated v1 with current Beaufort/YouGov Wales/ITV Wales fields and the
         2024 GE Welsh results re-aggregated to the new super-constituencies.
@@ -37,15 +37,15 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
   <section class="section prose-block">
     <h2>Methodology in brief</h2>
     <p>
-      This is the first Senedd election under the new geography — there are no prior election results on these
+      This is the first Senedd election under the new geography, there are no prior election results on these
       super-constituency boundaries to anchor a per-area forecast. The numbers below apply Welsh-wide vote
       intention uniformly to each of the 16 super-constituencies and run d'Hondt allocation in each one
       independently. Per-area geographic differentiation, using 2024 general election Welsh constituency-level
       results aggregated to the new super-constituency pairings, is a planned upgrade.
     </p>
     <p>
-      The intervals below are wider than the local-elections forecast — 5 percentage points of per-party noise
-      built into the bootstrap — to reflect this new-system uncertainty. Treat the numbers as a first estimate,
+      The intervals below are wider than the local-elections forecast. 5 percentage points of per-party noise
+      built into the bootstrap, to reflect this new-system uncertainty. Treat the numbers as a first estimate,
       not a final prediction.
     </p>
   </section>
@@ -100,7 +100,7 @@ const ranked = Object.entries(totals).sort((a, b) => (b[1] as any).p50 - (a[1] a
     <h2>Inputs</h2>
     <p><strong>Welsh 2024 general election baseline:</strong> Wales-wide vote share aggregated across the 32 Welsh Westminster constituencies (Labour 36.6%, Reform UK 16.9%, Conservative 18.2%, Plaid Cymru 14.9%, Lib Dem 6.7%, Green 4.3%).</p>
     <p><strong>Welsh polling:</strong> Auto-refreshed daily as the Wikipedia rolling 14-day average of every Welsh poll (current values shown on the <a href="/methodology/">About</a> page).</p>
-    <p><strong>Method:</strong> Per super-constituency — 6 seats allocated by d'Hondt highest-averages over Welsh-wide current polling. Bootstrapped with 2,000 samples and 5pp per-party noise to produce the high–low range.</p>
+    <p><strong>Method:</strong> Per super-constituency. 6 seats allocated by d'Hondt highest-averages over Welsh-wide current polling. Bootstrapped with 2,000 samples and 5pp per-party noise to produce the high–low range.</p>
   </section>
 </BaseLayout>
 

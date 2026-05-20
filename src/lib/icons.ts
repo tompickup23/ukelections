@@ -2,7 +2,7 @@
 //
 // `?raw` imports each SVG as a string at build time; we render it inline
 // via `set:html` so CSS can size via `currentColor` + `em` units. Add icons
-// here as needed — keep the list small to bound bundle bytes.
+// here as needed. keep the list small to bound bundle bytes.
 
 import crown from "lucide-static/icons/crown.svg?raw";
 import vote from "lucide-static/icons/vote.svg?raw";
