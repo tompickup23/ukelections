@@ -141,25 +141,153 @@ const structuredData = [
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="footer-inner">
-        <p>
-          UK Elections is an independent election intelligence project. It is not affiliated
-          with any political party, council, candidate, or election authority.
-        </p>
-        <p class="footer-cross-site">
-          <strong>Sister sites:</strong>
-          Population projections for 320 local authorities at <a href="https://ukdemographics.co.uk" rel="noopener">ukdemographics.co.uk</a>
-          &middot;
-          Asylum spending &amp; route data at <a href="https://asylumstats.co.uk" rel="noopener">asylumstats.co.uk</a>
-        </p>
-        <nav aria-label="Footer">
-          <a href="/sources/">Sources</a>
-          <a href="/methodology/">Methodology</a>
-          <a href="/privacy/">Privacy</a>
-          <a href="/terms/">Terms</a>
-          <a href="/accessibility/">Accessibility</a>
-        </nav>
+      <div class="footer-inner footer-inner--stacked">
+        <section class="footer-sisters" aria-labelledby="footer-sisters-heading">
+          <h2 id="footer-sisters-heading" class="footer-sisters-eyebrow">Sister sites</h2>
+          <div class="footer-sisters-grid">
+            <a class="footer-sister-card footer-sister-card--ukd" href="https://ukdemographics.co.uk" rel="noopener">
+              <span class="footer-sister-tile" aria-hidden="true">UKD</span>
+              <span class="footer-sister-body">
+                <span class="footer-sister-name">ukdemographics.co.uk</span>
+                <span class="footer-sister-tagline">Population projections for every UK community</span>
+              </span>
+              <span class="footer-sister-arrow" aria-hidden="true">&#8599;</span>
+            </a>
+            <a class="footer-sister-card footer-sister-card--as" href="https://asylumstats.co.uk" rel="noopener">
+              <span class="footer-sister-tile" aria-hidden="true">AS</span>
+              <span class="footer-sister-body">
+                <span class="footer-sister-name">asylumstats.co.uk</span>
+                <span class="footer-sister-tagline">Asylum spending, dispersal &amp; route data</span>
+              </span>
+              <span class="footer-sister-arrow" aria-hidden="true">&#8599;</span>
+            </a>
+          </div>
+        </section>
+        <div class="footer-meta">
+          <p>
+            UK Elections is an independent election intelligence project. It is not affiliated
+            with any political party, council, candidate, or election authority.
+          </p>
+          <nav aria-label="Footer">
+            <a href="/sources/">Sources</a>
+            <a href="/methodology/">Methodology</a>
+            <a href="/privacy/">Privacy</a>
+            <a href="/terms/">Terms</a>
+            <a href="/accessibility/">Accessibility</a>
+          </nav>
+        </div>
       </div>
     </footer>
+
+    <style is:global>
+      .footer-inner--stacked {
+        display: block !important;
+      }
+      .footer-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .footer-meta p { max-width: 48rem; margin: 0; color: var(--muted); line-height: 1.5; }
+      .footer-meta nav { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+      .footer-meta nav a { color: var(--ink); font-weight: 800; text-decoration: none; }
+      .footer-sisters {
+        margin: 0 0 1.5rem;
+      }
+      .footer-sisters-eyebrow {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted, #5b6b80);
+        margin: 0 0 0.65rem;
+      }
+      .footer-sisters-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+      }
+      .footer-sister-card {
+        display: grid;
+        grid-template-columns: 44px 1fr auto;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        text-decoration: none;
+        border: 1px solid var(--border, #d4dce6);
+        background: var(--bg-soft, #ffffff);
+        transition: transform 180ms, border-color 180ms, box-shadow 180ms;
+      }
+      .footer-sister-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      }
+      .footer-sister-tile {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+      }
+      .footer-sister-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+      }
+      .footer-sister-name {
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: var(--ink, #111827);
+        line-height: 1.2;
+      }
+      .footer-sister-tagline {
+        font-size: 0.78rem;
+        color: var(--muted, #5b6b80);
+        line-height: 1.3;
+      }
+      .footer-sister-arrow {
+        font-size: 1rem;
+        color: var(--muted, #5b6b80);
+        align-self: start;
+        margin-top: 2px;
+      }
+      .footer-sister-card--ukd .footer-sister-tile {
+        background: #4f46e5;
+        box-shadow: 0 6px 14px rgba(79, 70, 229, 0.28);
+      }
+      .footer-sister-card--ukd:hover {
+        border-color: rgba(79, 70, 229, 0.55);
+      }
+      .footer-sister-card--as .footer-sister-tile {
+        background: #06b6d4;
+        box-shadow: 0 6px 14px rgba(6, 182, 212, 0.28);
+      }
+      .footer-sister-card--as:hover {
+        border-color: rgba(6, 182, 212, 0.55);
+      }
+      @media (prefers-color-scheme: dark) {
+        .footer-sister-card {
+          background: rgba(255, 255, 255, 0.03);
+          border-color: rgba(255, 255, 255, 0.08);
+        }
+        .footer-sister-card:hover {
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+      }
+      @media (max-width: 640px) {
+        .footer-sisters-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </body>
 </html>

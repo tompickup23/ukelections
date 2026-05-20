@@ -30,6 +30,48 @@ export const NAV_ITEMS = [
   { href: "/methodology/", label: "About" },
 ] as const;
 
+export type NavGroup = {
+  label: string;
+  items: ReadonlyArray<{ href: string; label: string; desc: string }>;
+};
+
+export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
+  {
+    label: "Forecasts",
+    items: [
+      { href: "/forecasts/general-election/", label: "General Election", desc: "Reform UK projected to win 348 of 650 seats" },
+      { href: "/by-elections/makerfield/", label: "Makerfield By-election", desc: "18 Jun · Reform UK vs Burnham · 1.4pp toss-up" },
+      { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
+    ],
+  },
+  {
+    label: "Past Results",
+    items: [
+      { href: "/past-results/", label: "All Past Results", desc: "Every contest we've forecast" },
+      { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: "7-May backtest · 5.7pp MAE" },
+      { href: "/data-quality/", label: "Data Quality", desc: "Sources, coverage, gaps" },
+    ],
+  },
+  {
+    label: "Browse",
+    items: [
+      { href: "/seats/", label: "650 Constituencies", desc: "Seat-by-seat profile" },
+      { href: "/councils/", label: "Councils", desc: "Every English council" },
+      { href: "/your-area/", label: "Find Your Ward", desc: "By postcode" },
+    ],
+  },
+  {
+    label: "About",
+    items: [
+      { href: "/methodology/", label: "Methodology", desc: "How the model works" },
+      { href: "/sources/", label: "Sources", desc: "Data provenance" },
+      { href: "/coverage/", label: "Coverage", desc: "What we forecast" },
+      { href: "/transparency/", label: "Transparency", desc: "Funding & affiliations" },
+      { href: "/releases/", label: "Releases", desc: "Version history" },
+    ],
+  },
+] as const;
+
 export const RELEASES: ReleaseEntry[] = [
   {
     date: "2026-04-20",
