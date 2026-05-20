@@ -101,24 +101,54 @@ function regionalMultiplier(councilSlug, regionTag) {
   // Northern unitaries demographically aligned with Reform-realigning 2-tier
   // districts get full lift (parity with 1.00 calibration source).
   if (NORTHERN_UNITARY_FULL_LIFT.has(councilSlug)) return 1.00;
-  // London: deep Lab/Asian strongholds plus cosmopolitan whites that polling
-  // shows are markedly less Reform-leaning than equivalent demographics
-  // outside London. Cap at 0.50.
-  if (regionTag === "london") return 0.50;
-  // Metropolitan boroughs: include both Reform-realigning outer-NW/Yorks
-  // wards and deep Lab city-core wards. Polling regional split (NW Reform
-  // 27%, Y/H 26%) supports a meaningful lift, but a 1.00 multiplier would
-  // push Manchester / Liverpool / inner-Sheffield core wards above
-  // empirically-plausible Reform shares. Use 0.75 as a defensible mid-point.
+  // London: zero lift. The 7 May 2026 post-audit (n=218 wards) found that
+  // applying any positive multiplier in London made Reform predictions
+  // HOTTER on average by 6.7pp. Pre-uplift bias was +2.85pp (already
+  // slightly hot); post-uplift bias was +9.51pp. Live MAE 10.86pp vs
+  // shadow MAE 7.43pp. London should fall through to the hard
+  // plausibility ceiling instead.
+  if (regionTag === "london") return 0.00;
+  // Metropolitan boroughs: post-audit (n=528) live MAE 9.31pp vs shadow
+  // 18.56pp. Uplift helped; retain 0.75.
   if (regionTag === "metropolitan") return 0.75;
   // Reform-realigning 2-tier districts already receive the May-2025
   // county anchor and would not normally land here, but if the anchor
   // failed for some reason we still want full lift.
   if (regionTag === "county_district") return 1.00;
   // Southern unitaries / districts in counties that did NOT contest May
-  // 2025 (Hampshire, Sussex, Surrey, etc.). Polling shows Reform there
-  // ~22%. slightly below the calibration source. Use 0.85.
+  // 2025. Post-audit (n=750) live MAE 8.45pp vs shadow 17.69pp. Uplift
+  // helped; retain 0.85.
   return 0.85;
+}
+
+/**
+ * Hard plausibility ceiling on Reform UK predicted share. Applied AFTER
+ * `regionalMultiplier()` and the per-Asian% target. The 7 May 2026
+ * post-audit found Reform predictions of 25%+ in wards where the actual
+ * Reform share was 0-8%. Those wards all had at least one of:
+ *   (a) Asian % > 0.40 (Tower Hamlets, Newham, Brent, Birmingham core)
+ *   (b) Muslim % > 0.30 (same)
+ *   (c) Degree % > 0.45 (inner-London Lab + cosmopolitan-white wards)
+ *
+ * This ceiling acts as a regardless-of-upstream safety net. It is more
+ * aggressive than the existing demographic-ceiling rule (which only
+ * triggers on Muslim %).
+ *
+ * Returns the lower of the input share and the demographic ceiling.
+ */
+export function reformPlausibilityCeiling(demo) {
+  if (!demo) return 1.0;
+  const asian = demo.asian_pct ?? 0;
+  const muslim = demo.muslim_pct ?? 0;
+  const degree = demo.degree_pct ?? 0;
+  // Strongest cap: highly Asian or Muslim concentration.
+  if (asian > 0.40 || muslim > 0.30) return 0.15;
+  // Inner-suburb high-degree + meaningful Asian presence.
+  if (asian > 0.25 && degree > 0.35) return 0.18;
+  // High-degree wards without the Asian factor (Oxford / inner-Edinburgh
+  // / Greater London suburbs with graduate professional bases).
+  if (degree > 0.45) return 0.25;
+  return 1.0;
 }
 
 /**
@@ -140,7 +170,10 @@ export function applyReformRealignmentUplift(prediction, demo, ctx) {
 
   const baseTarget = reformTargetFromAsianPct(asianPct);
   const multiplier = regionalMultiplier(ctx.councilSlug, ctx.regionTag);
-  const target = baseTarget * multiplier;
+  // Hard plausibility ceiling, regardless of the uplift target. This is
+  // the safety net the 7 May post-audit demanded.
+  const ceiling = reformPlausibilityCeiling(demo);
+  const target = Math.min(baseTarget * multiplier, ceiling);
 
   const out = { ...prediction };
   if (!out["Reform UK"]) {
@@ -148,18 +181,24 @@ export function applyReformRealignmentUplift(prediction, demo, ctx) {
   }
   const before = out["Reform UK"].pct || 0;
 
-  if (target <= before + 1e-6) {
+  // If the upstream prediction is already above the plausibility ceiling
+  // (e.g. an aggressive Reform stronghold prior), pull it down.
+  const ceilingTriggered = before > ceiling + 1e-6;
+
+  if (target <= before + 1e-6 && !ceilingTriggered) {
     return { prediction: out, applied: null };
   }
 
-  const lift = target - before;
-  out["Reform UK"] = { ...out["Reform UK"], pct: target };
+  const finalReform = ceilingTriggered ? ceiling : target;
+  const lift = finalReform - before;
+  out["Reform UK"] = { ...out["Reform UK"], pct: finalReform };
 
-  // Pro-rata reduction across other parties so the prediction sums to ~1.0.
+  // Pro-rata reduction (or expansion if lift is negative) across other
+  // parties so the prediction sums to ~1.0.
   const others = Object.keys(out).filter((p) => p !== "Reform UK");
   const otherSum = others.reduce((s, p) => s + (out[p].pct || 0), 0);
   if (otherSum > 0) {
-    const scale = (1 - target) / otherSum;
+    const scale = (1 - finalReform) / otherSum;
     for (const p of others) {
       out[p] = { ...out[p], pct: (out[p].pct || 0) * scale };
     }
@@ -170,12 +209,108 @@ export function applyReformRealignmentUplift(prediction, demo, ctx) {
     applied: {
       asian_pct: asianPct,
       muslim_pct: muslimPct,
+      degree_pct: demo.degree_pct ?? null,
       base_target: baseTarget,
       regional_multiplier: multiplier,
-      final_target: target,
+      plausibility_ceiling: ceiling,
+      final_target: finalReform,
       reform_before: before,
-      reform_after: target,
+      reform_after: finalReform,
       lift,
+      ceiling_triggered: ceilingTriggered,
+    },
+  };
+}
+
+/**
+ * Green cap. The 7 May 2026 post-audit found Greens were systematically
+ * COLD by 4.04pp (predicted lower than actual on average) BUT also had
+ * the second-highest MAE bucket at 7.76pp. Both signs in the residuals.
+ * The fix isn't a flat lift; it's bounding the prior. Where there's no
+ * meaningful Green presence in GE2024 (< 8% Green share in the host
+ * PCON), cap Greens at 25%. Where GE2024 Green was already >= 8%, leave
+ * the prior alone (those wards are correctly heavy-Green by prior).
+ *
+ * Returns { prediction, applied } in the same shape as the uplift step.
+ */
+export function applyGreenCap(prediction, ctx) {
+  if (!prediction || !ctx) return { prediction, applied: null };
+  const greenPrior = ctx.ge2024GreenShare ?? 0;
+  if (greenPrior >= 0.08) return { prediction, applied: null };
+  const before = prediction["Green Party"]?.pct ?? 0;
+  if (before <= 0.25) return { prediction, applied: null };
+  const out = { ...prediction };
+  out["Green Party"] = { ...out["Green Party"], pct: 0.25 };
+  // Redistribute the shed share to the prediction's other parties pro-rata.
+  const others = Object.keys(out).filter((p) => p !== "Green Party");
+  const otherSum = others.reduce((s, p) => s + (out[p].pct || 0), 0);
+  if (otherSum > 0) {
+    const scale = (1 - 0.25) / otherSum;
+    for (const p of others) {
+      out[p] = { ...out[p], pct: (out[p].pct || 0) * scale };
+    }
+  }
+  return {
+    prediction: out,
+    applied: {
+      ge2024_green_share: greenPrior,
+      green_before: before,
+      green_after: 0.25,
+      shed_to_others_pp: (before - 0.25) * 100,
+    },
+  };
+}
+
+/**
+ * Tory floor. The 7 May post-audit found Conservatives were systematically
+ * HOT by 2.66pp (predicted higher than actual). In wards where Reform took
+ * the lion's share of the protest vote, the model still expected residual
+ * Tory loyalists at GE2024 levels. Where Reform > 30% in the same ward,
+ * the historical Tory base has typically gone to Reform, not stayed home.
+ * Halve the Tory share against its GE2024 PCON baseline when Reform > 30%.
+ *
+ * Returns { prediction, applied } in the same shape as the uplift step.
+ */
+export function applyToryFloor(prediction, ctx) {
+  if (!prediction || !ctx) return { prediction, applied: null };
+  const reformShare = prediction["Reform UK"]?.pct ?? 0;
+  if (reformShare <= 0.30) return { prediction, applied: null };
+  const toryBefore = prediction["Conservative"]?.pct ?? 0;
+  const toryBaseline = ctx.ge2024TorySharePcon ?? 0;
+  if (toryBaseline <= 0) return { prediction, applied: null };
+  // Halve the Tory share against the GE2024 baseline, not zero. There's
+  // always some residual Tory floor even in deep Reform wards (older,
+  // home-owning, faithful to brand).
+  const target = Math.max(0.05, toryBaseline * 0.5);
+  if (toryBefore <= target + 1e-6) return { prediction, applied: null };
+  const out = { ...prediction };
+  out["Conservative"] = { ...out["Conservative"], pct: target };
+  // The shed share goes to Reform first (since this is the protest-vote
+  // realignment), then pro-rata across remaining parties.
+  const shed = toryBefore - target;
+  out["Reform UK"] = {
+    ...out["Reform UK"],
+    pct: (out["Reform UK"].pct || 0) + shed * 0.7,
+  };
+  const others = Object.keys(out).filter(
+    (p) => p !== "Conservative" && p !== "Reform UK",
+  );
+  const remainingShed = shed * 0.3;
+  const otherSum = others.reduce((s, p) => s + (out[p].pct || 0), 0);
+  if (otherSum > 0 && remainingShed > 0) {
+    const scale = (otherSum + remainingShed) / otherSum;
+    for (const p of others) {
+      out[p] = { ...out[p], pct: (out[p].pct || 0) * scale };
+    }
+  }
+  return {
+    prediction: out,
+    applied: {
+      ge2024_tory_share_pcon: toryBaseline,
+      reform_share: reformShare,
+      tory_before: toryBefore,
+      tory_after: target,
+      shed_pp: shed * 100,
     },
   };
 }
