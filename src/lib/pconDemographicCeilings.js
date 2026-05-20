@@ -160,10 +160,51 @@ export function applyAgeStructureAdjustment(shares, demographics, opts = {}) {
 /**
  * Independent ceiling. caps Independent vote at `cap` (default 8%) in
  * regular contests. Bypassed when `opts.allowHighIndependent` is true.
+ *
+ * 20 May 2026 — local-party register wiring. The flat 8% cap is wrong
+ * wherever a LAD has an organised local-bloc party (Your Bradford,
+ * Walsall Community Independents, Our West Lancashire, Havering
+ * Residents). When `opts.localRegister` is supplied AND has an entry
+ * for `opts.lad24cd` with ward_count >= 3, the per-LAD cap derives
+ * from the register: `min(mean_share + buffer, max_share, 0.50)`,
+ * floored at the global 0.08. Register entries with ward_count < 3
+ * fall through to the flat cap to avoid sample noise.
+ * See .claude/rules/lessons.md "Local-party register" (20 May 2026).
  */
 export function applyIndependentCeiling(shares, opts = {}) {
   if (opts.allowHighIndependent) return { shares: { ...shares }, applied: null };
-  const cap = opts.cap ?? 0.08;
+  let cap = opts.cap ?? 0.08;
+  let source = "flat";
+  let registerHit = null;
+  if (opts.localRegister && Array.isArray(opts.localRegister.register) && opts.lad24cd) {
+    const entries = opts.localRegister.register.filter(
+      (e) => e && e.lad24cd === opts.lad24cd && (e.ward_count || 0) >= 3,
+    );
+    if (entries.length > 0) {
+      // Take the strongest entry for this LAD (sorted by mean_share desc)
+      entries.sort((a, b) => (b.mean_share || 0) - (a.mean_share || 0));
+      const top = entries[0];
+      // mean + ~1sd buffer of 0.05; bounded by observed max and a hard 0.50 ceiling
+      const derived = Math.min(
+        Math.max(top.mean_share || 0, 0) + 0.05,
+        top.max_share || 0.50,
+        0.50,
+      );
+      const derivedCap = Math.max(derived, 0.08);
+      if (derivedCap > cap) {
+        cap = derivedCap;
+        source = "local_register";
+        registerHit = {
+          lad24cd: top.lad24cd,
+          party_name: top.party_name,
+          ward_count: top.ward_count,
+          mean_share: top.mean_share,
+          max_share: top.max_share,
+          derived_cap: cap,
+        };
+      }
+    }
+  }
   const indShare = shares["Independent"] || 0;
   if (indShare <= cap) return { shares: { ...shares }, applied: null };
   const out = { ...shares };
@@ -178,5 +219,8 @@ export function applyIndependentCeiling(shares, opts = {}) {
       out[p] = (out[p] || 0) + excess * (out[p] || 0) / otherTotal;
     }
   }
-  return { shares: out, applied: { cap, original: indShare, excess_redistributed: excess } };
+  return {
+    shares: out,
+    applied: { cap, original: indShare, excess_redistributed: excess, source, register_hit: registerHit },
+  };
 }

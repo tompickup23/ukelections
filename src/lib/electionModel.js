@@ -1254,12 +1254,20 @@ export function predictConstituencyGE(constituency, polling, modelCoefficients, 
         data: reformCap.applied,
       });
     }
-    const indCap = applyIndependentCeiling(shares, { allowHighIndependent: opts.allowHighIndependent });
+    // 20 May 2026 — local-party register override. When a LAD has an
+    // organised local-bloc party (Your Bradford, Walsall CI, OWL,
+    // Havering Residents), the per-LAD cap derives from the register
+    // instead of the flat 8% cap. See .claude/rules/lessons.md.
+    const indCap = applyIndependentCeiling(shares, {
+      allowHighIndependent: opts.allowHighIndependent,
+      localRegister: opts.localRegister,
+      lad24cd: opts.lad24cd,
+    });
     if (indCap.applied) {
       shares = indCap.shares;
       methodology.push({
         step: 2.55, name: 'Independent ceiling',
-        description: `Cap Independent at ${(indCap.applied.cap * 100).toFixed(0)}% (no override flag); redistributed ${(indCap.applied.excess_redistributed * 100).toFixed(1)}pp`,
+        description: `Cap Independent at ${(indCap.applied.cap * 100).toFixed(0)}% (${indCap.applied.source || 'flat'}); redistributed ${(indCap.applied.excess_redistributed * 100).toFixed(1)}pp`,
         data: indCap.applied,
       });
     }
