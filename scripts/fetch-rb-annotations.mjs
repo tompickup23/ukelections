@@ -29,7 +29,7 @@ const ROOT = path.resolve(__dirname, "..");
 
 const OUT_PATH = path.join(ROOT, "data/restore-britain/seat-shares.json");
 const IDENTITY_PATH = path.join(ROOT, "data/identity/wards-may-2026.json");
-const GE_IDENTITY_PATH = path.join(ROOT, "data/identity/pcons-2024.json");
+const GE_IDENTITY_PATH = path.join(ROOT, "data/identity/pcons-ge-next.json");
 
 // Wikipedia rate-limit: stay under 200 requests/minute. We sleep 400ms between
 // fetches by default.
