@@ -44,9 +44,9 @@ const MAKERFIELD_WARDS = [
 // Pre-flight check: only those whose host LAD voted on 1 May 2026 are
 // included in the comparator table; the rest are listed but flagged.
 const COMPARATORS = [
-  { pcon_slug: "llanelli", name: "Llanelli", region: "Wales", maj_pct: 0.037, lad24cd: null, host_voted_2026: false, reason: "Welsh — different cycle + Plaid factor" },
+  { pcon_slug: "llanelli", name: "Llanelli", region: "Wales", maj_pct: 0.037, lad24cd: null, host_voted_2026: false, reason: "Welsh, different cycle + Plaid factor" },
   { pcon_slug: "amber-valley", name: "Amber Valley", region: "East Midlands", maj_pct: 0.084, lad24cd: "E07000032", host_voted_2026: false, reason: "Borough not in 2026 cycle" },
-  { pcon_slug: "montgomeryshire-and-glyndwr", name: "Montgomeryshire & Glyndwr", region: "Wales", maj_pct: 0.088, lad24cd: null, host_voted_2026: false, reason: "Welsh — different cycle" },
+  { pcon_slug: "montgomeryshire-and-glyndwr", name: "Montgomeryshire & Glyndwr", region: "Wales", maj_pct: 0.088, lad24cd: null, host_voted_2026: false, reason: "Welsh, different cycle" },
   { pcon_slug: "great-grimsby-and-cleethorpes", name: "Great Grimsby & Cleethorpes", region: "Yorkshire & Humber", maj_pct: 0.131, lad24cd: "E06000012", host_voted_2026: true, host_council: "north-east-lincolnshire" },
   { pcon_slug: "kingston-upon-hull-east", name: "Kingston upon Hull East", region: "Yorkshire & Humber", maj_pct: 0.131, lad24cd: "E06000010", host_voted_2026: false, reason: "Hull elections in different cycle" },
   { pcon_slug: "bradford-south", name: "Bradford South", region: "Yorkshire & Humber", maj_pct: 0.133, lad24cd: "E08000032", host_voted_2026: true, host_council: "bradford" },
@@ -344,9 +344,9 @@ function buildIndicators(wards, regression, comparators) {
       1,
     ),
     narrative: [
-      "Reform's 2026 vote share across the 9 Makerfield wards is dominated by educational and deprivation gradients, not by ethnicity (all 9 wards are 90%+ White British and 0.6-1.8% Asian — the demographic levers that drive Reform in mixed-ethnicity seats simply have no variance here).",
-      "The strongest single predictor across the 9 wards is the no-qualifications share — wards where 25%+ of working-age adults hold no qualifications (Pemberton, Hindley, Worsley Mesnes, Abram) average Reform vote in the low-to-mid 50s; the two highest-degree wards (Orrell, Winstanley) drop into the high 30s / low 40s.",
-      "The Burnham personal vote will be applied on top of this demographic floor. The Survation / Britain Elects forecasts implicitly assume the uplift is uniform across the 9 wards — but if Burnham's mayoral over-performance is itself a function of deprivation and Lab-identity recovery (which the GM mayoral data suggests), the uplift will be largest in the wards where Reform are weakest already, narrowing rather than reversing the gap.",
+      "Reform's 2026 vote share across the 9 Makerfield wards is dominated by educational and deprivation gradients, not by ethnicity (all 9 wards are 90%+ White British and 0.6-1.8% Asian, so the demographic levers that drive Reform in mixed-ethnicity seats simply have no variance here).",
+      "The strongest single predictor across the 9 wards is the no-qualifications share. Wards where 25%+ of working-age adults hold no qualifications (Pemberton, Hindley, Worsley Mesnes, Abram) average Reform vote in the low-to-mid 50s; the two highest-degree wards (Orrell, Winstanley) drop into the high 30s / low 40s.",
+      "The Burnham personal vote will be applied on top of this demographic floor. The Survation / Britain Elects forecasts implicitly assume the uplift is uniform across the 9 wards, but if Burnham's mayoral over-performance is itself a function of deprivation and Lab-identity recovery (which the GM mayoral data suggests), the uplift will be largest in the wards where Reform are weakest already, narrowing rather than reversing the gap.",
     ],
   };
 }
