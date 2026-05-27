@@ -59,6 +59,8 @@ phases.push(["7. Run Holyrood 2026 predictions", "scripts/run-holyrood-predictio
 phases.push(["7a. Build GE PCON identity table", "scripts/ingest-pcon-identity.mjs"]);
 phases.push(["7b. Run GE2024 backtest", "scripts/run-ge-backtest.mjs"]);
 phases.push(["7c. Run GE next-election bulk forecast (650 PCONs)", "scripts/run-ge-predictions.mjs"]);
+phases.push(["7d. Regenerate Makerfield 2026-06-18 by-election forecast", "scripts/forecast-makerfield-byelection.mjs"]);
+phases.push(["7e. Regenerate Makerfield by-election ward + comparator analysis", "scripts/analyse-makerfield-byelection.mjs"]);
 
 for (const [label, scriptPath] of phases) run(label, scriptPath);
 
