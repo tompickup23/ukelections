@@ -41,7 +41,8 @@ for (const c of (data.candidates || [])) {
 const candidateList = Object.entries(candidateByParty).map(([party, candidate]) => ({ party, candidate }));
 const geRanked = ge ? sortShares(ge.shares) : [];
 const holyroodRanked = holyrood ? sortShares(holyrood.shares) : [];
-const signals = (fvr.signals || []) as Array<any>;
+const benchmarks = (data.benchmarks?.graded || []) as Array<any>;
+const benchNote = data.benchmarks?.note as string | undefined;
 const winnerParty = result.winner;
 const runnerUpParty = result.runner_up;
 const marginPp = (result.margin_pp * 100).toFixed(1);
@@ -143,34 +144,36 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
   </div>
 </section>
 
-{signals.length > 0 && (
+{benchmarks.length > 0 && (
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Scorecard · signal vs result</p>
-      <h2>How the signals graded out</h2>
+      <p class="eyebrow">Scorecard · how every forecaster did</p>
+      <h2>Forecasts vs result</h2>
     </div>
     <table class="seat-table">
       <thead>
-        <tr><th>Signal</th><th>Predicted winner</th><th class="num">MAE vs result</th><th>Call</th></tr>
+        <tr><th>Forecaster</th><th>Type</th><th>Predicted winner</th><th class="num">Share MAE</th><th>Call</th></tr>
       </thead>
       <tbody>
         <tr class="scorecard-actual">
           <td><strong>Actual result</strong></td>
+          <td>declared</td>
           <td><span class="party-pill" style={`background:${partyColour(winnerParty)}`}></span> <strong>{shortPartyLabel(winnerParty)}</strong></td>
           <td class="num">—</td>
           <td>—</td>
         </tr>
-        {signals.map((s: any) => (
+        {benchmarks.map((b: any) => (
           <tr>
-            <td>{s.label}</td>
-            <td>{shortPartyLabel(s.called_winner)}</td>
-            <td class="num"><span class="scorecard-err">{s.accuracy ? (s.accuracy.mae_pp * 100).toFixed(1) + "pp" : "—"}</span></td>
-            <td>{s.winner_call_correct ? <span class="call-correct">✓ correct</span> : <span class="call-wrong">✗ wrong</span>}</td>
+            <td>{b.forecaster}{b.date ? <span class="muted"> · {b.date}</span> : null}</td>
+            <td class="muted">{b.type}</td>
+            <td>{shortPartyLabel(b.called)}{b.prob ? <span class="muted"> ({Math.round(b.prob * 100)}%)</span> : null}</td>
+            <td class="num">{b.mae_pp != null ? <span class="scorecard-err">{(b.mae_pp * 100).toFixed(1)}pp</span> : <span class="muted">n/a</span>}</td>
+            <td>{b.winner_correct ? <span class="call-correct">✓</span> : <span class="call-wrong">✗</span>}</td>
           </tr>
         ))}
       </tbody>
     </table>
-    <p class="caption">MAE = mean absolute error across the main parties (signal share minus declared share). No UKE forecast or constituency poll existed for this seat; the signals above are the freshest pre-election data, graded after the fact.</p>
+    <p class="caption">{benchNote}</p>
     {(fvr.narrative || []).map((n: string) => (<p>{n}</p>))}
   </section>
 )}

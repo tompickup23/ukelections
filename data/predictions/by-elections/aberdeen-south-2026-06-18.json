@@ -282,5 +282,89 @@
       "The mechanism was tactical unionist consolidation on a low (37%) by-election turnout. Labour collapsed from 24.7% to 5.4% (-19pp) and the Lib Dems eased, with that vote coalescing behind Douglas Lumsden to beat the SNP. The SNP's own share barely moved (-4pp); they were not so much defeated as outflanked by a unified anti-SNP vote.",
       "Reform UK is the signal's other big miss: 17.7% in the Holyrood overlap five weeks earlier, just 8.6% here. Reform's Holyrood list strength did not transfer to a Westminster by-election framed as a straight SNP-vs-Conservative fight. No area-level signal could have called this; it needed a model of tactical switching that the raw shares do not contain."
     ]
+  },
+  "benchmarks": {
+    "note": "How every forecaster did, graded against the declared result. No constituency poll or bespoke by-election model existed for this seat; the entries are the freshest signal, the Electoral Calculus GE-model seat estimate, betting markets, and the Ballot Box Scotland qualitative call. MAE is over each forecaster's reported parties.",
+    "graded": [
+      {
+        "id": "ge2024",
+        "forecaster": "GE2024 result (naive prior)",
+        "date": "4 Jul 2024",
+        "type": "baseline",
+        "called": "Scottish National Party",
+        "shares": {
+          "Scottish National Party": 0.328,
+          "Labour": 0.247,
+          "Conservative": 0.244,
+          "Reform UK": 0.069,
+          "Liberal Democrats": 0.063,
+          "Green Party": 0.035
+        },
+        "winner_correct": false,
+        "mae_pp": 0.0873,
+        "n_parties": 6
+      },
+      {
+        "id": "uke_signal",
+        "forecaster": "UK Elections — Holyrood signal",
+        "date": "7 May (basis)",
+        "type": "signal",
+        "called": "Scottish National Party",
+        "shares": {
+          "Scottish National Party": 0.341,
+          "Conservative": 0.305,
+          "Reform UK": 0.177,
+          "Liberal Democrats": 0.083,
+          "Labour": 0.081
+        },
+        "winner_correct": false,
+        "mae_pp": 0.0806,
+        "n_parties": 5
+      },
+      {
+        "id": "electoral_calculus",
+        "forecaster": "Electoral Calculus (GE seat model)",
+        "date": "9 May",
+        "type": "seat model",
+        "called": "Scottish National Party",
+        "shares": {
+          "Scottish National Party": 0.364,
+          "Conservative": 0.215,
+          "Reform UK": 0.182,
+          "Labour": 0.121,
+          "Green Party": 0.049,
+          "Liberal Democrats": 0.045
+        },
+        "note": "82% SNP. Standard GE-model seat estimate, not a bespoke by-election forecast.",
+        "winner_correct": false,
+        "mae_pp": 0.0897,
+        "n_parties": 6
+      },
+      {
+        "id": "betting_markets",
+        "forecaster": "Betting markets (eve of poll)",
+        "date": "17 Jun",
+        "type": "market",
+        "called": "Scottish National Party",
+        "prob": 0.79,
+        "shares": null,
+        "note": "SNP ~79% (oddschecker); the Conservatives were a ~20% outsider.",
+        "winner_correct": false,
+        "mae_pp": null,
+        "n_parties": null
+      },
+      {
+        "id": "ballot_box_scotland",
+        "forecaster": "Ballot Box Scotland (qualitative)",
+        "date": "4 Jun",
+        "type": "qualitative",
+        "called": "Scottish National Party",
+        "shares": null,
+        "note": "'Lean SNP'.",
+        "winner_correct": false,
+        "mae_pp": null,
+        "n_parties": null
+      }
+    ]
   }
 }
