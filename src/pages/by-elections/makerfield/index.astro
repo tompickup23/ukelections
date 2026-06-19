@@ -127,6 +127,7 @@ const pollAvg = (finalPolls?.poll_of_polls as any) || null;
 const pollAvgRanked = (pollAvg?.ranked as Array<{ party: string; pct: number }>) || [];
 const marginCmp = (fvr?.margin_comparison as any) || null;
 const actualMarginPp = marginCmp ? (marginCmp.actual_labour_margin_pp * 100).toFixed(0) : null;
+const benchmarks = ((forecast.benchmarks?.graded as Array<any>) || []);
 
 // Map the margin-comparison contender ids to human labels for the scorecard.
 const CONTENDER_LABELS: Record<string, string> = {
@@ -346,6 +347,55 @@ function classificationLabel(c: string): string {
         understated Labour, who overshot even the most favourable poll; only the published forecast
         also got the direction wrong. Mean absolute error across the six main parties: published
         forecast <strong>6.5pp</strong>, Scenario A 5.9pp, the final poll-of-polls <strong>2.8pp</strong>.
+      </p>
+    </section>
+  )}
+
+  {isConcluded && benchmarks.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Scorecard · the whole field</p>
+        <h2>How every forecaster did</h2>
+      </div>
+      <p>
+        Our forecast was not the only one to get Makerfield wrong, and the constituency polls were not
+        the only ones to get it right. Ranked by accuracy against the result (Labour 54.8 / Reform 34.5):
+      </p>
+      <table class="seat-table">
+        <thead>
+          <tr>
+            <th>Forecaster</th>
+            <th class="num">Share MAE</th>
+            <th class="num">Margin err</th>
+            <th>Called</th>
+          </tr>
+        </thead>
+        <tbody>
+          {benchmarks
+            .slice()
+            .sort((a: any, b: any) => {
+              if (a.winner_correct !== b.winner_correct) return a.winner_correct ? -1 : 1;
+              return (a.mae_pp ?? 9) - (b.mae_pp ?? 9);
+            })
+            .map((b: any) => (
+              <tr>
+                <td>
+                  {b.winner_correct ? <span class="call-correct">✓</span> : <span class="call-wrong">✗</span>}{" "}
+                  {b.forecaster}<span class="muted"> · {b.date}</span>
+                </td>
+                <td class="num">{b.mae_pp != null ? (b.mae_pp * 100).toFixed(1) + "pp" : <span class="muted">n/a</span>}{b.partial ? <span class="muted">*</span> : null}</td>
+                <td class="num">{b.margin_err_pp != null ? <span class="scorecard-err">{(b.margin_err_pp * 100).toFixed(1)}pp</span> : <span class="muted">—</span>}</td>
+                <td>{shortPartyLabel(b.called)}{b.prob ? <span class="muted"> ({Math.round(b.prob * 100)}%)</span> : null}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      <p class="caption">
+        Share MAE = mean absolute error across each forecaster's reported parties (<span class="muted">*partial: headline parties only</span>).
+        Margin err = signed Labour-minus-Reform vs the actual +20.3pp; every forecaster understated Labour, because
+        Burnham's 54.8% overshot even the best poll. The two seat models that ignore constituency polls (our
+        published forecast and Electoral Calculus) were the only ones to call the wrong winner. Electoral Calculus's
+        figure is its standard general-election seat model from 9 May, not a bespoke by-election forecast.
       </p>
     </section>
   )}

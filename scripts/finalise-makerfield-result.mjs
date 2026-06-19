@@ -201,6 +201,32 @@ function labMargin(shares) {
   return r4((shares["Labour"] ?? 0) - (shares["Reform UK"] ?? 0));
 }
 
+// MAE over ONLY the parties a forecaster actually reported (fair to partial
+// forecasts that gave headline figures only). Returns {mae_pp, n_parties}.
+function maeOverReported(shares, resultShares) {
+  const keys = Object.keys(shares).filter((k) => k !== "Other");
+  if (!keys.length) return null;
+  let sum = 0;
+  for (const k of keys) sum += Math.abs((shares[k] ?? 0) - (resultShares[k] ?? 0));
+  return { mae_pp: r4(sum / keys.length), n_parties: keys.length };
+}
+
+// Grade a list of rival forecasts against the declared result.
+function gradeBenchmarks(list, resultShares, resultWinner) {
+  const actualMargin = labMargin(resultShares);
+  return list.map((b) => {
+    const acc = b.shares ? maeOverReported(b.shares, resultShares) : null;
+    const hasLabRef = b.shares && b.shares["Labour"] != null && b.shares["Reform UK"] != null;
+    return {
+      ...b,
+      winner_correct: b.called === resultWinner,
+      mae_pp: acc?.mae_pp ?? null,
+      n_parties: acc?.n_parties ?? null,
+      margin_err_pp: hasLabRef ? r4(labMargin(b.shares) - actualMargin) : null,
+    };
+  });
+}
+
 // ---------------------------------------------------------------------------
 // build
 // ---------------------------------------------------------------------------
@@ -334,6 +360,28 @@ data.forecast_vs_result = {
       "right flank'); the polls put them at 5–8% and they finished THIRD. Reform's right flank fragmented " +
       "harder than assumed, which is part of why Reform underperformed its ward-signal ceiling.",
   ],
+};
+
+// Rival-forecaster benchmarks, graded against the result. Sources: the published
+// polls + Politics UK + Britain Predicts + Electoral Calculus (GE-model seat
+// estimate, 9 May, NOT a bespoke by-election forecast) + betting markets.
+const MAKERFIELD_BENCHMARKS = [
+  { id: "survation_poll_jun", forecaster: "Survation (constituency poll)", date: "26 May–1 Jun", type: "poll", called: "Labour", shares: { Labour: 0.49, "Reform UK": 0.39, "Restore Britain": 0.08, "Green Party": 0.02, "Liberal Democrats": 0.01, Conservative: 0.01 } },
+  { id: "convergent", forecaster: "Convergent Opinion (Sunday Times)", date: "2–12 Jun", type: "poll", called: "Labour", shares: { Labour: 0.49, "Reform UK": 0.37, "Restore Britain": 0.05, "Green Party": 0.05, Conservative: 0.03, "Liberal Democrats": 0.01 } },
+  { id: "opinium", forecaster: "Opinium (Forward Democracy)", date: "3–11 Jun", type: "poll", called: "Labour", shares: { Labour: 0.46, "Reform UK": 0.41, "Restore Britain": 0.07, Conservative: 0.03, "Green Party": 0.02, "Liberal Democrats": 0.01 } },
+  { id: "more_in_common", forecaster: "More in Common", date: "28 May–12 Jun", type: "poll", called: "Labour", shares: { Labour: 0.45, "Reform UK": 0.40, "Restore Britain": 0.08, "Green Party": 0.03, Conservative: 0.02, "Liberal Democrats": 0.01 } },
+  { id: "survation_poll_may", forecaster: "Survation (constituency poll)", date: "18–22 May", type: "poll", called: "Labour", shares: { Labour: 0.43, "Reform UK": 0.40, "Restore Britain": 0.07, "Liberal Democrats": 0.04, "Green Party": 0.03, Conservative: 0.02 } },
+  { id: "uke_poll_of_polls", forecaster: "UK Elections — final poll-of-polls", date: "poll avg", type: "aggregate", called: "Labour", shares: pollAvg },
+  { id: "politics_uk", forecaster: "Politics UK (poll+market model)", date: "18 Jun", type: "model", called: "Labour", shares: { Labour: 0.463, "Reform UK": 0.394, "Restore Britain": 0.072 }, partial: true },
+  { id: "survation_prepoll", forecaster: "Survation (pre-poll forecast)", date: "15 May", type: "forecast", called: "Labour", shares: { Labour: 0.45, "Reform UK": 0.42, Conservative: 0.05, "Green Party": 0.04, "Liberal Democrats": 0.02, "Restore Britain": 0.01 } },
+  { id: "britain_predicts", forecaster: "Britain Predicts (Ben Walker)", date: "14 May", type: "forecast", called: "Labour", shares: { Labour: 0.39, "Reform UK": 0.36 }, partial: true },
+  { id: "uke_published", forecaster: "UK Elections — published forecast", date: "26 May", type: "forecast", called: data.forecast.winner, shares: data.forecast.central_shares },
+  { id: "electoral_calculus", forecaster: "Electoral Calculus (GE seat model)", date: "9 May", type: "seat model", called: "Reform UK", shares: { "Reform UK": 0.502, Labour: 0.368, "Green Party": 0.035, Conservative: 0.034, "Liberal Democrats": 0.017 }, note: "Standard GE-model seat estimate, not a bespoke by-election forecast." },
+  { id: "betting_markets", forecaster: "Betting markets (eve of poll)", date: "17–18 Jun", type: "market", called: "Labour", prob: 0.85, shares: null, note: "Burnham ~85% (oddschecker/Betfair); Polymarket ~94-98%." },
+];
+data.benchmarks = {
+  note: "Rival pre-election forecasts graded against the declared result. MAE is over each forecaster's reported parties; margin error is signed Labour-minus-Reform vs the actual +20.3pp.",
+  graded: gradeBenchmarks(MAKERFIELD_BENCHMARKS, RESULT.shares, RESULT.winner_party),
 };
 
 // status flags so the page renders result-first and the generator won't clobber
