@@ -1,0 +1,259 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "scottish-byelection-signal-v1",
+  "status": "concluded",
+  "concluded_at": "result-final",
+  "generated_note": "Built post-result. No UKE pre-election forecast and no constituency polls existed; the 'forecast' block below is the freshest actual-vote signal (7 May 2026 Holyrood overlap), graded against the declared result in forecast_vs_result.",
+  "contest": {
+    "constituency_slug": "arbroath-and-broughty-ferry",
+    "constituency_name": "Arbroath and Broughty Ferry",
+    "pcon24cd": "S14000091",
+    "region": "Scotland",
+    "trigger": {
+      "type": "resignation",
+      "departing_mp": "Stephen Gethins",
+      "departing_party": "Scottish National Party",
+      "stated_reason": "Gethins won the Holyrood seat of Dundee City East on 7 May 2026; the dual-mandate ban (Scottish Elections (Representation and Reform) Act 2025) forced his resignation from the Commons on 14 May 2026."
+    },
+    "polling_day": "2026-06-18"
+  },
+  "candidates": [
+    {
+      "party": "Scottish National Party",
+      "candidate": "Lara Bird"
+    },
+    {
+      "party": "Conservative",
+      "candidate": "Jack Cruickshanks"
+    },
+    {
+      "party": "Reform UK",
+      "candidate": "Bill Reid"
+    },
+    {
+      "party": "Labour",
+      "candidate": "Heather Doran"
+    },
+    {
+      "party": "Liberal Democrats",
+      "candidate": "Tanvir Ahmad"
+    }
+  ],
+  "forecast": {
+    "basis": "7 May 2026 Holyrood overlap signal (no constituency polls were published).",
+    "winner": "Scottish National Party",
+    "runner_up": "Conservative",
+    "central_shares": {
+      "Scottish National Party": 0.423,
+      "Conservative": 0.213,
+      "Reform UK": 0.178,
+      "Labour": 0.107,
+      "Liberal Democrats": 0.079
+    },
+    "ranked": [
+      {
+        "party": "Scottish National Party",
+        "pct": 0.423
+      },
+      {
+        "party": "Conservative",
+        "pct": 0.213
+      },
+      {
+        "party": "Reform UK",
+        "pct": 0.178
+      },
+      {
+        "party": "Labour",
+        "pct": 0.107
+      },
+      {
+        "party": "Liberal Democrats",
+        "pct": 0.079
+      }
+    ],
+    "classification": "signal-only",
+    "headline": "No constituency polls existed. Freshest signal (Angus South (Holyrood constituency, ~94% overlap), 7 May 2026): Scottish National Party 42.3% ahead of Conservative 21.3%."
+  },
+  "inputs": {
+    "no_polls_note": "No published constituency polling for this by-election (confirmed by PollCheck and Ballot Box Scotland). By-elections get no broadcaster exit poll either. The signal below is the substitute.",
+    "ge2024_baseline": {
+      "date": "2024-07-04",
+      "winner_party": "Scottish National Party",
+      "shares": {
+        "Scottish National Party": 0.353,
+        "Labour": 0.334,
+        "Conservative": 0.155,
+        "Reform UK": 0.086,
+        "Liberal Democrats": 0.051,
+        "Other": 0.021
+      },
+      "votes": {
+        "Scottish National Party": 15581,
+        "Labour": 14722,
+        "Conservative": 6841,
+        "Reform UK": 3800,
+        "Liberal Democrats": 2249,
+        "Other": 924
+      },
+      "majority_pp": 0.019,
+      "turnout_pct": 0.581,
+      "electorate": 76149
+    },
+    "holyrood_signal_2026_05_07": {
+      "name": "Angus South (Holyrood constituency, ~94% overlap)",
+      "date": "2026-05-07",
+      "note": "Angus South covers ~94% of the Westminster seat and, crucially, the SAME Reform (Bill Reid) and Labour (Heather Doran) candidates stood here five weeks before the by-election. Constituency (first) vote.",
+      "shares": {
+        "Scottish National Party": 0.423,
+        "Conservative": 0.213,
+        "Reform UK": 0.178,
+        "Labour": 0.107,
+        "Liberal Democrats": 0.079
+      },
+      "majority_pp": 0.211,
+      "turnout_pct": 0.534
+    },
+    "preelection_calls": [
+      {
+        "source": "Ballot Box Scotland",
+        "call": "Likely SNP",
+        "note": "Pre-election qualitative call."
+      }
+    ]
+  },
+  "result": {
+    "outcome": "SNP hold",
+    "winner_candidate": "Lara Bird",
+    "runner_up_candidate": "Jack Cruickshanks",
+    "shares": {
+      "Scottish National Party": 0.412,
+      "Conservative": 0.19,
+      "Reform UK": 0.183,
+      "Labour": 0.154,
+      "Liberal Democrats": 0.061
+    },
+    "votes": {
+      "Scottish National Party": 9802,
+      "Conservative": 4524,
+      "Reform UK": 4341,
+      "Labour": 3651,
+      "Liberal Democrats": 1452
+    },
+    "majority_votes": 5278,
+    "majority_pp": 0.222,
+    "turnout_votes": 23827,
+    "turnout_pct": 0.3136,
+    "electorate": 76149,
+    "sources": [
+      "https://en.wikipedia.org/wiki/2026_Arbroath_and_Broughty_Ferry_by-election",
+      "https://www.angus.gov.uk/news/uk_parliament_by_election_result_arbroath_and_broughty_ferry",
+      "https://www.pollcheck.co.uk/by-elections/arbroath-and-broughty-ferry"
+    ],
+    "ranked": [
+      {
+        "party": "Scottish National Party",
+        "pct": 0.412
+      },
+      {
+        "party": "Conservative",
+        "pct": 0.19
+      },
+      {
+        "party": "Reform UK",
+        "pct": 0.183
+      },
+      {
+        "party": "Labour",
+        "pct": 0.154
+      },
+      {
+        "party": "Liberal Democrats",
+        "pct": 0.061
+      }
+    ],
+    "winner": "Scottish National Party",
+    "runner_up": "Conservative",
+    "margin_pp": 0.222,
+    "swing_vs_ge2024_pp": {
+      "Scottish National Party": 0.059,
+      "Conservative": 0.035,
+      "Reform UK": 0.097,
+      "Labour": -0.18,
+      "Liberal Democrats": 0.01
+    }
+  },
+  "final_polls": {
+    "note": "No published constituency polls; no broadcaster exit poll (by-elections never get one).",
+    "polls": []
+  },
+  "forecast_vs_result": {
+    "actual": {
+      "winner": "Scottish National Party (Lara Bird)",
+      "outcome": "SNP hold",
+      "runner_up": "Conservative (Jack Cruickshanks)",
+      "margin": "5,278 votes (+22.2pp)",
+      "turnout": "23,827 (31.4%)"
+    },
+    "signals": [
+      {
+        "id": "ge2024_baseline",
+        "label": "GE2024 result (naive prior)",
+        "shares": {
+          "Scottish National Party": 0.353,
+          "Labour": 0.334,
+          "Conservative": 0.155,
+          "Reform UK": 0.086,
+          "Liberal Democrats": 0.051,
+          "Other": 0.021
+        },
+        "called_winner": "Scottish National Party",
+        "winner_call_correct": true,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Scottish National Party": -0.059,
+            "Conservative": -0.035,
+            "Reform UK": -0.097,
+            "Labour": 0.18,
+            "Liberal Democrats": -0.01
+          },
+          "mae_pp": 0.0762
+        },
+        "labour_or_lead_margin_pp": null
+      },
+      {
+        "id": "holyrood_overlap_2026_05_07",
+        "label": "7 May 2026 Holyrood signal (Angus South (Holyrood constituency, ~94% overlap))",
+        "shares": {
+          "Scottish National Party": 0.423,
+          "Conservative": 0.213,
+          "Reform UK": 0.178,
+          "Labour": 0.107,
+          "Liberal Democrats": 0.079
+        },
+        "called_winner": "Scottish National Party",
+        "winner_call_correct": true,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Scottish National Party": 0.011,
+            "Conservative": 0.023,
+            "Reform UK": -0.005,
+            "Labour": -0.047,
+            "Liberal Democrats": 0.018
+          },
+          "mae_pp": 0.0208
+        },
+        "labour_or_lead_margin_pp": null
+      }
+    ],
+    "winner_call_summary": [
+      "GE2024 result (naive prior): predicted Scottish National Party — CORRECT",
+      "7 May 2026 Holyrood signal (Angus South (Holyrood constituency, ~94% overlap)): predicted Scottish National Party — CORRECT"
+    ],
+    "narrative": [
+      "The signal nailed it. The 7 May 2026 Holyrood result in Angus South (which covers ~94% of this seat, with the SAME Reform and Labour candidates) was SNP 42.3 / Con 21.3 / Reform 17.8 / Lab 10.7 / LD 7.9. The by-election five weeks later: SNP 41.2 / Con 19.0 / Reform 18.3 / Lab 15.4 / LD 6.1. Almost a carbon copy, and a comfortable SNP hold exactly as Ballot Box Scotland's 'Likely SNP' call expected.",
+      "The GE2024 baseline, by contrast, would have badly misframed the contest: it had Labour second on 33.4%, a 1.9-point SNP-Labour marginal. The Holyrood signal correctly captured what GE2024 could not — that Labour had collapsed (to ~11-15%) and that Reform had risen to overtake them for third. Here the freshest actual-vote signal beat the year-old general-election prior decisively.",
+      "Reform UK's 18.3% (up 9.7pp on GE2024, third place) is the structural story: in a seat where it polled 8.6% at the general election, Reform now runs ahead of both Labour and, at Holyrood, tracked almost exactly. The SNP's vote was remarkably stable through a collapse in turnout (58% to 31%), which is what a safe-ish incumbent hold looks like."
+    ]
+  }
+}

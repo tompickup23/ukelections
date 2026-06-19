@@ -23,7 +23,7 @@ export interface SearchEntry {
 
 export const NAV_ITEMS = [
   { href: "/forecasts/general-election/", label: "General Election" },
-  { href: "/by-elections/makerfield/", label: "Makerfield By-election" },
+  { href: "/by-elections/", label: "By-elections" },
   { href: "/polling/", label: "Polling" },
   { href: "/past-results/", label: "Past Results" },
   { href: "/your-area/", label: "Find Your Ward" },
@@ -40,7 +40,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     label: "Forecasts",
     items: [
       { href: "/forecasts/general-election/", label: "General Election", desc: "Reform UK projected to win 348 of 650 seats" },
-      { href: "/by-elections/makerfield/", label: "Makerfield By-election", desc: "18 Jun · Reform UK vs Burnham · 1.4pp toss-up" },
+      { href: "/by-elections/", label: "By-elections", desc: "18 Jun 2026 results: Lab hold Makerfield, Con gain Aberdeen S, SNP hold Arbroath" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
     ],
   },
@@ -115,7 +115,10 @@ const STATIC_PATHS = [
   "/forecasts/",
   "/forecasts/may-2026/",
   "/forecasts/general-election/",
+  "/by-elections/",
   "/by-elections/makerfield/",
+  "/by-elections/aberdeen-south/",
+  "/by-elections/arbroath-and-broughty-ferry/",
   "/past-results/may-2025/",
   "/past-results/indicators/",
   "/forecasts/senedd-2026/",
@@ -153,11 +156,32 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     priority: 108
   },
   {
-    href: "/by-elections/makerfield/",
-    title: "Makerfield by-election. 18 June 2026",
+    href: "/by-elections/",
+    title: "By-elections. Results and forecasts",
     kind: "page",
-    description: "Forecast for the Makerfield by-election triggered by Josh Simons' resignation to make way for Andy Burnham. Two scenarios (Burnham stands / withdraws), 1 May 2026 ward signal, Survation 14-15 May poll, 120-year historical anchor.",
+    description: "Every Westminster by-election we track, the declared result, and how the forecast or signal compared. The 18 June 2026 round: Labour held Makerfield (Burnham), Conservatives gained Aberdeen South, SNP held Arbroath and Broughty Ferry.",
+    priority: 111
+  },
+  {
+    href: "/by-elections/makerfield/",
+    title: "Makerfield by-election. Result vs forecast",
+    kind: "page",
+    description: "Andy Burnham (Labour) held Makerfield on 18 June 2026 with a 9,231 majority (54.8% to 34.5%). The UKE forecast wrongly called Reform (1.4pp toss-up) by blending a moot bimodal scenario; the final-polls poll-of-polls (Lab +7) called it right. Full result, scorecard, and the four methodology failures.",
     priority: 110
+  },
+  {
+    href: "/by-elections/aberdeen-south/",
+    title: "Aberdeen South by-election. Conservative gain",
+    kind: "page",
+    description: "The Conservatives gained Aberdeen South from the SNP on 18 June 2026 (Douglas Lumsden, 49.5%, majority 6,050). An upset on a 37% turnout: tactical unionist consolidation as Labour collapsed. Every area signal had pointed to an SNP hold.",
+    priority: 106
+  },
+  {
+    href: "/by-elections/arbroath-and-broughty-ferry/",
+    title: "Arbroath and Broughty Ferry by-election. SNP hold",
+    kind: "page",
+    description: "The SNP held Arbroath and Broughty Ferry on 18 June 2026 (Lara Bird, 41.2%, majority 5,278), Reform UK third. The 7 May Holyrood signal in Angus South called the result almost exactly; the GE2024 baseline (Labour second) did not.",
+    priority: 105
   },
   {
     href: "/polling/",

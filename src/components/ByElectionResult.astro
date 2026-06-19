@@ -1,0 +1,189 @@
+---
+/**
+ * ByElectionResult.astro — generic result-first renderer for a CONCLUDED
+ * by-election whose data file carries `result`, `inputs` (ge2024_baseline +
+ * holyrood_signal_2026_05_07 + preelection_calls + no_polls_note) and
+ * `forecast_vs_result` (signals + narrative). Used by the Scottish 18 Jun 2026
+ * seats (Aberdeen South, Arbroath & Broughty Ferry) which UKE did not forecast
+ * and which had no constituency polls. Makerfield keeps its own bespoke page.
+ */
+import RaceBar from "./RaceBar.astro";
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+const { data } = Astro.props as { data: any };
+
+const contest = data.contest;
+const result = data.result;
+const inputs = data.inputs || {};
+const fvr = data.forecast_vs_result || {};
+const ge = inputs.ge2024_baseline || null;
+const holyrood = inputs.holyrood_signal_2026_05_07 || null;
+const calls = inputs.preelection_calls || [];
+
+const pollingDayLabel = new Date(`${contest.polling_day}T00:00:00Z`).toLocaleDateString("en-GB", {
+  weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+});
+
+function sortShares(shares: Record<string, number>) {
+  return Object.entries(shares || {})
+    .filter(([, p]) => (p as number) > 0.0005)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .map(([party, pct]) => ({ party, pct: pct as number }));
+}
+function pct1(x: number): string { return (x * 100).toFixed(1); }
+
+const resultRanked = sortShares(result.shares);
+const candidateByParty: Record<string, string> = {};
+for (const c of (data.candidates || [])) {
+  if (c.candidate && c.candidate !== "to be confirmed") candidateByParty[c.party] = c.candidate;
+}
+const candidateList = Object.entries(candidateByParty).map(([party, candidate]) => ({ party, candidate }));
+const geRanked = ge ? sortShares(ge.shares) : [];
+const holyroodRanked = holyrood ? sortShares(holyrood.shares) : [];
+const signals = (fvr.signals || []) as Array<any>;
+const winnerParty = result.winner;
+const runnerUpParty = result.runner_up;
+const marginPp = (result.margin_pp * 100).toFixed(1);
+---
+
+<section class="hero hero-byelection-v2">
+  <div class="hero-byelection-grid">
+    <header class="hero-byelection-head">
+      <p class="eyebrow">Result · {pollingDayLabel}</p>
+      <h1>{contest.constituency_name} by-election</h1>
+      <p class="lede">
+        <strong>{result.outcome}.</strong> {result.winner_candidate} ({shortPartyLabel(winnerParty)})
+        won on <strong>{pct1(result.shares[winnerParty])}%</strong>, a
+        <strong> {result.majority_votes.toLocaleString()}-vote majority</strong> (+{marginPp}pp) over
+        {result.runner_up_candidate} ({shortPartyLabel(runnerUpParty)},
+        {pct1(result.shares[runnerUpParty])}%). Turnout <strong>{pct1(result.turnout_pct)}%</strong>.
+        {contest.region} · {contest.pcon24cd}.
+      </p>
+    </header>
+    <div class="result-badge">
+      <span class="result-badge-kicker">Elected MP</span>
+      <span class="result-badge-name">{result.winner_candidate}</span>
+      <span class="result-badge-party" style={`background:${partyColour(winnerParty)}`}>{shortPartyLabel(winnerParty)}</span>
+    </div>
+  </div>
+  <RaceBar shares={resultRanked} candidates={candidateList} title="Declared result (vote share)" />
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Trigger</p>
+    <h2>Why this seat was contested</h2>
+  </div>
+  <p>
+    {contest.trigger.departing_mp} ({shortPartyLabel(contest.trigger.departing_party)}) {contest.trigger.stated_reason}
+  </p>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Declared result · {pollingDayLabel.split(",").slice(-1)}</p>
+    <h2>Full result</h2>
+  </div>
+  <table class="seat-table">
+    <thead>
+      <tr><th>Party</th><th class="num">Votes</th><th class="num">Share</th><th class="num">Swing vs GE2024</th></tr>
+    </thead>
+    <tbody>
+      {resultRanked.map((row) => {
+        const v = result.votes?.[row.party];
+        const sw = result.swing_vs_ge2024_pp?.[row.party];
+        return (
+          <tr>
+            <td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
+            <td class="num">{typeof v === "number" ? v.toLocaleString() : "—"}</td>
+            <td class="num">{pct1(row.pct)}%</td>
+            <td class="num">
+              {typeof sw === "number" ? (
+                <span class={sw > 0 ? "swing-up" : (sw < 0 ? "swing-down" : "swing-flat")}>{sw > 0 ? "+" : ""}{(sw * 100).toFixed(1)}pp</span>
+              ) : "—"}
+            </td>
+          </tr>
+        );
+      })}
+      <tr><td><strong>Majority</strong></td><td class="num"><strong>{result.majority_votes.toLocaleString()}</strong></td><td class="num"><strong>{(result.margin_pp * 100).toFixed(1)}pp</strong></td><td class="num">—</td></tr>
+      <tr><td><strong>Turnout</strong></td><td class="num"><strong>{result.turnout_votes.toLocaleString()}</strong></td><td class="num"><strong>{pct1(result.turnout_pct)}%</strong></td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">Source: returning officer declaration via {result.sources?.[0] ? <a href={result.sources[0]}>primary record</a> : "official declaration"}.</p>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">The signal · no constituency polls existed</p>
+    <h2>What the freshest data pointed to</h2>
+  </div>
+  <p>{inputs.no_polls_note}</p>
+  {calls.length > 0 && (
+    <p>
+      Pre-election call{calls.length > 1 ? "s" : ""}:
+      {calls.map((c: any, i: number) => (<span> {i > 0 ? "· " : ""}<strong>{c.source}</strong> — {c.call}</span>))}.
+    </p>
+  )}
+  <div class="signal-grid">
+    {holyrood && (
+      <div>
+        <h3>7 May 2026 Holyrood overlap</h3>
+        <p class="caption">{holyrood.name}. {holyrood.note}</p>
+        <RaceBar shares={holyroodRanked} height={52} showLegend={true} title={null} ariaLabel="Holyrood overlap signal" />
+      </div>
+    )}
+    {ge && (
+      <div>
+        <h3>GE2024 baseline (4 Jul 2024)</h3>
+        <p class="caption">The year-old general-election result, a naive prior.</p>
+        <RaceBar shares={geRanked} height={52} showLegend={true} title={null} ariaLabel="GE2024 baseline" />
+      </div>
+    )}
+  </div>
+</section>
+
+{signals.length > 0 && (
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Scorecard · signal vs result</p>
+      <h2>How the signals graded out</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr><th>Signal</th><th>Predicted winner</th><th class="num">MAE vs result</th><th>Call</th></tr>
+      </thead>
+      <tbody>
+        <tr class="scorecard-actual">
+          <td><strong>Actual result</strong></td>
+          <td><span class="party-pill" style={`background:${partyColour(winnerParty)}`}></span> <strong>{shortPartyLabel(winnerParty)}</strong></td>
+          <td class="num">—</td>
+          <td>—</td>
+        </tr>
+        {signals.map((s: any) => (
+          <tr>
+            <td>{s.label}</td>
+            <td>{shortPartyLabel(s.called_winner)}</td>
+            <td class="num"><span class="scorecard-err">{s.accuracy ? (s.accuracy.mae_pp * 100).toFixed(1) + "pp" : "—"}</span></td>
+            <td>{s.winner_call_correct ? <span class="call-correct">✓ correct</span> : <span class="call-wrong">✗ wrong</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">MAE = mean absolute error across the main parties (signal share minus declared share). No UKE forecast or constituency poll existed for this seat; the signals above are the freshest pre-election data, graded after the fact.</p>
+    {(fvr.narrative || []).map((n: string) => (<p>{n}</p>))}
+  </section>
+)}
+
+<style>
+  .result-badge { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:0.35rem; padding:1rem 1.25rem; border:1px solid var(--border); border-radius:14px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+  .result-badge-kicker { font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
+  .result-badge-name { font-size:1.4rem; font-weight:800; line-height:1.1; color:var(--ink); }
+  .result-badge-party { display:inline-block; padding:0.15rem 0.6rem; border-radius:999px; font-size:0.78rem; font-weight:700; color:#fff; }
+  .scorecard-actual td { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  .scorecard-err { color: var(--accent); font-weight:600; }
+  .call-correct { color: var(--accent-2); font-weight:700; }
+  .call-wrong { color: var(--accent); font-weight:700; }
+  .signal-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-top:1rem; }
+  .signal-grid h3 { margin:0 0 0.25rem; }
+</style>

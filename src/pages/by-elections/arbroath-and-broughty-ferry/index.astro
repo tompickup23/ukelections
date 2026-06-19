@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ByElectionResult from "../../../components/ByElectionResult.astro";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const data = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "data/predictions/by-elections/arbroath-and-broughty-ferry-2026-06-18.json"),
+    "utf8",
+  ),
+);
+---
+
+<BaseLayout
+  title="Arbroath and Broughty Ferry by-election 2026. Result"
+  description="The SNP held Arbroath and Broughty Ferry at the 18 June 2026 by-election (Lara Bird, majority 5,278), with Reform UK third. The 7 May Holyrood signal called it almost exactly. Result, swing and signal-vs-result scorecard."
+>
+  <ByElectionResult data={data} />
+</BaseLayout>

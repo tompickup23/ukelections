@@ -21,7 +21,7 @@
  *   data/predictions/by-elections/makerfield-2026-06-18.analysis.json
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
@@ -373,6 +373,20 @@ function main() {
     ROOT,
     "data/predictions/by-elections/makerfield-2026-06-18.analysis.json",
   );
+
+  // Guard: the contest concluded 18 Jun 2026. If the main forecast file is
+  // frozen (status:"concluded"), don't regenerate the analysis sidecar either —
+  // keep the post-mortem's inputs stable. Delete/clear status to force a regen.
+  const mainPath = path.join(ROOT, "data/predictions/by-elections/makerfield-2026-06-18.json");
+  if (existsSync(mainPath)) {
+    try {
+      if (JSON.parse(readFileSync(mainPath, "utf8")).status === "concluded") {
+        console.log(`Skipping ${path.relative(ROOT, outPath)} — contest concluded (forecast frozen).`);
+        return;
+      }
+    } catch { /* fall through */ }
+  }
+
   writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n", "utf8");
 
   console.log(`Wrote ${outPath}`);
