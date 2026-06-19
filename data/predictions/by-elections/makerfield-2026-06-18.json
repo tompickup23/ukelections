@@ -965,6 +965,396 @@
   ],
   "confidence": "medium",
   "confidence_note": "Stepped down from medium-high to medium after the per-ward + comparator analysis (see makerfield-2026-06-18.analysis.json). Reasons to weight Reform's side of the toss-up more heavily: (a) Makerfield's Reform-vs-Lab council lead (26.5pp) is nearly double the comparator average (14.2pp across Grimsby, Barnsley, Bradford); (b) the within-seat regression shows 72% of cross-ward Reform variance is explained by education + deprivation + retired + social-rent, and Burnham's brand is strongest in graduate-rich wards (Orrell, Winstanley) where Reform are already weakest, so the uplift narrows rather than reverses the gap in the no-quals wards (Pemberton, Hindley, Abram) where Reform are 52-56%; (c) two of the closest demographic comparators (Grimsby +31.7pp Reform, Barnsley +9.7pp Reform) bracket Makerfield's local-elections aggregate exactly. The 1.4pp Reform-leaning toss-up remains the central estimate but a 3-5pp Reform lead is now more probable than the bare blended figure suggests.",
-  "next_refresh": "Daily until polling day; re-fit on any new constituency poll.",
-  "hash": "cdfe20f4a931ee84fc6e69cc82fe3b6654dc82d3ca272fe97a8fa60553f7f517"
+  "next_refresh": "None. Contest concluded 18 June 2026; forecast frozen for post-mortem.",
+  "hash": "cdfe20f4a931ee84fc6e69cc82fe3b6654dc82d3ca272fe97a8fa60553f7f517",
+  "final_polls": {
+    "note": "Five fieldwork-based Makerfield constituency polls landed between 18 May and 12 June 2026. The published UKE forecast (generated 26 May, then re-run daily by cron with no new inputs) ingested NONE of them — it stayed anchored on the 15 May Survation/Britain Elects pre-poll FORECASTS. Every one of the five polls put Labour/Burnham ahead (leads of +3 to +12).",
+    "no_exit_poll_note": "By-elections get no broadcaster exit poll. The only 'exit-poll'-labelled figure in circulation was a self-selecting Wigan Today reader click-poll (n≈3,956), not a probability sample; excluded.",
+    "polls": [
+      {
+        "pollster": "Survation",
+        "client": "Election Data Ltd",
+        "fieldwork": "2026-05-18/2026-05-22",
+        "sample": 504,
+        "shares": {
+          "Labour": 0.43,
+          "Reform UK": 0.4,
+          "Conservative": 0.02,
+          "Liberal Democrats": 0.04,
+          "Green Party": 0.03,
+          "Restore Britain": 0.07,
+          "Other": 0.01
+        },
+        "lead_pp": 0.03,
+        "note": "First published fieldwork-based Makerfield constituency poll. Burnham premium = small lead."
+      },
+      {
+        "pollster": "Survation",
+        "client": null,
+        "fieldwork": "2026-05-26/2026-06-01",
+        "sample": 518,
+        "shares": {
+          "Labour": 0.49,
+          "Reform UK": 0.39,
+          "Conservative": 0.01,
+          "Liberal Democrats": 0.01,
+          "Green Party": 0.02,
+          "Restore Britain": 0.08,
+          "Other": 0.01
+        },
+        "lead_pp": 0.1,
+        "note": "'Left consolidates, right splits, Burnham ahead' — Restore Britain eating Reform's right flank."
+      },
+      {
+        "pollster": "More in Common",
+        "client": null,
+        "fieldwork": "2026-05-28/2026-06-12",
+        "sample": 515,
+        "shares": {
+          "Labour": 0.45,
+          "Reform UK": 0.4,
+          "Conservative": 0.02,
+          "Liberal Democrats": 0.01,
+          "Green Party": 0.03,
+          "Restore Britain": 0.08,
+          "Other": 0.01
+        },
+        "lead_pp": 0.05
+      },
+      {
+        "pollster": "Opinium",
+        "client": "Forward Democracy",
+        "fieldwork": "2026-06-03/2026-06-11",
+        "sample": 543,
+        "shares": {
+          "Labour": 0.46,
+          "Reform UK": 0.41,
+          "Conservative": 0.03,
+          "Liberal Democrats": 0.01,
+          "Green Party": 0.02,
+          "Restore Britain": 0.07,
+          "Other": 0.01
+        },
+        "lead_pp": 0.05
+      },
+      {
+        "pollster": "Convergent Opinion",
+        "client": "The Sunday Times",
+        "fieldwork": "2026-06-02/2026-06-12",
+        "sample": 525,
+        "shares": {
+          "Labour": 0.49,
+          "Reform UK": 0.37,
+          "Conservative": 0.03,
+          "Liberal Democrats": 0.01,
+          "Green Party": 0.05,
+          "Restore Britain": 0.05,
+          "Other": 0.01
+        },
+        "lead_pp": 0.12,
+        "note": "Final poll; largest Labour lead of the campaign."
+      }
+    ],
+    "poll_of_polls": {
+      "method": "Simple mean of the five final constituency polls.",
+      "shares": {
+        "Labour": 0.464,
+        "Reform UK": 0.394,
+        "Conservative": 0.022,
+        "Liberal Democrats": 0.016,
+        "Green Party": 0.03,
+        "Restore Britain": 0.07,
+        "Other": 0.01
+      },
+      "ranked": [
+        {
+          "party": "Labour",
+          "pct": 0.464
+        },
+        {
+          "party": "Reform UK",
+          "pct": 0.394
+        },
+        {
+          "party": "Restore Britain",
+          "pct": 0.07
+        },
+        {
+          "party": "Green Party",
+          "pct": 0.03
+        },
+        {
+          "party": "Conservative",
+          "pct": 0.022
+        },
+        {
+          "party": "Liberal Democrats",
+          "pct": 0.016
+        },
+        {
+          "party": "Other",
+          "pct": 0.01
+        }
+      ],
+      "labour_lead_pp": 0.07,
+      "winner": "Labour",
+      "june_only_mean": {
+        "shares": {
+          "Labour": 0.475,
+          "Reform UK": 0.39,
+          "Conservative": 0.03,
+          "Liberal Democrats": 0.01,
+          "Green Party": 0.035,
+          "Restore Britain": 0.06,
+          "Other": 0.01
+        },
+        "labour_lead_pp": 0.085
+      },
+      "headline": "Final-polls central estimate: Labour 46.4% vs Reform UK 39.4% (Labour +7.0pp), Restore Britain 7.0% third."
+    }
+  },
+  "result": {
+    "declared": true,
+    "outcome": "Labour hold",
+    "winner_party": "Labour",
+    "winner_candidate": "Andy Burnham",
+    "runner_up_party": "Reform UK",
+    "runner_up_candidate": "Robert Kenyon",
+    "third_party": "Restore Britain",
+    "third_candidate": "Rebecca Shepherd",
+    "finishing_order_top3": [
+      "Labour",
+      "Reform UK",
+      "Restore Britain"
+    ],
+    "turnout_votes": 45476,
+    "turnout_pct": 0.5875,
+    "turnout_change_pp": 0.0635,
+    "rejected_ballots": 48,
+    "electorate_ge2024": 76641,
+    "shares": {
+      "Labour": 0.5481,
+      "Reform UK": 0.3451,
+      "Restore Britain": 0.0684,
+      "Conservative": 0.0219,
+      "Green Party": 0.0068,
+      "Liberal Democrats": 0.0036,
+      "Other": 0.0061
+    },
+    "votes": {
+      "Labour": 24927,
+      "Reform UK": 15696,
+      "Restore Britain": 3111,
+      "Conservative": 997,
+      "Green Party": 308,
+      "Liberal Democrats": 163,
+      "Other": 274
+    },
+    "majority_votes": 9231,
+    "majority_pp": 0.203,
+    "margin_note": "Labour majority 9,231 votes (+20.3pp) — a landslide hold, WIDER than the 5,399-vote / 13.4pp GE2024 majority and wider than every final poll. Burnham 54.81% (+9.61pp on GE2024) overshot even the most Labour-favourable poll; Reform 34.51% (+2.71pp) was held below its ward-signal ceiling.",
+    "figures_status": "declared_full_breakdown",
+    "sources": [
+      "https://en.wikipedia.org/wiki/2026_Makerfield_by-election",
+      "https://www.wigan.gov.uk/Council/Voting-and-Elections/Makerfield/index.aspx"
+    ],
+    "ranked": [
+      {
+        "party": "Labour",
+        "pct": 0.5481
+      },
+      {
+        "party": "Reform UK",
+        "pct": 0.3451
+      },
+      {
+        "party": "Restore Britain",
+        "pct": 0.0684
+      },
+      {
+        "party": "Conservative",
+        "pct": 0.0219
+      },
+      {
+        "party": "Green Party",
+        "pct": 0.0068
+      },
+      {
+        "party": "Other",
+        "pct": 0.0061
+      },
+      {
+        "party": "Liberal Democrats",
+        "pct": 0.0036
+      }
+    ],
+    "swing_vs_ge2024_pp": {
+      "Labour": 0.0961,
+      "Reform UK": 0.0271,
+      "Conservative": -0.0871,
+      "Green Party": -0.0372,
+      "Liberal Democrats": -0.0644,
+      "Other": -0.0029
+    }
+  },
+  "forecast_vs_result": {
+    "actual": {
+      "winner": "Labour (Andy Burnham)",
+      "outcome": "Labour hold",
+      "runner_up": "Reform UK (Robert Kenyon)",
+      "third": "Restore Britain (Rebecca Shepherd)",
+      "turnout": "45,476 (58.75%)",
+      "majority": "9,231 votes"
+    },
+    "margin_comparison": {
+      "actual_labour_margin_pp": 0.203,
+      "actual_basis": "declared shares",
+      "contenders": [
+        {
+          "id": "uke_published_forecast",
+          "labour_margin_pp": -0.0135,
+          "signed_error_pp": -0.2165,
+          "direction_correct": false
+        },
+        {
+          "id": "uke_scenario_a_burnham_stands",
+          "labour_margin_pp": 0.03,
+          "signed_error_pp": -0.173,
+          "direction_correct": true
+        },
+        {
+          "id": "final_poll_of_polls",
+          "labour_margin_pp": 0.07,
+          "signed_error_pp": -0.133,
+          "direction_correct": true
+        },
+        {
+          "id": "most_labour_favourable_poll_convergent",
+          "labour_margin_pp": 0.12,
+          "signed_error_pp": -0.083,
+          "direction_correct": true
+        }
+      ],
+      "note": "Everyone understated Labour's margin; only the UKE published forecast got the SIGN wrong too (it had Reform +1.4). Even the most Labour-favourable poll (+12) trailed the ≈+20pp actual."
+    },
+    "contenders": [
+      {
+        "id": "uke_published_forecast",
+        "label": "UKE published forecast (probability-weighted central)",
+        "shares": {
+          "Labour": 0.39749999999999996,
+          "Reform UK": 0.411,
+          "Conservative": 0.06961538461538459,
+          "Green Party": 0.05869230769230767,
+          "Liberal Democrats": 0.029346153846153834,
+          "Restore Britain": 0.018423076923076917,
+          "Other": 0.015423076923076918
+        },
+        "called_winner": "Reform UK",
+        "winner_call_correct": false,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Labour": -0.1506,
+            "Reform UK": 0.0659,
+            "Restore Britain": -0.05,
+            "Conservative": 0.0477,
+            "Green Party": 0.0519,
+            "Liberal Democrats": 0.0257
+          },
+          "mae_pp": 0.0653
+        }
+      },
+      {
+        "id": "uke_scenario_a_burnham_stands",
+        "label": "UKE Scenario A — Burnham stands (85% branch)",
+        "shares": {
+          "Labour": 0.4200000000000001,
+          "Reform UK": 0.39000000000000007,
+          "Conservative": 0.07307692307692307,
+          "Green Party": 0.05846153846153845,
+          "Liberal Democrats": 0.029230769230769223,
+          "Restore Britain": 0.014615384615384612,
+          "Other": 0.014615384615384612
+        },
+        "called_winner": "Labour",
+        "winner_call_correct": true,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Labour": -0.1281,
+            "Reform UK": 0.0449,
+            "Restore Britain": -0.0538,
+            "Conservative": 0.0512,
+            "Green Party": 0.0517,
+            "Liberal Democrats": 0.0256
+          },
+          "mae_pp": 0.0592
+        }
+      },
+      {
+        "id": "uke_scenario_b_burnham_withdraws",
+        "label": "UKE Scenario B — Burnham withdraws (15% branch)",
+        "shares": {
+          "Labour": 0.26999999999999996,
+          "Reform UK": 0.5299999999999999,
+          "Conservative": 0.04999999999999999,
+          "Green Party": 0.059999999999999984,
+          "Liberal Democrats": 0.029999999999999992,
+          "Restore Britain": 0.039999999999999994,
+          "Other": 0.019999999999999997
+        },
+        "called_winner": "Reform UK",
+        "winner_call_correct": false,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Labour": -0.2781,
+            "Reform UK": 0.1849,
+            "Restore Britain": -0.0284,
+            "Conservative": 0.0281,
+            "Green Party": 0.0532,
+            "Liberal Democrats": 0.0264
+          },
+          "mae_pp": 0.0999
+        }
+      },
+      {
+        "id": "final_poll_of_polls",
+        "label": "Final-polls poll-of-polls (5 constituency polls)",
+        "shares": {
+          "Labour": 0.464,
+          "Reform UK": 0.394,
+          "Conservative": 0.022,
+          "Liberal Democrats": 0.016,
+          "Green Party": 0.03,
+          "Restore Britain": 0.07,
+          "Other": 0.01
+        },
+        "called_winner": "Labour",
+        "winner_call_correct": true,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Labour": -0.0841,
+            "Reform UK": 0.0489,
+            "Restore Britain": 0.0016,
+            "Conservative": 0.0001,
+            "Green Party": 0.0232,
+            "Liberal Democrats": 0.0124
+          },
+          "mae_pp": 0.0284
+        }
+      }
+    ],
+    "winner_call_summary": {
+      "uke_published_forecast": "Reform UK — INCORRECT",
+      "uke_scenario_a": "Labour — CORRECT",
+      "final_polls": "Labour — CORRECT (all 5 of 5 polls had Labour ahead)"
+    },
+    "miss_attribution": [
+      "The published central forecast (Reform UK 41.1% vs Labour 39.8%) inverted the actual winner. The inversion was an artefact of the probability-BLEND, not of the fundamentals: the 85%-weighted Scenario A already had Labour ahead (42.0 vs 39.0). Folding in 15% of a Burnham-withdraws landslide (Reform 53 / Lab 27) dragged the blended central across the line to a spurious Reform 'win'. This is the 'never collapse a bimodal forecast to one point estimate' failure mode — present scenarios + P(win) separately instead.",
+      "Scenario B was already moot. Nominations closed in late May with Burnham confirmed on the ballot, so P(Burnham withdraws) should have decayed to ~0 by polling day. The forecast was last meaningfully regenerated on 26 May and never updated this probability, despite the daily cron re-running the script.",
+      "The model ingested zero fieldwork-based constituency polls. Five landed (18 May–12 Jun), all with Labour ahead by +3 to +12; the script's own `next_refresh` promised to 're-fit on any new constituency poll' and never did. The final-polls poll-of-polls (Lab +7) called the seat correctly.",
+      "Restore Britain was under-modelled. The forecast carried them at ~1.8% (Step 8: '1–4%, from Reform's right flank'); the polls put them at 5–8% and they finished THIRD. Reform's right flank fragmented harder than assumed, which is part of why Reform underperformed its ward-signal ceiling."
+    ]
+  },
+  "status": "concluded",
+  "concluded_at": "result-final"
 }

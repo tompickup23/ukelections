@@ -59,8 +59,13 @@ phases.push(["7. Run Holyrood 2026 predictions", "scripts/run-holyrood-predictio
 phases.push(["7a. Build GE PCON identity table", "scripts/ingest-pcon-identity.mjs"]);
 phases.push(["7b. Run GE2024 backtest", "scripts/run-ge-backtest.mjs"]);
 phases.push(["7c. Run GE next-election bulk forecast (650 PCONs)", "scripts/run-ge-predictions.mjs"]);
-phases.push(["7d. Regenerate Makerfield 2026-06-18 by-election forecast", "scripts/forecast-makerfield-byelection.mjs"]);
-phases.push(["7e. Regenerate Makerfield by-election ward + comparator analysis", "scripts/analyse-makerfield-byelection.mjs"]);
+// 7d/7e (Makerfield 2026-06-18 by-election forecast + analysis) were REMOVED on
+// 19 Jun 2026: the contest concluded on 18 Jun (Labour hold, Burnham). The
+// forecast is now frozen as a post-mortem (status: "concluded" in the JSON) and
+// graded against the result by scripts/finalise-makerfield-result.mjs. Re-running
+// the daily generators would clobber the frozen forecast + result blocks; both
+// generators also self-guard against overwriting a concluded file. Re-add a phase
+// here only when a NEW by-election forecast is created.
 
 for (const [label, scriptPath] of phases) run(label, scriptPath);
 

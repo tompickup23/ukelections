@@ -22,7 +22,7 @@
  * the full chain of reasoning step-by-step.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
@@ -622,6 +622,22 @@ function build() {
 const outDir = path.join(ROOT, "data/predictions/by-elections");
 mkdirSync(outDir, { recursive: true });
 const outPath = path.join(outDir, "makerfield-2026-06-18.json");
+
+// Guard: the 18 Jun 2026 contest has concluded. The forecast JSON now carries
+// status:"concluded" plus result/accuracy blocks (see finalise-makerfield-result.mjs).
+// Refuse to overwrite it — re-running this pre-election generator would wipe the
+// post-mortem. Delete the file or clear `status` to force a regen.
+if (existsSync(outPath)) {
+  try {
+    if (JSON.parse(readFileSync(outPath, "utf8")).status === "concluded") {
+      console.log(
+        `Skipping ${path.relative(ROOT, outPath)} — status="concluded" (contest over; forecast frozen).`,
+      );
+      process.exit(0);
+    }
+  } catch { /* unreadable/partial file — fall through and regenerate */ }
+}
+
 const result = build();
 writeFileSync(outPath, JSON.stringify(result, null, 2) + "\n", "utf8");
 console.log(

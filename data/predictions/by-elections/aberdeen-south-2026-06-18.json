@@ -1,0 +1,286 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "scottish-byelection-signal-v1",
+  "status": "concluded",
+  "concluded_at": "result-final",
+  "generated_note": "Built post-result. No UKE pre-election forecast and no constituency polls existed; the 'forecast' block below is the freshest actual-vote signal (7 May 2026 Holyrood overlap), graded against the declared result in forecast_vs_result.",
+  "contest": {
+    "constituency_slug": "aberdeen-south",
+    "constituency_name": "Aberdeen South",
+    "pcon24cd": "S14000061",
+    "region": "Scotland",
+    "trigger": {
+      "type": "resignation",
+      "departing_mp": "Stephen Flynn",
+      "departing_party": "Scottish National Party",
+      "stated_reason": "Flynn was elected to the Scottish Parliament on 7 May 2026; the Scottish Elections (Representation and Reform) Act 2025 bars a dual Holyrood+Westminster mandate, so he resigned the Commons seat on 14 May 2026."
+    },
+    "polling_day": "2026-06-18"
+  },
+  "candidates": [
+    {
+      "party": "Scottish National Party",
+      "candidate": "Richard Thomson"
+    },
+    {
+      "party": "Conservative",
+      "candidate": "Douglas Lumsden"
+    },
+    {
+      "party": "Reform UK",
+      "candidate": "Jo Hart"
+    },
+    {
+      "party": "Labour",
+      "candidate": "Nurul Hoque Ali"
+    },
+    {
+      "party": "Liberal Democrats",
+      "candidate": "Mel Sullivan"
+    },
+    {
+      "party": "Green Party",
+      "candidate": "Jorg Shelton-Eckstein"
+    },
+    {
+      "party": "Alliance for Democracy and Freedom",
+      "candidate": "David Ballantine"
+    }
+  ],
+  "forecast": {
+    "basis": "7 May 2026 Holyrood overlap signal (no constituency polls were published).",
+    "winner": "Scottish National Party",
+    "runner_up": "Conservative",
+    "central_shares": {
+      "Scottish National Party": 0.341,
+      "Conservative": 0.305,
+      "Reform UK": 0.177,
+      "Liberal Democrats": 0.083,
+      "Labour": 0.081
+    },
+    "ranked": [
+      {
+        "party": "Scottish National Party",
+        "pct": 0.341
+      },
+      {
+        "party": "Conservative",
+        "pct": 0.305
+      },
+      {
+        "party": "Reform UK",
+        "pct": 0.177
+      },
+      {
+        "party": "Liberal Democrats",
+        "pct": 0.083
+      },
+      {
+        "party": "Labour",
+        "pct": 0.081
+      }
+    ],
+    "classification": "signal-only",
+    "headline": "No constituency polls existed. Freshest signal (Aberdeen Deeside and North Kincardine (Holyrood constituency), 7 May 2026): Scottish National Party 34.1% ahead of Conservative 30.5%."
+  },
+  "inputs": {
+    "no_polls_note": "No published constituency polling for this by-election (confirmed by PollCheck and Ballot Box Scotland). By-elections get no broadcaster exit poll either. The signal below is the substitute.",
+    "ge2024_baseline": {
+      "date": "2024-07-04",
+      "winner_party": "Scottish National Party",
+      "shares": {
+        "Scottish National Party": 0.328,
+        "Labour": 0.247,
+        "Conservative": 0.244,
+        "Reform UK": 0.069,
+        "Liberal Democrats": 0.063,
+        "Green Party": 0.035,
+        "Other": 0.014
+      },
+      "votes": {
+        "Scottish National Party": 15213,
+        "Labour": 11455,
+        "Conservative": 11300,
+        "Reform UK": 3199,
+        "Liberal Democrats": 2921,
+        "Green Party": 1609,
+        "Other": 648
+      },
+      "majority_pp": 0.081,
+      "turnout_pct": 0.599,
+      "electorate": 77328
+    },
+    "holyrood_signal_2026_05_07": {
+      "name": "Aberdeen Deeside and North Kincardine (Holyrood constituency)",
+      "date": "2026-05-07",
+      "note": "Stephen Flynn won this Holyrood seat on 7 May 2026 — the win that triggered the Westminster by-election. Different electorate to the Westminster seat; constituency (first) vote.",
+      "shares": {
+        "Scottish National Party": 0.341,
+        "Conservative": 0.305,
+        "Reform UK": 0.177,
+        "Liberal Democrats": 0.083,
+        "Labour": 0.081
+      },
+      "majority_pp": 0.036,
+      "turnout_pct": 0.55
+    },
+    "preelection_calls": [
+      {
+        "source": "Ballot Box Scotland",
+        "call": "Lean SNP",
+        "note": "Pre-election qualitative call, 4 June 2026."
+      }
+    ]
+  },
+  "result": {
+    "outcome": "Conservative gain from SNP",
+    "winner_candidate": "Douglas Lumsden",
+    "runner_up_candidate": "Richard Thomson",
+    "shares": {
+      "Conservative": 0.4952,
+      "Scottish National Party": 0.2858,
+      "Reform UK": 0.0858,
+      "Labour": 0.0536,
+      "Liberal Democrats": 0.0439,
+      "Green Party": 0.0337,
+      "Other": 0.002
+    },
+    "votes": {
+      "Conservative": 14308,
+      "Scottish National Party": 8258,
+      "Reform UK": 2478,
+      "Labour": 1550,
+      "Liberal Democrats": 1270,
+      "Green Party": 974,
+      "Other": 59
+    },
+    "majority_votes": 6050,
+    "majority_pp": 0.2094,
+    "turnout_votes": 28897,
+    "turnout_pct": 0.374,
+    "electorate": 77328,
+    "sources": [
+      "https://en.wikipedia.org/wiki/2026_Aberdeen_South_by-election",
+      "https://www.pollcheck.co.uk/by-elections/aberdeen-south",
+      "https://ballotbox.scot/preview-westminster-aberdeen-south/"
+    ],
+    "ranked": [
+      {
+        "party": "Conservative",
+        "pct": 0.4952
+      },
+      {
+        "party": "Scottish National Party",
+        "pct": 0.2858
+      },
+      {
+        "party": "Reform UK",
+        "pct": 0.0858
+      },
+      {
+        "party": "Labour",
+        "pct": 0.0536
+      },
+      {
+        "party": "Liberal Democrats",
+        "pct": 0.0439
+      },
+      {
+        "party": "Green Party",
+        "pct": 0.0337
+      },
+      {
+        "party": "Other",
+        "pct": 0.002
+      }
+    ],
+    "winner": "Conservative",
+    "runner_up": "Scottish National Party",
+    "margin_pp": 0.2094,
+    "swing_vs_ge2024_pp": {
+      "Conservative": 0.2512,
+      "Scottish National Party": -0.0422,
+      "Reform UK": 0.0168,
+      "Labour": -0.1934,
+      "Liberal Democrats": -0.0191,
+      "Green Party": -0.0013,
+      "Other": -0.012
+    }
+  },
+  "final_polls": {
+    "note": "No published constituency polls; no broadcaster exit poll (by-elections never get one).",
+    "polls": []
+  },
+  "forecast_vs_result": {
+    "actual": {
+      "winner": "Conservative (Douglas Lumsden)",
+      "outcome": "Conservative gain from SNP",
+      "runner_up": "Scottish National Party (Richard Thomson)",
+      "margin": "6,050 votes (+20.9pp)",
+      "turnout": "28,897 (37.4%)"
+    },
+    "signals": [
+      {
+        "id": "ge2024_baseline",
+        "label": "GE2024 result (naive prior)",
+        "shares": {
+          "Scottish National Party": 0.328,
+          "Labour": 0.247,
+          "Conservative": 0.244,
+          "Reform UK": 0.069,
+          "Liberal Democrats": 0.063,
+          "Green Party": 0.035,
+          "Other": 0.014
+        },
+        "called_winner": "Scottish National Party",
+        "winner_call_correct": false,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Conservative": -0.2512,
+            "Scottish National Party": 0.0422,
+            "Reform UK": -0.0168,
+            "Labour": 0.1934,
+            "Liberal Democrats": 0.0191,
+            "Green Party": 0.0013
+          },
+          "mae_pp": 0.0873
+        },
+        "labour_or_lead_margin_pp": null
+      },
+      {
+        "id": "holyrood_overlap_2026_05_07",
+        "label": "7 May 2026 Holyrood signal (Aberdeen Deeside and North Kincardine (Holyrood constituency))",
+        "shares": {
+          "Scottish National Party": 0.341,
+          "Conservative": 0.305,
+          "Reform UK": 0.177,
+          "Liberal Democrats": 0.083,
+          "Labour": 0.081
+        },
+        "called_winner": "Scottish National Party",
+        "winner_call_correct": false,
+        "accuracy": {
+          "per_party_signed_error_pp": {
+            "Conservative": -0.1902,
+            "Scottish National Party": 0.0552,
+            "Reform UK": 0.0912,
+            "Labour": 0.0274,
+            "Liberal Democrats": 0.0391,
+            "Green Party": -0.0337
+          },
+          "mae_pp": 0.0728
+        },
+        "labour_or_lead_margin_pp": null
+      }
+    ],
+    "winner_call_summary": [
+      "GE2024 result (naive prior): predicted Scottish National Party — INCORRECT",
+      "7 May 2026 Holyrood signal (Aberdeen Deeside and North Kincardine (Holyrood constituency)): predicted Scottish National Party — INCORRECT"
+    ],
+    "narrative": [
+      "An upset. Every area signal pointed to an SNP hold: the GE2024 baseline (SNP 32.8%), the 7 May 2026 Holyrood overlap (SNP 34.1% ahead of the Conservatives' 30.5%), and Ballot Box Scotland's 'Lean SNP' call. The result was a 21-point Conservative GAIN — the first Conservative gain of a Westminster seat at a Scottish by-election since 1967.",
+      "The mechanism was tactical unionist consolidation on a low (37%) by-election turnout. Labour collapsed from 24.7% to 5.4% (-19pp) and the Lib Dems eased, with that vote coalescing behind Douglas Lumsden to beat the SNP. The SNP's own share barely moved (-4pp); they were not so much defeated as outflanked by a unified anti-SNP vote.",
+      "Reform UK is the signal's other big miss: 17.7% in the Holyrood overlap five weeks earlier, just 8.6% here. Reform's Holyrood list strength did not transfer to a Westminster by-election framed as a straight SNP-vs-Conservative fight. No area-level signal could have called this; it needed a model of tactical switching that the raw shares do not contain."
+    ]
+  }
+}
