@@ -162,7 +162,13 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
           <td class="num">—</td>
           <td>—</td>
         </tr>
-        {benchmarks.map((b: any) => (
+        {benchmarks
+          .slice()
+          .sort((a: any, b: any) => {
+            if (a.winner_correct !== b.winner_correct) return a.winner_correct ? -1 : 1;
+            return (a.mae_pp ?? 9) - (b.mae_pp ?? 9);
+          })
+          .map((b: any) => (
           <tr>
             <td>{b.forecaster}{b.date ? <span class="muted"> · {b.date}</span> : null}</td>
             <td class="muted">{b.type}</td>
