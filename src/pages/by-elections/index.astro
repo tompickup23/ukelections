@@ -77,6 +77,7 @@ type Lead = { name: string; hits: number; total: number; avgMae: number | null; 
 const leaderboard: Lead[] = [
   { name: "Constituency polls", picks: pollsSeat, note: "Makerfield only (5 polls, all agreed)" },
   { name: "UK Elections (best call)", picks: [lookup("makerfield", "uke_poll_of_polls"), lookup("aberdeen-south", "uke_signal"), lookup("arbroath-and-broughty-ferry", "uke_signal")], note: "poll-of-polls + Holyrood signal" },
+  { name: "UK Elections (GE model)", picks: [lookup("makerfield", "uke_ge_model"), lookup("aberdeen-south", "uke_ge_model"), lookup("arbroath-and-broughty-ferry", "uke_ge_model")], note: "650-seat GE model, like Electoral Calculus" },
   { name: "Betting markets", picks: [lookup("makerfield", "betting_markets"), lookup("aberdeen-south", "betting_markets"), lookup("arbroath-and-broughty-ferry", "betting_markets")], note: "odds-implied favourite" },
   { name: "Electoral Calculus", picks: [lookup("makerfield", "electoral_calculus"), lookup("aberdeen-south", "electoral_calculus"), lookup("arbroath-and-broughty-ferry", "electoral_calculus")], note: "GE seat model, not bespoke" },
   { name: "Ballot Box Scotland", picks: [lookup("aberdeen-south", "ballot_box_scotland"), lookup("arbroath-and-broughty-ferry", "ballot_box_scotland")], note: "Scottish seats, qualitative" },
