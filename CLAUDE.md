@@ -77,3 +77,7 @@ Every detail page renders data as visual, not text. `/polling/` has a trend char
 - Cloudflare Pages: `ukelections` (production)
 - GitHub Pages: `tompickup23.github.io/ukelections/` (auto-mirrored backup)
 - Domain: `ukelections.co.uk` (CF Pages custom domain, behind Cloudflare Access)
+
+## Cross-repo lessons (5 Jul 2026)
+
+Hard-won gotchas for this site live in the clawd repo: `/Users/tompickup/clawd/docs/lessons/sister-sites.md` (deploy flows, CSP/Pagefind/Astro 6 gotchas, OG-card standard, em-dash sweep method) and `/Users/tompickup/clawd/docs/lessons/editorial-method.md` (fact-check protocol, factual anchors). Read the relevant one before major work, and append new lessons there, not here.
