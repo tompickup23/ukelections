@@ -42,6 +42,7 @@ function loadOverride() {
           retrieved_at: src.retrieved_at,
           generated_at: raw.generated_at,
           source_key: key,
+          restore_britain: src.restore_britain || null,
         };
       }
     }
@@ -67,6 +68,7 @@ function applyOverride(constantName, snapshot) {
       source_url: `https://en.wikipedia.org/wiki/${ov.page}`,
       review_status: "auto_refreshed",
       retrieved_at: ov.retrieved_at,
+      parsed_restore_britain: ov.restore_britain || null,
     },
   };
 }
@@ -268,16 +270,14 @@ const SCOTTISH_2026_APRIL_AVERAGE_STATIC = {
 };
 
 // Restore Britain, Rupert Lowe's party (formed November 2025).
-// Most pollsters embed RB inside the "Others" cell rather than giving it its
-// own column. Wikipedia rolling-average parser therefore can't pick it up
-// directly. The number below is a manual snapshot of the most recent named
-// pollster published in the last 14 days, applied as an overlay on top of the
-// auto-refreshed snapshot, subtracted from the "Other" cell so the total
-// still sums to 1.0.
-//
-// Refresh from: https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election
-// (look for the parenthetical "(RB X)" annotation inside the Others column).
-const RESTORE_BRITAIN_OVERLAY = {
+// Since June 2026 Wikipedia's UK polling table carries a dedicated RB column;
+// the refresh parser folds it into "Other" for the headline shares (pollsters
+// that don't prompt for RB leave it inside their Others cell, so folding keeps
+// "Other" comparable across polls) and reports the where-reported mean in a
+// `restore_britain` block, which this overlay prefers. The static value below
+// is only the fallback for when the override carries no parsed RB block
+// (e.g. a parse failure retained an old snapshot).
+const RESTORE_BRITAIN_OVERLAY_FALLBACK = {
   share: 0.04,
   source:
     "YouGov 17-18 May 2026 + Find Out Now 6 May 2026. RB 4% embedded in Wikipedia 'Others' column. " +
@@ -289,9 +289,20 @@ const RESTORE_BRITAIN_OVERLAY = {
 
 function applyRestoreBritainOverlay(snapshot) {
   // Only applies to UK Westminster, Welsh + Scottish samples are too small.
-  const restoreShare = RESTORE_BRITAIN_OVERLAY.share;
+  const parsed = snapshot._meta?.parsed_restore_britain;
+  const overlay = parsed && parsed.polls_reporting > 0
+    ? {
+        share: parsed.share_where_reported,
+        source:
+          `Wikipedia UK polling table, dedicated Restore Britain column: mean of the ` +
+          `${parsed.polls_reporting} poll${parsed.polls_reporting === 1 ? "" : "s"} in the rolling ` +
+          `window that report RB separately. Polls that fold RB into Others are excluded from this mean.`,
+        retrieved_at: snapshot._meta?.retrieved_at || null,
+      }
+    : RESTORE_BRITAIN_OVERLAY_FALLBACK;
+  const restoreShare = overlay.share;
   const currentOther = snapshot.shares["Other"] || 0;
-  if (currentOther < restoreShare) {
+  if (restoreShare <= 0 || currentOther < restoreShare) {
     // Defensive: if Other is already smaller than the overlay, don't push it
     // negative. This shouldn't happen in normal polling but the model breaks
     // if any share goes below zero.
@@ -306,7 +317,7 @@ function applyRestoreBritainOverlay(snapshot) {
     },
     _meta: {
       ...snapshot._meta,
-      restore_britain_overlay: RESTORE_BRITAIN_OVERLAY,
+      restore_britain_overlay: overlay,
     },
   };
 }

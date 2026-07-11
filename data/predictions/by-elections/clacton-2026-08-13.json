@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "clacton-by-election-v1",
+  "generated_at": "2026-07-11T12:00:00.000Z",
+  "status": "upcoming",
+  "contest": {
+    "constituency_slug": "clacton",
+    "constituency_name": "Clacton",
+    "pcon24cd": "E14001174",
+    "region": "East of England",
+    "trigger": {
+      "type": "resignation",
+      "departing_mp": "Nigel Farage",
+      "departing_party": "Reform UK",
+      "resignation_announced_at": "2026-07-07",
+      "resignation_effected_at": "2026-07-08",
+      "writ_moved_at": "2026-07-09",
+      "stated_reason": "Farage announced he would vacate the seat and re-contest it himself, saying he wanted Clacton voters rather than the press or parliamentary authorities to decide whether he continues as their MP. The announcement came amid a Parliamentary Commissioner for Standards investigation into his financial interests, including a reported 5 million pound payment from Christopher Harborne (also flagged to the National Crime Agency under the Suspicious Activity Report scheme), alleged cryptocurrency lobbying of the Bank of England, and property declarations."
+    },
+    "polling_day": "2026-08-13",
+    "writ_status": "moved",
+    "nominations_close": "2026-07-17",
+    "precedent_note": "Resign-and-recontest has form in Clacton itself: Douglas Carswell resigned and re-won the seat for UKIP at the 2014 Clacton by-election. Mark Reckless (Rochester and Strood 2014) and Zac Goldsmith (Richmond Park 2016) are the other modern precedents. A win does not end the standards investigation: suspension, recall and a further by-election all remain possible afterwards."
+  },
+  "boycott": {
+    "parties_not_standing": [
+      "Labour",
+      "Conservative",
+      "Liberal Democrats",
+      "Green Party",
+      "Restore Britain"
+    ],
+    "note": "All five parties confirmed within days of the writ that they will not contest the by-election, framing it as unnecessary and self-inflicted. Kemi Badenoch called it 'Farage's fake by-election'. Restore Britain, the party most directly competing for Reform's vote, also declined to stand."
+  },
+  "candidates": [
+    {
+      "party": "Reform UK",
+      "candidate": "Nigel Farage",
+      "status": "declared (nominations close 17 July)",
+      "note": "Party leader; MP for Clacton July 2024 to July 2026. Won the seat at GE2024 with 46.2%."
+    },
+    {
+      "party": "Reclaim",
+      "candidate": "Laurence Fox",
+      "status": "declared (nominations close 17 July)"
+    },
+    {
+      "party": "Count Binface Party",
+      "candidate": "Count Binface",
+      "status": "declared (nominations close 17 July)"
+    },
+    {
+      "party": "Independent",
+      "candidate": "Piers Corbyn",
+      "status": "declared (nominations close 17 July)"
+    },
+    {
+      "party": "British Democratic Party",
+      "candidate": "Kai Stephens",
+      "status": "declared (nominations close 17 July)"
+    },
+    {
+      "party": "Forward Party",
+      "candidate": "Adham Alkhatip",
+      "status": "declared (nominations close 17 July)"
+    }
+  ],
+  "prior_result": {
+    "label": "GE2024, 4 July 2024",
+    "winner": "Reform UK",
+    "winner_candidate": "Nigel Farage",
+    "majority_votes": 8405,
+    "majority_pp": 0.1829,
+    "turnout_votes": 45958,
+    "electorate": 78245,
+    "shares": {
+      "Reform UK": 0.4618,
+      "Conservative": 0.2789,
+      "Labour": 0.1621,
+      "Liberal Democrats": 0.0439,
+      "Green Party": 0.0421,
+      "Other": 0.0112
+    },
+    "source": "House of Commons Library GE2024 results; mirrored in data/identity/pcons-ge-next.json"
+  },
+  "forecast": {
+    "winner": null,
+    "runner_up": null,
+    "margin_pp": null,
+    "classification": "no_forecast",
+    "method": "qualitative",
+    "provider": "UK Elections",
+    "headline": "No vote-share forecast: with Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain all declining to stand, there is no competitive race for a swing model to forecast. Farage is the overwhelming favourite by default.",
+    "no_forecast_rationale": "Every quantitative method we benchmark (GE swing model, poll of polls, local signal) assumes the major parties contest the seat. A five-party boycott breaks that assumption: national vote-intention shares cannot be mapped onto a ballot missing parties that hold roughly two-thirds of the national vote between them. Publishing invented shares would repeat the Makerfield mistake in a different costume. We will grade the outcome (winner, majority, turnout) against the qualitative call above, and treat turnout as the only genuinely open question."
+  },
+  "sources": [
+    {
+      "label": "Wikipedia: 2026 Clacton by-election",
+      "url": "https://en.wikipedia.org/wiki/2026_Clacton_by-election",
+      "retrieved_at": "2026-07-11"
+    },
+    {
+      "label": "AP via US News, 10 July 2026: by-election set for 13 August",
+      "url": "https://www.usnews.com/news/world/articles/2026-07-10/uks-clacton-by-election-triggered-by-farage-to-take-place-on-august-13",
+      "retrieved_at": "2026-07-11"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import MiniMap from "../../../components/MiniMap.astro";
+import PartyBars from "../../../components/PartyBars.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const data = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "data/predictions/by-elections/clacton-2026-08-13.json"),
+    "utf8",
+  ),
+);
+
+const contest = data.contest;
+const prior = data.prior_result;
+const priorRows = Object.entries(prior.shares as Record<string, number>)
+  .sort((a, b) => b[1] - a[1])
+  .map(([party, share]) => ({ party, pct: share }));
+
+const timeline: Array<{ date: string; event: string }> = [
+  { date: "7 July 2026", event: "Nigel Farage announces he will vacate the seat and stand in the resulting by-election." },
+  { date: "8 July 2026", event: "Resignation effected (appointment as Steward and Bailiff of the Manor of Northstead)." },
+  { date: "9 July 2026", event: "Writ moved; polling day set for 13 August." },
+  { date: "17 July 2026", event: "Nominations close. The candidate list below is declared-so-far, not final." },
+  { date: "28 July 2026", event: "Voter registration deadline." },
+  { date: "13 August 2026", event: "Polling day." },
+];
+---
+
+<BaseLayout
+  title="Clacton by-election 2026. 13 August"
+  description="Nigel Farage resigned as MP for Clacton on 8 July 2026 and is re-contesting the seat at a 13 August by-election. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain are all declining to stand. Why we are not publishing a vote-share forecast."
+>
+  <section class="page-hero">
+    {contest.pcon24cd && (
+      <div class="mini-map-side">
+        <MiniMap
+          focalCode={contest.pcon24cd}
+          focalKind="pcon"
+          focalColour={partyColour("Reform UK")}
+          width={240}
+          height={170}
+          ariaLabel="Location map of Clacton on the UK map"
+        />
+      </div>
+    )}
+    <p class="eyebrow">By-election · Thursday 13 August 2026</p>
+    <h1>Clacton by-election</h1>
+    <p class="lede">
+      Nigel Farage resigned as MP for Clacton on 8 July 2026, amid a parliamentary standards
+      investigation into his financial interests, in order to trigger a by-election and stand in it
+      himself. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain
+      have all said they will not contest it.
+    </p>
+    <p class="meta-row">England · East of England · GE2024: Reform UK, majority 8,405 (18.3pp)</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Our call</p>
+      <h2>Why there is no vote-share forecast</h2>
+    </div>
+    <div class="backtest-callout">
+      <strong>{data.forecast.headline}</strong>
+      <span class="backtest-detail">{data.forecast.no_forecast_rationale}</span>
+    </div>
+    <p class="caption">
+      Method: qualitative · Provider: UK Elections. After Makerfield we publish a numeric central
+      forecast only where a competitive race gives the models something real to estimate.
+      <a href="/by-elections/makerfield/">What went wrong at Makerfield →</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">How we got here</p>
+      <h2>Timeline</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Date</th><th>Event</th></tr></thead>
+      <tbody>
+        {timeline.map((t) => (
+          <tr><td style="white-space:nowrap">{t.date}</td><td>{t.event}</td></tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      {contest.trigger.stated_reason}
+      {" "}{contest.precedent_note}
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The ballot</p>
+      <h2>Who is standing, and who is not</h2>
+    </div>
+    <div class="backtest-callout">
+      <strong>Five parties are boycotting: {data.boycott.parties_not_standing.map((p: string) => shortPartyLabel(p)).join(", ")}.</strong>
+      <span class="backtest-detail">{data.boycott.note}</span>
+    </div>
+    <table class="seat-table" style="margin-top:var(--space-md)">
+      <thead><tr><th>Candidate</th><th>Party</th><th>Status</th></tr></thead>
+      <tbody>
+        {data.candidates.map((c: any) => (
+          <tr>
+            <td>{c.candidate}</td>
+            <td>
+              <span class="party-pill" style={`background:${partyColour(c.party)}`}></span>
+              {c.party}
+            </td>
+            <td class="muted">{c.status}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      Declared candidates as of 11 July 2026. Nominations close 17 July; the final list is the
+      returning officer's statement of persons nominated.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The baseline</p>
+      <h2>Clacton at GE2024</h2>
+    </div>
+    <PartyBars
+      large={true}
+      rows={priorRows.map((r) => ({ party: r.party, pct: r.pct }))}
+    />
+    <p class="caption">
+      4 July 2024: Nigel Farage (Reform UK) 21,225 votes (46.2%), majority 8,405 (18.3pp) over the
+      Conservatives, on a turnout of 45,958 (58.7% of a 78,245 electorate). Clacton also elected
+      Douglas Carswell for UKIP at the 2014 by-election, the party's first elected MP. With the
+      2024 runners-up all absent from this ballot, the GE2024 shares are context, not a predictor.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">What we will grade</p>
+      <h2>The open questions</h2>
+    </div>
+    <p>
+      With no competitive opposition, the winner call carries almost no information. What we will
+      record and grade when the result declares: the winner (our qualitative call is Farage),
+      his vote share against the 46.2% he won in a contested 2024 race, and above all
+      <strong>turnout</strong>. The 2014 Carswell resign-and-recontest by-election managed 51.0%
+      turnout with all major parties standing; a five-party boycott in August makes turnout the
+      only genuinely open number on the ballot.
+    </p>
+    <p class="muted-row">
+      Sources:
+      {data.sources.map((s: any, i: number) => (
+        <>
+          {i > 0 ? " · " : " "}
+          <a href={s.url} rel="external">{s.label}</a>
+        </>
+      ))}
+    </p>
+  </section>
+</BaseLayout>

@@ -121,17 +121,19 @@ const ukSourceSummary = overlay
   {overlay && (
     <section class="section">
       <div class="section-head">
-        <p class="eyebrow">Manual overlay</p>
-        <h2>Restore Britain isn't in the Wikipedia table</h2>
+        <p class="eyebrow">Restore Britain overlay</p>
+        <h2>How Restore Britain enters the numbers</h2>
       </div>
       <div class="backtest-callout">
         <strong>Restore Britain {pct(overlay.share)}, applied as a national overlay.</strong>
         <span class="backtest-detail">
-          Most pollsters embed Restore Britain inside the "Others" cell rather than as a separate
-          column. We subtract the overlay from "Other" so the total still sums to 100%. The
-          per-seat parser at <code>scripts/fetch-rb-annotations.mjs</code> scans Wikipedia
-          constituency pages for tabulated RB results; where it finds one, the per-seat share
-          replaces the national overlay for that constituency.
+          Since June 2026 Wikipedia's polling table carries a dedicated Restore Britain column,
+          but only some pollsters prompt for the party; the rest leave it inside "Others". Our
+          overlay is the mean of the polls that report RB separately, subtracted from "Other" so
+          the total still sums to 100%. The per-seat parser at
+          <code>scripts/fetch-rb-annotations.mjs</code> scans Wikipedia constituency pages for
+          tabulated RB results; where it finds one, the per-seat share replaces the national
+          overlay for that constituency.
         </span>
       </div>
       <p class="caption">
@@ -210,13 +212,17 @@ const ukSourceSummary = overlay
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Devolved snapshots</p>
-      <h2>Welsh + Scottish vote intention</h2>
+      <p class="eyebrow">Devolved snapshots · elections concluded</p>
+      <h2>Welsh + Scottish: final pre-election snapshots</h2>
     </div>
     <p>
-      The Senedd 2026 and Holyrood 2026 forecasts use Wales-only and Scotland-only polling.
-      Sample sizes are smaller and refresh windows can be longer than the UK-wide tracker. Be
-      cautious of inference until a fresh Welsh field lands.
+      The <a href="/forecasts/senedd-2026/">Senedd</a> and
+      <a href="/forecasts/holyrood-2026/">Holyrood</a> elections were held on 7 May 2026:
+      Plaid Cymru now leads a minority Welsh government under Rhun ap Iorwerth with Green support,
+      and the SNP won a fifth consecutive Scottish term with John Swinney continuing as First
+      Minister. No pollster has published voting intention for the next devolved elections yet,
+      so the table below is frozen at the final pre-election averages our forecasts used. It will
+      pick up again when post-election fieldwork appears.
     </p>
     <table class="seat-table">
       <thead>
@@ -260,17 +266,18 @@ const ukSourceSummary = overlay
     </div>
     <ol class="numbered-list">
       <li>
-        <strong>Scrape.</strong> Weekly, <code>scripts/refresh-polling.mjs</code> pulls the first
-        wikitable from Wikipedia's UK / Welsh / Scottish polling pages and parses every poll
-        published in the last 14 days.
+        <strong>Scrape.</strong> Daily, <code>scripts/refresh-polling.mjs</code> pulls the first
+        wikitable from Wikipedia's UK Westminster polling page and parses every poll published in
+        the last 14 days. The Welsh and Scottish sources are frozen at their final pre-election
+        snapshots since the 7 May 2026 devolved elections.
       </li>
       <li>
         <strong>Average.</strong> Each party's share is the mean across those polls. The snapshot
         is written to <code>data/polling/override.json</code>; a copy lands in <code>ledger.json</code>.
       </li>
       <li>
-        <strong>Overlay.</strong> Restore Britain (which most pollsters bury inside "Others")
-        is added back as a fixed 4% overlay subtracted from "Other".
+        <strong>Overlay.</strong> Restore Britain is averaged over the polls that report it as a
+        separate column and subtracted from "Other", so the total still sums to 100%.
       </li>
       <li>
         <strong>Swing.</strong> The seat forecast computes (current share − 2024 share) per party

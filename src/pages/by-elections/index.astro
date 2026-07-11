@@ -24,6 +24,7 @@ type Card = {
   turnoutPct: number | null;
   predictedWinner: string | null;
   callCorrect: boolean | null;
+  forecastHeadline: string | null;
   href: string;
 };
 
@@ -48,6 +49,7 @@ const contests: Card[] = files
       turnoutPct: r?.turnout_pct ?? null,
       predictedWinner,
       callCorrect: predictedWinner && winnerParty ? predictedWinner === winnerParty : null,
+      forecastHeadline: d.forecast?.headline ?? null,
       href: `/by-elections/${slug}/`,
     };
   })
@@ -55,6 +57,22 @@ const contests: Card[] = files
   .sort((a, b) => b.pollingDay.localeCompare(a.pollingDay));
 
 const concluded = contests.filter((c) => c.concluded);
+const upcoming = contests.filter((c) => !c.concluded);
+
+// Local council by-elections roundup (hand-curated, sourced per polling date).
+const localData = JSON.parse(
+  readFileSync(path.join(process.cwd(), "data/results/local-byelections.json"), "utf8"),
+);
+type LocalContest = { ward: string; council: string; winner: string; previous: string; share_pct?: number; note?: string };
+const localDates: Array<{ date: string; sources: Array<{ label: string; url: string }>; contests: LocalContest[] }> =
+  localData.dates || [];
+const localAll: LocalContest[] = localDates.flatMap((d) => d.contests);
+// Reform scorecard derived from the rows themselves so the numbers always
+// match the table.
+const refWins = localAll.filter((c) => c.winner.includes("Reform"));
+const refGains = refWins.filter((c) => !c.previous.includes("Reform")).length;
+const refHolds = refWins.filter((c) => c.previous.includes("Reform")).length;
+const refLosses = localAll.filter((c) => c.previous.includes("Reform") && !c.winner.includes("Reform")).length;
 function prettyDate(iso: string): string {
   return iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
 }
@@ -96,15 +114,15 @@ const leaderboard: Lead[] = [
 ---
 
 <BaseLayout
-  title="UK parliamentary by-elections. Results and forecasts"
-  description="UK Westminster by-election results and how our forecasts compared. Covers the three 18 June 2026 by-elections: Makerfield (Labour hold, Burnham), Aberdeen South (Conservative gain) and Arbroath and Broughty Ferry (SNP hold)."
+  title="UK parliamentary by-elections. Results, forecasts and what's next"
+  description="UK Westminster by-election results and how our forecasts compared. Next up: Clacton on 13 August 2026, where Nigel Farage is re-contesting his own seat against a five-party boycott. Plus the 18 June 2026 round and a rolling local council by-election scorecard."
 >
   <section class="hero">
     <p class="eyebrow">By-elections</p>
     <h1>Westminster by-elections</h1>
     <p class="lede">
-      Every by-election we have tracked, the declared result, and how the pre-election forecast or
-      signal compared. {concluded.length} concluded contest{concluded.length === 1 ? "" : "s"}.
+      Every by-election we track, the declared result, and how the pre-election forecast or
+      signal compared. {concluded.length} concluded contest{concluded.length === 1 ? "" : "s"}{upcoming.length > 0 ? `, ${upcoming.length} upcoming` : ""}.
     </p>
   </section>
 
@@ -131,7 +149,7 @@ const leaderboard: Lead[] = [
               </span>
             </div>
           ) : (
-            <p class="byelection-meta">Forecast pending</p>
+            <p class="byelection-meta">{c.forecastHeadline || "Forecast pending"}</p>
           )}
           {c.predictedWinner && c.callCorrect === false && (
             <p class="byelection-call">Pre-election call: <strong>{shortPartyLabel(c.predictedWinner)}</strong> · the result went the other way.</p>
@@ -139,15 +157,17 @@ const leaderboard: Lead[] = [
           {c.predictedWinner && c.callCorrect === true && (
             <p class="byelection-call">Pre-election call: <strong>{shortPartyLabel(c.predictedWinner)}</strong> · called correctly.</p>
           )}
-          <span class="byelection-link">Read the result and scorecard →</span>
+          <span class="byelection-link">{c.concluded ? "Read the result and scorecard →" : "Read the contest briefing →"}</span>
         </a>
       ))}
     </div>
     <p class="caption">
-      The 18 June 2026 round was a split verdict: Labour held Makerfield (Andy Burnham) against a
-      UKE forecast that wrongly called Reform; the Conservatives gained Aberdeen South in an upset no
-      area signal saw coming; and the SNP held Arbroath and Broughty Ferry exactly as the Holyrood
-      signal predicted.
+      Next up: Clacton on 13 August 2026, where Nigel Farage resigned to re-contest his own seat
+      and the five main opposition parties are refusing to stand. The 18 June 2026 round was a
+      split verdict: Labour held Makerfield (Andy Burnham) against a UKE forecast that wrongly
+      called Reform; the Conservatives gained Aberdeen South in an upset no area signal saw
+      coming; and the SNP held Arbroath and Broughty Ferry exactly as the Holyrood signal
+      predicted.
     </p>
   </section>
 
@@ -186,6 +206,54 @@ const leaderboard: Lead[] = [
     </p>
   </section>
 
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Local council by-elections · {localData.window.from} to {localData.window.to}</p>
+      <h2>The weekly ward scorecard</h2>
+    </div>
+    <p>
+      Westminster by-elections are rare; council by-elections happen most Thursdays and are the
+      highest-frequency real-vote signal between general elections. Across the
+      {localAll.length} ward contests since 19 June 2026, Reform UK made
+      <strong>{refGains} gain{refGains === 1 ? "" : "s"}</strong>, held
+      <strong>{refHolds}</strong> of its own seats and lost
+      <strong>{refLosses}</strong> (Llangennech to Plaid Cymru). The gains came off Labour,
+      the Conservatives and independents across England, Wales and, notably, Scotland
+      (Larkhall, South Lanarkshire, under STV).
+    </p>
+    {localDates.map((d) => (
+      <details class="local-date">
+        <summary>
+          <strong>{prettyDate(d.date)}</strong> · {d.contests.length} contest{d.contests.length === 1 ? "" : "s"}
+          · Reform {d.contests.filter((c) => c.winner.includes("Reform")).length} win{d.contests.filter((c) => c.winner.includes("Reform")).length === 1 ? "" : "s"}
+        </summary>
+        <table class="seat-table">
+          <thead><tr><th>Ward</th><th>Council</th><th>Winner</th><th>Previously</th><th>Notes</th></tr></thead>
+          <tbody>
+            {d.contests.map((c) => (
+              <tr>
+                <td>{c.ward}</td>
+                <td class="muted">{c.council}</td>
+                <td>
+                  <span class="party-pill" style={`background:${partyColour(c.winner.split(" / ")[0])}`}></span>
+                  {c.winner}{c.share_pct != null ? ` (${c.share_pct.toFixed(1)}%)` : ""}
+                </td>
+                <td class="muted">{c.previous}</td>
+                <td class="muted">{c.note || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="caption">
+          Sources: {d.sources.map((s, i) => (
+            <>{i > 0 ? " · " : ""}<a href={s.url} rel="external">{s.label}</a></>
+          ))}
+        </p>
+      </details>
+    ))}
+    <p class="caption">{localData.method_note}</p>
+  </section>
+
   <style>
     .byelection-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap:1.25rem; }
     .byelection-card { display:block; padding:1.25rem 1.4rem; border:1px solid var(--border); border-radius:16px; background:var(--panel-bg); text-decoration:none; color:inherit; transition: border-color .15s, transform .15s; }
@@ -198,6 +266,10 @@ const leaderboard: Lead[] = [
     .byelection-outcome { font-weight:700; }
     .byelection-meta { color:var(--muted); font-size:0.85rem; }
     .byelection-call { margin:0.4rem 0 0; font-size:0.85rem; }
+    .local-date { margin:0.75rem 0; border:1px solid var(--border); border-radius:12px; padding:0.6rem 1rem; background:var(--panel-bg); }
+    .local-date summary { cursor:pointer; padding:0.35rem 0; }
+    .local-date[open] summary { border-bottom:1px solid var(--border); margin-bottom:0.6rem; }
+    .local-date .seat-table { margin-top:0.5rem; }
     .byelection-link { display:inline-block; margin-top:0.75rem; color:var(--accent); font-weight:600; font-size:0.9rem; }
     .call-tag { font-size:0.7rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:999px; }
     .call-tag--ok { color:var(--accent-2); background: color-mix(in srgb, var(--accent-2) 12%, transparent); }

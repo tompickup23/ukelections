@@ -52,10 +52,22 @@ const SOURCES = {
     constant: "UK_WESTMINSTER_2026_APRIL_AVERAGE",
     preamble: 5,
     filter_area: true,
+    // Wikipedia added a dedicated Restore Britain column between Plaid Cymru
+    // and Others in June 2026. Polls that don't prompt for RB carry {{sdash}}
+    // there (parses to null → treated as 0), and their RB support stays inside
+    // the Others cell. We therefore fold the RB column mean back into "Other"
+    // for the headline shares (so "Other" means the same thing across all
+    // polls) and report the RB where-reported mean separately, which
+    // nationalPolling.js uses as the Restore Britain overlay.
     columns: [
       "Labour", "Conservative", "Reform UK",
-      "Liberal Democrats", "Green Party", "SNP", "Plaid Cymru", "Other",
+      "Liberal Democrats", "Green Party", "SNP", "Plaid Cymru",
+      "Restore Britain", "Other",
     ],
+    fold_into_other: ["Restore Britain"],
+    // RB + Plaid are both frequently blank in the same row; tolerate two
+    // missing share cells (the 0.85 sum floor still guards row validity).
+    max_missing: 2,
     label: "UK Westminster",
   },
   welsh: {
@@ -63,6 +75,11 @@ const SOURCES = {
     constant: "WELSH_2026_APRIL_AVERAGE",
     preamble: 4,
     filter_area: false,
+    // Election held 7 May 2026 (Plaid Cymru minority government). The polling
+    // page is frozen; keep the final pre-election snapshot instead of
+    // re-fetching. Remove this flag if a "next Senedd election" polling page
+    // appears and we want to track it.
+    concluded: { on: "2026-05-07", note: "2026 Senedd election held; final pre-election snapshot retained" },
     columns: [
       "Labour", "Conservative", "Plaid Cymru",
       "Green Party", "Liberal Democrats", "Reform UK", "Other",
@@ -74,6 +91,9 @@ const SOURCES = {
     constant: "SCOTTISH_2026_APRIL_AVERAGE",
     preamble: 4,
     filter_area: false,
+    // Election held 7 May 2026 (SNP fifth term, Swinney minority government).
+    // Same freeze rationale as the Welsh source above.
+    concluded: { on: "2026-05-07", note: "2026 Scottish Parliament election held; final pre-election snapshot retained" },
     // Scottish page has an Alba column between Greens and Reform — we
     // ingest it as "Other Scottish" so the share is preserved without
     // needing a top-level Alba constant.
@@ -183,9 +203,12 @@ function parseRows(tableBody) {
 
 function averageRecentPolls(rows, spec, windowDays) {
   const { preamble, filter_area, columns: columnLabels } = spec;
+  const maxMissing = spec.max_missing ?? 1;
   const cutoff = Date.now() - windowDays * 86400 * 1000;
   const sums = {};
   const counts = {};
+  const reportedSums = {};
+  const reportedCounts = {};
   let used = 0;
   let earliest = null;
   let latest = null;
@@ -203,9 +226,10 @@ function averageRecentPolls(rows, spec, windowDays) {
 
     const shareCells = cells.slice(preamble, preamble + columnLabels.length);
     const parsed = shareCells.map(parsePercent);
-    // Allow up to one missing column (Alba/Plaid sometimes blank in early polls).
+    // Allow up to `max_missing` blank columns (Alba/Plaid/RB are sometimes
+    // dashes rather than numbers).
     const missing = parsed.filter((v) => v == null).length;
-    if (missing > 1) continue;
+    if (missing > maxMissing) continue;
     const filled = parsed.map((v) => v == null ? 0 : v);
 
     const sum = filled.reduce((s, v) => s + v, 0);
@@ -215,6 +239,10 @@ function averageRecentPolls(rows, spec, windowDays) {
       const label = columnLabels[i];
       sums[label] = (sums[label] || 0) + filled[i];
       counts[label] = (counts[label] || 0) + 1;
+      if (parsed[i] != null) {
+        reportedSums[label] = (reportedSums[label] || 0) + parsed[i];
+        reportedCounts[label] = (reportedCounts[label] || 0) + 1;
+      }
     }
     used += 1;
     if (!earliest || date.getTime() < earliest.getTime()) earliest = date;
@@ -226,6 +254,25 @@ function averageRecentPolls(rows, spec, windowDays) {
   for (const label of columnLabels) {
     shares[label] = counts[label] ? sums[label] / counts[label] : 0;
   }
+
+  // Fold designated columns back into "Other" so the headline shares stay in
+  // the canonical party shape (polls that don't break the party out leave it
+  // inside their Others cell, so folding keeps "Other" comparable across
+  // polls). The where-reported mean is returned separately so downstream
+  // consumers (the Restore Britain overlay) can use the honest number.
+  const folded = {};
+  for (const label of spec.fold_into_other || []) {
+    if (!(label in shares)) continue;
+    folded[label] = {
+      share_where_reported: reportedCounts[label]
+        ? reportedSums[label] / reportedCounts[label]
+        : 0,
+      polls_reporting: reportedCounts[label] || 0,
+    };
+    shares["Other"] = (shares["Other"] || 0) + shares[label];
+    delete shares[label];
+  }
+
   // Re-normalise (averaging doesn't preserve sum-to-1 strictly).
   const total = Object.values(shares).reduce((s, v) => s + v, 0);
   if (total > 0) for (const k of Object.keys(shares)) shares[k] = shares[k] / total;
@@ -237,6 +284,7 @@ function averageRecentPolls(rows, spec, windowDays) {
       earliest: earliest ? earliest.toISOString().slice(0, 10) : null,
       latest: latest ? latest.toISOString().slice(0, 10) : null,
     },
+    folded: Object.keys(folded).length ? folded : null,
   };
 }
 
@@ -252,6 +300,29 @@ async function main() {
   const errors = [];
 
   for (const [key, spec] of Object.entries(SOURCES)) {
+    // Concluded elections: the polling page is frozen, so retain the final
+    // pre-election snapshot verbatim rather than re-fetching a dead page.
+    if (spec.concluded) {
+      const prior = loadExistingOverride();
+      const priorEntry = prior?.sources?.[key];
+      if (priorEntry?.shares) {
+        result.sources[key] = {
+          ...priorEntry,
+          concluded: spec.concluded,
+          retained_from: priorEntry.retained_from || priorEntry.retrieved_at,
+        };
+        process.stdout.write(`— ${spec.label}: election concluded ${spec.concluded.on}; final snapshot retained\n`);
+      } else {
+        errors.push({ source: key, error: "concluded election with no prior snapshot" });
+        result.sources[key] = {
+          constant: spec.constant,
+          error: "concluded election with no prior snapshot to retain",
+          retrieved_at: now,
+          review_status: "parse_failed",
+        };
+      }
+      continue;
+    }
     try {
       const wt = await fetchWikitext(spec.page);
       const sha = createHash("sha256").update(wt).digest("hex");
@@ -267,6 +338,9 @@ async function main() {
         shares: avg.shares,
         polls_used: avg.polls_used,
         fieldwork_window: avg.fieldwork_window,
+        ...(avg.folded?.["Restore Britain"]
+          ? { restore_britain: avg.folded["Restore Britain"] }
+          : {}),
         wikitext_sha256: sha,
         retrieved_at: now,
         review_status: "auto_parsed",
@@ -274,6 +348,9 @@ async function main() {
       process.stdout.write(`✓ ${spec.label}: averaged ${avg.polls_used} polls from ${avg.fieldwork_window.earliest} to ${avg.fieldwork_window.latest}\n`);
       for (const [p, v] of Object.entries(avg.shares)) {
         process.stdout.write(`    ${p.padEnd(20)} ${(v * 100).toFixed(1)}%\n`);
+      }
+      for (const [p, f] of Object.entries(avg.folded || {})) {
+        process.stdout.write(`    ${p.padEnd(20)} ${(f.share_where_reported * 100).toFixed(1)}% where reported (${f.polls_reporting} polls; folded into Other above)\n`);
       }
     } catch (err) {
       const msg = String(err.message || err);

@@ -2134,6 +2134,12 @@ table.council-table th {
   overflow: hidden;
 }
 
+/* display:flex above overrides the UA's dialog:not([open]) { display:none },
+   so the closed dialog must be re-hidden explicitly. */
+.search-dialog:not([open]) {
+  display: none;
+}
+
 .search-dialog[open] {
   animation: uke-search-pop 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
