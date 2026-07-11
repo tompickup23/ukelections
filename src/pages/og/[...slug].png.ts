@@ -122,7 +122,8 @@ function buildEntries(): Entry[] {
       eyebrow: `Polling day · ${top.polling_day_short_label}`,
       headline: top.short_name,
       shares: upcomingShares,
-      sharesCaption: "Central forecast, projected vote share",
+      subline: upcomingShares.length ? undefined : top.headline_summary,
+      sharesCaption: upcomingShares.length ? "Central forecast, projected vote share" : undefined,
       accentColour: partyColour(top.headline_winner || "Reform UK"),
       partyChipLabel: top.headline_winner
         ? `${shortPartyLabel(top.headline_winner)} forecast to win`
@@ -180,7 +181,8 @@ function buildEntries(): Entry[] {
       eyebrow: `Polling day · ${u.polling_day_short_label}`,
       headline: u.short_name,
       shares: ucShares,
-      sharesCaption: "Central forecast, projected vote share",
+      subline: ucShares.length ? undefined : u.headline_summary,
+      sharesCaption: ucShares.length ? "Central forecast, projected vote share" : undefined,
       accentColour: partyColour(u.headline_winner || "Reform UK"),
       partyChipLabel: u.headline_winner ? shortPartyLabel(u.headline_winner) : null,
       partyChipColour: u.headline_winner ? partyColour(u.headline_winner) : null,

@@ -39,8 +39,8 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     label: "Forecasts",
     items: [
-      { href: "/forecasts/general-election/", label: "General Election", desc: "Reform UK projected to win 348 of 650 seats" },
-      { href: "/by-elections/", label: "By-elections", desc: "18 Jun 2026 results: Lab hold Makerfield, Con gain Aberdeen S, SNP hold Arbroath" },
+      { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
+      { href: "/by-elections/", label: "By-elections", desc: "Next: Clacton 13 Aug, Farage re-contests his seat. Plus 18 Jun results + weekly ward scorecard" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
     ],
   },
@@ -119,6 +119,7 @@ const STATIC_PATHS = [
   "/by-elections/makerfield/",
   "/by-elections/aberdeen-south/",
   "/by-elections/arbroath-and-broughty-ferry/",
+  "/by-elections/clacton/",
   "/past-results/may-2025/",
   "/past-results/indicators/",
   "/forecasts/senedd-2026/",
@@ -157,10 +158,17 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
   },
   {
     href: "/by-elections/",
-    title: "By-elections. Results and forecasts",
+    title: "By-elections. Results, forecasts and what's next",
     kind: "page",
-    description: "Every Westminster by-election we track, the declared result, and how the forecast or signal compared. The 18 June 2026 round: Labour held Makerfield (Burnham), Conservatives gained Aberdeen South, SNP held Arbroath and Broughty Ferry.",
+    description: "Every Westminster by-election we track, the declared result, and how the forecast or signal compared. Next: Clacton, 13 August 2026. The 18 June 2026 round: Labour held Makerfield (Burnham), Conservatives gained Aberdeen South, SNP held Arbroath and Broughty Ferry. Plus the weekly local council by-election scorecard.",
     priority: 111
+  },
+  {
+    href: "/by-elections/clacton/",
+    title: "Clacton by-election, 13 August 2026",
+    kind: "page",
+    description: "Nigel Farage resigned as MP for Clacton on 8 July 2026, amid a parliamentary standards investigation, to trigger a by-election and stand in it himself. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain are all boycotting. Why we are publishing no vote-share forecast, the declared candidates, and the GE2024 baseline.",
+    priority: 112
   },
   {
     href: "/by-elections/makerfield/",
@@ -187,7 +195,7 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     href: "/polling/",
     title: "Polling, current Westminster average and how we use it",
     kind: "page",
-    description: "Where our forecast's national polling input comes from. Current UK / Welsh / Scottish rolling 14-day average, the Restore Britain overlay, the refresh ledger, and how it flows into the seat forecast.",
+    description: "Where our forecast's national polling input comes from. Current UK Westminster rolling 14-day average, the Restore Britain overlay, the refresh ledger, the frozen final pre-election Welsh and Scottish snapshots, and how it all flows into the seat forecast.",
     priority: 107
   },
   {
