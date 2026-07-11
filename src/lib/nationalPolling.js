@@ -28,9 +28,19 @@ function loadOverride() {
   if (__OVERRIDE_BY_CONSTANT !== null) return __OVERRIDE_BY_CONSTANT;
   __OVERRIDE_BY_CONSTANT = {};
   try {
-    const here = dirname(fileURLToPath(import.meta.url));
-    const overridePath = resolve(here, "../../data/polling/override.json");
-    if (!existsSync(overridePath)) return __OVERRIDE_BY_CONSTANT;
+    // process.cwd() first: during `astro build` Vite relocates this module
+    // into a compiled chunk, so import.meta.url no longer points at src/lib
+    // and the module-relative path silently misses (the built site then
+    // falls back to the static placeholder while node scripts, which run
+    // the file in place, load the override fine). Every caller (astro dev,
+    // astro build, scripts/, vitest) runs with cwd = project root; keep the
+    // module-relative path only as a fallback for odd invocation dirs.
+    const candidates = [
+      resolve(process.cwd(), "data/polling/override.json"),
+      resolve(dirname(fileURLToPath(import.meta.url)), "../../data/polling/override.json"),
+    ];
+    const overridePath = candidates.find((p) => existsSync(p));
+    if (!overridePath) return __OVERRIDE_BY_CONSTANT;
     const raw = JSON.parse(readFileSync(overridePath, "utf8"));
     for (const [key, src] of Object.entries(raw.sources || {})) {
       if (src.review_status === "auto_parsed" && src.shares && src.constant) {
