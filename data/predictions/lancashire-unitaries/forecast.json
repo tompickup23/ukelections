@@ -1,9 +1,11 @@
 {
   "snapshot": {
     "generated_at": "2026-07-22T00:00:00.000Z",
-    "model_version": "ukelections.lancashire-unitaries.v0.1.0",
-    "method": "Electorate-weighted blend of the most recent actual elections (May 2025 LCC county divisions + May 2026 borough where held + GE2024 proxy for Blackpool), aggregated into each proposed unitary. Control projected from aggregate vote share; d'Hondt seat split is an illustrative proportional guide only.",
+    "model_version": "ukelections.lancashire-unitaries.v0.2.0-wardlevel",
+    "method": "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Winner-takes-all per multi-member ward; seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
     "election_target": "May 2027 shadow-authority elections",
+    "monte_carlo_draws": 2000,
+    "total_councillors": 313,
     "decision_context": {
       "interim_plan_submitted": "2025-03-21",
       "full_business_cases_submitted": "2025-11-28",
@@ -33,382 +35,2600 @@
         "url": "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
       }
     ],
+    "warding_source": "4UA warding.xlsx (Tom Pickup, 22 Jul 2026); ward-to-source mapping derived and verified against LCC 2025 divisions + Blackburn 2026 borough wards.",
     "caveats": [
-      "The government's decision (16 July 2026) is subject to Parliamentary approval via a Structural Change Order; not yet legally confirmed.",
-      "New unitary ward boundaries have not been drawn by the LGBCE, so exact seat counts cannot be forecast. The d'Hondt figures are an illustrative proportional guide; FPTP will hand the largest party a winner's bonus above that.",
-      "Blackpool has no recent local election in the data corpus (last all-out 2023) and no county divisions, so its signal is the weaker GE2024 constituency proxy.",
-      "Unitary names are working geographic shorthand only; none are statutory."
+      "The government's decision (16 July 2026) is subject to Parliamentary approval via a Structural Change Order.",
+      "Warding is the proposed 4UA scheme, not yet confirmed by the Local Government Boundary Commission; ward names and councillor counts may change.",
+      "Seats are allocated winner-takes-all per multi-member ward. Real multi-member wards sometimes split between parties, so a leading party's seat count is an upper-ish estimate; marginal wards (lead under 10 points) are flagged.",
+      "Blackpool has no borough-wide local election in the corpus, so its 11 wards share a proxy pooled from recent Blackpool by-elections and the 2024 general election.",
+      "The 3- and 5-unitary options were rejected and have no ward plan, so only their vote share is shown."
     ],
-    "sha256": "5ed159c6c9311dfdb3f66f876ea765ff5cd45f0f327e2fb25ab7c880611330fa"
+    "sha256": "e73678ef85cfb1fca264710d2eb374ca7411e783ca1a3f55930f4b447c5acd2e"
   },
-  "models": {
-    "four-unitary": {
-      "label": "Four-unitary model",
-      "short_label": "4 unitaries",
-      "status": "government-decided",
-      "status_note": "Selected by the government on 16 July 2026, subject to a Structural Change Order. This is the model that will hold shadow-authority elections in May 2027.",
-      "proposer": "Chorley, Lancaster, Preston, Ribble Valley, South Ribble and West Lancashire councils ('Four Lancashire for the Future')",
-      "is_decided": true,
-      "unitaries": [
-        {
-          "id": "north-lancashire",
-          "name": "North Lancashire",
-          "bid_name": "North Lancashire",
-          "govt_label": null,
-          "districts": [
-            "lancaster",
-            "preston",
-            "ribble-valley"
-          ],
-          "population": 373664,
-          "total_electorate": 270910,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3109,
-              "p10": 0.239,
-              "p90": 0.3828
-            },
-            "Labour": {
-              "pct": 0.1862,
-              "p10": 0.1143,
-              "p90": 0.2581
-            },
-            "Conservative": {
-              "pct": 0.1427,
-              "p10": 0.0708,
-              "p90": 0.2146
-            },
-            "Liberal Democrats": {
-              "pct": 0.1577,
-              "p10": 0.0858,
-              "p90": 0.2296
-            },
-            "Green Party": {
-              "pct": 0.1563,
-              "p10": 0.0844,
-              "p90": 0.2282
-            },
-            "Independent": {
-              "pct": 0.0457,
-              "p10": 0,
-              "p90": 0.1176
-            },
-            "Other": {
-              "pct": 0.0004,
-              "p10": 0,
-              "p90": 0.0723
-            }
-          },
-          "largest_party": "Reform UK",
-          "lead_pp": 12.5,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 5.6,
-          "notional_council_size": 68,
-          "seat_projection_dhondt": {
-            "Reform UK": 21,
-            "Labour": 13,
-            "Conservative": 10,
-            "Liberal Democrats": 11,
-            "Green Party": 10,
-            "Independent": 3
-          },
-          "majority_threshold": 35,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 21,
-          "member_signals": [
-            {
-              "area": "lancaster",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "preston",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "ribble-valley",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+  "four_unitary": {
+    "label": "Four-unitary model",
+    "status": "government-decided",
+    "status_note": "Selected by the government on 16 July 2026, subject to a Structural Change Order. This is the model that will hold shadow-authority elections in May 2027.",
+    "proposer": "Chorley, Lancaster, Preston, Ribble Valley, South Ribble and West Lancashire councils ('Four Lancashire for the Future')",
+    "total_councillors": 313,
+    "unitaries": [
+      {
+        "id": "west-lancashire-coast",
+        "ua_name": "Fylde Coast/West",
+        "council_size": 74,
+        "majority_threshold": 38,
+        "total_electorate": 254550,
+        "ward_count": 25,
+        "vote_share": {
+          "Reform UK": 0.364,
+          "Labour": 0.2259,
+          "Conservative": 0.2782,
+          "Liberal Democrats": 0.0348,
+          "Green Party": 0.0435,
+          "Independent": 0.0516,
+          "Other": 0.002
         },
-        {
-          "id": "west-lancashire-coast",
-          "name": "West Lancashire (Fylde Coast)",
-          "bid_name": "Fylde Coast",
-          "govt_label": "West Lancashire",
-          "districts": [
-            "blackpool",
-            "fylde",
-            "wyre"
-          ],
-          "population": 348381,
-          "total_electorate": 258604,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3347,
-              "p10": 0.2146,
-              "p90": 0.4548
-            },
-            "Labour": {
-              "pct": 0.2618,
-              "p10": 0.1417,
-              "p90": 0.3819
-            },
-            "Conservative": {
-              "pct": 0.2818,
-              "p10": 0.1617,
-              "p90": 0.4019
-            },
-            "Liberal Democrats": {
-              "pct": 0.0356,
-              "p10": 0,
-              "p90": 0.1557
-            },
-            "Green Party": {
-              "pct": 0.0426,
-              "p10": 0,
-              "p90": 0.1627
-            },
-            "Independent": {
-              "pct": 0.0402,
-              "p10": 0,
-              "p90": 0.1603
-            },
-            "Other": {
-              "pct": 0.0034,
-              "p10": 0,
-              "p90": 0.1235
-            }
+        "seats": {
+          "Reform UK": {
+            "expected": 39,
+            "p10": 21,
+            "p50": 36,
+            "p90": 62,
+            "majority_prob": 0.451,
+            "largest_prob": 0.637
           },
-          "largest_party": "Reform UK",
-          "lead_pp": 5.3,
-          "control_call": "Too close to call, no overall control likely",
-          "uncertainty_sigma_pp": 9.4,
-          "notional_council_size": 63,
-          "seat_projection_dhondt": {
-            "Reform UK": 22,
-            "Labour": 17,
-            "Conservative": 18,
-            "Liberal Democrats": 2,
-            "Green Party": 2,
-            "Independent": 2
+          "Labour": {
+            "expected": 16,
+            "p10": 0,
+            "p50": 15,
+            "p90": 32,
+            "majority_prob": 0,
+            "largest_prob": 0.271
           },
-          "majority_threshold": 32,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 22,
-          "member_signals": [
-            {
-              "area": "blackpool",
-              "provenance": "ge2024 constituency proxy (no recent Blackpool local in corpus)",
-              "quality": "proxy"
-            },
-            {
-              "area": "fylde",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "wyre",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+          "Conservative": {
+            "expected": 17,
+            "p10": 6,
+            "p50": 15,
+            "p90": 29,
+            "majority_prob": 0.066,
+            "largest_prob": 0.092
+          },
+          "Liberal Democrats": {
+            "expected": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Green Party": {
+            "expected": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Independent": {
+            "expected": 2,
+            "p10": 0,
+            "p50": 3,
+            "p90": 6,
+            "majority_prob": 0,
+            "largest_prob": 0
+          }
         },
-        {
-          "id": "east-lancashire",
-          "name": "East Lancashire",
-          "bid_name": "East Lancashire",
-          "govt_label": "East Lancashire",
-          "districts": [
-            "blackburn-with-darwen",
-            "burnley",
-            "hyndburn",
-            "pendle",
-            "rossendale"
-          ],
-          "population": 520563,
-          "total_electorate": 353557,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3591,
-              "p10": 0.2756,
-              "p90": 0.4426
-            },
-            "Labour": {
-              "pct": 0.1848,
-              "p10": 0.1013,
-              "p90": 0.2683
-            },
-            "Conservative": {
-              "pct": 0.1673,
-              "p10": 0.0838,
-              "p90": 0.2508
-            },
-            "Liberal Democrats": {
-              "pct": 0.0558,
-              "p10": 0,
-              "p90": 0.1393
-            },
-            "Green Party": {
-              "pct": 0.0949,
-              "p10": 0.0114,
-              "p90": 0.1784
-            },
-            "Independent": {
-              "pct": 0.1373,
-              "p10": 0.0538,
-              "p90": 0.2208
-            },
-            "Other": {
-              "pct": 0.0007,
-              "p10": 0,
-              "p90": 0.0842
+        "noc_prob": 0.483,
+        "largest_party": "Reform UK",
+        "control_call": "Reform UK largest, majority on a knife-edge",
+        "wards": [
+          {
+            "ward": "Anchorsholme and Norbreck",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9895,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
             }
           },
-          "largest_party": "Reform UK",
-          "lead_pp": 17.4,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 6.5,
-          "notional_council_size": 87,
-          "seat_projection_dhondt": {
-            "Reform UK": 32,
-            "Labour": 16,
-            "Conservative": 14,
-            "Liberal Democrats": 5,
-            "Green Party": 8,
-            "Independent": 12
-          },
-          "majority_threshold": 44,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 32,
-          "member_signals": [
-            {
-              "area": "blackburn-with-darwen",
-              "provenance": "borough-2026 (unitary)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "burnley",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "hyndburn",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "pendle",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "rossendale",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
+          {
+            "ward": "Bispham and Warbreck",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9359,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
             }
-          ]
+          },
+          {
+            "ward": "Bloomfield and Tyldesley",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9814,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Claremont and Talbot",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9647,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Clifton and Marton",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 10000,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Greenlands and Ingthorpe",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 10341,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Highfield and Stanley",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9561,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Layton and Brunswick",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9987,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Park",
+            "district": "Blackpool",
+            "cllrs": 2,
+            "electorate": 4968,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Victoria and Hawes Side",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 9705,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Waterloo and Squires Gate",
+            "district": "Blackpool",
+            "cllrs": 3,
+            "electorate": 10231,
+            "winner": "Labour",
+            "winner_pct": 34.6,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "proxy",
+            "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "shares": {
+              "Reform UK": 32.5,
+              "Labour": 34.6,
+              "Conservative": 22.5,
+              "Liberal Democrats": 2.8,
+              "Green Party": 3.4,
+              "Independent": 3.8,
+              "Other": 0.3
+            }
+          },
+          {
+            "ward": "Fylde East",
+            "district": "Fylde",
+            "cllrs": 3,
+            "electorate": 11813,
+            "winner": "Reform UK",
+            "winner_pct": 34.3,
+            "margin_pp": 1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 fylde-east",
+            "shares": {
+              "Reform UK": 34.3,
+              "Labour": 8.5,
+              "Conservative": 20,
+              "Liberal Democrats": 0,
+              "Green Party": 3.9,
+              "Independent": 33.3,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Fylde South",
+            "district": "Fylde",
+            "cllrs": 3,
+            "electorate": 10479,
+            "winner": "Reform UK",
+            "winner_pct": 36.9,
+            "margin_pp": 5.2,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 fylde-south",
+            "shares": {
+              "Reform UK": 36.9,
+              "Labour": 9.2,
+              "Conservative": 31.8,
+              "Liberal Democrats": 0,
+              "Green Party": 8.6,
+              "Independent": 13.5,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Fylde West",
+            "district": "Fylde",
+            "cllrs": 3,
+            "electorate": 10628,
+            "winner": "Conservative",
+            "winner_pct": 42.7,
+            "margin_pp": 5,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 fylde-west",
+            "shares": {
+              "Reform UK": 37.7,
+              "Labour": 12.2,
+              "Conservative": 42.7,
+              "Liberal Democrats": 0,
+              "Green Party": 7.4,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Lytham",
+            "district": "Fylde",
+            "cllrs": 3,
+            "electorate": 10179,
+            "winner": "Conservative",
+            "winner_pct": 40.1,
+            "margin_pp": 5.6,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lytham",
+            "shares": {
+              "Reform UK": 15.6,
+              "Labour": 5.6,
+              "Conservative": 40.1,
+              "Liberal Democrats": 2.5,
+              "Green Party": 1.8,
+              "Independent": 34.4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "St Annes North",
+            "district": "Fylde",
+            "cllrs": 3,
+            "electorate": 10695,
+            "winner": "Conservative",
+            "winner_pct": 34,
+            "margin_pp": 0,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 st-annes-north",
+            "shares": {
+              "Reform UK": 34,
+              "Labour": 11.4,
+              "Conservative": 34,
+              "Liberal Democrats": 17.2,
+              "Green Party": 2.7,
+              "Independent": 0,
+              "Other": 0.8
+            }
+          },
+          {
+            "ward": "St Annes South",
+            "district": "Fylde",
+            "cllrs": 3,
+            "electorate": 11263,
+            "winner": "Conservative",
+            "winner_pct": 35.6,
+            "margin_pp": 4.4,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 st-annes-south",
+            "shares": {
+              "Reform UK": 31.2,
+              "Labour": 16,
+              "Conservative": 35.6,
+              "Liberal Democrats": 12.3,
+              "Green Party": 3.8,
+              "Independent": 0,
+              "Other": 1.1
+            }
+          },
+          {
+            "ward": "Cleveleys East",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 10148,
+            "winner": "Reform UK",
+            "winner_pct": 47.2,
+            "margin_pp": 15.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 cleveleys-east",
+            "shares": {
+              "Reform UK": 47.2,
+              "Labour": 16.1,
+              "Conservative": 31.9,
+              "Liberal Democrats": 0,
+              "Green Party": 4.9,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Cleveleys South & Carleton",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 10227,
+            "winner": "Reform UK",
+            "winner_pct": 45.9,
+            "margin_pp": 21.4,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 cleveleys-south-carleton",
+            "shares": {
+              "Reform UK": 45.9,
+              "Labour": 20.3,
+              "Conservative": 24.5,
+              "Liberal Democrats": 3.3,
+              "Green Party": 5.9,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Fleetwood East",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 9968,
+            "winner": "Reform UK",
+            "winner_pct": 53.7,
+            "margin_pp": 29.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 fleetwood-east",
+            "shares": {
+              "Reform UK": 53.7,
+              "Labour": 24.1,
+              "Conservative": 16.1,
+              "Liberal Democrats": 2.3,
+              "Green Party": 3.8,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Fleetwood West & Cleveleys West",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 10402,
+            "winner": "Reform UK",
+            "winner_pct": 54.7,
+            "margin_pp": 34.7,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 fleetwood-west-cleveleys-west",
+            "shares": {
+              "Reform UK": 54.7,
+              "Labour": 18.2,
+              "Conservative": 20,
+              "Liberal Democrats": 3.1,
+              "Green Party": 3.9,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Poulton-le-Fylde",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 11649,
+            "winner": "Conservative",
+            "winner_pct": 45.2,
+            "margin_pp": 15.4,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 poulton-le-fylde",
+            "shares": {
+              "Reform UK": 29.8,
+              "Labour": 14.5,
+              "Conservative": 45.2,
+              "Liberal Democrats": 3.1,
+              "Green Party": 6.1,
+              "Independent": 1.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Thornton & Hambleton",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 10493,
+            "winner": "Reform UK",
+            "winner_pct": 47.6,
+            "margin_pp": 21.1,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 thornton-hambleton",
+            "shares": {
+              "Reform UK": 47.6,
+              "Labour": 17.4,
+              "Conservative": 26.4,
+              "Liberal Democrats": 3.8,
+              "Green Party": 4.8,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Wyre Rural Central",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 10613,
+            "winner": "Reform UK",
+            "winner_pct": 41.4,
+            "margin_pp": 4,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 wyre-rural-central",
+            "shares": {
+              "Reform UK": 41.4,
+              "Labour": 10.9,
+              "Conservative": 37.3,
+              "Liberal Democrats": 2.5,
+              "Green Party": 6.1,
+              "Independent": 1.8,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Wyre Rural East",
+            "district": "Wyre",
+            "cllrs": 3,
+            "electorate": 12485,
+            "winner": "Reform UK",
+            "winner_pct": 39.9,
+            "margin_pp": 7,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 wyre-rural-east",
+            "shares": {
+              "Reform UK": 39.9,
+              "Labour": 16.9,
+              "Conservative": 33,
+              "Liberal Democrats": 4.4,
+              "Green Party": 5.8,
+              "Independent": 0,
+              "Other": 0
+            }
+          }
+        ],
+        "name": "West Lancashire (Fylde Coast)",
+        "districts": [
+          "blackpool",
+          "fylde",
+          "wyre"
+        ],
+        "population": 348381
+      },
+      {
+        "id": "north-lancashire",
+        "ua_name": "North",
+        "council_size": 72,
+        "majority_threshold": 37,
+        "total_electorate": 268906,
+        "ward_count": 24,
+        "vote_share": {
+          "Reform UK": 0.3037,
+          "Labour": 0.1943,
+          "Conservative": 0.1285,
+          "Liberal Democrats": 0.1442,
+          "Green Party": 0.1743,
+          "Independent": 0.0544,
+          "Other": 0.0006
         },
-        {
-          "id": "south-lancashire",
-          "name": "South Lancashire",
-          "bid_name": "South Lancashire",
-          "govt_label": null,
-          "districts": [
-            "chorley",
-            "south-ribble",
-            "west-lancashire"
-          ],
-          "population": 358947,
-          "total_electorate": 265348,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3572,
-              "p10": 0.3005,
-              "p90": 0.4139
-            },
-            "Labour": {
-              "pct": 0.2462,
-              "p10": 0.1895,
-              "p90": 0.3029
-            },
-            "Conservative": {
-              "pct": 0.1955,
-              "p10": 0.1388,
-              "p90": 0.2522
-            },
-            "Liberal Democrats": {
-              "pct": 0.0616,
-              "p10": 0.0049,
-              "p90": 0.1183
-            },
-            "Green Party": {
-              "pct": 0.0801,
-              "p10": 0.0234,
-              "p90": 0.1368
-            },
-            "Independent": {
-              "pct": 0.0002,
-              "p10": 0,
-              "p90": 0.0569
-            },
-            "Other": {
-              "pct": 0.0592,
-              "p10": 0.0025,
-              "p90": 0.1159
+        "seats": {
+          "Reform UK": {
+            "expected": 38,
+            "p10": 29,
+            "p50": 38,
+            "p90": 47,
+            "majority_prob": 0.566,
+            "largest_prob": 0.995
+          },
+          "Labour": {
+            "expected": 7,
+            "p10": 3,
+            "p50": 6,
+            "p90": 12,
+            "majority_prob": 0,
+            "largest_prob": 0.001
+          },
+          "Conservative": {
+            "expected": 3,
+            "p10": 0,
+            "p50": 3,
+            "p90": 6,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Liberal Democrats": {
+            "expected": 11,
+            "p10": 6,
+            "p50": 12,
+            "p90": 17,
+            "majority_prob": 0,
+            "largest_prob": 0.004
+          },
+          "Green Party": {
+            "expected": 10,
+            "p10": 9,
+            "p50": 9,
+            "p90": 12,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Independent": {
+            "expected": 3,
+            "p10": 3,
+            "p50": 3,
+            "p90": 6,
+            "majority_prob": 0,
+            "largest_prob": 0
+          }
+        },
+        "noc_prob": 0.434,
+        "largest_party": "Reform UK",
+        "control_call": "Reform UK largest, majority on a knife-edge",
+        "wards": [
+          {
+            "ward": "Heysham",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 11281,
+            "winner": "Reform UK",
+            "winner_pct": 48.6,
+            "margin_pp": 21.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 heysham",
+            "shares": {
+              "Reform UK": 48.6,
+              "Labour": 27,
+              "Conservative": 15.2,
+              "Liberal Democrats": 4.4,
+              "Green Party": 4.7,
+              "Independent": 0,
+              "Other": 0
             }
           },
-          "largest_party": "Reform UK",
-          "lead_pp": 11.1,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 4.4,
-          "notional_council_size": 65,
-          "seat_projection_dhondt": {
-            "Reform UK": 25,
-            "Labour": 17,
-            "Conservative": 14,
-            "Liberal Democrats": 4,
-            "Green Party": 5,
-            "Independent": 0
-          },
-          "majority_threshold": 33,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 25,
-          "member_signals": [
-            {
-              "area": "chorley",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "south-ribble",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "west-lancashire",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
+          {
+            "ward": "Lancaster Central",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 10815,
+            "winner": "Green Party",
+            "winner_pct": 57.2,
+            "margin_pp": 36.9,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lancaster-central",
+            "shares": {
+              "Reform UK": 20.3,
+              "Labour": 13.3,
+              "Conservative": 6.2,
+              "Liberal Democrats": 3,
+              "Green Party": 57.2,
+              "Independent": 0,
+              "Other": 0
             }
-          ]
-        }
-      ]
-    },
+          },
+          {
+            "ward": "Lancaster East",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 11674,
+            "winner": "Green Party",
+            "winner_pct": 54,
+            "margin_pp": 28.8,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lancaster-east",
+            "shares": {
+              "Reform UK": 14.7,
+              "Labour": 25.2,
+              "Conservative": 3.5,
+              "Liberal Democrats": 2.6,
+              "Green Party": 54,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Lancaster Rural East",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 10643,
+            "winner": "Reform UK",
+            "winner_pct": 26.3,
+            "margin_pp": 0.7,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lancaster-rural-east",
+            "shares": {
+              "Reform UK": 26.3,
+              "Labour": 10.2,
+              "Conservative": 21,
+              "Liberal Democrats": 25.6,
+              "Green Party": 17,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Lancaster Rural North",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 10197,
+            "winner": "Reform UK",
+            "winner_pct": 30.2,
+            "margin_pp": 0.8,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lancaster-rural-north",
+            "shares": {
+              "Reform UK": 30.2,
+              "Labour": 11.5,
+              "Conservative": 29.5,
+              "Liberal Democrats": 10.2,
+              "Green Party": 18.6,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Lancaster South East",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 11066,
+            "winner": "Green Party",
+            "winner_pct": 50.4,
+            "margin_pp": 26.7,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lancaster-south-east",
+            "shares": {
+              "Reform UK": 17.3,
+              "Labour": 23.7,
+              "Conservative": 5.7,
+              "Liberal Democrats": 3,
+              "Green Party": 50.4,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Morecambe Central",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 11606,
+            "winner": "Reform UK",
+            "winner_pct": 37.9,
+            "margin_pp": 6.3,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 morecambe-central",
+            "shares": {
+              "Reform UK": 37.9,
+              "Labour": 22.5,
+              "Conservative": 4.1,
+              "Liberal Democrats": 31.5,
+              "Green Party": 4,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Morecambe North",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 10278,
+            "winner": "Reform UK",
+            "winner_pct": 41.7,
+            "margin_pp": 22.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 morecambe-north",
+            "shares": {
+              "Reform UK": 41.7,
+              "Labour": 18,
+              "Conservative": 19.5,
+              "Liberal Democrats": 11.6,
+              "Green Party": 9.2,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Morecambe South",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 10683,
+            "winner": "Reform UK",
+            "winner_pct": 45.7,
+            "margin_pp": 25.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 morecambe-south",
+            "shares": {
+              "Reform UK": 45.7,
+              "Labour": 20.1,
+              "Conservative": 14.7,
+              "Liberal Democrats": 13.9,
+              "Green Party": 5.6,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Skerton",
+            "district": "Lancaster",
+            "cllrs": 3,
+            "electorate": 10018,
+            "winner": "Reform UK",
+            "winner_pct": 38.5,
+            "margin_pp": 11.8,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 skerton",
+            "shares": {
+              "Reform UK": 38.5,
+              "Labour": 21.1,
+              "Conservative": 9.4,
+              "Liberal Democrats": 4.3,
+              "Green Party": 26.7,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston Central East",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 11956,
+            "winner": "Independent",
+            "winner_pct": 37.3,
+            "margin_pp": 11.8,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-central-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 14.6,
+              "Labour": 25.5,
+              "Conservative": 3.1,
+              "Liberal Democrats": 5.2,
+              "Green Party": 14.3,
+              "Independent": 37.3,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston Central West",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 13082,
+            "winner": "Labour",
+            "winner_pct": 29.8,
+            "margin_pp": 5,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-central-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 24.8,
+              "Labour": 29.8,
+              "Conservative": 7.5,
+              "Liberal Democrats": 20.1,
+              "Green Party": 17.7,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston City",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 12420,
+            "winner": "Labour",
+            "winner_pct": 32.3,
+            "margin_pp": 9,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-city + 2026 district swing",
+            "shares": {
+              "Reform UK": 15.9,
+              "Labour": 32.3,
+              "Conservative": 4.6,
+              "Liberal Democrats": 6,
+              "Green Party": 18.1,
+              "Independent": 23.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston East",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 10850,
+            "winner": "Reform UK",
+            "winner_pct": 38.8,
+            "margin_pp": 12.4,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 38.8,
+              "Labour": 26.5,
+              "Conservative": 10.2,
+              "Liberal Democrats": 7.7,
+              "Green Party": 15.2,
+              "Independent": 0,
+              "Other": 1.5
+            }
+          },
+          {
+            "ward": "Preston North",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 11181,
+            "winner": "Liberal Democrats",
+            "winner_pct": 36.5,
+            "margin_pp": 15.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-north + 2026 district swing",
+            "shares": {
+              "Reform UK": 21.2,
+              "Labour": 13.5,
+              "Conservative": 15,
+              "Liberal Democrats": 36.5,
+              "Green Party": 13.7,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston Rural East (Preston Rural)",
+            "district": "Preston",
+            "cllrs": 2,
+            "electorate": 9070,
+            "winner": "Reform UK",
+            "winner_pct": 30.9,
+            "margin_pp": 6.3,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-rural + 2026 district swing",
+            "shares": {
+              "Reform UK": 30.9,
+              "Labour": 11,
+              "Conservative": 19,
+              "Liberal Democrats": 24.6,
+              "Green Party": 14.4,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston Rural North (Preston Rural)",
+            "district": "Preston",
+            "cllrs": 2,
+            "electorate": 7247,
+            "winner": "Reform UK",
+            "winner_pct": 30.9,
+            "margin_pp": 6.3,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-rural + 2026 district swing",
+            "shares": {
+              "Reform UK": 30.9,
+              "Labour": 11,
+              "Conservative": 19,
+              "Liberal Democrats": 24.6,
+              "Green Party": 14.4,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston South East",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 11880,
+            "winner": "Labour",
+            "winner_pct": 29.5,
+            "margin_pp": 2,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-south-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 27.5,
+              "Labour": 29.5,
+              "Conservative": 3.9,
+              "Liberal Democrats": 4.7,
+              "Green Party": 15.5,
+              "Independent": 18.8,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston South West",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 10803,
+            "winner": "Liberal Democrats",
+            "winner_pct": 36.2,
+            "margin_pp": 6.9,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-south-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 29.3,
+              "Labour": 18.2,
+              "Conservative": 2.9,
+              "Liberal Democrats": 36.2,
+              "Green Party": 13.5,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Preston West",
+            "district": "Preston",
+            "cllrs": 3,
+            "electorate": 12298,
+            "winner": "Liberal Democrats",
+            "winner_pct": 38.5,
+            "margin_pp": 11.8,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 preston-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 26.7,
+              "Labour": 9.2,
+              "Conservative": 12.2,
+              "Liberal Democrats": 38.5,
+              "Green Party": 13.5,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Clitheroe",
+            "district": "Ribble Valley",
+            "cllrs": 4,
+            "electorate": 13687,
+            "winner": "Reform UK",
+            "winner_pct": 31.5,
+            "margin_pp": 8.7,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 clitheroe",
+            "shares": {
+              "Reform UK": 31.5,
+              "Labour": 15,
+              "Conservative": 16.2,
+              "Liberal Democrats": 22.8,
+              "Green Party": 4.7,
+              "Independent": 9.8,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Longridge with Bowland",
+            "district": "Ribble Valley",
+            "cllrs": 3,
+            "electorate": 11454,
+            "winner": "Reform UK",
+            "winner_pct": 34.4,
+            "margin_pp": 11.5,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 longridge-with-bowland",
+            "shares": {
+              "Reform UK": 34.4,
+              "Labour": 22.9,
+              "Conservative": 21.1,
+              "Liberal Democrats": 3.1,
+              "Green Party": 3.6,
+              "Independent": 14.9,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Ribble Valley North East",
+            "district": "Ribble Valley",
+            "cllrs": 4,
+            "electorate": 13142,
+            "winner": "Reform UK",
+            "winner_pct": 38.4,
+            "margin_pp": 13.2,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 ribble-valley-north-east",
+            "shares": {
+              "Reform UK": 38.4,
+              "Labour": 10.9,
+              "Conservative": 25.2,
+              "Liberal Democrats": 4.7,
+              "Green Party": 11.4,
+              "Independent": 9.3,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Ribble Valley South West",
+            "district": "Ribble Valley",
+            "cllrs": 3,
+            "electorate": 11575,
+            "winner": "Reform UK",
+            "winner_pct": 47.1,
+            "margin_pp": 22.4,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 ribble-valley-south-west",
+            "shares": {
+              "Reform UK": 47.1,
+              "Labour": 12,
+              "Conservative": 24.8,
+              "Liberal Democrats": 4.9,
+              "Green Party": 4.7,
+              "Independent": 6.5,
+              "Other": 0
+            }
+          }
+        ],
+        "name": "North Lancashire",
+        "districts": [
+          "lancaster",
+          "preston",
+          "ribble-valley"
+        ],
+        "population": 373664
+      },
+      {
+        "id": "east-lancashire",
+        "ua_name": "Pennine/East",
+        "council_size": 95,
+        "majority_threshold": 48,
+        "total_electorate": 355326,
+        "ward_count": 34,
+        "vote_share": {
+          "Reform UK": 0.3575,
+          "Labour": 0.1688,
+          "Conservative": 0.1511,
+          "Liberal Democrats": 0.0502,
+          "Green Party": 0.1196,
+          "Independent": 0.1517,
+          "Other": 0.0009
+        },
+        "seats": {
+          "Reform UK": {
+            "expected": 60,
+            "p10": 52,
+            "p50": 60,
+            "p90": 66,
+            "majority_prob": 0.982,
+            "largest_prob": 1
+          },
+          "Labour": {
+            "expected": 4,
+            "p10": 0,
+            "p50": 3,
+            "p90": 9,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Conservative": {
+            "expected": 5,
+            "p10": 0,
+            "p50": 6,
+            "p90": 10,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Liberal Democrats": {
+            "expected": 2,
+            "p10": 0,
+            "p50": 2,
+            "p90": 6,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Green Party": {
+            "expected": 2,
+            "p10": 0,
+            "p50": 3,
+            "p90": 3,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Independent": {
+            "expected": 22,
+            "p10": 17,
+            "p50": 23,
+            "p90": 26,
+            "majority_prob": 0,
+            "largest_prob": 0
+          }
+        },
+        "noc_prob": 0.018,
+        "largest_party": "Reform UK",
+        "control_call": "Reform UK majority likely",
+        "wards": [
+          {
+            "ward": "Audley & Queen's Park and Blackburn South East",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 12983,
+            "winner": "Independent",
+            "winner_pct": 36,
+            "margin_pp": 11.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (audley-queens-park, blackburn-south-east)",
+            "shares": {
+              "Reform UK": 24.8,
+              "Labour": 22.3,
+              "Conservative": 4.3,
+              "Liberal Democrats": 0,
+              "Green Party": 12.6,
+              "Independent": 36,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Bastwell & Daisyfield and Shear Brow & Corporation Park",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 12248,
+            "winner": "Independent",
+            "winner_pct": 47.9,
+            "margin_pp": 4.1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (bastwell-daisyfield, shear-brow-corporation-park)",
+            "shares": {
+              "Reform UK": 2.9,
+              "Labour": 43.8,
+              "Conservative": 0.6,
+              "Liberal Democrats": 0,
+              "Green Party": 4.7,
+              "Independent": 47.9,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Billinge & Beardwood",
+            "district": "Blackburn with Darwen",
+            "cllrs": 2,
+            "electorate": 6546,
+            "winner": "Independent",
+            "winner_pct": 41.9,
+            "margin_pp": 25.1,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (billinge-beardwood)",
+            "shares": {
+              "Reform UK": 13,
+              "Labour": 16.8,
+              "Conservative": 14.2,
+              "Liberal Democrats": 0,
+              "Green Party": 14.1,
+              "Independent": 41.9,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Livesey with Pleasington",
+            "district": "Blackburn with Darwen",
+            "cllrs": 2,
+            "electorate": 7128,
+            "winner": "Reform UK",
+            "winner_pct": 43.3,
+            "margin_pp": 18.7,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (livesey-with-pleasington)",
+            "shares": {
+              "Reform UK": 43.3,
+              "Labour": 9.7,
+              "Conservative": 24.6,
+              "Liberal Democrats": 0,
+              "Green Party": 9.7,
+              "Independent": 12.8,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Blackburn Central and Wensley Fold",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 12592,
+            "winner": "Labour",
+            "winner_pct": 38.4,
+            "margin_pp": 1.9,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (blackburn-central, wensley-fold)",
+            "shares": {
+              "Reform UK": 13,
+              "Labour": 38.4,
+              "Conservative": 2.3,
+              "Liberal Democrats": 1.2,
+              "Green Party": 8.7,
+              "Independent": 36.4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Blackburn South & Lower Darwen and Darwen East",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 12541,
+            "winner": "Reform UK",
+            "winner_pct": 51,
+            "margin_pp": 31.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (blackburn-south-lower-darwen, darwen-east)",
+            "shares": {
+              "Reform UK": 51,
+              "Labour": 13,
+              "Conservative": 16.3,
+              "Liberal Democrats": 0,
+              "Green Party": 19.7,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Darwen South and Darwen West",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 12796,
+            "winner": "Reform UK",
+            "winner_pct": 47.2,
+            "margin_pp": 18.2,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (darwen-south, darwen-west)",
+            "shares": {
+              "Reform UK": 47.2,
+              "Labour": 28.9,
+              "Conservative": 12.6,
+              "Liberal Democrats": 1.3,
+              "Green Party": 10,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Ewood and Mill Hill & Moorgate",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 11952,
+            "winner": "Reform UK",
+            "winner_pct": 52.4,
+            "margin_pp": 36.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (ewood, mill-hill-moorgate)",
+            "shares": {
+              "Reform UK": 52.4,
+              "Labour": 11.7,
+              "Conservative": 10.2,
+              "Liberal Democrats": 0,
+              "Green Party": 15.8,
+              "Independent": 9.8,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Little Harwood & Whitebirk and Roe Lee",
+            "district": "Blackburn with Darwen",
+            "cllrs": 3,
+            "electorate": 12854,
+            "winner": "Independent",
+            "winner_pct": 46.4,
+            "margin_pp": 27.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (little-harwood-whitebirk, roe-lee)",
+            "shares": {
+              "Reform UK": 18.7,
+              "Labour": 12.3,
+              "Conservative": 7.4,
+              "Liberal Democrats": 0,
+              "Green Party": 13.8,
+              "Independent": 46.4,
+              "Other": 1.4
+            }
+          },
+          {
+            "ward": "West Pennine",
+            "district": "Blackburn with Darwen",
+            "cllrs": 2,
+            "electorate": 6272,
+            "winner": "Reform UK",
+            "winner_pct": 39.1,
+            "margin_pp": 10.1,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "Blackburn 2026 borough (west-pennine)",
+            "shares": {
+              "Reform UK": 39.1,
+              "Labour": 21.5,
+              "Conservative": 29.1,
+              "Liberal Democrats": 0,
+              "Green Party": 10.2,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Burnley Central East",
+            "district": "Burnley",
+            "cllrs": 3,
+            "electorate": 11917,
+            "winner": "Independent",
+            "winner_pct": 39.1,
+            "margin_pp": 5.1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 burnley-central-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 34,
+              "Labour": 14.5,
+              "Conservative": 0.1,
+              "Liberal Democrats": 3.5,
+              "Green Party": 7.9,
+              "Independent": 39.1,
+              "Other": 0.9
+            }
+          },
+          {
+            "ward": "Burnley Central West",
+            "district": "Burnley",
+            "cllrs": 3,
+            "electorate": 10580,
+            "winner": "Reform UK",
+            "winner_pct": 46.5,
+            "margin_pp": 29.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 burnley-central-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 46.5,
+              "Labour": 12.6,
+              "Conservative": 16.9,
+              "Liberal Democrats": 8.2,
+              "Green Party": 15.7,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Burnley North East",
+            "district": "Burnley",
+            "cllrs": 3,
+            "electorate": 11264,
+            "winner": "Independent",
+            "winner_pct": 57.6,
+            "margin_pp": 32.4,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 burnley-north-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 25.2,
+              "Labour": 9.9,
+              "Conservative": 0,
+              "Liberal Democrats": 3.5,
+              "Green Party": 3.8,
+              "Independent": 57.6,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Burnley Rural",
+            "district": "Burnley",
+            "cllrs": 3,
+            "electorate": 11457,
+            "winner": "Reform UK",
+            "winner_pct": 46.1,
+            "margin_pp": 23.1,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 burnley-rural + 2026 district swing",
+            "shares": {
+              "Reform UK": 46.1,
+              "Labour": 7.6,
+              "Conservative": 13.1,
+              "Liberal Democrats": 22.9,
+              "Green Party": 10.3,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Burnley South West",
+            "district": "Burnley",
+            "cllrs": 3,
+            "electorate": 11879,
+            "winner": "Reform UK",
+            "winner_pct": 51.4,
+            "margin_pp": 30.9,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 burnley-south-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 51.4,
+              "Labour": 15.2,
+              "Conservative": 7.6,
+              "Liberal Democrats": 20.4,
+              "Green Party": 5.3,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Padiham & Burnley West",
+            "district": "Burnley",
+            "cllrs": 3,
+            "electorate": 10698,
+            "winner": "Reform UK",
+            "winner_pct": 47.3,
+            "margin_pp": 20.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 padiham-burnley-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 47.3,
+              "Labour": 15.4,
+              "Conservative": 26.9,
+              "Liberal Democrats": 3.5,
+              "Green Party": 6.4,
+              "Independent": 0.5,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Accrington North",
+            "district": "Hyndburn",
+            "cllrs": 3,
+            "electorate": 10186,
+            "winner": "Reform UK",
+            "winner_pct": 52.4,
+            "margin_pp": 34.4,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 accrington-north + 2026 district swing",
+            "shares": {
+              "Reform UK": 52.4,
+              "Labour": 18,
+              "Conservative": 14.7,
+              "Liberal Democrats": 0,
+              "Green Party": 10.9,
+              "Independent": 4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Accrington South",
+            "district": "Hyndburn",
+            "cllrs": 3,
+            "electorate": 9875,
+            "winner": "Reform UK",
+            "winner_pct": 36.7,
+            "margin_pp": 8.2,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 accrington-south + 2026 district swing",
+            "shares": {
+              "Reform UK": 36.7,
+              "Labour": 23.1,
+              "Conservative": 28.5,
+              "Liberal Democrats": 0,
+              "Green Party": 7.6,
+              "Independent": 4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Accrington West & Oswaldtwistle Central",
+            "district": "Hyndburn",
+            "cllrs": 3,
+            "electorate": 10956,
+            "winner": "Green Party",
+            "winner_pct": 30.1,
+            "margin_pp": 2.1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 accrington-west-oswaldtwistle-central + 2026 district swing",
+            "shares": {
+              "Reform UK": 17.8,
+              "Labour": 20.2,
+              "Conservative": 28,
+              "Liberal Democrats": 0,
+              "Green Party": 30.1,
+              "Independent": 4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Great Harwood, Rishton & Clayton Le Moors 1 (Rishton, Clayton-Le-Moors and Altham)",
+            "district": "Hyndburn",
+            "cllrs": 3,
+            "electorate": 11193,
+            "winner": "Reform UK",
+            "winner_pct": 48.7,
+            "margin_pp": 23.2,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 great-harwood-rishton-clayton-le-moors + 2026 district swing",
+            "shares": {
+              "Reform UK": 48.7,
+              "Labour": 25.5,
+              "Conservative": 15.7,
+              "Liberal Democrats": 0,
+              "Green Party": 6.1,
+              "Independent": 4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Great Harwood, Rishton & Clayton Le Moors 2 (Netherton and Overton)",
+            "district": "Hyndburn",
+            "cllrs": 2,
+            "electorate": 8302,
+            "winner": "Reform UK",
+            "winner_pct": 48.7,
+            "margin_pp": 23.2,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 great-harwood-rishton-clayton-le-moors + 2026 district swing",
+            "shares": {
+              "Reform UK": 48.7,
+              "Labour": 25.5,
+              "Conservative": 15.7,
+              "Liberal Democrats": 0,
+              "Green Party": 6.1,
+              "Independent": 4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Oswaldtwistle",
+            "district": "Hyndburn",
+            "cllrs": 3,
+            "electorate": 9592,
+            "winner": "Reform UK",
+            "winner_pct": 42.3,
+            "margin_pp": 0,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 oswaldtwistle + 2026 district swing",
+            "shares": {
+              "Reform UK": 42.3,
+              "Labour": 7.5,
+              "Conservative": 42.3,
+              "Liberal Democrats": 0,
+              "Green Party": 3.9,
+              "Independent": 4,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Brierfield and Nelson West",
+            "district": "Pendle",
+            "cllrs": 3,
+            "electorate": 12371,
+            "winner": "Independent",
+            "winner_pct": 66.8,
+            "margin_pp": 51.9,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 brierfield-nelson-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 14.9,
+              "Labour": 7,
+              "Conservative": 4.1,
+              "Liberal Democrats": 0.2,
+              "Green Party": 7,
+              "Independent": 66.8,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Nelson East",
+            "district": "Pendle",
+            "cllrs": 3,
+            "electorate": 12110,
+            "winner": "Independent",
+            "winner_pct": 46.1,
+            "margin_pp": 25.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 nelson-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 20.5,
+              "Labour": 8,
+              "Conservative": 17.6,
+              "Liberal Democrats": 0.6,
+              "Green Party": 6.8,
+              "Independent": 46.1,
+              "Other": 0.4
+            }
+          },
+          {
+            "ward": "Pendle Central",
+            "district": "Pendle",
+            "cllrs": 3,
+            "electorate": 10769,
+            "winner": "Reform UK",
+            "winner_pct": 45.4,
+            "margin_pp": 26.8,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 pendle-central + 2026 district swing",
+            "shares": {
+              "Reform UK": 45.4,
+              "Labour": 8.4,
+              "Conservative": 18.5,
+              "Liberal Democrats": 18.6,
+              "Green Party": 8,
+              "Independent": 1.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Pendle Hill",
+            "district": "Pendle",
+            "cllrs": 3,
+            "electorate": 11437,
+            "winner": "Reform UK",
+            "winner_pct": 35.3,
+            "margin_pp": 4.6,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 pendle-hill + 2026 district swing",
+            "shares": {
+              "Reform UK": 35.3,
+              "Labour": 14.3,
+              "Conservative": 30.8,
+              "Liberal Democrats": 9,
+              "Green Party": 9.4,
+              "Independent": 1.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "South Pendle Rural (part of Waterside & Horsfield and Boulsworth & Foulridge)",
+            "district": "Pendle",
+            "cllrs": 2,
+            "electorate": 7661,
+            "winner": "Reform UK",
+            "winner_pct": 35.1,
+            "margin_pp": 3.1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 pendle-rural + 2026 district swing",
+            "shares": {
+              "Reform UK": 35.1,
+              "Labour": 6.6,
+              "Conservative": 16.7,
+              "Liberal Democrats": 32,
+              "Green Party": 8.6,
+              "Independent": 1.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Mid Pendle Rural (Earby & Coates)",
+            "district": "Pendle",
+            "cllrs": 2,
+            "electorate": 6495,
+            "winner": "Reform UK",
+            "winner_pct": 35.1,
+            "margin_pp": 3.1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 pendle-rural + 2026 district swing",
+            "shares": {
+              "Reform UK": 35.1,
+              "Labour": 6.6,
+              "Conservative": 16.7,
+              "Liberal Democrats": 32,
+              "Green Party": 8.6,
+              "Independent": 1.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "North Pendle Rural (part of Barrowford & Pendleside and Barnoldswick)",
+            "district": "Pendle",
+            "cllrs": 2,
+            "electorate": 7107,
+            "winner": "Reform UK",
+            "winner_pct": 35.1,
+            "margin_pp": 3.1,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 pendle-rural + 2026 district swing",
+            "shares": {
+              "Reform UK": 35.1,
+              "Labour": 6.6,
+              "Conservative": 16.7,
+              "Liberal Democrats": 32,
+              "Green Party": 8.6,
+              "Independent": 1.2,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Mid-Rossendale",
+            "district": "Rossendale",
+            "cllrs": 3,
+            "electorate": 11463,
+            "winner": "Reform UK",
+            "winner_pct": 40.8,
+            "margin_pp": 16.6,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 mid-rossendale + 2026 district swing",
+            "shares": {
+              "Reform UK": 40.8,
+              "Labour": 21.5,
+              "Conservative": 13.4,
+              "Liberal Democrats": 0,
+              "Green Party": 24.2,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Rossendale East",
+            "district": "Rossendale",
+            "cllrs": 3,
+            "electorate": 9997,
+            "winner": "Reform UK",
+            "winner_pct": 48.7,
+            "margin_pp": 21.7,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 rossendale-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 48.7,
+              "Labour": 12.7,
+              "Conservative": 6.4,
+              "Liberal Democrats": 5.1,
+              "Green Party": 27.1,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Rossendale South",
+            "district": "Rossendale",
+            "cllrs": 3,
+            "electorate": 9615,
+            "winner": "Reform UK",
+            "winner_pct": 38.2,
+            "margin_pp": 15.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 rossendale-south + 2026 district swing",
+            "shares": {
+              "Reform UK": 38.2,
+              "Labour": 19.5,
+              "Conservative": 19.4,
+              "Liberal Democrats": 0,
+              "Green Party": 22.9,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Rossendale West",
+            "district": "Rossendale",
+            "cllrs": 3,
+            "electorate": 10407,
+            "winner": "Reform UK",
+            "winner_pct": 34.1,
+            "margin_pp": 4.6,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 rossendale-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 34.1,
+              "Labour": 29.5,
+              "Conservative": 15.3,
+              "Liberal Democrats": 0,
+              "Green Party": 21.1,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Whitworth & Bacup",
+            "district": "Rossendale",
+            "cllrs": 3,
+            "electorate": 10083,
+            "winner": "Reform UK",
+            "winner_pct": 41.1,
+            "margin_pp": 6.4,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 whitworth-bacup + 2026 district swing",
+            "shares": {
+              "Reform UK": 41.1,
+              "Labour": 4.7,
+              "Conservative": 34.7,
+              "Liberal Democrats": 0,
+              "Green Party": 19.5,
+              "Independent": 0,
+              "Other": 0
+            }
+          }
+        ],
+        "name": "East Lancashire",
+        "districts": [
+          "blackburn-with-darwen",
+          "burnley",
+          "hyndburn",
+          "pendle",
+          "rossendale"
+        ],
+        "population": 520563
+      },
+      {
+        "id": "south-lancashire",
+        "ua_name": "South",
+        "council_size": 72,
+        "majority_threshold": 37,
+        "total_electorate": 264087,
+        "ward_count": 24,
+        "vote_share": {
+          "Reform UK": 0.3538,
+          "Labour": 0.2427,
+          "Conservative": 0.1856,
+          "Liberal Democrats": 0.0557,
+          "Green Party": 0.0947,
+          "Independent": 0.0003,
+          "Other": 0.0671
+        },
+        "seats": {
+          "Reform UK": {
+            "expected": 47,
+            "p10": 36,
+            "p50": 48,
+            "p90": 60,
+            "majority_prob": 0.848,
+            "largest_prob": 0.988
+          },
+          "Labour": {
+            "expected": 13,
+            "p10": 3,
+            "p50": 12,
+            "p90": 21,
+            "majority_prob": 0.001,
+            "largest_prob": 0.011
+          },
+          "Conservative": {
+            "expected": 8,
+            "p10": 3,
+            "p50": 6,
+            "p90": 15,
+            "majority_prob": 0,
+            "largest_prob": 0.002
+          },
+          "Liberal Democrats": {
+            "expected": 3,
+            "p10": 3,
+            "p50": 3,
+            "p90": 3,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Green Party": {
+            "expected": 1,
+            "p10": 0,
+            "p50": 0,
+            "p90": 3,
+            "majority_prob": 0,
+            "largest_prob": 0
+          },
+          "Independent": {
+            "expected": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0,
+            "majority_prob": 0,
+            "largest_prob": 0
+          }
+        },
+        "noc_prob": 0.151,
+        "largest_party": "Reform UK",
+        "control_call": "Reform UK majority likely",
+        "wards": [
+          {
+            "ward": "Chorley Central",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 11486,
+            "winner": "Labour",
+            "winner_pct": 35.5,
+            "margin_pp": 1.5,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 chorley-central + 2026 district swing",
+            "shares": {
+              "Reform UK": 34,
+              "Labour": 35.5,
+              "Conservative": 14.9,
+              "Liberal Democrats": 0,
+              "Green Party": 13.8,
+              "Independent": 0,
+              "Other": 1.8
+            }
+          },
+          {
+            "ward": "Chorley North",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 9963,
+            "winner": "Reform UK",
+            "winner_pct": 39.6,
+            "margin_pp": 4.2,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 chorley-north + 2026 district swing",
+            "shares": {
+              "Reform UK": 39.6,
+              "Labour": 35.4,
+              "Conservative": 9.9,
+              "Liberal Democrats": 0,
+              "Green Party": 12.5,
+              "Independent": 0.8,
+              "Other": 1.8
+            }
+          },
+          {
+            "ward": "Chorley Rural East",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 9904,
+            "winner": "Labour",
+            "winner_pct": 46,
+            "margin_pp": 12.3,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 chorley-rural-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 33.7,
+              "Labour": 46,
+              "Conservative": 10.3,
+              "Liberal Democrats": 1.5,
+              "Green Party": 8.5,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Chorley Rural West",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 10941,
+            "winner": "Reform UK",
+            "winner_pct": 37.1,
+            "margin_pp": 7.3,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 chorley-rural-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 37.1,
+              "Labour": 29.9,
+              "Conservative": 20.9,
+              "Liberal Democrats": 4.2,
+              "Green Party": 7.9,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Chorley South",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 11979,
+            "winner": "Reform UK",
+            "winner_pct": 39.7,
+            "margin_pp": 8.4,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 chorley-south + 2026 district swing",
+            "shares": {
+              "Reform UK": 39.7,
+              "Labour": 23.2,
+              "Conservative": 4.7,
+              "Liberal Democrats": 1,
+              "Green Party": 31.3,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Clayton with Whittle",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 11262,
+            "winner": "Labour",
+            "winner_pct": 37.7,
+            "margin_pp": 3.7,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 clayton-with-whittle + 2026 district swing",
+            "shares": {
+              "Reform UK": 34,
+              "Labour": 37.7,
+              "Conservative": 16.2,
+              "Liberal Democrats": 3.5,
+              "Green Party": 8.5,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Euxton, Buckshaw & Astley",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 13098,
+            "winner": "Conservative",
+            "winner_pct": 32,
+            "margin_pp": 0.5,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 euxton-buckshaw-astley + 2026 district swing",
+            "shares": {
+              "Reform UK": 31.5,
+              "Labour": 26.1,
+              "Conservative": 32,
+              "Liberal Democrats": 1.5,
+              "Green Party": 8.9,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Hoghton with Wheelton",
+            "district": "Chorley",
+            "cllrs": 3,
+            "electorate": 9793,
+            "winner": "Reform UK",
+            "winner_pct": 36.4,
+            "margin_pp": 5.9,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 hoghton-with-wheelton + 2026 district swing",
+            "shares": {
+              "Reform UK": 36.4,
+              "Labour": 30.5,
+              "Conservative": 18.8,
+              "Liberal Democrats": 3.4,
+              "Green Party": 10.2,
+              "Independent": 0,
+              "Other": 0.7
+            }
+          },
+          {
+            "ward": "Leyland Central",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 10624,
+            "winner": "Reform UK",
+            "winner_pct": 45.6,
+            "margin_pp": 13,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 leyland-central",
+            "shares": {
+              "Reform UK": 45.6,
+              "Labour": 32.6,
+              "Conservative": 11.8,
+              "Liberal Democrats": 5.8,
+              "Green Party": 3.5,
+              "Independent": 0,
+              "Other": 0.7
+            }
+          },
+          {
+            "ward": "Leyland South",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 10614,
+            "winner": "Reform UK",
+            "winner_pct": 40.2,
+            "margin_pp": 13.7,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 leyland-south",
+            "shares": {
+              "Reform UK": 40.2,
+              "Labour": 26.5,
+              "Conservative": 20.9,
+              "Liberal Democrats": 7.5,
+              "Green Party": 4.2,
+              "Independent": 0,
+              "Other": 0.7
+            }
+          },
+          {
+            "ward": "Lostock Hall & Bamber Bridge",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 10824,
+            "winner": "Reform UK",
+            "winner_pct": 37.4,
+            "margin_pp": 6.8,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 lostock-hall-bamber-bridge",
+            "shares": {
+              "Reform UK": 37.4,
+              "Labour": 23.7,
+              "Conservative": 30.6,
+              "Liberal Democrats": 4.2,
+              "Green Party": 4.2,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Moss Side & Farington",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 11372,
+            "winner": "Reform UK",
+            "winner_pct": 36.8,
+            "margin_pp": 4.7,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 moss-side-farington",
+            "shares": {
+              "Reform UK": 36.8,
+              "Labour": 23.6,
+              "Conservative": 32.1,
+              "Liberal Democrats": 4.2,
+              "Green Party": 3.2,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Penwortham East & Walton-le-dale",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 10664,
+            "winner": "Reform UK",
+            "winner_pct": 35.9,
+            "margin_pp": 4.9,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 penwortham-east-walton-le-dale",
+            "shares": {
+              "Reform UK": 35.9,
+              "Labour": 21.2,
+              "Conservative": 31,
+              "Liberal Democrats": 5.6,
+              "Green Party": 6.3,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Penwortham West",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 11353,
+            "winner": "Liberal Democrats",
+            "winner_pct": 50.4,
+            "margin_pp": 23.2,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 penwortham-west",
+            "shares": {
+              "Reform UK": 27.1,
+              "Labour": 12.1,
+              "Conservative": 6.8,
+              "Liberal Democrats": 50.4,
+              "Green Party": 3.5,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "South Ribble East",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 11801,
+            "winner": "Reform UK",
+            "winner_pct": 40.5,
+            "margin_pp": 15,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 south-ribble-east",
+            "shares": {
+              "Reform UK": 40.5,
+              "Labour": 24.4,
+              "Conservative": 25.5,
+              "Liberal Democrats": 4.9,
+              "Green Party": 4.8,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "South Ribble West",
+            "district": "South Ribble",
+            "cllrs": 3,
+            "electorate": 10887,
+            "winner": "Reform UK",
+            "winner_pct": 40.4,
+            "margin_pp": 9.7,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 south-ribble-west",
+            "shares": {
+              "Reform UK": 40.4,
+              "Labour": 14,
+              "Conservative": 30.7,
+              "Liberal Democrats": 10.2,
+              "Green Party": 4.6,
+              "Independent": 0,
+              "Other": 0
+            }
+          },
+          {
+            "ward": "Burscough & Rufford",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 11049,
+            "winner": "Reform UK",
+            "winner_pct": 32.6,
+            "margin_pp": 9.8,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 burscough-rufford + 2026 district swing",
+            "shares": {
+              "Reform UK": 32.6,
+              "Labour": 21.7,
+              "Conservative": 22.8,
+              "Liberal Democrats": 5.4,
+              "Green Party": 10.7,
+              "Independent": 0,
+              "Other": 6.8
+            }
+          },
+          {
+            "ward": "Ormskirk",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 10612,
+            "winner": "Independent",
+            "winner_pct": 45.5,
+            "margin_pp": 23.7,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 ormskirk + 2026 district swing",
+            "shares": {
+              "Reform UK": 18.1,
+              "Labour": 21.8,
+              "Conservative": 5,
+              "Liberal Democrats": 0,
+              "Green Party": 9.6,
+              "Independent": 0,
+              "Other": 45.5
+            }
+          },
+          {
+            "ward": "Skelmersdale Central",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 10970,
+            "winner": "Reform UK",
+            "winner_pct": 44.4,
+            "margin_pp": 19,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 skelmersdale-central + 2026 district swing",
+            "shares": {
+              "Reform UK": 44.4,
+              "Labour": 25.5,
+              "Conservative": 1.9,
+              "Liberal Democrats": 5.2,
+              "Green Party": 16.1,
+              "Independent": 0,
+              "Other": 6.8
+            }
+          },
+          {
+            "ward": "Skelmersdale East",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 10909,
+            "winner": "Reform UK",
+            "winner_pct": 37.9,
+            "margin_pp": 18,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 skelmersdale-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 37.9,
+              "Labour": 19.8,
+              "Conservative": 9.6,
+              "Liberal Democrats": 0,
+              "Green Party": 12.8,
+              "Independent": 0,
+              "Other": 19.9
+            }
+          },
+          {
+            "ward": "Skelmersdale West",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 11297,
+            "winner": "Reform UK",
+            "winner_pct": 39,
+            "margin_pp": 14.8,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 skelmersdale-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 39,
+              "Labour": 19.8,
+              "Conservative": 1.7,
+              "Liberal Democrats": 4.1,
+              "Green Party": 11.2,
+              "Independent": 0,
+              "Other": 24.2
+            }
+          },
+          {
+            "ward": "West Lancashire East",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 10214,
+            "winner": "Independent",
+            "winner_pct": 42.9,
+            "margin_pp": 23.5,
+            "marginal": false,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 west-lancashire-east + 2026 district swing",
+            "shares": {
+              "Reform UK": 19.4,
+              "Labour": 11.7,
+              "Conservative": 15.9,
+              "Liberal Democrats": 0,
+              "Green Party": 10,
+              "Independent": 0,
+              "Other": 42.9
+            }
+          },
+          {
+            "ward": "West Lancashire North",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 12093,
+            "winner": "Conservative",
+            "winner_pct": 40.4,
+            "margin_pp": 8.4,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 west-lancashire-north + 2026 district swing",
+            "shares": {
+              "Reform UK": 32,
+              "Labour": 6.6,
+              "Conservative": 40.4,
+              "Liberal Democrats": 6,
+              "Green Party": 8.2,
+              "Independent": 0,
+              "Other": 6.8
+            }
+          },
+          {
+            "ward": "West Lancashire West",
+            "district": "West Lancashire",
+            "cllrs": 3,
+            "electorate": 10378,
+            "winner": "Reform UK",
+            "winner_pct": 35.3,
+            "margin_pp": 9.2,
+            "marginal": true,
+            "quality": "actual-local",
+            "provenance": "LCC 2025 west-lancashire-west + 2026 district swing",
+            "shares": {
+              "Reform UK": 35.3,
+              "Labour": 17.1,
+              "Conservative": 26.1,
+              "Liberal Democrats": 3.3,
+              "Green Party": 11.4,
+              "Independent": 0,
+              "Other": 6.8
+            }
+          }
+        ],
+        "name": "South Lancashire",
+        "districts": [
+          "chorley",
+          "south-ribble",
+          "west-lancashire"
+        ],
+        "population": 358947
+      }
+    ]
+  },
+  "comparison": {
     "three-unitary": {
       "label": "Three-unitary model",
-      "short_label": "3 unitaries",
       "status": "rejected",
       "status_note": "A competing submission; not selected by the government. Groupings from the Lancaster City Council LGR report, 26 Nov 2025 (para 15b); unit names corroborated via contemporaneous coverage.",
       "proposer": "Wyre, Blackburn with Darwen, Hyndburn, Fylde and Rossendale councils",
-      "is_decided": false,
       "unitaries": [
         {
           "id": "central-lancashire-3u",
           "name": "Central Lancashire",
-          "bid_name": "Central Lancashire",
-          "govt_label": null,
           "districts": [
             "chorley",
             "preston",
@@ -416,88 +2636,22 @@
             "west-lancashire"
           ],
           "population": null,
-          "total_electorate": 376645,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3331,
-              "p10": 0.2635,
-              "p90": 0.4027
-            },
-            "Labour": {
-              "pct": 0.2329,
-              "p10": 0.1633,
-              "p90": 0.3025
-            },
-            "Conservative": {
-              "pct": 0.1722,
-              "p10": 0.1026,
-              "p90": 0.2418
-            },
-            "Liberal Democrats": {
-              "pct": 0.1125,
-              "p10": 0.0429,
-              "p90": 0.1821
-            },
-            "Green Party": {
-              "pct": 0.0875,
-              "p10": 0.0179,
-              "p90": 0.1571
-            },
-            "Independent": {
-              "pct": 0.0198,
-              "p10": 0,
-              "p90": 0.0894
-            },
-            "Other": {
-              "pct": 0.042,
-              "p10": 0,
-              "p90": 0.1116
-            }
+          "vote_share": {
+            "Reform UK": 0.3331,
+            "Labour": 0.2329,
+            "Conservative": 0.1722,
+            "Liberal Democrats": 0.1125,
+            "Green Party": 0.0875,
+            "Independent": 0.0198,
+            "Other": 0.042
           },
           "largest_party": "Reform UK",
           "lead_pp": 10,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 5.4,
-          "notional_council_size": 87,
-          "seat_projection_dhondt": {
-            "Reform UK": 31,
-            "Labour": 21,
-            "Conservative": 16,
-            "Liberal Democrats": 10,
-            "Green Party": 8,
-            "Independent": 1
-          },
-          "majority_threshold": 44,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 31,
-          "member_signals": [
-            {
-              "area": "chorley",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "preston",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "south-ribble",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "west-lancashire",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            }
-          ]
+          "control_call": "Reform UK likely largest party"
         },
         {
           "id": "coastal-lancashire-3u",
           "name": "Coastal Lancashire",
-          "bid_name": "Coastal Lancashire",
-          "govt_label": null,
           "districts": [
             "blackpool",
             "fylde",
@@ -505,88 +2659,22 @@
             "wyre"
           ],
           "population": null,
-          "total_electorate": 368797,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3291,
-              "p10": 0.2153,
-              "p90": 0.4429
-            },
-            "Labour": {
-              "pct": 0.2395,
-              "p10": 0.1257,
-              "p90": 0.3533
-            },
-            "Conservative": {
-              "pct": 0.2379,
-              "p10": 0.1241,
-              "p90": 0.3517
-            },
-            "Liberal Democrats": {
-              "pct": 0.0582,
-              "p10": 0,
-              "p90": 0.172
-            },
-            "Green Party": {
-              "pct": 0.1046,
-              "p10": 0,
-              "p90": 0.2184
-            },
-            "Independent": {
-              "pct": 0.0282,
-              "p10": 0,
-              "p90": 0.142
-            },
-            "Other": {
-              "pct": 0.0024,
-              "p10": 0,
-              "p90": 0.1162
-            }
+          "vote_share": {
+            "Reform UK": 0.3477,
+            "Labour": 0.2136,
+            "Conservative": 0.237,
+            "Liberal Democrats": 0.0576,
+            "Green Party": 0.1052,
+            "Independent": 0.0375,
+            "Other": 0.0014
           },
           "largest_party": "Reform UK",
-          "lead_pp": 9,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 8.9,
-          "notional_council_size": 87,
-          "seat_projection_dhondt": {
-            "Reform UK": 29,
-            "Labour": 21,
-            "Conservative": 21,
-            "Liberal Democrats": 5,
-            "Green Party": 9,
-            "Independent": 2
-          },
-          "majority_threshold": 44,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 29,
-          "member_signals": [
-            {
-              "area": "blackpool",
-              "provenance": "ge2024 constituency proxy (no recent Blackpool local in corpus)",
-              "quality": "proxy"
-            },
-            {
-              "area": "fylde",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "lancaster",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "wyre",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+          "lead_pp": 11.1,
+          "control_call": "Reform UK likely largest party"
         },
         {
           "id": "pennine-lancashire-3u",
           "name": "Pennine Lancashire",
-          "bid_name": "Pennine Lancashire",
-          "govt_label": null,
           "districts": [
             "blackburn-with-darwen",
             "burnley",
@@ -596,511 +2684,135 @@
             "rossendale"
           ],
           "population": null,
-          "total_electorate": 402977,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3615,
-              "p10": 0.2814,
-              "p90": 0.4416
-            },
-            "Labour": {
-              "pct": 0.1806,
-              "p10": 0.1005,
-              "p90": 0.2607
-            },
-            "Conservative": {
-              "pct": 0.1736,
-              "p10": 0.0935,
-              "p90": 0.2537
-            },
-            "Liberal Democrats": {
-              "pct": 0.06,
-              "p10": 0,
-              "p90": 0.1401
-            },
-            "Green Party": {
-              "pct": 0.0909,
-              "p10": 0.0108,
-              "p90": 0.171
-            },
-            "Independent": {
-              "pct": 0.1328,
-              "p10": 0.0527,
-              "p90": 0.2129
-            },
-            "Other": {
-              "pct": 0.0006,
-              "p10": 0,
-              "p90": 0.0807
-            }
+          "vote_share": {
+            "Reform UK": 0.3615,
+            "Labour": 0.1806,
+            "Conservative": 0.1736,
+            "Liberal Democrats": 0.06,
+            "Green Party": 0.0909,
+            "Independent": 0.1328,
+            "Other": 0.0006
           },
           "largest_party": "Reform UK",
           "lead_pp": 18.1,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 6.3,
-          "notional_council_size": 87,
-          "seat_projection_dhondt": {
-            "Reform UK": 32,
-            "Labour": 16,
-            "Conservative": 15,
-            "Liberal Democrats": 5,
-            "Green Party": 8,
-            "Independent": 11
-          },
-          "majority_threshold": 44,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 32,
-          "member_signals": [
-            {
-              "area": "blackburn-with-darwen",
-              "provenance": "borough-2026 (unitary)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "burnley",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "hyndburn",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "pendle",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "ribble-valley",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "rossendale",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+          "control_call": "Reform UK likely largest party"
         }
       ]
     },
     "five-unitary": {
       "label": "Five-unitary model",
-      "short_label": "5 unitaries",
       "status": "rejected",
       "status_note": "A competing submission by Burnley and Pendle councils (28 Nov 2025); not selected. Groupings triangulated from the Lancaster City Council LGR report (para 15e) plus Burnley/Pendle coverage; all districts kept whole. Populations other than the East unit (~270,000, first-party Pendle figure) and the South unit (358,947) are unverified.",
       "proposer": "Burnley and Pendle councils",
-      "is_decided": false,
       "unitaries": [
         {
           "id": "east-5u",
           "name": "East",
-          "bid_name": "East",
-          "govt_label": null,
           "districts": [
             "burnley",
             "pendle",
             "rossendale"
           ],
           "population": 270000,
-          "total_electorate": 188191,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3753,
-              "p10": 0.2935,
-              "p90": 0.4571
-            },
-            "Labour": {
-              "pct": 0.1424,
-              "p10": 0.0606,
-              "p90": 0.2242
-            },
-            "Conservative": {
-              "pct": 0.182,
-              "p10": 0.1002,
-              "p90": 0.2638
-            },
-            "Liberal Democrats": {
-              "pct": 0.1033,
-              "p10": 0.0215,
-              "p90": 0.1851
-            },
-            "Green Party": {
-              "pct": 0.0796,
-              "p10": 0,
-              "p90": 0.1614
-            },
-            "Independent": {
-              "pct": 0.117,
-              "p10": 0.0352,
-              "p90": 0.1988
-            },
-            "Other": {
-              "pct": 0.0004,
-              "p10": 0,
-              "p90": 0.0822
-            }
+          "vote_share": {
+            "Reform UK": 0.3753,
+            "Labour": 0.1424,
+            "Conservative": 0.182,
+            "Liberal Democrats": 0.1033,
+            "Green Party": 0.0796,
+            "Independent": 0.117,
+            "Other": 0.0004
           },
           "largest_party": "Reform UK",
           "lead_pp": 19.3,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 6.4,
-          "notional_council_size": 55,
-          "seat_projection_dhondt": {
-            "Reform UK": 21,
-            "Labour": 8,
-            "Conservative": 10,
-            "Liberal Democrats": 6,
-            "Green Party": 4,
-            "Independent": 6
-          },
-          "majority_threshold": 28,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 21,
-          "member_signals": [
-            {
-              "area": "burnley",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "pendle",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "rossendale",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+          "control_call": "Reform UK likely largest party"
         },
         {
           "id": "middle-5u",
           "name": "Middle",
-          "bid_name": "Middle",
-          "govt_label": null,
           "districts": [
             "blackburn-with-darwen",
             "hyndburn",
             "ribble-valley"
           ],
           "population": null,
-          "total_electorate": 214786,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3494,
-              "p10": 0.272,
-              "p90": 0.4268
-            },
-            "Labour": {
-              "pct": 0.214,
-              "p10": 0.1366,
-              "p90": 0.2914
-            },
-            "Conservative": {
-              "pct": 0.1662,
-              "p10": 0.0888,
-              "p90": 0.2436
-            },
-            "Liberal Democrats": {
-              "pct": 0.022,
-              "p10": 0,
-              "p90": 0.0994
-            },
-            "Green Party": {
-              "pct": 0.1009,
-              "p10": 0.0235,
-              "p90": 0.1783
-            },
-            "Independent": {
-              "pct": 0.1467,
-              "p10": 0.0693,
-              "p90": 0.2241
-            },
-            "Other": {
-              "pct": 0.0008,
-              "p10": 0,
-              "p90": 0.0782
-            }
+          "vote_share": {
+            "Reform UK": 0.3494,
+            "Labour": 0.214,
+            "Conservative": 0.1662,
+            "Liberal Democrats": 0.022,
+            "Green Party": 0.1009,
+            "Independent": 0.1467,
+            "Other": 0.0008
           },
           "largest_party": "Reform UK",
           "lead_pp": 13.5,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 6,
-          "notional_council_size": 55,
-          "seat_projection_dhondt": {
-            "Reform UK": 20,
-            "Labour": 12,
-            "Conservative": 9,
-            "Liberal Democrats": 1,
-            "Green Party": 5,
-            "Independent": 8
-          },
-          "majority_threshold": 28,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 20,
-          "member_signals": [
-            {
-              "area": "blackburn-with-darwen",
-              "provenance": "borough-2026 (unitary)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "hyndburn",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "ribble-valley",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+          "control_call": "Reform UK likely largest party"
         },
         {
           "id": "north-5u",
           "name": "North",
-          "bid_name": "North",
-          "govt_label": null,
           "districts": [
             "lancaster",
             "wyre"
           ],
           "population": null,
-          "total_electorate": 198461,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3726,
-              "p10": 0.2871,
-              "p90": 0.4581
-            },
-            "Labour": {
-              "pct": 0.1798,
-              "p10": 0.0943,
-              "p90": 0.2653
-            },
-            "Conservative": {
-              "pct": 0.2086,
-              "p10": 0.1231,
-              "p90": 0.2941
-            },
-            "Liberal Democrats": {
-              "pct": 0.0749,
-              "p10": 0,
-              "p90": 0.1604
-            },
-            "Green Party": {
-              "pct": 0.1624,
-              "p10": 0.0769,
-              "p90": 0.2479
-            },
-            "Independent": {
-              "pct": 0.0018,
-              "p10": 0,
-              "p90": 0.0873
-            },
-            "Other": {
-              "pct": 0,
-              "p10": 0,
-              "p90": 0.0855
-            }
+          "vote_share": {
+            "Reform UK": 0.3726,
+            "Labour": 0.1797,
+            "Conservative": 0.2086,
+            "Liberal Democrats": 0.0749,
+            "Green Party": 0.1624,
+            "Independent": 0.0018,
+            "Other": 0
           },
           "largest_party": "Reform UK",
           "lead_pp": 16.4,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 6.7,
-          "notional_council_size": 55,
-          "seat_projection_dhondt": {
-            "Reform UK": 21,
-            "Labour": 10,
-            "Conservative": 11,
-            "Liberal Democrats": 4,
-            "Green Party": 9,
-            "Independent": 0
-          },
-          "majority_threshold": 28,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 21,
-          "member_signals": [
-            {
-              "area": "lancaster",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "wyre",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            }
-          ]
+          "control_call": "Reform UK likely largest party"
         },
         {
           "id": "south-5u",
           "name": "South",
-          "bid_name": "South",
-          "govt_label": null,
           "districts": [
             "chorley",
             "south-ribble",
             "west-lancashire"
           ],
           "population": 358947,
-          "total_electorate": 265348,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.3572,
-              "p10": 0.3005,
-              "p90": 0.4139
-            },
-            "Labour": {
-              "pct": 0.2462,
-              "p10": 0.1895,
-              "p90": 0.3029
-            },
-            "Conservative": {
-              "pct": 0.1955,
-              "p10": 0.1388,
-              "p90": 0.2522
-            },
-            "Liberal Democrats": {
-              "pct": 0.0616,
-              "p10": 0.0049,
-              "p90": 0.1183
-            },
-            "Green Party": {
-              "pct": 0.0801,
-              "p10": 0.0234,
-              "p90": 0.1368
-            },
-            "Independent": {
-              "pct": 0.0002,
-              "p10": 0,
-              "p90": 0.0569
-            },
-            "Other": {
-              "pct": 0.0592,
-              "p10": 0.0025,
-              "p90": 0.1159
-            }
+          "vote_share": {
+            "Reform UK": 0.3572,
+            "Labour": 0.2461,
+            "Conservative": 0.1955,
+            "Liberal Democrats": 0.0616,
+            "Green Party": 0.0801,
+            "Independent": 0.0002,
+            "Other": 0.0592
           },
           "largest_party": "Reform UK",
           "lead_pp": 11.1,
-          "control_call": "Reform UK likely largest party, no overall control",
-          "uncertainty_sigma_pp": 4.4,
-          "notional_council_size": 65,
-          "seat_projection_dhondt": {
-            "Reform UK": 25,
-            "Labour": 17,
-            "Conservative": 14,
-            "Liberal Democrats": 4,
-            "Green Party": 5,
-            "Independent": 0
-          },
-          "majority_threshold": 33,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 25,
-          "member_signals": [
-            {
-              "area": "chorley",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            },
-            {
-              "area": "south-ribble",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "west-lancashire",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            }
-          ]
+          "control_call": "Reform UK likely largest party"
         },
         {
           "id": "west-5u",
           "name": "West",
-          "bid_name": "West",
-          "govt_label": null,
           "districts": [
             "blackpool",
             "fylde",
             "preston"
           ],
           "population": null,
-          "total_electorate": 281633,
-          "predicted_shares": {
-            "Reform UK": {
-              "pct": 0.2774,
-              "p10": 0.1938,
-              "p90": 0.361
-            },
-            "Labour": {
-              "pct": 0.2665,
-              "p10": 0.1829,
-              "p90": 0.3501
-            },
-            "Conservative": {
-              "pct": 0.2106,
-              "p10": 0.127,
-              "p90": 0.2942
-            },
-            "Liberal Democrats": {
-              "pct": 0.1159,
-              "p10": 0.0323,
-              "p90": 0.1995
-            },
-            "Green Party": {
-              "pct": 0.0641,
-              "p10": 0,
-              "p90": 0.1477
-            },
-            "Independent": {
-              "pct": 0.0619,
-              "p10": 0,
-              "p90": 0.1455
-            },
-            "Other": {
-              "pct": 0.0035,
-              "p10": 0,
-              "p90": 0.0871
-            }
+          "vote_share": {
+            "Reform UK": 0.3018,
+            "Labour": 0.2326,
+            "Conservative": 0.2094,
+            "Liberal Democrats": 0.115,
+            "Green Party": 0.0648,
+            "Independent": 0.0742,
+            "Other": 0.0022
           },
           "largest_party": "Reform UK",
-          "lead_pp": 1.1,
-          "control_call": "Too close to call, no overall control likely",
-          "uncertainty_sigma_pp": 6.5,
-          "notional_council_size": 70,
-          "seat_projection_dhondt": {
-            "Reform UK": 20,
-            "Labour": 19,
-            "Conservative": 15,
-            "Liberal Democrats": 8,
-            "Green Party": 4,
-            "Independent": 4
-          },
-          "majority_threshold": 36,
-          "largest_seat_party": "Reform UK",
-          "largest_seat_count": 20,
-          "member_signals": [
-            {
-              "area": "blackpool",
-              "provenance": "ge2024 constituency proxy (no recent Blackpool local in corpus)",
-              "quality": "proxy"
-            },
-            {
-              "area": "fylde",
-              "provenance": "lcc-2025 county divisions",
-              "quality": "actual-local"
-            },
-            {
-              "area": "preston",
-              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
-              "quality": "actual-local"
-            }
-          ]
+          "lead_pp": 6.9,
+          "control_call": "Reform UK likely largest party"
         }
       ]
     }
