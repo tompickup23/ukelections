@@ -109,6 +109,15 @@ export function loadMay7Control() {
   return _controlMay7;
 }
 
+let _lancsUnitaries: any = null;
+export function loadLancashireUnitaries() {
+  if (_lancsUnitaries) return _lancsUnitaries;
+  _lancsUnitaries = JSON.parse(
+    readFileSync(path.join(ROOT, "data/predictions/lancashire-unitaries/forecast.json"), "utf8")
+  );
+  return _lancsUnitaries;
+}
+
 let _postaudit: any = null;
 export function loadMay7Postaudit() {
   if (_postaudit) return _postaudit;

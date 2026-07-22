@@ -1,0 +1,1108 @@
+{
+  "snapshot": {
+    "generated_at": "2026-07-22T00:00:00.000Z",
+    "model_version": "ukelections.lancashire-unitaries.v0.1.0",
+    "method": "Electorate-weighted blend of the most recent actual elections (May 2025 LCC county divisions + May 2026 borough where held + GE2024 proxy for Blackpool), aggregated into each proposed unitary. Control projected from aggregate vote share; d'Hondt seat split is an illustrative proportional guide only.",
+    "election_target": "May 2027 shadow-authority elections",
+    "decision_context": {
+      "interim_plan_submitted": "2025-03-21",
+      "full_business_cases_submitted": "2025-11-28",
+      "mhclg_consultation_closed": "2026-03-26",
+      "government_decision": "2026-07-16",
+      "decision_by": "Secretary of State (Steve Reed)",
+      "decision_status": "Subject to Parliamentary approval; legally confirmed only once a Structural Change Order is made.",
+      "shadow_authority_elections": "2027-05",
+      "vesting_day": "2028-04-01"
+    },
+    "name_caveat": "None of the unitary names below are statutory. The six sponsoring councils' business case used North Lancashire / Fylde Coast / South Lancashire / East Lancashire; the county council's post-decision press release used North / West / East / South Lancashire, which confusingly reuses 'West Lancashire' for both a new unitary and a folded-in district. ('Pennine Lancashire' is the name of the rejected 3-unitary model's eastern unit, not a 4-unitary unit.) Preston's leader has said publicly it is 'too early to even know what our new unitary authority's name will be'. Treat all labels as working geographic shorthand only.",
+    "sources": [
+      {
+        "label": "Lancaster City Council LGR committee report, 26 Nov 2025",
+        "url": "https://committeeadmin.lancaster.gov.uk/documents/s92020/Council%20261125report%20002.pdf"
+      },
+      {
+        "label": "Lancashire County Council news release, 16 July 2026",
+        "url": "https://news.lancashire.gov.uk/news/government-announces-local-government-reorganisation-decision-for-lancashire"
+      },
+      {
+        "label": "MHCLG consultation portal: Lancashire, Blackburn with Darwen, Blackpool",
+        "url": "https://consult.communities.gov.uk/local-government-reorganisation/lancashire-blackburn-with-darwen-blackpool"
+      },
+      {
+        "label": "lancashirelgr.co.uk decision article",
+        "url": "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
+      }
+    ],
+    "caveats": [
+      "The government's decision (16 July 2026) is subject to Parliamentary approval via a Structural Change Order; not yet legally confirmed.",
+      "New unitary ward boundaries have not been drawn by the LGBCE, so exact seat counts cannot be forecast. The d'Hondt figures are an illustrative proportional guide; FPTP will hand the largest party a winner's bonus above that.",
+      "Blackpool has no recent local election in the data corpus (last all-out 2023) and no county divisions, so its signal is the weaker GE2024 constituency proxy.",
+      "Unitary names are working geographic shorthand only; none are statutory."
+    ],
+    "sha256": "5ed159c6c9311dfdb3f66f876ea765ff5cd45f0f327e2fb25ab7c880611330fa"
+  },
+  "models": {
+    "four-unitary": {
+      "label": "Four-unitary model",
+      "short_label": "4 unitaries",
+      "status": "government-decided",
+      "status_note": "Selected by the government on 16 July 2026, subject to a Structural Change Order. This is the model that will hold shadow-authority elections in May 2027.",
+      "proposer": "Chorley, Lancaster, Preston, Ribble Valley, South Ribble and West Lancashire councils ('Four Lancashire for the Future')",
+      "is_decided": true,
+      "unitaries": [
+        {
+          "id": "north-lancashire",
+          "name": "North Lancashire",
+          "bid_name": "North Lancashire",
+          "govt_label": null,
+          "districts": [
+            "lancaster",
+            "preston",
+            "ribble-valley"
+          ],
+          "population": 373664,
+          "total_electorate": 270910,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3109,
+              "p10": 0.239,
+              "p90": 0.3828
+            },
+            "Labour": {
+              "pct": 0.1862,
+              "p10": 0.1143,
+              "p90": 0.2581
+            },
+            "Conservative": {
+              "pct": 0.1427,
+              "p10": 0.0708,
+              "p90": 0.2146
+            },
+            "Liberal Democrats": {
+              "pct": 0.1577,
+              "p10": 0.0858,
+              "p90": 0.2296
+            },
+            "Green Party": {
+              "pct": 0.1563,
+              "p10": 0.0844,
+              "p90": 0.2282
+            },
+            "Independent": {
+              "pct": 0.0457,
+              "p10": 0,
+              "p90": 0.1176
+            },
+            "Other": {
+              "pct": 0.0004,
+              "p10": 0,
+              "p90": 0.0723
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 12.5,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 5.6,
+          "notional_council_size": 68,
+          "seat_projection_dhondt": {
+            "Reform UK": 21,
+            "Labour": 13,
+            "Conservative": 10,
+            "Liberal Democrats": 11,
+            "Green Party": 10,
+            "Independent": 3
+          },
+          "majority_threshold": 35,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 21,
+          "member_signals": [
+            {
+              "area": "lancaster",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "preston",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "ribble-valley",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "west-lancashire-coast",
+          "name": "West Lancashire (Fylde Coast)",
+          "bid_name": "Fylde Coast",
+          "govt_label": "West Lancashire",
+          "districts": [
+            "blackpool",
+            "fylde",
+            "wyre"
+          ],
+          "population": 348381,
+          "total_electorate": 258604,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3347,
+              "p10": 0.2146,
+              "p90": 0.4548
+            },
+            "Labour": {
+              "pct": 0.2618,
+              "p10": 0.1417,
+              "p90": 0.3819
+            },
+            "Conservative": {
+              "pct": 0.2818,
+              "p10": 0.1617,
+              "p90": 0.4019
+            },
+            "Liberal Democrats": {
+              "pct": 0.0356,
+              "p10": 0,
+              "p90": 0.1557
+            },
+            "Green Party": {
+              "pct": 0.0426,
+              "p10": 0,
+              "p90": 0.1627
+            },
+            "Independent": {
+              "pct": 0.0402,
+              "p10": 0,
+              "p90": 0.1603
+            },
+            "Other": {
+              "pct": 0.0034,
+              "p10": 0,
+              "p90": 0.1235
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 5.3,
+          "control_call": "Too close to call, no overall control likely",
+          "uncertainty_sigma_pp": 9.4,
+          "notional_council_size": 63,
+          "seat_projection_dhondt": {
+            "Reform UK": 22,
+            "Labour": 17,
+            "Conservative": 18,
+            "Liberal Democrats": 2,
+            "Green Party": 2,
+            "Independent": 2
+          },
+          "majority_threshold": 32,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 22,
+          "member_signals": [
+            {
+              "area": "blackpool",
+              "provenance": "ge2024 constituency proxy (no recent Blackpool local in corpus)",
+              "quality": "proxy"
+            },
+            {
+              "area": "fylde",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "wyre",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "east-lancashire",
+          "name": "East Lancashire",
+          "bid_name": "East Lancashire",
+          "govt_label": "East Lancashire",
+          "districts": [
+            "blackburn-with-darwen",
+            "burnley",
+            "hyndburn",
+            "pendle",
+            "rossendale"
+          ],
+          "population": 520563,
+          "total_electorate": 353557,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3591,
+              "p10": 0.2756,
+              "p90": 0.4426
+            },
+            "Labour": {
+              "pct": 0.1848,
+              "p10": 0.1013,
+              "p90": 0.2683
+            },
+            "Conservative": {
+              "pct": 0.1673,
+              "p10": 0.0838,
+              "p90": 0.2508
+            },
+            "Liberal Democrats": {
+              "pct": 0.0558,
+              "p10": 0,
+              "p90": 0.1393
+            },
+            "Green Party": {
+              "pct": 0.0949,
+              "p10": 0.0114,
+              "p90": 0.1784
+            },
+            "Independent": {
+              "pct": 0.1373,
+              "p10": 0.0538,
+              "p90": 0.2208
+            },
+            "Other": {
+              "pct": 0.0007,
+              "p10": 0,
+              "p90": 0.0842
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 17.4,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 6.5,
+          "notional_council_size": 87,
+          "seat_projection_dhondt": {
+            "Reform UK": 32,
+            "Labour": 16,
+            "Conservative": 14,
+            "Liberal Democrats": 5,
+            "Green Party": 8,
+            "Independent": 12
+          },
+          "majority_threshold": 44,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 32,
+          "member_signals": [
+            {
+              "area": "blackburn-with-darwen",
+              "provenance": "borough-2026 (unitary)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "burnley",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "hyndburn",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "pendle",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "rossendale",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "south-lancashire",
+          "name": "South Lancashire",
+          "bid_name": "South Lancashire",
+          "govt_label": null,
+          "districts": [
+            "chorley",
+            "south-ribble",
+            "west-lancashire"
+          ],
+          "population": 358947,
+          "total_electorate": 265348,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3572,
+              "p10": 0.3005,
+              "p90": 0.4139
+            },
+            "Labour": {
+              "pct": 0.2462,
+              "p10": 0.1895,
+              "p90": 0.3029
+            },
+            "Conservative": {
+              "pct": 0.1955,
+              "p10": 0.1388,
+              "p90": 0.2522
+            },
+            "Liberal Democrats": {
+              "pct": 0.0616,
+              "p10": 0.0049,
+              "p90": 0.1183
+            },
+            "Green Party": {
+              "pct": 0.0801,
+              "p10": 0.0234,
+              "p90": 0.1368
+            },
+            "Independent": {
+              "pct": 0.0002,
+              "p10": 0,
+              "p90": 0.0569
+            },
+            "Other": {
+              "pct": 0.0592,
+              "p10": 0.0025,
+              "p90": 0.1159
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 11.1,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 4.4,
+          "notional_council_size": 65,
+          "seat_projection_dhondt": {
+            "Reform UK": 25,
+            "Labour": 17,
+            "Conservative": 14,
+            "Liberal Democrats": 4,
+            "Green Party": 5,
+            "Independent": 0
+          },
+          "majority_threshold": 33,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 25,
+          "member_signals": [
+            {
+              "area": "chorley",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "south-ribble",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "west-lancashire",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            }
+          ]
+        }
+      ]
+    },
+    "three-unitary": {
+      "label": "Three-unitary model",
+      "short_label": "3 unitaries",
+      "status": "rejected",
+      "status_note": "A competing submission; not selected by the government. Groupings from the Lancaster City Council LGR report, 26 Nov 2025 (para 15b); unit names corroborated via contemporaneous coverage.",
+      "proposer": "Wyre, Blackburn with Darwen, Hyndburn, Fylde and Rossendale councils",
+      "is_decided": false,
+      "unitaries": [
+        {
+          "id": "central-lancashire-3u",
+          "name": "Central Lancashire",
+          "bid_name": "Central Lancashire",
+          "govt_label": null,
+          "districts": [
+            "chorley",
+            "preston",
+            "south-ribble",
+            "west-lancashire"
+          ],
+          "population": null,
+          "total_electorate": 376645,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3331,
+              "p10": 0.2635,
+              "p90": 0.4027
+            },
+            "Labour": {
+              "pct": 0.2329,
+              "p10": 0.1633,
+              "p90": 0.3025
+            },
+            "Conservative": {
+              "pct": 0.1722,
+              "p10": 0.1026,
+              "p90": 0.2418
+            },
+            "Liberal Democrats": {
+              "pct": 0.1125,
+              "p10": 0.0429,
+              "p90": 0.1821
+            },
+            "Green Party": {
+              "pct": 0.0875,
+              "p10": 0.0179,
+              "p90": 0.1571
+            },
+            "Independent": {
+              "pct": 0.0198,
+              "p10": 0,
+              "p90": 0.0894
+            },
+            "Other": {
+              "pct": 0.042,
+              "p10": 0,
+              "p90": 0.1116
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 10,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 5.4,
+          "notional_council_size": 87,
+          "seat_projection_dhondt": {
+            "Reform UK": 31,
+            "Labour": 21,
+            "Conservative": 16,
+            "Liberal Democrats": 10,
+            "Green Party": 8,
+            "Independent": 1
+          },
+          "majority_threshold": 44,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 31,
+          "member_signals": [
+            {
+              "area": "chorley",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "preston",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "south-ribble",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "west-lancashire",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "coastal-lancashire-3u",
+          "name": "Coastal Lancashire",
+          "bid_name": "Coastal Lancashire",
+          "govt_label": null,
+          "districts": [
+            "blackpool",
+            "fylde",
+            "lancaster",
+            "wyre"
+          ],
+          "population": null,
+          "total_electorate": 368797,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3291,
+              "p10": 0.2153,
+              "p90": 0.4429
+            },
+            "Labour": {
+              "pct": 0.2395,
+              "p10": 0.1257,
+              "p90": 0.3533
+            },
+            "Conservative": {
+              "pct": 0.2379,
+              "p10": 0.1241,
+              "p90": 0.3517
+            },
+            "Liberal Democrats": {
+              "pct": 0.0582,
+              "p10": 0,
+              "p90": 0.172
+            },
+            "Green Party": {
+              "pct": 0.1046,
+              "p10": 0,
+              "p90": 0.2184
+            },
+            "Independent": {
+              "pct": 0.0282,
+              "p10": 0,
+              "p90": 0.142
+            },
+            "Other": {
+              "pct": 0.0024,
+              "p10": 0,
+              "p90": 0.1162
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 9,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 8.9,
+          "notional_council_size": 87,
+          "seat_projection_dhondt": {
+            "Reform UK": 29,
+            "Labour": 21,
+            "Conservative": 21,
+            "Liberal Democrats": 5,
+            "Green Party": 9,
+            "Independent": 2
+          },
+          "majority_threshold": 44,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 29,
+          "member_signals": [
+            {
+              "area": "blackpool",
+              "provenance": "ge2024 constituency proxy (no recent Blackpool local in corpus)",
+              "quality": "proxy"
+            },
+            {
+              "area": "fylde",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "lancaster",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "wyre",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "pennine-lancashire-3u",
+          "name": "Pennine Lancashire",
+          "bid_name": "Pennine Lancashire",
+          "govt_label": null,
+          "districts": [
+            "blackburn-with-darwen",
+            "burnley",
+            "hyndburn",
+            "pendle",
+            "ribble-valley",
+            "rossendale"
+          ],
+          "population": null,
+          "total_electorate": 402977,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3615,
+              "p10": 0.2814,
+              "p90": 0.4416
+            },
+            "Labour": {
+              "pct": 0.1806,
+              "p10": 0.1005,
+              "p90": 0.2607
+            },
+            "Conservative": {
+              "pct": 0.1736,
+              "p10": 0.0935,
+              "p90": 0.2537
+            },
+            "Liberal Democrats": {
+              "pct": 0.06,
+              "p10": 0,
+              "p90": 0.1401
+            },
+            "Green Party": {
+              "pct": 0.0909,
+              "p10": 0.0108,
+              "p90": 0.171
+            },
+            "Independent": {
+              "pct": 0.1328,
+              "p10": 0.0527,
+              "p90": 0.2129
+            },
+            "Other": {
+              "pct": 0.0006,
+              "p10": 0,
+              "p90": 0.0807
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 18.1,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 6.3,
+          "notional_council_size": 87,
+          "seat_projection_dhondt": {
+            "Reform UK": 32,
+            "Labour": 16,
+            "Conservative": 15,
+            "Liberal Democrats": 5,
+            "Green Party": 8,
+            "Independent": 11
+          },
+          "majority_threshold": 44,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 32,
+          "member_signals": [
+            {
+              "area": "blackburn-with-darwen",
+              "provenance": "borough-2026 (unitary)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "burnley",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "hyndburn",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "pendle",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "ribble-valley",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "rossendale",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        }
+      ]
+    },
+    "five-unitary": {
+      "label": "Five-unitary model",
+      "short_label": "5 unitaries",
+      "status": "rejected",
+      "status_note": "A competing submission by Burnley and Pendle councils (28 Nov 2025); not selected. Groupings triangulated from the Lancaster City Council LGR report (para 15e) plus Burnley/Pendle coverage; all districts kept whole. Populations other than the East unit (~270,000, first-party Pendle figure) and the South unit (358,947) are unverified.",
+      "proposer": "Burnley and Pendle councils",
+      "is_decided": false,
+      "unitaries": [
+        {
+          "id": "east-5u",
+          "name": "East",
+          "bid_name": "East",
+          "govt_label": null,
+          "districts": [
+            "burnley",
+            "pendle",
+            "rossendale"
+          ],
+          "population": 270000,
+          "total_electorate": 188191,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3753,
+              "p10": 0.2935,
+              "p90": 0.4571
+            },
+            "Labour": {
+              "pct": 0.1424,
+              "p10": 0.0606,
+              "p90": 0.2242
+            },
+            "Conservative": {
+              "pct": 0.182,
+              "p10": 0.1002,
+              "p90": 0.2638
+            },
+            "Liberal Democrats": {
+              "pct": 0.1033,
+              "p10": 0.0215,
+              "p90": 0.1851
+            },
+            "Green Party": {
+              "pct": 0.0796,
+              "p10": 0,
+              "p90": 0.1614
+            },
+            "Independent": {
+              "pct": 0.117,
+              "p10": 0.0352,
+              "p90": 0.1988
+            },
+            "Other": {
+              "pct": 0.0004,
+              "p10": 0,
+              "p90": 0.0822
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 19.3,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 6.4,
+          "notional_council_size": 55,
+          "seat_projection_dhondt": {
+            "Reform UK": 21,
+            "Labour": 8,
+            "Conservative": 10,
+            "Liberal Democrats": 6,
+            "Green Party": 4,
+            "Independent": 6
+          },
+          "majority_threshold": 28,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 21,
+          "member_signals": [
+            {
+              "area": "burnley",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "pendle",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "rossendale",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "middle-5u",
+          "name": "Middle",
+          "bid_name": "Middle",
+          "govt_label": null,
+          "districts": [
+            "blackburn-with-darwen",
+            "hyndburn",
+            "ribble-valley"
+          ],
+          "population": null,
+          "total_electorate": 214786,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3494,
+              "p10": 0.272,
+              "p90": 0.4268
+            },
+            "Labour": {
+              "pct": 0.214,
+              "p10": 0.1366,
+              "p90": 0.2914
+            },
+            "Conservative": {
+              "pct": 0.1662,
+              "p10": 0.0888,
+              "p90": 0.2436
+            },
+            "Liberal Democrats": {
+              "pct": 0.022,
+              "p10": 0,
+              "p90": 0.0994
+            },
+            "Green Party": {
+              "pct": 0.1009,
+              "p10": 0.0235,
+              "p90": 0.1783
+            },
+            "Independent": {
+              "pct": 0.1467,
+              "p10": 0.0693,
+              "p90": 0.2241
+            },
+            "Other": {
+              "pct": 0.0008,
+              "p10": 0,
+              "p90": 0.0782
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 13.5,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 6,
+          "notional_council_size": 55,
+          "seat_projection_dhondt": {
+            "Reform UK": 20,
+            "Labour": 12,
+            "Conservative": 9,
+            "Liberal Democrats": 1,
+            "Green Party": 5,
+            "Independent": 8
+          },
+          "majority_threshold": 28,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 20,
+          "member_signals": [
+            {
+              "area": "blackburn-with-darwen",
+              "provenance": "borough-2026 (unitary)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "hyndburn",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "ribble-valley",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "north-5u",
+          "name": "North",
+          "bid_name": "North",
+          "govt_label": null,
+          "districts": [
+            "lancaster",
+            "wyre"
+          ],
+          "population": null,
+          "total_electorate": 198461,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3726,
+              "p10": 0.2871,
+              "p90": 0.4581
+            },
+            "Labour": {
+              "pct": 0.1798,
+              "p10": 0.0943,
+              "p90": 0.2653
+            },
+            "Conservative": {
+              "pct": 0.2086,
+              "p10": 0.1231,
+              "p90": 0.2941
+            },
+            "Liberal Democrats": {
+              "pct": 0.0749,
+              "p10": 0,
+              "p90": 0.1604
+            },
+            "Green Party": {
+              "pct": 0.1624,
+              "p10": 0.0769,
+              "p90": 0.2479
+            },
+            "Independent": {
+              "pct": 0.0018,
+              "p10": 0,
+              "p90": 0.0873
+            },
+            "Other": {
+              "pct": 0,
+              "p10": 0,
+              "p90": 0.0855
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 16.4,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 6.7,
+          "notional_council_size": 55,
+          "seat_projection_dhondt": {
+            "Reform UK": 21,
+            "Labour": 10,
+            "Conservative": 11,
+            "Liberal Democrats": 4,
+            "Green Party": 9,
+            "Independent": 0
+          },
+          "majority_threshold": 28,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 21,
+          "member_signals": [
+            {
+              "area": "lancaster",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "wyre",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "south-5u",
+          "name": "South",
+          "bid_name": "South",
+          "govt_label": null,
+          "districts": [
+            "chorley",
+            "south-ribble",
+            "west-lancashire"
+          ],
+          "population": 358947,
+          "total_electorate": 265348,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.3572,
+              "p10": 0.3005,
+              "p90": 0.4139
+            },
+            "Labour": {
+              "pct": 0.2462,
+              "p10": 0.1895,
+              "p90": 0.3029
+            },
+            "Conservative": {
+              "pct": 0.1955,
+              "p10": 0.1388,
+              "p90": 0.2522
+            },
+            "Liberal Democrats": {
+              "pct": 0.0616,
+              "p10": 0.0049,
+              "p90": 0.1183
+            },
+            "Green Party": {
+              "pct": 0.0801,
+              "p10": 0.0234,
+              "p90": 0.1368
+            },
+            "Independent": {
+              "pct": 0.0002,
+              "p10": 0,
+              "p90": 0.0569
+            },
+            "Other": {
+              "pct": 0.0592,
+              "p10": 0.0025,
+              "p90": 0.1159
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 11.1,
+          "control_call": "Reform UK likely largest party, no overall control",
+          "uncertainty_sigma_pp": 4.4,
+          "notional_council_size": 65,
+          "seat_projection_dhondt": {
+            "Reform UK": 25,
+            "Labour": 17,
+            "Conservative": 14,
+            "Liberal Democrats": 4,
+            "Green Party": 5,
+            "Independent": 0
+          },
+          "majority_threshold": 33,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 25,
+          "member_signals": [
+            {
+              "area": "chorley",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            },
+            {
+              "area": "south-ribble",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "west-lancashire",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            }
+          ]
+        },
+        {
+          "id": "west-5u",
+          "name": "West",
+          "bid_name": "West",
+          "govt_label": null,
+          "districts": [
+            "blackpool",
+            "fylde",
+            "preston"
+          ],
+          "population": null,
+          "total_electorate": 281633,
+          "predicted_shares": {
+            "Reform UK": {
+              "pct": 0.2774,
+              "p10": 0.1938,
+              "p90": 0.361
+            },
+            "Labour": {
+              "pct": 0.2665,
+              "p10": 0.1829,
+              "p90": 0.3501
+            },
+            "Conservative": {
+              "pct": 0.2106,
+              "p10": 0.127,
+              "p90": 0.2942
+            },
+            "Liberal Democrats": {
+              "pct": 0.1159,
+              "p10": 0.0323,
+              "p90": 0.1995
+            },
+            "Green Party": {
+              "pct": 0.0641,
+              "p10": 0,
+              "p90": 0.1477
+            },
+            "Independent": {
+              "pct": 0.0619,
+              "p10": 0,
+              "p90": 0.1455
+            },
+            "Other": {
+              "pct": 0.0035,
+              "p10": 0,
+              "p90": 0.0871
+            }
+          },
+          "largest_party": "Reform UK",
+          "lead_pp": 1.1,
+          "control_call": "Too close to call, no overall control likely",
+          "uncertainty_sigma_pp": 6.5,
+          "notional_council_size": 70,
+          "seat_projection_dhondt": {
+            "Reform UK": 20,
+            "Labour": 19,
+            "Conservative": 15,
+            "Liberal Democrats": 8,
+            "Green Party": 4,
+            "Independent": 4
+          },
+          "majority_threshold": 36,
+          "largest_seat_party": "Reform UK",
+          "largest_seat_count": 20,
+          "member_signals": [
+            {
+              "area": "blackpool",
+              "provenance": "ge2024 constituency proxy (no recent Blackpool local in corpus)",
+              "quality": "proxy"
+            },
+            {
+              "area": "fylde",
+              "provenance": "lcc-2025 county divisions",
+              "quality": "actual-local"
+            },
+            {
+              "area": "preston",
+              "provenance": "lcc-2025 + borough-2026 (50/50 blend)",
+              "quality": "actual-local"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
