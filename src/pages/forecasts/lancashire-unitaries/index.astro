@@ -1,13 +1,12 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import PartyBars from "../../../components/PartyBars.astro";
 import { loadLancashireUnitaries, partyColour } from "../../../lib/predictions";
 
 const data = loadLancashireUnitaries();
 const snap = data.snapshot;
-const decided = data.models["four-unitary"];
-const three = data.models["three-unitary"];
-const five = data.models["five-unitary"];
+const four = data.four_unitary;
+const three = data.comparison["three-unitary"];
+const five = data.comparison["five-unitary"];
 
 const DISTRICT_NAMES: Record<string, string> = {
   "burnley": "Burnley", "chorley": "Chorley", "fylde": "Fylde", "hyndburn": "Hyndburn",
@@ -16,129 +15,165 @@ const DISTRICT_NAMES: Record<string, string> = {
   "wyre": "Wyre", "blackburn-with-darwen": "Blackburn with Darwen", "blackpool": "Blackpool",
 };
 const districtName = (slug: string) => DISTRICT_NAMES[slug] || slug;
+const SHORT: Record<string, string> = { "Reform UK": "Reform", "Liberal Democrats": "Lib Dem", "Conservative": "Con", "Green Party": "Green", "Labour": "Labour", "Independent": "Ind" };
+const shortLabel = (p: string) => SHORT[p] || p;
 
-// Turn a unitary's predicted_shares into ordered PartyBars rows (skip near-zero).
-function shareRows(unitary: any) {
-  return Object.entries(unitary.predicted_shares)
-    .map(([party, b]: [string, any]) => ({
-      party,
-      pct: b.pct,
-      value: `${(b.pct * 100).toFixed(1)}%`,
-      annotation: `${(b.p10 * 100).toFixed(0)}–${(b.p90 * 100).toFixed(0)}`,
-    }))
-    .filter((r) => r.pct >= 0.01)
-    .sort((a, b) => b.pct - a.pct);
+// Party seat rows for a unitary, ranked, non-zero.
+function seatRows(u: any) {
+  return Object.entries(u.seats)
+    .map(([party, s]: [string, any]) => ({ party, ...s }))
+    .filter((r) => r.expected > 0 || r.p90 > 0)
+    .sort((a, b) => b.expected - a.expected);
 }
 
-function controlClass(call: string) {
-  if (/on course for a majority/.test(call)) return "control-pill control-pill--majority";
-  if (/likely largest/.test(call)) return "control-pill control-pill--largest";
+// Ordered segments for the seat-composition bar (largest first), colours + widths.
+function seatSegments(u: any) {
+  return seatRows(u)
+    .filter((r) => r.expected > 0)
+    .map((r) => ({ party: r.party, seats: r.expected, pct: (r.expected / u.council_size) * 100 }));
+}
+
+function pct(x: number) { return `${(x * 100).toFixed(0)}%`; }
+function controlClass(prob: number) {
+  if (prob >= 0.65) return "control-pill control-pill--majority";
+  if (prob >= 0.35) return "control-pill control-pill--knife";
   return "control-pill control-pill--noc";
 }
 ---
 
 <BaseLayout
   title="Lancashire reorganisation: new unitary councils forecast"
-  description="Forecast of the four new Lancashire unitary councils the government approved on 16 July 2026, for the May 2027 shadow-authority elections, plus the rejected 3- and 5-unitary options for comparison."
+  description="Ward-by-ward seat forecast of the four new Lancashire unitary councils approved on 16 July 2026, for the May 2027 shadow-authority elections. 107 wards, 313 councillors, with majority probabilities from a 2,000-run Monte Carlo."
 >
   <section class="page-hero">
-    <p class="eyebrow">Lancashire local government reorganisation · Scaffold forecast</p>
-    <h1>Four new Lancashire unitaries, forecast</h1>
+    <p class="eyebrow">Lancashire local government reorganisation · Ward-by-ward forecast</p>
+    <h1>Four new Lancashire unitaries, ward by ward</h1>
     <p class="lede">
-      On 16 July 2026 the government chose to scrap Lancashire's two-tier system and its two existing
-      unitaries and replace all fourteen with <strong>four new unitary councils</strong>. The first elections
-      to them are the <strong>May 2027 shadow-authority elections</strong>. Here is how each one would look
-      on the most recent votes cast, with the rejected 3- and 5-unitary options for comparison.
+      On 16 July 2026 the government chose to replace Lancashire's fifteen councils with <strong>four new unitary
+      authorities</strong>. The first elections are the <strong>May 2027 shadow-authority elections</strong>. This
+      forecasts all <strong>107 proposed wards</strong> and <strong>313 councillors</strong> from the most recent
+      votes cast, then runs the result 2,000 times to size up each council's control.
     </p>
   </section>
 
   <section class="section">
     <div class="backtest-callout backtest-callout--warn">
-      <strong>⚠ Scaffold forecast. New councils, new boundaries, no election yet.</strong>
+      <strong>⚠ Scaffold forecast. Proposed wards, no election yet.</strong>
       <span class="backtest-detail">
-        The government's decision is <strong>subject to Parliamentary approval</strong> via a Structural Change
-        Order and is not yet law. The new councils have <strong>no ward boundaries</strong> yet (the Local Government
-        Boundary Commission draws those later), so exact seat counts cannot be forecast; the seat figures below
-        are an <strong>illustrative proportional guide only</strong>, and first-past-the-post will hand the
-        largest party a winner's bonus above them. Blackpool has no recent local election in our data, so its
-        signal is a weaker general-election proxy. Treat everything here as a first estimate, not a prediction of
-        the result.
+        The government's decision is <strong>subject to Parliamentary approval</strong> and the warding is the
+        proposed 4UA scheme, <strong>not yet confirmed by the Local Government Boundary Commission</strong>. Seats
+        are allocated winner-takes-all per multi-member ward, so a leading party's seat count sits at the higher
+        end of what splitting wards would give; marginal wards (lead under 10 points) are flagged. Blackpool has no
+        borough-wide local election in our data, so its eleven wards share a proxy from recent by-elections and the
+        2024 general election, which is why the Fylde Coast range is wide. A first estimate, not a result.
       </span>
     </div>
   </section>
 
-  <!-- Decision facts -->
   <section class="section">
     <div class="fact-grid">
-      <div class="fact"><span class="fact-k">Decision</span><span class="fact-v">16 July 2026</span><span class="fact-s">Secretary of State (Steve Reed)</span></div>
-      <div class="fact"><span class="fact-k">New councils</span><span class="fact-v">4 unitaries</span><span class="fact-s">from 15 current councils</span></div>
+      <div class="fact"><span class="fact-k">Decision</span><span class="fact-v">16 July 2026</span><span class="fact-s">Secretary of State</span></div>
+      <div class="fact"><span class="fact-k">New councils</span><span class="fact-v">4 unitaries</span><span class="fact-s">{four.total_councillors} councillors</span></div>
       <div class="fact"><span class="fact-k">First elections</span><span class="fact-v">May 2027</span><span class="fact-s">shadow authorities</span></div>
       <div class="fact"><span class="fact-k">Vesting day</span><span class="fact-v">1 April 2028</span><span class="fact-s">new councils take over</span></div>
     </div>
     <p class="name-caveat"><strong>A note on names.</strong> {snap.name_caveat}</p>
   </section>
 
-  <!-- The decided model -->
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">The government's model · {decided.proposer}</p>
-      <h2>The four new unitaries</h2>
+      <p class="eyebrow">The government's model · {four.proposer}</p>
+      <h2>The four new unitaries, forecast</h2>
     </div>
+
     <div class="unitary-grid">
-      {decided.unitaries.map((u: any) => (
-        <article class="unitary-card">
-          <header class="unitary-head">
-            <div>
-              <h3>{u.name}</h3>
-              <p class="unitary-sub">{u.districts.map((d: string) => districtName(d)).join(" · ")}</p>
+      {four.unitaries.map((u: any) => {
+        const lead = u.seats[u.largest_party];
+        const segs = seatSegments(u);
+        const majorityPos = (u.majority_threshold / u.council_size) * 100;
+        return (
+          <article class="unitary-card">
+            <header class="unitary-head">
+              <div>
+                <h3>{u.name}</h3>
+                <p class="unitary-sub">{u.districts.map((d: string) => districtName(d)).join(" · ")}</p>
+              </div>
+              <span class={controlClass(lead.majority_prob)}>{u.control_call}</span>
+            </header>
+
+            {/* Seat-composition bar with majority marker */}
+            <div class="seatbar-wrap">
+              <div class="seatbar" role="img" aria-label={`Projected seat composition of ${u.council_size} seats`}>
+                {segs.map((s: any) => (
+                  <span class="seatbar-seg" style={`width:${s.pct}%;background:${partyColour(s.party)}`} title={`${s.party}: ${s.seats}`}></span>
+                ))}
+                <span class="seatbar-majority" style={`left:${majorityPos}%`} title={`Majority: ${u.majority_threshold}`}></span>
+              </div>
+              <p class="seatbar-caption">
+                {u.council_size} seats · majority needs {u.majority_threshold} ·
+                <strong> {u.largest_party} {lead.majority_prob >= 0.5 ? `${pct(lead.majority_prob)} to win control` : `${pct(lead.largest_prob)} to be largest`}</strong> ·
+                NOC {pct(u.noc_prob)}
+              </p>
             </div>
-            <span class={controlClass(u.control_call)}>{u.control_call}</span>
-          </header>
-          <PartyBars rows={shareRows(u)} />
-          <dl class="unitary-meta">
-            <div><dt>Largest party</dt><dd><span class="party-swatch" style={`background:${partyColour(u.largest_party)}`}></span>{u.largest_party} (+{u.lead_pp}pp)</dd></div>
-            {u.population && <div><dt>Population</dt><dd>{u.population.toLocaleString()}</dd></div>}
-            <div><dt>Notional council</dt><dd>~{u.notional_council_size} seats · majority {u.majority_threshold}</dd></div>
-            <div><dt>Proportional guide</dt><dd>{Object.entries(u.seat_projection_dhondt).filter(([, n]: any) => n > 0).sort((a: any, b: any) => b[1] - a[1]).map(([p, n]: any) => `${p.replace(" UK", "")} ${n}`).join(" · ")}</dd></div>
-          </dl>
-          <details class="unitary-signals">
-            <summary>Signals used ({u.member_signals.length} areas)</summary>
-            <ul>
-              {u.member_signals.map((m: any) => (
-                <li><strong>{districtName(m.area)}</strong>: {m.provenance}{m.quality === "proxy" ? " ⚠" : ""}</li>
-              ))}
-            </ul>
-          </details>
-        </article>
-      ))}
+
+            {/* Per-party seat forecast */}
+            <table class="seat-forecast">
+              <thead><tr><th>Party</th><th>Seats</th><th class="rng">Range</th></tr></thead>
+              <tbody>
+                {seatRows(u).map((r: any) => (
+                  <tr>
+                    <td><span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>{shortLabel(r.party)}</td>
+                    <td class="seat-num">{r.expected}</td>
+                    <td class="rng">{r.p10}–{r.p90}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <details class="ward-detail">
+              <summary>All {u.ward_count} wards ({u.wards.filter((w: any) => w.marginal).length} marginal)</summary>
+              <table class="ward-table">
+                <thead><tr><th>Ward</th><th>Cllrs</th><th>Predicted winner</th><th class="rng">Lead</th></tr></thead>
+                <tbody>
+                  {u.wards.map((w: any) => (
+                    <tr class={w.marginal ? "is-marginal" : ""}>
+                      <td>{w.ward}<span class="ward-src" title={w.provenance}>{w.quality === "proxy" ? " ⚠" : ""}</span></td>
+                      <td>{w.cllrs}</td>
+                      <td><span class="party-swatch" style={`background:${partyColour(w.winner)}`}></span>{shortLabel(w.winner)}</td>
+                      <td class="rng">{w.margin_pp}pp{w.marginal ? " ·mrg" : ""}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </details>
+          </article>
+        );
+      })}
     </div>
   </section>
 
-  <!-- Comparison with rejected options -->
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">The options that lost</p>
-      <h2>How control shifts with the geography</h2>
+      <h2>How the vote splits under the rejected models</h2>
     </div>
     <p class="prose-lead">
-      Five configurations were submitted; the government picked four. The rejected 3- and 5-unitary bids
-      grouped the same fourteen areas differently, enough to change which party leads where. Reform is the
-      largest party in almost every proposed unitary under every model; the councils that would be genuinely
-      competitive with Labour are the coastal ones anchored by Blackpool.
+      Five configurations were submitted; the government picked four. The rejected 3- and 5-unitary bids have no
+      ward plan, so only their vote share can be compared. Reform leads in almost every proposed unitary under
+      every model; the coastal units anchored by Blackpool are the ones genuinely competitive with Labour.
     </p>
-
     {[three, five].map((model: any) => (
       <div class="rejected-model">
         <h3>{model.label} <span class="rejected-tag">rejected · {model.proposer}</span></h3>
         <table class="compare-table">
-          <thead><tr><th>Proposed unitary</th><th>Districts</th><th>Reform</th><th>Labour</th><th>Projected control</th></tr></thead>
+          <thead><tr><th>Proposed unitary</th><th>Districts</th><th>Reform</th><th>Labour</th><th>Projected</th></tr></thead>
           <tbody>
             {model.unitaries.map((u: any) => (
               <tr>
                 <td><strong>{u.name}</strong></td>
                 <td class="td-districts">{u.districts.map((d: string) => districtName(d)).join(", ")}</td>
-                <td>{(u.predicted_shares["Reform UK"].pct * 100).toFixed(1)}%</td>
-                <td>{(u.predicted_shares["Labour"].pct * 100).toFixed(1)}%</td>
+                <td>{(u.vote_share["Reform UK"] * 100).toFixed(1)}%</td>
+                <td>{(u.vote_share["Labour"] * 100).toFixed(1)}%</td>
                 <td>{u.control_call}</td>
               </tr>
             ))}
@@ -148,16 +183,17 @@ function controlClass(call: string) {
     ))}
   </section>
 
-  <!-- Methodology -->
   <section class="section prose-block">
     <h2>Methodology</h2>
     <p>{snap.method}</p>
     <p>
-      For each of the fourteen current areas we take the most recent votes actually cast and build a single
-      vote-share vector, then combine the areas in each proposed unitary weighted by their registered
-      electorate. The May 2025 Lancashire County Council election is the backbone: it is the one recent
-      contest fought across the whole county on the same day, and it is where Reform's breakthrough shows up.
-      Where a borough also held elections in May 2026, that result is blended in equally.
+      The forecast runs against the actual proposed warding for the four-unitary model: {four.total_councillors}
+      councillors across 107 wards. Most proposed wards are the existing Lancashire County Council divisions, so
+      each is predicted from its own May 2025 county result, then nudged by the swing between that county vote and
+      the district's May 2026 borough election and any 2025–26 by-elections. Blackburn's wards combine its May 2026
+      borough wards directly; Blackpool's use a proxy. Each ward's councillors go to the winning party, and the
+      whole council is simulated {snap.monte_carlo_draws.toLocaleString()} times with correlated district-level
+      swings to produce the seat ranges and the majority and no-overall-control probabilities.
     </p>
     <ul>
       {snap.caveats.map((c: string) => <li>{c}</li>)}
@@ -165,11 +201,9 @@ function controlClass(call: string) {
     <h3>Sources</h3>
     <ul>
       {snap.sources.map((s: any) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
+      <li>Proposed warding: {snap.warding_source}</li>
     </ul>
-    <p class="micro">
-      Model {snap.model_version} · target: {snap.election_target} ·
-      Reorganisation status: subject to Parliamentary approval (Structural Change Order).
-    </p>
+    <p class="micro">Model {snap.model_version} · target: {snap.election_target} · subject to Parliamentary approval (Structural Change Order).</p>
   </section>
 </BaseLayout>
 
@@ -181,22 +215,39 @@ function controlClass(call: string) {
 .fact-s { font-size: 0.8rem; color: var(--muted); }
 .name-caveat { margin-top: 1.25rem; font-size: 0.9rem; color: var(--muted); border-left: 3px solid var(--border); padding-left: 0.9rem; }
 
-.unitary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+.unitary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem; }
 .unitary-card { border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; background: var(--surface); }
 .unitary-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
 .unitary-head h3 { margin: 0; font-size: 1.2rem; }
 .unitary-sub { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); }
 .control-pill { font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.55rem; border-radius: 999px; text-align: center; line-height: 1.25; max-width: 8.5rem; flex-shrink: 0; }
 .control-pill--majority { background: rgba(18,181,203,0.16); color: var(--text); border: 1px solid #12b5cb; }
-.control-pill--largest { background: rgba(18,181,203,0.08); color: var(--muted); border: 1px solid var(--border); }
-.control-pill--noc { background: var(--surface-2, rgba(128,138,153,0.12)); color: var(--muted); border: 1px solid var(--border); }
-.unitary-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; margin: 1rem 0 0; font-size: 0.85rem; }
-.unitary-meta dt { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; }
-.unitary-meta dd { margin: 0.1rem 0 0; font-weight: 600; }
-.unitary-signals { margin-top: 0.9rem; font-size: 0.82rem; }
-.unitary-signals summary { cursor: pointer; color: var(--muted); }
-.unitary-signals ul { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+.control-pill--knife { background: rgba(245,158,11,0.14); color: var(--text); border: 1px solid #f59e0b; }
+.control-pill--noc { background: rgba(128,138,153,0.14); color: var(--muted); border: 1px solid var(--border); }
+
+.seatbar-wrap { margin: 1.4rem 0 1rem; }
+.seatbar { position: relative; display: flex; height: 26px; width: 100%; border-radius: 6px; background: rgba(128,138,153,0.18); }
+.seatbar-seg { height: 100%; }
+.seatbar-seg:first-child { border-radius: 6px 0 0 6px; }
+.seatbar-seg:last-child { border-radius: 0 6px 6px 0; }
+.seatbar-majority { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--text); opacity: 0.85; z-index: 2; }
+.seatbar-majority::after { content: "majority"; position: absolute; top: -1.1rem; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: var(--muted); white-space: nowrap; }
+.seatbar-caption { margin: 0.8rem 0 0; font-size: 0.82rem; color: var(--muted); }
+
+.seat-forecast { width: 100%; border-collapse: collapse; }
+.seat-forecast th { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; text-align: left; font-weight: 600; padding: 0.2rem 0.5rem; }
+.seat-forecast td { padding: 0.3rem 0.5rem; border-top: 1px solid var(--border); }
+.seat-forecast .seat-num { font-weight: 700; font-size: 1.05rem; }
+.seat-forecast .rng, .ward-table .rng, .compare-table th.rng { text-align: right; color: var(--muted); font-size: 0.85rem; }
 .party-swatch { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; margin-right: 0.4rem; vertical-align: middle; }
+
+.ward-detail { margin-top: 0.9rem; font-size: 0.82rem; }
+.ward-detail summary { cursor: pointer; color: var(--muted); }
+.ward-table { width: 100%; border-collapse: collapse; margin-top: 0.6rem; }
+.ward-table th { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; text-align: left; font-weight: 600; padding: 0.25rem 0.4rem; }
+.ward-table td { padding: 0.25rem 0.4rem; border-top: 1px solid var(--border); vertical-align: top; }
+.ward-table tr.is-marginal td { background: rgba(245,158,11,0.07); }
+.ward-src { color: #f59e0b; }
 
 .prose-lead { max-width: 62ch; color: var(--muted); }
 .rejected-model { margin-top: 1.75rem; }
@@ -207,5 +258,5 @@ function controlClass(call: string) {
 .compare-table th { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
 .td-districts { color: var(--muted); font-size: 0.82rem; max-width: 22ch; }
 .micro { font-size: 0.78rem; color: var(--muted); margin-top: 1rem; }
-@media (max-width: 640px) { .unitary-meta { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .unitary-grid { grid-template-columns: 1fr; } }
 </style>

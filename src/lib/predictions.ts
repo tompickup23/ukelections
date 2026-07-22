@@ -265,8 +265,18 @@ export function partyColour(party: string): string {
     "Plaid Cymru": "#3f9c35",
     "Independent": "#888888",
     "Workers Party": "#a78bfa",
+    "Workers Party of Britain": "#a78bfa",
     "SDP": "#8c1f3a",
     "Restore Britain": "#0f2545",
+    // Northern Ireland + Speaker (were falling to the grey default on the
+    // 650-seat choropleth and hemicycle).
+    "DUP": "#d46a4c",
+    "Sinn Féin": "#326760",
+    "SDLP": "#2aa82c",
+    "Alliance": "#f6cb2f",
+    "UUP": "#48a5ee",
+    "Traditional Unionist Voice - TUV": "#0c3a6a",
+    "Speaker seeking re-election": "#708090",
   };
   return map[party] || "#475467";
 }
