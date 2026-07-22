@@ -1,0 +1,138 @@
+{
+  "meta": {
+    "title": "Lancashire local government reorganisation: unitary models",
+    "summary": "On 16 July 2026 the government announced its decision to replace Lancashire's two-tier structure (Lancashire County Council + 12 districts) plus the two existing unitaries (Blackburn with Darwen, Blackpool) with four new unitary councils. This file holds the geography of that decided model and the competing 3- and 5-unitary options submitted during the process, for predictive comparison.",
+    "current_structure": {
+      "county": "lancashire",
+      "two_tier_districts": ["burnley", "chorley", "fylde", "hyndburn", "lancaster", "pendle", "preston", "ribble-valley", "rossendale", "south-ribble", "west-lancashire", "wyre"],
+      "existing_unitaries": ["blackburn-with-darwen", "blackpool"]
+    },
+    "process_timeline": {
+      "interim_plan_submitted": "2025-03-21",
+      "full_business_cases_submitted": "2025-11-28",
+      "mhclg_consultation_closed": "2026-03-26",
+      "government_decision": "2026-07-16",
+      "decision_by": "Secretary of State (Steve Reed)",
+      "decision_status": "Subject to Parliamentary approval; legally confirmed only once a Structural Change Order is made.",
+      "shadow_authority_elections": "2027-05",
+      "vesting_day": "2028-04-01"
+    },
+    "name_caveat": "None of the unitary names below are statutory. The six sponsoring councils' business case used North Lancashire / Fylde Coast / South Lancashire / East Lancashire; the county council's post-decision press release used North / West / East / South Lancashire, which confusingly reuses 'West Lancashire' for both a new unitary and a folded-in district. ('Pennine Lancashire' is the name of the rejected 3-unitary model's eastern unit, not a 4-unitary unit.) Preston's leader has said publicly it is 'too early to even know what our new unitary authority's name will be'. Treat all labels as working geographic shorthand only.",
+    "sources": [
+      {"label": "Lancaster City Council LGR committee report, 26 Nov 2025", "url": "https://committeeadmin.lancaster.gov.uk/documents/s92020/Council%20261125report%20002.pdf"},
+      {"label": "Lancashire County Council news release, 16 July 2026", "url": "https://news.lancashire.gov.uk/news/government-announces-local-government-reorganisation-decision-for-lancashire"},
+      {"label": "MHCLG consultation portal: Lancashire, Blackburn with Darwen, Blackpool", "url": "https://consult.communities.gov.uk/local-government-reorganisation/lancashire-blackburn-with-darwen-blackpool"},
+      {"label": "lancashirelgr.co.uk decision article", "url": "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"}
+    ]
+  },
+  "models": {
+    "four-unitary": {
+      "label": "Four-unitary model",
+      "short_label": "4 unitaries",
+      "status": "government-decided",
+      "status_note": "Selected by the government on 16 July 2026, subject to a Structural Change Order. This is the model that will hold shadow-authority elections in May 2027.",
+      "proposer": "Chorley, Lancaster, Preston, Ribble Valley, South Ribble and West Lancashire councils ('Four Lancashire for the Future')",
+      "is_decided": true,
+      "unitaries": [
+        {
+          "id": "north-lancashire",
+          "name": "North Lancashire",
+          "bid_name": "North Lancashire",
+          "districts": ["lancaster", "preston", "ribble-valley"],
+          "population": 373664
+        },
+        {
+          "id": "west-lancashire-coast",
+          "name": "West Lancashire (Fylde Coast)",
+          "bid_name": "Fylde Coast",
+          "govt_label": "West Lancashire",
+          "districts": ["blackpool", "fylde", "wyre"],
+          "population": 348381
+        },
+        {
+          "id": "east-lancashire",
+          "name": "East Lancashire",
+          "bid_name": "East Lancashire",
+          "govt_label": "East Lancashire",
+          "districts": ["blackburn-with-darwen", "burnley", "hyndburn", "pendle", "rossendale"],
+          "population": 520563
+        },
+        {
+          "id": "south-lancashire",
+          "name": "South Lancashire",
+          "bid_name": "South Lancashire",
+          "districts": ["chorley", "south-ribble", "west-lancashire"],
+          "population": 358947
+        }
+      ]
+    },
+    "three-unitary": {
+      "label": "Three-unitary model",
+      "short_label": "3 unitaries",
+      "status": "rejected",
+      "status_note": "A competing submission; not selected by the government. Groupings from the Lancaster City Council LGR report, 26 Nov 2025 (para 15b); unit names corroborated via contemporaneous coverage.",
+      "proposer": "Wyre, Blackburn with Darwen, Hyndburn, Fylde and Rossendale councils",
+      "is_decided": false,
+      "unitaries": [
+        {
+          "id": "central-lancashire-3u",
+          "name": "Central Lancashire",
+          "districts": ["chorley", "preston", "south-ribble", "west-lancashire"],
+          "population": null
+        },
+        {
+          "id": "coastal-lancashire-3u",
+          "name": "Coastal Lancashire",
+          "districts": ["blackpool", "fylde", "lancaster", "wyre"],
+          "population": null
+        },
+        {
+          "id": "pennine-lancashire-3u",
+          "name": "Pennine Lancashire",
+          "districts": ["blackburn-with-darwen", "burnley", "hyndburn", "pendle", "ribble-valley", "rossendale"],
+          "population": null
+        }
+      ]
+    },
+    "five-unitary": {
+      "label": "Five-unitary model",
+      "short_label": "5 unitaries",
+      "status": "rejected",
+      "status_note": "A competing submission by Burnley and Pendle councils (28 Nov 2025); not selected. Groupings triangulated from the Lancaster City Council LGR report (para 15e) plus Burnley/Pendle coverage; all districts kept whole. Populations other than the East unit (~270,000, first-party Pendle figure) and the South unit (358,947) are unverified.",
+      "proposer": "Burnley and Pendle councils",
+      "is_decided": false,
+      "unitaries": [
+        {
+          "id": "east-5u",
+          "name": "East",
+          "districts": ["burnley", "pendle", "rossendale"],
+          "population": 270000
+        },
+        {
+          "id": "middle-5u",
+          "name": "Middle",
+          "districts": ["blackburn-with-darwen", "hyndburn", "ribble-valley"],
+          "population": null
+        },
+        {
+          "id": "north-5u",
+          "name": "North",
+          "districts": ["lancaster", "wyre"],
+          "population": null
+        },
+        {
+          "id": "south-5u",
+          "name": "South",
+          "districts": ["chorley", "south-ribble", "west-lancashire"],
+          "population": 358947
+        },
+        {
+          "id": "west-5u",
+          "name": "West",
+          "districts": ["blackpool", "fylde", "preston"],
+          "population": null
+        }
+      ]
+    }
+  }
+}
