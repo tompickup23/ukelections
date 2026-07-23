@@ -3,7 +3,7 @@
     "generated_at": "2026-07-22T00:00:00.000Z",
     "model_version": "ukelections.lancashire-unitaries.v0.2.0-wardlevel",
     "method": "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Seats allocated under first-past-the-post bloc vote: the leading party's slate sweeps a safe ward, but a runner-up within 10 points picks off one seat (two in a near-tied four-seat ward). Seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
-    "voting_system": "First-past-the-post. English principal-council elections are FPTP by statute (multi-member wards use the bloc vote); the Elections Act 2022 moved mayors and PCCs to FPTP too. No change is legislated or proposed for the 2027 shadow elections. Confirmed by default via the Structural Change Order rather than by a Lancashire-specific ruling; the order is still subject to Parliamentary approval.",
+    "voting_system": "First-past-the-post, confirmed. Elections to English principal councils, including the new unitaries and their May 2027 shadow authorities, are held under first-past-the-post (multi-member wards use the bloc vote). This is set by general law, not just precedent: the English Devolution and Community Empowerment Act 2026, the same Act that creates these unitaries and reformed mayoral and PCC elections (moving them back to the supplementary vote), deliberately left principal-council elections on first-past-the-post. Campaigners pressed for STV in council elections during the Bill's passage; it was not adopted. A directly-elected Lancashire mayor, if one is created for 2027, would be a separate contest under the supplementary vote and does not affect this council seat model.",
     "election_target": "May 2027 shadow-authority elections",
     "monte_carlo_draws": 2000,
     "total_councillors": 313,
@@ -34,6 +34,10 @@
       {
         "label": "lancashirelgr.co.uk decision article",
         "url": "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
+      },
+      {
+        "label": "English Devolution and Community Empowerment Act 2026 (legislation.gov.uk): reforms mayoral/PCC voting to the supplementary vote, leaves principal-council elections on first-past-the-post",
+        "url": "https://www.legislation.gov.uk/ukpga/2026/23"
       }
     ],
     "warding_source": "4UA warding.xlsx (Tom Pickup, 22 Jul 2026); ward-to-source mapping derived and verified against LCC 2025 divisions + Blackburn 2026 borough wards.",
