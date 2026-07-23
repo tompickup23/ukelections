@@ -214,13 +214,18 @@ const leaderboard: Lead[] = [
     <p>
       Westminster by-elections are rare; council by-elections happen most Thursdays and are the
       highest-frequency real-vote signal between general elections. Across the
-      {localAll.length} ward contests since 19 June 2026, Reform UK made
+      {localAll.length} ward contests since {prettyDate(localData.window.from)}, Reform UK made
       <strong>{refGains} gain{refGains === 1 ? "" : "s"}</strong>, held
       <strong>{refHolds}</strong> of its own seats and lost
-      <strong>{refLosses}</strong> (Llangennech to Plaid Cymru). The gains came off Labour,
-      the Conservatives and independents across England, Wales and, notably, Scotland
-      (Larkhall, South Lanarkshire, under STV).
+      <strong>{refLosses}</strong>: Llangennech to Plaid Cymru, and Old Catton in Norfolk to the
+      Conservatives, where Reform's vote fell to third. The 16 July round was the first real sign of
+      Reform slipping back from its May 2025 county peak in these low-turnout contests, even as it
+      picked up the force-wide Norfolk Police and Crime Commissioner. That mean-reversion is exactly
+      why our Lancashire unitary model swings each ward off the 2025 county result rather than
+      freezing it. The earlier gains came off Labour, the Conservatives and independents across
+      England, Wales and, notably, Scotland (Larkhall, South Lanarkshire, under STV).
     </p>
+    {localData.pending_note && <p class="muted">{localData.pending_note}</p>}
     {localDates.map((d) => (
       <details class="local-date">
         <summary>

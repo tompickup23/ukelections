@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "model_version": "clacton-by-election-v1",
-  "generated_at": "2026-07-11T12:00:00.000Z",
+  "model_version": "clacton-by-election-v2",
+  "generated_at": "2026-07-23T12:00:00.000Z",
   "status": "upcoming",
   "contest": {
     "constituency_slug": "clacton",
@@ -32,37 +32,56 @@
     ],
     "note": "All five parties confirmed within days of the writ that they will not contest the by-election, framing it as unnecessary and self-inflicted. Kemi Badenoch called it 'Farage's fake by-election'. Restore Britain, the party most directly competing for Reform's vote, also declined to stand."
   },
+  "field": {
+    "candidate_count": 34,
+    "nominations_closed": "2026-07-17",
+    "record_note": "A record 34 candidates were nominated, the most for any UK by-election, beating the 26 who stood at Haltemprice and Howden in 2008. The size of the field is a direct product of the major-party boycott: with no mainstream opponent on the ballot, minor parties, independents and novelty candidates filled the vacuum.",
+    "named_of_note": "Named below are the most notable; the balance are minor-party, novelty (several Monster Raving Loony) and independent candidates."
+  },
   "candidates": [
     {
       "party": "Reform UK",
       "candidate": "Nigel Farage",
-      "status": "declared (nominations close 17 July)",
-      "note": "Party leader; MP for Clacton July 2024 to July 2026. Won the seat at GE2024 with 46.2%."
-    },
-    {
-      "party": "Reclaim",
-      "candidate": "Laurence Fox",
-      "status": "declared (nominations close 17 July)"
+      "status": "nominated",
+      "note": "Party leader; MP for Clacton July 2024 to July 2026. Won the seat at GE2024 with 46.2%. The overwhelming favourite."
     },
     {
       "party": "Count Binface Party",
       "candidate": "Count Binface",
-      "status": "declared (nominations close 17 July)"
+      "status": "nominated",
+      "note": "The de-facto main challenger given the boycott. Raised over 15,000 pounds within a day; green-energy industrialist Dale Vince offered to fund the campaign. An Ipsos 'who do you want to win' poll put Binface on 33% to Farage's 21%, a novelty-driven question rather than a turnout-modelled vote-intention figure."
+    },
+    {
+      "party": "Reclaim",
+      "candidate": "Laurence Fox",
+      "status": "nominated"
+    },
+    {
+      "party": "SDP",
+      "candidate": "William Clouston",
+      "status": "nominated",
+      "note": "SDP leader."
+    },
+    {
+      "party": "Rejoin EU",
+      "candidate": "John Stevens",
+      "status": "nominated",
+      "note": "Former Conservative MEP."
     },
     {
       "party": "Independent",
       "candidate": "Piers Corbyn",
-      "status": "declared (nominations close 17 July)"
+      "status": "nominated"
     },
     {
       "party": "British Democratic Party",
       "candidate": "Kai Stephens",
-      "status": "declared (nominations close 17 July)"
+      "status": "nominated"
     },
     {
       "party": "Forward Party",
       "candidate": "Adham Alkhatip",
-      "status": "declared (nominations close 17 July)"
+      "status": "nominated"
     }
   ],
   "prior_result": {
@@ -90,14 +109,34 @@
     "classification": "no_forecast",
     "method": "qualitative",
     "provider": "UK Elections",
-    "headline": "No vote-share forecast: with Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain all declining to stand, there is no competitive race for a swing model to forecast. Farage is the overwhelming favourite by default.",
-    "no_forecast_rationale": "Every quantitative method we benchmark (GE swing model, poll of polls, local signal) assumes the major parties contest the seat. A five-party boycott breaks that assumption: national vote-intention shares cannot be mapped onto a ballot missing parties that hold roughly two-thirds of the national vote between them. Publishing invented shares would repeat the Makerfield mistake in a different costume. We will grade the outcome (winner, majority, turnout) against the qualitative call above, and treat turnout as the only genuinely open question."
+    "headline": "No vote-share forecast. With Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain all standing aside, no mainstream opponent is on the ballot. Farage is the overwhelming favourite: psephologist John Curtice expects him to win comfortably in a seat that voted roughly 75% Leave in 2016. The only genuinely open question is turnout, in mid-August with the result a foregone conclusion.",
+    "open_questions": [
+      "Turnout: an August by-election with no mainstream contest is likely to be low; the 2014 Carswell by-election (also a Clacton resign-and-recontest) drew 51.0%.",
+      "The runner-up: with the field a record 34 candidates and no major party standing, second place is a real contest between Count Binface, minor-party and independent candidates. An Ipsos 'who do you want to win' question put Binface ahead of Farage, but that is a novelty measure, not a turnout-weighted vote-intention.",
+      "Farage's margin and share versus his 46.2% at GE2024: a lower share against a fractured field would still be a comfortable win but a weaker mandate."
+    ],
+    "no_forecast_rationale": "Every quantitative method we benchmark (GE swing model, poll of polls, local signal) assumes the major parties contest the seat. A five-party boycott breaks that assumption: national vote-intention shares cannot be mapped onto a ballot missing parties that hold roughly two-thirds of the national vote between them. Publishing invented shares would repeat the Makerfield mistake in a different costume. We will grade the outcome (winner, margin, turnout) against the qualitative call above."
   },
   "sources": [
     {
       "label": "Wikipedia: 2026 Clacton by-election",
       "url": "https://en.wikipedia.org/wiki/2026_Clacton_by-election",
-      "retrieved_at": "2026-07-11"
+      "retrieved_at": "2026-07-23"
+    },
+    {
+      "label": "ITV News, 17 July 2026: record field of candidates",
+      "url": "https://www.itv.com/news/2026-07-17/nigel-farage-to-compete-with-record-33-candidates-in-clacton-by-election",
+      "retrieved_at": "2026-07-23"
+    },
+    {
+      "label": "Al Jazeera, 18 July 2026: record 34 candidates as Farage seeks return",
+      "url": "https://www.aljazeera.com/news/2026/7/18/uk-by-election-sees-record-34-candidates-as-farage-seeks-return",
+      "retrieved_at": "2026-07-23"
+    },
+    {
+      "label": "Who Can I Vote For: Clacton candidate list",
+      "url": "https://whocanivotefor.co.uk/elections/parl.clacton.by.2026-08-13/clacton/",
+      "retrieved_at": "2026-07-23"
     },
     {
       "label": "AP via US News, 10 July 2026: by-election set for 13 August",

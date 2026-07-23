@@ -1,94 +1,493 @@
 {
-  "generated_at": "2026-07-11T12:00:00.000Z",
-  "label": "Local council by-elections, 19 June to 11 July 2026",
-  "window": { "from": "2026-06-19", "to": "2026-07-11" },
+  "generated_at": "2026-07-23T12:00:00.000Z",
+  "label": "Local council by-elections, 19 June to 16 July 2026",
+  "window": {
+    "from": "2026-06-19",
+    "to": "2026-07-16"
+  },
   "method_note": "Winner and previous-holder parties as published by ALDC and the aggregated per-date roundups, cross-checked where both cover a contest. Vote shares are quoted only where the aggregator published one; per-candidate counts are on each returning officer's page.",
   "dates": [
     {
       "date": "2026-06-25",
       "sources": [
-        { "label": "Per-date roundup, 25 June 2026", "url": "https://www.binlabour.com/2026/06/council-by-elections-250626.html" },
-        { "label": "ALDC by-election results", "url": "https://www.aldc.org/category/by-election-results/" }
+        {
+          "label": "Per-date roundup, 25 June 2026",
+          "url": "https://www.binlabour.com/2026/06/council-by-elections-250626.html"
+        },
+        {
+          "label": "ALDC by-election results",
+          "url": "https://www.aldc.org/category/by-election-results/"
+        }
       ],
       "contests": [
-        { "ward": "Camp Hill", "council": "Nuneaton and Bedworth", "winner": "Reform UK", "previous": "Labour", "share_pct": 48.7, "note": "Labour 42.4%" },
-        { "ward": "Rhyl South", "council": "Denbighshire", "winner": "Reform UK", "previous": "Labour", "share_pct": 44.3 },
-        { "ward": "Wilnecote", "council": "Tamworth", "winner": "Reform UK", "previous": "Conservative", "share_pct": 46.4 },
-        { "ward": "St Helens Town Centre (2 seats)", "council": "St Helens", "winner": "Reform UK / Labour", "previous": "Labour x2", "note": "One Reform gain, one Labour hold" },
-        { "ward": "Haydock", "council": "St Helens", "winner": "Reform UK", "previous": "Reform UK", "share_pct": 33.0 },
-        { "ward": "Stretton", "council": "Staffordshire CC", "winner": "Reform UK", "previous": "Reform UK", "share_pct": 37.1, "note": "Conservative 35.8%" },
-        { "ward": "Roman Bank and Peckover", "council": "Cambridgeshire CC", "winner": "Reform UK", "previous": "Reform UK", "share_pct": 39.0, "note": "Conservative 38.0%" },
-        { "ward": "Llangennech", "council": "Carmarthenshire", "winner": "Plaid Cymru", "previous": "Reform UK", "share_pct": 41.1, "note": "Reform 24.2%. Reform's only defence loss of the window" },
-        { "ward": "George Street/Harbour", "council": "Aberdeen City", "winner": "SNP", "previous": "Liberal Democrats" },
-        { "ward": "Goldsmid", "council": "Brighton and Hove", "winner": "Green Party", "previous": "Labour" },
-        { "ward": "Llanrhaeadr-yng-Nghinmeirch", "council": "Denbighshire", "winner": "Independent", "previous": "Plaid Cymru" },
-        { "ward": "North Acton", "council": "Ealing", "winner": "Green Party", "previous": "Green Party" },
-        { "ward": "Dalston", "council": "Hackney", "winner": "Green Party", "previous": "Green Party" },
-        { "ward": "Hackney Central", "council": "Hackney", "winner": "Green Party", "previous": "Green Party" },
-        { "ward": "Farnworth", "council": "Halton", "winner": "Labour", "previous": "Labour" },
-        { "ward": "Northumberland Park", "council": "Haringey", "winner": "Labour", "previous": "Green Party" },
-        { "ward": "Woodside", "council": "Haringey", "winner": "Green Party", "previous": "Labour" },
-        { "ward": "Bushey Park", "council": "Hertsmere", "winner": "Conservative", "previous": "Liberal Democrats" },
-        { "ward": "East Sutherland and Edderton", "council": "Highland", "winner": "Independent", "previous": "Independent" },
-        { "ward": "Dowlais and Pant", "council": "Merthyr Tydfil", "winner": "Labour", "previous": "Independent" },
-        { "ward": "Treorchy", "council": "Rhondda Cynon Taf", "winner": "Plaid Cymru", "previous": "Plaid Cymru", "share_pct": 70.8 },
-        { "ward": "Dawlish South West", "council": "Teignbridge", "winner": "Liberal Democrats", "previous": "Liberal Democrats" },
-        { "ward": "Stort Valley", "council": "Uttlesford", "winner": "Conservative", "previous": "Liberal Democrats" }
+        {
+          "ward": "Camp Hill",
+          "council": "Nuneaton and Bedworth",
+          "winner": "Reform UK",
+          "previous": "Labour",
+          "share_pct": 48.7,
+          "note": "Labour 42.4%"
+        },
+        {
+          "ward": "Rhyl South",
+          "council": "Denbighshire",
+          "winner": "Reform UK",
+          "previous": "Labour",
+          "share_pct": 44.3
+        },
+        {
+          "ward": "Wilnecote",
+          "council": "Tamworth",
+          "winner": "Reform UK",
+          "previous": "Conservative",
+          "share_pct": 46.4
+        },
+        {
+          "ward": "St Helens Town Centre (2 seats)",
+          "council": "St Helens",
+          "winner": "Reform UK / Labour",
+          "previous": "Labour x2",
+          "note": "One Reform gain, one Labour hold"
+        },
+        {
+          "ward": "Haydock",
+          "council": "St Helens",
+          "winner": "Reform UK",
+          "previous": "Reform UK",
+          "share_pct": 33
+        },
+        {
+          "ward": "Stretton",
+          "council": "Staffordshire CC",
+          "winner": "Reform UK",
+          "previous": "Reform UK",
+          "share_pct": 37.1,
+          "note": "Conservative 35.8%"
+        },
+        {
+          "ward": "Roman Bank and Peckover",
+          "council": "Cambridgeshire CC",
+          "winner": "Reform UK",
+          "previous": "Reform UK",
+          "share_pct": 39,
+          "note": "Conservative 38.0%"
+        },
+        {
+          "ward": "Llangennech",
+          "council": "Carmarthenshire",
+          "winner": "Plaid Cymru",
+          "previous": "Reform UK",
+          "share_pct": 41.1,
+          "note": "Reform 24.2%. Reform's only defence loss of the window"
+        },
+        {
+          "ward": "George Street/Harbour",
+          "council": "Aberdeen City",
+          "winner": "SNP",
+          "previous": "Liberal Democrats"
+        },
+        {
+          "ward": "Goldsmid",
+          "council": "Brighton and Hove",
+          "winner": "Green Party",
+          "previous": "Labour"
+        },
+        {
+          "ward": "Llanrhaeadr-yng-Nghinmeirch",
+          "council": "Denbighshire",
+          "winner": "Independent",
+          "previous": "Plaid Cymru"
+        },
+        {
+          "ward": "North Acton",
+          "council": "Ealing",
+          "winner": "Green Party",
+          "previous": "Green Party"
+        },
+        {
+          "ward": "Dalston",
+          "council": "Hackney",
+          "winner": "Green Party",
+          "previous": "Green Party"
+        },
+        {
+          "ward": "Hackney Central",
+          "council": "Hackney",
+          "winner": "Green Party",
+          "previous": "Green Party"
+        },
+        {
+          "ward": "Farnworth",
+          "council": "Halton",
+          "winner": "Labour",
+          "previous": "Labour"
+        },
+        {
+          "ward": "Northumberland Park",
+          "council": "Haringey",
+          "winner": "Labour",
+          "previous": "Green Party"
+        },
+        {
+          "ward": "Woodside",
+          "council": "Haringey",
+          "winner": "Green Party",
+          "previous": "Labour"
+        },
+        {
+          "ward": "Bushey Park",
+          "council": "Hertsmere",
+          "winner": "Conservative",
+          "previous": "Liberal Democrats"
+        },
+        {
+          "ward": "East Sutherland and Edderton",
+          "council": "Highland",
+          "winner": "Independent",
+          "previous": "Independent"
+        },
+        {
+          "ward": "Dowlais and Pant",
+          "council": "Merthyr Tydfil",
+          "winner": "Labour",
+          "previous": "Independent"
+        },
+        {
+          "ward": "Treorchy",
+          "council": "Rhondda Cynon Taf",
+          "winner": "Plaid Cymru",
+          "previous": "Plaid Cymru",
+          "share_pct": 70.8
+        },
+        {
+          "ward": "Dawlish South West",
+          "council": "Teignbridge",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats"
+        },
+        {
+          "ward": "Stort Valley",
+          "council": "Uttlesford",
+          "winner": "Conservative",
+          "previous": "Liberal Democrats"
+        }
       ]
     },
     {
       "date": "2026-07-02",
       "sources": [
-        { "label": "ALDC report, 2 July 2026", "url": "https://www.libdemvoice.org/byelection-report-2-july-2026-80047.html" },
-        { "label": "Andrew Teale preview", "url": "https://andrewspreviews.substack.com/p/previewing-the-twelve-by-elections" }
+        {
+          "label": "ALDC report, 2 July 2026",
+          "url": "https://www.libdemvoice.org/byelection-report-2-july-2026-80047.html"
+        },
+        {
+          "label": "Andrew Teale preview",
+          "url": "https://andrewspreviews.substack.com/p/previewing-the-twelve-by-elections"
+        }
       ],
       "contests": [
-        { "ward": "Llantarnam", "council": "Torfaen", "winner": "Reform UK", "previous": "Independent", "share_pct": 42.7, "note": "Outgoing councillor had defected to Reform, so in practice a Reform defence" },
-        { "ward": "Llanyre and Nantmel", "council": "Powys", "winner": "Reform UK", "previous": "Independent", "share_pct": 41.6, "note": "Turnout 49.6%" },
-        { "ward": "Lutterworth East", "council": "Harborough", "winner": "Reform UK", "previous": "Labour", "share_pct": 28.2, "note": "Conservative 27.0%" },
-        { "ward": "Yscir with Honddu Isaf and Llandew", "council": "Powys", "winner": "Liberal Democrats", "previous": "Conservative", "share_pct": 39.6, "note": "Reform 34.5%" },
-        { "ward": "Glantwymyn", "council": "Powys", "winner": "Plaid Cymru", "previous": "Plaid Cymru", "share_pct": 81.8 },
-        { "ward": "Peterhead South and Cruden", "council": "Aberdeenshire", "winner": "SNP", "previous": "Conservative", "note": "Reform 22.9% on first preferences, second" },
-        { "ward": "St Michaels", "council": "Cotswold", "winner": "Liberal Democrats", "previous": "Liberal Democrats" },
-        { "ward": "Cirencester Park", "council": "Gloucestershire CC", "winner": "Liberal Democrats", "previous": "Liberal Democrats" },
-        { "ward": "St Leonards and St Ives", "council": "Dorset", "winner": "Conservative", "previous": "Conservative", "share_pct": 37.9, "note": "Reform 33.6%" },
-        { "ward": "Malinslee and Dawley Bank", "council": "Telford and Wrekin", "winner": "Labour", "previous": "Labour", "share_pct": 42.9, "note": "Reform 41.4%, 1.5pp short" },
-        { "ward": "Horwich North", "council": "Bolton", "winner": "Horwich and Blackrod First", "previous": "Horwich and Blackrod First", "share_pct": 50.0 },
-        { "ward": "Weaver and Cuddington", "council": "Cheshire West and Chester", "winner": "Independent", "previous": "Conservative" }
+        {
+          "ward": "Llantarnam",
+          "council": "Torfaen",
+          "winner": "Reform UK",
+          "previous": "Independent",
+          "share_pct": 42.7,
+          "note": "Outgoing councillor had defected to Reform, so in practice a Reform defence"
+        },
+        {
+          "ward": "Llanyre and Nantmel",
+          "council": "Powys",
+          "winner": "Reform UK",
+          "previous": "Independent",
+          "share_pct": 41.6,
+          "note": "Turnout 49.6%"
+        },
+        {
+          "ward": "Lutterworth East",
+          "council": "Harborough",
+          "winner": "Reform UK",
+          "previous": "Labour",
+          "share_pct": 28.2,
+          "note": "Conservative 27.0%"
+        },
+        {
+          "ward": "Yscir with Honddu Isaf and Llandew",
+          "council": "Powys",
+          "winner": "Liberal Democrats",
+          "previous": "Conservative",
+          "share_pct": 39.6,
+          "note": "Reform 34.5%"
+        },
+        {
+          "ward": "Glantwymyn",
+          "council": "Powys",
+          "winner": "Plaid Cymru",
+          "previous": "Plaid Cymru",
+          "share_pct": 81.8
+        },
+        {
+          "ward": "Peterhead South and Cruden",
+          "council": "Aberdeenshire",
+          "winner": "SNP",
+          "previous": "Conservative",
+          "note": "Reform 22.9% on first preferences, second"
+        },
+        {
+          "ward": "St Michaels",
+          "council": "Cotswold",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats"
+        },
+        {
+          "ward": "Cirencester Park",
+          "council": "Gloucestershire CC",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats"
+        },
+        {
+          "ward": "St Leonards and St Ives",
+          "council": "Dorset",
+          "winner": "Conservative",
+          "previous": "Conservative",
+          "share_pct": 37.9,
+          "note": "Reform 33.6%"
+        },
+        {
+          "ward": "Malinslee and Dawley Bank",
+          "council": "Telford and Wrekin",
+          "winner": "Labour",
+          "previous": "Labour",
+          "share_pct": 42.9,
+          "note": "Reform 41.4%, 1.5pp short"
+        },
+        {
+          "ward": "Horwich North",
+          "council": "Bolton",
+          "winner": "Horwich and Blackrod First",
+          "previous": "Horwich and Blackrod First",
+          "share_pct": 50
+        },
+        {
+          "ward": "Weaver and Cuddington",
+          "council": "Cheshire West and Chester",
+          "winner": "Independent",
+          "previous": "Conservative"
+        }
       ]
     },
     {
       "date": "2026-07-07",
       "sources": [
-        { "label": "Andrew Teale preview (Haslemere)", "url": "https://andrewspreviews.substack.com/p/previewing-the-haslemere-by-elections" }
+        {
+          "label": "Andrew Teale preview (Haslemere)",
+          "url": "https://andrewspreviews.substack.com/p/previewing-the-haslemere-by-elections"
+        }
       ],
       "contests": [
-        { "ward": "Haslemere", "council": "Surrey CC", "winner": "Liberal Democrats", "previous": "Liberal Democrats", "share_pct": 47.8, "note": "Tuesday poll; caused by the death of the sitting councillor" },
-        { "ward": "Haslemere West", "council": "Waverley", "winner": "Liberal Democrats", "previous": "Liberal Democrats", "share_pct": 58.6 }
+        {
+          "ward": "Haslemere",
+          "council": "Surrey CC",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats",
+          "share_pct": 47.8,
+          "note": "Tuesday poll; caused by the death of the sitting councillor"
+        },
+        {
+          "ward": "Haslemere West",
+          "council": "Waverley",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats",
+          "share_pct": 58.6
+        }
       ]
     },
     {
       "date": "2026-07-09",
       "sources": [
-        { "label": "Per-date roundup, 9 July 2026", "url": "https://www.binlabour.com/2026/07/council-by-elections-090726.html" },
-        { "label": "Andrew Teale preview", "url": "https://andrewspreviews.substack.com/p/previewing-the-14-council-by-elections" }
+        {
+          "label": "Per-date roundup, 9 July 2026",
+          "url": "https://www.binlabour.com/2026/07/council-by-elections-090726.html"
+        },
+        {
+          "label": "Andrew Teale preview",
+          "url": "https://andrewspreviews.substack.com/p/previewing-the-14-council-by-elections"
+        }
       ],
       "contests": [
-        { "ward": "Larkhall", "council": "South Lanarkshire", "winner": "Reform UK", "previous": "Labour", "share_pct": 35.2, "note": "First preferences; elected at stage 4 of the STV count. A notable Scottish gain" },
-        { "ward": "Connah's Quay Central", "council": "Flintshire", "winner": "Reform UK", "previous": "Independent", "share_pct": 48.1 },
-        { "ward": "High Fell", "council": "Gateshead", "winner": "Reform UK", "previous": "Reform UK", "note": "Held by 5 votes, 564 to Labour's 559" },
-        { "ward": "Regent's Park", "council": "Camden", "winner": "Labour", "previous": "Green Party" },
-        { "ward": "Streatham St Leonard's", "council": "Lambeth", "winner": "Liberal Democrats", "previous": "Green Party", "note": "Won from third place" },
-        { "ward": "Clapham Park", "council": "Lambeth", "winner": "Green Party", "previous": "Green Party" },
-        { "ward": "Kinwarton", "council": "Stratford-on-Avon", "winner": "Conservative", "previous": "Liberal Democrats", "note": "By 7 votes" },
-        { "ward": "Pembroke Dock Market", "council": "Pembrokeshire", "winner": "Conservative", "previous": "Independent" },
-        { "ward": "Splott", "council": "Cardiff", "winner": "Labour", "previous": "Labour", "note": "Vacancy caused by election to the Senedd" },
-        { "ward": "Baruc", "council": "Vale of Glamorgan", "winner": "Plaid Cymru", "previous": "Plaid Cymru", "note": "Vacancy caused by election to the Senedd" },
-        { "ward": "Trebanos", "council": "Neath Port Talbot", "winner": "Plaid Cymru", "previous": "Plaid Cymru", "note": "Vacancy caused by election to the Senedd" },
-        { "ward": "Llanrug", "council": "Gwynedd", "winner": "Independent", "previous": "Plaid Cymru", "note": "Vacancy caused by election to the Senedd" },
-        { "ward": "Argoed and New Brighton", "council": "Flintshire", "winner": "Liberal Democrats", "previous": "Liberal Democrats", "note": "Labour fifth on 7.3%" },
-        { "ward": "Suffield Park", "council": "North Norfolk", "winner": "Liberal Democrats", "previous": "Liberal Democrats", "share_pct": 65.4 }
+        {
+          "ward": "Larkhall",
+          "council": "South Lanarkshire",
+          "winner": "Reform UK",
+          "previous": "Labour",
+          "share_pct": 35.2,
+          "note": "First preferences; elected at stage 4 of the STV count. A notable Scottish gain"
+        },
+        {
+          "ward": "Connah's Quay Central",
+          "council": "Flintshire",
+          "winner": "Reform UK",
+          "previous": "Independent",
+          "share_pct": 48.1
+        },
+        {
+          "ward": "High Fell",
+          "council": "Gateshead",
+          "winner": "Reform UK",
+          "previous": "Reform UK",
+          "note": "Held by 5 votes, 564 to Labour's 559"
+        },
+        {
+          "ward": "Regent's Park",
+          "council": "Camden",
+          "winner": "Labour",
+          "previous": "Green Party"
+        },
+        {
+          "ward": "Streatham St Leonard's",
+          "council": "Lambeth",
+          "winner": "Liberal Democrats",
+          "previous": "Green Party",
+          "note": "Won from third place"
+        },
+        {
+          "ward": "Clapham Park",
+          "council": "Lambeth",
+          "winner": "Green Party",
+          "previous": "Green Party"
+        },
+        {
+          "ward": "Kinwarton",
+          "council": "Stratford-on-Avon",
+          "winner": "Conservative",
+          "previous": "Liberal Democrats",
+          "note": "By 7 votes"
+        },
+        {
+          "ward": "Pembroke Dock Market",
+          "council": "Pembrokeshire",
+          "winner": "Conservative",
+          "previous": "Independent"
+        },
+        {
+          "ward": "Splott",
+          "council": "Cardiff",
+          "winner": "Labour",
+          "previous": "Labour",
+          "note": "Vacancy caused by election to the Senedd"
+        },
+        {
+          "ward": "Baruc",
+          "council": "Vale of Glamorgan",
+          "winner": "Plaid Cymru",
+          "previous": "Plaid Cymru",
+          "note": "Vacancy caused by election to the Senedd"
+        },
+        {
+          "ward": "Trebanos",
+          "council": "Neath Port Talbot",
+          "winner": "Plaid Cymru",
+          "previous": "Plaid Cymru",
+          "note": "Vacancy caused by election to the Senedd"
+        },
+        {
+          "ward": "Llanrug",
+          "council": "Gwynedd",
+          "winner": "Independent",
+          "previous": "Plaid Cymru",
+          "note": "Vacancy caused by election to the Senedd"
+        },
+        {
+          "ward": "Argoed and New Brighton",
+          "council": "Flintshire",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats",
+          "note": "Labour fifth on 7.3%"
+        },
+        {
+          "ward": "Suffield Park",
+          "council": "North Norfolk",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats",
+          "share_pct": 65.4
+        }
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "sources": [
+        {
+          "label": "LocalCouncils.co.uk",
+          "url": "https://www.localcouncils.co.uk/2026/07/little-surprise-in-old-catton/"
+        },
+        {
+          "label": "Andrew's Previews (16 July)",
+          "url": "https://andrewspreviews.substack.com/p/previewing-the-nine-by-elections"
+        },
+        {
+          "label": "Old Catton result (whocanivotefor)",
+          "url": "https://whocanivotefor.co.uk/elections/local.norfolk.old-catton.by.2026-07-16/old-catton/"
+        }
+      ],
+      "contests": [
+        {
+          "ward": "Old Catton & Sprowston West",
+          "council": "Norfolk County Council",
+          "winner": "Conservative",
+          "previous": "Reform UK",
+          "share_pct": 34.5,
+          "note": "Reform fell to third on 19.9%; Green 32.7%. A Reform loss from its May 2025 county sweep."
+        },
+        {
+          "ward": "Ramsey & Bury",
+          "council": "Cambridgeshire County Council",
+          "winner": "Reform UK",
+          "previous": "Reform UK",
+          "note": "Reform hold."
+        },
+        {
+          "ward": "Fletton & Woodston",
+          "council": "Peterborough",
+          "winner": "Green Party",
+          "previous": "Labour",
+          "note": "Green gain from Labour."
+        },
+        {
+          "ward": "Dereham Toftwood",
+          "council": "Breckland",
+          "winner": "Conservative",
+          "previous": "Labour",
+          "note": "Conservative gain from Labour."
+        },
+        {
+          "ward": "Kidlington West",
+          "council": "Cherwell",
+          "winner": "Liberal Democrats",
+          "previous": "Liberal Democrats",
+          "note": "Liberal Democrat hold."
+        },
+        {
+          "ward": "Wellington",
+          "council": "Rushmoor",
+          "winner": "Labour",
+          "previous": "Labour",
+          "note": "Labour hold."
+        },
+        {
+          "ward": "Himley & Swindon",
+          "council": "South Staffordshire",
+          "winner": "Conservative",
+          "previous": "Conservative",
+          "note": "Conservative hold."
+        },
+        {
+          "ward": "Manor",
+          "council": "Stafford",
+          "winner": "Labour",
+          "previous": "Labour",
+          "note": "Labour hold."
+        }
       ]
     }
-  ]
+  ],
+  "pending_note": "Five further contests polled on 23 July 2026 (including two Grays seats in Thurrock that Reform is defending after its own councillors resigned); results due from 24 July."
 }
