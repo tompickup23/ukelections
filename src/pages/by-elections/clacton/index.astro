@@ -102,6 +102,9 @@ const timeline: Array<{ date: string; event: string }> = [
       <strong>Five parties are boycotting: {data.boycott.parties_not_standing.map((p: string) => shortPartyLabel(p)).join(", ")}.</strong>
       <span class="backtest-detail">{data.boycott.note}</span>
     </div>
+    {data.field && (
+      <p class="caption" style="margin-top:var(--space-md)">{data.field.record_note}</p>
+    )}
     <table class="seat-table" style="margin-top:var(--space-md)">
       <thead><tr><th>Candidate</th><th>Party</th><th>Status</th></tr></thead>
       <tbody>
@@ -118,8 +121,9 @@ const timeline: Array<{ date: string; event: string }> = [
       </tbody>
     </table>
     <p class="caption">
-      Declared candidates as of 11 July 2026. Nominations close 17 July; the final list is the
-      returning officer's statement of persons nominated.
+      The most notable of the {data.field ? data.field.candidate_count : ""} candidates on the ballot;
+      nominations closed 17 July 2026. The balance are minor-party, novelty (several Monster Raving Loony)
+      and independent candidates.
     </p>
   </section>
 
@@ -146,12 +150,14 @@ const timeline: Array<{ date: string; event: string }> = [
       <h2>The open questions</h2>
     </div>
     <p>
-      With no competitive opposition, the winner call carries almost no information. What we will
-      record and grade when the result declares: the winner (our qualitative call is Farage),
-      his vote share against the 46.2% he won in a contested 2024 race, and above all
-      <strong>turnout</strong>. The 2014 Carswell resign-and-recontest by-election managed 51.0%
-      turnout with all major parties standing; a five-party boycott in August makes turnout the
-      only genuinely open number on the ballot.
+      With no mainstream opposition, the winner call carries almost no information: John Curtice expects
+      Farage to win comfortably in a seat that voted around 75% Leave. What we will record and grade when
+      the result declares: <strong>turnout</strong> (the 2014 Carswell resign-and-recontest managed 51.0%,
+      but that had all major parties standing, and this is mid-August); Farage's share against the 46.2% he
+      won in a contested 2024 race; and <strong>second place</strong>, a genuine contest across a record
+      field with no major party in it. An Ipsos "who do you want to win" question put Count Binface ahead
+      of Farage, but that is a novelty measure of sentiment, not a turnout-weighted vote intention, and we
+      are not treating it as a forecast.
     </p>
     <p class="muted-row">
       Sources:
