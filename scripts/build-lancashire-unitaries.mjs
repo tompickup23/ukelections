@@ -241,6 +241,25 @@ const N_SIM = 2000;
 const SIGMA_WARD = 0.03; // idiosyncratic per-ward
 function districtSigma(quality) { return quality === "proxy" ? 0.10 : 0.055; }
 
+// Bloc-vote FPTP seat allocation for a multi-member ward. The leading party's
+// slate sweeps a safe ward, but a close runner-up (or strong independent) picks
+// off a seat when the gap is small, and both split a near-tie in a big ward.
+const SPLIT_CLOSE = 0.10; // runner-up takes one seat within 10pp
+const SPLIT_NEAR = 0.03;  // near-tie: runner-up takes two in a 4-seat ward
+function allocateWard(shares, n) {
+  const ranked = SEAT_PARTIES.map((party) => [party, shares[party] || 0]).sort((a, b) => b[1] - a[1]);
+  const p1 = ranked[0][0], p2 = ranked[1][0];
+  const gap = ranked[0][1] - ranked[1][1];
+  const out = { [p1]: n };
+  if (n >= 2 && gap <= SPLIT_CLOSE) {
+    let steal = 1;
+    if (n >= 4 && gap <= SPLIT_NEAR) steal = 2;
+    out[p1] -= steal;
+    out[p2] = (out[p2] || 0) + steal;
+  }
+  return out;
+}
+
 function simulateUa(uaName) {
   const wards = wardsByUa[uaName];
   const size = COUNCIL_SIZE[uaName];
@@ -266,9 +285,8 @@ function simulateUa(uaName) {
       const draw = {};
       for (const party of PARTIES) draw[party] = (w.shares[party] || 0) + shock[w.district][party] + gauss() * SIGMA_WARD;
       const ns = normaliseShares(draw);
-      let win = "Independent", best = -1;
-      for (const party of SEAT_PARTIES) { const v = ns[party] || 0; if (v > best) { best = v; win = party; } }
-      seats[win] += w.cllrs; // "Other" already excluded from SEAT_PARTIES
+      const alloc = allocateWard(ns, w.cllrs); // bloc-vote FPTP, splits close wards
+      for (const [party, n] of Object.entries(alloc)) seats[party] += n;
     }
     for (const party of SEAT_PARTIES) { seatDraws[party].push(seats[party]); seatSum[party] += seats[party]; }
     const ranked = Object.entries(seats).sort((a, b) => b[1] - a[1]);
@@ -312,13 +330,17 @@ function simulateUa(uaName) {
     total_electorate: Math.round(totalElec), ward_count: wards.length,
     vote_share: voteShare, seats: perParty, noc_prob: nocProb,
     largest_party: lead, control_call: controlCall,
-    wards: wards.map((w) => ({
-      ward: w.ward, district: w.district, cllrs: w.cllrs, electorate: w.electorate,
-      winner: w.winner === "Other" ? "Independent" : w.winner,
-      winner_pct: +(w.winner_pct * 100).toFixed(1), margin_pp: w.margin_pp,
-      marginal: w.marginal, quality: w.quality, provenance: w.provenance,
-      shares: Object.fromEntries(PARTIES.map((party) => [party, +((w.shares[party] || 0) * 100).toFixed(1)])),
-    })),
+    wards: wards.map((w) => {
+      const split = allocateWard(w.shares, w.cllrs);
+      return {
+        ward: w.ward, district: w.district, cllrs: w.cllrs, electorate: w.electorate,
+        winner: w.winner === "Other" ? "Independent" : w.winner,
+        winner_pct: +(w.winner_pct * 100).toFixed(1), margin_pp: w.margin_pp,
+        marginal: w.marginal, quality: w.quality, provenance: w.provenance,
+        seat_split: Object.fromEntries(Object.entries(split).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1])),
+        shares: Object.fromEntries(PARTIES.map((party) => [party, +((w.shares[party] || 0) * 100).toFixed(1)])),
+      };
+    }),
   };
 }
 
@@ -370,7 +392,8 @@ const output = {
   snapshot: {
     generated_at: process.env.SNAPSHOT_AT || "2026-07-22T00:00:00.000Z",
     model_version: "ukelections.lancashire-unitaries.v0.2.0-wardlevel",
-    method: "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Winner-takes-all per multi-member ward; seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
+    method: "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Seats allocated under first-past-the-post bloc vote: the leading party's slate sweeps a safe ward, but a runner-up within 10 points picks off one seat (two in a near-tied four-seat ward). Seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
+    voting_system: "First-past-the-post. English principal-council elections are FPTP by statute (multi-member wards use the bloc vote); the Elections Act 2022 moved mayors and PCCs to FPTP too. No change is legislated or proposed for the 2027 shadow elections. Confirmed by default via the Structural Change Order rather than by a Lancashire-specific ruling; the order is still subject to Parliamentary approval.",
     election_target: "May 2027 shadow-authority elections",
     monte_carlo_draws: N_SIM,
     total_councillors: warding.meta.total_councillors,
@@ -381,7 +404,7 @@ const output = {
     caveats: [
       "The government's decision (16 July 2026) is subject to Parliamentary approval via a Structural Change Order.",
       "Warding is the proposed 4UA scheme, not yet confirmed by the Local Government Boundary Commission; ward names and councillor counts may change.",
-      "Seats are allocated winner-takes-all per multi-member ward. Real multi-member wards sometimes split between parties, so a leading party's seat count is an upper-ish estimate; marginal wards (lead under 10 points) are flagged.",
+      "Seats use first-past-the-post bloc vote: the leading party sweeps a safe ward, and a runner-up within 10 points takes one seat (two in a near-tied four-seat ward). Marginal wards are flagged; their split is where most of the uncertainty sits.",
       "Blackpool has no borough-wide local election in the corpus, so its 11 wards share a proxy pooled from recent Blackpool by-elections and the 2024 general election.",
       "The 3- and 5-unitary options were rejected and have no ward plan, so only their vote share is shown.",
     ],

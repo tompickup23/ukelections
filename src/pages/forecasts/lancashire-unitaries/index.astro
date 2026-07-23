@@ -62,8 +62,8 @@ function controlClass(prob: number) {
       <span class="backtest-detail">
         The government's decision is <strong>subject to Parliamentary approval</strong> and the warding is the
         proposed 4UA scheme, <strong>not yet confirmed by the Local Government Boundary Commission</strong>. Seats
-        are allocated winner-takes-all per multi-member ward, so a leading party's seat count sits at the higher
-        end of what splitting wards would give; marginal wards (lead under 10 points) are flagged. Blackpool has no
+        are allocated under first-past-the-post bloc vote: a safe ward's seats all go to the leading party, but a
+        close runner-up picks off a seat, and those marginal wards are where most of the uncertainty sits. Blackpool has no
         borough-wide local election in our data, so its eleven wards share a proxy from recent by-elections and the
         2024 general election, which is why the Fylde Coast range is wide. A first estimate, not a result.
       </span>
@@ -78,6 +78,7 @@ function controlClass(prob: number) {
       <div class="fact"><span class="fact-k">Vesting day</span><span class="fact-v">1 April 2028</span><span class="fact-s">new councils take over</span></div>
     </div>
     <p class="name-caveat"><strong>A note on names.</strong> {snap.name_caveat}</p>
+    <p class="name-caveat"><strong>Voting system: first past the post.</strong> {snap.voting_system}</p>
   </section>
 
   <section class="section">
@@ -131,15 +132,19 @@ function controlClass(prob: number) {
             </table>
 
             <details class="ward-detail">
-              <summary>All {u.ward_count} wards ({u.wards.filter((w: any) => w.marginal).length} marginal)</summary>
+              <summary>All {u.ward_count} wards ({u.wards.filter((w: any) => w.marginal).length} split/marginal)</summary>
               <table class="ward-table">
-                <thead><tr><th>Ward</th><th>Cllrs</th><th>Predicted winner</th><th class="rng">Lead</th></tr></thead>
+                <thead><tr><th>Ward</th><th>Cllrs</th><th>Projected seats</th><th class="rng">Lead</th></tr></thead>
                 <tbody>
                   {u.wards.map((w: any) => (
                     <tr class={w.marginal ? "is-marginal" : ""}>
                       <td>{w.ward}<span class="ward-src" title={w.provenance}>{w.quality === "proxy" ? " ⚠" : ""}</span></td>
                       <td>{w.cllrs}</td>
-                      <td><span class="party-swatch" style={`background:${partyColour(w.winner)}`}></span>{shortLabel(w.winner)}</td>
+                      <td class="ward-split">
+                        {Object.entries(w.seat_split).map(([party, n]: [string, any]) => (
+                          <span class="split-chip"><span class="party-swatch" style={`background:${partyColour(party)}`}></span>{shortLabel(party)}&nbsp;{n}</span>
+                        ))}
+                      </td>
                       <td class="rng">{w.margin_pp}pp{w.marginal ? " ·mrg" : ""}</td>
                     </tr>
                   ))}
@@ -248,6 +253,8 @@ function controlClass(prob: number) {
 .ward-table td { padding: 0.25rem 0.4rem; border-top: 1px solid var(--border); vertical-align: top; }
 .ward-table tr.is-marginal td { background: rgba(245,158,11,0.07); }
 .ward-src { color: #f59e0b; }
+.ward-split { display: flex; flex-wrap: wrap; gap: 0.35rem 0.6rem; }
+.split-chip { white-space: nowrap; }
 
 .prose-lead { max-width: 62ch; color: var(--muted); }
 .rejected-model { margin-top: 1.75rem; }

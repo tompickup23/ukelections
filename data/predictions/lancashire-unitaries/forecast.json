@@ -2,7 +2,8 @@
   "snapshot": {
     "generated_at": "2026-07-22T00:00:00.000Z",
     "model_version": "ukelections.lancashire-unitaries.v0.2.0-wardlevel",
-    "method": "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Winner-takes-all per multi-member ward; seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
+    "method": "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Seats allocated under first-past-the-post bloc vote: the leading party's slate sweeps a safe ward, but a runner-up within 10 points picks off one seat (two in a near-tied four-seat ward). Seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
+    "voting_system": "First-past-the-post. English principal-council elections are FPTP by statute (multi-member wards use the bloc vote); the Elections Act 2022 moved mayors and PCCs to FPTP too. No change is legislated or proposed for the 2027 shadow elections. Confirmed by default via the Structural Change Order rather than by a Lancashire-specific ruling; the order is still subject to Parliamentary approval.",
     "election_target": "May 2027 shadow-authority elections",
     "monte_carlo_draws": 2000,
     "total_councillors": 313,
@@ -39,11 +40,11 @@
     "caveats": [
       "The government's decision (16 July 2026) is subject to Parliamentary approval via a Structural Change Order.",
       "Warding is the proposed 4UA scheme, not yet confirmed by the Local Government Boundary Commission; ward names and councillor counts may change.",
-      "Seats are allocated winner-takes-all per multi-member ward. Real multi-member wards sometimes split between parties, so a leading party's seat count is an upper-ish estimate; marginal wards (lead under 10 points) are flagged.",
+      "Seats use first-past-the-post bloc vote: the leading party sweeps a safe ward, and a runner-up within 10 points takes one seat (two in a near-tied four-seat ward). Marginal wards are flagged; their split is where most of the uncertainty sits.",
       "Blackpool has no borough-wide local election in the corpus, so its 11 wards share a proxy pooled from recent Blackpool by-elections and the 2024 general election.",
       "The 3- and 5-unitary options were rejected and have no ward plan, so only their vote share is shown."
     ],
-    "sha256": "e73678ef85cfb1fca264710d2eb374ca7411e783ca1a3f55930f4b447c5acd2e"
+    "sha256": "10cba3c136e0287bbcc226f2ca3b2bd87c5a88c3192c59adfe011f1d99a82869"
   },
   "four_unitary": {
     "label": "Four-unitary model",
@@ -70,28 +71,28 @@
         },
         "seats": {
           "Reform UK": {
-            "expected": 39,
-            "p10": 21,
-            "p50": 36,
-            "p90": 62,
-            "majority_prob": 0.451,
-            "largest_prob": 0.637
+            "expected": 38,
+            "p10": 24,
+            "p50": 37,
+            "p90": 54,
+            "majority_prob": 0.495,
+            "largest_prob": 0.764
           },
           "Labour": {
-            "expected": 16,
+            "expected": 15,
             "p10": 0,
-            "p50": 15,
-            "p90": 32,
+            "p50": 16,
+            "p90": 31,
             "majority_prob": 0,
-            "largest_prob": 0.271
+            "largest_prob": 0.145
           },
           "Conservative": {
-            "expected": 17,
-            "p10": 6,
-            "p50": 15,
+            "expected": 18,
+            "p10": 9,
+            "p50": 16,
             "p90": 29,
-            "majority_prob": 0.066,
-            "largest_prob": 0.092
+            "majority_prob": 0.033,
+            "largest_prob": 0.09
           },
           "Liberal Democrats": {
             "expected": 0,
@@ -110,15 +111,15 @@
             "largest_prob": 0
           },
           "Independent": {
-            "expected": 2,
-            "p10": 0,
-            "p50": 3,
-            "p90": 6,
+            "expected": 3,
+            "p10": 1,
+            "p50": 2,
+            "p90": 4,
             "majority_prob": 0,
             "largest_prob": 0
           }
         },
-        "noc_prob": 0.483,
+        "noc_prob": 0.472,
         "largest_party": "Reform UK",
         "control_call": "Reform UK largest, majority on a knife-edge",
         "wards": [
@@ -133,6 +134,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -154,6 +159,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -175,6 +184,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -196,6 +209,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -217,6 +234,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -238,6 +259,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -259,6 +284,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -280,6 +309,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -301,6 +334,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 1,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -322,6 +359,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -343,6 +384,10 @@
             "marginal": true,
             "quality": "proxy",
             "provenance": "blackpool by-elections 2024-26 + GE2024",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32.5,
               "Labour": 34.6,
@@ -364,6 +409,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 fylde-east",
+            "seat_split": {
+              "Reform UK": 2,
+              "Independent": 1
+            },
             "shares": {
               "Reform UK": 34.3,
               "Labour": 8.5,
@@ -385,6 +434,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 fylde-south",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 36.9,
               "Labour": 9.2,
@@ -406,6 +459,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 fylde-west",
+            "seat_split": {
+              "Conservative": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 37.7,
               "Labour": 12.2,
@@ -427,6 +484,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 lytham",
+            "seat_split": {
+              "Conservative": 2,
+              "Independent": 1
+            },
             "shares": {
               "Reform UK": 15.6,
               "Labour": 5.6,
@@ -448,6 +509,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 st-annes-north",
+            "seat_split": {
+              "Conservative": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 34,
               "Labour": 11.4,
@@ -469,6 +534,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 st-annes-south",
+            "seat_split": {
+              "Conservative": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 31.2,
               "Labour": 16,
@@ -490,6 +559,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 cleveleys-east",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 47.2,
               "Labour": 16.1,
@@ -511,6 +583,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 cleveleys-south-carleton",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 45.9,
               "Labour": 20.3,
@@ -532,6 +607,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 fleetwood-east",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 53.7,
               "Labour": 24.1,
@@ -553,6 +631,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 fleetwood-west-cleveleys-west",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 54.7,
               "Labour": 18.2,
@@ -574,6 +655,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 poulton-le-fylde",
+            "seat_split": {
+              "Conservative": 3
+            },
             "shares": {
               "Reform UK": 29.8,
               "Labour": 14.5,
@@ -595,6 +679,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 thornton-hambleton",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 47.6,
               "Labour": 17.4,
@@ -616,6 +703,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 wyre-rural-central",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 41.4,
               "Labour": 10.9,
@@ -637,6 +728,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 wyre-rural-east",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 39.9,
               "Labour": 16.9,
@@ -674,55 +769,55 @@
         },
         "seats": {
           "Reform UK": {
-            "expected": 38,
+            "expected": 36,
             "p10": 29,
-            "p50": 38,
-            "p90": 47,
-            "majority_prob": 0.566,
-            "largest_prob": 0.995
+            "p50": 36,
+            "p90": 43,
+            "majority_prob": 0.435,
+            "largest_prob": 0.999
           },
           "Labour": {
-            "expected": 7,
+            "expected": 8,
             "p10": 3,
-            "p50": 6,
-            "p90": 12,
+            "p50": 7,
+            "p90": 13,
             "majority_prob": 0,
             "largest_prob": 0.001
           },
           "Conservative": {
             "expected": 3,
-            "p10": 0,
+            "p10": 1,
             "p50": 3,
-            "p90": 6,
+            "p90": 7,
             "majority_prob": 0,
             "largest_prob": 0
           },
           "Liberal Democrats": {
             "expected": 11,
-            "p10": 6,
-            "p50": 12,
-            "p90": 17,
+            "p10": 7,
+            "p50": 11,
+            "p90": 16,
             "majority_prob": 0,
-            "largest_prob": 0.004
+            "largest_prob": 0.001
           },
           "Green Party": {
             "expected": 10,
             "p10": 9,
-            "p50": 9,
-            "p90": 12,
+            "p50": 10,
+            "p90": 13,
             "majority_prob": 0,
             "largest_prob": 0
           },
           "Independent": {
             "expected": 3,
-            "p10": 3,
+            "p10": 2,
             "p50": 3,
             "p90": 6,
             "majority_prob": 0,
             "largest_prob": 0
           }
         },
-        "noc_prob": 0.434,
+        "noc_prob": 0.565,
         "largest_party": "Reform UK",
         "control_call": "Reform UK largest, majority on a knife-edge",
         "wards": [
@@ -737,6 +832,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 heysham",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 48.6,
               "Labour": 27,
@@ -758,6 +856,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 lancaster-central",
+            "seat_split": {
+              "Green Party": 3
+            },
             "shares": {
               "Reform UK": 20.3,
               "Labour": 13.3,
@@ -779,6 +880,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 lancaster-east",
+            "seat_split": {
+              "Green Party": 3
+            },
             "shares": {
               "Reform UK": 14.7,
               "Labour": 25.2,
@@ -800,6 +904,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 lancaster-rural-east",
+            "seat_split": {
+              "Reform UK": 2,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 26.3,
               "Labour": 10.2,
@@ -821,6 +929,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 lancaster-rural-north",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 30.2,
               "Labour": 11.5,
@@ -842,6 +954,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 lancaster-south-east",
+            "seat_split": {
+              "Green Party": 3
+            },
             "shares": {
               "Reform UK": 17.3,
               "Labour": 23.7,
@@ -863,6 +978,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 morecambe-central",
+            "seat_split": {
+              "Reform UK": 2,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 37.9,
               "Labour": 22.5,
@@ -884,6 +1003,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 morecambe-north",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 41.7,
               "Labour": 18,
@@ -905,6 +1027,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 morecambe-south",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 45.7,
               "Labour": 20.1,
@@ -926,6 +1051,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 skerton",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 38.5,
               "Labour": 21.1,
@@ -947,6 +1075,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-central-east + 2026 district swing",
+            "seat_split": {
+              "Independent": 3
+            },
             "shares": {
               "Reform UK": 14.6,
               "Labour": 25.5,
@@ -968,6 +1099,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-central-west + 2026 district swing",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 24.8,
               "Labour": 29.8,
@@ -989,6 +1124,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-city + 2026 district swing",
+            "seat_split": {
+              "Labour": 2,
+              "Independent": 1
+            },
             "shares": {
               "Reform UK": 15.9,
               "Labour": 32.3,
@@ -1010,6 +1149,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-east + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 38.8,
               "Labour": 26.5,
@@ -1031,6 +1173,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-north + 2026 district swing",
+            "seat_split": {
+              "Liberal Democrats": 3
+            },
             "shares": {
               "Reform UK": 21.2,
               "Labour": 13.5,
@@ -1052,6 +1197,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-rural + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 1,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 30.9,
               "Labour": 11,
@@ -1073,6 +1222,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-rural + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 1,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 30.9,
               "Labour": 11,
@@ -1094,6 +1247,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-south-east + 2026 district swing",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 27.5,
               "Labour": 29.5,
@@ -1115,6 +1272,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-south-west + 2026 district swing",
+            "seat_split": {
+              "Liberal Democrats": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 29.3,
               "Labour": 18.2,
@@ -1136,6 +1297,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 preston-west + 2026 district swing",
+            "seat_split": {
+              "Liberal Democrats": 3
+            },
             "shares": {
               "Reform UK": 26.7,
               "Labour": 9.2,
@@ -1157,6 +1321,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 clitheroe",
+            "seat_split": {
+              "Reform UK": 3,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 31.5,
               "Labour": 15,
@@ -1178,6 +1346,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 longridge-with-bowland",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 34.4,
               "Labour": 22.9,
@@ -1199,6 +1370,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 ribble-valley-north-east",
+            "seat_split": {
+              "Reform UK": 4
+            },
             "shares": {
               "Reform UK": 38.4,
               "Labour": 10.9,
@@ -1220,6 +1394,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 ribble-valley-south-west",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 47.1,
               "Labour": 12,
@@ -1257,55 +1434,55 @@
         },
         "seats": {
           "Reform UK": {
-            "expected": 60,
-            "p10": 52,
-            "p50": 60,
-            "p90": 66,
-            "majority_prob": 0.982,
+            "expected": 57,
+            "p10": 51,
+            "p50": 57,
+            "p90": 62,
+            "majority_prob": 0.98,
             "largest_prob": 1
           },
           "Labour": {
-            "expected": 4,
-            "p10": 0,
-            "p50": 3,
+            "expected": 5,
+            "p10": 2,
+            "p50": 5,
             "p90": 9,
             "majority_prob": 0,
             "largest_prob": 0
           },
           "Conservative": {
-            "expected": 5,
-            "p10": 0,
+            "expected": 7,
+            "p10": 3,
             "p50": 6,
             "p90": 10,
             "majority_prob": 0,
             "largest_prob": 0
           },
           "Liberal Democrats": {
-            "expected": 2,
+            "expected": 3,
             "p10": 0,
-            "p50": 2,
-            "p90": 6,
+            "p50": 3,
+            "p90": 4,
             "majority_prob": 0,
             "largest_prob": 0
           },
           "Green Party": {
             "expected": 2,
             "p10": 0,
-            "p50": 3,
-            "p90": 3,
+            "p50": 2,
+            "p90": 5,
             "majority_prob": 0,
             "largest_prob": 0
           },
           "Independent": {
-            "expected": 22,
-            "p10": 17,
-            "p50": 23,
-            "p90": 26,
+            "expected": 21,
+            "p10": 18,
+            "p50": 21,
+            "p90": 24,
             "majority_prob": 0,
             "largest_prob": 0
           }
         },
-        "noc_prob": 0.018,
+        "noc_prob": 0.021,
         "largest_party": "Reform UK",
         "control_call": "Reform UK majority likely",
         "wards": [
@@ -1320,6 +1497,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (audley-queens-park, blackburn-south-east)",
+            "seat_split": {
+              "Independent": 3
+            },
             "shares": {
               "Reform UK": 24.8,
               "Labour": 22.3,
@@ -1341,6 +1521,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (bastwell-daisyfield, shear-brow-corporation-park)",
+            "seat_split": {
+              "Independent": 2,
+              "Labour": 1
+            },
             "shares": {
               "Reform UK": 2.9,
               "Labour": 43.8,
@@ -1362,6 +1546,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (billinge-beardwood)",
+            "seat_split": {
+              "Independent": 2
+            },
             "shares": {
               "Reform UK": 13,
               "Labour": 16.8,
@@ -1383,6 +1570,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (livesey-with-pleasington)",
+            "seat_split": {
+              "Reform UK": 2
+            },
             "shares": {
               "Reform UK": 43.3,
               "Labour": 9.7,
@@ -1404,6 +1594,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (blackburn-central, wensley-fold)",
+            "seat_split": {
+              "Labour": 2,
+              "Independent": 1
+            },
             "shares": {
               "Reform UK": 13,
               "Labour": 38.4,
@@ -1425,6 +1619,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (blackburn-south-lower-darwen, darwen-east)",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 51,
               "Labour": 13,
@@ -1446,6 +1643,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (darwen-south, darwen-west)",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 47.2,
               "Labour": 28.9,
@@ -1467,6 +1667,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (ewood, mill-hill-moorgate)",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 52.4,
               "Labour": 11.7,
@@ -1488,6 +1691,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (little-harwood-whitebirk, roe-lee)",
+            "seat_split": {
+              "Independent": 3
+            },
             "shares": {
               "Reform UK": 18.7,
               "Labour": 12.3,
@@ -1509,6 +1715,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "Blackburn 2026 borough (west-pennine)",
+            "seat_split": {
+              "Reform UK": 2
+            },
             "shares": {
               "Reform UK": 39.1,
               "Labour": 21.5,
@@ -1530,6 +1739,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 burnley-central-east + 2026 district swing",
+            "seat_split": {
+              "Independent": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 34,
               "Labour": 14.5,
@@ -1551,6 +1764,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 burnley-central-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 46.5,
               "Labour": 12.6,
@@ -1572,6 +1788,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 burnley-north-east + 2026 district swing",
+            "seat_split": {
+              "Independent": 3
+            },
             "shares": {
               "Reform UK": 25.2,
               "Labour": 9.9,
@@ -1593,6 +1812,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 burnley-rural + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 46.1,
               "Labour": 7.6,
@@ -1614,6 +1836,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 burnley-south-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 51.4,
               "Labour": 15.2,
@@ -1635,6 +1860,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 padiham-burnley-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 47.3,
               "Labour": 15.4,
@@ -1656,6 +1884,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 accrington-north + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 52.4,
               "Labour": 18,
@@ -1677,6 +1908,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 accrington-south + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 36.7,
               "Labour": 23.1,
@@ -1698,6 +1933,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 accrington-west-oswaldtwistle-central + 2026 district swing",
+            "seat_split": {
+              "Green Party": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 17.8,
               "Labour": 20.2,
@@ -1719,6 +1958,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 great-harwood-rishton-clayton-le-moors + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 48.7,
               "Labour": 25.5,
@@ -1740,6 +1982,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 great-harwood-rishton-clayton-le-moors + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2
+            },
             "shares": {
               "Reform UK": 48.7,
               "Labour": 25.5,
@@ -1761,6 +2006,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 oswaldtwistle + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 42.3,
               "Labour": 7.5,
@@ -1782,6 +2031,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 brierfield-nelson-west + 2026 district swing",
+            "seat_split": {
+              "Independent": 3
+            },
             "shares": {
               "Reform UK": 14.9,
               "Labour": 7,
@@ -1803,6 +2055,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 nelson-east + 2026 district swing",
+            "seat_split": {
+              "Independent": 3
+            },
             "shares": {
               "Reform UK": 20.5,
               "Labour": 8,
@@ -1824,6 +2079,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 pendle-central + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 45.4,
               "Labour": 8.4,
@@ -1845,6 +2103,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 pendle-hill + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 35.3,
               "Labour": 14.3,
@@ -1866,6 +2128,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 pendle-rural + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 1,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 35.1,
               "Labour": 6.6,
@@ -1887,6 +2153,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 pendle-rural + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 1,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 35.1,
               "Labour": 6.6,
@@ -1908,6 +2178,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 pendle-rural + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 1,
+              "Liberal Democrats": 1
+            },
             "shares": {
               "Reform UK": 35.1,
               "Labour": 6.6,
@@ -1929,6 +2203,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 mid-rossendale + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 40.8,
               "Labour": 21.5,
@@ -1950,6 +2227,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 rossendale-east + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 48.7,
               "Labour": 12.7,
@@ -1971,6 +2251,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 rossendale-south + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 38.2,
               "Labour": 19.5,
@@ -1992,6 +2275,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 rossendale-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Labour": 1
+            },
             "shares": {
               "Reform UK": 34.1,
               "Labour": 29.5,
@@ -2013,6 +2300,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 whitworth-bacup + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 41.1,
               "Labour": 4.7,
@@ -2052,28 +2343,28 @@
         },
         "seats": {
           "Reform UK": {
-            "expected": 47,
-            "p10": 36,
-            "p50": 48,
-            "p90": 60,
-            "majority_prob": 0.848,
-            "largest_prob": 0.988
+            "expected": 44,
+            "p10": 34,
+            "p50": 44,
+            "p90": 53,
+            "majority_prob": 0.838,
+            "largest_prob": 0.991
           },
           "Labour": {
-            "expected": 13,
-            "p10": 3,
-            "p50": 12,
-            "p90": 21,
-            "majority_prob": 0.001,
-            "largest_prob": 0.011
+            "expected": 14,
+            "p10": 7,
+            "p50": 14,
+            "p90": 22,
+            "majority_prob": 0,
+            "largest_prob": 0.009
           },
           "Conservative": {
-            "expected": 8,
-            "p10": 3,
-            "p50": 6,
+            "expected": 10,
+            "p10": 4,
+            "p50": 9,
             "p90": 15,
             "majority_prob": 0,
-            "largest_prob": 0.002
+            "largest_prob": 0
           },
           "Liberal Democrats": {
             "expected": 3,
@@ -2086,7 +2377,7 @@
           "Green Party": {
             "expected": 1,
             "p10": 0,
-            "p50": 0,
+            "p50": 1,
             "p90": 3,
             "majority_prob": 0,
             "largest_prob": 0
@@ -2100,7 +2391,7 @@
             "largest_prob": 0
           }
         },
-        "noc_prob": 0.151,
+        "noc_prob": 0.163,
         "largest_party": "Reform UK",
         "control_call": "Reform UK majority likely",
         "wards": [
@@ -2115,6 +2406,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 chorley-central + 2026 district swing",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 34,
               "Labour": 35.5,
@@ -2136,6 +2431,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 chorley-north + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Labour": 1
+            },
             "shares": {
               "Reform UK": 39.6,
               "Labour": 35.4,
@@ -2157,6 +2456,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 chorley-rural-east + 2026 district swing",
+            "seat_split": {
+              "Labour": 3
+            },
             "shares": {
               "Reform UK": 33.7,
               "Labour": 46,
@@ -2178,6 +2480,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 chorley-rural-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Labour": 1
+            },
             "shares": {
               "Reform UK": 37.1,
               "Labour": 29.9,
@@ -2199,6 +2505,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 chorley-south + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Green Party": 1
+            },
             "shares": {
               "Reform UK": 39.7,
               "Labour": 23.2,
@@ -2220,6 +2530,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 clayton-with-whittle + 2026 district swing",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 34,
               "Labour": 37.7,
@@ -2241,6 +2555,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 euxton-buckshaw-astley + 2026 district swing",
+            "seat_split": {
+              "Conservative": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 31.5,
               "Labour": 26.1,
@@ -2262,6 +2580,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 hoghton-with-wheelton + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Labour": 1
+            },
             "shares": {
               "Reform UK": 36.4,
               "Labour": 30.5,
@@ -2283,6 +2605,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 leyland-central",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 45.6,
               "Labour": 32.6,
@@ -2304,6 +2629,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 leyland-south",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 40.2,
               "Labour": 26.5,
@@ -2325,6 +2653,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 lostock-hall-bamber-bridge",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 37.4,
               "Labour": 23.7,
@@ -2346,6 +2678,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 moss-side-farington",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 36.8,
               "Labour": 23.6,
@@ -2367,6 +2703,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 penwortham-east-walton-le-dale",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 35.9,
               "Labour": 21.2,
@@ -2388,6 +2728,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 penwortham-west",
+            "seat_split": {
+              "Liberal Democrats": 3
+            },
             "shares": {
               "Reform UK": 27.1,
               "Labour": 12.1,
@@ -2409,6 +2752,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 south-ribble-east",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 40.5,
               "Labour": 24.4,
@@ -2430,6 +2776,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 south-ribble-west",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 40.4,
               "Labour": 14,
@@ -2451,6 +2801,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 burscough-rufford + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 32.6,
               "Labour": 21.7,
@@ -2472,6 +2826,10 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 ormskirk + 2026 district swing",
+            "seat_split": {
+              "Labour": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 18.1,
               "Labour": 21.8,
@@ -2493,6 +2851,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 skelmersdale-central + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 44.4,
               "Labour": 25.5,
@@ -2514,6 +2875,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 skelmersdale-east + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 37.9,
               "Labour": 19.8,
@@ -2535,6 +2899,9 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 skelmersdale-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 3
+            },
             "shares": {
               "Reform UK": 39,
               "Labour": 19.8,
@@ -2556,6 +2923,10 @@
             "marginal": false,
             "quality": "actual-local",
             "provenance": "LCC 2025 west-lancashire-east + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 19.4,
               "Labour": 11.7,
@@ -2577,6 +2948,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 west-lancashire-north + 2026 district swing",
+            "seat_split": {
+              "Conservative": 2,
+              "Reform UK": 1
+            },
             "shares": {
               "Reform UK": 32,
               "Labour": 6.6,
@@ -2598,6 +2973,10 @@
             "marginal": true,
             "quality": "actual-local",
             "provenance": "LCC 2025 west-lancashire-west + 2026 district swing",
+            "seat_split": {
+              "Reform UK": 2,
+              "Conservative": 1
+            },
             "shares": {
               "Reform UK": 35.3,
               "Labour": 17.1,
