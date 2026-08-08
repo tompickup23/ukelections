@@ -681,6 +681,7 @@ const output = {
       "Seats use first-past-the-post bloc vote: the leading party sweeps a safe ward, and a runner-up within 10 points takes one seat (two in a near-tied four-seat ward). Marginal wards are flagged; their split is where most of the uncertainty sits.",
       "Blackpool wards are built from the May 2023 all-out borough election (council-declared results, cross-verified), aggregated onto the proposed merged wards, with a volume-weighted swing from Blackpool by-elections since. 2023 is the oldest base in the model, so these wards carry wider noise.",
       "The 3- and 5-unitary options were rejected and have no ward plan, so only their vote share is shown.",
+      "Three county divisions (Preston Rural, Great Harwood/Rishton/Clayton-le-Moors, Pendle Rural) each feed more than one proposed ward; those sibling wards inherit the same division result, so differences between them within the division are not modelled.",
       "Districts without a May 2026 election carry a borrowed swing from demographically similar districts (shrunk 0.7x, wider ward noise). The leave-one-out error of that transfer, versus freezing those districts at May 2025, is published in data_vintage.swing_validation.",
     ],
     data_vintage: {
