@@ -114,6 +114,8 @@ const may2026 = readJson("data/results/may-2026/local-and-mayor.merged.json");
 const config = readJson("data/geography/lancashire-unitaries.json");
 const crosswalk = readJson("data/geography/lcc-2025-division-to-district.json").division_to_district;
 const warding = readJson("data/geography/lancashire-4ua-warding.json");
+const wardDemographics = readJson("data/features/ward-demographics-2021.json").wards;
+const slugToLad = readJson("data/identity/council-slug-to-lad24.json").map;
 
 const hist = history.results || [];
 const RECENT_SINCE = "2025-05-02"; // by-elections after the 2025 LCC baseline
@@ -149,6 +151,7 @@ for (const r of hist) {
 // District-level 2025->2026 swing (borough + by-elections vs LCC 2025).
 const LANCS_DISTRICTS = config.meta.current_structure.two_tier_districts;
 const districtSwing = {};
+const districtSwingSource = {};
 const districtRecency = {};
 for (const d of LANCS_DISTRICTS) {
   const lcc = sharesFromRows(lccRowsByDistrict[d] || []);
@@ -156,7 +159,10 @@ for (const d of LANCS_DISTRICTS) {
   const recent = sharesFromRows(recentRows);
   const swing = {};
   for (const party of PARTIES) swing[party] = 0;
-  if (lcc && recent && recent.votes >= 1500) {
+  // Own swing at ANY volume; how much it counts is decided later by a
+  // volume weight, so one small by-election can inform but never dominate.
+  const hasOwn = !!(lcc && recent && recent.votes >= 500);
+  if (hasOwn) {
     for (const party of PARTIES) {
       let s = (recent.shares[party] || 0) - (lcc.shares[party] || 0);
       s = Math.max(-0.15, Math.min(0.15, s)); // clamp extrapolation
@@ -164,6 +170,7 @@ for (const d of LANCS_DISTRICTS) {
     }
   }
   districtSwing[d] = swing;
+  districtSwingSource[d] = hasOwn ? "observed-2026" : "none";
   districtRecency[d] = {
     has_borough_2026: !!(boroughRowsByCouncil[d] || []).length,
     by_elections: (byElectionRowsByCouncil[d] || []).map((r) => `${r.ward_slug} ${r.election_date}`),
@@ -171,24 +178,221 @@ for (const d of LANCS_DISTRICTS) {
   };
 }
 
-// Blackpool proxy: pool recent Blackpool by-elections (2024+) + GE2024 constituencies.
-function blackpoolProxy() {
+// ---- demographic swing borrowing --------------------------------------------
+// Districts with no qualifying 2026 signal previously received ZERO swing,
+// freezing them at May 2025. Instead, borrow swing from demographically
+// similar districts that do have observed 2025->2026 swing: each borrower's
+// swing is the similarity-weighted average of the donors' swings (Gaussian
+// kernel over standardised Census-2021 district profiles), shrunk toward zero
+// because a transferred swing is weaker evidence than an observed one.
+const DEMO_FEATURES = [
+  "retired_pct", "degree_pct", "no_quals_pct", "social_rented_pct",
+  "owned_outright_pct", "private_rented_pct", "white_british_pct",
+  "muslim_pct", "uk_born_pct", "avg_imd_decile",
+];
+const BORROW_SHRINK = 0.7;
+
+// The identity map is incomplete for five Lancashire districts; their ONS
+// codes are stable (E07000117..128, alphabetical), so carry a local fallback.
+const LANCS_LAD_FALLBACK = {
+  burnley: "E07000117", chorley: "E07000118", fylde: "E07000119",
+  hyndburn: "E07000120", lancaster: "E07000121", pendle: "E07000122",
+  preston: "E07000123", "ribble-valley": "E07000124", rossendale: "E07000125",
+  "south-ribble": "E07000126", "west-lancashire": "E07000127", wyre: "E07000128",
+};
+
+function districtDemoVector(slug) {
+  const lad = (slugToLad[slug] && slugToLad[slug].lad24cd) || LANCS_LAD_FALLBACK[slug];
+  if (!lad) return null;
+  const rows = Object.values(wardDemographics).filter((w) => w.lad22cd === lad);
+  if (!rows.length) return null;
+  const vec = {};
+  let pop = 0;
+  for (const r of rows) pop += r.total_residents || 0;
+  for (const f of DEMO_FEATURES) {
+    let acc = 0;
+    for (const r of rows) acc += (r[f] || 0) * (r.total_residents || 0);
+    vec[f] = pop ? acc / pop : 0;
+  }
+  return vec;
+}
+
+const demoVec = {};
+for (const d of LANCS_DISTRICTS) demoVec[d] = districtDemoVector(d);
+
+// Standardise features across the districts that have vectors.
+const demoZ = {};
+{
+  const have = LANCS_DISTRICTS.filter((d) => demoVec[d]);
+  const mean = {}, sd = {};
+  for (const f of DEMO_FEATURES) {
+    const vals = have.map((d) => demoVec[d][f]);
+    mean[f] = vals.reduce((a, b) => a + b, 0) / vals.length;
+    sd[f] = Math.sqrt(vals.reduce((a, b) => a + (b - mean[f]) ** 2, 0) / vals.length) || 1;
+  }
+  for (const d of have) {
+    demoZ[d] = DEMO_FEATURES.map((f) => (demoVec[d][f] - mean[f]) / sd[f]);
+  }
+}
+
+function demoDistance(a, b) {
+  if (!demoZ[a] || !demoZ[b]) return null;
+  let s = 0;
+  for (let i = 0; i < demoZ[a].length; i += 1) s += (demoZ[a][i] - demoZ[b][i]) ** 2;
+  return Math.sqrt(s);
+}
+
+function borrowSwing(target, donors, bandwidth, shrink, srcMap = districtSwing) {
+  const weights = [];
+  for (const d of donors) {
+    const dist = demoDistance(target, d);
+    if (dist === null) continue;
+    weights.push([d, Math.exp(-(dist * dist) / (2 * bandwidth * bandwidth))]);
+  }
+  const wSum = weights.reduce((a, [, w]) => a + w, 0);
+  if (!wSum) return null;
+  const swing = {};
+  for (const party of PARTIES) {
+    let acc = 0;
+    for (const [d, w] of weights) acc += (srcMap[d][party] || 0) * w;
+    swing[party] = Math.max(-0.15, Math.min(0.15, shrink * (acc / wSum)));
+  }
+  const top = weights.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([d]) => d);
+  return { swing, donors: top };
+}
+
+// Donors are districts whose swing comes from a full May 2026 borough
+// election (a lone ward by-election can inform its own district a little,
+// via the volume weight below, but never teaches other districts).
+const donors = LANCS_DISTRICTS.filter(
+  (d) => districtRecency[d].has_borough_2026 && districtRecency[d].recent_votes >= 8000 && demoZ[d]);
+// Bandwidth: median pairwise donor distance keeps the kernel scale honest.
+const pairDists = [];
+for (let i = 0; i < donors.length; i += 1)
+  for (let j = i + 1; j < donors.length; j += 1) pairDists.push(demoDistance(donors[i], donors[j]));
+const BANDWIDTH = pairDists.sort((a, b) => a - b)[Math.floor(pairDists.length / 2)] || 1;
+
+// Shrink chosen empirically: leave-one-out over the donors, grid over lambda,
+// pick the lambda that minimises MAE of (lambda x borrowed) vs actual swing.
+// If freezing at zero were genuinely better, the grid returns lambda = 0 and
+// the model self-honestly stops borrowing.
+const LOO_PARTIES = ["Reform UK", "Labour", "Conservative", "Liberal Democrats", "Green Party"];
+const looRows = [];
+for (const d of donors) {
+  const rest = donors.filter((x) => x !== d);
+  const borrowed = borrowSwing(d, rest, BANDWIDTH, 1); // unshrunk
+  if (!borrowed) continue;
+  looRows.push({ district: d, borrowed: borrowed.swing, actual: districtSwing[d] });
+}
+function looMae(lambda) {
+  const errs = [];
+  for (const r of looRows)
+    for (const party of LOO_PARTIES)
+      errs.push(Math.abs(lambda * (r.borrowed[party] || 0) - (r.actual[party] || 0)));
+  return errs.reduce((a, b) => a + b, 0) / (errs.length || 1);
+}
+let LAMBDA = 0, bestMae = Infinity;
+for (let l = 0; l <= 1.0001; l += 0.1) {
+  const m = looMae(l);
+  if (m < bestMae - 1e-9) { bestMae = m; LAMBDA = +l.toFixed(1); }
+}
+
+// Final swing per district: volume-weighted blend of its own observed swing
+// and the demographic borrow. w = votes/(votes + K): a full borough election
+// (~25-40k votes) keeps w near 1; a single by-election (~2k) keeps w near
+// 0.15, so it nudges rather than speaks for the district.
+const VOTES_K = 10000;
+const observedSwing = JSON.parse(JSON.stringify(districtSwing)); // pre-blend snapshot
+for (const d of LANCS_DISTRICTS) {
+  const ownVotes = districtRecency[d].recent_votes || 0;
+  const own = observedSwing[d];
+  const hasOwn = districtSwingSource[d] === "observed-2026";
+  const borrowed = borrowSwing(d, donors.filter((x) => x !== d), BANDWIDTH, LAMBDA, observedSwing);
+  const w = hasOwn ? ownVotes / (ownVotes + VOTES_K) : 0;
+  const final = {};
+  for (const party of PARTIES) {
+    const b = borrowed ? borrowed.swing[party] || 0 : 0;
+    final[party] = Math.max(-0.15, Math.min(0.15, w * (own[party] || 0) + (1 - w) * b));
+  }
+  districtSwing[d] = final;
+  districtRecency[d].own_weight = +w.toFixed(2);
+  if (w >= 0.5) districtSwingSource[d] = "observed-2026";
+  else if (borrowed && w > 0) districtSwingSource[d] = "blended-own-plus-borrowed";
+  else if (borrowed) districtSwingSource[d] = "borrowed-demographic";
+  else districtSwingSource[d] = hasOwn ? "observed-2026" : "none";
+  if (borrowed && w < 0.5) districtRecency[d].borrowed_from = borrowed.donors;
+}
+
+const swingValidation = {
+  method: "leave-one-out over full-borough-election districts; shrink lambda chosen from the LOO grid",
+  lambda: LAMBDA,
+  mae_pp: {
+    borrowed_at_lambda: +(bestMae * 100).toFixed(2),
+    zero_swing_baseline: +(looMae(0) * 100).toFixed(2),
+    unshrunk_borrow: +(looMae(1) * 100).toFixed(2),
+  },
+  per_district: looRows.map((r) => {
+    const row = { district: r.district };
+    for (const party of ["Reform UK", "Labour", "Conservative"]) {
+      row[party] = { actual_pp: +((r.actual[party] || 0) * 100).toFixed(1),
+                     borrowed_pp: +((LAMBDA * (r.borrowed[party] || 0)) * 100).toFixed(1) };
+    }
+    return row;
+  }),
+};
+
+// Blackpool: the May 2023 all-out borough election, ward by ward (council's
+// own declared results, cross-verified against LEAP and Democracy Club),
+// plus a borough-wide swing from Blackpool's 2024-26 by-elections measured
+// against the same wards' 2023 results and volume-weighted like the district
+// swings. The old pooled proxy remains only as a fallback.
+const blackpool2023 = readJson("data/results/blackpool-2023.json");
+const bp2023ByWard = {};
+for (const w of blackpool2023.wards) bp2023ByWard[w.ward] = w;
+
+// Level correction, not a nudge: May 2023 predates Reform UK as a real local
+// force in Blackpool (four paper candidates, ~100-170 votes each), so raw 2023
+// shares systematically understate today's Reform level and overstate the 2023
+// duopoly. Estimate the CURRENT borough-wide level from the 2024-26 by-election
+// pool blended with GE2024 (the two Blackpool constituencies), then apply the
+// full difference from the 2023 borough-wide result to every ward: 2023 gives
+// the geography (which wards lean where), the correction gives the level.
+function blackpoolSwing() {
   const beRows = hist.filter((r) => r.is_by_election && r.council_slug === "blackpool" && r.election_date >= "2024-01-01");
   const geRows = hist.filter((r) => r.tier === "parl" && r.year === 2024 &&
     /parl\.(blackpool-south|blackpool-north-and-fleetwood)\.2024-07-04/.test(r.ballot_paper_id));
   const be = sharesFromRows(beRows);
   const ge = sharesFromRows(geRows);
-  // GE understates Reform locally and overstates the majors; weight the recent
-  // local by-elections more heavily where they exist.
+  const base = sharesFromRows(blackpool2023.wards);
+  let current = null, note = "";
   if (be && ge) {
-    const out = {};
-    for (const party of PARTIES) out[party] = 0.55 * be.shares[party] + 0.45 * ge.shares[party];
-    return { shares: normaliseShares(out), electorate: 0, provenance: "blackpool by-elections 2024-26 + GE2024" };
+    current = {};
+    for (const party of PARTIES) current[party] = 0.55 * (be.shares[party] || 0) + 0.45 * (ge.shares[party] || 0);
+    note = `level from by-elections 2024-26 (${be.votes} votes) 55% + GE2024 45%`;
+  } else if (be || ge) {
+    current = (be || ge).shares;
+    note = be ? "level from by-elections 2024-26" : "level from GE2024";
   }
-  const only = be || ge;
-  return { shares: only.shares, electorate: 0, provenance: be ? "blackpool by-elections 2024-26" : "GE2024 proxy" };
+  if (!current || !base) return { swing: Object.fromEntries(PARTIES.map((pt) => [pt, 0])), note: "no level correction available" };
+  const swing = {};
+  for (const party of PARTIES) {
+    const s = (current[party] || 0) - (base.shares[party] || 0);
+    // Wider clamp than the district swings: this is a known structural
+    // realignment (Reform from ~1% to the mid-20s), not extrapolation noise.
+    swing[party] = Math.max(-0.3, Math.min(0.3, s));
+  }
+  return { swing, note };
 }
-const bpProxy = blackpoolProxy();
+const bpSwing = blackpoolSwing();
+
+function blackpoolProxyFallback() {
+  const beRows = hist.filter((r) => r.is_by_election && r.council_slug === "blackpool" && r.election_date >= "2024-01-01");
+  const be = sharesFromRows(beRows);
+  if (be) return { shares: be.shares, provenance: "blackpool by-elections 2024-26 (fallback)" };
+  const all = sharesFromRows(blackpool2023.wards);
+  return { shares: all.shares, provenance: "Blackpool 2023 borough-wide (fallback)" };
+}
+const bpProxy = blackpoolProxyFallback();
 
 // ---- per-ward base shares ---------------------------------------------------
 function wardBase(w) {
@@ -198,7 +402,14 @@ function wardBase(w) {
     if (!base) return null;
     const d = crosswalk[src.division];
     const shares = applySwing(base.shares, districtSwing[d] || {});
-    const hasSwing = PARTIES.some((party) => Math.abs((districtSwing[d] || {})[party] || 0) > 0.0001);
+    const source = districtSwingSource[d] || "none";
+    if (source === "borrowed-demographic") {
+      const from = (districtRecency[d].borrowed_from || []).join(", ");
+      // A transferred swing is weaker evidence than an observed one: widen sigma.
+      return { shares, quality: "actual-local", sigma: 0.075,
+        provenance: `LCC 2025 ${src.division} + demographic-similarity swing (from ${from})` };
+    }
+    const hasSwing = source === "observed-2026";
     return { shares, quality: "actual-local", sigma: 0.06,
       provenance: `LCC 2025 ${src.division}${hasSwing ? " + 2026 district swing" : ""}` };
   }
@@ -209,7 +420,16 @@ function wardBase(w) {
     return { shares: normaliseShares(s.shares), quality: "actual-local", sigma: 0.05,
       provenance: `Blackburn 2026 borough (${src.wards.join(", ")})` };
   }
-  // blackpool-proxy
+  // Blackpool: aggregate the proposed ward's constituent 2023 wards.
+  const constituents = w.ward === "Park" ? ["Park"] : w.ward.split(" and ").map((s) => s.trim());
+  const rows = constituents.map((name) => bp2023ByWard[name]).filter(Boolean);
+  if (rows.length === constituents.length) {
+    const s = sharesFromRows(rows);
+    if (s) {
+      return { shares: applySwing(s.shares, bpSwing.swing), quality: "actual-local", sigma: 0.08,
+        provenance: `Blackpool 2023 (${constituents.join(" + ")}) + by-election swing (${bpSwing.note})` };
+    }
+  }
   return { shares: bpProxy.shares, quality: "proxy", sigma: 0.11, provenance: bpProxy.provenance };
 }
 
@@ -392,7 +612,7 @@ const output = {
   snapshot: {
     generated_at: process.env.SNAPSHOT_AT || "2026-07-22T00:00:00.000Z",
     model_version: "ukelections.lancashire-unitaries.v0.2.0-wardlevel",
-    method: "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's 2025->2026 borough and by-election swing), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Seats allocated under first-past-the-post bloc vote: the leading party's slate sweeps a safe ward, but a runner-up within 10 points picks off one seat (two in a near-tied four-seat ward). Seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
+    method: "Ward-by-ward forecast against the proposed 4UA warding (107 wards, 313 councillors). Each ward predicted from its LCC 2025 division result (nudged by the district's observed 2025->2026 borough and by-election swing where one exists; districts with no 2026 contest borrow a shrunk swing from demographically similar districts, weighted by a Gaussian kernel over standardised Census 2021 profiles and validated leave-one-out), the constituent Blackburn 2026 borough wards, or a Blackpool proxy. Seats allocated under first-past-the-post bloc vote: the leading party's slate sweeps a safe ward, but a runner-up within 10 points picks off one seat (two in a near-tied four-seat ward). Seat ranges and majority probabilities from a seeded 2,000-draw Monte Carlo. The rejected 3- and 5-unitary bids have no warding and are shown as district-aggregate vote share only.",
     voting_system: "First-past-the-post, confirmed. Elections to English principal councils, including the new unitaries and their May 2027 shadow authorities, are held under first-past-the-post (multi-member wards use the bloc vote). This is set by general law, not just precedent: the English Devolution and Community Empowerment Act 2026, the same Act that creates these unitaries and reformed mayoral and PCC elections (moving them back to the supplementary vote), deliberately left principal-council elections on first-past-the-post. Campaigners pressed for STV in council elections during the Bill's passage; it was not adopted. A directly-elected Lancashire mayor, if one is created for 2027, would be a separate contest under the supplementary vote and does not affect this council seat model.",
     election_target: "May 2027 shadow-authority elections",
     monte_carlo_draws: N_SIM,
@@ -405,9 +625,18 @@ const output = {
       "The government's decision (16 July 2026) is subject to Parliamentary approval via a Structural Change Order.",
       "Warding is the proposed 4UA scheme, not yet confirmed by the Local Government Boundary Commission; ward names and councillor counts may change.",
       "Seats use first-past-the-post bloc vote: the leading party sweeps a safe ward, and a runner-up within 10 points takes one seat (two in a near-tied four-seat ward). Marginal wards are flagged; their split is where most of the uncertainty sits.",
-      "Blackpool has no borough-wide local election in the corpus, so its 11 wards share a proxy pooled from recent Blackpool by-elections and the 2024 general election.",
+      "Blackpool wards are built from the May 2023 all-out borough election (council-declared results, cross-verified), aggregated onto the proposed merged wards, with a volume-weighted swing from Blackpool by-elections since. 2023 is the oldest base in the model, so these wards carry wider noise.",
       "The 3- and 5-unitary options were rejected and have no ward plan, so only their vote share is shown.",
+      "Districts without a May 2026 election carry a borrowed swing from demographically similar districts (shrunk 0.7x, wider ward noise). The leave-one-out error of that transfer, versus freezing those districts at May 2025, is published in data_vintage.swing_validation.",
     ],
+    data_vintage: {
+      note: "Per-district data recency: which districts have an observed 2025->2026 swing, which borrow one demographically, and the by-elections ingested for each. Wards in borrowed-swing districts carry wider noise in the Monte Carlo.",
+      districts: Object.fromEntries(LANCS_DISTRICTS.map((d) => [d, {
+        swing_source: districtSwingSource[d] || "none",
+        ...districtRecency[d],
+      }])),
+      swing_validation: swingValidation,
+    },
   },
   four_unitary: {
     label: fourModel.label,
