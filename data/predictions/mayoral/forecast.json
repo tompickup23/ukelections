@@ -1,0 +1,1211 @@
+{
+  "snapshot": {
+    "generated_at": "2026-08-08T08:19:58.578Z",
+    "model_version": "ukelections.mayoral.v1.0.0",
+    "election_target": "May 2027 mayoral elections (supplementary vote)",
+    "monte_carlo_draws": 2000,
+    "national_polling": {
+      "shares": {
+        "Reform UK": 0.25579598145285937,
+        "Labour": 0.20788253477588878,
+        "Conservative": 0.19783616692426587,
+        "Liberal Democrats": 0.11591962905718703,
+        "Green Party": 0.13523956723338484,
+        "Independent": 0,
+        "Other": 0.08732612055641423
+      },
+      "label": "13 polls, fieldwork to 2026-07-09",
+      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election"
+    },
+    "voting_system_note": "The English Devolution and Community Empowerment Act 2026 (Royal Assent 29 April 2026, section 63 and Schedule 30) restored the supplementary vote for mayoral and PCC elections. Commencement: SI 2026/656 brought the change into force on 18 June 2026 for elections whose notice is published on or after that date. The 7 May 2026 mayoral elections were the last under first past the post; every contest below uses the supplementary vote.",
+    "method_note": "Methods are reported separately and are never blended into a single point estimate. Where methods disagree on the most likely winner the contest is reported as method-split. Party-level projections only until nominations close; candidate effects in mayoral contests are large and the bands are wide by design.",
+    "caveats": [
+      "Projections are party level. Mayoral contests have strong candidate effects (independents and well known local figures routinely beat party baselines) which cannot be modelled before nominations close.",
+      "The supplementary vote transfer model is calibrated on a thin base: one Reform era SV contest (Greater Manchester, 30 July 2026) plus the pre-2022 SV era. Transfer parameters carry deliberately wide noise.",
+      "The GE swing method applies uniform national swing to a general election base; local and mayoral elections routinely deviate from national swing (differential turnout, local parties, incumbency).",
+      "Mansfield is forecast subject to its caveat: Nottinghamshire reorganisation may abolish the post, and the contest should be re-verified when nominations open.",
+      "No constituency level polling exists for any May 2027 mayoral contest as of generation; the first published poll for a contest supersedes these baselines (wire it in, per the Makerfield lesson)."
+    ],
+    "registry_sources": [
+      {
+        "label": "English Devolution and Community Empowerment Act 2026 (legislation.gov.uk)",
+        "url": "https://www.legislation.gov.uk/ukpga/2026/23"
+      },
+      {
+        "label": "EDCE Act 2026 Commencement No. 1 Regulations, SI 2026/656 (supplementary vote in force 18 June 2026)",
+        "url": "https://www.legislationtracker.co.uk/article/english-devolution-and-community-empowerment-act-2026-commencement-no-1-17-06-26"
+      },
+      {
+        "label": "Combined Authorities (Mayoral Elections) (Amendment) Order 2026, SI 2026/652 (Hansard, 8 June 2026)",
+        "url": "https://hansard.parliament.uk/commons/2026-06-08/debates/4496bb76-b7f5-4dd3-9b03-ae6eb4935e5d/DraftCombinedAuthorities(MayoralElections)(Amendment)Order2026"
+      },
+      {
+        "label": "Electoral Reform Society on the restored supplementary vote (30 April 2026)",
+        "url": "https://electoral-reform.org.uk/new-law-restores-fairer-voting-system-for-mayoral-elections/"
+      },
+      {
+        "label": "DPP mayoral elections delayed: written statement HCWS1128, 4 December 2025",
+        "url": "https://questions-statements.parliament.uk/written-statements/detail/2025-12-04/hcws1128"
+      },
+      {
+        "label": "gov.uk election timetable in England (2028/2032 combined authority cycle)",
+        "url": "https://www.gov.uk/government/publications/election-timetable-in-england/election-timetable-in-england"
+      },
+      {
+        "label": "Institute for Government: regional mayors and devolution (updated 3 August 2026)",
+        "url": "https://www.instituteforgovernment.org.uk/explainer/regional-mayors-devolution"
+      }
+    ]
+  },
+  "contests": [
+    {
+      "slug": "cumbria",
+      "label": "Mayor of Cumbria",
+      "authority": "Cumbria Combined Authority",
+      "election_date": "2027-05-06",
+      "status": "confirmed",
+      "status_note": "Established by the Cumbria Combined Authority Order 2026. The first mayoral election was deferred from 2026 to 6 May 2027 at the request of the two constituent councils.",
+      "first_election": true,
+      "incumbent": null,
+      "voting_system": "supplementary_vote",
+      "constituent_councils": [
+        {
+          "name": "Cumberland",
+          "lad25cd": "E06000063"
+        },
+        {
+          "name": "Westmorland and Furness",
+          "lad25cd": "E06000064"
+        }
+      ],
+      "declared_candidates_note": "Declared so far: Mike Starkie (Conservative, former Copeland mayor), Libby Bateman (Liberal Democrats), David Allen (Labour and Co-operative, sitting Cumbria police, fire and crime commissioner). Reform UK and the Green Party had not named candidates as of 6 August 2026.",
+      "methods_agree_on_leader": true,
+      "consensus_leader": "Reform UK",
+      "method_leaders": [
+        "Reform UK"
+      ],
+      "methods": [
+        {
+          "id": "ge_swing_2024",
+          "label": "GE2024 base + national swing",
+          "description": "General election 2024 results across the Cumberland, Westmorland and Furness area (6 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (13 polls, fieldwork to 2026-07-09). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "base": {
+            "shares": {
+              "Reform UK": 0.16455375865667002,
+              "Labour": 0.3571358303695696,
+              "Conservative": 0.2588841195179497,
+              "Liberal Democrats": 0.17764438811026823,
+              "Green Party": 0.034590188238050754,
+              "Independent": 0.003751657274445427,
+              "Other": 0.0034400578330463054
+            },
+            "source": "GE2024 constituency results (DC), ONS postcode crosswalk",
+            "weighted_votes": 240694
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.2767,
+              "p10": 0.1934,
+              "p90": 0.3421,
+              "p_reach_runoff": 0.816,
+              "p_win": 0.486
+            },
+            "Labour": {
+              "central": 0.2275,
+              "p10": 0.146,
+              "p90": 0.2928,
+              "p_reach_runoff": 0.501,
+              "p_win": 0.248
+            },
+            "Conservative": {
+              "central": 0.2202,
+              "p10": 0.1373,
+              "p90": 0.2803,
+              "p_reach_runoff": 0.447,
+              "p_win": 0.163
+            },
+            "Liberal Democrats": {
+              "central": 0.1712,
+              "p10": 0.0941,
+              "p90": 0.2394,
+              "p_reach_runoff": 0.208,
+              "p_win": 0.091
+            },
+            "Green Party": {
+              "central": 0.1006,
+              "p10": 0.0174,
+              "p90": 0.1645,
+              "p_reach_runoff": 0.026,
+              "p_win": 0.011
+            },
+            "Independent": {
+              "central": 0.0037,
+              "p10": 0,
+              "p90": 0.0756,
+              "p_reach_runoff": 0.001,
+              "p_win": 0
+            },
+            "Other": {
+              "central": 0,
+              "p10": 0,
+              "p90": 0.0796,
+              "p_reach_runoff": 0.001,
+              "p_win": 0.001
+            }
+          },
+          "modal_runoff": {
+            "pair": "Labour v Reform UK",
+            "probability": 0.359,
+            "median_final_split": {
+              "Reform UK": 0.507,
+              "Labour": 0.493
+            }
+          }
+        }
+      ],
+      "sources": [
+        {
+          "label": "Cumbria Combined Authority Order 2026 (legislation.gov.uk)",
+          "url": "https://www.legislation.gov.uk/ukdsi/2026/9780348277906"
+        },
+        {
+          "label": "Cumberland Council: councils request deferral of mayoral election to May 2027",
+          "url": "https://www.cumberland.gov.uk/news/2025/councils-request-deferral-mayoral-election-may-2027"
+        },
+        {
+          "label": "BBC News: Cumbria mayoral election deferral",
+          "url": "https://feeds.bbci.co.uk/news/articles/cjrlv415jplo"
+        },
+        {
+          "label": "Wikipedia: 2027 Cumbria mayoral election (candidates)",
+          "url": "https://en.wikipedia.org/wiki/2027_Cumbria_mayoral_election"
+        }
+      ]
+    },
+    {
+      "slug": "cheshire-and-warrington",
+      "label": "Mayor of Cheshire and Warrington",
+      "authority": "Cheshire and Warrington Combined Authority",
+      "election_date": "2027-05-06",
+      "status": "confirmed",
+      "status_note": "Authority established 24 February 2026 by the Cheshire and Warrington Combined Authority Order 2026. First mayoral election 6 May 2027; the mayor takes office on 10 May 2027 for a four year term.",
+      "first_election": true,
+      "incumbent": null,
+      "voting_system": "supplementary_vote",
+      "constituent_councils": [
+        {
+          "name": "Cheshire East",
+          "lad25cd": "E06000049"
+        },
+        {
+          "name": "Cheshire West and Chester",
+          "lad25cd": "E06000050"
+        },
+        {
+          "name": "Warrington",
+          "lad25cd": "E06000007"
+        }
+      ],
+      "declared_candidates_note": "No declared candidates found as of 6 August 2026.",
+      "methods_agree_on_leader": true,
+      "consensus_leader": "Labour",
+      "method_leaders": [
+        "Labour"
+      ],
+      "methods": [
+        {
+          "id": "ge_swing_2024",
+          "label": "GE2024 base + national swing",
+          "description": "General election 2024 results across the Cheshire East, Cheshire West and Chester, Warrington area (11 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (13 polls, fieldwork to 2026-07-09). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "base": {
+            "shares": {
+              "Reform UK": 0.15999638831110113,
+              "Labour": 0.43751706799113393,
+              "Conservative": 0.26561331539969096,
+              "Liberal Democrats": 0.06541159621587933,
+              "Green Party": 0.05193422924855929,
+              "Independent": 0.015840376153052477,
+              "Other": 0.003687026680582953
+            },
+            "source": "GE2024 constituency results (DC), ONS postcode crosswalk",
+            "weighted_votes": 477159
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.2723,
+              "p10": 0.1873,
+              "p90": 0.3367,
+              "p_reach_runoff": 0.727,
+              "p_win": 0.327
+            },
+            "Labour": {
+              "central": 0.3078,
+              "p10": 0.2218,
+              "p90": 0.3706,
+              "p_reach_runoff": 0.87,
+              "p_win": 0.537
+            },
+            "Conservative": {
+              "central": 0.227,
+              "p10": 0.1394,
+              "p90": 0.2902,
+              "p_reach_runoff": 0.378,
+              "p_win": 0.132
+            },
+            "Liberal Democrats": {
+              "central": 0.0592,
+              "p10": 0,
+              "p90": 0.1254,
+              "p_reach_runoff": 0.002,
+              "p_win": 0.001
+            },
+            "Green Party": {
+              "central": 0.1179,
+              "p10": 0.0338,
+              "p90": 0.1827,
+              "p_reach_runoff": 0.022,
+              "p_win": 0.004
+            },
+            "Independent": {
+              "central": 0.0158,
+              "p10": 0,
+              "p90": 0.0923,
+              "p_reach_runoff": 0.002,
+              "p_win": 0
+            },
+            "Other": {
+              "central": 0,
+              "p10": 0,
+              "p90": 0.0753,
+              "p_reach_runoff": 0,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Labour v Reform UK",
+            "probability": 0.598,
+            "median_final_split": {
+              "Labour": 0.512,
+              "Reform UK": 0.488
+            }
+          }
+        }
+      ],
+      "sources": [
+        {
+          "label": "Cheshire and Warrington Combined Authority Order 2026 (legislation.gov.uk)",
+          "url": "https://www.legislation.gov.uk/ukdsi/2026/9780348277913"
+        },
+        {
+          "label": "Hansard, Lords Grand Committee, 10 February 2026",
+          "url": "https://hansard.parliament.uk/Lords/2026-02-10/debates/2FEB31F0-33EA-4547-9468-3E9BD57DA8BF/details"
+        },
+        {
+          "label": "Warrington Borough Council: mayoral election May 2027",
+          "url": "https://www.warrington.gov.uk/news/cheshire-and-warrington-councils-request-mayoral-election-takes-place-may-2027"
+        }
+      ]
+    },
+    {
+      "slug": "bedford",
+      "label": "Mayor of Bedford",
+      "authority": "Bedford Borough Council",
+      "election_date": "2027-05-06",
+      "status": "confirmed",
+      "status_note": "Routine four year cycle alongside the borough elections.",
+      "first_election": false,
+      "incumbent": {
+        "name": "Tom Wootton",
+        "party": "Conservative",
+        "elected": 2023
+      },
+      "voting_system": "supplementary_vote",
+      "constituent_councils": [
+        {
+          "name": "Bedford",
+          "lad25cd": "E06000055"
+        }
+      ],
+      "declared_candidates_note": null,
+      "methods_agree_on_leader": false,
+      "consensus_leader": null,
+      "method_leaders": [
+        "Conservative",
+        "Liberal Democrats"
+      ],
+      "methods": [
+        {
+          "id": "ge_swing_2024",
+          "label": "GE2024 base + national swing",
+          "description": "General election 2024 results across the Bedford area (3 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (13 polls, fieldwork to 2026-07-09). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "base": {
+            "shares": {
+              "Reform UK": 0.13861472991756404,
+              "Labour": 0.3717370534420317,
+              "Conservative": 0.2965628962626021,
+              "Liberal Democrats": 0.10008422870028337,
+              "Green Party": 0.05796613323406511,
+              "Independent": 0.02221415603912853,
+              "Other": 0.012820802404324934
+            },
+            "source": "GE2024 constituency results (DC), ONS postcode crosswalk",
+            "weighted_votes": 80401
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.2514,
+              "p10": 0.1747,
+              "p90": 0.3162,
+              "p_reach_runoff": 0.662,
+              "p_win": 0.346
+            },
+            "Labour": {
+              "central": 0.2426,
+              "p10": 0.1679,
+              "p90": 0.306,
+              "p_reach_runoff": 0.589,
+              "p_win": 0.281
+            },
+            "Conservative": {
+              "central": 0.2584,
+              "p10": 0.1779,
+              "p90": 0.3197,
+              "p_reach_runoff": 0.687,
+              "p_win": 0.353
+            },
+            "Liberal Democrats": {
+              "central": 0.094,
+              "p10": 0.0186,
+              "p90": 0.1597,
+              "p_reach_runoff": 0.011,
+              "p_win": 0.003
+            },
+            "Green Party": {
+              "central": 0.1242,
+              "p10": 0.0469,
+              "p90": 0.1926,
+              "p_reach_runoff": 0.05,
+              "p_win": 0.017
+            },
+            "Independent": {
+              "central": 0.0222,
+              "p10": 0,
+              "p90": 0.0929,
+              "p_reach_runoff": 0.001,
+              "p_win": 0.001
+            },
+            "Other": {
+              "central": 0.0071,
+              "p10": 0,
+              "p90": 0.077,
+              "p_reach_runoff": 0,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Conservative v Reform UK",
+            "probability": 0.363,
+            "median_final_split": {
+              "Reform UK": 0.501,
+              "Conservative": 0.499
+            }
+          }
+        },
+        {
+          "id": "prior_swing",
+          "label": "2023 mayoral result + proportional swing",
+          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (13 polls, fieldwork to 2026-07-09) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
+          "base": {
+            "shares": {
+              "Reform UK": 0,
+              "Labour": 0.24303031576293618,
+              "Conservative": 0.3308262778629803,
+              "Liberal Democrats": 0.32777999537805413,
+              "Green Party": 0.07972856572617072,
+              "Independent": 0,
+              "Other": 0.01863484526985861
+            },
+            "source": "https://www.bedford.gov.uk/your-council/elections-and-voting/previous-election-results/local-elections-4-may-2023",
+            "year": 2023
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.1367,
+              "p10": 0.0489,
+              "p90": 0.2087,
+              "p_reach_runoff": 0.14,
+              "p_win": 0.009
+            },
+            "Labour": {
+              "central": 0.1022,
+              "p10": 0.0159,
+              "p90": 0.1765,
+              "p_reach_runoff": 0.078,
+              "p_win": 0.005
+            },
+            "Conservative": {
+              "central": 0.201,
+              "p10": 0.1179,
+              "p90": 0.2758,
+              "p_reach_runoff": 0.523,
+              "p_win": 0.03
+            },
+            "Liberal Democrats": {
+              "central": 0.3759,
+              "p10": 0.2774,
+              "p90": 0.454,
+              "p_reach_runoff": 0.99,
+              "p_win": 0.942
+            },
+            "Green Party": {
+              "central": 0.16,
+              "p10": 0.0731,
+              "p90": 0.2319,
+              "p_reach_runoff": 0.255,
+              "p_win": 0.015
+            },
+            "Independent": {
+              "central": 0,
+              "p10": 0,
+              "p90": 0.0846,
+              "p_reach_runoff": 0.005,
+              "p_win": 0
+            },
+            "Other": {
+              "central": 0.0242,
+              "p10": 0,
+              "p90": 0.1052,
+              "p_reach_runoff": 0.009,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Conservative v Liberal Democrats",
+            "probability": 0.514,
+            "median_final_split": {
+              "Liberal Democrats": 0.596,
+              "Conservative": 0.404
+            }
+          }
+        }
+      ],
+      "sources": [
+        {
+          "label": "Bedford Borough Council: types of elections",
+          "url": "https://www.bedford.gov.uk/your-council/elections-and-voting/types-elections"
+        },
+        {
+          "label": "Bedford Borough Council: local elections 4 May 2023 results",
+          "url": "https://www.bedford.gov.uk/your-council/elections-and-voting/previous-election-results/local-elections-4-may-2023"
+        },
+        {
+          "label": "Wikipedia: 2027 United Kingdom local elections",
+          "url": "https://en.wikipedia.org/wiki/2027_United_Kingdom_local_elections"
+        }
+      ]
+    },
+    {
+      "slug": "middlesbrough",
+      "label": "Mayor of Middlesbrough",
+      "authority": "Middlesbrough Council",
+      "election_date": "2027-05-06",
+      "status": "confirmed",
+      "status_note": "Routine four year cycle alongside the borough elections.",
+      "first_election": false,
+      "incumbent": {
+        "name": "Chris Cooke",
+        "party": "Labour and Co-operative",
+        "elected": 2023
+      },
+      "voting_system": "supplementary_vote",
+      "constituent_councils": [
+        {
+          "name": "Middlesbrough",
+          "lad25cd": "E06000002"
+        }
+      ],
+      "declared_candidates_note": null,
+      "methods_agree_on_leader": false,
+      "consensus_leader": null,
+      "method_leaders": [
+        "Labour",
+        "Independent"
+      ],
+      "methods": [
+        {
+          "id": "ge_swing_2024",
+          "label": "GE2024 base + national swing",
+          "description": "General election 2024 results across the Middlesbrough area (2 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (13 polls, fieldwork to 2026-07-09). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "base": {
+            "shares": {
+              "Reform UK": 0.12927509263354034,
+              "Labour": 0.45756995000743395,
+              "Conservative": 0.2708481091889208,
+              "Liberal Democrats": 0.03872505919327343,
+              "Green Party": 0.04194261538109208,
+              "Independent": 0.007027016815022133,
+              "Other": 0.054612156780717167
+            },
+            "source": "GE2024 constituency results (DC), ONS postcode crosswalk",
+            "weighted_votes": 46785
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.2421,
+              "p10": 0.1651,
+              "p90": 0.3029,
+              "p_reach_runoff": 0.557,
+              "p_win": 0.163
+            },
+            "Labour": {
+              "central": 0.3285,
+              "p10": 0.2484,
+              "p90": 0.3903,
+              "p_reach_runoff": 0.951,
+              "p_win": 0.695
+            },
+            "Conservative": {
+              "central": 0.2327,
+              "p10": 0.1558,
+              "p90": 0.2926,
+              "p_reach_runoff": 0.467,
+              "p_win": 0.14
+            },
+            "Liberal Democrats": {
+              "central": 0.0326,
+              "p10": 0,
+              "p90": 0.1056,
+              "p_reach_runoff": 0.001,
+              "p_win": 0
+            },
+            "Green Party": {
+              "central": 0.1082,
+              "p10": 0.0312,
+              "p90": 0.1719,
+              "p_reach_runoff": 0.022,
+              "p_win": 0.002
+            },
+            "Independent": {
+              "central": 0.007,
+              "p10": 0,
+              "p90": 0.08,
+              "p_reach_runoff": 0.001,
+              "p_win": 0
+            },
+            "Other": {
+              "central": 0.0489,
+              "p10": 0,
+              "p90": 0.1166,
+              "p_reach_runoff": 0.002,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Labour v Reform UK",
+            "probability": 0.508,
+            "median_final_split": {
+              "Labour": 0.529,
+              "Reform UK": 0.471
+            }
+          }
+        },
+        {
+          "id": "prior_swing",
+          "label": "2023 mayoral result + proportional swing",
+          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (13 polls, fieldwork to 2026-07-09) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
+          "base": {
+            "shares": {
+              "Reform UK": 0,
+              "Labour": 0.4020402920993725,
+              "Conservative": 0.10997761550034861,
+              "Liberal Democrats": 0,
+              "Green Party": 0,
+              "Independent": 0.4879820924002789,
+              "Other": 0
+            },
+            "source": "https://www.middlesbrough.gov.uk/elections/election-results/",
+            "year": 2023
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.1383,
+              "p10": 0.0525,
+              "p90": 0.2168,
+              "p_reach_runoff": 0.289,
+              "p_win": 0.023
+            },
+            "Labour": {
+              "central": 0.1712,
+              "p10": 0.0853,
+              "p90": 0.2473,
+              "p_reach_runoff": 0.495,
+              "p_win": 0.037
+            },
+            "Conservative": {
+              "central": 0.0676,
+              "p10": 0,
+              "p90": 0.1476,
+              "p_reach_runoff": 0.057,
+              "p_win": 0.004
+            },
+            "Liberal Democrats": {
+              "central": 0.0627,
+              "p10": 0,
+              "p90": 0.1437,
+              "p_reach_runoff": 0.059,
+              "p_win": 0.002
+            },
+            "Green Party": {
+              "central": 0.0731,
+              "p10": 0,
+              "p90": 0.1482,
+              "p_reach_runoff": 0.067,
+              "p_win": 0.003
+            },
+            "Independent": {
+              "central": 0.4398,
+              "p10": 0.3384,
+              "p90": 0.5278,
+              "p_reach_runoff": 1,
+              "p_win": 0.93
+            },
+            "Other": {
+              "central": 0.0472,
+              "p10": 0,
+              "p90": 0.1285,
+              "p_reach_runoff": 0.034,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Independent v Labour",
+            "probability": 0.495,
+            "median_final_split": {
+              "Independent": 0.586,
+              "Labour": 0.414
+            }
+          }
+        }
+      ],
+      "sources": [
+        {
+          "label": "Middlesbrough Council: election results",
+          "url": "https://www.middlesbrough.gov.uk/elections/election-results/"
+        },
+        {
+          "label": "Wikipedia: 2027 United Kingdom local elections",
+          "url": "https://en.wikipedia.org/wiki/2027_United_Kingdom_local_elections"
+        }
+      ]
+    },
+    {
+      "slug": "mansfield",
+      "label": "Mayor of Mansfield",
+      "authority": "Mansfield District Council",
+      "election_date": "2027-05-06",
+      "status": "scheduled_with_caveat",
+      "status_note": "Scheduled for 6 May 2027 per the council's own elections page, but Nottinghamshire local government reorganisation is expected to abolish the district and the mayoralty around 2028, and the council has explored scrapping the post. Treat as scheduled until nominations close; re-verify then.",
+      "first_election": false,
+      "incumbent": {
+        "name": "Andy Abrahams",
+        "party": "Labour",
+        "elected": 2019
+      },
+      "voting_system": "supplementary_vote",
+      "constituent_councils": [
+        {
+          "name": "Mansfield",
+          "lad25cd": "E07000174"
+        }
+      ],
+      "declared_candidates_note": null,
+      "methods_agree_on_leader": false,
+      "consensus_leader": null,
+      "method_leaders": [
+        "Reform UK",
+        "Labour"
+      ],
+      "methods": [
+        {
+          "id": "ge_swing_2024",
+          "label": "GE2024 base + national swing",
+          "description": "General election 2024 results across the Mansfield area (2 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (13 polls, fieldwork to 2026-07-09). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "base": {
+            "shares": {
+              "Reform UK": 0.2383672825751266,
+              "Labour": 0.38555197984237033,
+              "Conservative": 0.2946010156699619,
+              "Liberal Democrats": 0.01925064988306004,
+              "Green Party": 0.032038875709623195,
+              "Independent": 0.017564420312532365,
+              "Other": 0.012625776007325727
+            },
+            "source": "GE2024 constituency results (DC), ONS postcode crosswalk",
+            "weighted_votes": 43245
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.3512,
+              "p10": 0.2653,
+              "p90": 0.4064,
+              "p_reach_runoff": 0.949,
+              "p_win": 0.797
+            },
+            "Labour": {
+              "central": 0.2564,
+              "p10": 0.1774,
+              "p90": 0.3118,
+              "p_reach_runoff": 0.514,
+              "p_win": 0.075
+            },
+            "Conservative": {
+              "central": 0.2564,
+              "p10": 0.1772,
+              "p90": 0.3097,
+              "p_reach_runoff": 0.53,
+              "p_win": 0.128
+            },
+            "Liberal Democrats": {
+              "central": 0.0132,
+              "p10": 0,
+              "p90": 0.0813,
+              "p_reach_runoff": 0,
+              "p_win": 0
+            },
+            "Green Party": {
+              "central": 0.0983,
+              "p10": 0.0208,
+              "p90": 0.159,
+              "p_reach_runoff": 0.007,
+              "p_win": 0.001
+            },
+            "Independent": {
+              "central": 0.0176,
+              "p10": 0,
+              "p90": 0.0874,
+              "p_reach_runoff": 0,
+              "p_win": 0
+            },
+            "Other": {
+              "central": 0.007,
+              "p10": 0,
+              "p90": 0.0727,
+              "p_reach_runoff": 0,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Conservative v Reform UK",
+            "probability": 0.478,
+            "median_final_split": {
+              "Reform UK": 0.54,
+              "Conservative": 0.46
+            }
+          }
+        },
+        {
+          "id": "prior_swing",
+          "label": "2023 mayoral result + proportional swing",
+          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (13 polls, fieldwork to 2026-07-09) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
+          "base": {
+            "shares": {
+              "Reform UK": 0,
+              "Labour": 0.4505345784273921,
+              "Conservative": 0.2630937880633374,
+              "Liberal Democrats": 0,
+              "Green Party": 0,
+              "Independent": 0.2674245500067668,
+              "Other": 0.018947083502503723
+            },
+            "source": "https://www.mansfield.gov.uk/news/article/12666/mansfield-mayoral-and-district-election-results-2023",
+            "year": 2023
+          },
+          "parties": {
+            "Reform UK": {
+              "central": 0.1548,
+              "p10": 0.0696,
+              "p90": 0.2335,
+              "p_reach_runoff": 0.209,
+              "p_win": 0.12
+            },
+            "Labour": {
+              "central": 0.2147,
+              "p10": 0.1289,
+              "p90": 0.291,
+              "p_reach_runoff": 0.554,
+              "p_win": 0.363
+            },
+            "Conservative": {
+              "central": 0.181,
+              "p10": 0.1002,
+              "p90": 0.2567,
+              "p_reach_runoff": 0.347,
+              "p_win": 0.196
+            },
+            "Liberal Democrats": {
+              "central": 0.0701,
+              "p10": 0,
+              "p90": 0.1473,
+              "p_reach_runoff": 0.028,
+              "p_win": 0.015
+            },
+            "Green Party": {
+              "central": 0.0818,
+              "p10": 0,
+              "p90": 0.1549,
+              "p_reach_runoff": 0.028,
+              "p_win": 0.017
+            },
+            "Independent": {
+              "central": 0.2697,
+              "p10": 0.1822,
+              "p90": 0.349,
+              "p_reach_runoff": 0.829,
+              "p_win": 0.289
+            },
+            "Other": {
+              "central": 0.0278,
+              "p10": 0,
+              "p90": 0.1135,
+              "p_reach_runoff": 0.004,
+              "p_win": 0
+            }
+          },
+          "modal_runoff": {
+            "pair": "Independent v Labour",
+            "probability": 0.416,
+            "median_final_split": {
+              "Independent": 0.482,
+              "Labour": 0.518
+            }
+          }
+        }
+      ],
+      "sources": [
+        {
+          "label": "Mansfield District Council: current elections",
+          "url": "https://www.mansfield.gov.uk/elections-voting/current-elections"
+        },
+        {
+          "label": "Mansfield District Council: 2023 mayoral and district election results",
+          "url": "https://www.mansfield.gov.uk/news/article/12666/mansfield-mayoral-and-district-election-results-2023"
+        },
+        {
+          "label": "Notts TV: council explored scrapping the elected mayor system",
+          "url": "https://nottstv.com/mansfield-council-to-explore-scrapping-directly-elected-mayor-system-21-years-on/"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "contest": "Greater Manchester mayoral by-election, 30 July 2026",
+    "method": "ge_swing_2024",
+    "projected_first_pref": {
+      "Reform UK": 0.2865,
+      "Labour": 0.2988,
+      "Conservative": 0.1197,
+      "Liberal Democrats": 0.0811,
+      "Green Party": 0.1473,
+      "Independent": 0.0237,
+      "Other": 0.0429
+    },
+    "actual_first_pref": {
+      "Reform UK": 0.2099,
+      "Labour": 0.4715,
+      "Conservative": 0.0769,
+      "Liberal Democrats": 0.0276,
+      "Green Party": 0.1218,
+      "Independent": 0.0056,
+      "Other": 0.0868
+    },
+    "errors_pp": {
+      "Reform UK": 0.0767,
+      "Labour": -0.1726,
+      "Conservative": 0.0428,
+      "Liberal Democrats": 0.0535,
+      "Green Party": 0.0255,
+      "Independent": 0.0181,
+      "Other": -0.0439
+    },
+    "mae_pp": 6.2,
+    "winner_called": true,
+    "note": "The method called the Labour winner correctly but understated Labour's first round by a wide margin: a well known incumbent-adjacent candidate on a 25% turnout beat her party's national baseline decisively. That gap is exactly the candidate effect these projections cannot see before nominations, and it is why the bands are wide and the prior_swing method exists.",
+    "source_url": "https://www.gmelects.org.uk/result2026/"
+  },
+  "watchlist": [
+    {
+      "slug": "leicester",
+      "label": "Mayor of Leicester",
+      "status": "unresolved",
+      "status_note": "Nominally due in May 2027, but Leicestershire reorganisation (two unitaries from April 2028, shadow elections May 2027) makes the contest uncertain and the city mayor has said the post is very likely to be scrapped. A 2023 council vote to abolish it failed 20 to 32. No confirmation either way that a May 2027 city mayoral election will be held; not forecast.",
+      "sources": [
+        {
+          "label": "Leicester City Council: local government reorganisation",
+          "url": "https://www.leicester.gov.uk/local-government-reorganisation"
+        },
+        {
+          "label": "BBC News: Soulsby says mayoralty very likely to be scrapped",
+          "url": "https://feeds.bbci.co.uk/news/articles/cvg014xvwjqo"
+        }
+      ]
+    },
+    {
+      "slug": "lancashire",
+      "label": "Mayor of Lancashire",
+      "status": "not_scheduled",
+      "status_note": "No Lancashire mayoral election is scheduled and nothing is confirmed by order. The Lancashire Combined County Authority remains non mayoral. Reporting at the start of August 2026 puts a possible first election at 2028 at the earliest and stresses it is far from confirmed: the LCC opposition leader has asked for May 2027, the Blackburn and Blackpool leaders support a mayor, and the LCC and LCCA leader opposes. Government policy is not to impose mayors but to reach full strategic authority coverage of England by the end of 2028. The May 2027 Lancashire ballots are the shadow unitary elections only.",
+      "sources": [
+        {
+          "label": "LDRS via Yahoo News: renewed calls for a 2027 Lancashire mayoral election (31 July 2026)",
+          "url": "https://www.yahoo.com/news/politics/articles/renewed-calls-2027-lancashire-mayoral-053402561.html"
+        },
+        {
+          "label": "LGC: mayoral stalemate continues in Lancashire (6 August 2026)",
+          "url": "https://www.lgcplus.com/home/news/mayoral-stalemate-continues-in-lancashire-06-08-2026/"
+        },
+        {
+          "label": "Wikipedia: Lancashire Combined County Authority",
+          "url": "https://en.wikipedia.org/wiki/Lancashire_Combined_County_Authority"
+        }
+      ]
+    }
+  ],
+  "roster_2028": {
+    "note": "May 2028 contests are listed as a roster only. Forecasting a mayoral contest 21 months out, before candidates are known, would not pass our quality gate; these get forecasts closer to the contests. Date of 4 May 2028 is per the statutory cycle and contest pages; no SI level confirmation of the exact day has been sighted.",
+    "re_elections": [
+      {
+        "slug": "london",
+        "label": "Mayor of London and London Assembly",
+        "incumbent": {
+          "name": "Sadiq Khan",
+          "party": "Labour"
+        },
+        "note": "Khan standing for a fourth term; Laila Cunningham declared for Reform UK. The supplementary vote is expected but GLA specific conduct rules were still awaited; re-verify before any forecast."
+      },
+      {
+        "slug": "greater-manchester",
+        "label": "Mayor of Greater Manchester",
+        "incumbent": {
+          "name": "Bev Craig",
+          "party": "Labour and Co-operative"
+        },
+        "note": "Craig won the 30 July 2026 by-election triggered by Andy Burnham's election as an MP; section 17 of the 2026 Act requires a strategic mayor elected to the Commons to resign within eight days."
+      },
+      {
+        "slug": "liverpool-city-region",
+        "label": "Mayor of the Liverpool City Region",
+        "incumbent": {
+          "name": "Steve Rotheram",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "north-east",
+        "label": "Mayor of the North East",
+        "incumbent": {
+          "name": "Kim McGuinness",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "tees-valley",
+        "label": "Mayor of Tees Valley",
+        "incumbent": {
+          "name": "Ben Houchen",
+          "party": "Conservative"
+        }
+      },
+      {
+        "slug": "south-yorkshire",
+        "label": "Mayor of South Yorkshire",
+        "incumbent": {
+          "name": "Oliver Coppard",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "west-midlands",
+        "label": "Mayor of the West Midlands",
+        "incumbent": {
+          "name": "Richard Parker",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "west-yorkshire",
+        "label": "Mayor of West Yorkshire",
+        "incumbent": {
+          "name": "Tracy Brabin",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "york-and-north-yorkshire",
+        "label": "Mayor of York and North Yorkshire",
+        "incumbent": {
+          "name": "David Skaith",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "east-midlands",
+        "label": "Mayor of the East Midlands",
+        "incumbent": {
+          "name": "Claire Ward",
+          "party": "Labour"
+        }
+      },
+      {
+        "slug": "salford",
+        "label": "City Mayor of Salford",
+        "incumbent": {
+          "name": "Paul Dennett",
+          "party": "Labour"
+        }
+      }
+    ],
+    "first_elections": [
+      {
+        "slug": "hampshire-and-the-solent",
+        "label": "Mayor of Hampshire and the Solent",
+        "note": "Authority created 4 June 2026; mayoral election 4 May 2028. The strongest confirmed of the four delayed devolution priority programme areas.",
+        "source_url": "https://www.legislation.gov.uk/ukdsi/2026/9780348281200"
+      },
+      {
+        "slug": "greater-essex",
+        "label": "Mayor of Greater Essex",
+        "note": "Election announced for 4 May 2028; establishment order not yet verified as made."
+      },
+      {
+        "slug": "norfolk-and-suffolk",
+        "label": "Mayor of Norfolk and Suffolk",
+        "note": "Election announced for May 2028; establishment order not yet verified as made."
+      },
+      {
+        "slug": "sussex-and-brighton",
+        "label": "Mayor of Sussex and Brighton",
+        "note": "Election announced for 4 May 2028; establishment order not yet verified as made."
+      }
+    ],
+    "constituents_caveat": "All four first election areas are being reorganised under LGR before vesting, so constituent councils are described as areas, not fixed council lists.",
+    "london_polling": {
+      "note": "Published 2028 London voting intention, shown as reported. Not a forecast.",
+      "polls": [
+        {
+          "pollster": "Opinium",
+          "fieldwork": "July 2026",
+          "shares": {
+            "Labour": 0.32,
+            "Green Party": 0.18,
+            "Conservative": 0.17,
+            "Reform UK": 0.17,
+            "Liberal Democrats": 0.1
+          }
+        },
+        {
+          "pollster": "Savanta",
+          "fieldwork": "July 2026",
+          "shares": {
+            "Labour": 0.33,
+            "Conservative": 0.18,
+            "Reform UK": 0.18,
+            "Green Party": 0.17,
+            "Liberal Democrats": 0.09
+          }
+        }
+      ],
+      "source_url": "https://en.wikipedia.org/wiki/2028_London_mayoral_election"
+    }
+  },
+  "sv_calibration": {
+    "note": "Supplementary vote transfer behaviour anchors, verified 8 August 2026 against the returning authorities. Derived parameters: transfer reach (share of eliminated candidates' votes that reach a finalist) was 60.8 percent in Greater Manchester 2026 (103,326 of 169,949; 66,623 exhausted) and 44.3 percent in London 2021 (276,863 of 624,585). Of transfers reaching the finalists in GM 2026, 56.2 percent went to the Labour finalist and 43.8 percent to the Reform UK finalist, despite the eliminated pool leaning right of centre (Restore Britain plus Conservative outweighed Green plus Liberal Democrats).",
+    "gm_2026_byelection": {
+      "date": "2026-07-30",
+      "voting_system": "supplementary_vote",
+      "first_round": [
+        {
+          "name": "Bev Craig",
+          "party": "Labour and Co-operative",
+          "votes": 251449,
+          "share": 0.471
+        },
+        {
+          "name": "Sian Niamh Astley",
+          "party": "Reform UK",
+          "votes": 111928,
+          "share": 0.21
+        },
+        {
+          "name": "Geraldine Coggins",
+          "party": "Green Party",
+          "votes": 64968,
+          "share": 0.122
+        },
+        {
+          "name": "Marlon Scott West",
+          "party": "Restore Britain",
+          "votes": 46289,
+          "share": 0.087
+        },
+        {
+          "name": "Phil Eckersley",
+          "party": "Conservative",
+          "votes": 41021,
+          "share": 0.077
+        },
+        {
+          "name": "Richard Martin Kilpatrick",
+          "party": "Liberal Democrats",
+          "votes": 14702,
+          "share": 0.028
+        },
+        {
+          "name": "Marcus Jonathan Farmer",
+          "party": "Independent",
+          "votes": 2969,
+          "share": 0.006
+        }
+      ],
+      "total_first_preferences": 533326,
+      "final_round": {
+        "Bev Craig": 309525,
+        "Sian Niamh Astley": 157178
+      },
+      "final_shares": {
+        "Labour and Co-operative": 0.663,
+        "Reform UK": 0.337
+      },
+      "exhausted_ballots": 66623,
+      "turnout_pct": 0.2514,
+      "source_url": "https://www.gmelects.org.uk/result2026/"
+    },
+    "london_2021": {
+      "date": "2021-05-06",
+      "voting_system": "supplementary_vote",
+      "first_round_top_two": [
+        {
+          "name": "Sadiq Khan",
+          "party": "Labour",
+          "votes": 1013721,
+          "share": 0.4
+        },
+        {
+          "name": "Shaun Bailey",
+          "party": "Conservative",
+          "votes": 893051,
+          "share": 0.353
+        }
+      ],
+      "total_first_preferences": 2531357,
+      "transfers_received": {
+        "Sadiq Khan": 192313,
+        "Shaun Bailey": 84550
+      },
+      "final_round": {
+        "Sadiq Khan": 1206034,
+        "Shaun Bailey": 977601
+      },
+      "source_url": "https://www.londonelects.org.uk/files/London%20Elects%20-%20Results%20Factsheet%202021.pdf"
+    }
+  }
+}

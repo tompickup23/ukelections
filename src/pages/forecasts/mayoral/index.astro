@@ -1,0 +1,357 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import RaceBar from "../../../components/RaceBar.astro";
+import { loadMayoralForecasts, partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+
+const data = loadMayoralForecasts();
+const snap = data.snapshot;
+const contests = data.contests;
+const watchlist = data.watchlist;
+const roster = data.roster_2028;
+const lancashire = watchlist.find((w: any) => w.slug === "lancashire");
+const otherWatch = watchlist.filter((w: any) => w.slug !== "lancashire");
+const validation = data.validation;
+
+// Unique method descriptions across all contests (not every contest runs both).
+const methodDescriptions: Array<{ label: string; description: string }> = [];
+for (const c of contests) {
+  for (const m of c.methods) {
+    if (!methodDescriptions.some((x) => x.label.startsWith(m.id))) {
+      methodDescriptions.push({ label: `${m.id} · ${m.label}`, description: m.description });
+    }
+  }
+}
+
+function pct(x: number) { return `${(x * 100).toFixed(0)}%`; }
+function pp(x: number) { return (x * 100).toFixed(1); }
+
+function methodShares(m: any) {
+  return Object.entries(m.parties)
+    .map(([party, v]: [string, any]) => ({ party, pct: v.central, ...v }))
+    .filter((r) => r.pct > 0.005)
+    .sort((a, b) => b.pct - a.pct);
+}
+
+function winRows(m: any) {
+  return Object.entries(m.parties)
+    .map(([party, v]: [string, any]) => ({ party, ...v }))
+    .filter((r) => r.p_win >= 0.005)
+    .sort((a, b) => b.p_win - a.p_win);
+}
+
+function statusPill(status: string) {
+  if (status === "confirmed") return { cls: "status-pill status-pill--confirmed", label: "Confirmed" };
+  if (status === "scheduled_with_caveat") return { cls: "status-pill status-pill--caveat", label: "Scheduled, see caveat" };
+  return { cls: "status-pill", label: status };
+}
+---
+
+<BaseLayout
+  title="Mayoral projections: May 2027 under the supplementary vote"
+  description="Party-level projections for every May 2027 directly elected mayoral contest in England: Cumbria, Cheshire and Warrington, Bedford, Middlesbrough and Mansfield. Two labelled methods per contest, supplementary vote runoff modelling, and win probabilities from a seeded Monte Carlo."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Mayoral projections · Supplementary vote</p>
+    <h1>The May 2027 mayoral races, projected</h1>
+    <p class="lede">
+      Five directly elected mayoral contests are scheduled for <strong>6 May 2027</strong>: the first mayors of
+      <strong>Cumbria</strong> and <strong>Cheshire and Warrington</strong>, and re-elections in
+      <strong>Bedford</strong>, <strong>Middlesbrough</strong> and <strong>Mansfield</strong>. They are the first
+      scheduled elections under the restored <strong>supplementary vote</strong>, so winning takes a top-two finish
+      and then a transfer round. We project each race two ways and give win probabilities from
+      {snap.monte_carlo_draws.toLocaleString()} simulated runs.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="backtest-callout backtest-callout--warn">
+      <strong>⚠ Party-level projections, not seat calls.</strong>
+      <span class="backtest-detail">
+        No candidates are confirmed for most of these races and no constituency polling exists for any of them.
+        Mayoral contests have strong candidate effects that no model can see before nominations close, so the bands
+        are wide by design. Each method is shown separately and they are never blended into a single headline
+        number. When the methods disagree on the likely winner, we say so.
+      </span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="fact-grid">
+      <div class="fact"><span class="fact-k">Polling day</span><span class="fact-v">6 May 2027</span><span class="fact-s">all five contests</span></div>
+      <div class="fact"><span class="fact-k">First elections</span><span class="fact-v">2 mayors</span><span class="fact-s">Cumbria · Cheshire and Warrington</span></div>
+      <div class="fact"><span class="fact-k">Re-elections</span><span class="fact-v">3 mayors</span><span class="fact-s">Bedford · Middlesbrough · Mansfield</span></div>
+      <div class="fact"><span class="fact-k">Voting system</span><span class="fact-v">Supplementary vote</span><span class="fact-s">restored 18 June 2026</span></div>
+    </div>
+    <p class="name-caveat"><strong>The system changed back.</strong> {snap.voting_system_note}</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">How the supplementary vote changes the race</p>
+      <h2>Top two, then transfers</h2>
+    </div>
+    <p class="prose-lead">
+      Voters mark a first and second preference. If nobody clears 50 percent, everyone but the top two is
+      eliminated and their ballots transfer to whichever finalist their second preference names, if either.
+      Leading the first round is not enough: in the 30 July 2026 Greater Manchester by-election, the first contest
+      under the restored system, Labour's Bev Craig converted a 47 percent first round into a 66 to 34 final round
+      as transfers broke heavily against the Reform UK finalist. That transfer behaviour, plus the pre-2022
+      supplementary vote record, calibrates the runoff model here, with deliberately wide uncertainty.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">May 2027 · five contests</p>
+      <h2>The projections</h2>
+    </div>
+
+    <div class="contest-list">
+      {contests.map((c: any) => {
+        const pill = statusPill(c.status);
+        return (
+          <article class="contest-card">
+            <header class="contest-head">
+              <div>
+                <h3>{c.label}</h3>
+                <p class="contest-sub">
+                  {c.constituent_councils.map((x: any) => x.name).join(" · ")}
+                  {c.incumbent ? ` · Incumbent: ${c.incumbent.name} (${shortPartyLabel(c.incumbent.party)})` : " · First election"}
+                </p>
+              </div>
+              <span class={pill.cls}>{pill.label}</span>
+            </header>
+
+            {c.status === "scheduled_with_caveat" && (
+              <p class="contest-caveat">{c.status_note}</p>
+            )}
+
+            {!c.methods_agree_on_leader && c.methods.length > 1 && (
+              <p class="method-split">
+                ⚠ <strong>Method split.</strong> Our two methods disagree on the likely winner
+                ({c.method_leaders.map((x: string) => shortPartyLabel(x)).join(" vs ")}). No blended call is made;
+                read both rows.
+              </p>
+            )}
+
+            {c.methods.map((m: any) => (
+              <div class="method-block">
+                <p class="method-label"><strong>{m.label}</strong></p>
+                <RaceBar
+                  shares={methodShares(m).map((r) => ({ party: r.party, pct: r.pct }))}
+                  ariaLabel={`${c.label}: projected first preferences, ${m.label}`}
+                  height={40}
+                  showLegend={false}
+                />
+                <div class="win-chips">
+                  {winRows(m).map((r) => (
+                    <span class="win-chip">
+                      <span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>
+                      {shortPartyLabel(r.party)} <strong>{pct(r.p_win)}</strong>
+                      <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}–{pp(r.p90)})</span>
+                    </span>
+                  ))}
+                </div>
+                {m.modal_runoff && (
+                  <p class="runoff-line">
+                    Most likely runoff: <strong>{m.modal_runoff.pair.split(" v ").map((x: string) => shortPartyLabel(x)).join(" v ")}</strong>
+                    ({pct(m.modal_runoff.probability)} of runs), median final round
+                    {" "}{Object.entries(m.modal_runoff.median_final_split).map(([party, v]: [string, any]) => `${shortPartyLabel(party)} ${pct(v)}`).join(" · ")}.
+                  </p>
+                )}
+              </div>
+            ))}
+
+            {c.declared_candidates_note && <p class="cand-note">{c.declared_candidates_note}</p>}
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  {lancashire && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">The one everyone asks about</p>
+        <h2>No Mayor of Lancashire on any ballot</h2>
+      </div>
+      <div class="lancs-box">
+        <p>{lancashire.status_note}</p>
+        <p class="micro">
+          Sources: {lancashire.sources.map((s: any, i: number) => (
+            <span>{i > 0 ? " · " : ""}<a href={s.url} rel="noopener">{s.label}</a></span>
+          ))}
+        </p>
+      </div>
+    </section>
+  )}
+
+  {otherWatch.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Watchlist</p>
+        <h2>Unresolved contests</h2>
+      </div>
+      {otherWatch.map((w: any) => (
+        <div class="watch-item">
+          <h3>{w.label} <span class="rejected-tag">{w.status}</span></h3>
+          <p>{w.status_note}</p>
+        </div>
+      ))}
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Looking ahead · 4 May 2028</p>
+      <h2>The 2028 slate, on the roster</h2>
+    </div>
+    <p class="prose-lead">{roster.note}</p>
+    <div class="roster-cols">
+      <div>
+        <h3>Re-elections</h3>
+        <table class="compare-table">
+          <thead><tr><th>Mayoralty</th><th>Incumbent</th></tr></thead>
+          <tbody>
+            {roster.re_elections.map((r: any) => (
+              <tr>
+                <td><strong>{r.label}</strong>{r.note ? <span class="roster-note"> {r.note}</span> : null}</td>
+                <td><span class="party-swatch" style={`background:${partyColour(r.incumbent.party)}`}></span>{r.incumbent.name} ({shortPartyLabel(r.incumbent.party)})</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>First elections</h3>
+        <table class="compare-table">
+          <thead><tr><th>Mayoralty</th><th>Status</th></tr></thead>
+          <tbody>
+            {roster.first_elections.map((r: any) => (
+              <tr><td><strong>{r.label}</strong></td><td class="td-districts">{r.note}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="micro">{roster.constituents_caveat}</p>
+      </div>
+    </div>
+    {roster.london_polling && (
+      <div class="london-polls">
+        <h3>London 2028: published polling</h3>
+        <p class="micro">{roster.london_polling.note}</p>
+        <table class="compare-table">
+          <thead><tr><th>Pollster</th><th>Fieldwork</th>{Object.keys(roster.london_polling.polls[0].shares).map((k) => <th>{shortPartyLabel(k)}</th>)}</tr></thead>
+          <tbody>
+            {roster.london_polling.polls.map((poll: any) => (
+              <tr>
+                <td>{poll.pollster}</td>
+                <td>{poll.fieldwork}</td>
+                {Object.values(poll.shares).map((v: any) => <td>{Math.round(v * 100)}%</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="micro"><a href={roster.london_polling.source_url} rel="noopener">Source</a></p>
+      </div>
+    )}
+  </section>
+
+  <section class="section prose-block">
+    <h2>Methodology</h2>
+    <p>{snap.method_note}</p>
+    <ul>
+      {methodDescriptions.map((m) => (
+        <li><strong>{m.label}:</strong> {m.description}</li>
+      ))}
+    </ul>
+    {validation && (
+      <div class="validation-box">
+        <h3>Does the method work? The one live test so far</h3>
+        <p>
+          The GE-base method, run on the {validation.contest} exactly as we run it above, gives a per-party
+          error of <strong>{validation.mae_pp}pp MAE</strong> and
+          {validation.winner_called ? " called the winner correctly" : " called the wrong winner"}.
+          {" "}{validation.note}
+        </p>
+        <table class="compare-table">
+          <thead><tr><th>Party</th><th>Projected 1st pref</th><th>Actual</th><th>Error</th></tr></thead>
+          <tbody>
+            {Object.entries(validation.actual_first_pref)
+              .filter(([party, v]: [string, any]) => v > 0.02 || (validation.projected_first_pref[party] || 0) > 0.02)
+              .sort((a: any, b: any) => b[1] - a[1])
+              .map(([party, actual]: [string, any]) => (
+                <tr>
+                  <td><span class="party-swatch" style={`background:${partyColour(party)}`}></span>{shortPartyLabel(party)}</td>
+                  <td>{(validation.projected_first_pref[party] * 100).toFixed(1)}%</td>
+                  <td>{(actual * 100).toFixed(1)}%</td>
+                  <td>{(validation.errors_pp[party] * 100).toFixed(1)}pp</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <p class="micro"><a href={validation.source_url} rel="noopener">Result source: GM Elects</a></p>
+      </div>
+    )}
+    <h3>Caveats</h3>
+    <ul>
+      {snap.caveats.map((c: string) => <li>{c}</li>)}
+    </ul>
+    <h3>Sources</h3>
+    <ul>
+      {snap.registry_sources.map((s: any) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
+    </ul>
+    <p class="micro">
+      Model {snap.model_version} · target: {snap.election_target} · national polling anchor: {snap.national_polling.label} ·
+      generated {new Date(snap.generated_at).toISOString().slice(0, 10)}.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+.fact { display: flex; flex-direction: column; padding: 0.9rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.fact-k { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.fact-v { font-size: 1.25rem; font-weight: 700; margin-top: 0.15rem; }
+.fact-s { font-size: 0.8rem; color: var(--muted); }
+.name-caveat { margin-top: 1.25rem; font-size: 0.9rem; color: var(--muted); border-left: 3px solid var(--border); padding-left: 0.9rem; }
+
+.contest-list { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+.contest-card { border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; background: var(--surface); }
+.contest-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; }
+.contest-head h3 { margin: 0; font-size: 1.2rem; }
+.contest-sub { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); }
+.status-pill { font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.55rem; border-radius: 999px; white-space: nowrap; flex-shrink: 0; background: rgba(128,138,153,0.14); color: var(--muted); border: 1px solid var(--border); }
+.status-pill--confirmed { background: rgba(18,181,203,0.16); color: var(--text); border-color: #12b5cb; }
+.status-pill--caveat { background: rgba(245,158,11,0.14); color: var(--text); border-color: #f59e0b; }
+.contest-caveat { font-size: 0.85rem; color: var(--muted); border-left: 3px solid #f59e0b; padding-left: 0.9rem; }
+.method-split { font-size: 0.9rem; border-left: 3px solid #f59e0b; padding-left: 0.9rem; }
+
+.method-block { margin-top: 1.1rem; }
+.method-label { margin: 0 0 0.4rem; font-size: 0.85rem; color: var(--muted); }
+.win-chips { display: flex; flex-wrap: wrap; gap: 0.45rem 0.8rem; margin-top: 0.6rem; }
+.win-chip { font-size: 0.85rem; display: inline-flex; align-items: baseline; gap: 0.35rem; }
+.win-chip strong { font-size: 0.95rem; }
+.chip-detail { color: var(--muted); font-size: 0.75rem; }
+.party-swatch { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; vertical-align: middle; align-self: center; }
+.runoff-line { margin: 0.6rem 0 0; font-size: 0.82rem; color: var(--muted); }
+.cand-note { margin: 1rem 0 0; font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.8rem; }
+
+.lancs-box { border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; padding: 1.1rem 1.25rem; background: var(--surface); max-width: 72ch; }
+.watch-item h3 { display: flex; align-items: baseline; gap: 0.6rem; }
+.rejected-tag { font-size: 0.75rem; font-weight: 500; color: var(--muted); text-transform: none; }
+
+.roster-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+.roster-note { display: block; font-weight: 400; font-size: 0.78rem; color: var(--muted); }
+.compare-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
+.compare-table th, .compare-table td { padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.compare-table th { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.td-districts { color: var(--muted); font-size: 0.82rem; }
+.london-polls { margin-top: 1.75rem; }
+
+.validation-box { border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; background: var(--surface); margin: 1.5rem 0; }
+.validation-box h3 { margin-top: 0; }
+.prose-lead { max-width: 68ch; color: var(--muted); }
+.micro { font-size: 0.78rem; color: var(--muted); margin-top: 0.6rem; }
+@media (max-width: 640px) { .contest-head { flex-direction: column; } }
+</style>

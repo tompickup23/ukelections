@@ -118,6 +118,15 @@ export function loadLancashireUnitaries() {
   return _lancsUnitaries;
 }
 
+let _mayoral: any = null;
+export function loadMayoralForecasts() {
+  if (_mayoral) return _mayoral;
+  _mayoral = JSON.parse(
+    readFileSync(path.join(ROOT, "data/predictions/mayoral/forecast.json"), "utf8")
+  );
+  return _mayoral;
+}
+
 let _postaudit: any = null;
 export function loadMay7Postaudit() {
   if (_postaudit) return _postaudit;

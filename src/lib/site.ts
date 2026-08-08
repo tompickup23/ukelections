@@ -41,6 +41,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     items: [
       { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
       { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "The four new Lancashire unitaries, forecast for the May 2027 shadow elections" },
+      { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
       { href: "/by-elections/", label: "By-elections", desc: "Next: Clacton 13 Aug, Farage re-contests his seat. Plus 18 Jun results + weekly ward scorecard" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
     ],
@@ -117,6 +118,7 @@ const STATIC_PATHS = [
   "/forecasts/may-2026/",
   "/forecasts/general-election/",
   "/forecasts/lancashire-unitaries/",
+  "/forecasts/mayoral/",
   "/by-elections/",
   "/by-elections/makerfield/",
   "/by-elections/aberdeen-south/",
