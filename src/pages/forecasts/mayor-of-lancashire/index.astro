@@ -139,7 +139,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
         ("reach"), and how the transfers split between the finalists. This forecast calibrates both on three
         verified official counts, and gives Lancashire county-specific parameters{overrides ? `: ${overrides.rationale}` : "."}
       </p>
-      <table class="data-table">
+      <div class="table-scroll"><table class="data-table">
         <thead><tr><th>Contest</th><th>Reach</th><th>Transfer split</th><th>What it teaches</th></tr></thead>
         <tbody>
           <tr>
@@ -159,7 +159,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
       <h3>The county's own SV history</h3>
       <ul>
         {precedents.map((p) => (
@@ -176,7 +176,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
         <a href="/forecasts/lancashire-unitaries/">Lancashire unitaries forecast</a> (votes actually cast in
         2023–26, not re-swung to national polling).
       </p>
-      <table class="data-table">
+      <div class="table-scroll"><table class="data-table">
         <thead><tr><th>District</th><th>Electorate</th><th>Leads</th>{PARTY_COLS.slice(0, 5).map((p) => <th>{shortPartyLabel(p)}</th>)}</tr></thead>
         <tbody>
           {districtRows.map((r) => (
@@ -188,7 +188,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
       <div class="heartlands">
         <div>
           <h3>Reform's ten strongest wards</h3>
@@ -236,6 +236,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
 .chip-detail { color: var(--muted); font-size: 0.78rem; }
 .party-swatch { width: 0.7rem; height: 0.7rem; border-radius: 3px; display: inline-block; }
 .runoff-line { font-size: 0.9rem; margin-top: 0.5rem; }
+.table-scroll { overflow-x: auto; }
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.75rem 0 1rem; }
 .data-table th, .data-table td { border-top: 1px solid var(--border); padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
 .heartlands { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
