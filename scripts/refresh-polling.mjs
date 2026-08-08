@@ -288,6 +288,89 @@ function averageRecentPolls(rows, spec, windowDays) {
   };
 }
 
+// ---- full poll series (for /polling/trends/) --------------------------------
+// Every valid GB poll row in the table, with pollster attribution, canonical
+// folded shares, and the where-reported Restore Britain figure. Same parse,
+// same validity rules as the averaging above, no recency cutoff.
+function stripPollsterCell(cell) {
+  let s = stripWikiMarkup(cell);
+  // [[YouGov]] → YouGov; [[Survation|Survation (MRP)]] → Survation (MRP)
+  s = s.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "$2");
+  s = s.replace(/\[\[([^\]]+)\]\]/g, "$1");
+  s = s.replace(/\{\{[^}]*\}\}/g, "");
+  s = s.replace(/<[^>]+>/g, "");
+  s = s.replace(/''+/g, "");
+  return s.replace(/\s+/g, " ").trim();
+}
+
+function extractPollSeries(rows, spec) {
+  const { preamble, filter_area, columns: columnLabels } = spec;
+  const maxMissing = spec.max_missing ?? 1;
+  const polls = [];
+  for (const cells of rows) {
+    if (cells.length < preamble + columnLabels.length) continue;
+    const date = parseOpdrts(cells[0]);
+    if (!date) continue;
+    if (date.getTime() > Date.now() + 86400 * 1000) continue;
+    if (filter_area) {
+      const area = stripWikiMarkup(cells[3] || "").toUpperCase();
+      if (!/(GB|UK|GREAT BRITAIN|UNITED KINGDOM)/.test(area)) continue;
+    }
+    const shareCells = cells.slice(preamble, preamble + columnLabels.length);
+    const parsed = shareCells.map(parsePercent);
+    const missing = parsed.filter((v) => v == null).length;
+    if (missing > maxMissing) continue;
+    const filled = parsed.map((v) => (v == null ? 0 : v));
+    const sum = filled.reduce((s, v) => s + v, 0);
+    if (sum < 0.85 || sum > 1.15) continue;
+
+    const shares = {};
+    for (let i = 0; i < columnLabels.length; i++) shares[columnLabels[i]] = filled[i];
+    let rbReported = null;
+    for (const label of spec.fold_into_other || []) {
+      if (label === "Restore Britain" && parsed[columnLabels.indexOf(label)] != null) {
+        rbReported = parsed[columnLabels.indexOf(label)];
+      }
+      shares["Other"] = (shares["Other"] || 0) + (shares[label] || 0);
+      delete shares[label];
+    }
+    polls.push({
+      date: date.toISOString().slice(0, 10),
+      pollster: stripPollsterCell(cells[1] || "") || "Unknown",
+      shares,
+      ...(rbReported != null ? { restore_britain_reported: rbReported } : {}),
+    });
+  }
+  polls.sort((a, b) => a.date.localeCompare(b.date));
+  return polls;
+}
+
+// Trailing 14-day mean per party at each poll date: the same method the model
+// anchor uses, computed retrospectively so the "UK Elections average" line
+// spans the whole series.
+function rollingAverageSeries(polls, windowDays) {
+  const out = [];
+  for (let i = 0; i < polls.length; i++) {
+    const end = new Date(polls[i].date).getTime();
+    const start = end - windowDays * 86400 * 1000;
+    const win = polls.filter((p) => {
+      const t = new Date(p.date).getTime();
+      return t > start && t <= end;
+    });
+    if (win.length < 2) continue;
+    const sums = {};
+    for (const p of win) for (const [k, v] of Object.entries(p.shares)) sums[k] = (sums[k] || 0) + v;
+    const shares = {};
+    for (const [k, v] of Object.entries(sums)) shares[k] = v / win.length;
+    const total = Object.values(shares).reduce((s, v) => s + v, 0) || 1;
+    for (const k of Object.keys(shares)) shares[k] = shares[k] / total;
+    // one point per date (last poll of the day wins; identical window anyway)
+    if (out.length && out[out.length - 1].date === polls[i].date) out.pop();
+    out.push({ date: polls[i].date, shares, polls_in_window: win.length });
+  }
+  return out;
+}
+
 function loadExistingOverride() {
   if (!existsSync(OVERRIDE)) return null;
   try { return JSON.parse(readFileSync(OVERRIDE, "utf8")); } catch { return null; }
@@ -345,6 +428,21 @@ async function main() {
         retrieved_at: now,
         review_status: "auto_parsed",
       };
+      // Full poll series + retrospective UK Elections rolling average, for
+      // /polling/trends/. UK-page only; concluded sources stay frozen.
+      if (key === "uk_westminster" && !DRY_RUN) {
+        const polls = extractPollSeries(rows, spec);
+        const series = {
+          generated_at: now,
+          source: { page: spec.page, url: `https://en.wikipedia.org/wiki/${spec.page}`, wikitext_sha256: sha },
+          method: `Every GB-wide poll row parsed from the source table (same validity rules as the model anchor: complete share columns, shares summing 0.85 to 1.15). The UK Elections average is the trailing ${WINDOW_DAYS}-day unweighted mean per party, renormalised, computed retrospectively at each poll date; it is exactly the series the seat model anchors on.`,
+          window_days: WINDOW_DAYS,
+          polls,
+          uke_average: rollingAverageSeries(polls, WINDOW_DAYS),
+        };
+        writeFileSync(path.join(ROOT, "data/polling/timeseries.json"), JSON.stringify(series, null, 2));
+        process.stdout.write(`✓ ${spec.label}: wrote timeseries.json (${polls.length} polls, ${series.uke_average.length} average points)\n`);
+      }
       process.stdout.write(`✓ ${spec.label}: averaged ${avg.polls_used} polls from ${avg.fieldwork_window.earliest} to ${avg.fieldwork_window.latest}\n`);
       for (const [p, v] of Object.entries(avg.shares)) {
         process.stdout.write(`    ${p.padEnd(20)} ${(v * 100).toFixed(1)}%\n`);

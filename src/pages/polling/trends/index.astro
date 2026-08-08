@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PollScatterChart from "../../../components/PollScatterChart.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const series = JSON.parse(readFileSync(path.join(process.cwd(), "data/polling/timeseries.json"), "utf8"));
+const polls = series.polls;
+const average = series.uke_average;
+const latestAvg = average[average.length - 1];
+
+const PARTIES = ["Labour", "Reform UK", "Conservative", "Liberal Democrats", "Green Party"];
+
+// House effects: each pollster's mean deviation from the UK Elections average
+// on the day of each of its polls, over the last 120 days, pollsters with 3+
+// polls in that window. Positive = that pollster runs higher than the average.
+const cutoff = new Date(new Date(latestAvg.date).getTime() - 120 * 86400 * 1000).toISOString().slice(0, 10);
+function avgAt(date: string) {
+  let best = null;
+  for (const a of average) {
+    if (a.date <= date) best = a;
+    else break;
+  }
+  return best;
+}
+const byPollster: Record<string, { n: number; dev: Record<string, number>; last: string }> = {};
+for (const p of polls) {
+  if (p.date < cutoff) continue;
+  const anchor = avgAt(p.date);
+  if (!anchor) continue;
+  const entry = byPollster[p.pollster] || { n: 0, dev: Object.fromEntries(PARTIES.map((x) => [x, 0])), last: p.date };
+  entry.n += 1;
+  entry.last = p.date > entry.last ? p.date : entry.last;
+  for (const party of PARTIES) {
+    entry.dev[party] += (p.shares[party] ?? 0) - (anchor.shares[party] ?? 0);
+  }
+  byPollster[p.pollster] = entry;
+}
+const houseRows = Object.entries(byPollster)
+  .filter(([, v]) => v.n >= 3)
+  .map(([pollster, v]) => ({
+    pollster,
+    n: v.n,
+    last: v.last,
+    dev: Object.fromEntries(PARTIES.map((party) => [party, v.dev[party] / v.n])),
+  }))
+  .sort((a, b) => b.n - a.n);
+
+const recentPolls = [...polls].slice(-15).reverse();
+
+function pp(x: number) { return `${(x * 100).toFixed(1)}`; }
+function devFmt(x: number) {
+  const v = x * 100;
+  const s = v >= 0 ? `+${v.toFixed(1)}` : v.toFixed(1);
+  return s;
+}
+function devClass(x: number) {
+  if (x >= 0.015) return "dev dev--high";
+  if (x <= -0.015) return "dev dev--low";
+  return "dev";
+}
+
+const firstDate = polls[0]?.date;
+---
+
+<BaseLayout
+  title="Polling trends: every poll, plotted over time"
+  description="Every GB Westminster poll since the 2024 general election plotted over time, one dot per poll, with the UK Elections rolling average the seat model anchors on, plus pollster house effects."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Polling · Trends</p>
+    <h1>Every poll, plotted</h1>
+    <p class="lede">
+      {polls.length.toLocaleString()} GB Westminster polls since {new Date(firstDate).toLocaleDateString("en-GB", { month: "long", year: "numeric" })},
+      one dot per poll, with the <strong>UK Elections 14-day average</strong> drawn through them. That average is not
+      decoration: it is the exact series our seat model anchors on. The dots around each line show you how much
+      individual polls disagree, and the house-effects table shows which pollsters consistently sit above or below
+      the pack.
+    </p>
+  </section>
+
+  <section class="section">
+    <PollScatterChart polls={polls} average={average} parties={PARTIES} />
+    <p class="micro chart-note">
+      Dots: individual polls (hover for pollster and figure). Lines: UK Elections trailing 14-day mean,
+      renormalised, computed at each poll date. SNP, Plaid Cymru and Others omitted from the chart for legibility;
+      they are in the data and in the model. Restore Britain is folded into Others where polls do not break it out.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Who runs hot, who runs cold</p>
+      <h2>Pollster house effects</h2>
+    </div>
+    <p class="prose-lead">
+      Each pollster's average deviation from the UK Elections average on the days it polled, over the last 120
+      days (pollsters with three or more polls). A consistently positive number for a party means that pollster's
+      methodology tends to find more of that party's vote than the pack does. House effects are legitimate
+      methodological differences, not errors; but if a single outlier poll is driving a headline, this table
+      tells you whose outlier it is.
+    </p>
+    <div class="table-scroll">
+      <table class="compare-table house-table">
+        <thead>
+          <tr>
+            <th>Pollster</th>
+            <th>Polls</th>
+            <th>Last</th>
+            {PARTIES.map((p) => (
+              <th><span class="party-swatch" style={`background:${partyColour(p)}`}></span>{shortPartyLabel(p)}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {houseRows.map((r) => (
+            <tr>
+              <td><strong>{r.pollster}</strong></td>
+              <td>{r.n}</td>
+              <td class="td-muted">{new Date(r.last).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</td>
+              {PARTIES.map((p) => (
+                <td class={devClass(r.dev[p])}>{devFmt(r.dev[p])}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="micro">Deviations in percentage points vs the UK Elections average at each poll's date. ±1.5pp highlighted.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The raw feed</p>
+      <h2>Most recent polls</h2>
+    </div>
+    <div class="table-scroll">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Fieldwork end</th>
+            <th>Pollster</th>
+            {PARTIES.map((p) => (
+              <th><span class="party-swatch" style={`background:${partyColour(p)}`}></span>{shortPartyLabel(p)}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {recentPolls.map((p: any) => (
+            <tr>
+              <td class="td-muted">{new Date(p.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</td>
+              <td><strong>{p.pollster}</strong></td>
+              {PARTIES.map((party) => (
+                <td>{pp(p.shares[party] ?? 0)}%</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Method and source</h2>
+    <p>{series.method}</p>
+    <p>
+      Source: <a href={series.source.url} rel="noopener">Wikipedia, opinion polling for the next United Kingdom
+      general election</a> (every poll cited there to its primary publication). Parsed
+      {new Date(series.generated_at).toISOString().slice(0, 10)}; refreshed with every polling refresh run. The
+      current average feeds the <a href="/forecasts/general-election/">general election model</a> and the
+      <a href="/forecasts/mayoral/">mayoral projections</a> directly.
+    </p>
+    <p><a href="/polling/">← Back to the polling headline page</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+.chart-note { margin-top: 0.75rem; }
+.prose-lead { max-width: 68ch; color: var(--muted); }
+.table-scroll { overflow-x: auto; }
+.compare-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
+.compare-table th, .compare-table td { padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; white-space: nowrap; }
+.compare-table th { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.td-muted { color: var(--muted); }
+.party-swatch { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; margin-right: 0.35rem; vertical-align: middle; }
+.dev { font-variant-numeric: tabular-nums; }
+.dev--high, .dev--low { font-weight: 700; background: rgba(245,158,11,0.12); border-radius: 4px; }
+.micro { font-size: 0.78rem; color: var(--muted); margin-top: 0.6rem; }
+</style>

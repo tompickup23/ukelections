@@ -44,6 +44,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
       { href: "/by-elections/", label: "By-elections", desc: "Next: Clacton 13 Aug, Farage re-contests his seat. Plus 18 Jun results + weekly ward scorecard" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
+      { href: "/polling/trends/", label: "Polling trends", desc: "Every poll plotted over time, with the UK Elections average and pollster house effects" },
     ],
   },
   {
@@ -129,6 +130,7 @@ const STATIC_PATHS = [
   "/forecasts/senedd-2026/",
   "/forecasts/holyrood-2026/",
   "/polling/",
+  "/polling/trends/",
   "/data-quality/",
   "/data-quality/2024-backtest/",
   "/data-quality/ge-backtest/",

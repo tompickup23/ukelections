@@ -1,0 +1,146 @@
+---
+/**
+ * PollScatterChart.astro. server-rendered SVG scatter of individual polls
+ * (one dot per poll per party) with the UK Elections trailing-average line
+ * overlaid per party. Same Observable Plot + JSDOM build-time pattern as
+ * PartyTrendChart; no client JS.
+ *
+ * Props:
+ *   polls:   [{date, pollster, shares}]
+ *   average: [{date, shares}]  (the UK Elections rolling average series)
+ *   parties: which parties to plot (default top 5 by latest average)
+ */
+import * as Plot from "@observablehq/plot";
+import { JSDOM } from "jsdom";
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface PollRow { date: string; pollster: string; shares: Record<string, number> }
+interface AvgRow { date: string; shares: Record<string, number> }
+
+interface Props {
+  polls: PollRow[];
+  average: AvgRow[];
+  parties?: string[];
+  width?: number;
+  height?: number;
+  ariaLabel?: string;
+}
+
+const {
+  polls,
+  average,
+  parties: partiesIn,
+  width = 860,
+  height = 380,
+  ariaLabel = "Scatter chart of every national poll since July 2024, one dot per poll per party, with the UK Elections rolling average line per party",
+} = Astro.props;
+
+const latestAvg = average[average.length - 1];
+const parties: string[] = partiesIn ??
+  Object.entries(latestAvg?.shares || {})
+    .filter(([p]) => p !== "Other" && p !== "SNP" && p !== "Plaid Cymru")
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .slice(0, 5)
+    .map(([p]) => p);
+
+type Dot = { date: Date; party: string; share: number; pollster: string };
+const dots: Dot[] = [];
+for (const p of polls) {
+  const d = new Date(p.date);
+  for (const party of parties) {
+    if (typeof p.shares[party] === "number") dots.push({ date: d, party, share: p.shares[party], pollster: p.pollster });
+  }
+}
+type LineRow = { date: Date; party: string; share: number };
+const lines: LineRow[] = [];
+for (const a of average) {
+  const d = new Date(a.date);
+  for (const party of parties) {
+    if (typeof a.shares[party] === "number") lines.push({ date: d, party, share: a.shares[party] });
+  }
+}
+
+const maxShare = dots.reduce((m, r) => (r.share > m ? r.share : m), 0);
+const yCeil = Math.min(0.55, Math.ceil((maxShare + 0.04) * 20) / 20);
+const colourDomain = parties;
+const colourRange = parties.map((p) => partyColour(p));
+
+function renderPlotSvg(): string {
+  const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
+  const doc = dom.window.document;
+  const chart = Plot.plot({
+    document: doc,
+    width,
+    height,
+    marginTop: 14,
+    marginRight: 18,
+    marginBottom: 38,
+    marginLeft: 50,
+    style: { background: "transparent", fontFamily: "Manrope, system-ui, sans-serif", fontSize: "11px" },
+    x: {
+      type: "time",
+      label: null,
+      tickFormat: (d: Date) => d.toLocaleDateString("en-GB", { month: "short", year: "2-digit", timeZone: "UTC" }),
+    },
+    y: {
+      domain: [0, yCeil],
+      label: null,
+      grid: true,
+      tickFormat: (v: number) => `${(v * 100).toFixed(0)}%`,
+      ticks: Math.round(yCeil / 0.05),
+    },
+    color: { domain: colourDomain, range: colourRange, legend: false },
+    marks: [
+      Plot.ruleY([0], { stroke: "currentColor", strokeOpacity: 0.18 }),
+      Plot.dot(dots, {
+        x: "date",
+        y: "share",
+        fill: "party",
+        fillOpacity: 0.35,
+        r: 2.6,
+        title: (r: Dot) => `${r.pollster}, ${r.date.toISOString().slice(0, 10)}: ${shortPartyLabel(r.party)} ${(r.share * 100).toFixed(0)}%`,
+      }),
+      Plot.lineY(lines, {
+        x: "date",
+        y: "share",
+        stroke: "party",
+        strokeWidth: 2.6,
+        strokeLinejoin: "round",
+        strokeLinecap: "round",
+        curve: "linear",
+      }),
+    ],
+  });
+  chart.removeAttribute?.("style");
+  return chart.outerHTML;
+}
+
+const plotSvg = renderPlotSvg();
+---
+
+<figure class="poll-scatter-chart" role="figure" aria-label={ariaLabel}>
+  <div class="psc-plot-wrap" set:html={plotSvg} />
+  <figcaption class="psc-legend">
+    {parties.map((p) => (
+      <span class="psc-legend-item">
+        <span class="psc-legend-swatch" style={`background:${partyColour(p)}`}></span>
+        <span class="psc-legend-name">{shortPartyLabel(p)}</span>
+        <span class="psc-legend-latest">{((latestAvg?.shares[p] ?? 0) * 100).toFixed(1)}%</span>
+      </span>
+    ))}
+    <span class="psc-legend-item psc-legend-note">dots = individual polls · lines = UK Elections 14-day average</span>
+  </figcaption>
+</figure>
+
+<style>
+  .poll-scatter-chart { margin: 0; color: var(--ink); }
+  .psc-plot-wrap :global(svg) { width: 100%; height: auto; color: var(--ink); overflow: visible; }
+  .psc-plot-wrap :global(text) { fill: currentColor; }
+  .psc-legend { display: flex; flex-wrap: wrap; gap: 0.55rem 1rem; margin-top: var(--space-sm, 0.75rem); }
+  .psc-legend-item { display: inline-flex; align-items: center; gap: 0.35rem; font-size: var(--text-small, 0.88rem); color: var(--muted); }
+  .psc-legend-swatch { width: 12px; height: 12px; border-radius: 3px; }
+  .psc-legend-name { font-weight: 600; color: var(--ink); }
+  .psc-legend-latest { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .psc-legend-note { font-size: 0.78rem; }
+</style>

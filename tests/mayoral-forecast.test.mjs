@@ -87,4 +87,44 @@ describe("mayoral forecast output", () => {
     const raw = JSON.stringify(forecast) + JSON.stringify(registry);
     expect(raw.includes("—")).toBe(false);
   });
+
+  it("Lancashire hypothetical is present, loudly labelled, and never in the contests list", () => {
+    const h = forecast.hypothetical_lancashire;
+    expect(h).toBeTruthy();
+    expect(h.status).toBe("hypothetical");
+    expect(h.status_note).toMatch(/NO Lancashire mayoral election is scheduled/);
+    // 14 lower-tier areas (12 districts + 2 unitaries); LCC itself is not a LAD
+    expect(h.constituent_councils.length).toBe(14);
+    expect(h.caveats.length).toBeGreaterThanOrEqual(3);
+    expect(forecast.contests.some((c) => c.slug.includes("lancashire"))).toBe(false);
+    for (const m of h.methods) {
+      const central = Object.values(m.parties).reduce((a, x) => a + x.central, 0);
+      expect(central).toBeGreaterThan(0.98);
+      expect(central).toBeLessThan(1.02);
+    }
+  });
+});
+
+describe("polling timeseries", () => {
+  const series = JSON.parse(readFileSync(path.join(ROOT, "data/polling/timeseries.json"), "utf8"));
+
+  it("polls are dated, attributed, and shares are sane", () => {
+    expect(series.polls.length).toBeGreaterThan(50);
+    for (const p of series.polls) {
+      expect(p.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(p.pollster.length).toBeGreaterThan(1);
+      const sum = Object.values(p.shares).reduce((a, v) => a + v, 0);
+      expect(sum).toBeGreaterThan(0.85);
+      expect(sum).toBeLessThan(1.15);
+    }
+  });
+
+  it("polls are sorted and the average series is renormalised", () => {
+    const dates = series.polls.map((p) => p.date);
+    expect([...dates].sort()).toEqual(dates);
+    for (const a of series.uke_average) {
+      const sum = Object.values(a.shares).reduce((s, v) => s + v, 0);
+      expect(Math.abs(sum - 1)).toBeLessThan(1e-6);
+    }
+  });
 });
