@@ -358,7 +358,20 @@
     }
    ],
    "voting_system_if_called": "Supplementary vote, under s.63 and Schedule 30 of the English Devolution and Community Empowerment Act 2026 (applies to combined county authority mayors). A mechanism in waiting, not a scheduled contest.",
-   "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography."
+   "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography.",
+   "sv_overrides": {
+    "transfer_reach": {
+     "mu": 0.61,
+     "sd": 0.1,
+     "lo": 0.3,
+     "hi": 0.85
+    },
+    "same_bloc_split": {
+     "mu": 0.7,
+     "sd": 0.12
+    },
+    "rationale": "Lancashire's own SV contests show higher transfer reach (0.583 in 2016, 0.656 in 2021) than the global anchor set; GM 2026's per-district second preferences show weaker left-bloc cohesion in Lancashire-like boroughs (Reform won transfers in Wigan/Oldham/Rochdale/Tameside/Bury). Reach centred 0.61; same-bloc split softened 0.74 to 0.70. Verified 8 Aug 2026."
+   }
   }
  ],
  "hypothetical_lancashire": {
@@ -439,7 +452,20 @@
     "label": "LGC: mayoral stalemate continues in Lancashire (6 August 2026)",
     "url": "https://www.lgcplus.com/home/news/mayoral-stalemate-continues-in-lancashire-06-08-2026/"
    }
-  ]
+  ],
+  "sv_overrides": {
+   "transfer_reach": {
+    "mu": 0.61,
+    "sd": 0.1,
+    "lo": 0.3,
+    "hi": 0.85
+   },
+   "same_bloc_split": {
+    "mu": 0.7,
+    "sd": 0.12
+   },
+   "rationale": "Lancashire-specific calibration, verified 8 Aug 2026: its own SV contests show higher transfer reach (0.583 in 2016, 0.656 in 2021) than the global anchors, and GM 2026 per-district second preferences show weaker left-bloc cohesion in Lancashire-like boroughs (Reform won transfers in Wigan, Oldham, Rochdale, Tameside, Bury). See sv_calibration entries lancashire_pcc_2016/2021 and gm_2026."
+  }
  },
  "roster_2028": {
   "note": "May 2028 contests are listed as a roster only. Forecasting a mayoral contest 21 months out, before candidates are known, would not pass our quality gate; these get forecasts closer to the contests. Date of 4 May 2028 is per the statutory cycle and contest pages; no SI level confirmation of the exact day has been sighted.",
@@ -677,6 +703,42 @@
     "Shaun Bailey": 977601
    },
    "source_url": "https://www.londonelects.org.uk/files/London%20Elects%20-%20Results%20Factsheet%202021.pdf"
+  },
+  "lancashire_pcc_2021": {
+   "date": "2021-05-06",
+   "reach": 0.656,
+   "pool": 50739,
+   "transferred": 33279,
+   "runoff_transfer_split": {
+    "labour": 0.546,
+    "conservative": 0.454
+   },
+   "note": "Con won 51.27-48.73. Eliminated pool LD 32,813 + Reform UK 17,926 (fringe-era Reform, 4.83pct: do NOT map onto 2026 Reform). Transfers derived from official first/final counts; OPCC publishes no exhausted breakdown.",
+   "source": "https://www.lancashire-pcc.gov.uk/the-commissioner/elections/"
+  },
+  "lancashire_pcc_2016": {
+   "date": "2016-05-05",
+   "reach": 0.583,
+   "pool": 73151,
+   "transferred": 42648,
+   "runoff_transfer_split": {
+    "conservative": 0.52,
+    "labour": 0.48
+   },
+   "note": "Lab won. UKIP-era pool (UKIP 16.54pct + LD) split near-evenly Con/Lab: right-populist ballots did NOT break heavily Conservative in Lancashire.",
+   "source": "https://www.wyre.gov.uk/directory-record/947/lancashire-police-and-crime-commissioner-election-results-2016"
+  },
+  "gm_2026": {
+   "date": "2026-07-30",
+   "reach": 0.608,
+   "pool": 169949,
+   "transferred": 103326,
+   "runoff_transfer_split": {
+    "labour": 0.562,
+    "reform": 0.438
+   },
+   "district_signal": "Official per-district table: Reform (Astley) WON second preferences in Wigan, Oldham, Rochdale, Tameside and Bury; Labour (Craig) dominated Manchester, Stockport, Trafford. Lancashire's geography resembles the former group, so pooled GM parameters lean Labour when applied to Lancashire.",
+   "source": "https://www.gmelects.org.uk/result2026/ (403s bots; browser UA works)"
   }
  },
  "may_2026_results_note": "The six 7 May 2026 mayoral elections (Croydon, Hackney, Lewisham, Newham, Tower Hamlets, Watford) are in data/results/may-2026/local-and-mayor.merged.json and were the last first past the post mayoral contests. The devolution priority programme mayoral elections did not happen in May 2026: Cumbria and Cheshire and Warrington were deferred to May 2027 at the councils' request, and Greater Essex, Hampshire and the Solent, Norfolk and Suffolk, and Sussex and Brighton were delayed to May 2028 by the government on 4 December 2025."

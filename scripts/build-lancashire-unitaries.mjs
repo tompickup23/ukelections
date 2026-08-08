@@ -433,6 +433,36 @@ function wardBase(w) {
   return { shares: bpProxy.shares, quality: "proxy", sigma: 0.11, provenance: bpProxy.provenance };
 }
 
+// ---- national-drift scenarios ----------------------------------------------
+// The central forecast is a last-election model: May 2027 assumed to look like
+// Lancashire's 2025-26 votes. National polling has since moved (the change of
+// Prime Minister). These scenarios shift every ward by the national movement
+// between the spring 2026 baseline (when the local votes were cast) and the
+// current polling average, at two strengths, and are shown SEPARATELY, never
+// blended into the central call (Makerfield rule):
+//   calibrated: dampening 0.10, the 2024-backtest optimum for county districts
+//     (data/calibration/regional-dampening.json; a boundary solution, i.e. the
+//     backtest wanted the LOWEST tested transfer of national swing to local
+//     results - local elections are sticky);
+//   stress: dampening 1.0, the full national move as an upper bound.
+// Spring 2026 baseline: the model's own April 2026 rolling average constant.
+const NATIONAL_BASELINE_SPRING_2026 = {
+  "Labour": 0.230, "Conservative": 0.180, "Reform UK": 0.300,
+  "Liberal Democrats": 0.130, "Green Party": 0.090,
+};
+const pollingLatest = readJson("data/polling/latest.json");
+const NATIONAL_CURRENT = pollingLatest.sources.uk_westminster.shares;
+const NATIONAL_DRIFT = {};
+for (const party of PARTIES) {
+  const base = NATIONAL_BASELINE_SPRING_2026[party];
+  const cur = NATIONAL_CURRENT[party];
+  NATIONAL_DRIFT[party] = base !== undefined && cur !== undefined ? cur - base : 0;
+}
+const DRIFT_SCENARIOS = [
+  { key: "calibrated_drift", label: "National drift, calibrated (0.10)", dampening: 0.10 },
+  { key: "full_drift_stress", label: "National drift, full (stress bound)", dampening: 1.0 },
+];
+
 // Build predicted wards for the four-unitary model.
 const UA_ID = warding.meta.ua_id_map;
 const COUNCIL_SIZE = warding.meta.council_size;
@@ -441,10 +471,16 @@ for (const w of warding.wards) {
   const base = wardBase(w);
   if (!base) { console.warn(`  ! no base for ${w.ua} / ${w.ward}`); continue; }
   const { first, second } = topTwo(base.shares);
+  const scenarioShares = {};
+  for (const sc of DRIFT_SCENARIOS) {
+    const scaled = {};
+    for (const party of PARTIES) scaled[party] = sc.dampening * (NATIONAL_DRIFT[party] || 0);
+    scenarioShares["shares_" + sc.key] = applySwing(base.shares, scaled);
+  }
   const ward = {
     ua: w.ua, ua_id: UA_ID[w.ua], district: w.district, ward: w.ward,
     cllrs: w.cllrs, electorate: w.electorate,
-    shares: base.shares, winner: first[0], winner_pct: first[1],
+    shares: base.shares, ...scenarioShares, winner: first[0], winner_pct: first[1],
     margin_pp: +((first[1] - second[1]) * 100).toFixed(1),
     marginal: (first[1] - second[1]) < 0.10,
     quality: base.quality, sigma: base.sigma, provenance: base.provenance,
@@ -480,7 +516,7 @@ function allocateWard(shares, n) {
   return out;
 }
 
-function simulateUa(uaName) {
+function simulateUa(uaName, sharesKey = "shares") {
   const wards = wardsByUa[uaName];
   const size = COUNCIL_SIZE[uaName];
   const majority = Math.floor(size / 2) + 1;
@@ -503,7 +539,7 @@ function simulateUa(uaName) {
     const seats = {}; for (const party of SEAT_PARTIES) seats[party] = 0;
     for (const w of wards) {
       const draw = {};
-      for (const party of PARTIES) draw[party] = (w.shares[party] || 0) + shock[w.district][party] + gauss() * SIGMA_WARD;
+      for (const party of PARTIES) draw[party] = ((w[sharesKey] || w.shares)[party] || 0) + shock[w.district][party] + gauss() * SIGMA_WARD;
       const ns = normaliseShares(draw);
       const alloc = allocateWard(ns, w.cllrs); // bloc-vote FPTP, splits close wards
       for (const [party, n] of Object.entries(alloc)) seats[party] += n;
@@ -608,6 +644,24 @@ const fourUnitaries = fourUnitaryOrder.map((uaName) => {
   return { ...sim, name: cfg ? cfg.name : uaName, districts: cfg ? cfg.districts : [], population: cfg ? cfg.population : null };
 });
 
+// Scenario runs: same wards, shares shifted by the dampened national drift.
+const driftScenarios = DRIFT_SCENARIOS.map((sc) => ({
+  key: sc.key,
+  label: sc.label,
+  dampening: sc.dampening,
+  unitaries: fourUnitaryOrder.map((uaName) => {
+    const sim = simulateUa(uaName, "shares_" + sc.key);
+    const reform = sim.seats["Reform UK"];
+    return {
+      id: sim.id, ua_name: uaName,
+      reform_expected: reform.expected, reform_p10: reform.p10, reform_p90: reform.p90,
+      reform_majority_prob: reform.majority_prob,
+      labour_expected: sim.seats["Labour"].expected,
+      noc_prob: sim.noc_prob, largest_party: sim.largest_party,
+    };
+  }),
+}));
+
 const output = {
   snapshot: {
     generated_at: process.env.SNAPSHOT_AT || "2026-07-22T00:00:00.000Z",
@@ -636,6 +690,14 @@ const output = {
         ...districtRecency[d],
       }])),
       swing_validation: swingValidation,
+    },
+    national_drift: {
+      note: "The central forecast assumes May 2027 looks like Lancashire's 2025-26 votes. These scenarios shift every ward by the national polling movement since the spring 2026 baseline, at the backtested 0.10 transfer strength (the 2024 backtest found national swing carries weakly into local results) and at full strength as a stress bound. Shown separately, never blended into the central call.",
+      baseline_spring_2026: NATIONAL_BASELINE_SPRING_2026,
+      current_average: Object.fromEntries(Object.entries(NATIONAL_CURRENT).filter(([k]) => NATIONAL_BASELINE_SPRING_2026[k] !== undefined)),
+      drift_pp: Object.fromEntries(Object.entries(NATIONAL_DRIFT).filter(([, v]) => v !== 0).map(([k, v]) => [k, +(v * 100).toFixed(1)])),
+      polling_fieldwork: pollingLatest.sources.uk_westminster.fieldwork_window,
+      scenarios: driftScenarios,
     },
   },
   four_unitary: {
