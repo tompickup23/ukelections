@@ -63,9 +63,10 @@ function controlClass(prob: number) {
         The government's decision is <strong>subject to Parliamentary approval</strong> and the warding is the
         proposed 4UA scheme, <strong>not yet confirmed by the Local Government Boundary Commission</strong>. Seats
         are allocated under first-past-the-post bloc vote: a safe ward's seats all go to the leading party, but a
-        close runner-up picks off a seat, and those marginal wards are where most of the uncertainty sits. Blackpool has no
-        borough-wide local election in our data, so its eleven wards share a proxy from recent by-elections and the
-        2024 general election, which is why the Fylde Coast range is wide. A first estimate, not a result.
+        close runner-up picks off a seat, and those marginal wards are where most of the uncertainty sits. Blackpool's
+        wards are built from its May 2023 all-out borough election with the party levels corrected to its 2024-26
+        by-elections and general election result, the oldest base in the model, which is why the Fylde Coast range
+        stays wide. A first estimate, not a result.
       </span>
     </div>
   </section>
@@ -195,14 +196,45 @@ function controlClass(prob: number) {
       The forecast runs against the actual proposed warding for the four-unitary model: {four.total_councillors}
       councillors across 107 wards. Most proposed wards are the existing Lancashire County Council divisions, so
       each is predicted from its own May 2025 county result, then nudged by the swing between that county vote and
-      the district's May 2026 borough election and any 2025–26 by-elections. Blackburn's wards combine its May 2026
-      borough wards directly; Blackpool's use a proxy. Each ward's councillors go to the winning party, and the
+      the district's May 2026 borough election and any 2025–26 by-elections; districts with no 2026 contest borrow
+      a validated, shrunk swing from demographically similar districts. Blackburn's wards combine its May 2026
+      borough wards directly; Blackpool's are its May 2023 ward results with party levels corrected to the 2024-26
+      by-elections and GE2024. Each ward's councillors go to the winning party, and the
       whole council is simulated {snap.monte_carlo_draws.toLocaleString()} times with correlated district-level
       swings to produce the seat ranges and the majority and no-overall-control probabilities.
     </p>
     <ul>
       {snap.caveats.map((c: string) => <li>{c}</li>)}
     </ul>
+    {snap.data_vintage && (
+      <>
+        <h3>Data vintage by district</h3>
+        <p>
+          Not every district votes at the same time, so the model's inputs age unevenly. Districts with a May 2026
+          borough election carry an observed 2025→2026 swing; districts without one borrow a shrunk swing from
+          demographically similar districts (Census 2021 profiles), and a lone by-election nudges its district in
+          proportion to its votes rather than speaking for it. The table shows where each district's swing comes
+          from. Transferred swing is validated leave-one-out across the districts where the answer is known:
+          at the chosen shrink of {snap.data_vintage.swing_validation.lambda}, the transfer error is
+          {" "}{snap.data_vintage.swing_validation.mae_pp.borrowed_at_lambda}pp per party against
+          {" "}{snap.data_vintage.swing_validation.mae_pp.zero_swing_baseline}pp if those districts were simply
+          frozen at their May 2025 result.
+        </p>
+        <table class="vintage-table">
+          <thead><tr><th>District</th><th>Swing source</th><th>Own-signal weight</th><th>Borrowed from</th></tr></thead>
+          <tbody>
+            {Object.entries(snap.data_vintage.districts).map(([d, v]: [string, any]) => (
+              <tr>
+                <td>{d}</td>
+                <td>{v.swing_source.replace(/-/g, " ")}</td>
+                <td>{v.own_weight ?? 0}</td>
+                <td>{(v.borrowed_from || []).join(", ") || "not needed"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )}
     <h3>Sources</h3>
     <ul>
       {snap.sources.map((s: any) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
