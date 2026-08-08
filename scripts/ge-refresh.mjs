@@ -35,6 +35,9 @@ const STEPS = [
   { name: "refresh-polling", script: "scripts/refresh-polling.mjs" },
   { name: "run-ge-predictions", script: "scripts/run-ge-predictions.mjs" },
   { name: "apply-restore-britain-overlay", script: "scripts/apply-restore-britain-overlay.mjs" },
+  // Mayoral projections track the same polling refresh. The script self-guards
+  // against concluded contests (registry status), per the Makerfield lesson.
+  { name: "build-mayoral-forecasts", script: "scripts/build-mayoral-forecasts.mjs" },
 ];
 
 function runStep(step) {
