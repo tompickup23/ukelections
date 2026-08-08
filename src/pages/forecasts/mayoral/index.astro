@@ -12,6 +12,7 @@ const roster = data.roster_2028;
 const lancashire = watchlist.find((w: any) => w.slug === "lancashire");
 const otherWatch = watchlist.filter((w: any) => w.slug !== "lancashire");
 const validation = data.validation;
+const lancsHypothetical = data.hypothetical_lancashire;
 
 // Unique method descriptions across all contests (not every contest runs both).
 const methodDescriptions: Array<{ label: string; description: string }> = [];
@@ -184,6 +185,62 @@ function statusPill(status: string) {
           ))}
         </p>
       </div>
+
+      {lancsHypothetical && (
+        <article class="contest-card contest-card--hypothetical">
+          <header class="contest-head">
+            <div>
+              <h3>But if one were held tomorrow…</h3>
+              <p class="contest-sub">All fifteen Lancashire authorities · county-wide supplementary vote · no such contest exists</p>
+            </div>
+            <span class="status-pill status-pill--hypothetical">Hypothetical</span>
+          </header>
+          <p class="contest-caveat">{lancsHypothetical.status_note}</p>
+
+          {!lancsHypothetical.methods_agree_on_leader && lancsHypothetical.methods.length > 1 && (
+            <p class="method-split">
+              ⚠ <strong>Method split, and it is the whole story here.</strong> Current national polling
+              ({lancsHypothetical.method_leaders.map((x: string) => shortPartyLabel(x)).join(" vs ")}) and Lancashire's
+              own recent local votes point at different winners. No blended call is made; read both rows.
+            </p>
+          )}
+
+          {lancsHypothetical.methods.map((m: any) => (
+            <div class="method-block">
+              <p class="method-label"><strong>{m.label}</strong></p>
+              <RaceBar
+                shares={methodShares(m).map((r) => ({ party: r.party, pct: r.pct }))}
+                ariaLabel={`Hypothetical Mayor of Lancashire: projected first preferences, ${m.label}`}
+                height={40}
+                showLegend={false}
+              />
+              <div class="win-chips">
+                {winRows(m).map((r) => (
+                  <span class="win-chip">
+                    <span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>
+                    {shortPartyLabel(r.party)} <strong>{pct(r.p_win)}</strong>
+                    <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}–{pp(r.p90)})</span>
+                  </span>
+                ))}
+              </div>
+              {m.modal_runoff && (
+                <p class="runoff-line">
+                  Most likely runoff: <strong>{m.modal_runoff.pair.split(" v ").map((x: string) => shortPartyLabel(x)).join(" v ")}</strong>
+                  ({pct(m.modal_runoff.probability)} of runs), median final round
+                  {" "}{Object.entries(m.modal_runoff.median_final_split).map(([party, v]: [string, any]) => `${shortPartyLabel(party)} ${pct(v)}`).join(" · ")}.
+                </p>
+              )}
+            </div>
+          ))}
+
+          <div class="cand-note">
+            <strong>Read the caveats before quoting a number:</strong>
+            <ul class="hyp-caveats">
+              {lancsHypothetical.caveats.map((c: string) => <li>{c}</li>)}
+            </ul>
+          </div>
+        </article>
+      )}
     </section>
   )}
 
@@ -325,6 +382,10 @@ function statusPill(status: string) {
 .status-pill--confirmed { background: rgba(18,181,203,0.16); color: var(--text); border-color: #12b5cb; }
 .status-pill--caveat { background: rgba(245,158,11,0.14); color: var(--text); border-color: #f59e0b; }
 .contest-caveat { font-size: 0.85rem; color: var(--muted); border-left: 3px solid #f59e0b; padding-left: 0.9rem; }
+.contest-card--hypothetical { margin-top: 1.25rem; border-style: dashed; }
+.status-pill--hypothetical { background: rgba(124,58,237,0.14); color: var(--text); border-color: #7c3aed; }
+.hyp-caveats { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+.hyp-caveats li { margin-top: 0.35rem; }
 .method-split { font-size: 0.9rem; border-left: 3px solid #f59e0b; padding-left: 0.9rem; }
 
 .method-block { margin-top: 1.1rem; }

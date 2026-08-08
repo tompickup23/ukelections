@@ -340,6 +340,69 @@ for (const contest of registry.contests_2027) {
   });
 }
 
+// ---- hypothetical: Mayor of Lancashire --------------------------------------
+// No contest exists (see registry status_note); modelled because the question
+// keeps being asked. Two methods: the standard GE2024 + national swing, and
+// the county's own local signal aggregated from the Lancashire unitaries
+// forecast (LCC 2025 divisions nudged by 2026 swings, Blackburn 2026 wards,
+// Blackpool proxy), electorate-weighted across the four proposed unitaries.
+function buildLancashireHypothetical() {
+  const reg = registry.hypothetical_lancashire;
+  if (!reg) return null;
+
+  const ge = buildGeBase(reg, pcons, crosswalkRows);
+  const methods = [];
+
+  const geCentral = applySwing(ge.shares, GE2024_NATIONAL, national.shares);
+  methods.push({
+    id: "ge_swing_2024",
+    label: "GE2024 base + national swing",
+    description: `General election 2024 results across all fourteen Lancashire districts plus Blackburn with Darwen and Blackpool (${ge.pcon_count} constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (${national.label}).`,
+    base: { shares: ge.shares, source: "GE2024 constituency results (DC), ONS postcode crosswalk", weighted_votes: ge.weighted_votes },
+    ...runMethod(reg.slug, "ge_swing_2024", geCentral, 0.06),
+  });
+
+  try {
+    const unis = readJson("data/predictions/lancashire-unitaries/forecast.json").four_unitary.unitaries;
+    const acc = {};
+    let totalElectorate = 0;
+    for (const u of unis) {
+      for (const [party, v] of Object.entries(u.vote_share || {})) {
+        acc[party] = (acc[party] || 0) + v * (u.total_electorate || 0);
+      }
+      totalElectorate += u.total_electorate || 0;
+    }
+    if (totalElectorate > 0) {
+      for (const k of Object.keys(acc)) acc[k] = acc[k] / totalElectorate;
+      const local = normalise(acc);
+      methods.push({
+        id: "unitaries_local_signal",
+        label: "Lancashire local signal (unitaries model)",
+        description: "The county's own most recent local votes, taken from our Lancashire unitaries forecast: each proposed ward's LCC May 2025 division result nudged by the district's 2025 to 2026 borough and by-election swing, Blackburn's May 2026 wards directly, and a Blackpool proxy; electorate-weighted across the four proposed unitaries. Carries the local Reform organisation and independent vote the GE base misses. Not re-swung to current national polling, so it is a picture of votes actually cast in 2025 and 2026.",
+        base: { shares: local, source: "data/predictions/lancashire-unitaries/forecast.json (four_unitary vote_share, electorate-weighted)" },
+        ...runMethod(reg.slug, "unitaries_local_signal", local, 0.055),
+      });
+    }
+  } catch {
+    // unitaries forecast missing: ship the GE method alone rather than fail
+  }
+
+  const leaders = methods.map((m) => Object.entries(m.parties).sort((a, b) => b[1].p_win - a[1].p_win)[0][0]);
+  return {
+    slug: reg.slug,
+    label: reg.label,
+    status: reg.status,
+    status_note: reg.status_note,
+    voting_system: reg.voting_system,
+    constituent_councils: reg.constituent_councils,
+    methods_agree_on_leader: leaders.every((x) => x === leaders[0]),
+    method_leaders: leaders,
+    methods,
+    caveats: reg.caveats,
+    sources: reg.sources,
+  };
+}
+
 // ---- validation: ge_swing_2024 backtested on the GM 2026 by-election --------
 // The one supplementary vote contest since the system was restored. We project
 // it exactly as the method would have, and publish the error honestly.
@@ -400,6 +463,7 @@ const out = {
   },
   contests,
   validation,
+  hypothetical_lancashire: buildLancashireHypothetical(),
   watchlist: registry.watchlist,
   roster_2028: registry.roster_2028,
   sv_calibration: registry.sv_calibration,
