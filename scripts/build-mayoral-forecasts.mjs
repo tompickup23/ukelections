@@ -199,18 +199,20 @@ const TRANSFER_REACH = { mu: 0.52, sd: 0.15, lo: 0.15, hi: 0.85 };
 // signal (independents, minor parties, Restore Britain under "Other").
 const SAME_BLOC_SPLIT = { mu: 0.74, sd: 0.12 };
 
-function svRunoffDraw(shares, gauss, clamp01) {
+function svRunoffDraw(shares, gauss, clamp01, svOverrides = null) {
+  const REACH = svOverrides && svOverrides.transfer_reach ? svOverrides.transfer_reach : TRANSFER_REACH;
+  const SPLIT = svOverrides && svOverrides.same_bloc_split ? svOverrides.same_bloc_split : SAME_BLOC_SPLIT;
   const ranked = PARTIES.map((k) => [k, shares[k] || 0]).sort((a, b) => b[1] - a[1]);
   const [f1, f2] = [ranked[0], ranked[1]];
   let v1 = f1[1], v2 = f2[1];
   for (const [party, share] of ranked.slice(2)) {
     if (share <= 0) continue;
-    const reach = clamp01(TRANSFER_REACH.mu + gauss() * TRANSFER_REACH.sd, TRANSFER_REACH.lo, TRANSFER_REACH.hi);
+    const reach = clamp01(REACH.mu + gauss() * REACH.sd, REACH.lo ?? TRANSFER_REACH.lo, REACH.hi ?? TRANSFER_REACH.hi);
     const pool = share * reach;
     const b = BLOC[party], b1 = BLOC[f1[0]], b2 = BLOC[f2[0]];
     let toF1 = 0.5;
     if (b !== "none" && b1 !== b2) {
-      const same = clamp01(SAME_BLOC_SPLIT.mu + gauss() * SAME_BLOC_SPLIT.sd, 0.5, 0.92);
+      const same = clamp01(SPLIT.mu + gauss() * SPLIT.sd, 0.5, 0.92);
       toF1 = b === b1 ? same : 1 - same;
     } else {
       toF1 = clamp01(0.5 + gauss() * 0.1, 0.2, 0.8);
@@ -222,7 +224,7 @@ function svRunoffDraw(shares, gauss, clamp01) {
 }
 
 // ---- Monte Carlo per method -------------------------------------------------
-function runMethod(contestSlug, methodId, central, sigmaPp) {
+function runMethod(contestSlug, methodId, central, sigmaPp, svOverrides = null) {
   const rand = mulberry32(hashSeed(`${contestSlug}:${methodId}:20270506`));
   const gauss = gaussFactory(rand);
   const clamp01 = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
@@ -236,7 +238,7 @@ function runMethod(contestSlug, methodId, central, sigmaPp) {
     for (const k of PARTIES) drawn[k] = Math.max(0, (central[k] || 0) + gauss() * sigmaPp);
     const shares = normalise(drawn);
     for (const k of PARTIES) shareDraws[k].push(shares[k]);
-    const { finalists, final, winner } = svRunoffDraw(shares, gauss, clamp01);
+    const { finalists, final, winner } = svRunoffDraw(shares, gauss, clamp01, svOverrides);
     winCount[winner] = (winCount[winner] || 0) + 1;
     for (const f of finalists) runoffCount[f] = (runoffCount[f] || 0) + 1;
     const pairKey = [...finalists].sort().join(" v ");
@@ -359,7 +361,7 @@ function buildLancashireHypothetical() {
     label: "GE2024 base + national swing",
     description: `General election 2024 results across all fourteen Lancashire districts plus Blackburn with Darwen and Blackpool (${ge.pcon_count} constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (${national.label}).`,
     base: { shares: ge.shares, source: "GE2024 constituency results (DC), ONS postcode crosswalk", weighted_votes: ge.weighted_votes },
-    ...runMethod(reg.slug, "ge_swing_2024", geCentral, 0.06),
+    ...runMethod(reg.slug, "ge_swing_2024", geCentral, 0.06, reg.sv_overrides || null),
   });
 
   try {
@@ -380,7 +382,7 @@ function buildLancashireHypothetical() {
         label: "Lancashire local signal (unitaries model)",
         description: "The county's own most recent local votes, taken from our Lancashire unitaries forecast: each proposed ward's LCC May 2025 division result nudged by the district's 2025 to 2026 borough and by-election swing, Blackburn's May 2026 wards directly, and a Blackpool proxy; electorate-weighted across the four proposed unitaries. Carries the local Reform organisation and independent vote the GE base misses. Not re-swung to current national polling, so it is a picture of votes actually cast in 2025 and 2026.",
         base: { shares: local, source: "data/predictions/lancashire-unitaries/forecast.json (four_unitary vote_share, electorate-weighted)" },
-        ...runMethod(reg.slug, "unitaries_local_signal", local, 0.055),
+        ...runMethod(reg.slug, "unitaries_local_signal", local, 0.055, reg.sv_overrides || null),
       });
     }
   } catch {
@@ -454,7 +456,7 @@ const out = {
     method_note: "Methods are reported separately and are never blended into a single point estimate. Where methods disagree on the most likely winner the contest is reported as method-split. Party-level projections only until nominations close; candidate effects in mayoral contests are large and the bands are wide by design.",
     caveats: [
       "Projections are party level. Mayoral contests have strong candidate effects (independents and well known local figures routinely beat party baselines) which cannot be modelled before nominations close.",
-      "The supplementary vote transfer model is calibrated on a thin base: one Reform era SV contest (Greater Manchester, 30 July 2026) plus the pre-2022 SV era. Transfer parameters carry deliberately wide noise.",
+      "The supplementary vote transfer model is calibrated on three verified counts: Greater Manchester 2026 (the one Reform era SV contest, including its per-district second-preference table) and Lancashire's own 2016 and 2021 PCC elections. The Lancashire hypothetical uses county-specific parameters: higher transfer reach (its own contests ran 58 to 66 percent) and weaker left-bloc cohesion (Reform won the GM second-preference battle in the Lancashire-like boroughs of Wigan, Oldham, Rochdale, Tameside and Bury). Parameters still carry deliberately wide noise; SV counts never reveal transfers by source candidate, so splits are pooled estimates.",
       "The GE swing method applies uniform national swing to a general election base; local and mayoral elections routinely deviate from national swing (differential turnout, local parties, incumbency).",
       "Mansfield is forecast subject to its caveat: Nottinghamshire reorganisation may abolish the post, and the contest should be re-verified when nominations open.",
       "No constituency level polling exists for any May 2027 mayoral contest as of generation; the first published poll for a contest supersedes these baselines (wire it in, per the Makerfield lesson).",

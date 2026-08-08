@@ -289,6 +289,138 @@
         ]
       }
     },
+    "national_drift": {
+      "note": "The central forecast assumes May 2027 looks like Lancashire's 2025-26 votes. These scenarios shift every ward by the national polling movement since the spring 2026 baseline, at the backtested 0.10 transfer strength (the 2024 backtest found national swing carries weakly into local results) and at full strength as a stress bound. Shown separately, never blended into the central call.",
+      "baseline_spring_2026": {
+        "Labour": 0.23,
+        "Conservative": 0.18,
+        "Reform UK": 0.3,
+        "Liberal Democrats": 0.13,
+        "Green Party": 0.09
+      },
+      "current_average": {
+        "Labour": 0.2535070140280561,
+        "Conservative": 0.1973947895791583,
+        "Reform UK": 0.23647294589178355,
+        "Liberal Democrats": 0.10821643286573145,
+        "Green Party": 0.11422845691382767
+      },
+      "drift_pp": {
+        "Reform UK": -6.4,
+        "Labour": 2.4,
+        "Conservative": 1.7,
+        "Liberal Democrats": -2.2,
+        "Green Party": 2.4
+      },
+      "polling_fieldwork": {
+        "earliest": "2026-07-27",
+        "latest": "2026-08-05"
+      },
+      "scenarios": [
+        {
+          "key": "calibrated_drift",
+          "label": "National drift, calibrated (0.10)",
+          "dampening": 0.1,
+          "unitaries": [
+            {
+              "id": "west-lancashire-coast",
+              "ua_name": "Fylde Coast/West",
+              "reform_expected": 35,
+              "reform_p10": 25,
+              "reform_p90": 45,
+              "reform_majority_prob": 0.354,
+              "labour_expected": 19,
+              "noc_prob": 0.64,
+              "largest_party": "Reform UK"
+            },
+            {
+              "id": "north-lancashire",
+              "ua_name": "North",
+              "reform_expected": 35,
+              "reform_p10": 27,
+              "reform_p90": 42,
+              "reform_majority_prob": 0.366,
+              "labour_expected": 7,
+              "noc_prob": 0.633,
+              "largest_party": "Reform UK"
+            },
+            {
+              "id": "east-lancashire",
+              "ua_name": "Pennine/East",
+              "reform_expected": 55,
+              "reform_p10": 50,
+              "reform_p90": 61,
+              "reform_majority_prob": 0.965,
+              "labour_expected": 7,
+              "noc_prob": 0.035,
+              "largest_party": "Reform UK"
+            },
+            {
+              "id": "south-lancashire",
+              "ua_name": "South",
+              "reform_expected": 43,
+              "reform_p10": 33,
+              "reform_p90": 53,
+              "reform_majority_prob": 0.798,
+              "labour_expected": 15,
+              "noc_prob": 0.2,
+              "largest_party": "Reform UK"
+            }
+          ]
+        },
+        {
+          "key": "full_drift_stress",
+          "label": "National drift, full (stress bound)",
+          "dampening": 1,
+          "unitaries": [
+            {
+              "id": "west-lancashire-coast",
+              "ua_name": "Fylde Coast/West",
+              "reform_expected": 23,
+              "reform_p10": 16,
+              "reform_p90": 32,
+              "reform_majority_prob": 0.019,
+              "labour_expected": 24,
+              "noc_prob": 0.951,
+              "largest_party": "Labour"
+            },
+            {
+              "id": "north-lancashire",
+              "ua_name": "North",
+              "reform_expected": 25,
+              "reform_p10": 17,
+              "reform_p90": 33,
+              "reform_majority_prob": 0.03,
+              "labour_expected": 12,
+              "noc_prob": 0.97,
+              "largest_party": "Reform UK"
+            },
+            {
+              "id": "east-lancashire",
+              "ua_name": "Pennine/East",
+              "reform_expected": 46,
+              "reform_p10": 40,
+              "reform_p90": 52,
+              "reform_majority_prob": 0.396,
+              "labour_expected": 11,
+              "noc_prob": 0.605,
+              "largest_party": "Reform UK"
+            },
+            {
+              "id": "south-lancashire",
+              "ua_name": "South",
+              "reform_expected": 29,
+              "reform_p10": 19,
+              "reform_p90": 40,
+              "reform_majority_prob": 0.175,
+              "labour_expected": 23,
+              "noc_prob": 0.786,
+              "largest_party": "Reform UK"
+            }
+          ]
+        }
+      ]
+    },
     "sha256": "26a6f34056812f6fc25b2956816e017c3eef95f50eef45b80a8e111f52fa4958"
   },
   "four_unitary": {

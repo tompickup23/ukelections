@@ -235,6 +235,32 @@ function controlClass(prob: number) {
         </table>
       </>
     )}
+    {snap.national_drift && (
+      <>
+        <h3>What if the national mood carries into May 2027?</h3>
+        <p>
+          The central forecast assumes May 2027 votes like Lancashire voted in 2025–26. National polling has moved
+          since (fieldwork {snap.national_drift.polling_fieldwork.earliest} to {snap.national_drift.polling_fieldwork.latest}:
+          Reform {snap.national_drift.drift_pp["Reform UK"]}pp, Labour +{snap.national_drift.drift_pp["Labour"]}pp against
+          the spring 2026 baseline). Our 2024 backtest found national swing carries into local results at only about a
+          tenth of its strength, so the calibrated scenario barely moves the forecast; the full-strength row is a
+          stress bound, not a prediction. Scenarios are shown separately and never blended into the central call.
+        </p>
+        <table class="vintage-table">
+          <thead><tr><th>Scenario</th>{snap.national_drift.scenarios[0].unitaries.map((u: any) => <th>{u.ua_name}</th>)}</tr></thead>
+          <tbody>
+            {snap.national_drift.scenarios.map((sc: any) => (
+              <tr>
+                <td>{sc.label}</td>
+                {sc.unitaries.map((u: any) => (
+                  <td>Ref {u.reform_expected} ({u.reform_p10}–{u.reform_p90}), maj {(u.reform_majority_prob * 100).toFixed(0)}%</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )}
     <h3>Sources</h3>
     <ul>
       {snap.sources.map((s: any) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
