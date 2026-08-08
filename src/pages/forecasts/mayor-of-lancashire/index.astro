@@ -1,0 +1,243 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import RaceBar from "../../../components/RaceBar.astro";
+import { loadMayoralForecasts, partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+
+const data = loadMayoralForecasts();
+const h = data.hypothetical_lancashire;
+const registry = JSON.parse(readFileSync("data/contests/mayoral.json", "utf8"));
+const svCal = registry.sv_calibration || {};
+const overrides = (registry.hypothetical_lancashire || {}).sv_overrides;
+const unis = JSON.parse(readFileSync("data/predictions/lancashire-unitaries/forecast.json", "utf8")).four_unitary.unitaries;
+
+const PARTY_COLS = ["Reform UK", "Labour", "Conservative", "Liberal Democrats", "Green Party", "Independent"];
+
+// District aggregation of the local signal: electorate-weighted ward shares.
+const byDistrict: Record<string, { elec: number; acc: Record<string, number> }> = {};
+const allWards: any[] = [];
+for (const u of unis) {
+  for (const w of u.wards || []) {
+    allWards.push({ ...w, ua: u.name || u.ua_name });
+    const d = (byDistrict[w.district] ||= { elec: 0, acc: {} });
+    for (const [party, v] of Object.entries(w.shares || {})) {
+      d.acc[party] = (d.acc[party] || 0) + (v as number) * (w.electorate || 0);
+    }
+    d.elec += w.electorate || 0;
+  }
+}
+const districtRows = Object.entries(byDistrict).map(([district, v]) => {
+  const shares = Object.fromEntries(PARTY_COLS.map((p) => [p, v.elec ? (v.acc[p] || 0) / v.elec : 0]));
+  const leader = PARTY_COLS.reduce((a, b) => ((shares[a] || 0) >= (shares[b] || 0) ? a : b));
+  return { district, electorate: v.elec, shares, leader };
+}).sort((a, b) => b.electorate - a.electorate);
+
+const topWards = (party: string, n = 10) =>
+  allWards
+    .filter((w) => (w.shares?.[party] || 0) > 0)
+    .sort((a, b) => (b.shares[party] || 0) - (a.shares[party] || 0))
+    .slice(0, n);
+const reformHeartlands = topWards("Reform UK");
+const labourHeartlands = topWards("Labour");
+
+function methodShares(m: any) {
+  return Object.entries(m.parties)
+    .map(([party, v]: [string, any]) => ({ party, pct: v.central, ...v }))
+    .filter((r) => r.pct > 0.005)
+    .sort((a, b) => b.pct - a.pct);
+}
+function winRows(m: any) {
+  return Object.entries(m.parties)
+    .map(([party, v]: [string, any]) => ({ party, ...v }))
+    .filter((r) => r.p_win >= 0.005)
+    .sort((a, b) => b.p_win - a.p_win);
+}
+const pct = (x: number) => `${Math.round(x * 100)}%`;
+const pp = (x: number) => (x * 100).toFixed(1);
+
+// Verified Lancashire SV precedents (agent-verified against council/OPCC
+// declarations, 8 Aug 2026; sources in the table).
+const precedents = [
+  {
+    year: "2021", winner: "Snowden (Con) 51.27 to 48.73 over Grunshaw (Lab)",
+    firstprefs: "Con 44.8, Lab 41.6, LD 8.8, Reform UK 4.8",
+    transfers: "Pool 50,739; 33,279 reached the finalists (65.6%); split Lab 54.6 / Con 45.4",
+    context: "Post-vaccine Conservative high point (Hartlepool day). Reform then a fringe 4.8% party.",
+    source: "https://www.lancashire-pcc.gov.uk/the-commissioner/elections/",
+    source_label: "Lancashire OPCC",
+  },
+  {
+    year: "2016", winner: "Grunshaw (Lab) beat Pratt (Con)",
+    firstprefs: "Lab 43.8, Con 32.0, UKIP 16.5, LD 7.7",
+    transfers: "Pool 73,151; 42,648 reached the finalists (58.3%); split Con 52.0 / Lab 48.0",
+    context: "UKIP-era right-populist ballots split almost evenly rather than consolidating right; 41.7% exhausted.",
+    source: "https://www.wyre.gov.uk/directory-record/947/lancashire-police-and-crime-commissioner-election-results-2016",
+    source_label: "Wyre Council declared results",
+  },
+];
+
+const gm = svCal.gm_2026 || {};
+const title = "Mayor of Lancashire: the full hypothetical forecast";
+const description = "No Lancashire mayoral election is scheduled. If one were held: two methods, both shown, plus the supplementary-vote transfer evidence and where each party's vote lives, ward by ward.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main data-pagefind-body>
+    <section class="section">
+      <p class="kicker">LANCASHIRE · HYPOTHETICAL MAYORAL FORECAST · SUPPLEMENTARY VOTE</p>
+      <h1>Mayor of Lancashire</h1>
+      <div class="callout">
+        <strong>No such election exists.</strong> {h.status_note}
+        {overrides && <span> Voting system if called: supplementary vote (s.63 and Sch.30, English Devolution and Community Empowerment Act 2026).</span>}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Two methods, no blend</h2>
+      {!h.methods_agree_on_leader && (
+        <p class="method-split">
+          ⚠ <strong>The methods disagree, and that disagreement is the finding.</strong> National polling and
+          Lancashire's own recent local votes point at different winners. Read both; we do not average them.
+        </p>
+      )}
+      {h.methods.map((m: any) => (
+        <div class="method-block">
+          <p class="method-label"><strong>{m.label}</strong></p>
+          <p class="method-desc">{m.description}</p>
+          <RaceBar
+            shares={methodShares(m).map((r) => ({ party: r.party, pct: r.pct }))}
+            ariaLabel={`Mayor of Lancashire hypothetical: projected first preferences, ${m.label}`}
+            height={40}
+            showLegend={false}
+          />
+          <div class="win-chips">
+            {winRows(m).map((r) => (
+              <span class="win-chip">
+                <span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>
+                {shortPartyLabel(r.party)} <strong>{pct(r.p_win)}</strong>
+                <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}–{pp(r.p90)})</span>
+              </span>
+            ))}
+          </div>
+          {m.modal_runoff && (
+            <p class="runoff-line">
+              Most likely runoff: <strong>{m.modal_runoff.pair.split(" v ").map((x: string) => shortPartyLabel(x)).join(" v ")}</strong>
+              {" "}({pct(m.modal_runoff.probability)} of runs), median final round
+              {" "}{Object.entries(m.modal_runoff.median_final_split).map(([party, v]: [string, any]) => `${shortPartyLabel(party)} ${pct(v)}`).join(" · ")}.
+            </p>
+          )}
+        </div>
+      ))}
+    </section>
+
+    <section class="section prose-block">
+      <h2>How second preferences are modelled, and why Lancashire gets its own parameters</h2>
+      <p>
+        Supplementary-vote counts never reveal transfers by source candidate, only the pooled totals, so any SV
+        model estimates two things: how many eliminated-candidate ballots carry a usable second preference
+        ("reach"), and how the transfers split between the finalists. This forecast calibrates both on three
+        verified official counts, and gives Lancashire county-specific parameters{overrides ? `: ${overrides.rationale}` : "."}
+      </p>
+      <table class="data-table">
+        <thead><tr><th>Contest</th><th>Reach</th><th>Transfer split</th><th>What it teaches</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Greater Manchester mayoral by-election, 30 Jul 2026<br /><a href="https://www.gmelects.org.uk/result2026/" rel="noopener">GMCA declaration</a></td>
+            <td>{gm.reach ? pp(gm.reach) + "%" : "60.8%"}</td>
+            <td>Labour 56.2 / Reform 43.8</td>
+            <td>The only Reform-era SV contest. Its per-district table is the key evidence: Reform WON the
+              second-preference battle in Wigan, Oldham, Rochdale, Tameside and Bury, the boroughs most like
+              Lancashire; Labour's transfer strength came from Manchester, Stockport and Trafford.</td>
+          </tr>
+          {precedents.map((p) => (
+            <tr>
+              <td>Lancashire PCC, {p.year}<br /><a href={p.source} rel="noopener">{p.source_label}</a></td>
+              <td>{p.transfers.match(/\(([\d.]+%)\)/)?.[1]}</td>
+              <td>{p.transfers.split("split ")[1]}</td>
+              <td>{p.context}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h3>The county's own SV history</h3>
+      <ul>
+        {precedents.map((p) => (
+          <li><strong>{p.year}:</strong> {p.winner}. First preferences: {p.firstprefs}. {p.transfers}.</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section prose-block">
+      <h2>Where the mayoral vote lives</h2>
+      <p>
+        A mayoral election is one county-wide count, so the rows below are not separate contests: they show where
+        each party's first-preference vote would come from, using the same ward-level model as our
+        <a href="/forecasts/lancashire-unitaries/">Lancashire unitaries forecast</a> (votes actually cast in
+        2023–26, not re-swung to national polling).
+      </p>
+      <table class="data-table">
+        <thead><tr><th>District</th><th>Electorate</th><th>Leads</th>{PARTY_COLS.slice(0, 5).map((p) => <th>{shortPartyLabel(p)}</th>)}</tr></thead>
+        <tbody>
+          {districtRows.map((r) => (
+            <tr>
+              <td>{r.district}</td>
+              <td>{r.electorate.toLocaleString()}</td>
+              <td><span class="party-swatch" style={`background:${partyColour(r.leader)}`}></span> {shortPartyLabel(r.leader)}</td>
+              {PARTY_COLS.slice(0, 5).map((p) => <td>{(r.shares[p] * 1).toFixed(1)}%</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div class="heartlands">
+        <div>
+          <h3>Reform's ten strongest wards</h3>
+          <ol>
+            {reformHeartlands.map((w) => (
+              <li>{w.ward} <span class="muted">({w.district}, {(w.shares["Reform UK"]).toFixed(1)}%)</span></li>
+            ))}
+          </ol>
+        </div>
+        <div>
+          <h3>Labour's ten strongest wards</h3>
+          <ol>
+            {labourHeartlands.map((w) => (
+              <li>{w.ward} <span class="muted">({w.district}, {(w.shares["Labour"]).toFixed(1)}%)</span></li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section prose-block">
+      <h2>Caveats</h2>
+      <ul>
+        {(h.caveats || []).map((c: string) => <li>{c}</li>)}
+        <li>District and ward figures are the local-votes method decomposed geographically; a real campaign, real
+          candidates and turnout differences would move them.</li>
+      </ul>
+      <h3>Sources</h3>
+      <ul>
+        {(h.sources || []).map((s: any) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+.kicker { font-size: 0.78rem; letter-spacing: 0.08em; color: var(--muted); }
+.callout { border-left: 3px solid #7c3aed; padding: 0.8rem 1rem; background: rgba(124,58,237,0.07); border-radius: 6px; margin-top: 0.75rem; }
+.method-block { margin: 1.25rem 0; }
+.method-label { margin-bottom: 0.35rem; }
+.method-desc { font-size: 0.88rem; color: var(--muted); margin: 0.2rem 0 0.6rem; }
+.method-split { border-left: 3px solid var(--status-warn-border, #b45309); padding: 0.6rem 0.9rem; background: rgba(180,83,9,0.08); border-radius: 6px; }
+.win-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.win-chip { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; border: 1px solid var(--border); border-radius: 999px; padding: 0.25rem 0.7rem; }
+.chip-detail { color: var(--muted); font-size: 0.78rem; }
+.party-swatch { width: 0.7rem; height: 0.7rem; border-radius: 3px; display: inline-block; }
+.runoff-line { font-size: 0.9rem; margin-top: 0.5rem; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.75rem 0 1rem; }
+.data-table th, .data-table td { border-top: 1px solid var(--border); padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
+.heartlands { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.muted { color: var(--muted); font-size: 0.85em; }
+</style>
