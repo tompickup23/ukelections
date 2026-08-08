@@ -359,7 +359,7 @@ function buildLancashireHypothetical() {
   methods.push({
     id: "ge_swing_2024",
     label: "GE2024 base + national swing",
-    description: `General election 2024 results across all fourteen Lancashire districts plus Blackburn with Darwen and Blackpool (${ge.pcon_count} constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (${national.label}).`,
+    description: `General election 2024 results across the fourteen Lancashire councils, the twelve districts plus Blackburn with Darwen and Blackpool (${ge.pcon_count} constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (${national.label}).`,
     base: { shares: ge.shares, source: "GE2024 constituency results (DC), ONS postcode crosswalk", weighted_votes: ge.weighted_votes },
     ...runMethod(reg.slug, "ge_swing_2024", geCentral, 0.06, reg.sv_overrides || null),
   });
