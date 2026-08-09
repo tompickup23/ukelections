@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const ROOT = process.cwd();
+const dp = JSON.parse(
+  readFileSync(path.join(ROOT, "data/predictions/lancashire-unitaries/demographic-propensity.json"), "utf8")
+);
+const v = dp.snapshot.validation;
+---
+
+<BaseLayout
+  title="Methodology, demographic ward model"
+  description="A machine-learning model of Reform UK's local vote built from Census 2021 ward demographics alone: support vector machine + gradient boosting ensemble, walk-forward validated at 4.4pp share error and 84.7% win accuracy on the unseen May 2026 results."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Methodology</p>
+    <h1>The demographic ward model</h1>
+    <p class="lede">
+      What does a ward's census profile alone say about how it votes? A machine-learning model trained on
+      2024-25 local results and tested, honestly, on May 2026. Pin: <code>{dp.snapshot.model_version}</code>
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>What this model is</h2>
+    <p>
+      Every other model on this site starts from votes: the last result in a ward, swung by polling. This one
+      deliberately does not. It is shown only the <strong>structure</strong> of a place, its Census 2021 profile,
+      its occupational mix, its 2024 general election result bridged down to ward level, its neighbourhood, and the
+      national polling level on the day, and it learns how that structure maps to the local Reform UK vote. It
+      models Reform because Reform is where the demographic realignment signal is strongest and where a
+      structure-only model has the most to say; the same machinery can be extended to other parties.
+    </p>
+    <p>
+      Because the inputs are structural, the model can score wards that have no usable electoral history at all:
+      new boundaries, long-uncontested wards, and the proposed May 2027 shadow unitary wards. That is what it is
+      used for on this site: an <strong>independent second opinion</strong> alongside the results-based forecasts,
+      labelled separately and never blended into them.
+    </p>
+
+    <h2>Headline accuracy, tested the honest way</h2>
+    <p>
+      The model was trained only on 2024 and 2025 contests (2,056 ward-elections where Reform stood) and then asked
+      to predict all <strong>2,625 wards Reform fought in May 2026</strong>, results it had never seen, in a cooler
+      national environment than the May 2025 peak. On that unseen test:
+    </p>
+    <ul>
+      <li><strong>{v.share_mae_pp}pp average error</strong> on Reform vote share (a predict-the-mean baseline manages 11.3pp), R² {v.share_r2}.</li>
+      <li><strong>{(v.win_accuracy * 100).toFixed(1)}% win/lose accuracy</strong>, AUC {v.win_auc}, Brier {v.win_brier} (base rate 67.1%).</li>
+      <li>Every prediction carries a <strong>90% interval of ±{v.interval_90_half_width_pp}pp</strong>; {(v.interval_90_coverage * 100).toFixed(1)}% of the unseen results landed inside their interval.</li>
+      <li>Win probabilities are calibrated: wards scored 50-60% were won 58.8% of the time, wards scored 20-30% were won 24.2% of the time.</li>
+    </ul>
+    <p>
+      A further forward test against <strong>38 English local by-elections from 25 June to 16 July 2026</strong>,
+      later than any training or test data, held the ranking power completely (AUC 0.914, accuracy 81.6%). It also
+      measured a real effect: Reform underperforms these scores in low-turnout by-elections by roughly
+      <strong>11 points of win rate</strong>. By-election readings of this model should carry that discount.
+    </p>
+
+    <h2>What the model learned drives the Reform vote</h2>
+    <p>
+      The single strongest predictor, by a factor of roughly two, is <strong>graduate share</strong> (correlation
+      &minus;0.74 with Reform share). Education, not ethnicity and not deprivation, is the fault line of the
+      realignment at ward level. Behind it, in order of learned importance: no-qualifications share (+0.46),
+      West-European-born share (&minus;0.65), UK-born share (+0.69), the area's <strong>UKIP vote from 2013-16</strong>
+      (+0.73, still independently predictive a decade later), occupational class (routine and semi-routine
+      occupations +0.62, managerial and professional &minus;0.44), car dependence (two-plus-car households +0.41),
+      and age (50-and-over wards lean towards, under-35 wards lean against). A ward's neighbours matter too: the
+      surrounding area's profile carries real weight beyond the ward's own.
+    </p>
+    <p>
+      One negative result worth stating: wards shaped by post-2004 Eastern European migration are
+      <strong>not</strong> distinctive Reform territory once education and the UKIP legacy are controlled for.
+    </p>
+
+    <h2>How it works</h2>
+    <p>
+      <strong>Data.</strong> 19,618 ward-level results 2016-2026 assembled from Democracy Club, official May 2026
+      declarations and the Local Elections Archive Project, matched to ONS ward codes (95% match rate) including
+      1,382 county divisions via the ONS ward-to-division lookup. Features are composed population-weighted from
+      LSOA-level Census 2021 data (ethnicity, religion, tenure, education, NS-SEC occupation, age bands, car
+      availability), plus the average profile of the eight nearest non-overlapping wards, the ward-bridged 2024
+      general election shares, the council area's 2013-16 UKIP average, and the UK Elections 14-day national
+      polling average on polling day.
+    </p>
+    <p>
+      <strong>Model.</strong> Predictions average a support vector machine (RBF kernel) and a histogram
+      gradient-boosting model, hyperparameter-tuned with cross-validation grouped by council so no council appears
+      on both sides of a tuning fold. Win probabilities pass through isotonic calibration fitted on out-of-fold
+      training predictions. Intervals are split-conformal, from grouped cross-validation residuals, and checked
+      against the unseen test. The support vector machine also identifies which training wards hold up the
+      win/lose boundary, a direct read-out of where the contest between winning and losing demographics actually sits.
+    </p>
+
+    <h2>Scope: interpolation, not extrapolation</h2>
+    <p>
+      The national polling feature is what lets one model span different electoral climates, but it earns that
+      honestly only <strong>within the range the model has seen</strong>: roughly Reform 14% (the 2024 anchor) to
+      30% (the May 2025 peak). A deliberately broken test proves the point: trained on 2024 alone, the model missed
+      the May 2025 sweep by 18 points, because nothing in a 14%-world tells you about a 29%-world. All published
+      uses of this model sit inside the validated range; if national polling leaves it, these scores should be
+      treated as stale until the model is retrained.
+    </p>
+
+    <h2>Limitations</h2>
+    <ul>
+      <li>It predicts <strong>places, not people</strong>. Nothing here supports claims about how any individual or any demographic group votes; that is the ecological fallacy.</li>
+      <li>Scores assume Reform stands a candidate and are conditional on the stated national environment.</li>
+      <li>Localist parties (residents' associations, town-first parties) are invisible to a census-based model and have taken wards it rated strongly.</li>
+      <li>Multi-seat wards use a best-candidate-per-party share approximation.</li>
+      <li>England only at present.</li>
+    </ul>
+
+    <h2>Where it is used on this site</h2>
+    <p>
+      The <a href="/forecasts/lancashire-unitaries/">Lancashire unitaries forecast</a> shows this model as an
+      independent demographic second opinion next to the results-based seat forecast, across three named national
+      environments. The two methods are labelled and never blended.
+    </p>
+  </section>
+</BaseLayout>

@@ -1,6 +1,12 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { loadLancashireUnitaries, partyColour } from "../../../lib/predictions";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const dp = JSON.parse(
+  readFileSync(path.join(process.cwd(), "data/predictions/lancashire-unitaries/demographic-propensity.json"), "utf8")
+);
 
 const data = loadLancashireUnitaries();
 const snap = data.snapshot;
@@ -187,6 +193,58 @@ function controlClass(prob: number) {
         </table>
       </div>
     ))}
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Independent method · demographic propensity</p>
+      <h2>What the demographics alone say</h2>
+    </div>
+    <p class="prose-lead">
+      A completely different way to read the same 107 wards. The
+      <a href="/methodology/demographic-ward-model/">demographic ward model</a> never sees a local result: it
+      scores each proposed ward from its Census 2021 structure, occupational mix, ward-bridged GE2024 shares and
+      the national polling level, using a machine-learning model walk-forward validated at 4.4pp share error on
+      the unseen May 2026 results. It is shown here as a second opinion on Reform's structural position under
+      three named national environments. The two methods are independent and are <strong>never blended</strong>.
+    </p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Unitary</th>
+          <th>Seats</th>
+          <th>GE 2024 environment (Reform 14.3%)</th>
+          <th>Current polling (Reform 23.8%)</th>
+          <th>May 2025 environment (Reform ~29%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {dp.unitaries.map((u: any) => (
+          <tr>
+            <td><strong>{u.name}</strong></td>
+            <td>{u.council_size}</td>
+            <td>{u.expected_seats_ge24_low}</td>
+            <td>{u.expected_seats_current}</td>
+            <td>{u.expected_seats_may25_high}</td>
+          </tr>
+        ))}
+        <tr>
+          <td><strong>All four unitaries</strong></td>
+          <td>{dp.unitaries.reduce((s: number, u: any) => s + u.council_size, 0)}</td>
+          <td><strong>{dp.unitaries.reduce((s: number, u: any) => s + u.expected_seats_ge24_low, 0)}</strong></td>
+          <td><strong>{dp.unitaries.reduce((s: number, u: any) => s + u.expected_seats_current, 0)}</strong></td>
+          <td><strong>{dp.unitaries.reduce((s: number, u: any) => s + u.expected_seats_may25_high, 0)}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="name-caveat">
+      Cells are expected Reform seats (sum of calibrated win probability × councillors per ward). The spread across
+      environments is the point: on structure alone, Reform's 2027 seat count is highly sensitive to the national
+      mood on polling day, and the model is only valid inside the polling range it was trained on (Reform 14-30%
+      nationally). Demographic propensity, not a contest forecast: no candidates, no incumbency, no local parties.
+      Where the two methods disagree, that disagreement is information about how much a ward's recent results
+      diverge from its structure.
+    </p>
   </section>
 
   <section class="section prose-block">
