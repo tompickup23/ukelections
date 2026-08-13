@@ -20,6 +20,35 @@ const priorRows = Object.entries(prior.shares as Record<string, number>)
   .sort((a, b) => b[1] - a[1])
   .map(([party, share]) => ({ party, pct: share }));
 
+// ---------------------------------------------------------------------------
+// Contest state. "upcoming" is the pre-poll page. Setting status to
+// "polls_closed" (22:00 BST on polling day, not before) promotes the embargoed
+// winner call in data.call. Setting it to "concluded" additionally renders the
+// declared result, which degrades gracefully until the returning officer's
+// per-candidate breakdown is backfilled into result.shares.
+// ---------------------------------------------------------------------------
+const status = (data.status as string) || "upcoming";
+const call = (data.call as any) || null;
+const showCall = Boolean(call) && (status === "polls_closed" || status === "concluded");
+const result = (data.result as any) || null;
+const declared = status === "concluded" && Boolean(result?.declared);
+const resultShares = (result?.shares as Record<string, number> | null) || null;
+const resultRows = resultShares
+  ? Object.entries(resultShares)
+      .sort((a, b) => b[1] - a[1])
+      .map(([party, share]) => ({ party, pct: share }))
+  : [];
+const pct1 = (x: number | null | undefined) =>
+  typeof x === "number" ? (x * 100).toFixed(1) : null;
+
+const cPolling = (data.constituency_polling as any) || null;
+const cPolls = (cPolling?.polls as Array<any>) || [];
+const exitPoll = (data.exit_poll as any) || null;
+const pollRows = (p: any) =>
+  Object.entries(p.shares as Record<string, number>)
+    .sort((a, b) => b[1] - a[1])
+    .map(([party, share]) => ({ party, pct: share }));
+
 const timeline: Array<{ date: string; event: string }> = [
   { date: "7 July 2026", event: "Nigel Farage announces he will vacate the seat and stand in the resulting by-election." },
   { date: "8 July 2026", event: "Resignation effected (appointment as Steward and Bailiff of the Manor of Northstead)." },
@@ -58,9 +87,82 @@ const timeline: Array<{ date: string; event: string }> = [
     <p class="meta-row">England · East of England · GE2024: Reform UK, majority 8,405 (18.3pp)</p>
   </section>
 
+  {showCall && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Our call · published at close of poll</p>
+        <h2>{call.outcome}</h2>
+      </div>
+      <div class="backtest-callout">
+        <strong>{call.headline}</strong>
+        <span class="backtest-detail">{call.reasoning}</span>
+      </div>
+      <p class="caption" style="margin-top:var(--space-md)">
+        Basis: {call.basis} · Confidence: {call.confidence}. This is a call on the shape of the
+        ballot paper, not a vote-share forecast. What we are explicitly not calling:
+      </p>
+      <ul class="caption">
+        {call.not_called.map((q: string) => <li>{q}</li>)}
+      </ul>
+      <p class="caption">{call.standing_caveat}</p>
+    </section>
+  )}
+
+  {declared && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Declared result · 13 August 2026</p>
+        <h2>{result.outcome || call?.outcome}</h2>
+      </div>
+      {resultRows.length ? (
+        <PartyBars large={true} rows={resultRows} />
+      ) : (
+        <p class="caption">
+          Declared by {result.returning_officer}. The full per-candidate vote breakdown appears
+          here once the returning officer publishes it.
+        </p>
+      )}
+      <p class="caption">
+        {pct1(result.turnout_pct) && <>Turnout {pct1(result.turnout_pct)}%</>}
+        {result.turnout_votes && <> ({result.turnout_votes.toLocaleString()} votes)</>}
+        {result.majority_votes && <> · Majority {result.majority_votes.toLocaleString()}</>}
+        {pct1(result.majority_pp) && <> ({pct1(result.majority_pp)}pp)</>}
+        {result.rejected_ballots != null && <> · Rejected ballots {result.rejected_ballots}</>}
+      </p>
+    </section>
+  )}
+
+  {cPolls.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">The only hard number</p>
+        <h2>What the one constituency poll said</h2>
+      </div>
+      {cPolls.map((p: any) => (
+        <>
+          <PartyBars large={true} rows={pollRows(p)} />
+          <p class="caption">
+            {p.pollster} for {p.client}, fieldwork {p.fieldwork}, sample{" "}
+            {p.sample_size}. Head to head, excluding the rest of the field:{" "}
+            {shortPartyLabel("Reform UK")} {pct1(p.head_to_head["Reform UK"])}% against Count Binface{" "}
+            {pct1(p.head_to_head["Count Binface Party"])}%.
+            <a href={p.source} rel="external"> Source →</a>
+          </p>
+        </>
+      ))}
+      <p class="caption">{cPolling.note}</p>
+      {exitPoll && exitPoll.exists === false && (
+        <div class="backtest-callout" style="margin-top:var(--space-md)">
+          <strong>There is no exit poll for this by-election.</strong>
+          <span class="backtest-detail">{exitPoll.note}</span>
+        </div>
+      )}
+    </section>
+  )}
+
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Our call</p>
+      <p class="eyebrow">{showCall ? "Method" : "Our call"}</p>
       <h2>Why there is no vote-share forecast</h2>
     </div>
     <div class="backtest-callout">

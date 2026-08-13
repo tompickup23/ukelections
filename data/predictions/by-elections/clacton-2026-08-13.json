@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "model_version": "clacton-by-election-v2",
   "generated_at": "2026-07-23T12:00:00.000Z",
-  "status": "upcoming",
+  "status": "polls_closed",
   "contest": {
     "constituency_slug": "clacton",
     "constituency_name": "Clacton",
@@ -115,7 +115,66 @@
       "The runner-up: with the field a record 34 candidates and no major party standing, second place is a real contest between Count Binface, minor-party and independent candidates. An Ipsos 'who do you want to win' question put Binface ahead of Farage, but that is a novelty measure, not a turnout-weighted vote-intention.",
       "Farage's margin and share versus his 46.2% at GE2024: a lower share against a fractured field would still be a comfortable win but a weaker mandate."
     ],
-    "no_forecast_rationale": "Every quantitative method we benchmark (GE swing model, poll of polls, local signal) assumes the major parties contest the seat. A five-party boycott breaks that assumption: national vote-intention shares cannot be mapped onto a ballot missing parties that hold roughly two-thirds of the national vote between them. Publishing invented shares would repeat the Makerfield mistake in a different costume. We will grade the outcome (winner, margin, turnout) against the qualitative call above."
+    "no_forecast_rationale": "Every quantitative method we benchmark (GE swing model, poll of polls, local signal) assumes the major parties contest the seat. A five-party boycott breaks that assumption: national vote-intention shares cannot be mapped onto a ballot missing parties that hold roughly two-thirds of the national vote between them. Publishing invented shares would repeat the Makerfield mistake in a different costume. One constituency poll (Survation, n=265) was published after this file was written, and a seat-level poll does not rely on the swing model, so we report it under constituency_polling as the one quantitative anchor that survives the boycott. Reporting someone else's seat poll is not the same as issuing our own modelled shares, and we are not issuing any. We will grade the outcome (winner, margin, turnout) against the qualitative call above."
+  },
+  "constituency_polling": {
+    "note": "One constituency poll was published during the campaign, after this file was first generated on 23 July. A seat-level poll does not depend on the swing model, so it survives the boycott in a way our national-shares methods do not. It is reported here as the single quantitative anchor available, not adopted as a UKE forecast: the sample is small enough that the margin of error is roughly plus or minus 6 points.",
+    "polls": [
+      {
+        "pollster": "Survation",
+        "client": "Mandate Research",
+        "fieldwork": "16 to 24 July 2026",
+        "fieldwork_start": "2026-07-16",
+        "fieldwork_end": "2026-07-24",
+        "sample_size": 265,
+        "shares": {
+          "Reform UK": 0.73,
+          "Count Binface Party": 0.2,
+          "Reclaim": 0.02,
+          "Other": 0.05
+        },
+        "head_to_head": {
+          "Reform UK": 0.69,
+          "Count Binface Party": 0.31
+        },
+        "source": "https://en.wikipedia.org/wiki/2026_Clacton_by-election"
+      }
+    ]
+  },
+  "exit_poll": {
+    "exists": false,
+    "note": "The national exit poll is commissioned only for general elections, so no by-election has one. Any figure circulating before the declaration is either the Survation constituency poll above, a partial turnout count from tellers outside polling stations, or invention.",
+    "source": "https://www.inkl.com/news/clacton-by-election-when-does-voting-close-and-will-there-be-an-exit-poll"
+  },
+  "call": {
+    "embargoed_until": "2026-08-13T21:00:00.000Z",
+    "embargo_note": "22:00 BST, close of poll. This block renders only when contest status is set to polls_closed or concluded. It is deliberately not published while voting is open: turnout is the single undetermined quantity in this contest, and a published winner call is the one thing that can move it. Representation of the People Act 1983 section 66A also makes it an offence to publish a forecast of the result before close of poll where that forecast draws on exit poll data. Ours does not, but a seat called at 21:30 invites the reading.",
+    "outcome": "Reform UK hold",
+    "winner_party": "Reform UK",
+    "winner_candidate": "Nigel Farage",
+    "confidence": "very high",
+    "basis": "structural, not modelled",
+    "headline": "Reform UK hold. Nigel Farage returns as MP for Clacton.",
+    "reasoning": "This is a call about the ballot paper, not about the electorate. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain are all absent, so roughly two-thirds of the national vote has no vehicle in this seat. Farage starts from 46.2% in a contested 2024 race, in a constituency that voted around 75% Leave and that elected Douglas Carswell for UKIP at a by-election in 2014. The record 34-candidate field fragments everything that is not Farage rather than consolidating against him. John Curtice expects a comfortable win.",
+    "not_called": [
+      "Turnout. Mid-August, no mainstream contest, a foregone conclusion at the top of the ballot. The 2014 Carswell resign-and-recontest managed 51.0%, but that had every major party standing.",
+      "Farage's share against the 46.2% he won in 2024. A lower share on a fragmented ballot is still a comfortable win and a weaker mandate.",
+      "Second place, though less open than it looked in July. Survation put Count Binface on 20% and every other challenger in the low single digits, so Binface second is the strong expectation rather than a coin toss. On a sample of 265 the gap between second and third is still inside the margin of error. Separately, the Ipsos 'who do you want to win' question that put Binface ahead of Farage is a novelty sentiment measure, not a turnout-weighted vote intention, and we are not treating it as a forecast of anything."
+    ],
+    "standing_caveat": "A win does not end the Parliamentary Commissioner for Standards investigation. Suspension, recall and a further by-election all remain possible afterwards."
+  },
+  "result": {
+    "declared": false,
+    "note": "Backfill from the Tendring District Council declaration. Set contest status to concluded once winner, majority, turnout and finishing order are in hand; per-candidate shares can follow separately and the page degrades gracefully until they land.",
+    "returning_officer": "Tendring District Council",
+    "shares": null,
+    "votes": null,
+    "turnout_votes": null,
+    "turnout_pct": null,
+    "majority_votes": null,
+    "majority_pp": null,
+    "finishing_order_top3": null,
+    "rejected_ballots": null
   },
   "sources": [
     {

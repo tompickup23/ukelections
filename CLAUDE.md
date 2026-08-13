@@ -23,6 +23,8 @@ ssh vps-main 'set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy /tmp/
 
 Total deploy ≈ 4 min wall-clock end-to-end.
 
+**Cross-repo data dependency (10 Aug 2026):** `scripts/aggregate-lsoa-to-ward-demographics.py` and `src/lib/lancashireLcc2025.js` read `/Users/tompickup/clawd/burnley-council/data` directly off disk — a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
+
 ## Architecture (19 May 2026 state)
 
 **Design system**
