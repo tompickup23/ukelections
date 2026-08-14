@@ -2,6 +2,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { geoMercator, geoPath } from "d3-geo";
+import { rewindFeatures } from "../../../lib/geoRewind";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import StatCard from "../../../components/StatCard.astro";
 import { loadMay7Control, partyColour } from "../../../lib/predictions";
@@ -13,9 +14,12 @@ const SLUG_TO_LAD = JSON.parse(
 const LAD_TO_REGION = JSON.parse(
   readFileSync(resolve(process.cwd(), "data/geography/lad24-to-region.json"), "utf8"),
 );
-const lads = JSON.parse(
+const rawLads = JSON.parse(
   readFileSync(resolve(process.cwd(), "data/geography/lad24-simplified.geojson"), "utf8"),
 ) as { features: Array<{ properties: { LAD24CD: string; LAD24NM: string }; geometry: any }> };
+// Source rings are wound the opposite way to what d3-geo expects, so every
+// feature reads as its own complement. See src/lib/geoRewind.ts.
+const lads = { ...rawLads, features: rewindFeatures(rawLads.features) };
 
 const ctl = loadMay7Control();
 

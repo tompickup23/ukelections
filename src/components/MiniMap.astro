@@ -25,13 +25,12 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { geoMercator, geoPath } from "d3-geo";
+import { rewindFeatures, bboxPolygon } from "../lib/geoRewind";
 
-// We intentionally don't use d3-geo's `geoBounds` here. ONS simplified
-// boundaries ship with clockwise outer-ring winding, which d3-geo's
-// spherical bbox calculation interprets as "this polygon covers the
-// outside of the planet". every feature comes back with bbox
-// `[[-180,-90],[180,90]]`. A plain coordinate min/max works for our
-// neighbour-bbox intersection check.
+// A plain planar coordinate min/max, which is all the neighbour-bbox
+// intersection check needs. Rings reaching here have already been rewound
+// at load, so d3-geo's `geoBounds` would work too, but it costs a spherical
+// pass we have no use for at this scale.
 function flatBbox(feature: any): [number, number, number, number] {
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   const visit = (n: any): void => {
@@ -158,7 +157,10 @@ function loadCache(kind: keyof typeof REGISTRY): GeoCache | null {
   const reg = REGISTRY[kind];
   const p = resolve(process.cwd(), reg.file);
   if (!existsSync(p)) return null;
-  const data = JSON.parse(readFileSync(p, "utf8")) as { features: any[] };
+  const raw = JSON.parse(readFileSync(p, "utf8")) as { features: any[] };
+  // Rewinding at load time fixes the winding for every consumer of the cache
+  // at once. See src/lib/geoRewind.ts for why this is necessary.
+  const data = { features: rewindFeatures(raw.features) };
   const byCode = new Map<string, any>();
   const byName = new Map<string, any>();
   for (const f of data.features) {
@@ -231,18 +233,10 @@ if (hasFocal) {
         {
           type: "Feature",
           properties: {},
-          geometry: {
-            type: "Polygon",
-            coordinates: [
-              [
-                [focalBbox[0], focalBbox[1]],
-                [focalBbox[2], focalBbox[1]],
-                [focalBbox[2], focalBbox[3]],
-                [focalBbox[0], focalBbox[3]],
-                [focalBbox[0], focalBbox[1]],
-              ],
-            ],
-          },
+          // Clockwise-wound, for the same reason the source rings are rewound
+          // at load. This rectangle has the defect independently of the source
+          // data, so it needs fixing separately.
+          geometry: bboxPolygon(focalBbox),
         },
       ],
     } as any,

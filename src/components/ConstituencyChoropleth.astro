@@ -30,6 +30,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { geoMercator, geoPath } from "d3-geo";
+import { rewindFeatures } from "../lib/geoRewind";
 import { loadGePredictions, loadGeIdentity, partyColour } from "../lib/predictions";
 import { shortPartyLabel } from "../lib/siteData";
 
@@ -43,10 +44,15 @@ const { width = 800, height = 1000, showLegend = true } = Astro.props;
 
 // Load the simplified boundary file from disk at build time.
 const geojsonPath = resolve(process.cwd(), "data/geography/pcon24-simplified.geojson");
-const geo = JSON.parse(readFileSync(geojsonPath, "utf8")) as {
+const rawGeo = JSON.parse(readFileSync(geojsonPath, "utf8")) as {
   type: string;
   features: Array<{ properties: { PCON24CD: string; PCON24NM: string }; geometry: any }>;
 };
+// The source rings are wound the opposite way to what d3-geo expects, which
+// makes every feature the complement of itself: fitSize then scaled the whole
+// globe into the frame and all 650 seats painted as full-canvas rectangles.
+// See src/lib/geoRewind.ts.
+const geo = { ...rawGeo, features: rewindFeatures(rawGeo.features) };
 
 // Load predictions and build two lookup tables.
 // Primary: pcon24cd → prediction (works for England + Wales + Northern Ireland).
