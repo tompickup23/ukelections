@@ -231,7 +231,7 @@ function main() {
       generated_at: new Date().toISOString(),
       model_version: MODEL_VERSION,
       sha256: sha,
-      method_summary: "Stage 1 estimate. Per-constituency 2021 Holyrood result + Scotland-wide April 2026 polling swing → FPTP winner prediction. Per-region list: 2021 regional-list shares + Scotland-wide polling swing + d'Hondt over 7 list seats with priorSeats apportioned as Scotland-wide constituency wins / 8 regions. Constituency-region mapping reflects 2026 boundary changes — region-specific baselines deferred to Stage 1.5.",
+      method_summary: "Stage 1 estimate. Per-constituency 2021 Holyrood result + Scotland-wide April 2026 polling swing → FPTP winner prediction. Per-region list: 2021 regional-list shares + Scotland-wide polling swing + d'Hondt over 7 list seats with priorSeats apportioned as Scotland-wide constituency wins / 8 regions. Constituency-region mapping reflects 2026 boundary changes; region-specific baselines are deferred to Stage 1.5.",
       input_baseline_constituency: baseline,
       input_baseline_list: baselineList,
       input_polling_2026_scotland: polling,

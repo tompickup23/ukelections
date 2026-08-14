@@ -174,7 +174,7 @@ function main() {
       generated_at: new Date().toISOString(),
       model_version: MODEL_VERSION,
       sha256: sha,
-      method_summary: "Senedd 2026 (Senedd Cymru Act 2024 Schedule 1 — closed-list PR, 16 super-constituencies × 6 seats). Per-super-constituency baseline aggregated from the constituent 2024 GE Welsh constituency pair (using hardcoded pairings with confidence flags), then Welsh-wide swing applied per party from the Apr 2026 Welsh polling average. d'Hondt allocation per area with σ=5pp bootstrap intervals.",
+      method_summary: "Senedd 2026 (Senedd Cymru Act 2024 Schedule 1: closed-list PR, 16 super-constituencies × 6 seats). Per-super-constituency baseline aggregated from the constituent 2024 GE Welsh constituency pair (using hardcoded pairings with confidence flags), then Welsh-wide swing applied per party from the Apr 2026 Welsh polling average. d'Hondt allocation per area with σ=5pp bootstrap intervals.",
       input_baseline_2024_welsh_ge: baselineNational,
       input_polling_2026_welsh: polling,
       input_polling_meta: WELSH_2026_APRIL_AVERAGE._meta,

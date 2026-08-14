@@ -61,7 +61,7 @@ const FINAL_POLLS = [
     sample: 518,
     shares: { Labour: 0.49, "Reform UK": 0.39, Conservative: 0.01, "Liberal Democrats": 0.01, "Green Party": 0.02, "Restore Britain": 0.08, Other: 0.01 },
     lead_pp: 0.10,
-    note: "'Left consolidates, right splits, Burnham ahead' — Restore Britain eating Reform's right flank.",
+    note: "'Left consolidates, right splits, Burnham ahead', with Restore Britain eating Reform's right flank.",
   },
   {
     pollster: "More in Common",
@@ -137,7 +137,7 @@ const RESULT = {
   majority_votes: 9231,
   majority_pp: 0.203,
   margin_note:
-    "Labour majority 9,231 votes (+20.3pp) — a landslide hold, WIDER than the 5,399-vote / 13.4pp " +
+    "Labour majority 9,231 votes (+20.3pp), a landslide hold, WIDER than the 5,399-vote / 13.4pp " +
     "GE2024 majority and wider than every final poll. Burnham 54.81% (+9.61pp on GE2024) overshot " +
     "even the most Labour-favourable poll; Reform 34.51% (+2.71pp) was held below its ward-signal ceiling.",
   figures_status: "declared_full_breakdown",
@@ -242,7 +242,7 @@ data.final_polls = {
   note:
     "Five fieldwork-based Makerfield constituency polls landed between 18 May and 12 June 2026. " +
     "The published UKE forecast (generated 26 May, then re-run daily by cron with no new inputs) " +
-    "ingested NONE of them — it stayed anchored on the 15 May Survation/Britain Elects pre-poll " +
+    "ingested NONE of them; it stayed anchored on the 15 May Survation/Britain Elects pre-poll " +
     "FORECASTS. Every one of the five polls put Labour/Burnham ahead (leads of +3 to +12).",
   no_exit_poll_note:
     "By-elections get no broadcaster exit poll. The only 'exit-poll'-labelled figure in circulation " +
@@ -282,13 +282,13 @@ const contenders = [
   },
   {
     id: "uke_scenario_a_burnham_stands",
-    label: "UKE Scenario A — Burnham stands (85% branch)",
+    label: "UKE Scenario A: Burnham stands (85% branch)",
     shares: data.scenarios.burnham_stands.central,
     called_winner: winnerOf(data.scenarios.burnham_stands.central),
   },
   {
     id: "uke_scenario_b_burnham_withdraws",
-    label: "UKE Scenario B — Burnham withdraws (15% branch)",
+    label: "UKE Scenario B: Burnham withdraws (15% branch)",
     shares: data.scenarios.burnham_withdraws.central,
     called_winner: winnerOf(data.scenarios.burnham_withdraws.central),
   },
@@ -339,25 +339,25 @@ data.forecast_vs_result = {
   margin_comparison: marginComparison,
   contenders,
   winner_call_summary: {
-    uke_published_forecast: `${data.forecast.winner} — ${data.forecast.winner === RESULT.winner_party ? "CORRECT" : "INCORRECT"}`,
-    uke_scenario_a: `${winnerOf(data.scenarios.burnham_stands.central)} — ${winnerOf(data.scenarios.burnham_stands.central) === RESULT.winner_party ? "CORRECT" : "INCORRECT"}`,
-    final_polls: `Labour — CORRECT (all 5 of 5 polls had Labour ahead)`,
+    uke_published_forecast: `${data.forecast.winner}, ${data.forecast.winner === RESULT.winner_party ? "CORRECT" : "INCORRECT"}`,
+    uke_scenario_a: `${winnerOf(data.scenarios.burnham_stands.central)}, ${winnerOf(data.scenarios.burnham_stands.central) === RESULT.winner_party ? "CORRECT" : "INCORRECT"}`,
+    final_polls: `Labour, CORRECT (all 5 of 5 polls had Labour ahead)`,
   },
   miss_attribution: [
     "The published central forecast (Reform UK 41.1% vs Labour 39.8%) inverted the actual winner. " +
       "The inversion was an artefact of the probability-BLEND, not of the fundamentals: the 85%-weighted " +
       "Scenario A already had Labour ahead (42.0 vs 39.0). Folding in 15% of a Burnham-withdraws landslide " +
       "(Reform 53 / Lab 27) dragged the blended central across the line to a spurious Reform 'win'. This is " +
-      "the 'never collapse a bimodal forecast to one point estimate' failure mode — present scenarios + " +
+      "the 'never collapse a bimodal forecast to one point estimate' failure mode. Present scenarios and " +
       "P(win) separately instead.",
     "Scenario B was already moot. Nominations closed in late May with Burnham confirmed on the ballot, so " +
       "P(Burnham withdraws) should have decayed to ~0 by polling day. The forecast was last meaningfully " +
       "regenerated on 26 May and never updated this probability, despite the daily cron re-running the script.",
-    "The model ingested zero fieldwork-based constituency polls. Five landed (18 May–12 Jun), all with Labour " +
+    "The model ingested zero fieldwork-based constituency polls. Five landed (18 May to 12 Jun), all with Labour " +
       "ahead by +3 to +12; the script's own `next_refresh` promised to 're-fit on any new constituency poll' " +
       "and never did. The final-polls poll-of-polls (Lab +7) called the seat correctly.",
-    "Restore Britain was under-modelled. The forecast carried them at ~1.8% (Step 8: '1–4%, from Reform's " +
-      "right flank'); the polls put them at 5–8% and they finished THIRD. Reform's right flank fragmented " +
+    "Restore Britain was under-modelled. The forecast carried them at ~1.8% (Step 8: '1-4%, from Reform's " +
+      "right flank'); the polls put them at 5-8% and they finished THIRD. Reform's right flank fragmented " +
       "harder than assumed, which is part of why Reform underperformed its ward-signal ceiling.",
   ],
 };
@@ -366,19 +366,19 @@ data.forecast_vs_result = {
 // polls + Politics UK + Britain Predicts + Electoral Calculus (GE-model seat
 // estimate, 9 May, NOT a bespoke by-election forecast) + betting markets.
 const MAKERFIELD_BENCHMARKS = [
-  { id: "survation_poll_jun", forecaster: "Survation (constituency poll)", date: "26 May–1 Jun", type: "poll", called: "Labour", shares: { Labour: 0.49, "Reform UK": 0.39, "Restore Britain": 0.08, "Green Party": 0.02, "Liberal Democrats": 0.01, Conservative: 0.01 } },
-  { id: "convergent", forecaster: "Convergent Opinion (Sunday Times)", date: "2–12 Jun", type: "poll", called: "Labour", shares: { Labour: 0.49, "Reform UK": 0.37, "Restore Britain": 0.05, "Green Party": 0.05, Conservative: 0.03, "Liberal Democrats": 0.01 } },
-  { id: "opinium", forecaster: "Opinium (Forward Democracy)", date: "3–11 Jun", type: "poll", called: "Labour", shares: { Labour: 0.46, "Reform UK": 0.41, "Restore Britain": 0.07, Conservative: 0.03, "Green Party": 0.02, "Liberal Democrats": 0.01 } },
-  { id: "more_in_common", forecaster: "More in Common", date: "28 May–12 Jun", type: "poll", called: "Labour", shares: { Labour: 0.45, "Reform UK": 0.40, "Restore Britain": 0.08, "Green Party": 0.03, Conservative: 0.02, "Liberal Democrats": 0.01 } },
-  { id: "survation_poll_may", forecaster: "Survation (constituency poll)", date: "18–22 May", type: "poll", called: "Labour", shares: { Labour: 0.43, "Reform UK": 0.40, "Restore Britain": 0.07, "Liberal Democrats": 0.04, "Green Party": 0.03, Conservative: 0.02 } },
-  { id: "uke_poll_of_polls", forecaster: "UK Elections — final poll-of-polls", date: "poll avg", type: "aggregate", called: "Labour", shares: pollAvg },
+  { id: "survation_poll_jun", forecaster: "Survation (constituency poll)", date: "26 May to 1 Jun", type: "poll", called: "Labour", shares: { Labour: 0.49, "Reform UK": 0.39, "Restore Britain": 0.08, "Green Party": 0.02, "Liberal Democrats": 0.01, Conservative: 0.01 } },
+  { id: "convergent", forecaster: "Convergent Opinion (Sunday Times)", date: "2 to 12 Jun", type: "poll", called: "Labour", shares: { Labour: 0.49, "Reform UK": 0.37, "Restore Britain": 0.05, "Green Party": 0.05, Conservative: 0.03, "Liberal Democrats": 0.01 } },
+  { id: "opinium", forecaster: "Opinium (Forward Democracy)", date: "3 to 11 Jun", type: "poll", called: "Labour", shares: { Labour: 0.46, "Reform UK": 0.41, "Restore Britain": 0.07, Conservative: 0.03, "Green Party": 0.02, "Liberal Democrats": 0.01 } },
+  { id: "more_in_common", forecaster: "More in Common", date: "28 May to 12 Jun", type: "poll", called: "Labour", shares: { Labour: 0.45, "Reform UK": 0.40, "Restore Britain": 0.08, "Green Party": 0.03, Conservative: 0.02, "Liberal Democrats": 0.01 } },
+  { id: "survation_poll_may", forecaster: "Survation (constituency poll)", date: "18 to 22 May", type: "poll", called: "Labour", shares: { Labour: 0.43, "Reform UK": 0.40, "Restore Britain": 0.07, "Liberal Democrats": 0.04, "Green Party": 0.03, Conservative: 0.02 } },
+  { id: "uke_poll_of_polls", forecaster: "UK Elections final poll-of-polls", date: "poll avg", type: "aggregate", called: "Labour", shares: pollAvg },
   { id: "politics_uk", forecaster: "Politics UK (poll+market model)", date: "18 Jun", type: "model", called: "Labour", shares: { Labour: 0.463, "Reform UK": 0.394, "Restore Britain": 0.072 }, partial: true },
   { id: "survation_prepoll", forecaster: "Survation (pre-poll forecast)", date: "15 May", type: "forecast", called: "Labour", shares: { Labour: 0.45, "Reform UK": 0.42, Conservative: 0.05, "Green Party": 0.04, "Liberal Democrats": 0.02, "Restore Britain": 0.01 } },
   { id: "britain_predicts", forecaster: "Britain Predicts (Ben Walker)", date: "14 May", type: "forecast", called: "Labour", shares: { Labour: 0.39, "Reform UK": 0.36 }, partial: true },
-  { id: "uke_published", forecaster: "UK Elections — published forecast", date: "26 May", type: "forecast", called: data.forecast.winner, shares: data.forecast.central_shares },
-  { id: "uke_ge_model", forecaster: "UK Elections — GE seat model", date: "19 May", type: "seat model", called: "Reform UK", shares: { "Reform UK": 0.454, Labour: 0.231, "Green Party": 0.116, Conservative: 0.081, "Liberal Democrats": 0.070, "Restore Britain": 0.033 }, note: "Our standing 650-seat GE model (run-ge-predictions.mjs), same class as Electoral Calculus, run retrospectively. Not the bespoke by-election forecast." },
+  { id: "uke_published", forecaster: "UK Elections published forecast", date: "26 May", type: "forecast", called: data.forecast.winner, shares: data.forecast.central_shares },
+  { id: "uke_ge_model", forecaster: "UK Elections GE seat model", date: "19 May", type: "seat model", called: "Reform UK", shares: { "Reform UK": 0.454, Labour: 0.231, "Green Party": 0.116, Conservative: 0.081, "Liberal Democrats": 0.070, "Restore Britain": 0.033 }, note: "Our standing 650-seat GE model (run-ge-predictions.mjs), same class as Electoral Calculus, run retrospectively. Not the bespoke by-election forecast." },
   { id: "electoral_calculus", forecaster: "Electoral Calculus (GE seat model)", date: "9 May", type: "seat model", called: "Reform UK", shares: { "Reform UK": 0.502, Labour: 0.368, "Green Party": 0.035, Conservative: 0.034, "Liberal Democrats": 0.017 }, note: "Standard GE-model seat estimate, not a bespoke by-election forecast." },
-  { id: "betting_markets", forecaster: "Betting markets (eve of poll)", date: "17–18 Jun", type: "market", called: "Labour", prob: 0.85, shares: null, note: "Burnham ~85% (oddschecker/Betfair); Polymarket ~94-98%." },
+  { id: "betting_markets", forecaster: "Betting markets (eve of poll)", date: "17 to 18 Jun", type: "market", called: "Labour", prob: 0.85, shares: null, note: "Burnham ~85% (oddschecker/Betfair); Polymarket ~94-98%." },
 ];
 data.benchmarks = {
   note: "Rival pre-election forecasts graded against the declared result. MAE is over each forecaster's reported parties; margin error is signed Labour-minus-Reform vs the actual +20.3pp.",

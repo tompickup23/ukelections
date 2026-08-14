@@ -69,7 +69,7 @@ async function main() {
   }
   mkdirSync(path.dirname(OUT), { recursive: true });
   writeFileSync(OUT, JSON.stringify({
-    snapshot: { generated_at: new Date().toISOString(), source: "ONS Open Geography Portal — LSOA21_WD22_LAD22 lookup England", rows: Object.keys(lookup).length },
+    snapshot: { generated_at: new Date().toISOString(), source: "ONS Open Geography Portal, LSOA21_WD22_LAD22 lookup England", rows: Object.keys(lookup).length },
     lookup,
   }, null, 2));
   process.stdout.write(`\nWrote ${OUT} (${Object.keys(lookup).length} LSOA→ward rows)\n`);

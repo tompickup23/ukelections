@@ -77,7 +77,7 @@ function main() {
 
   // ======== Build markdown ========
   const md = [];
-  md.push(`# May 7 2026 — Reform UK council control\n`);
+  md.push(`# May 7 2026 Reform UK council control\n`);
   md.push(`Generated: ${data.snapshot.generated_at}`);
   md.push(`Source: ${data.snapshot.election_date} actuals (sha256 ${data.snapshot.actuals_sha256.slice(0, 12)}…)`);
   md.push(`Method: ${data.snapshot.method}\n`);
@@ -149,7 +149,7 @@ function main() {
     md.push(``);
   }
 
-  md.push(`## 3. Reform breakthrough — won seats, not largest (${breakthrough.length})\n`);
+  md.push(`## 3. Reform breakthrough: won seats, not largest (${breakthrough.length})\n`);
   if (breakthrough.length === 0) {
     md.push(`_None._\n`);
   } else {
@@ -181,10 +181,10 @@ function main() {
   md.push(`## Method notes & caveats\n`);
   md.push(`1. **Pre-May-7 composition** is the OpenCouncilData 2025 snapshot for each council. Defections and by-elections between January 2025 and May 7 2026 are not folded in.`);
   md.push(`2. **Carry-over seats** (for thirds / halves councils where only some seats were up) are approximated by pre[party] × seats_up/total. Exact derivation requires per-ward incumbent verification.`);
-  md.push(`3. **Pending ballots**: ${data.councils.reduce((s, c) => s + (c.may7_wins.pending_ballots || 0), 0)} ballots had no DC-elected flag at ingest time — they're treated as pending and excluded from the wins count. As more declarations process, re-run the pipeline to refresh.`);
+  md.push(`3. **Pending ballots**: ${data.councils.reduce((s, c) => s + (c.may7_wins.pending_ballots || 0), 0)} ballots had no DC-elected flag at ingest time, so they are treated as pending and excluded from the wins count. As more declarations process, re-run the pipeline to refresh.`);
   md.push(`4. **Group affiliation vs elected party**: a candidate elected as Reform may not whip with the Reform group in practice; vice-versa for independents who join. This view counts elected-party labels only.`);
   md.push(`5. **Control thresholds**: a council with an even total (e.g. 60 seats) needs 31 for majority; an odd total (e.g. 61) needs 31. We use floor(total/2)+1 throughout.`);
-  md.push(`6. **${summary.unmatched_council_slugs.length} councils could not be matched** to OCD: ${summary.unmatched_council_slugs.join(", ") || "—"}.\n`);
+  md.push(`6. **${summary.unmatched_council_slugs.length} councils could not be matched** to OCD: ${summary.unmatched_council_slugs.join(", ") || "none"}.\n`);
 
   const mdPath = "data/transparency/may-2026-reform-controlled-councils.md";
   mkdirSync(dirname(join(REPO, mdPath)), { recursive: true });

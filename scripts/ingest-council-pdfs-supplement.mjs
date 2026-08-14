@@ -307,7 +307,7 @@ function compactRecord({ ward, parsed, sourceUrl, ingestedAt }) {
     source: sourceUrl,
     ingested_at: ingestedAt,
     ingest_method: "council-pdf-declaration",
-    quality_caveat: "Authoritative — official deputy/returning officer's declaration of result, parsed via pdftotext.",
+    quality_caveat: "Authoritative: the official deputy/returning officer's declaration of result, parsed via pdftotext.",
   };
 }
 

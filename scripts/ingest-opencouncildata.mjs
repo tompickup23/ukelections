@@ -91,7 +91,7 @@ function main() {
   }
   mkdirSync(path.dirname(OUT), { recursive: true });
   writeFileSync(OUT, JSON.stringify({
-    snapshot: { generated_at: new Date().toISOString(), source: "OpenCouncilData (CC BY-SA, public domain CSVs) — UK council seat composition 1973-2025" },
+    snapshot: { generated_at: new Date().toISOString(), source: "OpenCouncilData (CC BY-SA, public domain CSVs): UK council seat composition 1973-2025" },
     summary: { councils: Object.keys(out).length, signals_built: Object.keys(signals).length },
     per_council: out,
     signals,

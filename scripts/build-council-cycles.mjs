@@ -209,7 +209,7 @@ function classify(councilSlug, controlRow) {
     cycle: isAllUp
       ? "Whole council; cycle to be confirmed."
       : "Partial council; cycle to be confirmed.",
-    note: "Council type not yet classified in council-cycles.json — verify against LGBCE register and update build-council-cycles.mjs.",
+    note: "Council type not yet classified in council-cycles.json. Verify against the LGBCE register and update build-council-cycles.mjs.",
   };
 }
 
@@ -220,8 +220,8 @@ const out = {
     cohort_size: control.councils.length,
     source_notes: [
       "Source: English Devolution White Paper (Dec 2024) for LGR-pending list.",
-      "Source: Local Government Boundary Commission for England — current cycle pattern by council.",
-      "Welsh principal areas: Local Government and Elections (Wales) Act 2021, s. 7 — 5-year cycle.",
+      "Source: Local Government Boundary Commission for England, current cycle pattern by council.",
+      "Welsh principal areas: Local Government and Elections (Wales) Act 2021, s. 7, which sets a 5-year cycle.",
       "All dates assume the first Thursday in May per established convention; subject to Statutory Instruments.",
     ],
     review: "Hand-audit before quoting publicly. LGR timetable is moving; flip lgr_pending → scheduled as each SI lands.",
