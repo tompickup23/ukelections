@@ -1,9 +1,9 @@
 {
   "snapshot": {
-    "generated_at": "2026-04-26T04:16:40.550Z",
+    "generated_at": "2026-08-09T04:30:49.425Z",
     "model_version": "ukelections.holyrood.v0.1.0-may2026-stage1",
-    "sha256": "ab25795ad1f120011331ccbeb46b74fae0981e37d1f47cd51fbd1783219058aa",
-    "method_summary": "Stage 1 estimate. Per-constituency 2021 Holyrood result + Scotland-wide April 2026 polling swing → FPTP winner prediction. Per-region list: 2021 regional-list shares + Scotland-wide polling swing + d'Hondt over 7 list seats with priorSeats apportioned as Scotland-wide constituency wins / 8 regions. Constituency-region mapping reflects 2026 boundary changes, region-specific baselines deferred to Stage 1.5.",
+    "sha256": "d97b1aaf4a1030d19996ff9a5428c3ca0fdbcc5657f4aed2e60d234db9143a10",
+    "method_summary": "Stage 1 estimate. Per-constituency 2021 Holyrood result + Scotland-wide April 2026 polling swing → FPTP winner prediction. Per-region list: 2021 regional-list shares + Scotland-wide polling swing + d'Hondt over 7 list seats with priorSeats apportioned as Scotland-wide constituency wins / 8 regions. Constituency-region mapping reflects 2026 boundary changes — region-specific baselines deferred to Stage 1.5.",
     "input_baseline_constituency": {
       "SNP": 0.479,
       "Labour": 0.218,
@@ -22,87 +22,100 @@
       "Other": 0.049
     },
     "input_polling_2026_scotland": {
-      "SNP": 0.29,
-      "Labour": 0.24,
-      "Reform UK": 0.18,
-      "Conservative": 0.14,
-      "Liberal Democrats": 0.08,
-      "Green Party": 0.05,
-      "Other": 0.02
+      "SNP": 0.38613861386138615,
+      "Labour": 0.18811881188118812,
+      "Reform UK": 0.019801980198019802,
+      "Conservative": 0.1188118811881188,
+      "Liberal Democrats": 0.09900990099009901,
+      "Green Party": 0.019801980198019802,
+      "Other": 0,
+      "Alba": 0.16831683168316833
     },
     "input_polling_meta": {
-      "label": "Scottish vote intention, April 2026 placeholder (refresh required)",
-      "fieldwork": "2026-04",
-      "source": "PLACEHOLDER, refresh from Survation / Ipsos / YouGov Scotland poll before launch",
-      "review_status": "draft_placeholder",
-      "refresh_required_by": "2026-05-01"
+      "label": "Scottish vote intention. April 2026 placeholder (refresh required) (auto-refreshed from Wikipedia 2026-05-20)",
+      "fieldwork": "2026-05-20 to 2026-05-20",
+      "source": "Wikipedia rolling 14-day average, 1 polls",
+      "review_status": "auto_refreshed",
+      "refresh_required_by": "2026-05-01",
+      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Scottish_Parliament_election",
+      "retrieved_at": "2026-05-26T09:40:08.255Z",
+      "parsed_restore_britain": null
     },
     "sigma_used": 0.04,
     "bootstrap_samples": 2000
   },
   "scottish_seat_total_projection": {
     "SNP": {
-      "constituency": 50,
-      "list_central": 7,
-      "list_p10": 4,
-      "list_p50": 7,
-      "list_p90": 13,
-      "total_central": 57,
-      "total_p50": 57
-    },
-    "Conservative": {
-      "constituency": 7,
-      "list_central": 9,
-      "list_p10": 5,
-      "list_p50": 9,
-      "list_p90": 15,
-      "total_central": 16,
-      "total_p50": 16
+      "constituency": 67,
+      "list_central": 5,
+      "list_p10": 3,
+      "list_p50": 5,
+      "list_p90": 10,
+      "total_central": 72,
+      "total_p50": 72
     },
     "Liberal Democrats": {
       "constituency": 3,
-      "list_central": 6,
+      "list_central": 7,
       "list_p10": 0,
-      "list_p50": 6,
-      "list_p90": 10,
-      "total_central": 9,
-      "total_p50": 9
+      "list_p50": 7,
+      "list_p90": 12,
+      "total_central": 10,
+      "total_p50": 10
     },
     "Labour": {
-      "constituency": 13,
-      "list_central": 14,
-      "list_p10": 8,
-      "list_p50": 13,
-      "list_p90": 19,
-      "total_central": 27,
-      "total_p50": 26
+      "constituency": 2,
+      "list_central": 20,
+      "list_p10": 12,
+      "list_p50": 16,
+      "list_p90": 21,
+      "total_central": 22,
+      "total_p50": 18
+    },
+    "Conservative": {
+      "constituency": 1,
+      "list_central": 9,
+      "list_p10": 5,
+      "list_p50": 7,
+      "list_p90": 14,
+      "total_central": 10,
+      "total_p50": 8
     },
     "Green Party": {
       "constituency": 0,
       "list_central": 0,
       "list_p10": 0,
       "list_p50": 0,
-      "list_p90": 8,
+      "list_p90": 6,
       "total_central": 0,
       "total_p50": 0
     },
     "Reform UK": {
       "constituency": 0,
-      "list_central": 20,
-      "list_p10": 12,
-      "list_p50": 18,
-      "list_p90": 22,
-      "total_central": 20,
-      "total_p50": 18
+      "list_central": 0,
+      "list_p10": 0,
+      "list_p50": 0,
+      "list_p90": 6,
+      "total_central": 0,
+      "total_p50": 0
     },
     "Other": {
       "constituency": 0,
       "list_central": 0,
       "list_p10": 0,
       "list_p50": 0,
-      "list_p90": 5,
+      "list_p90": 0,
       "total_central": 0,
       "total_p50": 0
+    },
+    "Alba": {
+      "constituency": 0,
+      "list_central": 15,
+      "list_p10": 8,
+      "list_p50": 15,
+      "list_p90": 22,
+      "total_central": 15,
+      "total_p50": 15
     }
   },
   "constituency_predictions": [
@@ -112,15 +125,16 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2721,
+      "predicted_winner_share": 0.3622,
       "shares": {
-        "SNP": 0.2721,
-        "Conservative": 0.1547,
-        "Labour": 0.2207,
-        "Green Party": 0.1025,
-        "Liberal Democrats": 0.0586,
-        "Reform UK": 0.1777,
-        "Other": 0.0138
+        "SNP": 0.3622,
+        "Conservative": 0.1313,
+        "Labour": 0.1717,
+        "Green Party": 0.0727,
+        "Liberal Democrats": 0.0772,
+        "Other": 0,
+        "Reform UK": 0.0195,
+        "Alba": 0.1654
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000074",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.aberdeen-central.2026-05-07/sopn/2026-04-01T17%3A15%3A02.455876%2B00%3A00/Abderdeen_Central.pdf"
@@ -131,15 +145,16 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.aberdeen-deeside-and-north-kincardine.2026-05-07/sopn/2026-04-01T17%3A15%3A24.436455%2B00%3A00/Aberdeen_Deeside.pdf"
@@ -150,16 +165,17 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3121,
+      "predicted_winner_share": 0.4156,
       "shares": {
-        "SNP": 0.3121,
-        "Conservative": 0.1697,
-        "Labour": 0.1779,
-        "Liberal Democrats": 0.0758,
+        "SNP": 0.4156,
+        "Conservative": 0.144,
+        "Labour": 0.1323,
+        "Liberal Democrats": 0.0951,
         "Trade Unionist and Socialist Coalition": 0.0067,
-        "Reform UK": 0.2009,
-        "Green Party": 0.0413,
-        "Other": 0.0156
+        "Other": 0,
+        "Reform UK": 0.021,
+        "Green Party": 0.0072,
+        "Alba": 0.1781
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.aberdeencity.gov.uk/services/council-and-democracy/elections-and-voting/scottish-parliamentary-election-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.aberdeen-donside.2026-05-07/sopn/2026-04-01T17%3A15%3A38.611673%2B00%3A00/Aberdeen_Donside.pdf"
@@ -170,15 +186,16 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2702,
+      "predicted_winner_share": 0.3598,
       "shares": {
-        "SNP": 0.2702,
-        "Conservative": 0.257,
-        "Liberal Democrats": 0.0995,
-        "Labour": 0.097,
-        "Reform UK": 0.2153,
-        "Green Party": 0.0442,
-        "Other": 0.0167
+        "SNP": 0.3598,
+        "Conservative": 0.2181,
+        "Liberal Democrats": 0.1231,
+        "Labour": 0.061,
+        "Other": 0,
+        "Reform UK": 0.0242,
+        "Green Party": 0.0083,
+        "Alba": 0.2055
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://aberdeenshire.gov.uk/council-and-democracy/elections/scottish-parliament-election/",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.aberdeenshire-east.2026-05-07/sopn/2026-04-01T15%3A26%3A50.593332%2B00%3A00/sp.c.aberdeenshire-east.2026-05-07-sopn.pdf"
@@ -188,16 +205,17 @@
       "constituency": "Aberdeenshire West",
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
-      "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.303,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3149,
       "shares": {
-        "Conservative": 0.303,
-        "SNP": 0.2365,
-        "Liberal Democrats": 0.0974,
-        "Labour": 0.0836,
-        "Reform UK": 0.2177,
-        "Green Party": 0.0448,
-        "Other": 0.0169
+        "Conservative": 0.2571,
+        "SNP": 0.3149,
+        "Liberal Democrats": 0.1237,
+        "Labour": 0.0492,
+        "Other": 0,
+        "Reform UK": 0.0259,
+        "Green Party": 0.0089,
+        "Alba": 0.2202
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.aberdeenshire.gov.uk/media/26253/declaration-sp-constituency-abw-21.pdf",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.aberdeenshire-west.2026-05-07/sopn/2026-04-01T15%3A26%3A51.159759%2B00%3A00/sp.c.aberdeenshire-west.2026-05-07-sopn.pdf"
@@ -208,15 +226,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.airdrie.2026-05-07/sopn/2026-04-01T17%3A50%3A32.027676%2B00%3A00/Airdrie.pdf"
@@ -227,15 +246,16 @@
       "region": "Central Scotland and Lothians West",
       "region_slug": "central-scotland-and-lothians-west",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3286,
+      "predicted_winner_share": 0.4376,
       "shares": {
-        "SNP": 0.3286,
-        "Labour": 0.275,
-        "Conservative": 0.1069,
-        "Liberal Democrats": 0.0527,
-        "Reform UK": 0.1845,
-        "Green Party": 0.0379,
-        "Other": 0.0144
+        "SNP": 0.4376,
+        "Labour": 0.2178,
+        "Conservative": 0.0907,
+        "Liberal Democrats": 0.0695,
+        "Other": 0,
+        "Reform UK": 0.0187,
+        "Green Party": 0.0064,
+        "Alba": 0.1592
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.westlothian.gov.uk/electionresults",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.almond-valley.2026-05-07/sopn/2026-04-01T16%3A24%3A41.503746%2B00%3A00/sp.c.almond-valley.2026-05-07-sopn.pdf"
@@ -246,15 +266,16 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2943,
+      "predicted_winner_share": 0.3919,
       "shares": {
-        "SNP": 0.2943,
-        "Conservative": 0.2483,
-        "Labour": 0.1034,
-        "Liberal Democrats": 0.0685,
-        "Reform UK": 0.2226,
-        "Green Party": 0.0457,
-        "Other": 0.0173
+        "SNP": 0.3919,
+        "Conservative": 0.2107,
+        "Labour": 0.0657,
+        "Liberal Democrats": 0.0918,
+        "Other": 0,
+        "Reform UK": 0.0244,
+        "Green Party": 0.0084,
+        "Alba": 0.2072
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000081",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.angus-north-and-mearns.2026-05-07/sopn/2026-04-01T17%3A25%3A55.378289%2B00%3A00/Angus_North.pdf"
@@ -265,15 +286,16 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3069,
+      "predicted_winner_share": 0.4086,
       "shares": {
-        "SNP": 0.3069,
-        "Conservative": 0.2237,
-        "Labour": 0.1206,
-        "Liberal Democrats": 0.0679,
-        "Reform UK": 0.2189,
-        "Green Party": 0.045,
-        "Other": 0.017
+        "SNP": 0.4086,
+        "Conservative": 0.1899,
+        "Labour": 0.081,
+        "Liberal Democrats": 0.0899,
+        "Other": 0,
+        "Reform UK": 0.0234,
+        "Green Party": 0.008,
+        "Alba": 0.1991
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.angus.gov.uk/news/election_result_angus_south_constituency",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.angus-south.2026-05-07/sopn/2026-04-01T17%3A26%3A13.999129%2B00%3A00/Angus_South.pdf"
@@ -284,15 +306,16 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2996,
+      "predicted_winner_share": 0.3989,
       "shares": {
-        "SNP": 0.2996,
-        "Conservative": 0.1463,
-        "Liberal Democrats": 0.2193,
-        "Labour": 0.0954,
-        "Reform UK": 0.1866,
-        "Green Party": 0.0384,
-        "Other": 0.0145
+        "SNP": 0.3989,
+        "Conservative": 0.1241,
+        "Liberal Democrats": 0.2352,
+        "Labour": 0.0626,
+        "Other": 0,
+        "Reform UK": 0.0182,
+        "Green Party": 0.0063,
+        "Alba": 0.1547
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000083",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.argyll-and-bute.2026-05-07/sopn/2026-04-01T16%3A39%3A08.161316%2B00%3A00/sp.c.argyll-and-bute.2026-05-07-sopn.pdf"
@@ -302,17 +325,18 @@
       "constituency": "Ayr",
       "region": "South Scotland",
       "region_slug": "south-scotland",
-      "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.2767,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3504,
       "shares": {
-        "SNP": 0.2632,
-        "Conservative": 0.2767,
-        "Labour": 0.1366,
-        "Liberal Democrats": 0.0357,
+        "SNP": 0.3504,
+        "Conservative": 0.2348,
+        "Labour": 0.0947,
+        "Liberal Democrats": 0.0614,
         "Scotia Future": 0.0061,
-        "Reform UK": 0.2196,
-        "Green Party": 0.0451,
-        "Other": 0.0171
+        "Other": 0,
+        "Reform UK": 0.0257,
+        "Green Party": 0.0088,
+        "Alba": 0.2181
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000084",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.ayr.2026-05-07/sopn/2026-04-01T15%3A37%3A21.829220%2B00%3A00/Notice_of_Poll_and_Statement_of_Persons_Nominated.pdf"
@@ -322,18 +346,19 @@
       "constituency": "Banffshire and Buchan Coast",
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
-      "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.2754,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3646,
       "shares": {
-        "SNP": 0.2738,
-        "Conservative": 0.2754,
-        "Labour": 0.0931,
-        "Liberal Democrats": 0.0499,
+        "SNP": 0.3646,
+        "Conservative": 0.2338,
+        "Labour": 0.0567,
+        "Liberal Democrats": 0.0747,
         "For Future's Sake - Freedom Alliance": 0.0105,
         "Sovereignty": 0.01,
-        "Reform UK": 0.2238,
-        "Green Party": 0.046,
-        "Other": 0.0174
+        "Other": 0,
+        "Reform UK": 0.0254,
+        "Green Party": 0.0087,
+        "Alba": 0.2155
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000085\r\n\r\nhttps://aberdeenshire.gov.uk/council-and-democracy/elections/scottish-parliament-election/",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.banffshire-and-buchan-coast.2026-05-07/sopn/2026-04-01T15%3A26%3A51.801150%2B00%3A00/sp.c.banffshire-and-buchan-coast.2026-05-07-sopn.pdf"
@@ -344,15 +369,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.bathgate.2026-05-07/sopn/2026-04-01T16%3A24%3A42.155675%2B00%3A00/sp.c.bathgate.2026-05-07-sopn.pdf"
@@ -363,17 +389,18 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "Liberal Democrats",
-      "predicted_winner_share": 0.3721,
+      "predicted_winner_share": 0.383,
       "shares": {
-        "SNP": 0.2608,
-        "Liberal Democrats": 0.3721,
-        "Conservative": 0.09,
-        "Labour": 0.0728,
+        "SNP": 0.3473,
+        "Liberal Democrats": 0.383,
+        "Conservative": 0.0764,
+        "Labour": 0.0472,
         "For Future's Sake - Freedom Alliance": 0.0078,
         "Scottish Libertarian Party": 0.006,
-        "Reform UK": 0.1484,
-        "Green Party": 0.0305,
-        "Other": 0.0115
+        "Other": 0,
+        "Reform UK": 0.0134,
+        "Green Party": 0.0046,
+        "Alba": 0.1143
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000086",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.caithness-sutherland-and-ross.2026-05-07/sopn/2026-04-01T16%3A12%3A06.424607%2B00%3A00/sp.c.caithness-sutherland-and-ross.2026-05-07-sopn.pdf"
@@ -383,16 +410,17 @@
       "constituency": "Carrick, Cumnock and Doon Valley",
       "region": "South Scotland",
       "region_slug": "south-scotland",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.2633,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3472,
       "shares": {
-        "SNP": 0.2608,
-        "Conservative": 0.1956,
-        "Labour": 0.2633,
-        "Liberal Democrats": 0.0391,
-        "Reform UK": 0.188,
-        "Green Party": 0.0386,
-        "Other": 0.0146
+        "SNP": 0.3472,
+        "Conservative": 0.166,
+        "Labour": 0.2074,
+        "Liberal Democrats": 0.0614,
+        "Other": 0,
+        "Reform UK": 0.0222,
+        "Green Party": 0.0076,
+        "Alba": 0.1883
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.east-ayrshire.gov.uk/News/article/scottish-parliament-election-results-carrick-cumnock-and-doon-valley-constituency-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.carrick-cumnock-and-doon-valley.2026-05-07/sopn/2026-04-01T16%3A40%3A20.454518%2B00%3A00/sp.c.carrick-cumnock-and-doon-valley.2026-05-07-sopn.pdf"
@@ -403,15 +431,16 @@
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.286,
+      "predicted_winner_share": 0.3807,
       "shares": {
-        "SNP": 0.286,
-        "Conservative": 0.1645,
-        "Labour": 0.2602,
-        "Liberal Democrats": 0.0487,
-        "Reform UK": 0.1874,
-        "Green Party": 0.0385,
-        "Other": 0.0146
+        "SNP": 0.3807,
+        "Conservative": 0.1396,
+        "Labour": 0.2048,
+        "Liberal Democrats": 0.069,
+        "Other": 0,
+        "Reform UK": 0.0209,
+        "Green Party": 0.0072,
+        "Alba": 0.1777
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000088",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.clackmannanshire-and-dunblane.2026-05-07/sopn/2026-04-01T16%3A42%3A02.468664%2B00%3A00/temp.png"
@@ -421,17 +450,18 @@
       "constituency": "Clydebank and Milngavie",
       "region": "West Scotland",
       "region_slug": "west-scotland",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3509,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3807,
       "shares": {
-        "SNP": 0.2859,
-        "Labour": 0.3509,
-        "Conservative": 0.0708,
-        "Liberal Democrats": 0.0912,
+        "SNP": 0.3807,
+        "Labour": 0.2867,
+        "Conservative": 0.0601,
+        "Liberal Democrats": 0.1064,
         "Independent": 0.0058,
-        "Reform UK": 0.1522,
-        "Green Party": 0.0313,
-        "Other": 0.0118
+        "Other": 0,
+        "Reform UK": 0.0163,
+        "Green Party": 0.0056,
+        "Alba": 0.1383
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000089",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.clydebank-and-milngavie.2026-05-07/sopn/2026-04-01T18%3A16%3A19.754042%2B00%3A00/Clydebank.pdf"
@@ -442,15 +472,16 @@
       "region": "South Scotland",
       "region_slug": "south-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2616,
+      "predicted_winner_share": 0.3484,
       "shares": {
-        "SNP": 0.2616,
-        "Conservative": 0.2053,
-        "Labour": 0.2435,
-        "Liberal Democrats": 0.043,
-        "Reform UK": 0.1921,
-        "Green Party": 0.0395,
-        "Other": 0.0149
+        "SNP": 0.3484,
+        "Conservative": 0.1742,
+        "Labour": 0.1899,
+        "Liberal Democrats": 0.0657,
+        "Other": 0,
+        "Reform UK": 0.0225,
+        "Green Party": 0.0077,
+        "Alba": 0.1916
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.southlanarkshire.gov.uk/download/downloads/id/14694/constituency_declaration_of_results_2021_-_clydesdale.docx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.clydesdale.2026-05-07/sopn/2026-04-01T17%3A44%3A38.139203%2B00%3A00/temp.jpeg"
@@ -461,16 +492,17 @@
       "region": "Central Scotland and Lothians West",
       "region_slug": "central-scotland-and-lothians-west",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3482,
+      "predicted_winner_share": 0.4636,
       "shares": {
-        "SNP": 0.3482,
-        "Labour": 0.3326,
-        "Conservative": 0.0544,
-        "Liberal Democrats": 0.0309,
+        "SNP": 0.4636,
+        "Labour": 0.2687,
+        "Conservative": 0.0461,
+        "Liberal Democrats": 0.0453,
         "Scottish Family Party": 0.0115,
-        "Reform UK": 0.1734,
-        "Green Party": 0.0356,
-        "Other": 0.0135
+        "Other": 0,
+        "Reform UK": 0.0167,
+        "Green Party": 0.0058,
+        "Alba": 0.1423
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000091",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.coatbridge-and-chryston.2026-05-07/sopn/2026-04-01T17%3A50%3A57.982581%2B00%3A00/Coatbridge.pdf"
@@ -480,16 +512,17 @@
       "constituency": "Cowdenbeath",
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3266,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3892,
       "shares": {
-        "SNP": 0.2923,
-        "Labour": 0.3266,
-        "Conservative": 0.0894,
-        "Green Party": 0.0726,
-        "Liberal Democrats": 0.0444,
-        "Reform UK": 0.162,
-        "Other": 0.0126
+        "SNP": 0.3892,
+        "Labour": 0.2648,
+        "Conservative": 0.0759,
+        "Green Party": 0.0453,
+        "Liberal Democrats": 0.0607,
+        "Other": 0,
+        "Reform UK": 0.0173,
+        "Alba": 0.147
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000092",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.cowdenbeath.2026-05-07/sopn/2026-04-01T16%3A08%3A27.421642%2B00%3A00/SPE2026-SPN-Cowdenbeath-Constituency.pdf"
@@ -500,15 +533,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3551,
+      "predicted_winner_share": 0.4728,
       "shares": {
-        "SNP": 0.3551,
-        "Labour": 0.3145,
-        "Conservative": 0.0647,
-        "Liberal Democrats": 0.0343,
-        "Reform UK": 0.1803,
-        "Green Party": 0.0371,
-        "Other": 0.014
+        "SNP": 0.4728,
+        "Labour": 0.2524,
+        "Conservative": 0.0549,
+        "Liberal Democrats": 0.0492,
+        "Other": 0,
+        "Reform UK": 0.0173,
+        "Green Party": 0.006,
+        "Alba": 0.1474
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.northlanarkshire.gov.uk/your-council/elections-and-voting/elections/scottish-parliament-elections-6-may-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.cumbernauld-and-kilsyth.2026-05-07/sopn/2026-04-01T17%3A51%3A14.913761%2B00%3A00/Cumbernauld.pdf"
@@ -519,15 +553,16 @@
       "region": "West Scotland",
       "region_slug": "west-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2968,
+      "predicted_winner_share": 0.3952,
       "shares": {
-        "SNP": 0.2968,
-        "Conservative": 0.1805,
-        "Labour": 0.2269,
-        "Liberal Democrats": 0.0414,
-        "Reform UK": 0.1982,
-        "Green Party": 0.0407,
-        "Other": 0.0154
+        "SNP": 0.3952,
+        "Conservative": 0.1532,
+        "Labour": 0.1749,
+        "Liberal Democrats": 0.0623,
+        "Other": 0,
+        "Reform UK": 0.0218,
+        "Green Party": 0.0075,
+        "Alba": 0.1851
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.north-ayrshire.gov.uk/news/Scottish-Parliamentary-Elections-2021-results.aspx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.cunninghame-north.2026-05-07/sopn/2026-04-01T16%3A24%3A42.800879%2B00%3A00/sp.c.cunninghame-north.2026-05-07-sopn.pdf"
@@ -538,16 +573,17 @@
       "region": "West Scotland",
       "region_slug": "west-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3057,
+      "predicted_winner_share": 0.4071,
       "shares": {
-        "SNP": 0.3057,
-        "Labour": 0.2638,
-        "Conservative": 0.1412,
-        "Liberal Democrats": 0.0383,
+        "SNP": 0.4071,
+        "Labour": 0.2079,
+        "Conservative": 0.1198,
+        "Liberal Democrats": 0.0572,
         "Independent": 0.0106,
-        "Reform UK": 0.1873,
-        "Green Party": 0.0385,
-        "Other": 0.0146
+        "Other": 0,
+        "Reform UK": 0.0201,
+        "Green Party": 0.0069,
+        "Alba": 0.1705
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000095",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.cunninghame-south.2026-05-07/sopn/2026-04-01T16%3A24%3A43.512032%2B00%3A00/sp.c.cunninghame-south.2026-05-07-sopn.pdf"
@@ -558,17 +594,18 @@
       "region": "West Scotland",
       "region_slug": "west-scotland",
       "predicted_winner": "Labour",
-      "predicted_winner_share": 0.4798,
+      "predicted_winner_share": 0.4,
       "shares": {
-        "Labour": 0.4798,
-        "SNP": 0.2573,
-        "Conservative": 0.0535,
-        "Liberal Democrats": 0.0279,
+        "Labour": 0.4,
+        "SNP": 0.3425,
+        "Conservative": 0.0454,
+        "Liberal Democrats": 0.0442,
         "Independent": 0.0072,
         "Scottish Libertarian Party": 0.0035,
-        "Reform UK": 0.1331,
-        "Green Party": 0.0274,
-        "Other": 0.0104
+        "Other": 0,
+        "Reform UK": 0.016,
+        "Green Party": 0.0055,
+        "Alba": 0.1357
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.west-dunbarton.gov.uk/council/voting-and-elections/election-results/scottish-parliament-election-results/",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.dumbarton.2026-05-07/sopn/2026-04-01T18%3A15%3A41.140954%2B00%3A00/Dumbarton.pdf"
@@ -578,16 +615,17 @@
       "constituency": "Dumfriesshire",
       "region": "South Scotland",
       "region_slug": "south-scotland",
-      "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.306,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.304,
       "shares": {
-        "Conservative": 0.306,
-        "SNP": 0.2283,
-        "Labour": 0.1405,
-        "Liberal Democrats": 0.0489,
-        "Reform UK": 0.2153,
-        "Green Party": 0.0442,
-        "Other": 0.0167
+        "Conservative": 0.2597,
+        "SNP": 0.304,
+        "Labour": 0.0986,
+        "Liberal Democrats": 0.0764,
+        "Other": 0,
+        "Reform UK": 0.0265,
+        "Green Party": 0.0091,
+        "Alba": 0.2257
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000097",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.dumfriesshire.2026-05-07/sopn/2026-04-01T18%3A23%3A38.744280%2B00%3A00/Dumfries.pdf"
@@ -598,16 +636,17 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3585,
+      "predicted_winner_share": 0.4774,
       "shares": {
-        "SNP": 0.3585,
-        "Labour": 0.2059,
-        "Conservative": 0.1113,
-        "Liberal Democrats": 0.0596,
+        "SNP": 0.4774,
+        "Labour": 0.1566,
+        "Conservative": 0.0945,
+        "Liberal Democrats": 0.0757,
         "Trade Unionist and Socialist Coalition": 0.0088,
-        "Reform UK": 0.1994,
-        "Green Party": 0.041,
-        "Other": 0.0155
+        "Other": 0,
+        "Reform UK": 0.019,
+        "Green Party": 0.0065,
+        "Alba": 0.1614
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.dundeecity.gov.uk/service-area/corporate-services/democratic-and-legal-services/scottish-parliamentary-elections-6th-may-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.dundee-city-east.2026-05-07/sopn/2026-04-01T15%3A59%3A20.164327%2B00%3A00/Notice_of_poll_and_situation_of_polling_stations_-_Dundee_City_East.pdf"
@@ -618,17 +657,18 @@
       "region": "North East Scotland",
       "region_slug": "north-east-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3731,
+      "predicted_winner_share": 0.4968,
       "shares": {
-        "SNP": 0.3731,
-        "Labour": 0.2376,
-        "Conservative": 0.0664,
-        "Liberal Democrats": 0.0542,
+        "SNP": 0.4968,
+        "Labour": 0.1851,
+        "Conservative": 0.0564,
+        "Liberal Democrats": 0.0678,
         "Trade Unionist and Socialist Coalition": 0.0134,
         "Sovereignty": 0.0128,
-        "Reform UK": 0.1889,
-        "Green Party": 0.0388,
-        "Other": 0.0147
+        "Other": 0,
+        "Reform UK": 0.017,
+        "Green Party": 0.0058,
+        "Alba": 0.1447
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000099",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.dundee-city-west.2026-05-07/sopn/2026-04-01T15%3A59%3A16.845494%2B00%3A00/Notice_of_poll_and_situation_of_polling_stations_-_Dundee_City_West.pdf"
@@ -638,16 +678,17 @@
       "constituency": "Dunfermline",
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.2985,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3947,
       "shares": {
-        "SNP": 0.2965,
-        "Labour": 0.2985,
-        "Conservative": 0.099,
-        "Liberal Democrats": 0.0911,
-        "Reform UK": 0.1675,
-        "Green Party": 0.0344,
-        "Other": 0.013
+        "SNP": 0.3947,
+        "Labour": 0.2399,
+        "Conservative": 0.0841,
+        "Liberal Democrats": 0.1075,
+        "Other": 0,
+        "Reform UK": 0.0177,
+        "Green Party": 0.0061,
+        "Alba": 0.1501
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.fife.gov.uk/news/2021/scottish-parliamentary-election-results-for-fife",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.dunfermline.2026-05-07/sopn/2026-04-01T16%3A08%3A47.619270%2B00%3A00/SPE2026-SPN-Dunfermline-Constituency.pdf"
@@ -657,16 +698,17 @@
       "constituency": "East Kilbride",
       "region": "Central Scotland and Lothians West",
       "region_slug": "central-scotland-and-lothians-west",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3272,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.4182,
       "shares": {
-        "SNP": 0.3141,
-        "Labour": 0.3272,
-        "Conservative": 0.0933,
-        "Liberal Democrats": 0.0433,
-        "Reform UK": 0.173,
-        "Green Party": 0.0356,
-        "Other": 0.0135
+        "SNP": 0.4182,
+        "Labour": 0.2641,
+        "Conservative": 0.0792,
+        "Liberal Democrats": 0.0601,
+        "Other": 0,
+        "Reform UK": 0.0181,
+        "Green Party": 0.0062,
+        "Alba": 0.1541
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.southlanarkshire.gov.uk/download/downloads/id/14692/constituency_declaration_of_results_2021_-_east_kilbride.docx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.east-kilbride.2026-05-07/sopn/2026-04-01T17%3A45%3A00.750344%2B00%3A00/temp.jpeg"
@@ -677,15 +719,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.east-lothian-coast-and-lammermuirs.2026-05-07/sopn/2026-04-01T18%3A01%3A29.895953%2B00%3A00/EL_Coast.pdf"
@@ -695,18 +738,19 @@
       "constituency": "Eastwood",
       "region": "West Scotland",
       "region_slug": "west-scotland",
-      "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.2694,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.2963,
       "shares": {
-        "Conservative": 0.2694,
-        "SNP": 0.2225,
-        "Labour": 0.1826,
+        "Conservative": 0.2286,
+        "SNP": 0.2963,
+        "Labour": 0.1366,
         "Independent": 0.0317,
-        "Liberal Democrats": 0.0368,
+        "Liberal Democrats": 0.0624,
         "UK Independence Party (UKIP)": 0.0018,
-        "Reform UK": 0.1989,
-        "Green Party": 0.0409,
-        "Other": 0.0155
+        "Other": 0,
+        "Reform UK": 0.0247,
+        "Green Party": 0.0085,
+        "Alba": 0.2096
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.eastrenfrewshire.gov.uk/scottish-parliamentary-election-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.eastwood.2026-05-07/sopn/2026-04-01T17%3A23%3A24.819823%2B00%3A00/ERC_-_Notice_of_poll_and_situation_of_polling_stations_-_7_May_2026.pdf"
@@ -717,18 +761,19 @@
       "region": "Edinburgh and Lothians East",
       "region_slug": "edinburgh-and-lothians-east",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2362,
+      "predicted_winner_share": 0.3145,
       "shares": {
-        "SNP": 0.2362,
-        "Conservative": 0.1777,
-        "Labour": 0.1848,
-        "Green Party": 0.1291,
-        "Liberal Democrats": 0.0745,
+        "SNP": 0.3145,
+        "Conservative": 0.1508,
+        "Labour": 0.1415,
+        "Green Party": 0.1007,
+        "Liberal Democrats": 0.0937,
         "Independent": 0.0087,
         "Scottish Libertarian Party": 0.0033,
         "UK Independence Party (UKIP)": 0.0019,
-        "Reform UK": 0.1705,
-        "Other": 0.0133
+        "Other": 0,
+        "Reform UK": 0.0195,
+        "Alba": 0.1654
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.edinburgh.gov.uk/downloads/file/29419/edinburgh-central-constituency-results",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-central.2026-05-07/sopn/2026-04-01T17%3A32%3A29.677210%2B00%3A00/E_Central.pdf"
@@ -739,15 +784,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-eastern-musselburgh-and-tranent.2026-05-07/sopn/2026-04-01T18%3A01%3A59.453183%2B00%3A00/Edin_E.pdf"
@@ -758,15 +804,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-north-eastern-and-leith.2026-05-07/sopn/2026-04-01T17%3A32%3A44.417918%2B00%3A00/E_NE.pdf"
@@ -777,15 +824,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-northern.2026-05-07/sopn/2026-04-01T17%3A33%3A27.445962%2B00%3A00/E_N.pdf"
@@ -796,15 +844,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-north-western.2026-05-07/sopn/2026-04-01T17%3A33%3A05.461771%2B00%3A00/E_NW.pdf"
@@ -815,16 +864,17 @@
       "region": "Edinburgh and Lothians East",
       "region_slug": "edinburgh-and-lothians-east",
       "predicted_winner": "Labour",
-      "predicted_winner_share": 0.4741,
+      "predicted_winner_share": 0.3958,
       "shares": {
-        "Labour": 0.4741,
-        "SNP": 0.2239,
-        "Conservative": 0.0746,
-        "Liberal Democrats": 0.0582,
+        "Labour": 0.3958,
+        "SNP": 0.2981,
+        "Conservative": 0.0633,
+        "Liberal Democrats": 0.0755,
         "Scottish Family Party": 0.007,
-        "Reform UK": 0.1264,
-        "Green Party": 0.026,
-        "Other": 0.0098
+        "Other": 0,
+        "Reform UK": 0.0163,
+        "Green Party": 0.0056,
+        "Alba": 0.1384
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.edinburgh.gov.uk/downloads/file/29420/edinburgh-southern-constituency-results",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-southern.2026-05-07/sopn/2026-04-01T17%3A34%3A16.577288%2B00%3A00/E_S.pdf"
@@ -835,15 +885,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.edinburgh-south-western.2026-05-07/sopn/2026-04-01T17%3A33%3A54.958283%2B00%3A00/E_SW.pdf"
@@ -854,16 +905,17 @@
       "region": "South Scotland",
       "region_slug": "south-scotland",
       "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.3308,
+      "predicted_winner_share": 0.2807,
       "shares": {
-        "Conservative": 0.3308,
-        "SNP": 0.1966,
-        "Liberal Democrats": 0.0816,
-        "Labour": 0.0826,
-        "Green Party": 0.0734,
+        "Conservative": 0.2807,
+        "SNP": 0.2617,
+        "Liberal Democrats": 0.1094,
+        "Labour": 0.0491,
+        "Green Party": 0.0392,
         "Independent": 0.008,
-        "Reform UK": 0.2106,
-        "Other": 0.0164
+        "Other": 0,
+        "Reform UK": 0.0265,
+        "Alba": 0.2253
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.scotborders.gov.uk/info/20071/election_results/610/scottish_parliament_election_results/3",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.ettrick-roxburgh-and-berwickshire.2026-05-07/sopn/2026-04-01T18%3A44%3A15.099443%2B00%3A00/Ettrick.pdf"
@@ -874,15 +926,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.falkirk-east-and-linlithgow.2026-05-07/sopn/2026-04-01T18%3A29%3A21.033303%2B00%3A00/temp.jpeg"
@@ -893,15 +946,16 @@
       "region": "Central Scotland and Lothians West",
       "region_slug": "central-scotland-and-lothians-west",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3286,
+      "predicted_winner_share": 0.4375,
       "shares": {
-        "SNP": 0.3286,
-        "Labour": 0.2669,
-        "Conservative": 0.1191,
-        "Liberal Democrats": 0.0429,
-        "Reform UK": 0.1891,
-        "Green Party": 0.0389,
-        "Other": 0.0147
+        "SNP": 0.4375,
+        "Labour": 0.2103,
+        "Conservative": 0.1011,
+        "Liberal Democrats": 0.0604,
+        "Other": 0,
+        "Reform UK": 0.0194,
+        "Green Party": 0.0067,
+        "Alba": 0.1647
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.falkirk.gov.uk/services/council-democracy/elections-voting/election-results/scottish-parliamentary-election-results.aspx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.falkirk-west.2026-05-07/sopn/2026-04-01T18%3A29%3A40.866673%2B00%3A00/temp.jpeg"
@@ -912,15 +966,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.fife-north-east.2026-05-07/sopn/2026-04-01T16%3A09%3A11.535960%2B00%3A00/SPE2026-SPN-Fife-North-East-Constituency.pdf"
@@ -930,16 +985,17 @@
       "constituency": "Galloway and West Dumfries",
       "region": "South Scotland",
       "region_slug": "south-scotland",
-      "predicted_winner": "Conservative",
-      "predicted_winner_share": 0.302,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3219,
       "shares": {
-        "Conservative": 0.302,
-        "SNP": 0.2418,
-        "Labour": 0.1057,
-        "Green Party": 0.0712,
-        "Liberal Democrats": 0.0426,
-        "Reform UK": 0.2197,
-        "Other": 0.0171
+        "Conservative": 0.2563,
+        "SNP": 0.3219,
+        "Labour": 0.068,
+        "Green Party": 0.0351,
+        "Liberal Democrats": 0.0693,
+        "Other": 0,
+        "Reform UK": 0.0263,
+        "Alba": 0.2231
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.dumgal.gov.uk/article/22311/Scottish-Parliamentary-Election-results-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.galloway-and-west-dumfries.2026-05-07/sopn/2026-04-01T18%3A24%3A07.127486%2B00%3A00/Galloway.pdf"
@@ -949,16 +1005,17 @@
       "constituency": "Glasgow Anniesland",
       "region": "Glasgow",
       "region_slug": "glasgow",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3495,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.4254,
       "shares": {
-        "SNP": 0.3195,
-        "Labour": 0.3495,
-        "Conservative": 0.0714,
-        "Liberal Democrats": 0.0451,
-        "Reform UK": 0.1672,
-        "Green Party": 0.0344,
-        "Other": 0.013
+        "SNP": 0.4254,
+        "Labour": 0.2839,
+        "Conservative": 0.0606,
+        "Liberal Democrats": 0.0607,
+        "Other": 0,
+        "Reform UK": 0.0172,
+        "Green Party": 0.0059,
+        "Alba": 0.1462
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.glasgow.gov.uk/forms/election/ResultsForScottish.aspx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-anniesland.2026-05-07/sopn/2026-04-01T19%3A10%3A11.137007%2B00%3A00/G_Anniesland.pdf"
@@ -969,15 +1026,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-baillieston-and-shettleston.2026-05-07/sopn/2026-04-01T19%3A10%3A38.481084%2B00%3A00/G_Ballieston.pdf"
@@ -988,15 +1046,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-cathcart-and-pollok.2026-05-07/sopn/2026-04-01T19%3A11%3A10.813536%2B00%3A00/G_Cathcart.pdf"
@@ -1007,15 +1066,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-central.2026-05-07/sopn/2026-04-01T19%3A11%3A42.535636%2B00%3A00/G_Central.pdf"
@@ -1026,15 +1086,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-easterhouse-and-springburn.2026-05-07/sopn/2026-04-01T19%3A12%3A12.119979%2B00%3A00/G_Easterhouse.pdf"
@@ -1045,15 +1106,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-kelvin-and-maryhill.2026-05-07/sopn/2026-04-01T19%3A12%3A46.541198%2B00%3A00/G_Kelvin.pdf"
@@ -1064,18 +1126,19 @@
       "region": "Glasgow",
       "region_slug": "glasgow",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3642,
+      "predicted_winner_share": 0.4849,
       "shares": {
-        "SNP": 0.3642,
-        "Labour": 0.3345,
-        "Conservative": 0.035,
-        "Liberal Democrats": 0.0288,
+        "SNP": 0.4849,
+        "Labour": 0.2704,
+        "Conservative": 0.0297,
+        "Liberal Democrats": 0.0421,
         "For Future's Sake - Freedom Alliance": 0.0062,
         "Independent": 0.0059,
         "The Liberal Party": 0.0031,
-        "Reform UK": 0.1732,
-        "Green Party": 0.0356,
-        "Other": 0.0135
+        "Other": 0,
+        "Reform UK": 0.016,
+        "Green Party": 0.0055,
+        "Alba": 0.1362
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.glasgow.gov.uk/forms/election/ResultsForScottish.aspx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.glasgow-southside.2026-05-07/sopn/2026-04-01T19%3A13%3A39.302490%2B00%3A00/G_Southside.pdf"
@@ -1085,16 +1148,17 @@
       "constituency": "Hamilton, Larkhall and Stonehouse",
       "region": null,
       "region_slug": null,
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3558,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.3724,
       "shares": {
-        "SNP": 0.2797,
-        "Labour": 0.3558,
-        "Conservative": 0.1121,
-        "Liberal Democrats": 0.0407,
-        "Reform UK": 0.165,
-        "Green Party": 0.0339,
-        "Other": 0.0128
+        "SNP": 0.3724,
+        "Labour": 0.2896,
+        "Conservative": 0.0951,
+        "Liberal Democrats": 0.059,
+        "Other": 0,
+        "Reform UK": 0.0187,
+        "Green Party": 0.0064,
+        "Alba": 0.1587
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.southlanarkshire.gov.uk/download/downloads/id/14688/constituency_declaration_of_results_2021_-_hamilton_larkhall_and_stonehouse.docx",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.hamilton-larkhall-and-stonehouse.2026-05-07/sopn/2026-04-01T17%3A45%3A20.368226%2B00%3A00/temp.jpeg"
@@ -1105,15 +1169,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.inverclyde.2026-05-07/sopn/2026-04-01T18%3A41%3A50.440467%2B00%3A00/Inverclyde.pdf"
@@ -1124,16 +1189,17 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2885,
+      "predicted_winner_share": 0.3842,
       "shares": {
-        "SNP": 0.2885,
-        "Conservative": 0.1781,
-        "Labour": 0.1411,
-        "Liberal Democrats": 0.0783,
-        "Green Party": 0.0974,
+        "SNP": 0.3842,
+        "Conservative": 0.1511,
+        "Labour": 0.1013,
+        "Liberal Democrats": 0.0972,
+        "Green Party": 0.0646,
         "Sovereignty": 0.0079,
-        "Reform UK": 0.1936,
-        "Other": 0.0151
+        "Other": 0,
+        "Reform UK": 0.0204,
+        "Alba": 0.1733
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.highland.gov.uk/info/799/elections_and_voting/799/scottish_parliamentary_elections",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.inverness-and-nairn.2026-05-07/sopn/2026-04-01T16%3A12%3A06.961966%2B00%3A00/sp.c.inverness-and-nairn.2026-05-07-sopn.pdf"
@@ -1144,16 +1210,17 @@
       "region": "South Scotland",
       "region_slug": "south-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3192,
+      "predicted_winner_share": 0.425,
       "shares": {
-        "SNP": 0.3192,
-        "Labour": 0.2629,
-        "Conservative": 0.1311,
-        "Liberal Democrats": 0.0374,
+        "SNP": 0.425,
+        "Labour": 0.2068,
+        "Conservative": 0.1113,
+        "Liberal Democrats": 0.0556,
         "Scottish Libertarian Party": 0.0062,
-        "Reform UK": 0.1895,
-        "Green Party": 0.039,
-        "Other": 0.0147
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Green Party": 0.0068,
+        "Alba": 0.1684
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.east-ayrshire.gov.uk/News/article/scottish-parliament-election-results-kilmarnock-and-irvine-valley-constituency-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.kilmarnock-and-irvine-valley.2026-05-07/sopn/2026-04-01T16%3A40%3A21.183812%2B00%3A00/sp.c.kilmarnock-and-irvine-valley.2026-05-07-sopn.pdf"
@@ -1163,17 +1230,18 @@
       "constituency": "Kirkcaldy",
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.322,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.422,
       "shares": {
-        "SNP": 0.317,
-        "Labour": 0.322,
-        "Conservative": 0.0893,
-        "Liberal Democrats": 0.0423,
+        "SNP": 0.422,
+        "Labour": 0.2597,
+        "Conservative": 0.0758,
+        "Liberal Democrats": 0.0587,
         "Scottish Libertarian Party": 0.0076,
-        "Reform UK": 0.1728,
-        "Green Party": 0.0355,
-        "Other": 0.0134
+        "Other": 0,
+        "Reform UK": 0.0179,
+        "Green Party": 0.0061,
+        "Alba": 0.1521
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.fife.gov.uk/news/2021/scottish-parliamentary-election-results-for-fife",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.kirkcaldy.2026-05-07/sopn/2026-04-01T16%3A09%3A38.075854%2B00%3A00/SPE2026-SPN-Kirkcaldy-Constituency.pdf"
@@ -1184,16 +1252,17 @@
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3357,
+      "predicted_winner_share": 0.447,
       "shares": {
-        "SNP": 0.3357,
-        "Labour": 0.2633,
-        "Conservative": 0.0885,
-        "Liberal Democrats": 0.0688,
+        "SNP": 0.447,
+        "Labour": 0.2082,
+        "Conservative": 0.0751,
+        "Liberal Democrats": 0.0842,
         "Scottish Family Party": 0.0118,
-        "Reform UK": 0.1807,
-        "Green Party": 0.0371,
-        "Other": 0.0141
+        "Other": 0,
+        "Reform UK": 0.0177,
+        "Green Party": 0.0061,
+        "Alba": 0.1501
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.fife.gov.uk/news/2021/scottish-parliamentary-election-results-for-fife",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.mid-fife-and-glenrothes.2026-05-07/sopn/2026-04-01T16%3A09%3A56.629397%2B00%3A00/SPE2026-SPN-MID-Fife-and-Glenrothes-Constituency.pdf"
@@ -1204,15 +1273,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.midlothian-north.2026-05-07/sopn/2026-04-01T18%3A36%3A47.336208%2B00%3A00/Midlothian_North.pdf"
@@ -1223,16 +1293,17 @@
       "region": "Edinburgh and Lothians East",
       "region_slug": "edinburgh-and-lothians-east",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2787,
+      "predicted_winner_share": 0.371,
       "shares": {
-        "SNP": 0.2787,
-        "Conservative": 0.1937,
-        "Labour": 0.1496,
-        "Liberal Democrats": 0.0759,
-        "Green Party": 0.0902,
+        "SNP": 0.371,
+        "Conservative": 0.1644,
+        "Labour": 0.1085,
+        "Liberal Democrats": 0.0961,
+        "Green Party": 0.0573,
         "Vanguard Party": 0.0016,
-        "Reform UK": 0.1952,
-        "Other": 0.0152
+        "Other": 0,
+        "Reform UK": 0.0212,
+        "Alba": 0.18
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.scotborders.gov.uk/news/article/4066/christine_grahame_elected_as_msp_for_midlothian_south_tweeddale_and_lauderdale",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.midlothian-south-tweeddale-and-lauderdale.2026-05-07/sopn/2026-04-01T18%3A44%3A44.318661%2B00%3A00/Midlothian_South.pdf"
@@ -1243,16 +1314,17 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2942,
+      "predicted_winner_share": 0.3917,
       "shares": {
-        "SNP": 0.2942,
-        "Conservative": 0.2626,
-        "Labour": 0.1001,
-        "Liberal Democrats": 0.046,
+        "SNP": 0.3917,
+        "Conservative": 0.2229,
+        "Labour": 0.0623,
+        "Liberal Democrats": 0.0703,
         "UK Independence Party (UKIP)": 0.0046,
-        "Reform UK": 0.2279,
-        "Green Party": 0.0468,
-        "Other": 0.0177
+        "Other": 0,
+        "Reform UK": 0.0252,
+        "Green Party": 0.0087,
+        "Alba": 0.2143
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: http://www.moray.gov.uk/moray_standard/page_131994.html",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.moray.2026-05-07/sopn/2026-04-01T15%3A37%3A32.906985%2B00%3A00/sp.c.moray.2026-05-07-sopn.pdf"
@@ -1262,19 +1334,20 @@
       "constituency": "Motherwell and Wishaw",
       "region": "Central Scotland and Lothians West",
       "region_slug": "central-scotland-and-lothians-west",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.324,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.4286,
       "shares": {
-        "SNP": 0.3219,
-        "Labour": 0.324,
-        "Conservative": 0.0841,
-        "Liberal Democrats": 0.0298,
+        "SNP": 0.4286,
+        "Labour": 0.2613,
+        "Conservative": 0.0714,
+        "Liberal Democrats": 0.0459,
         "Scottish Libertarian Party": 0.0074,
         "Communist Party of Britain": 0.0057,
         "UK Independence Party (UKIP)": 0.0051,
-        "Reform UK": 0.173,
-        "Green Party": 0.0356,
-        "Other": 0.0135
+        "Other": 0,
+        "Reform UK": 0.0177,
+        "Green Party": 0.0061,
+        "Alba": 0.1508
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.northlanarkshire.gov.uk/your-council/elections-and-voting/elections/scottish-parliament-elections-6-may-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.motherwell-and-wishaw.2026-05-07/sopn/2026-04-01T17%3A51%3A34.733383%2B00%3A00/Motherwell.pdf"
@@ -1285,16 +1358,17 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3111,
+      "predicted_winner_share": 0.4142,
       "shares": {
-        "SNP": 0.3111,
-        "Labour": 0.2976,
-        "Conservative": 0.0937,
+        "SNP": 0.4142,
+        "Labour": 0.2387,
+        "Conservative": 0.0795,
         "Independent": 0.0394,
-        "Liberal Democrats": 0.0377,
-        "Reform UK": 0.1719,
-        "Green Party": 0.0353,
-        "Other": 0.0134
+        "Liberal Democrats": 0.0539,
+        "Other": 0,
+        "Reform UK": 0.0177,
+        "Green Party": 0.0061,
+        "Alba": 0.1506
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.cne-siar.gov.uk/your-council/elections-and-voting/scottish-parliamentary-election-2021/results/",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.na-h-eileanan-an-iar.2026-05-07/sopn/2026-04-01T18%3A05%3A12.150753%2B00%3A00/Western_Isles.pdf"
@@ -1305,15 +1379,16 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "Liberal Democrats",
-      "predicted_winner_share": 0.6313,
+      "predicted_winner_share": 0.6368,
       "shares": {
-        "Liberal Democrats": 0.6313,
-        "SNP": 0.1759,
-        "Conservative": 0.0387,
-        "Labour": 0.0362,
-        "Reform UK": 0.0918,
-        "Green Party": 0.0189,
-        "Other": 0.0071
+        "Liberal Democrats": 0.6368,
+        "SNP": 0.2342,
+        "Conservative": 0.0329,
+        "Labour": 0.0216,
+        "Other": 0,
+        "Reform UK": 0.0076,
+        "Green Party": 0.0026,
+        "Alba": 0.0644
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000135",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.orkney-islands.2026-05-07/sopn/2026-04-01T18%3A11%3A02.658154%2B00%3A00/Orkney.pdf"
@@ -1323,16 +1398,17 @@
       "constituency": "Paisley",
       "region": "West Scotland",
       "region_slug": "west-scotland",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3457,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.4034,
       "shares": {
-        "SNP": 0.3029,
-        "Labour": 0.3457,
-        "Conservative": 0.0614,
-        "Green Party": 0.0774,
-        "Liberal Democrats": 0.0443,
-        "Reform UK": 0.1562,
-        "Other": 0.0121
+        "SNP": 0.4034,
+        "Labour": 0.2818,
+        "Conservative": 0.0521,
+        "Green Party": 0.0508,
+        "Liberal Democrats": 0.059,
+        "Other": 0,
+        "Reform UK": 0.0161,
+        "Alba": 0.1368
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.renfrewshire.gov.uk/SPElection2021Results",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.paisley.2026-05-07/sopn/2026-04-01T16%3A24%3A44.124705%2B00%3A00/sp.c.paisley.2026-05-07-sopn.pdf"
@@ -1343,16 +1419,17 @@
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2996,
+      "predicted_winner_share": 0.399,
       "shares": {
-        "SNP": 0.2996,
-        "Conservative": 0.253,
-        "Labour": 0.0856,
-        "Liberal Democrats": 0.0625,
+        "SNP": 0.399,
+        "Conservative": 0.2147,
+        "Labour": 0.05,
+        "Liberal Democrats": 0.0859,
         "Scottish Family Party": 0.0083,
-        "Reform UK": 0.2267,
-        "Green Party": 0.0466,
-        "Other": 0.0176
+        "Other": 0,
+        "Reform UK": 0.0246,
+        "Green Party": 0.0084,
+        "Alba": 0.2091
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.pkc.gov.uk/article/14943/Scottish-Parliamentary-election-results",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.perthshire-north.2026-05-07/sopn/2026-04-01T18%3A49%3A37.302037%2B00%3A00/Perthshire.pdf"
@@ -1363,15 +1440,16 @@
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2765,
+      "predicted_winner_share": 0.3681,
       "shares": {
-        "SNP": 0.2765,
-        "Conservative": 0.2649,
-        "Labour": 0.0938,
-        "Liberal Democrats": 0.0812,
-        "Reform UK": 0.221,
-        "Green Party": 0.0454,
-        "Other": 0.0172
+        "SNP": 0.3681,
+        "Conservative": 0.2248,
+        "Labour": 0.0576,
+        "Liberal Democrats": 0.1054,
+        "Other": 0,
+        "Reform UK": 0.0248,
+        "Green Party": 0.0085,
+        "Alba": 0.2107
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.pkc.gov.uk/article/14943/Scottish-Parliamentary-election-results",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.perthshire-south-and-kinross-shire.2026-05-07/sopn/2026-04-01T18%3A51%3A25.905714%2B00%3A00/Perthshire.pdf"
@@ -1382,15 +1460,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.renfrewshire-north-and-cardonald.2026-05-07/sopn/2026-04-01T16%3A24%3A44.712604%2B00%3A00/sp.c.renfrewshire-north-and-cardonald.2026-05-07-sopn.pdf"
@@ -1401,15 +1480,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.renfrewshire-west-and-levern-valley.2026-05-07/sopn/2026-04-01T16%3A24%3A45.262627%2B00%3A00/sp.c.renfrewshire-west-and-levern-valley.2026-05-07-sopn.pdf"
@@ -1420,15 +1500,16 @@
       "region": null,
       "region_slug": null,
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.29,
+      "predicted_winner_share": 0.3861,
       "shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Liberal Democrats": 0.08,
-        "Green Party": 0.05,
-        "Other": 0.02,
-        "Reform UK": 0.18
+        "SNP": 0.3861,
+        "Labour": 0.1881,
+        "Conservative": 0.1188,
+        "Liberal Democrats": 0.099,
+        "Green Party": 0.0198,
+        "Other": 0,
+        "Reform UK": 0.0198,
+        "Alba": 0.1683
       },
       "baseline_source": "Fallback: Scotland-wide 2021 constituency baseline (no per-constituency 2021 result in DC bundle)",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.rutherglen-and-cambuslang.2026-05-07/sopn/2026-04-01T17%3A45%3A41.116983%2B00%3A00/temp.jpeg"
@@ -1439,17 +1520,18 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "Liberal Democrats",
-      "predicted_winner_share": 0.4958,
+      "predicted_winner_share": 0.5015,
       "shares": {
-        "Liberal Democrats": 0.4958,
-        "SNP": 0.2535,
-        "Conservative": 0.0271,
-        "Labour": 0.0504,
+        "Liberal Democrats": 0.5015,
+        "SNP": 0.3376,
+        "Conservative": 0.023,
+        "Labour": 0.0307,
         "Independent": 0.0097,
         "Sovereignty": 0.0075,
-        "Reform UK": 0.1216,
-        "Green Party": 0.025,
-        "Other": 0.0095
+        "Other": 0,
+        "Reform UK": 0.0091,
+        "Green Party": 0.0031,
+        "Alba": 0.0777
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.bbc.co.uk/news/election/2021/scotland/constituencies/S16000142",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.shetland-islands.2026-05-07/sopn/2026-04-01T15%3A37%3A33.933814%2B00%3A00/sp.c.shetland-islands.2026-05-07-sopn.pdf"
@@ -1460,15 +1542,16 @@
       "region": "Highlands and Islands",
       "region_slug": "highlands-and-islands",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.3394,
+      "predicted_winner_share": 0.4519,
       "shares": {
-        "SNP": 0.3394,
-        "Conservative": 0.124,
-        "Liberal Democrats": 0.1723,
-        "Labour": 0.1132,
-        "Reform UK": 0.1957,
-        "Green Party": 0.0402,
-        "Other": 0.0152
+        "SNP": 0.4519,
+        "Conservative": 0.1052,
+        "Liberal Democrats": 0.1873,
+        "Labour": 0.0771,
+        "Other": 0,
+        "Reform UK": 0.0181,
+        "Green Party": 0.0062,
+        "Alba": 0.1542
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.highland.gov.uk/info/799/elections_and_voting/799/scottish_parliamentary_elections",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.skye-lochaber-and-badenoch.2026-05-07/sopn/2026-04-01T16%3A12%3A07.556010%2B00%3A00/sp.c.skye-lochaber-and-badenoch.2026-05-07-sopn.pdf"
@@ -1479,15 +1562,16 @@
       "region": "Mid Scotland and Fife",
       "region_slug": "mid-scotland-and-fife",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2944,
+      "predicted_winner_share": 0.392,
       "shares": {
-        "SNP": 0.2944,
-        "Conservative": 0.204,
-        "Labour": 0.1855,
-        "Liberal Democrats": 0.0519,
-        "Reform UK": 0.2059,
-        "Green Party": 0.0423,
-        "Other": 0.016
+        "SNP": 0.392,
+        "Conservative": 0.1731,
+        "Labour": 0.1384,
+        "Liberal Democrats": 0.0736,
+        "Other": 0,
+        "Reform UK": 0.0227,
+        "Green Party": 0.0078,
+        "Alba": 0.1925
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.stirling.gov.uk/council-democracy/politicians-elections-democracy/elections-voting/election-results/scottish-parliament-election-2021/",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.stirling.2026-05-07/sopn/2026-04-01T17%3A17%3A41.040122%2B00%3A00/2026noticeofpollandstatementofpersonsnominated.pdf"
@@ -1498,16 +1582,17 @@
       "region": "West Scotland",
       "region_slug": "west-scotland",
       "predicted_winner": "SNP",
-      "predicted_winner_share": 0.2758,
+      "predicted_winner_share": 0.3672,
       "shares": {
-        "SNP": 0.2758,
-        "Conservative": 0.133,
-        "Labour": 0.2049,
-        "Liberal Democrats": 0.1577,
+        "SNP": 0.3672,
+        "Conservative": 0.1129,
+        "Labour": 0.1588,
+        "Liberal Democrats": 0.1744,
         "Scottish Family Party": 0.009,
-        "Reform UK": 0.1711,
-        "Green Party": 0.0352,
-        "Other": 0.0133
+        "Other": 0,
+        "Reform UK": 0.0181,
+        "Green Party": 0.0062,
+        "Alba": 0.1534
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.eastdunbarton.gov.uk/residents/council-democracy/elections-and-voting/scottish-parliamentary-elections-2021-results",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.strathkelvin-and-bearsden.2026-05-07/sopn/2026-04-01T18%3A55%3A56.685275%2B00%3A00/temp.jpeg"
@@ -1517,16 +1602,17 @@
       "constituency": "Uddingston and Bellshill",
       "region": "Central Scotland and Lothians West",
       "region_slug": "central-scotland-and-lothians-west",
-      "predicted_winner": "Labour",
-      "predicted_winner_share": 0.3714,
+      "predicted_winner": "SNP",
+      "predicted_winner_share": 0.4021,
       "shares": {
-        "SNP": 0.302,
-        "Labour": 0.3714,
-        "Conservative": 0.0815,
-        "Liberal Democrats": 0.0355,
-        "Reform UK": 0.1633,
-        "Green Party": 0.0336,
-        "Other": 0.0127
+        "SNP": 0.4021,
+        "Labour": 0.3032,
+        "Conservative": 0.0692,
+        "Liberal Democrats": 0.0522,
+        "Other": 0,
+        "Reform UK": 0.0176,
+        "Green Party": 0.006,
+        "Alba": 0.1496
       },
       "baseline_source": "Per-constituency 2021 baseline + Scotland-wide swing. Source: https://www.northlanarkshire.gov.uk/your-council/elections-and-voting/elections/scottish-parliament-elections-6-may-2021",
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.c.uddingston-and-bellshill.2026-05-07/sopn/2026-04-01T17%3A51%3A52.263197%2B00%3A00/Uddingston.pdf"
@@ -1548,76 +1634,84 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
-        "SNP": 3,
-        "Labour": 3
+        "SNP": 6
       },
       "central": {
-        "SNP": 1,
-        "Labour": 0,
-        "Conservative": 2,
+        "SNP": 0,
+        "Labour": 3,
+        "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 1,
-        "Reform UK": 3,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
           "p10": 0,
-          "p50": 1,
-          "p90": 2,
-          "central": 1,
-          "win_probability": 0.82
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.092
         },
         "Labour": {
-          "p10": 0,
-          "p50": 0,
-          "p90": 1,
-          "central": 0,
-          "win_probability": 0.4035
+          "p10": 2,
+          "p50": 2,
+          "p90": 3,
+          "central": 3,
+          "win_probability": 1
         },
         "Conservative": {
           "p10": 1,
-          "p50": 2,
-          "p90": 3,
-          "central": 2,
-          "win_probability": 0.9775
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.9275
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.3745
+          "win_probability": 0.117
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.6685
+          "win_probability": 0.796
         },
         "Reform UK": {
-          "p10": 2,
-          "p50": 2,
-          "p90": 3,
-          "central": 3,
-          "win_probability": 0.9985
-        },
-        "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1425
+          "win_probability": 0.1145
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0385
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 0.9975
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.central-scotland-and-lothians-west.2026-05-07/sopn/2026-04-01T20%3A10%3A09.812351%2B00%3A00/Notice_of_Poll_CSR__Lothians_West_Published.pdf"
@@ -1637,76 +1731,85 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
         "SNP": 2,
         "Labour": 1
       },
       "central": {
-        "SNP": 1,
-        "Labour": 2,
+        "SNP": 2,
+        "Labour": 1,
         "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 1,
-        "Reform UK": 2,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
-          "p10": 1,
-          "p50": 1,
-          "p90": 2,
-          "central": 1,
-          "win_probability": 0.93
+          "p10": 2,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 1
         },
         "Labour": {
-          "p10": 1,
-          "p50": 2,
-          "p90": 2,
-          "central": 2,
-          "win_probability": 0.989
-        },
-        "Conservative": {
-          "p10": 1,
+          "p10": 0,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.9535
+          "win_probability": 0.8155
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.85
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
-          "p90": 1,
+          "p90": 0,
           "central": 0,
-          "win_probability": 0.2505
+          "win_probability": 0.074
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
           "p90": 1,
           "central": 1,
-          "win_probability": 0.505
+          "win_probability": 0.721
         },
         "Reform UK": {
-          "p10": 1,
-          "p50": 2,
-          "p90": 2,
-          "central": 2,
-          "win_probability": 0.996
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0695
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0765
+          "win_probability": 0.018
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.9935
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.edinburgh-and-lothians-east.2026-05-07/sopn/2026-04-01T20%3A08%3A49.565065%2B00%3A00/SP_NOTICE_OF_POLL___EDINBURGH_AND_LOTHIANS_EAST_REGION_010426___FINAL.pdf"
@@ -1726,26 +1829,27 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
-        "Labour": 1,
-        "SNP": 1
+        "SNP": 2
       },
       "central": {
         "SNP": 2,
         "Labour": 2,
         "Conservative": 1,
         "Green Party": 0,
-        "Liberal Democrats": 0,
-        "Reform UK": 2,
-        "Other": 0
+        "Liberal Democrats": 1,
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 1
       },
       "per_party": {
         "SNP": {
@@ -1753,49 +1857,56 @@
           "p50": 2,
           "p90": 3,
           "central": 2,
-          "win_probability": 0.9995
+          "win_probability": 1
         },
         "Labour": {
-          "p10": 1,
-          "p50": 1,
-          "p90": 2,
-          "central": 2,
-          "win_probability": 0.9775
-        },
-        "Conservative": {
-          "p10": 1,
-          "p50": 1,
-          "p90": 2,
-          "central": 1,
-          "win_probability": 0.9295
-        },
-        "Green Party": {
-          "p10": 0,
-          "p50": 0,
-          "p90": 1,
-          "central": 0,
-          "win_probability": 0.2115
-        },
-        "Liberal Democrats": {
-          "p10": 0,
-          "p50": 0,
-          "p90": 1,
-          "central": 0,
-          "win_probability": 0.488
-        },
-        "Reform UK": {
           "p10": 1,
           "p50": 2,
           "p90": 2,
           "central": 2,
-          "win_probability": 0.9955
+          "win_probability": 0.9935
+        },
+        "Conservative": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.811
+        },
+        "Green Party": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0525
+        },
+        "Liberal Democrats": {
+          "p10": 0,
+          "p50": 1,
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.6405
+        },
+        "Reform UK": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0475
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.0515
+          "win_probability": 0.015
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.99
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.glasgow.2026-05-07/sopn/2026-04-01T19%3A14%3A15.606730%2B00%3A00/Glasgow.pdf"
@@ -1815,55 +1926,57 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
         "SNP": 5,
         "Liberal Democrats": 3
       },
       "central": {
-        "SNP": 0,
+        "SNP": 1,
         "Labour": 3,
-        "Conservative": 2,
+        "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 0,
-        "Reform UK": 2,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
           "p10": 0,
-          "p50": 0,
-          "p90": 0,
-          "central": 0,
-          "win_probability": 0.0135
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.6015
         },
         "Labour": {
           "p10": 2,
-          "p50": 3,
-          "p90": 4,
+          "p50": 2,
+          "p90": 3,
           "central": 3,
-          "win_probability": 1
+          "win_probability": 0.9995
         },
         "Conservative": {
           "p10": 1,
-          "p50": 2,
+          "p50": 1,
           "p90": 2,
-          "central": 2,
-          "win_probability": 0.9655
+          "central": 1,
+          "win_probability": 0.9245
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.326
+          "win_probability": 0.139
         },
         "Liberal Democrats": {
           "p10": 0,
@@ -1873,18 +1986,25 @@
           "win_probability": 0
         },
         "Reform UK": {
-          "p10": 1,
-          "p50": 2,
-          "p90": 3,
-          "central": 2,
-          "win_probability": 0.9995
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.1365
         },
         "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0.096
+          "win_probability": 0.057
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 0.9955
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.highlands-and-islands.2026-05-07/sopn/2026-04-01T16%3A12%3A08.245265%2B00%3A00/sp.r.highlands-and-islands.2026-05-07-sopn.pdf"
@@ -1904,76 +2024,84 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
-        "SNP": 5,
-        "Labour": 3
+        "SNP": 8
       },
       "central": {
         "SNP": 0,
-        "Labour": 1,
-        "Conservative": 2,
+        "Labour": 3,
+        "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 1,
-        "Reform UK": 3,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
           "p10": 0,
           "p50": 0,
-          "p90": 1,
+          "p90": 0,
           "central": 0,
-          "win_probability": 0.1495
+          "win_probability": 0.008
         },
         "Labour": {
-          "p10": 0,
-          "p50": 1,
-          "p90": 2,
-          "central": 1,
-          "win_probability": 0.607
+          "p10": 2,
+          "p50": 2,
+          "p90": 3,
+          "central": 3,
+          "win_probability": 0.9995
         },
         "Conservative": {
           "p10": 1,
-          "p50": 2,
-          "p90": 3,
-          "central": 2,
-          "win_probability": 0.986
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.93
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.4485
+          "win_probability": 0.1115
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.718
+          "win_probability": 0.8195
         },
         "Reform UK": {
-          "p10": 2,
-          "p50": 3,
-          "p90": 3,
-          "central": 3,
-          "win_probability": 0.9995
-        },
-        "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.176
+          "win_probability": 0.1195
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.048
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 0.998
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.mid-scotland-and-fife.2026-05-07/sopn/2026-04-01T16%3A10%3A53.619223%2B00%3A00/SPE2026Statement-of-Persons-and-Parties-Nominated-REG.pdf"
@@ -1993,26 +2121,27 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
-        "SNP": 8,
-        "Conservative": 2
+        "SNP": 10
       },
       "central": {
         "SNP": 0,
         "Labour": 3,
-        "Conservative": 0,
+        "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 1,
-        "Reform UK": 3,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
@@ -2020,49 +2149,56 @@
           "p50": 0,
           "p90": 0,
           "central": 0,
-          "win_probability": 0
+          "win_probability": 0.0005
         },
         "Labour": {
-          "p10": 3,
-          "p50": 3,
-          "p90": 4,
+          "p10": 2,
+          "p50": 2,
+          "p90": 3,
           "central": 3,
-          "win_probability": 1
+          "win_probability": 0.9995
         },
         "Conservative": {
-          "p10": 0,
-          "p50": 0,
-          "p90": 1,
-          "central": 0,
-          "win_probability": 0.113
+          "p10": 1,
+          "p50": 1,
+          "p90": 2,
+          "central": 1,
+          "win_probability": 0.934
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.3505
+          "win_probability": 0.1055
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
-          "p90": 1,
+          "p90": 2,
           "central": 1,
-          "win_probability": 0.677
+          "win_probability": 0.807
         },
         "Reform UK": {
-          "p10": 2,
-          "p50": 2,
-          "p90": 3,
-          "central": 3,
-          "win_probability": 1
-        },
-        "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.119
+          "win_probability": 0.117
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.04
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 0.996
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.north-east-scotland.2026-05-07/sopn/2026-04-01T17%3A16%3A01.286018%2B00%3A00/sp.r.north-east-scotland.2026-05-07-sopn.pdf"
@@ -2082,77 +2218,85 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
-        "Conservative": 4,
-        "Labour": 1,
-        "SNP": 2
+        "SNP": 6,
+        "Conservative": 1
       },
       "central": {
-        "SNP": 2,
-        "Labour": 2,
-        "Conservative": 0,
+        "SNP": 0,
+        "Labour": 3,
+        "Conservative": 1,
         "Green Party": 0,
         "Liberal Democrats": 1,
-        "Reform UK": 2,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
-          "p10": 1,
-          "p50": 2,
-          "p90": 3,
-          "central": 2,
-          "win_probability": 0.991
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.232
         },
         "Labour": {
-          "p10": 1,
-          "p50": 2,
+          "p10": 2,
+          "p50": 3,
           "p90": 3,
-          "central": 2,
-          "win_probability": 0.998
+          "central": 3,
+          "win_probability": 1
         },
         "Conservative": {
           "p10": 0,
           "p50": 0,
-          "p90": 0,
-          "central": 0,
-          "win_probability": 0
+          "p90": 1,
+          "central": 1,
+          "win_probability": 0.469
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.335
+          "win_probability": 0.1505
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
-          "p90": 1,
+          "p90": 2,
           "central": 1,
-          "win_probability": 0.612
+          "win_probability": 0.837
         },
         "Reform UK": {
-          "p10": 1,
-          "p50": 2,
-          "p90": 3,
-          "central": 2,
-          "win_probability": 0.9985
-        },
-        "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.1055
+          "win_probability": 0.147
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.053
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 0.997
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.south-scotland.2026-05-07/sopn/2026-04-01T19%3A09%3A06.516953%2B00%3A00/South_Scotland.pdf"
@@ -2172,77 +2316,85 @@
         "Other": 0.049
       },
       "adjusted_list_shares": {
-        "SNP": 0.29,
-        "Labour": 0.24,
-        "Conservative": 0.14,
-        "Green Party": 0.05,
-        "Liberal Democrats": 0.08,
-        "Reform UK": 0.18000000000000005,
-        "Other": 0.02
+        "SNP": 0.38613861386138615,
+        "Labour": 0.18811881188118812,
+        "Conservative": 0.1188118811881188,
+        "Green Party": 0.0198019801980198,
+        "Liberal Democrats": 0.09900990099009901,
+        "Reform UK": 0.019801980198019806,
+        "Other": 0,
+        "Alba": 0.16831683168316836
       },
       "prior_constituency_seats": {
-        "Labour": 3,
-        "SNP": 3,
-        "Conservative": 1
+        "SNP": 6,
+        "Labour": 1
       },
       "central": {
-        "SNP": 1,
-        "Labour": 1,
-        "Conservative": 1,
+        "SNP": 0,
+        "Labour": 2,
+        "Conservative": 2,
         "Green Party": 0,
         "Liberal Democrats": 1,
-        "Reform UK": 3,
-        "Other": 0
+        "Reform UK": 0,
+        "Other": 0,
+        "Alba": 2
       },
       "per_party": {
         "SNP": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 1,
+          "central": 0,
+          "win_probability": 0.238
+        },
+        "Labour": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 2,
+          "central": 2,
+          "win_probability": 0.968
+        },
+        "Conservative": {
           "p10": 1,
           "p50": 1,
           "p90": 2,
-          "central": 1,
-          "win_probability": 0.9145
-        },
-        "Labour": {
-          "p10": 0,
-          "p50": 1,
-          "p90": 1,
-          "central": 1,
-          "win_probability": 0.561
-        },
-        "Conservative": {
-          "p10": 0,
-          "p50": 1,
-          "p90": 2,
-          "central": 1,
-          "win_probability": 0.7195
+          "central": 2,
+          "win_probability": 0.943
         },
         "Green Party": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.405
+          "win_probability": 0.145
         },
         "Liberal Democrats": {
           "p10": 0,
           "p50": 1,
           "p90": 2,
           "central": 1,
-          "win_probability": 0.7365
+          "win_probability": 0.8415
         },
         "Reform UK": {
-          "p10": 2,
-          "p50": 3,
-          "p90": 3,
-          "central": 3,
-          "win_probability": 1
-        },
-        "Other": {
           "p10": 0,
           "p50": 0,
           "p90": 1,
           "central": 0,
-          "win_probability": 0.159
+          "win_probability": 0.134
+        },
+        "Other": {
+          "p10": 0,
+          "p50": 0,
+          "p90": 0,
+          "central": 0,
+          "win_probability": 0.0565
+        },
+        "Alba": {
+          "p10": 1,
+          "p50": 2,
+          "p90": 3,
+          "central": 2,
+          "win_probability": 0.9975
         }
       },
       "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/sp.r.west-scotland.2026-05-07/sopn/2026-04-01T16%3A24%3A45.867834%2B00%3A00/sp.r.west-scotland.2026-05-07-sopn.pdf"

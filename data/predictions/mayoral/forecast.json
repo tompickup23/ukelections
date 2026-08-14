@@ -1,6 +1,6 @@
 {
   "snapshot": {
-    "generated_at": "2026-08-08T10:23:04.703Z",
+    "generated_at": "2026-08-08T08:55:34.717Z",
     "model_version": "ukelections.mayoral.v1.0.0",
     "election_target": "May 2027 mayoral elections (supplementary vote)",
     "monte_carlo_draws": 2000,
@@ -21,7 +21,7 @@
     "method_note": "Methods are reported separately and are never blended into a single point estimate. Where methods disagree on the most likely winner the contest is reported as method-split. Party-level projections only until nominations close; candidate effects in mayoral contests are large and the bands are wide by design.",
     "caveats": [
       "Projections are party level. Mayoral contests have strong candidate effects (independents and well known local figures routinely beat party baselines) which cannot be modelled before nominations close.",
-      "The supplementary vote transfer model is calibrated on three verified counts: Greater Manchester 2026 (the one Reform era SV contest, including its per-district second-preference table) and Lancashire's own 2016 and 2021 PCC elections. The Lancashire hypothetical uses county-specific parameters: higher transfer reach (its own contests ran 58 to 66 percent) and weaker left-bloc cohesion (Reform won the GM second-preference battle in the Lancashire-like boroughs of Wigan, Oldham, Rochdale, Tameside and Bury). Parameters still carry deliberately wide noise; SV counts never reveal transfers by source candidate, so splits are pooled estimates.",
+      "The supplementary vote transfer model is calibrated on a thin base: one Reform era SV contest (Greater Manchester, 30 July 2026) plus the pre-2022 SV era. Transfer parameters carry deliberately wide noise.",
       "The GE swing method applies uniform national swing to a general election base; local and mayoral elections routinely deviate from national swing (differential turnout, local parties, incumbency).",
       "Mansfield is forecast subject to its caveat: Nottinghamshire reorganisation may abolish the post, and the contest should be re-verified when nominations open.",
       "No constituency level polling exists for any May 2027 mayoral contest as of generation; the first published poll for a contest supersedes these baselines (wire it in, per the Makerfield lesson)."
@@ -1005,7 +1005,7 @@
       {
         "id": "ge_swing_2024",
         "label": "GE2024 base + national swing",
-        "description": "General election 2024 results across the fourteen Lancashire councils, the twelve districts plus Blackburn with Darwen and Blackpool (16 constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (10 polls, fieldwork to 2026-08-05).",
+        "description": "General election 2024 results across all fourteen Lancashire districts plus Blackburn with Darwen and Blackpool (16 constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (10 polls, fieldwork to 2026-08-05).",
         "base": {
           "shares": {
             "Reform UK": 0.1754705905248772,
@@ -1025,21 +1025,21 @@
             "p10": 0.1931,
             "p90": 0.3357,
             "p_reach_runoff": 0.831,
-            "p_win": 0.433
+            "p_win": 0.441
           },
           "Labour": {
             "central": 0.2786,
             "p10": 0.2036,
             "p90": 0.3507,
             "p_reach_runoff": 0.855,
-            "p_win": 0.465
+            "p_win": 0.462
           },
           "Conservative": {
             "central": 0.1982,
             "p10": 0.1241,
             "p90": 0.2658,
             "p_reach_runoff": 0.293,
-            "p_win": 0.093
+            "p_win": 0.089
           },
           "Liberal Democrats": {
             "central": 0.0465,
@@ -1085,73 +1085,73 @@
         "description": "The county's own most recent local votes, taken from our Lancashire unitaries forecast: each proposed ward's LCC May 2025 division result nudged by the district's 2025 to 2026 borough and by-election swing, Blackburn's May 2026 wards directly, and a Blackpool proxy; electorate-weighted across the four proposed unitaries. Carries the local Reform organisation and independent vote the GE base misses. Not re-swung to current national polling, so it is a picture of votes actually cast in 2025 and 2026.",
         "base": {
           "shares": {
-            "Reform UK": 0.3409227744482766,
-            "Labour": 0.20282574816542018,
-            "Conservative": 0.1772498564738117,
-            "Liberal Democrats": 0.0702580156687995,
-            "Green Party": 0.11084038420897718,
-            "Independent": 0.07069886197022544,
-            "Other": 0.02720435906448936
+            "Reform UK": 0.345463610864814,
+            "Labour": 0.20461152484082706,
+            "Conservative": 0.182078860076351,
+            "Liberal Democrats": 0.07016415308634806,
+            "Green Party": 0.10977633449454914,
+            "Independent": 0.0715326247049375,
+            "Other": 0.01637289193217325
           },
           "source": "data/predictions/lancashire-unitaries/forecast.json (four_unitary vote_share, electorate-weighted)"
         },
         "parties": {
           "Reform UK": {
-            "central": 0.3409,
-            "p10": 0.2686,
-            "p90": 0.4159,
-            "p_reach_runoff": 0.995,
-            "p_win": 0.919
+            "central": 0.3455,
+            "p10": 0.2714,
+            "p90": 0.4153,
+            "p_reach_runoff": 0.997,
+            "p_win": 0.93
           },
           "Labour": {
-            "central": 0.2028,
+            "central": 0.2046,
             "p10": 0.1366,
-            "p90": 0.2651,
-            "p_reach_runoff": 0.591,
-            "p_win": 0.06
+            "p90": 0.2661,
+            "p_reach_runoff": 0.574,
+            "p_win": 0.046
           },
           "Conservative": {
-            "central": 0.1772,
-            "p10": 0.1052,
-            "p90": 0.237,
-            "p_reach_runoff": 0.341,
-            "p_win": 0.017
+            "central": 0.1821,
+            "p10": 0.1129,
+            "p90": 0.2428,
+            "p_reach_runoff": 0.36,
+            "p_win": 0.019
           },
           "Liberal Democrats": {
-            "central": 0.0703,
-            "p10": 0.0008,
-            "p90": 0.1338,
-            "p_reach_runoff": 0.012,
+            "central": 0.0702,
+            "p10": 0.0014,
+            "p90": 0.1333,
+            "p_reach_runoff": 0.009,
             "p_win": 0.001
           },
           "Green Party": {
-            "central": 0.1108,
-            "p10": 0.0444,
-            "p90": 0.1734,
-            "p_reach_runoff": 0.048,
+            "central": 0.1098,
+            "p10": 0.042,
+            "p90": 0.1706,
+            "p_reach_runoff": 0.049,
             "p_win": 0.003
           },
           "Independent": {
-            "central": 0.0707,
+            "central": 0.0715,
             "p10": 0,
-            "p90": 0.139,
-            "p_reach_runoff": 0.011,
-            "p_win": 0.001
+            "p90": 0.1336,
+            "p_reach_runoff": 0.009,
+            "p_win": 0
           },
           "Other": {
-            "central": 0.0272,
+            "central": 0.0164,
             "p10": 0,
-            "p90": 0.0898,
-            "p_reach_runoff": 0.003,
-            "p_win": 0.001
+            "p90": 0.0804,
+            "p_reach_runoff": 0.002,
+            "p_win": 0
           }
         },
         "modal_runoff": {
           "pair": "Labour v Reform UK",
-          "probability": 0.586,
+          "probability": 0.571,
           "median_final_split": {
-            "Reform UK": 0.564,
-            "Labour": 0.436
+            "Reform UK": 0.568,
+            "Labour": 0.432
           }
         }
       }
@@ -1217,20 +1217,7 @@
         }
       ],
       "voting_system_if_called": "Supplementary vote, under s.63 and Schedule 30 of the English Devolution and Community Empowerment Act 2026 (applies to combined county authority mayors). A mechanism in waiting, not a scheduled contest.",
-      "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography.",
-      "sv_overrides": {
-        "transfer_reach": {
-          "mu": 0.61,
-          "sd": 0.1,
-          "lo": 0.3,
-          "hi": 0.85
-        },
-        "same_bloc_split": {
-          "mu": 0.7,
-          "sd": 0.12
-        },
-        "rationale": "Lancashire's own SV contests show higher transfer reach (0.583 in 2016, 0.656 in 2021) than the global anchor set; GM 2026's per-district second preferences show weaker left-bloc cohesion in Lancashire-like boroughs (Reform won transfers in Wigan/Oldham/Rochdale/Tameside/Bury). Reach centred 0.61; same-bloc split softened 0.74 to 0.70. Verified 8 Aug 2026."
-      }
+      "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography."
     }
   ],
   "roster_2028": {
@@ -1469,42 +1456,6 @@
         "Shaun Bailey": 977601
       },
       "source_url": "https://www.londonelects.org.uk/files/London%20Elects%20-%20Results%20Factsheet%202021.pdf"
-    },
-    "lancashire_pcc_2021": {
-      "date": "2021-05-06",
-      "reach": 0.656,
-      "pool": 50739,
-      "transferred": 33279,
-      "runoff_transfer_split": {
-        "labour": 0.546,
-        "conservative": 0.454
-      },
-      "note": "Con won 51.27-48.73. Eliminated pool LD 32,813 + Reform UK 17,926 (fringe-era Reform, 4.83pct: do NOT map onto 2026 Reform). Transfers derived from official first/final counts; OPCC publishes no exhausted breakdown.",
-      "source": "https://www.lancashire-pcc.gov.uk/the-commissioner/elections/"
-    },
-    "lancashire_pcc_2016": {
-      "date": "2016-05-05",
-      "reach": 0.583,
-      "pool": 73151,
-      "transferred": 42648,
-      "runoff_transfer_split": {
-        "conservative": 0.52,
-        "labour": 0.48
-      },
-      "note": "Lab won. UKIP-era pool (UKIP 16.54pct + LD) split near-evenly Con/Lab: right-populist ballots did NOT break heavily Conservative in Lancashire.",
-      "source": "https://www.wyre.gov.uk/directory-record/947/lancashire-police-and-crime-commissioner-election-results-2016"
-    },
-    "gm_2026": {
-      "date": "2026-07-30",
-      "reach": 0.608,
-      "pool": 169949,
-      "transferred": 103326,
-      "runoff_transfer_split": {
-        "labour": 0.562,
-        "reform": 0.438
-      },
-      "district_signal": "Official per-district table: Reform (Astley) WON second preferences in Wigan, Oldham, Rochdale, Tameside and Bury; Labour (Craig) dominated Manchester, Stockport, Trafford. Lancashire's geography resembles the former group, so pooled GM parameters lean Labour when applied to Lancashire.",
-      "source": "https://www.gmelects.org.uk/result2026/ (403s bots; browser UA works)"
     }
   }
 }
