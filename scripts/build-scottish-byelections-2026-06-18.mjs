@@ -172,7 +172,7 @@ function buildSeat(spec) {
       },
       signals,
       winner_call_summary: signals.map(
-        (s) => `${s.label}: predicted ${s.called_winner} — ${s.winner_call_correct ? "CORRECT" : "INCORRECT"}`,
+        (s) => `${s.label}: predicted ${s.called_winner}, ${s.winner_call_correct ? "CORRECT" : "INCORRECT"}`,
       ),
       narrative: spec.narrative,
     },
@@ -243,7 +243,7 @@ const ABERDEEN = {
   holyrood: {
     name: "Aberdeen Deeside and North Kincardine (Holyrood constituency)",
     date: "2026-05-07",
-    note: "Stephen Flynn won this Holyrood seat on 7 May 2026 — the win that triggered the Westminster by-election. Different electorate to the Westminster seat; constituency (first) vote.",
+    note: "Stephen Flynn won this Holyrood seat on 7 May 2026, the win that triggered the Westminster by-election. Different electorate to the Westminster seat; constituency (first) vote.",
     shares: {
       "Scottish National Party": 0.341,
       Conservative: 0.305,
@@ -292,14 +292,14 @@ const ABERDEEN = {
   },
   benchmarks: [
     { id: "ge2024", forecaster: "GE2024 result (naive prior)", date: "4 Jul 2024", type: "baseline", called: "Scottish National Party", shares: { "Scottish National Party": 0.328, Labour: 0.247, Conservative: 0.244, "Reform UK": 0.069, "Liberal Democrats": 0.063, "Green Party": 0.035 } },
-    { id: "uke_signal", forecaster: "UK Elections — Holyrood signal", date: "7 May (basis)", type: "signal", called: "Scottish National Party", shares: { "Scottish National Party": 0.341, Conservative: 0.305, "Reform UK": 0.177, "Liberal Democrats": 0.083, Labour: 0.081 } },
-    { id: "uke_ge_model", forecaster: "UK Elections — GE seat model", date: "19 May", type: "seat model", called: "Scottish National Party", shares: { "Scottish National Party": 0.316, Conservative: 0.189, "Reform UK": 0.155, Labour: 0.141, "Green Party": 0.090, "Liberal Democrats": 0.071 }, note: "Our standing 650-seat GE model, same class as Electoral Calculus, run retrospectively." },
+    { id: "uke_signal", forecaster: "UK Elections Holyrood signal", date: "7 May (basis)", type: "signal", called: "Scottish National Party", shares: { "Scottish National Party": 0.341, Conservative: 0.305, "Reform UK": 0.177, "Liberal Democrats": 0.083, Labour: 0.081 } },
+    { id: "uke_ge_model", forecaster: "UK Elections GE seat model", date: "19 May", type: "seat model", called: "Scottish National Party", shares: { "Scottish National Party": 0.316, Conservative: 0.189, "Reform UK": 0.155, Labour: 0.141, "Green Party": 0.090, "Liberal Democrats": 0.071 }, note: "Our standing 650-seat GE model, same class as Electoral Calculus, run retrospectively." },
     { id: "electoral_calculus", forecaster: "Electoral Calculus (GE seat model)", date: "9 May", type: "seat model", called: "Scottish National Party", shares: { "Scottish National Party": 0.364, Conservative: 0.215, "Reform UK": 0.182, Labour: 0.121, "Green Party": 0.049, "Liberal Democrats": 0.045 }, note: "82% SNP. Standard GE-model seat estimate, not a bespoke by-election forecast." },
     { id: "betting_markets", forecaster: "Betting markets (eve of poll)", date: "17 Jun", type: "market", called: "Scottish National Party", prob: 0.79, shares: null, note: "SNP ~79% (oddschecker); the Conservatives were a ~20% outsider." },
     { id: "ballot_box_scotland", forecaster: "Ballot Box Scotland (qualitative)", date: "4 Jun", type: "qualitative", called: "Scottish National Party", shares: null, note: "'Lean SNP'." },
   ],
   narrative: [
-    "An upset. Every area signal pointed to an SNP hold: the GE2024 baseline (SNP 32.8%), the 7 May 2026 Holyrood overlap (SNP 34.1% ahead of the Conservatives' 30.5%), and Ballot Box Scotland's 'Lean SNP' call. The result was a 21-point Conservative GAIN — the first Conservative gain of a Westminster seat at a Scottish by-election since 1967.",
+    "An upset. Every area signal pointed to an SNP hold: the GE2024 baseline (SNP 32.8%), the 7 May 2026 Holyrood overlap (SNP 34.1% ahead of the Conservatives' 30.5%), and Ballot Box Scotland's 'Lean SNP' call. The result was a 21-point Conservative GAIN, the first Conservative gain of a Westminster seat at a Scottish by-election since 1967.",
     "The mechanism was tactical unionist consolidation on a low (37%) by-election turnout. Labour collapsed from 24.7% to 5.4% (-19pp) and the Lib Dems eased, with that vote coalescing behind Douglas Lumsden to beat the SNP. The SNP's own share barely moved (-4pp); they were not so much defeated as outflanked by a unified anti-SNP vote.",
     "Reform UK is the signal's other big miss: 17.7% in the Holyrood overlap five weeks earlier, just 8.6% here. Reform's Holyrood list strength did not transfer to a Westminster by-election framed as a straight SNP-vs-Conservative fight. No area-level signal could have called this; it needed a model of tactical switching that the raw shares do not contain.",
   ],
@@ -401,15 +401,15 @@ const ARBROATH = {
   },
   benchmarks: [
     { id: "ge2024", forecaster: "GE2024 result (naive prior)", date: "4 Jul 2024", type: "baseline", called: "Scottish National Party", shares: { "Scottish National Party": 0.353, Labour: 0.334, Conservative: 0.155, "Reform UK": 0.086, "Liberal Democrats": 0.051 } },
-    { id: "uke_signal", forecaster: "UK Elections — Holyrood signal", date: "7 May (basis)", type: "signal", called: "Scottish National Party", shares: { "Scottish National Party": 0.423, Conservative: 0.213, "Reform UK": 0.178, Labour: 0.107, "Liberal Democrats": 0.079 } },
-    { id: "uke_ge_model", forecaster: "UK Elections — GE seat model", date: "19 May", type: "seat model", called: "Scottish National Party", shares: { "Scottish National Party": 0.340, Labour: 0.183, "Reform UK": 0.182, Conservative: 0.123, "Green Party": 0.063, "Liberal Democrats": 0.060 }, note: "Our standing 650-seat GE model, same class as Electoral Calculus, run retrospectively." },
+    { id: "uke_signal", forecaster: "UK Elections Holyrood signal", date: "7 May (basis)", type: "signal", called: "Scottish National Party", shares: { "Scottish National Party": 0.423, Conservative: 0.213, "Reform UK": 0.178, Labour: 0.107, "Liberal Democrats": 0.079 } },
+    { id: "uke_ge_model", forecaster: "UK Elections GE seat model", date: "19 May", type: "seat model", called: "Scottish National Party", shares: { "Scottish National Party": 0.340, Labour: 0.183, "Reform UK": 0.182, Conservative: 0.123, "Green Party": 0.063, "Liberal Democrats": 0.060 }, note: "Our standing 650-seat GE model, same class as Electoral Calculus, run retrospectively." },
     { id: "electoral_calculus", forecaster: "Electoral Calculus (GE seat model)", date: "9 May", type: "seat model", called: "Scottish National Party", shares: { "Scottish National Party": 0.393, "Reform UK": 0.212, Labour: 0.162, Conservative: 0.127, "Green Party": 0.039, "Liberal Democrats": 0.036 }, note: "87% SNP. Standard GE-model seat estimate, not a bespoke by-election forecast." },
     { id: "betting_markets", forecaster: "Betting markets (eve of poll)", date: "17 Jun", type: "market", called: "Scottish National Party", prob: 0.90, shares: null, note: "SNP ~90% (oddschecker), the strongest favourite of the three seats." },
     { id: "ballot_box_scotland", forecaster: "Ballot Box Scotland (qualitative)", date: "6 Jun", type: "qualitative", called: "Scottish National Party", shares: null, note: "'Likely SNP'." },
   ],
   narrative: [
     "The signal nailed it. The 7 May 2026 Holyrood result in Angus South (which covers ~94% of this seat, with the SAME Reform and Labour candidates) was SNP 42.3 / Con 21.3 / Reform 17.8 / Lab 10.7 / LD 7.9. The by-election five weeks later: SNP 41.2 / Con 19.0 / Reform 18.3 / Lab 15.4 / LD 6.1. Almost a carbon copy, and a comfortable SNP hold exactly as Ballot Box Scotland's 'Likely SNP' call expected.",
-    "The GE2024 baseline, by contrast, would have badly misframed the contest: it had Labour second on 33.4%, a 1.9-point SNP-Labour marginal. The Holyrood signal correctly captured what GE2024 could not — that Labour had collapsed (to ~11-15%) and that Reform had risen to overtake them for third. Here the freshest actual-vote signal beat the year-old general-election prior decisively.",
+    "The GE2024 baseline, by contrast, would have badly misframed the contest: it had Labour second on 33.4%, a 1.9-point SNP-Labour marginal. The Holyrood signal correctly captured what GE2024 could not: Labour had collapsed (to ~11-15%) and that Reform had risen to overtake them for third. Here the freshest actual-vote signal beat the year-old general-election prior decisively.",
     "Reform UK's 18.3% (up 9.7pp on GE2024, third place) is the structural story: in a seat where it polled 8.6% at the general election, Reform now runs ahead of both Labour and, at Holyrood, tracked almost exactly. The SNP's vote was remarkably stable through a collapse in turnout (58% to 31%), which is what a safe-ish incumbent hold looks like.",
   ],
 };

@@ -1,4 +1,4 @@
-# May 7 2026 — Reform UK council control
+# May 7 2026 Reform UK council control
 
 Generated: 2026-05-10T12:17:12.171Z
 Source: 2026-05-07 actuals (sha256 0c9fb4a44439…)
@@ -78,7 +78,7 @@ Councils where Reform UK is the biggest single group but doesn't hold a majority
 | Burnley | **11** | 45 | 12 | Ind/Other | 10 | Reform 11, Ind/Other 10, Lab 9, LD 6, Con 5, Green 3 (of 45) |
 | Havant | **10** | 36 | 9 | Con | 8 | Reform 10, Con 8, Lab 8, Green 5, LD 3, Ind/Other 1 (of 36) |
 
-## 3. Reform breakthrough — won seats, not largest (78)
+## 3. Reform breakthrough: won seats, not largest (78)
 
 Councils where Reform won at least one seat but isn't the largest group. The "one to watch in 2027/2028" cohort.
 
@@ -149,7 +149,7 @@ Councils where Reform won at least one seat but isn't the largest group. The "on
 
 1. **Pre-May-7 composition** is the OpenCouncilData 2025 snapshot for each council. Defections and by-elections between January 2025 and May 7 2026 are not folded in.
 2. **Carry-over seats** (for thirds / halves councils where only some seats were up) are approximated by pre[party] × seats_up/total. Exact derivation requires per-ward incumbent verification.
-3. **Pending ballots**: 0 ballots had no DC-elected flag at ingest time — they're treated as pending and excluded from the wins count. As more declarations process, re-run the pipeline to refresh.
+3. **Pending ballots**: 0 ballots had no DC-elected flag at ingest time, so they are treated as pending and excluded from the wins count. As more declarations process, re-run the pipeline to refresh.
 4. **Group affiliation vs elected party**: a candidate elected as Reform may not whip with the Reform group in practice; vice-versa for independents who join. This view counts elected-party labels only.
 5. **Control thresholds**: a council with an even total (e.g. 60 seats) needs 31 for majority; an odd total (e.g. 61) needs 31. We use floor(total/2)+1 throughout.
 6. **2 councils could not be matched** to OCD: east-surrey, west-surrey.

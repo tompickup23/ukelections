@@ -250,7 +250,7 @@ function buildLaGE2024Shares(historyBundle, crosswalk) {
   return {
     national,
     pcon_ballots: pconShares,
-    method_note: "Currently provides national GE2024 average + per-PCON shares keyed by DC ballot id. Per-LAD apportionment requires PCON24CD↔ballot-slug join (deferred — model uses national fallback for stale baselines).",
+    method_note: "Currently provides national GE2024 average + per-PCON shares keyed by DC ballot id. Per-LAD apportionment requires PCON24CD↔ballot-slug join (deferred; the model uses a national fallback for stale baselines).",
   };
 }
 
@@ -299,7 +299,7 @@ function main() {
       source_name: "Hamilton-Perry v7.0 LA ethnic projections (back-extrapolated to May 2026)",
       source_path: "clawd/burnley-council/data/shared/hp_ethnic_projections_la.json",
       method: "Linear interpolation between current(2021) and projections(2031). Midpoint = May 2026.",
-      licence: "Internal — derived from ONS Census 2021 + Hamilton-Perry household projection model v7.0",
+      licence: "Internal, derived from ONS Census 2021 + Hamilton-Perry household projection model v7.0",
       sha256: sha(proj),
     },
     lad_count: Object.keys(proj).length,

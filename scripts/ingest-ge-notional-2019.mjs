@@ -174,7 +174,7 @@ function main() {
       generated_at: new Date().toISOString(),
       source_url: "https://electionresults.parliament.uk/general-elections/5",
       source_path: SRC,
-      method: "Rallings & Thrasher 2024 — ward-level apportionment of 2019 vote counts onto 2024 boundaries.",
+      method: "Rallings & Thrasher 2024: ward-level apportionment of 2019 vote counts onto 2024 boundaries.",
       coverage: {
         total_pcons: byGss.size,
         by_country: Object.fromEntries(

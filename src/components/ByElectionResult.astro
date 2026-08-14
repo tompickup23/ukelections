@@ -97,18 +97,18 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
         return (
           <tr>
             <td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
-            <td class="num">{typeof v === "number" ? v.toLocaleString() : "—"}</td>
+            <td class="num">{typeof v === "number" ? v.toLocaleString() : "n/a"}</td>
             <td class="num">{pct1(row.pct)}%</td>
             <td class="num">
               {typeof sw === "number" ? (
                 <span class={sw > 0 ? "swing-up" : (sw < 0 ? "swing-down" : "swing-flat")}>{sw > 0 ? "+" : ""}{(sw * 100).toFixed(1)}pp</span>
-              ) : "—"}
+              ) : "n/a"}
             </td>
           </tr>
         );
       })}
-      <tr><td><strong>Majority</strong></td><td class="num"><strong>{result.majority_votes.toLocaleString()}</strong></td><td class="num"><strong>{(result.margin_pp * 100).toFixed(1)}pp</strong></td><td class="num">—</td></tr>
-      <tr><td><strong>Turnout</strong></td><td class="num"><strong>{result.turnout_votes.toLocaleString()}</strong></td><td class="num"><strong>{pct1(result.turnout_pct)}%</strong></td><td class="num">—</td></tr>
+      <tr><td><strong>Majority</strong></td><td class="num"><strong>{result.majority_votes.toLocaleString()}</strong></td><td class="num"><strong>{(result.margin_pp * 100).toFixed(1)}pp</strong></td><td class="num">n/a</td></tr>
+      <tr><td><strong>Turnout</strong></td><td class="num"><strong>{result.turnout_votes.toLocaleString()}</strong></td><td class="num"><strong>{pct1(result.turnout_pct)}%</strong></td><td class="num">n/a</td></tr>
     </tbody>
   </table>
   <p class="caption">Source: returning officer declaration via {result.sources?.[0] ? <a href={result.sources[0]}>primary record</a> : "official declaration"}.</p>
@@ -123,7 +123,7 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
   {calls.length > 0 && (
     <p>
       Pre-election call{calls.length > 1 ? "s" : ""}:
-      {calls.map((c: any, i: number) => (<span> {i > 0 ? "· " : ""}<strong>{c.source}</strong> — {c.call}</span>))}.
+      {calls.map((c: any, i: number) => (<span> {i > 0 ? "· " : ""}<strong>{c.source}</strong>: {c.call}</span>))}.
     </p>
   )}
   <div class="signal-grid">
@@ -159,8 +159,8 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
           <td><strong>Actual result</strong></td>
           <td>declared</td>
           <td><span class="party-pill" style={`background:${partyColour(winnerParty)}`}></span> <strong>{shortPartyLabel(winnerParty)}</strong></td>
-          <td class="num">—</td>
-          <td>—</td>
+          <td class="num">n/a</td>
+          <td>n/a</td>
         </tr>
         {benchmarks
           .slice()

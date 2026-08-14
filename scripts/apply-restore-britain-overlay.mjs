@@ -90,7 +90,7 @@ g.methodology = (g.methodology || []).filter(
 g.methodology.push({
   name: "restore-britain-overlay",
   description:
-    "Lowe-defection flip — 90% of the predicted Reform UK vote in Great Yarmouth " +
+    "Lowe-defection flip: 90% of the predicted Reform UK vote in Great Yarmouth " +
     "reallocated to Restore Britain (locally branded 'Great Yarmouth First'). " +
     "Empirical anchor: Lowe's personal vote took 9/9 Norfolk County Council divisions " +
     "in Great Yarmouth on 7 May 2026, and Great Yarmouth First also won 1/39 Borough " +
@@ -106,14 +106,14 @@ summary.snapshot.restore_britain_overlay = {
   allocated_seats: 1,
   allocated_seat_pcons: ["great-yarmouth"],
   source:
-    "YouGov 17-18 May 2026 + Find Out Now 6 May 2026 — RB 4% embedded in Wikipedia 'Others' column. " +
+    "YouGov 17-18 May 2026 + Find Out Now 6 May 2026, with RB 4% embedded in the Wikipedia 'Others' column. " +
     "Great Yarmouth First (Restore Britain's local affiliate) won 9/9 Norfolk County Council divisions " +
     "in Great Yarmouth + 1/39 Great Yarmouth Borough Council seats on 7 May 2026.",
   note:
     "Seat-by-seat Restore Britain modelling has not yet been wired through the swing pipeline; " +
     "this is an additive overlay on top of the latest model run. Only Great Yarmouth has been " +
     "flipped (Lowe was elected for Reform UK in July 2024, defected to Independent, then founded " +
-    "Restore Britain in November 2025 — he stands again under his own party).",
+    "Restore Britain in November 2025, and he stands again under his own party).",
   applied_at: new Date().toISOString(),
 };
 

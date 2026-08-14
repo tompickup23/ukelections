@@ -353,7 +353,7 @@ function writeMarkdownSummary(out, mdPath) {
   lines.push(`- Evaluated against forecast: ${liveS.ballots_evaluated}\n`);
 
   if (out.prereg) {
-    lines.push(`## Pre-registered forecast (April 26 — sha-witnessed)\n`);
+    lines.push(`## Pre-registered forecast (April 26, sha-witnessed)\n`);
     lines.push(`SHA256: ${out.prereg.sha256_actual} ${out.prereg.sha256_match ? "✓ matches manifest" : "✗ MISMATCH"}\n`);
     lines.push(`This is the model output as locked 11 days before polling day. The May 7 forecast served on the live site differs (Step 9b realignment uplift was added between pre-reg and election day). Both numbers are reported in this audit.\n`);
     lines.push(`| Metric | Value |`);
@@ -364,7 +364,7 @@ function writeMarkdownSummary(out, mdPath) {
   }
 
   lines.push(`## Live forecast (what users saw on May 7, includes Step 9b)\n`);
-  lines.push(`SHA256 match against pre-registration manifest: ${out.live.sha256_match ? "✓" : "✗ (modified post pre-registration — see prereg section above)"}\n`);
+  lines.push(`SHA256 match against pre-registration manifest: ${out.live.sha256_match ? "✓" : "✗ (modified post pre-registration; see prereg section above)"}\n`);
   lines.push(`| Metric | Value |`);
   lines.push(`|---|---|`);
   lines.push(`| Winner accuracy | ${(liveS.winner_accuracy * 100).toFixed(1)}% |`);
@@ -402,14 +402,14 @@ function writeMarkdownSummary(out, mdPath) {
   lines.push(``);
 
   if (shadowS && out.step9b) {
-    lines.push(`## Step 9b (Reform realignment uplift) — isolated audit\n`);
+    lines.push(`## Step 9b (Reform realignment uplift): isolated audit\n`);
     lines.push(`Shadow forecast = pipeline rerun with UKE_DISABLE_REALIGNMENT_UPLIFT=1.\n`);
     lines.push(`| Metric | Value |`);
     lines.push(`|---|---|`);
     lines.push(`| Cohort size (lift > 1pp) | ${out.step9b.aggregate.cohort_size} |`);
     lines.push(`| Cohort evaluated | ${out.step9b.aggregate.cohort_evaluated} |`);
-    lines.push(`| Reform MAE — live (with 9b) | ${(out.step9b.aggregate.live_reform_mae * 100).toFixed(2)}pp |`);
-    lines.push(`| Reform MAE — shadow (no 9b) | ${(out.step9b.aggregate.shadow_reform_mae * 100).toFixed(2)}pp |`);
+    lines.push(`| Reform MAE, live (with 9b) | ${(out.step9b.aggregate.live_reform_mae * 100).toFixed(2)}pp |`);
+    lines.push(`| Reform MAE, shadow (no 9b) | ${(out.step9b.aggregate.shadow_reform_mae * 100).toFixed(2)}pp |`);
     lines.push(`| Avg help (positive = 9b helped) | ${(out.step9b.aggregate.avg_help_pp * 100).toFixed(2)}pp |`);
     lines.push(`| Helped / Hurt / Neutral | ${out.step9b.aggregate.helped} / ${out.step9b.aggregate.hurt} / ${out.step9b.aggregate.neutral} |\n`);
 
@@ -422,7 +422,7 @@ function writeMarkdownSummary(out, mdPath) {
     }
     lines.push(``);
 
-    lines.push(`### Shadow forecast — overall\n`);
+    lines.push(`### Shadow forecast: overall\n`);
     lines.push(`(For comparison; the shadow run scored against the same actuals on the same evaluable cohort.)\n`);
     lines.push(`| Metric | Live | Shadow | Δ |`);
     lines.push(`|---|---|---|---|`);

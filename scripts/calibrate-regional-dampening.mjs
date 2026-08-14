@@ -180,7 +180,7 @@ function main() {
   const calibration = {};
   for (const region of Object.keys(rowsByRegion)) {
     if (rowsByRegion[region].length === 0) {
-      calibration[region] = { dampening: 0.65, mae: null, ward_count: 0, note: "no fixtures available — defaulting to 0.65" };
+      calibration[region] = { dampening: 0.65, mae: null, ward_count: 0, note: "no fixtures available, defaulting to 0.65" };
       continue;
     }
     const trials = [];

@@ -132,7 +132,7 @@ function controlClass(prob: number) {
                   <tr>
                     <td><span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>{shortLabel(r.party)}</td>
                     <td class="seat-num">{r.expected}</td>
-                    <td class="rng">{r.p10}–{r.p90}</td>
+                    <td class="rng">{r.p10}-{r.p90}</td>
                   </tr>
                 ))}
               </tbody>
@@ -254,7 +254,7 @@ function controlClass(prob: number) {
       The forecast runs against the actual proposed warding for the four-unitary model: {four.total_councillors}
       councillors across 107 wards. Most proposed wards are the existing Lancashire County Council divisions, so
       each is predicted from its own May 2025 county result, then nudged by the swing between that county vote and
-      the district's May 2026 borough election and any 2025–26 by-elections; districts with no 2026 contest borrow
+      the district's May 2026 borough election and any 2025-26 by-elections; districts with no 2026 contest borrow
       a validated, shrunk swing from demographically similar districts. Blackburn's wards combine its May 2026
       borough wards directly; Blackpool's are its May 2023 ward results with party levels corrected to the 2024-26
       by-elections and GE2024. Each ward's councillors go to the winning party, and the
@@ -297,7 +297,7 @@ function controlClass(prob: number) {
       <>
         <h3>What if the national mood carries into May 2027?</h3>
         <p>
-          The central forecast assumes May 2027 votes like Lancashire voted in 2025–26. National polling has moved
+          The central forecast assumes May 2027 votes like Lancashire voted in 2025-26. National polling has moved
           since (fieldwork {snap.national_drift.polling_fieldwork.earliest} to {snap.national_drift.polling_fieldwork.latest}:
           Reform {snap.national_drift.drift_pp["Reform UK"]}pp, Labour +{snap.national_drift.drift_pp["Labour"]}pp against
           the spring 2026 baseline). Our 2024 backtest found national swing carries into local results at only about a
@@ -311,7 +311,7 @@ function controlClass(prob: number) {
               <tr>
                 <td>{sc.label}</td>
                 {sc.unitaries.map((u: any) => (
-                  <td>Ref {u.reform_expected} ({u.reform_p10}–{u.reform_p90}), maj {(u.reform_majority_prob * 100).toFixed(0)}%</td>
+                  <td>Ref {u.reform_expected} ({u.reform_p10}-{u.reform_p90}), maj {(u.reform_majority_prob * 100).toFixed(0)}%</td>
                 ))}
               </tr>
             ))}

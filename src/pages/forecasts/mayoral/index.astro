@@ -150,7 +150,7 @@ function statusPill(status: string) {
                     <span class="win-chip">
                       <span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>
                       {shortPartyLabel(r.party)} <strong>{pct(r.p_win)}</strong>
-                      <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}–{pp(r.p90)})</span>
+                      <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}-{pp(r.p90)})</span>
                     </span>
                   ))}
                 </div>
@@ -220,7 +220,7 @@ function statusPill(status: string) {
                   <span class="win-chip">
                     <span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>
                     {shortPartyLabel(r.party)} <strong>{pct(r.p_win)}</strong>
-                    <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}–{pp(r.p90)})</span>
+                    <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}-{pp(r.p90)})</span>
                   </span>
                 ))}
               </div>

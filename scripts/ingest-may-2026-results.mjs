@@ -246,7 +246,7 @@ async function main() {
   const out = {
     snapshot: {
       snapshot_id: `may-2026-results-${sha.slice(0, 12)}`,
-      source_name: "Democracy Club Candidates API — results endpoint",
+      source_name: "Democracy Club Candidates API, results endpoint",
       source_url: `${API}?election_date=${ELECTION_DATE}`,
       election_date: ELECTION_DATE,
       ingested_at: ingestedAt,

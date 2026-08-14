@@ -132,9 +132,9 @@ const benchmarks = ((forecast.benchmarks?.graded as Array<any>) || []);
 // Map the margin-comparison contender ids to human labels for the scorecard.
 const CONTENDER_LABELS: Record<string, string> = {
   uke_published_forecast: "UKE published forecast (probability-weighted)",
-  uke_scenario_a_burnham_stands: "UKE Scenario A — Burnham stands (85% branch)",
+  uke_scenario_a_burnham_stands: "UKE Scenario A: Burnham stands (85% branch)",
   final_poll_of_polls: "Final-polls poll-of-polls (5 polls)",
-  most_labour_favourable_poll_convergent: "Best Labour poll (Convergent, 2–12 Jun)",
+  most_labour_favourable_poll_convergent: "Best Labour poll (Convergent, 2 to 12 Jun)",
 };
 function fmtSigned(pp: number): string {
   const v = pp * 100;
@@ -259,14 +259,14 @@ function classificationLabel(c: string): string {
             return (
               <tr>
                 <td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
-                <td class="num">{typeof v === "number" ? v.toLocaleString() : "—"}</td>
+                <td class="num">{typeof v === "number" ? v.toLocaleString() : "n/a"}</td>
                 <td class="num">{(row.pct * 100).toFixed(1)}%</td>
                 <td class="num">
                   {typeof sw === "number" ? (
                     <span class={sw > 0 ? "swing-up" : (sw < 0 ? "swing-down" : "swing-flat")}>
                       {sw > 0 ? "+" : ""}{(sw * 100).toFixed(1)}pp
                     </span>
-                  ) : "—"}
+                  ) : "n/a"}
                 </td>
               </tr>
             );
@@ -275,7 +275,7 @@ function classificationLabel(c: string): string {
             <td><strong>Majority</strong></td>
             <td class="num"><strong>{result.majority_votes?.toLocaleString()}</strong></td>
             <td class="num"><strong>{(result.majority_pp * 100).toFixed(1)}pp</strong></td>
-            <td class="num">—</td>
+            <td class="num">n/a</td>
           </tr>
           <tr>
             <td><strong>Turnout</strong></td>
@@ -322,7 +322,7 @@ function classificationLabel(c: string): string {
           <tr class="scorecard-actual">
             <td><strong>Actual result</strong></td>
             <td class="num"><strong>+{actualMarginPp}pp</strong></td>
-            <td class="num">—</td>
+            <td class="num">n/a</td>
             <td><span class="party-pill" style={`background:${partyColour("Labour")}`}></span> <strong>Labour (Burnham)</strong></td>
           </tr>
           {marginCmp.contenders.map((c: any) => (
@@ -384,7 +384,7 @@ function classificationLabel(c: string): string {
                   {b.forecaster}<span class="muted"> · {b.date}</span>
                 </td>
                 <td class="num">{b.mae_pp != null ? (b.mae_pp * 100).toFixed(1) + "pp" : <span class="muted">n/a</span>}{b.partial ? <span class="muted">*</span> : null}</td>
-                <td class="num">{b.margin_err_pp != null ? <span class="scorecard-err">{(b.margin_err_pp * 100).toFixed(1)}pp</span> : <span class="muted">—</span>}</td>
+                <td class="num">{b.margin_err_pp != null ? <span class="scorecard-err">{(b.margin_err_pp * 100).toFixed(1)}pp</span> : <span class="muted">n/a</span>}</td>
                 <td>{shortPartyLabel(b.called)}{b.prob ? <span class="muted"> ({Math.round(b.prob * 100)}%)</span> : null}</td>
               </tr>
             ))}
@@ -429,7 +429,7 @@ function classificationLabel(c: string): string {
       </p>
       <RaceBar
         shares={pollAvgRanked}
-        title={`Final-polls poll-of-polls — ${pollAvg.headline}`}
+        title={`Final-polls poll-of-polls: ${pollAvg.headline}`}
       />
       <table class="seat-table">
         <thead>
@@ -448,7 +448,7 @@ function classificationLabel(c: string): string {
           {finalPolls.polls.map((p: any) => (
             <tr>
               <td>{p.pollster}{p.client ? <span class="muted"> · {p.client}</span> : null}</td>
-              <td class="muted">{p.fieldwork.replace("/", " – ")}</td>
+              <td class="muted">{p.fieldwork.replace("/", " to ")}</td>
               <td class="num">{p.sample}</td>
               <td class="num">{(p.shares["Labour"] * 100).toFixed(0)}</td>
               <td class="num">{(p.shares["Reform UK"] * 100).toFixed(0)}</td>
@@ -460,7 +460,7 @@ function classificationLabel(c: string): string {
           <tr>
             <td><strong>Poll-of-polls (mean)</strong></td>
             <td class="muted">5 polls</td>
-            <td class="num">—</td>
+            <td class="num">n/a</td>
             <td class="num"><strong>{(pollAvg.shares["Labour"] * 100).toFixed(1)}</strong></td>
             <td class="num"><strong>{(pollAvg.shares["Reform UK"] * 100).toFixed(1)}</strong></td>
             <td class="num"><strong>{(pollAvg.shares["Restore Britain"] * 100).toFixed(1)}</strong></td>
@@ -473,7 +473,7 @@ function classificationLabel(c: string): string {
         {finalPolls.no_exit_poll_note} A poll-of-polls of these five (Labour +7) would have called
         the seat correctly; the most recent poll (Convergent, to 12 Jun) had Labour +12. Even so,
         all five understated the eventual ≈+{actualMarginPp}pp margin, and all five over-stated
-        Reform — the high 58.75% turnout broke for Burnham harder than likely-voter models assumed.
+        Reform, because the high 58.75% turnout broke for Burnham harder than likely-voter models assumed.
       </p>
     </section>
   )}

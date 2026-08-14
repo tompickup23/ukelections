@@ -194,7 +194,7 @@ async function main() {
   const out = {
     snapshot: {
       snapshot_id: `dc-historic-results-${sha.slice(0, 12)}`,
-      source_name: "Democracy Club Candidates API — results endpoint",
+      source_name: "Democracy Club Candidates API, results endpoint",
       source_url: API,
       retrieved_at: new Date().toISOString(),
       sha256: sha,

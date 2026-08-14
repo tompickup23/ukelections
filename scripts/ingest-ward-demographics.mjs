@@ -120,7 +120,7 @@ function main() {
   writeJson(OUT, {
     snapshot: {
       generated_at: new Date().toISOString(),
-      method: "Stage 1 — harvest per-ward Census 2021 ethnic-group + age data from AI DOGE per-council demographics.json files. ONS NOMIS bulk fetch for remaining 95% of wards is a Stage 1.5 task.",
+      method: "Stage 1: harvest per-ward Census 2021 ethnic-group + age data from AI DOGE per-council demographics.json files. ONS NOMIS bulk fetch for remaining 95% of wards is a Stage 1.5 task.",
       source_root: CLAWD,
     },
     summary,

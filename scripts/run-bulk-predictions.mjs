@@ -665,14 +665,14 @@ function main() {
           name: "Restrict to ballot",
           description: dropped.length
             ? `Removed ${dropped.length} party/parties not standing in 2026 (${dropped.map((d) => `${d.party} ${(d.share * 100).toFixed(1)}pp`).join(", ")}). Their share redistributed pro-rata.`
-            : "All predicted parties are on the 2026 ballot — no redistribution needed.",
+            : "All predicted parties are on the 2026 ballot, so no redistribution was needed.",
         },
         anchored.anchor_used
           ? {
               step: "Final-B",
               name: "2025 county-cycle anchor",
               description: entrenchment.entrenched
-                ? `Anchor weight reduced to 0.10 because ${entrenchment.party} won the latest borough cycle (${(entrenchment.share * 100).toFixed(1)}%) — a hyperlocal personal-vote stronghold not represented in cross-tier county results. Otherwise blended toward May 2025 ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes).`
+                ? `Anchor weight reduced to 0.10 because ${entrenchment.party} won the latest borough cycle (${(entrenchment.share * 100).toFixed(1)}%), a hyperlocal personal-vote stronghold not represented in cross-tier county results. Otherwise blended toward May 2025 ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes).`
                 : `Blended (weight ${anchored.anchor_weight}) toward May 2025 results for ${anchored.anchor_source.county_slug} (${anchored.anchor_source.ballot_count} divisions, ${anchored.anchor_source.total_votes.toLocaleString()} votes), adjusted by national swing since May 2025. This corrects the model's tendency to under-weight Reform's 2025 county breakthroughs in 2-tier districts.`,
             }
           : {
@@ -904,7 +904,7 @@ function main() {
       {
         step: "Final-C",
         name: "National-share calibration",
-        description: `Aggregate-predicted vs national-polled mismatch corrected at strength ${CALIBRATION_STRENGTH}. Multipliers — ${CALIBRATION_PARTIES.map((p) => `${p} ×${(multipliers[p] || 1).toFixed(2)}`).join(", ")}.`,
+        description: `Aggregate-predicted vs national-polled mismatch corrected at strength ${CALIBRATION_STRENGTH}. Multipliers: ${CALIBRATION_PARTIES.map((p) => `${p} ×${(multipliers[p] || 1).toFixed(2)}`).join(", ")}.`,
       },
     ];
   }
@@ -947,7 +947,7 @@ function main() {
       input_polling: pollingPair().nationalPolling,
       input_ge2024_baseline: pollingPair().ge2024Result,
       assumptions: DEFAULT_ASSUMPTIONS,
-      method_summary: "AI DOGE election model (Lancashire-trained, RMSE 1.65) generalised. Pipeline: ward history baseline → national swing dampened 0.65 → LA-level UKD HP v7.0 demographic adjustment → IMD-based deprivation tilt → incumbency (where holders known) → Reform-entry handling → normalisation. Per-LA GE2024 deferred to Stage 1.5 — currently uses UK national.",
+      method_summary: "AI DOGE election model (Lancashire-trained, RMSE 1.65) generalised. Pipeline: ward history baseline → national swing dampened 0.65 → LA-level UKD HP v7.0 demographic adjustment → IMD-based deprivation tilt → incumbency (where holders known) → Reform-entry handling → normalisation. Per-LA GE2024 deferred to Stage 1.5, so this run uses the UK national baseline.",
     },
     tally,
     predictions,

@@ -121,7 +121,7 @@ async function main() {
       if (hit) {
         updates[pcon.pcon24cd] = {
           share: hit.share,
-          source: `Wikipedia (auto-parsed) — ${pcon.name}`,
+          source: `Wikipedia (auto-parsed): ${pcon.name}`,
           wikipedia: `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/\s/g, "_"))}`,
           scanned_at: new Date().toISOString(),
         };

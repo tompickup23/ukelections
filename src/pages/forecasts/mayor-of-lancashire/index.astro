@@ -116,7 +116,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
               <span class="win-chip">
                 <span class="party-swatch" style={`background:${partyColour(r.party)}`}></span>
                 {shortPartyLabel(r.party)} <strong>{pct(r.p_win)}</strong>
-                <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}–{pp(r.p90)})</span>
+                <span class="chip-detail">1st pref {pp(r.central)}% ({pp(r.p10)}-{pp(r.p90)})</span>
               </span>
             ))}
           </div>
@@ -174,7 +174,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
         A mayoral election is one county-wide count, so the rows below are not separate contests: they show where
         each party's first-preference vote would come from, using the same ward-level model as our
         <a href="/forecasts/lancashire-unitaries/">Lancashire unitaries forecast</a> (votes actually cast in
-        2023–26, not re-swung to national polling).
+        2023-26, not re-swung to national polling).
       </p>
       <div class="table-scroll"><table class="data-table">
         <thead><tr><th>District</th><th>Electorate</th><th>Leads</th>{PARTY_COLS.slice(0, 5).map((p) => <th>{shortPartyLabel(p)}</th>)}</tr></thead>
