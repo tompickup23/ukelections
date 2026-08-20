@@ -7,7 +7,7 @@
 // Per-result `source` URL is the official council declaration PDF.
 
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const API = "https://candidates.democracyclub.org.uk/api/next/results/";
@@ -17,6 +17,15 @@ const MAX_RETRIES = 6;
 const USER_AGENT = "ukelections.co.uk historic results ingest (contact: tom@ukelections.co.uk)";
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const CACHE_DIR = path.join(ROOT, ".cache/dc-results");
+// The page cache exists to resume a long paged fetch, not to freeze one. It had
+// no expiry: every page was written on 26 Apr 2026 and replayed unchanged every
+// night for four months, with the last cached page carrying next:null so the
+// loop never even looked for newer pages. That, not any lag at Democracy Club,
+// is why this file's newest result sat at 23 Apr 2026 all summer. Pages older
+// than the TTL are refetched; --fresh ignores the cache entirely.
+const ttlArg = process.argv.find((a) => a.startsWith("--cache-ttl-hours="));
+const CACHE_TTL_MS = (ttlArg ? Number(ttlArg.split("=")[1]) : 20) * 3600 * 1000;
+const IGNORE_CACHE = process.argv.includes("--fresh");
 const SCOPE_PATH = path.join(ROOT, "data/identity/wards-may-2026.json");
 const APPENDS_PATH = path.join(ROOT, "data/history/byelection-appends.json");
 const OUT = path.join(ROOT, "data/history/dc-historic-results.json");
@@ -68,7 +77,8 @@ async function fetchAll() {
     page += 1;
     const cachePath = path.join(CACHE_DIR, `page-${String(page).padStart(4, "0")}.json`);
     let body;
-    if (existsSync(cachePath)) {
+    const fresh = existsSync(cachePath) && Date.now() - statSync(cachePath).mtimeMs < CACHE_TTL_MS;
+    if (fresh && !IGNORE_CACHE) {
       body = JSON.parse(readFileSync(cachePath, "utf8"));
       process.stderr.write(`page ${page}: cached (${body.results.length})\n`);
     } else {
@@ -151,10 +161,10 @@ async function main() {
   });
 
   // -------------------------------------------------------------------------
-  // Fold in the by-election sidecar. The DC *results* endpoint this script
-  // reads runs months behind on local by-elections (its newest result sat at
-  // 23 Apr 2026 through the whole summer of 2026), so scripts/refresh-byelections.mjs
-  // sweeps the *ballots* endpoint weekly instead. That sweep used to write
+  // Fold in the by-election sidecar. The *ballots* endpoint carries a by-election
+  // result as soon as the returning officer publishes it, days before the
+  // *results* endpoint this script reads transcribes it, so
+  // scripts/refresh-byelections.mjs sweeps it weekly. That sweep used to write
   // straight into this script's output file, and this script overwrote it every
   // night: six contests ingested on 14 Aug 2026 were gone by the 15th, with the
   // sweep's own dead-man monitor still green. The sweep now keeps a tracked
