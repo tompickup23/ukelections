@@ -28,6 +28,9 @@ const rankedSeatsWon = Object.entries(seatsWon)
 
 const liveSummary = pa.live?.summary || {};
 const preregSummary = pa.prereg?.summary || {};
+// The witnessed artifact lives in git history, not at HEAD: the nightly
+// pipeline rebuilds the forecast file in place. See prereg.artifact_ref.
+const preregRef = pa.prereg?.artifact_ref || null;
 const step9b = pa.step9b?.aggregate || {};
 const perParty = pa.live?.per_party || {};
 
@@ -135,6 +138,15 @@ const reformMajorities = (ctl.councils as any[])
       the as-served forecast, which added one extra step (a Reform realignment uplift) calibrated on the morning
       of polling day after we spotted a structural undershoot in northern unitaries.
     </p>
+    {preregRef && (
+      <p class="caption">
+        Check the witness yourself. The forecast file at the head of the repository is rebuilt nightly, so the
+        pre-registered copy is the one committed on {preregRef.committed_on} at{" "}
+        <code>{preregRef.commit.slice(0, 10)}</code>, and it still hashes to{" "}
+        <code>{preregRef.sha256.slice(0, 16)}…</code>:{" "}
+        <code>{preregRef.verify}</code>
+      </p>
+    )}
     <table class="seat-table">
       <thead>
         <tr>
