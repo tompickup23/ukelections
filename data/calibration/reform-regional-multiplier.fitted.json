@@ -1,0 +1,122 @@
+{
+  "schema_version": "2.0.0",
+  "fitted_on": "local.2026-05-07",
+  "fitted_at": "2026-08-20T23:51:31.851Z",
+  "method": "One coordinate pass: each tier's multiplier swept with the others held fixed, one full model run per value, then chosen fold by fold on training councils and scored on held-out councils.",
+  "grid": {
+    "london": [
+      0,
+      0.25,
+      0.5
+    ],
+    "metropolitan": [
+      0.5,
+      0.75,
+      1
+    ],
+    "other": [
+      0.6,
+      0.85,
+      1
+    ],
+    "northern_unitary": [
+      0.75,
+      1,
+      1.25
+    ]
+  },
+  "hand_set": {
+    "london": 0,
+    "metropolitan": 0.75,
+    "other": 0.85,
+    "northern_unitary": 1
+  },
+  "fitted": {
+    "london": {
+      "multiplier": 0,
+      "folds_agreeing": 4,
+      "of_folds": 5,
+      "hand_set_was": 0
+    },
+    "metropolitan": {
+      "multiplier": 1,
+      "folds_agreeing": 5,
+      "of_folds": 5,
+      "hand_set_was": 0.75
+    },
+    "other": {
+      "multiplier": 0.6,
+      "folds_agreeing": 3,
+      "of_folds": 5,
+      "hand_set_was": 0.85
+    },
+    "northern_unitary": {
+      "multiplier": 1,
+      "folds_agreeing": 4,
+      "of_folds": 5,
+      "hand_set_was": 1
+    }
+  },
+  "validation": {
+    "folds": 5,
+    "mean_winner_delta_pp": 1.544,
+    "mean_mae_delta_pp": -0.0421,
+    "per_fold": [
+      {
+        "wards": 515,
+        "picks": {
+          "london": 0,
+          "metropolitan": 1,
+          "other": 0.85,
+          "northern_unitary": 1
+        },
+        "winner_delta_pp": 3.689,
+        "mae_delta_pp": -0.1061
+      },
+      {
+        "wards": 629,
+        "picks": {
+          "london": 0,
+          "metropolitan": 1,
+          "other": 0.85,
+          "northern_unitary": 1
+        },
+        "winner_delta_pp": 1.272,
+        "mae_delta_pp": -0.1536
+      },
+      {
+        "wards": 582,
+        "picks": {
+          "london": 0,
+          "metropolitan": 1,
+          "other": 0.6,
+          "northern_unitary": 1
+        },
+        "winner_delta_pp": 4.983,
+        "mae_delta_pp": -0.1851
+      },
+      {
+        "wards": 504,
+        "picks": {
+          "london": 0.25,
+          "metropolitan": 1,
+          "other": 0.6,
+          "northern_unitary": 1
+        },
+        "winner_delta_pp": 2.976,
+        "mae_delta_pp": -0.0387
+      },
+      {
+        "wards": 673,
+        "picks": {
+          "london": 0,
+          "metropolitan": 1,
+          "other": 0.6,
+          "northern_unitary": 1.25
+        },
+        "winner_delta_pp": -5.201,
+        "mae_delta_pp": 0.2729
+      }
+    ]
+  }
+}
