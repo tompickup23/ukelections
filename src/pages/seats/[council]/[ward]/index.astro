@@ -8,10 +8,13 @@ import {
   loadLaProj,
   loadLaImd,
   loadMay7BacktestForWard,
+  loadMay7ResultForWard,
+  loadMay7CouncilCoverage,
   rankedShares,
   formatPct,
   partyColour,
 } from "../../../../lib/predictions";
+import { summariseWardResult, seatsWonLabel } from "../../../../lib/may7WardResult";
 import { shortPartyLabel } from "../../../../lib/siteData";
 
 export async function getStaticPaths() {
@@ -45,14 +48,38 @@ const ladImd = lad24 ? laImd.imd[lad24] : null;
 const ranked = rankedShares(wp?.prediction || null);
 const top = ranked[0];
 
+// The declared 7 May 2026 result. This is what a reader searching
+// "<ward> election result" in August 2026 came for, so it leads the page
+// and the forecast below it is framed as a retrospective.
+const resultRow = ward.ballot_paper_id ? loadMay7ResultForWard(ward.ballot_paper_id) : null;
+const result = summariseWardResult(resultRow, ward.candidate_count ?? null);
+// Only consulted when this ward has no result, to say why rather than to
+// leave the reader staring at a page that skips 7 May entirely.
+const councilCoverage = result ? null : loadMay7CouncilCoverage(ward.council_slug);
+
+const seatsWon = result ? seatsWonLabel(result, shortPartyLabel) : null;
+// Actual shares are drawn with the same bars as the forecast so the two
+// are directly comparable. Suppressed on an incomplete candidate field,
+// where the denominator is wrong and the percentages would be invented.
+const actualShares: Array<[string, number]> = result && !result.incomplete && resultRow?.vote_shares
+  ? Object.entries(resultRow.vote_shares as Record<string, number>).sort((a, b) => b[1] - a[1])
+  : [];
+
 const tierLabel = { local: "Local council", mayor: "Mayoralty" }[ward.tier] || ward.tier;
 // Titles carry the words people actually search ("<ward> <council> election
 // result"). The bare "Bank Hall. Burnley" form matched no query intent, which
 // cost click-through on pages that were already ranking.
 const title = `${ward.ward_name}${ward.council_name ? `, ${ward.council_name}` : ""}. Election results and 2026 forecast`;
-const description = wp?.prediction
-  ? `Forecast for ${ward.ward_name} on Thursday 7 May 2026. Top: ${shortPartyLabel(top[0])} ${formatPct(top[1].pct)}.`
-  : `${ward.ward_name} (${ward.council_name}) on Thursday 7 May 2026. ${wp?.cancelled ? "Election cancelled." : "No prediction available."}`;
+// Lead the snippet with the declared result where we have one. A forecast
+// snippet on a result query reads as stale and loses the click.
+const description = result
+  ? `${ward.ward_name} (${ward.council_name}) result, Thursday 7 May 2026: ${seatsWon}.` +
+    (result.turnoutPct != null ? ` Turnout ${formatPct(result.turnoutPct)}.` : "")
+  : wp?.cancelled
+    ? `${ward.ward_name} (${ward.council_name}). The 7 May 2026 election here was cancelled and postponed to a by-election.`
+    : wp?.prediction
+      ? `${ward.ward_name} (${ward.council_name}) on Thursday 7 May 2026. No declared result captured yet. Our forecast had ${shortPartyLabel(top[0])} on ${formatPct(top[1].pct)}.`
+      : `${ward.ward_name} (${ward.council_name}) on Thursday 7 May 2026. No declared result captured yet.`;
 
 const confidenceLabel = { high: "High", medium: "Medium", low: "Low", none: "Not available" }[wp?.confidence || "none"];
 
@@ -112,7 +139,7 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
         {ward.candidate_count} candidates from {ward.parties_standing.length} {ward.parties_standing.length === 1 ? "party" : "parties"}.
       </p>
       <p class="meta-row">
-        Confidence in the forecast: <strong>{confidenceLabel}</strong>
+        {result ? "Model confidence going in" : "Confidence in the forecast"}: <strong>{confidenceLabel}</strong>
         {ward.sopn_url && (<>{" · "}<a href={ward.sopn_url}>Official Statement of Persons Nominated (PDF)</a></>)}
       </p>
     </div>
@@ -137,16 +164,146 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
 
   {wp?.cancelled && (
     <section class="section prose-block">
-      <h2>This election has been cancelled</h2>
-      <p>The 7 May 2026 election in this ward has been cancelled, most likely because of a candidate-death postponement. A by-election will be held on a later date.</p>
+      <h2>This election was cancelled</h2>
+      <p>The 7 May 2026 election in this ward was cancelled, most likely because of a candidate-death postponement, so no result was declared on the day. A by-election is held on a later date.</p>
+    </section>
+  )}
+
+  {result && (
+    <section class="section" id="result">
+      <div class="section-head">
+        <p class="eyebrow">Declared result{result.isByElection ? ", by-election" : ""}</p>
+        <h2>{ward.ward_name} on Thursday 7 May 2026</h2>
+      </div>
+
+      {result.incomplete && (
+        <div class="backtest-callout backtest-callout--warn">
+          <strong>Partial declaration.</strong>
+          We hold {result.recordedCandidates} of the {result.nominatedCandidates} candidates nominated in this ward,
+          so vote shares and the majority are withheld rather than calculated from an incomplete field.
+          The votes below are the ones we have, not the full count.
+        </div>
+      )}
+
+      <div class="status-grid result-grid">
+        <article>
+          <p class="status-label">{result.seats === 1 ? "Seat won by" : `${result.seats} seats won by`}</p>
+          <strong>{seatsWon}</strong>
+          <p>
+            {result.split
+              ? "The seats split between parties in this ward."
+              : result.seats === 1
+                ? "One seat was up for election."
+                : `All ${result.seats} seats went the same way.`}
+          </p>
+        </article>
+        {result.majority != null && (
+          <article>
+            <p class="status-label">Majority</p>
+            <strong>{result.majority.toLocaleString("en-GB")}</strong>
+            <p>
+              {result.seats === 1 ? "Over" : "Last seat held over"}{" "}
+              {result.majorityOverParty ? shortPartyLabel(result.majorityOverParty) : "the runner-up"}.
+            </p>
+          </article>
+        )}
+        {result.turnoutPct != null && (
+          <article>
+            <p class="status-label">Turnout</p>
+            <strong>{formatPct(result.turnoutPct)}</strong>
+            <p>
+              {result.totalValidVotes != null
+                ? `${result.totalValidVotes.toLocaleString("en-GB")} valid votes counted.`
+                : "Share of the electorate that voted."}
+            </p>
+          </article>
+        )}
+        {result.turnoutPct == null && result.totalValidVotes != null && (
+          <article>
+            <p class="status-label">Votes counted</p>
+            <strong>{result.totalValidVotes.toLocaleString("en-GB")}</strong>
+            <p>Turnout was not published for this ward.</p>
+          </article>
+        )}
+      </div>
+
+      {actualShares.length > 0 && (
+        <>
+          <h3 class="result-subhead">Vote share on the day</h3>
+          <div class="party-bars party-bars-large">
+            {actualShares.map(([party, share]) => (
+              <div class="bar-row">
+                <span class="bar-label">{shortPartyLabel(party)}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" style={`width:${(share * 100).toFixed(1)}%; background:${partyColour(party)}`}></div>
+                </div>
+                <span class="bar-value">{formatPct(share)}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      <h3 class="result-subhead">Every candidate</h3>
+      <table class="seat-table">
+        <thead>
+          <tr>
+            <th scope="col">Candidate</th>
+            <th scope="col">Party</th>
+            <th scope="col" class="num">Votes</th>
+            {!result.incomplete && <th scope="col" class="num">Share</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {result.candidates.map((c) => (
+            <tr class={c.elected ? "candidate-elected" : undefined}>
+              <td>
+                {c.name || <span class="muted">Name not recorded</span>}
+                {c.elected && <span class="elected-tag">Elected</span>}
+              </td>
+              <td><span class="party-pill" style={`background:${partyColour(c.party)}`}></span> {shortPartyLabel(c.party)}</td>
+              <td class="num">{c.votes.toLocaleString("en-GB")}</td>
+              {!result.incomplete && <td class="num">{c.share != null ? formatPct(c.share) : "n/a"}</td>}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <p class="caption">
+        {result.spoiltBallots != null && <>{result.spoiltBallots.toLocaleString("en-GB")} ballots were rejected. </>}
+        {result.provider === "council-pdf-declaration" && "Source: the returning officer's declaration of result. "}
+        {result.provider === "wikipedia" && "Source: a community-maintained Wikipedia mirror, not the council's own declaration. Treat it as provisional. "}
+        {result.provider === "dc-api" && "Source: Democracy Club's results database. "}
+        {result.sourceUrl && result.sourceUrl.startsWith("http")
+          ? <a href={result.sourceUrl}>View the source</a>
+          : result.sourceArticle
+            ? <a href={result.sourceArticle}>View the source</a>
+            : null}
+      </p>
+    </section>
+  )}
+
+  {!result && !wp?.cancelled && (
+    <section class="section prose-block">
+      <h2>No declared result for 7 May 2026</h2>
+      <p>
+        This ward went to the polls on Thursday 7 May 2026, but we have not captured a declaration for it.
+        {councilCoverage
+          ? ` ${ward.council_name} declared ${councilCoverage.declared} of ${councilCoverage.expected} wards into our dataset, and this is one of the ${councilCoverage.missing} still outstanding.`
+          : " The returning officer's declaration has not reached our dataset."}
+        {" "}The forecast below is what the model expected here, kept on the page so the record stands.
+      </p>
+      <p class="caption">
+        <a href={`/seats/${ward.council_slug}/`}>See the {ward.council_name} results we do hold</a>.
+      </p>
     </section>
   )}
 
   {wp?.prediction && (
     <section class="section">
       <div class="section-head">
-        <p class="eyebrow">Predicted vote share</p>
-        <h2>What the model expects</h2>
+        <p class="eyebrow">{result ? "Model expectation, before the vote" : "Predicted vote share"}</p>
+        <h2>{result ? "What the model expected here" : "What the model expects"}</h2>
       </div>
       <div class="party-bars party-bars-large">
         {ranked.map(([party, p]) => (
@@ -160,8 +317,10 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
         ))}
       </div>
       <p class="caption">
-        Predictions are point estimates: the model's best guess, not a guarantee. The "How this prediction was made"
-        section below lists every step that shaped this forecast.
+        {result
+          ? "This is the forecast as it stood before polls opened, published here unedited. It is scored against the declared result above, not quietly replaced by it."
+          : "Predictions are point estimates: the model's best guess, not a guarantee."}
+        {" "}The "How this prediction was made" section below lists every step that shaped this forecast.
       </p>
     </section>
   )}
@@ -176,8 +335,8 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
   {wardBacktest && (
     <section class="section">
       <div class="section-head">
-        <p class="eyebrow">How accurate was the model here?</p>
-        <h2>Our 7 May 2026 forecast for {ward.ward_name}</h2>
+        <p class="eyebrow">Forecast versus result</p>
+        <h2>How accurate the model was here</h2>
       </div>
       <div class="backtest-callout">
         <strong>
@@ -221,7 +380,7 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Recent contests</p>
-        <h2>What happened last time</h2>
+        <h2>{result ? "How this ward voted before 2026" : "What happened last time"}</h2>
       </div>
       <table class="seat-table">
         <thead>
@@ -311,6 +470,31 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
 </BaseLayout>
 
 <style>
+/* Declared-result block. Sits above the forecast, so it reuses the shared
+   status-grid + party-bars language rather than inventing a second one. */
+.result-grid { margin-top: var(--space-md, 1rem); }
+.result-subhead {
+  margin: var(--space-lg, 1.75rem) 0 var(--space-xs, 0.5rem);
+  font-size: var(--text-small, 0.95rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.candidate-elected { font-weight: 700; }
+.elected-tag {
+  display: inline-block;
+  margin-left: 0.45rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--status-good-text) 16%, transparent);
+  color: var(--status-good-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .party-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
 .party-list li { background: var(--surface); padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); }
 
