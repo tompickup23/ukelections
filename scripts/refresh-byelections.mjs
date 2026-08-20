@@ -19,6 +19,16 @@
 //   4. Ballots with no published result yet are recorded as pending and
 //      retried next run.
 //
+// Where it writes (changed 20 Aug 2026): rows go to the TRACKED sidecar
+// data/history/byelection-appends.json first, then get folded into the
+// gitignored history file. Writing only to the history file lost every sweep:
+// the nightly ingest rebuilds that file wholesale from the DC results
+// endpoint, so the six contests appended on 14 Aug 2026 were gone by the 15th
+// while the cron's dead-man stayed green. The nightly ingest now merges the
+// sidecar back in.
+//
+// Backfill: --from=YYYY-MM-DD forces the sweep start date.
+//
 // State: data/history/byelection-refresh-state.json
 // Exit code 0 even when results are pending; non-zero only on hard failure,
 // so the cron's Kuma dead-man distinguishes "ran fine" from "broken".
@@ -29,14 +39,38 @@ import path from "node:path";
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const p = (rel) => path.join(ROOT, rel);
 const HISTORY = p("data/history/dc-historic-results.json");
+const APPENDS = p("data/history/byelection-appends.json");
 const STATE = p("data/history/byelection-refresh-state.json");
 const EE = "https://elections.democracyclub.org.uk/api/elections/";
 const DC = "https://candidates.democracyclub.org.uk/api/next/ballots/";
 
 const today = new Date().toISOString().slice(0, 10);
 
-async function getJson(url) {
+// --from=YYYY-MM-DD overrides the sweep start, for backfills.
+const fromArg = process.argv.find((a) => a.startsWith("--from="));
+const forcedFrom = fromArg ? fromArg.slice("--from=".length) : null;
+
+// Politeness delay between API calls. Backfills sweep hundreds of ballots, so
+// --pace=1200 keeps a long run under the rate limit.
+const paceArg = process.argv.find((a) => a.startsWith("--pace="));
+const PACE_MS = paceArg ? Math.max(0, parseInt(paceArg.slice("--pace=".length), 10) || 0) : 400;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// DC rate-limits bulk callers. A weekly sweep of ten ballots never notices; a
+// backfill of a hundred gets 429s on almost every request, which the first
+// version of this script silently turned into "pending" (110 of 117 on the
+// 20 Aug 2026 backfill). Back off and retry instead.
+async function getJson(url, attempt = 0) {
   const res = await fetch(url, { headers: { "User-Agent": "ukelections.co.uk data refresh (tompickup23)" } });
+  if (res.status === 429 || res.status >= 500) {
+    if (attempt >= 5) throw new Error(`${res.status} after ${attempt + 1} attempts ${url}`);
+    const retryAfter = parseInt(res.headers.get("retry-after") || "", 10);
+    const waitMs = Number.isFinite(retryAfter) ? retryAfter * 1000 : Math.min(60000, 2000 * 2 ** attempt);
+    console.error(`  ${res.status}, waiting ${Math.round(waitMs / 1000)}s then retrying: ${url}`);
+    await sleep(waitMs);
+    return getJson(url, attempt + 1);
+  }
   if (!res.ok) throw new Error(`${res.status} ${url}`);
   return res.json();
 }
@@ -53,16 +87,30 @@ function isoDaysBetween(a, b) {
 }
 
 async function main() {
-  const doc = JSON.parse(readFileSync(HISTORY, "utf8"));
-  const have = new Set(doc.results.map((r) => r.ballot_paper_id));
+  // The sidecar is the durable record. data/history/dc-historic-results.json is
+  // gitignored and rebuilt nightly from the DC *results* endpoint, which lags
+  // by-elections by months (it sat at 23 Apr 2026 for the whole summer), so
+  // rows written only there were overwritten within a day of every sweep.
+  // Everything ingested here is written to the tracked sidecar first and folded
+  // back into the history file by scripts/ingest-dc-historic-results.mjs.
+  const appends = existsSync(APPENDS)
+    ? JSON.parse(readFileSync(APPENDS, "utf8"))
+    : {
+        note: "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not.",
+        source: "https://candidates.democracyclub.org.uk/api/next/ballots/",
+        review_status: "auto_ingested_dc",
+        generated_at: null,
+        results: [],
+      };
+  const have = new Set(appends.results.map((r) => r.ballot_paper_id));
   const state = existsSync(STATE)
     ? JSON.parse(readFileSync(STATE, "utf8"))
     : { last_sweep_date: "2026-08-08", pending: [] };
 
   // Sweep window: from a week before the last sweep (results lag polling day)
-  // through today, plus anything still pending.
-  const from = new Date(state.last_sweep_date + "T00:00:00Z");
-  from.setUTCDate(from.getUTCDate() - 7);
+  // through today, plus anything still pending. --from= forces a wider window.
+  const from = new Date((forcedFrom || state.last_sweep_date) + "T00:00:00Z");
+  if (!forcedFrom) from.setUTCDate(from.getUTCDate() - 7);
   const dates = isoDaysBetween(from.toISOString().slice(0, 10), today);
 
   const ballotIds = new Set(state.pending || []);
@@ -76,7 +124,7 @@ async function main() {
         if (/^local\..+\.by\./.test(id) && !el.group_type) ballotIds.add(id);
       }
       url = page.next;
-      await new Promise((r) => setTimeout(r, 300));
+      await sleep(PACE_MS);
     }
   }
 
@@ -100,7 +148,7 @@ async function main() {
     const m = id.match(/^local\.([^.]+)\.(.+)\.by\.(\d{4}-\d{2}-\d{2})$/);
     if (!m) { console.log("  skip odd id:", id); continue; }
     const [, council_slug, ward_slug, election_date] = m;
-    doc.results.push({
+    appends.results.push({
       ballot_paper_id: id,
       election_date,
       year: +election_date.slice(0, 4),
@@ -108,8 +156,14 @@ async function main() {
       council_slug,
       ward_slug,
       is_by_election: true,
-      turnout_votes: null, turnout_pct: null, spoilt_ballots: null,
-      electorate: null,
+      // DC publishes these on the ballot where the returning officer stated
+      // them. Null where it did not, never zero-filled.
+      turnout_votes: ballot.results?.num_turnout_reported ?? null,
+      turnout_pct: typeof ballot.results?.turnout_percentage === "number"
+        ? ballot.results.turnout_percentage / 100
+        : null,
+      spoilt_ballots: ballot.results?.num_spoilt_ballots ?? null,
+      electorate: ballot.results?.total_electorate ?? null,
       source: "https://candidates.democracyclub.org.uk/elections/" + id + "/",
       review_status: "auto_ingested_dc",
       candidates: cands.map((c) => ({
@@ -121,10 +175,34 @@ async function main() {
     });
     added += 1;
     console.log("  + ", id, `(${cands.length} candidates)`);
-    await new Promise((r) => setTimeout(r, 300));
+    await sleep(PACE_MS);
   }
 
-  if (added) writeFileSync(HISTORY, JSON.stringify(doc, null, 1));
+  if (added) {
+    appends.results.sort((a, b) =>
+      a.election_date === b.election_date
+        ? a.ballot_paper_id.localeCompare(b.ballot_paper_id)
+        : a.election_date.localeCompare(b.election_date),
+    );
+    appends.generated_at = new Date().toISOString();
+    writeFileSync(APPENDS, JSON.stringify(appends, null, 1));
+
+    // Fold straight into the history file too, so a model run between this
+    // sweep and the next rebuild already sees the new contests.
+    if (existsSync(HISTORY)) {
+      const doc = JSON.parse(readFileSync(HISTORY, "utf8"));
+      const inHistory = new Set(doc.results.map((r) => r.ballot_paper_id));
+      let folded = 0;
+      for (const row of appends.results) {
+        if (inHistory.has(row.ballot_paper_id)) continue;
+        doc.results.push(row);
+        inHistory.add(row.ballot_paper_id);
+        folded += 1;
+      }
+      if (folded) writeFileSync(HISTORY, JSON.stringify(doc, null, 1));
+      console.log(`  folded ${folded} rows into the history file`);
+    }
+  }
   writeFileSync(STATE, JSON.stringify({ last_sweep_date: today, pending: stillPending }, null, 2));
   console.log(`by-election refresh: ${added} appended, ${stillPending.length} pending, swept ${dates.length} days to ${today}`);
 }

@@ -18,6 +18,7 @@ const USER_AGENT = "ukelections.co.uk historic results ingest (contact: tom@ukel
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const CACHE_DIR = path.join(ROOT, ".cache/dc-results");
 const SCOPE_PATH = path.join(ROOT, "data/identity/wards-may-2026.json");
+const APPENDS_PATH = path.join(ROOT, "data/history/byelection-appends.json");
 const OUT = path.join(ROOT, "data/history/dc-historic-results.json");
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -149,6 +150,34 @@ async function main() {
     return true; // senedd / holyrood — keep all (national)
   });
 
+  // -------------------------------------------------------------------------
+  // Fold in the by-election sidecar. The DC *results* endpoint this script
+  // reads runs months behind on local by-elections (its newest result sat at
+  // 23 Apr 2026 through the whole summer of 2026), so scripts/refresh-byelections.mjs
+  // sweeps the *ballots* endpoint weekly instead. That sweep used to write
+  // straight into this script's output file, and this script overwrote it every
+  // night: six contests ingested on 14 Aug 2026 were gone by the 15th, with the
+  // sweep's own dead-man monitor still green. The sweep now keeps a tracked
+  // sidecar and we merge it here, so a rebuild cannot drop it. DC rows win on
+  // conflict: they carry turnout and the declaration-PDF source URL.
+  // -------------------------------------------------------------------------
+  let sidecarMerged = 0;
+  if (existsSync(APPENDS_PATH)) {
+    const sidecar = JSON.parse(readFileSync(APPENDS_PATH, "utf8"));
+    const seen = new Set(inScope.map((r) => r.ballot_paper_id));
+    for (const row of sidecar.results || []) {
+      if (!row.ballot_paper_id || seen.has(row.ballot_paper_id)) continue;
+      inScope.push(row);
+      seen.add(row.ballot_paper_id);
+      sidecarMerged += 1;
+    }
+    process.stderr.write(
+      `Merged ${sidecarMerged} by-election rows from the sidecar (${(sidecar.results || []).length} held).\n`,
+    );
+  } else {
+    process.stderr.write(`No by-election sidecar at ${APPENDS_PATH}; skipping merge.\n`);
+  }
+
   // Index
   const byBallot = {};
   const byCouncil = {};
@@ -200,12 +229,13 @@ async function main() {
       sha256: sha,
       licence: "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
       quality_status: "imported_quarantined",
-      review_notes: "Bulk fetch of all DC results, filtered to May 2026 scope councils + national tiers. Per-result `source` is the official declaration PDF.",
+      review_notes: "Bulk fetch of all DC results, filtered to May 2026 scope councils + national tiers, plus the by-election sidecar written by scripts/refresh-byelections.mjs. Per-result `source` is the official declaration PDF for DC rows and the DC ballot page for sidecar rows.",
     },
     election_date_target: identity.election_date,
     totals: {
       raw_results_fetched: raw.length,
       in_scope_results: inScope.length,
+      byelection_sidecar_rows_merged: sidecarMerged,
       target_local_or_mayor_wards: targetWardKeys.length,
       target_wards_with_any_dc_history: matchedAny,
       target_wards_with_cycle_history: matchedCycle,

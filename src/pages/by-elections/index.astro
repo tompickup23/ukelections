@@ -72,7 +72,13 @@ const localAll: LocalContest[] = localDates.flatMap((d) => d.contests);
 const refWins = localAll.filter((c) => c.winner.includes("Reform"));
 const refGains = refWins.filter((c) => !c.previous.includes("Reform")).length;
 const refHolds = refWins.filter((c) => c.previous.includes("Reform")).length;
-const refLosses = localAll.filter((c) => c.previous.includes("Reform") && !c.winner.includes("Reform")).length;
+const refLossRows = localAll.filter((c) => c.previous.includes("Reform") && !c.winner.includes("Reform"));
+const refLosses = refLossRows.length;
+// Named in the prose from the rows themselves, so the list cannot drift from
+// the table underneath it as new rounds land.
+const refLossList = refLossRows
+  .map((c) => `${c.ward} (${c.council}) to ${shortPartyLabel(c.winner)}`)
+  .join(", ");
 function prettyDate(iso: string): string {
   return iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
 }
@@ -85,21 +91,25 @@ for (const f of files) {
 }
 const lookup = (slug: string, id: string) => (benchBySlug[slug] || []).find((b) => b.id === id) || null;
 
-// Collapse the 5 Makerfield polls into one seat-level entry (1 seat, mean MAE).
+// Collapse the 5 Makerfield polls into one seat-level entry (1 seat, mean MAE),
+// then add Clacton's single constituency poll as a second seat.
 const makPolls = (benchBySlug["makerfield"] || []).filter((b) => b.type === "poll");
-const pollsSeat = makPolls.length
-  ? [{ winner_correct: makPolls.every((p) => p.winner_correct), mae_pp: makPolls.reduce((a, b) => a + b.mae_pp, 0) / makPolls.length }]
-  : [];
+const pollsSeat = [
+  ...(makPolls.length
+    ? [{ winner_correct: makPolls.every((p) => p.winner_correct), mae_pp: makPolls.reduce((a, b) => a + b.mae_pp, 0) / makPolls.length }]
+    : []),
+  lookup("clacton", "survation_poll"),
+].filter(Boolean);
 
 type Lead = { name: string; hits: number; total: number; avgMae: number | null; note: string };
 const leaderboard: Lead[] = [
-  { name: "Constituency polls", picks: pollsSeat, note: "Makerfield only (5 polls, all agreed)" },
-  { name: "UK Elections (best call)", picks: [lookup("makerfield", "uke_poll_of_polls"), lookup("aberdeen-south", "uke_signal"), lookup("arbroath-and-broughty-ferry", "uke_signal")], note: "poll-of-polls + Holyrood signal" },
+  { name: "Constituency polls", picks: pollsSeat, note: "Makerfield (5 polls, all agreed) and Clacton (1)" },
+  { name: "UK Elections (best call)", picks: [lookup("makerfield", "uke_poll_of_polls"), lookup("aberdeen-south", "uke_signal"), lookup("arbroath-and-broughty-ferry", "uke_signal"), lookup("clacton", "uke_call")], note: "poll-of-polls, Holyrood signal, Clacton structural call" },
   { name: "UK Elections (GE model)", picks: [lookup("makerfield", "uke_ge_model"), lookup("aberdeen-south", "uke_ge_model"), lookup("arbroath-and-broughty-ferry", "uke_ge_model")], note: "650-seat GE model, like Electoral Calculus" },
   { name: "Betting markets", picks: [lookup("makerfield", "betting_markets"), lookup("aberdeen-south", "betting_markets"), lookup("arbroath-and-broughty-ferry", "betting_markets")], note: "odds-implied favourite" },
   { name: "Electoral Calculus", picks: [lookup("makerfield", "electoral_calculus"), lookup("aberdeen-south", "electoral_calculus"), lookup("arbroath-and-broughty-ferry", "electoral_calculus")], note: "GE seat model, not bespoke" },
   { name: "Ballot Box Scotland", picks: [lookup("aberdeen-south", "ballot_box_scotland"), lookup("arbroath-and-broughty-ferry", "ballot_box_scotland")], note: "Scottish seats, qualitative" },
-  { name: "UK Elections (published forecast)", picks: [lookup("makerfield", "uke_published")], note: "the call we actually shipped" },
+  { name: "UK Elections (published forecast)", picks: [lookup("makerfield", "uke_published"), lookup("clacton", "uke_call")], note: "the call we actually shipped" },
 ].map((row) => {
   const picks = row.picks.filter(Boolean);
   const maes = picks.filter((p) => p.mae_pp != null).map((p) => p.mae_pp);
@@ -115,7 +125,7 @@ const leaderboard: Lead[] = [
 
 <BaseLayout
   title="UK parliamentary by-elections. Results, forecasts and what's next"
-  description="UK Westminster by-election results and how our forecasts compared. Next up: Clacton on 13 August 2026, where Nigel Farage is re-contesting his own seat against a five-party boycott. Plus the 18 June 2026 round and a rolling local council by-election scorecard."
+  description="UK Westminster by-election results and how our forecasts compared. Clacton on 13 August 2026: Reform hold, Farage returned on 63.3% with turnout at 44.4%. Plus the 18 June 2026 round and a rolling local council by-election scorecard."
 >
   <section class="hero">
     <p class="eyebrow">By-elections</p>
@@ -162,9 +172,9 @@ const leaderboard: Lead[] = [
       ))}
     </div>
     <p class="caption">
-      Next up: Clacton on 13 August 2026, where Nigel Farage resigned to re-contest his own seat
-      and the five main opposition parties are refusing to stand. The 18 June 2026 round was a
-      split verdict: Labour held Makerfield (Andy Burnham) against a UKE forecast that wrongly
+      Clacton, on 13 August 2026, went as called: Nigel Farage resigned, re-contested his own seat
+      against a five-party boycott and was returned on 63.3% of the vote, with turnout down to
+      44.4%. The 18 June 2026 round was a split verdict: Labour held Makerfield (Andy Burnham) against a UKE forecast that wrongly
       called Reform; the Conservatives gained Aberdeen South in an upset no area signal saw
       coming; and the SNP held Arbroath and Broughty Ferry exactly as the Holyrood signal
       predicted.
@@ -217,13 +227,15 @@ const leaderboard: Lead[] = [
       {localAll.length} ward contests since {prettyDate(localData.window.from)}, Reform UK made
       <strong>{refGains} gain{refGains === 1 ? "" : "s"}</strong>, held
       <strong>{refHolds}</strong> of its own seats and lost
-      <strong>{refLosses}</strong>: Llangennech to Plaid Cymru, and Old Catton in Norfolk to the
-      Conservatives, where Reform's vote fell to third. The 16 July round was the first real sign of
-      Reform slipping back from its May 2025 county peak in these low-turnout contests, even as it
-      picked up the force-wide Norfolk Police and Crime Commissioner. That mean-reversion is exactly
-      why our Lancashire unitary model swings each ward off the 2025 county result rather than
-      freezing it. The earlier gains came off Labour, the Conservatives and independents across
-      England, Wales and, notably, Scotland (Larkhall, South Lanarkshire, under STV).
+      <strong>{refLosses}</strong>: {refLossList}. Three of those losses came in the four weeks to
+      13 August: both Grays seats in Thurrock, on a night Labour took back seats that Reform
+      councillors elected in May had vacated within weeks, and Almondbury in Kirklees, where the
+      Liberal Democrats won back one of the three seats Reform had swept three months earlier.
+      Reform is still gaining, mostly from the Conservatives, and it is now also losing what it
+      defends. That mean-reversion is exactly why our Lancashire unitary model swings each ward off
+      the 2025 county result rather than freezing it. The gains came off Labour, the Conservatives
+      and independents across England, Wales and, notably, Scotland (Larkhall, South Lanarkshire,
+      under STV).
     </p>
     {localData.pending_note && <p class="muted">{localData.pending_note}</p>}
     {localDates.map((d) => (

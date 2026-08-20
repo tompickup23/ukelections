@@ -53,15 +53,16 @@ const timeline: Array<{ date: string; event: string }> = [
   { date: "7 July 2026", event: "Nigel Farage announces he will vacate the seat and stand in the resulting by-election." },
   { date: "8 July 2026", event: "Resignation effected (appointment as Steward and Bailiff of the Manor of Northstead)." },
   { date: "9 July 2026", event: "Writ moved; polling day set for 13 August." },
-  { date: "17 July 2026", event: "Nominations close. The candidate list below is declared-so-far, not final." },
+  { date: "17 July 2026", event: "Nominations close on a record field of 34 candidates." },
   { date: "28 July 2026", event: "Voter registration deadline." },
-  { date: "13 August 2026", event: "Polling day." },
+  { date: "13 August 2026", event: "Polling day. Polls closed at 22:00 and the contest was called: Reform UK hold." },
+  { date: "14 August 2026", event: "Result declared by the Acting Returning Officer. Farage returned with 22,239 votes (63.3%), a majority of 12,784 over Count Binface." },
 ];
 ---
 
 <BaseLayout
   title="Clacton by-election 2026. 13 August"
-  description="Nigel Farage resigned as MP for Clacton on 8 July 2026 and is re-contesting the seat at a 13 August by-election. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain are all declining to stand. Why we are not publishing a vote-share forecast."
+  description="Nigel Farage resigned as MP for Clacton on 8 July 2026, re-contested the seat on 13 August and was returned on 63.3% against a five-party boycott, with turnout at 44.4%. The declared result on a record 34-candidate ballot, and why we published no vote-share forecast."
 >
   <section class="page-hero">
     {contest.pcon24cd && (
@@ -76,16 +77,53 @@ const timeline: Array<{ date: string; event: string }> = [
         />
       </div>
     )}
-    <p class="eyebrow">By-election · Thursday 13 August 2026</p>
+    <p class="eyebrow">By-election · Thursday 13 August 2026 · declared</p>
     <h1>Clacton by-election</h1>
     <p class="lede">
       Nigel Farage resigned as MP for Clacton on 8 July 2026, amid a parliamentary standards
       investigation into his financial interests, in order to trigger a by-election and stand in it
-      himself. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain
-      have all said they will not contest it.
+      himself. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain all
+      declined to contest it. He was returned on 13 August with 63.3% of the vote, on a turnout of
+      44.4%, against a record field of 34 candidates.
     </p>
     <p class="meta-row">England · East of England · GE2024: Reform UK, majority 8,405 (18.3pp)</p>
   </section>
+
+  {declared && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Declared result · 13 August 2026</p>
+        <h2>{result.outcome || call?.outcome}</h2>
+      </div>
+      {resultRows.length ? (
+        <PartyBars large={true} rows={resultRows} />
+      ) : (
+        <p class="caption">
+          Declared by {result.returning_officer}. The full per-candidate vote breakdown appears
+          here once the returning officer publishes it.
+        </p>
+      )}
+      <p class="caption">
+        Declared by {result.returning_officer} on 14 August 2026, from a record field of{" "}
+        {result.candidate_count} candidates. {result.denominator_note}
+      </p>
+      <p class="caption">
+        {pct1(result.turnout_pct) && <>Turnout {pct1(result.turnout_pct)}%</>}
+        {result.turnout_votes && <> ({result.turnout_votes.toLocaleString()} votes)</>}
+        {result.majority_votes && <> · Majority {result.majority_votes.toLocaleString()}</>}
+        {pct1(result.majority_pp) && <> ({pct1(result.majority_pp)}pp)</>}
+        {result.rejected_ballots != null && <> · Rejected ballots {result.rejected_ballots}</>}
+        {result.electorate && <> · Electorate {result.electorate.toLocaleString()}</>}
+      </p>
+      {result.grouping_note && <p class="caption">{result.grouping_note}</p>}
+      {result.call_grade && (
+        <p class="caption">
+          <strong>How the call did.</strong> {result.call_grade.called}: {result.call_grade.verdict}.{" "}
+          {result.call_grade.not_called_outcome} {result.call_grade.no_vote_share_forecast}
+        </p>
+      )}
+    </section>
+  )}
 
   {showCall && (
     <section class="section">
@@ -105,30 +143,6 @@ const timeline: Array<{ date: string; event: string }> = [
         {call.not_called.map((q: string) => <li>{q}</li>)}
       </ul>
       <p class="caption">{call.standing_caveat}</p>
-    </section>
-  )}
-
-  {declared && (
-    <section class="section">
-      <div class="section-head">
-        <p class="eyebrow">Declared result · 13 August 2026</p>
-        <h2>{result.outcome || call?.outcome}</h2>
-      </div>
-      {resultRows.length ? (
-        <PartyBars large={true} rows={resultRows} />
-      ) : (
-        <p class="caption">
-          Declared by {result.returning_officer}. The full per-candidate vote breakdown appears
-          here once the returning officer publishes it.
-        </p>
-      )}
-      <p class="caption">
-        {pct1(result.turnout_pct) && <>Turnout {pct1(result.turnout_pct)}%</>}
-        {result.turnout_votes && <> ({result.turnout_votes.toLocaleString()} votes)</>}
-        {result.majority_votes && <> · Majority {result.majority_votes.toLocaleString()}</>}
-        {pct1(result.majority_pp) && <> ({pct1(result.majority_pp)}pp)</>}
-        {result.rejected_ballots != null && <> · Rejected ballots {result.rejected_ballots}</>}
-      </p>
     </section>
   )}
 
