@@ -19,6 +19,7 @@ import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
 import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
 import { computeWardDemographicAdjustments, applyAdjustments, applyDemographicCeilings } from "../src/lib/wardDemographicAdjustments.js";
 import { applyPartyBias, calibrationApplies } from "../src/lib/partyBiasCalibration.js";
+import { calibratedConfidence, confidenceApplies } from "../src/lib/confidenceCalibration.js";
 import { applyLocalStrength } from "../src/lib/localPartyStrength.js";
 import { buildCounty2025WinnerIndex, applyCounty2025Continuity } from "../src/lib/county2025Winners.js";
 import { applyReformRealignmentUplift } from "../src/lib/reformRealignmentUplift.js";
@@ -224,6 +225,19 @@ function main() {
     console.log("No party-bias calibration found (data/calibration/party-bias.json) — predictions run uncorrected");
   }
   const calibrationTally = { applied: 0, skipped: 0 };
+  // Calibrated winner probability, fitted by scripts/calibrate-confidence.mjs.
+  // Replaces the old three-band label, which ranked backwards: wards marked
+  // "high" were called right less often than wards marked "medium".
+  let confidenceCal = null;
+  try {
+    confidenceCal = readJson("data/calibration/confidence.json");
+    console.log(
+      `Loaded confidence calibration fitted on ${confidenceCal.fitted_on}: ${confidenceCal.bins.length} margin bins, held-out Brier ${confidenceCal.validation?.mean_brier} against flat base rate ${confidenceCal.validation?.mean_flat_baseline_brier}`,
+    );
+  } catch {
+    console.log("No confidence calibration found (data/calibration/confidence.json) — falling back to the heuristic label");
+  }
+  const confidenceTally = { applied: 0, skipped: 0 };
   let leapHistory = null;
   try {
     leapHistory = readJson("data/history/leap-history.json");
@@ -672,10 +686,31 @@ function main() {
       }
     }
 
-    const confidence = classifyConfidence(wd, finalPrediction);
+    let confidence = classifyConfidence(wd, finalPrediction);
+    let calibratedWinner = null;
+    if (confidenceCal && confidenceApplies(confidenceCal, ward.election_group_id)) {
+      calibratedWinner = calibratedConfidence(finalPrediction, confidenceCal);
+      if (calibratedWinner) {
+        confidence = calibratedWinner.band;
+        confidenceTally.applied += 1;
+      }
+    } else if (confidenceCal) {
+      confidenceTally.skipped += 1;
+    }
     predictions[ward.ballot_paper_id] = {
       prediction: finalPrediction,
       confidence,
+      ...(calibratedWinner
+        ? {
+            winner_probability: calibratedWinner.winner_probability,
+            winner_probability_basis: {
+              fitted_on: confidenceCal.fitted_on,
+              predictor: confidenceCal.predictor,
+              margin_pp: calibratedWinner.margin_pp,
+              bin: calibratedWinner.bin,
+            },
+          }
+        : {}),
       baseline_date: wd.history[wd.history.length - 1]?.date || null,
       lad24cd: ladCode || null,
       lad_name: slugMap.map[ward.council_slug]?.lad_name || null,
@@ -730,6 +765,12 @@ function main() {
         (calibrationTally.applied === 0
           ? ` (every ward in this run belongs to ${partyBias.fitted_on}, the election it was fitted on, so correcting it would be scoring the answer key)`
           : ""),
+    );
+  }
+  if (confidenceCal) {
+    console.log(
+      `Confidence calibration: applied to ${confidenceTally.applied} wards, skipped ${confidenceTally.skipped}` +
+        (confidenceTally.applied === 0 ? ` (all wards belong to ${confidenceCal.fitted_on}, the election it was fitted on)` : ""),
     );
   }
   console.log(`\nTally: ${JSON.stringify(tally, null, 2)}`);
