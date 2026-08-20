@@ -208,6 +208,51 @@ export function loadMay7BacktestForWard(ballotPaperId: string): any | null {
   return _may7BacktestByBallot[ballotPaperId] || null;
 }
 
+let _may7ResultsByBallot: Record<string, any> | null = null;
+/**
+ * Returns the declared 7 May 2026 result for a single ward, keyed by its
+ * Democracy Club ballot_paper_id (the same key the council page uses when
+ * it reads `results.by_ballot`). Returns null when no declaration was
+ * captured, which covers three real cases:
+ *
+ *   - the election in that ward was cancelled (6 wards, candidate-death
+ *     postponements) so there is no result to show
+ *   - the council declared but we never ingested the ballot (68 ballots,
+ *     concentrated in Birmingham, Newham and Tower Hamlets)
+ *   - the ward was not up for election in this cycle at all
+ *
+ * 2,903 of the 2,977 local and mayoral ward pages resolve to a row.
+ */
+export function loadMay7ResultForWard(ballotPaperId: string): any | null {
+  if (!_may7ResultsByBallot) {
+    _may7ResultsByBallot = loadMay7Results().by_ballot || {};
+  }
+  return _may7ResultsByBallot![ballotPaperId] || null;
+}
+
+let _may7PartialByCouncil: Record<string, { declared: number; expected: number; missing: number }> | null = null;
+/**
+ * Declaration coverage for a council whose 7 May 2026 returns came in
+ * incomplete, or null when the council is fully declared. Used to explain
+ * a missing ward result in context ("5 of 66 Newham wards captured")
+ * instead of leaving the reader on a blank page.
+ */
+export function loadMay7CouncilCoverage(slug: string): { declared: number; expected: number; missing: number } | null {
+  if (!_may7PartialByCouncil) {
+    _may7PartialByCouncil = {};
+    for (const row of (loadMay7Results().partial_councils || []) as any[]) {
+      if (row?.council_slug) {
+        _may7PartialByCouncil[row.council_slug] = {
+          declared: row.declared,
+          expected: row.expected,
+          missing: row.missing,
+        };
+      }
+    }
+  }
+  return _may7PartialByCouncil![slug] || null;
+}
+
 let _may7BacktestByCouncil: Record<string, any> | null = null;
 /**
  * Aggregates the May 2026 ward-level postaudit rows up to council level,

@@ -15,12 +15,16 @@ import { getIndexableSitePaths } from "./site";
  * src/pages/seats/**. A drift test in tests/sitemap-paths.test.ts guards that.
  */
 
+// Structurally compatible with IdentityWard in predictions.ts, which sets
+// the nullable fields to `string | null` rather than leaving them absent.
+// Declaring them `string | undefined` here made `identity.wards` fail to
+// assign, so `astro check` has been red since this module landed.
 type Ward = {
   tier?: string;
-  council_slug?: string;
-  ward_slug?: string;
-  gss_code?: string;
-  ballot_paper_id?: string;
+  council_slug?: string | null;
+  ward_slug?: string | null;
+  gss_code?: string | null;
+  ballot_paper_id?: string | null;
 };
 
 /** Matches src/pages/seats/[council]/[ward]/index.astro. */
