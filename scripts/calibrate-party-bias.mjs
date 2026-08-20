@@ -58,7 +58,13 @@ function loadRows() {
     if (!prediction || !actual) continue;
     const predicted = {};
     for (const [party, payload] of Object.entries(prediction)) predicted[party] = payload?.pct || 0;
-    rows.push({ ballotId, council: ballotId.split(".")[1], predicted, actual });
+    rows.push({
+      ballotId,
+      council: ballotId.split(".")[1],
+      predicted,
+      actual,
+      calibrated: Boolean(entry?.party_bias_calibration),
+    });
   }
   return rows;
 }
@@ -106,6 +112,17 @@ function score(rows, bias) {
 function main() {
   const rows = loadRows();
   if (rows.length < 200) throw new Error(`only ${rows.length} scoreable wards; refusing to fit a calibration on that`);
+  // Refuse to fit on predictions that already carry a correction. Doing so
+  // measures the residual after correction and reports it as the correction,
+  // which silently shrinks the offsets: fitting on once-corrected May 2026
+  // predictions gave Labour 4.91pp where the truth was 6.45pp. The engine
+  // stamps party_bias_calibration on any ward it corrected, so this is checkable.
+  if (rows.some((r) => r.calibrated)) {
+    const n = rows.filter((r) => r.calibrated).length;
+    throw new Error(
+      `${n} of ${rows.length} predictions already carry a party-bias correction. Regenerate them uncorrected before fitting.`,
+    );
+  }
   const bias = fitBias(rows);
   const baseline = score(rows, null);
 

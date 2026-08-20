@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "fitted_on": "local.2026-05-07",
   "fitted_on_date": "2026-05-07",
-  "fitted_at": "2026-08-20T23:12:56.164Z",
+  "fitted_at": "2026-08-20T23:20:38.714Z",
   "method": "Mean signed error per party (predicted minus actual share), fitted across every scoreable ward, validated by k-fold hold-out grouped by council.",
   "inputs": {
     "predictions": "data/predictions/may-2026/local-and-mayor.json",
@@ -11,110 +11,110 @@
     "councils": 156
   },
   "parties": {
-    "Labour": 0.049078,
-    "Conservative": 0.027674,
-    "Liberal Democrats": -0.026297,
-    "Reform UK": 0.017409,
-    "Green Party": -0.056604
+    "Labour": 0.064536,
+    "Conservative": 0.034122,
+    "Liberal Democrats": -0.031787,
+    "Reform UK": 0.016483,
+    "Green Party": -0.073009
   },
   "parties_pp": {
-    "Labour": 4.91,
-    "Conservative": 2.77,
-    "Liberal Democrats": -2.63,
-    "Reform UK": 1.74,
-    "Green Party": -5.66
+    "Labour": 6.45,
+    "Conservative": 3.41,
+    "Liberal Democrats": -3.18,
+    "Reform UK": 1.65,
+    "Green Party": -7.3
   },
   "baseline": {
-    "winner_accuracy_pct": 49.02,
-    "major_party_mae_pp": 7.87
+    "winner_accuracy_pct": 51.05,
+    "major_party_mae_pp": 8.168
   },
   "validation": {
     "design": "k-fold by council, fitted on the other folds, scored on the held-out fold",
     "folds": 5,
-    "mean_winner_delta_pp": 4.132,
-    "mean_mae_delta_pp": -0.3037,
+    "mean_winner_delta_pp": 4.1,
+    "mean_mae_delta_pp": -0.8793,
     "per_fold": [
       {
         "councils": 32,
         "wards": 515,
-        "winner_delta_pp": 2.913,
-        "mae_delta_pp": -0.0076
+        "winner_delta_pp": 3.301,
+        "mae_delta_pp": -0.5799
       },
       {
         "councils": 31,
         "wards": 629,
-        "winner_delta_pp": 5.564,
-        "mae_delta_pp": -0.4036
+        "winner_delta_pp": 6.2,
+        "mae_delta_pp": -1.0749
       },
       {
         "councils": 31,
         "wards": 582,
-        "winner_delta_pp": 3.608,
-        "mae_delta_pp": -0.5156
+        "winner_delta_pp": 5.842,
+        "mae_delta_pp": -0.9825
       },
       {
         "councils": 31,
         "wards": 504,
-        "winner_delta_pp": 5.754,
-        "mae_delta_pp": -0.215
+        "winner_delta_pp": 2.778,
+        "mae_delta_pp": -0.8456
       },
       {
         "councils": 31,
         "wards": 673,
-        "winner_delta_pp": 2.823,
-        "mae_delta_pp": -0.3769
+        "winner_delta_pp": 2.377,
+        "mae_delta_pp": -0.9134
       }
     ],
     "stability": {
       "Labour": {
         "per_fold_pp": [
-          5.35,
-          5.01,
-          4.71,
-          4.77,
-          4.69
+          6.89,
+          6.42,
+          6.3,
+          6.36,
+          6.27
         ],
-        "sd_pp": 0.247
+        "sd_pp": 0.227
       },
       "Conservative": {
         "per_fold_pp": [
-          3.21,
-          2.62,
-          2.58,
-          2.92,
-          2.47
+          3.78,
+          3.26,
+          3.24,
+          3.57,
+          3.18
         ],
-        "sd_pp": 0.268
+        "sd_pp": 0.23
       },
       "Liberal Democrats": {
         "per_fold_pp": [
-          -3.03,
-          -2.76,
-          -2.34,
-          -2.59,
-          -2.43
+          -3.5,
+          -3.33,
+          -2.91,
+          -3.13,
+          -3.01
         ],
-        "sd_pp": 0.247
+        "sd_pp": 0.213
       },
       "Reform UK": {
         "per_fold_pp": [
-          1.05,
-          2.16,
-          1.5,
-          1.85,
-          2.19
+          0.93,
+          2.08,
+          1.43,
+          1.76,
+          2.09
         ],
-        "sd_pp": 0.429
+        "sd_pp": 0.437
       },
       "Green Party": {
         "per_fold_pp": [
-          -5.36,
-          -5.72,
-          -5.67,
-          -5.67,
-          -5.9
+          -6.98,
+          -7.22,
+          -7.37,
+          -7.36,
+          -7.59
         ],
-        "sd_pp": 0.173
+        "sd_pp": 0.202
       }
     },
     "caveat": "Geographic hold-out, not temporal. It shows the offset is a real constant rather than fitted noise. It does not prove the offset survives to the next election, so refit after every real election and treat a party moving by more than its fold standard deviation as a signal that the model changed, not as a number to paste in."
