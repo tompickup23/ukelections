@@ -2,7 +2,10 @@ export const SITE_NAME = "UK Elections";
 export const SITE_URL = "https://ukelections.co.uk";
 export const DEFAULT_DESCRIPTION =
   "Election intelligence for every UK contest. Candidates, history, forecasts, confidence intervals, source notes, and honest backtests in one place.";
-export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-card.svg";
+// Static fallback card for pages with no Satori-rendered per-page card.
+// Must be a PNG — Facebook, X, LinkedIn and Slack all decline to render
+// an SVG og:image. Regenerate with `npm run build:og-default`.
+export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-default.png";
 
 export type StructuredDataNode = Record<string, unknown>;
 
