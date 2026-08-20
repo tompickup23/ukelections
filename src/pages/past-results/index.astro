@@ -36,9 +36,13 @@ const preregRef = pa.prereg?.artifact_ref || null;
 // Per-party bias calibration fitted on this election and carried into the next
 // one. Optional: absent file means no correction is in force.
 let calibration: any = null;
+let confidenceCal: any = null;
 try {
   calibration = JSON.parse(readFileSync(path.join(process.cwd(), "data/calibration/party-bias.json"), "utf8"));
 } catch { calibration = null; }
+try {
+  confidenceCal = JSON.parse(readFileSync(path.join(process.cwd(), "data/calibration/confidence.json"), "utf8"));
+} catch { confidenceCal = null; }
 const calibrationRows = calibration
   ? Object.entries(calibration.parties_pp as Record<string, number>)
       .sort((a, b) => b[1] - a[1])
@@ -217,6 +221,44 @@ const reformMajorities = (ctl.councils as any[])
           survives to the next election. And it is never applied to {calibration.fitted_on}, the election it
           was fitted on, because correcting a forecast with its own result is marking your own homework.
           Refitted after every real election by <code>scripts/calibrate-party-bias.mjs</code>.
+        </p>
+      </>
+    )}
+
+    {confidenceCal && (
+      <>
+        <h3 style="margin-top:var(--space-lg)">And what our confidence label is worth</h3>
+        <p>
+          It was worth nothing. The old three-band label described how much data a ward had rather than
+          how often we were right, and it ranked backwards: wards we marked <strong>high</strong> confidence
+          were called correctly {confidenceCal.replaces.measured.high.winner_accuracy_pct}% of the time,
+          against {confidenceCal.replaces.measured.medium.winner_accuracy_pct}% for <strong>medium</strong>.
+          A label that points the wrong way is worse than none, because you price it in.
+        </p>
+        <p>
+          It is now a number: the share of past contests we actually called right at that predicted margin.
+        </p>
+        <table class="seat-table">
+          <thead>
+            <tr><th scope="col">Predicted margin, first over second</th><th scope="col">We called it right</th><th scope="col">Wards</th></tr>
+          </thead>
+          <tbody>
+            {confidenceCal.bins.map((b: any) => (
+              <tr>
+                <td>{b.margin_from_pp} to {b.margin_to_pp === 101 ? "100" : b.margin_to_pp}pp</td>
+                <td class="num">{(b.winner_probability * 100).toFixed(0)}%</td>
+                <td class="num">{b.n.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="caption">
+          Read the top row as the warning it is. In a ward where our own forecast has the leader under five
+          points clear, we are right {(confidenceCal.bins[0].winner_probability * 100).toFixed(0)}% of the
+          time, which is a coin flip with extra steps. On councils this curve had never seen it scores a Brier
+          of {confidenceCal.validation.mean_brier} against {confidenceCal.validation.mean_flat_baseline_brier} for
+          quoting one flat number at every ward, so it earns its place, though not by a landslide. Fitted on
+          bias-corrected forecasts, out of fold, and never applied to {confidenceCal.fitted_on} itself.
         </p>
       </>
     )}
