@@ -18,6 +18,7 @@ import { applyIntervalsToBundle } from "../src/lib/intervals.js";
 import { buildCouncilGe2024Index } from "../src/lib/councilGe2024.js";
 import { lancashireLcc2025ForWard } from "../src/lib/lancashireLcc2025.js";
 import { computeWardDemographicAdjustments, applyAdjustments, applyDemographicCeilings } from "../src/lib/wardDemographicAdjustments.js";
+import { applyPartyBias, calibrationApplies } from "../src/lib/partyBiasCalibration.js";
 import { applyLocalStrength } from "../src/lib/localPartyStrength.js";
 import { buildCounty2025WinnerIndex, applyCounty2025Continuity } from "../src/lib/county2025Winners.js";
 import { applyReformRealignmentUplift } from "../src/lib/reformRealignmentUplift.js";
@@ -211,6 +212,18 @@ function main() {
   console.log("Loading inputs...");
   const identity = readJson("data/identity/wards-may-2026.json");
   const history = readJson("data/history/dc-historic-results.json");
+  // Per-party bias calibration, fitted by scripts/calibrate-party-bias.mjs on
+  // the last completed election. Optional: absent file means no correction.
+  let partyBias = null;
+  try {
+    partyBias = readJson("data/calibration/party-bias.json");
+    console.log(
+      `Loaded party-bias calibration fitted on ${partyBias.fitted_on}: ${JSON.stringify(partyBias.parties_pp)} (held-out lift ${partyBias.validation?.mean_winner_delta_pp}pp winners, ${partyBias.validation?.mean_mae_delta_pp}pp MAE)`,
+    );
+  } catch {
+    console.log("No party-bias calibration found (data/calibration/party-bias.json) — predictions run uncorrected");
+  }
+  const calibrationTally = { applied: 0, skipped: 0 };
   let leapHistory = null;
   try {
     leapHistory = readJson("data/history/leap-history.json");
@@ -608,7 +621,22 @@ function main() {
 
     // 4. Demographic ceilings (Phase F): cap Reform in high-Muslim wards.
     const ceilingOut = applyDemographicCeilings(postAnchor, wardDemoFull);
-    const finalPrediction = ceilingOut.prediction;
+
+    // 5. Per-party bias calibration, fitted on the last completed election.
+    // Skipped outright for the election it was fitted on: correcting a forecast
+    // with an offset derived from its own result is scoring the answer key.
+    let finalPrediction = ceilingOut.prediction;
+    let biasApplied = null;
+    if (partyBias && calibrationApplies(partyBias, ward.election_group_id)) {
+      const biasOut = applyPartyBias(finalPrediction, partyBias.parties);
+      if (biasOut.applied) {
+        finalPrediction = biasOut.prediction;
+        biasApplied = { fitted_on: partyBias.fitted_on, shifted: biasOut.shifted };
+        calibrationTally.applied += 1;
+      }
+    } else if (partyBias) {
+      calibrationTally.skipped += 1;
+    }
 
     // Recompute votes consistently from final pct so the page never displays
     // a (29%, 181 votes) inconsistency caused by transformation steps that
@@ -690,11 +718,20 @@ function main() {
             }]
           : []),
       ],
+      ...(biasApplied ? { party_bias_calibration: biasApplied } : {}),
     };
     tally.ok += 1;
     tally.by_confidence[confidence] = (tally.by_confidence[confidence] || 0) + 1;
   }
 
+  if (partyBias) {
+    console.log(
+      `\nParty-bias calibration: applied to ${calibrationTally.applied} wards, skipped ${calibrationTally.skipped}` +
+        (calibrationTally.applied === 0
+          ? ` (every ward in this run belongs to ${partyBias.fitted_on}, the election it was fitted on, so correcting it would be scoring the answer key)`
+          : ""),
+    );
+  }
   console.log(`\nTally: ${JSON.stringify(tally, null, 2)}`);
 
   // Final-B3: Reform realignment uplift for councils with no 2025 county
