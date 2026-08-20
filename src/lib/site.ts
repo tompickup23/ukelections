@@ -42,7 +42,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
       { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "The four new Lancashire unitaries, forecast for the May 2027 shadow elections" },
       { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
-      { href: "/by-elections/", label: "By-elections", desc: "Next: Clacton 13 Aug, Farage re-contests his seat. Plus 18 Jun results + weekly ward scorecard" },
+      { href: "/by-elections/", label: "By-elections", desc: "Clacton result: Farage returned on 63.3%. Plus 18 Jun results + weekly ward scorecard" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
       { href: "/polling/trends/", label: "Polling trends", desc: "Every poll plotted over time, with the UK Elections average and pollster house effects" },
     ],
@@ -52,7 +52,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     items: [
       { href: "/past-results/", label: "All Past Results", desc: "Every contest we've forecast" },
       { href: "/past-results/by-region/", label: "By Region", desc: "Reform UK share heatmap across the 12 regions" },
-      { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: "7-May backtest · 5.7pp MAE" },
+      { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: "May 2024 backtest · 5.7pp MAE" },
       { href: "/data-quality/", label: "Data Quality", desc: "Sources, coverage, gaps" },
     ],
   },
@@ -166,14 +166,14 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     href: "/by-elections/",
     title: "By-elections. Results, forecasts and what's next",
     kind: "page",
-    description: "Every Westminster by-election we track, the declared result, and how the forecast or signal compared. Next: Clacton, 13 August 2026. The 18 June 2026 round: Labour held Makerfield (Burnham), Conservatives gained Aberdeen South, SNP held Arbroath and Broughty Ferry. Plus the weekly local council by-election scorecard.",
+    description: "Every Westminster by-election we track, the declared result, and how the forecast or signal compared. Clacton, 13 August 2026: Reform hold, Farage returned on 63.3%, turnout 44.4%. The 18 June 2026 round: Labour held Makerfield (Burnham), Conservatives gained Aberdeen South, SNP held Arbroath and Broughty Ferry. Plus the weekly local council by-election scorecard.",
     priority: 111
   },
   {
     href: "/by-elections/clacton/",
     title: "Clacton by-election, 13 August 2026",
     kind: "page",
-    description: "Nigel Farage resigned as MP for Clacton on 8 July 2026, amid a parliamentary standards investigation, to trigger a by-election and stand in it himself. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain are all boycotting. Why we are publishing no vote-share forecast, the declared candidates, and the GE2024 baseline.",
+    description: "Nigel Farage resigned as MP for Clacton on 8 July 2026, amid a parliamentary standards investigation, to trigger a by-election and stand in it himself. Labour, the Conservatives, the Liberal Democrats, the Greens and Restore Britain all boycotted it. The declared result on a record 34-candidate ballot, why we published no vote-share forecast, and the GE2024 baseline.",
     priority: 112
   },
   {
