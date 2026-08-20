@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import PartyBars from "../../components/PartyBars.astro";
 import StatCard from "../../components/StatCard.astro";
 import {
@@ -31,6 +33,17 @@ const preregSummary = pa.prereg?.summary || {};
 // The witnessed artifact lives in git history, not at HEAD: the nightly
 // pipeline rebuilds the forecast file in place. See prereg.artifact_ref.
 const preregRef = pa.prereg?.artifact_ref || null;
+// Per-party bias calibration fitted on this election and carried into the next
+// one. Optional: absent file means no correction is in force.
+let calibration: any = null;
+try {
+  calibration = JSON.parse(readFileSync(path.join(process.cwd(), "data/calibration/party-bias.json"), "utf8"));
+} catch { calibration = null; }
+const calibrationRows = calibration
+  ? Object.entries(calibration.parties_pp as Record<string, number>)
+      .sort((a, b) => b[1] - a[1])
+      .map(([party, pp]) => ({ party, pp, sd: calibration.validation?.stability?.[party]?.sd_pp ?? null }))
+  : [];
 const step9b = pa.step9b?.aggregate || {};
 const perParty = pa.live?.per_party || {};
 
@@ -171,6 +184,42 @@ const reformMajorities = (ctl.councils as any[])
         </tr>
       </tbody>
     </table>
+
+    {calibration && (
+      <>
+        <h3 style="margin-top:var(--space-lg)">What we changed because of it</h3>
+        <p>
+          The errors above are not random. Each party carries a near-constant offset, so we now subtract
+          it from every forecast the ward model produces. Fitted on four fifths of councils and scored on
+          the held-out fifth, that correction was worth{" "}
+          <strong>{calibration.validation.mean_winner_delta_pp > 0 ? "+" : ""}{calibration.validation.mean_winner_delta_pp}pp</strong>{" "}
+          of winner accuracy and <strong>{calibration.validation.mean_mae_delta_pp}pp</strong> of vote-share error,
+          and it improved every one of the {calibration.validation.folds} folds.
+        </p>
+        <table class="seat-table">
+          <thead>
+            <tr><th scope="col">Party</th><th scope="col">Offset we now subtract</th><th scope="col">Spread across folds</th></tr>
+          </thead>
+          <tbody>
+            {calibrationRows.map((r) => (
+              <tr>
+                <td>{r.party}</td>
+                <td class="num">{r.pp > 0 ? "+" : ""}{r.pp}pp {r.pp > 0 ? "(we ran them hot)" : "(we ran them cold)"}</td>
+                <td class="num">{r.sd != null ? `±${r.sd}pp` : "n/a"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="caption">
+          The spread column is the point. A correction that swings about between folds is noise being
+          fitted; these barely move, which is what makes them worth subtracting. Two honest limits. This is a
+          hold-out across councils, not across time, so it shows the offset is real without proving it
+          survives to the next election. And it is never applied to {calibration.fitted_on}, the election it
+          was fitted on, because correcting a forecast with its own result is marking your own homework.
+          Refitted after every real election by <code>scripts/calibrate-party-bias.mjs</code>.
+        </p>
+      </>
+    )}
 
     {perPartyMaeRows.length > 0 && (
       <>
