@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
-import { buildAbsoluteUrl, getIndexableSitePaths } from "../lib/site";
+import { buildAbsoluteUrl } from "../lib/site";
+import { getAllSitemapPaths } from "../lib/sitemapPaths";
 
 export const prerender = true;
 
@@ -13,7 +14,7 @@ function escapeXml(value: string): string {
 }
 
 export const GET: APIRoute = () => {
-  const urlEntries = getIndexableSitePaths()
+  const urlEntries = getAllSitemapPaths()
     .map((path) => `  <url>\n    <loc>${escapeXml(buildAbsoluteUrl(path))}</loc>\n  </url>`)
     .join("\n");
 
