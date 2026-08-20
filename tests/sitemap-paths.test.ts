@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { loadIdentity } from "../src/lib/predictions";
 import { getIndexableSitePaths } from "../src/lib/site";
 import {
@@ -9,6 +9,14 @@ import {
 } from "../src/lib/sitemapPaths";
 
 describe("sitemap paths", () => {
+  // loadIdentity() reads tens of MB of JSON on first call and memoises it.
+  // Pay that in a hook so the cost isn't billed to whichever it() happens to
+  // run first — that made this suite fail on timeout whenever the machine was
+  // busy, which on vps-main means it blocked the nightly deploy.
+  beforeAll(() => {
+    loadIdentity();
+  });
+
   it("covers every elected seat, not just the hand-listed static routes", () => {
     const identity = loadIdentity();
     const elected = identity.wards.filter(

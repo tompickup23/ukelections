@@ -9,6 +9,7 @@ import {
   normalisePageTitle,
   type StructuredDataNode
 } from "../lib/site";
+import { hasOgCard, ogSlugForPathname } from "../lib/ogEntries";
 
 interface Props {
   title: string;
@@ -34,22 +35,20 @@ const pageTitle = normalisePageTitle(title);
 const canonicalUrl = new URL(pathname, siteOrigin).toString();
 // Per-page dynamic OG image (Satori-rendered at build time when
 // BUILD_OG=1). Map the page path → /og/<path>.png, with the homepage
-// mapping to /og/index.png. Falls back to the static og-card.svg if
-// the page is one where no dynamic card was generated.
+// mapping to /og/index.png — but ONLY for pages this build actually
+// rendered a card for. hasOgCard() reads the same entry list the
+// endpoint enumerates, so the two can't drift.
 //
-// We don't probe the dist/ filesystem from inside the layout (the
-// build is non-deterministic), so we accept that ~3,200 ward pages
-// will reference an OG URL that doesn't exist and gracefully fall
-// back to the static image client-side via the meta og:image. Search
-// engines + social platforms re-check periodically.
-function ogPathFor(pn: string): string {
-  if (pn === "/" || pn === "") return "/og/index.png";
-  const stripped = pn.replace(/^\/+|\/+$/g, "");
-  return `/og/${stripped}.png`;
-}
-const dynamicOgPath = ogPathFor(pathname);
+// Anything else (the ~3,000 ward pages, and every page at all when
+// BUILD_OG is unset) gets the static PNG card. There is no
+// client-side fallback for og:image — a crawler fetches the URL once
+// and takes what it gets — and Cloudflare Pages answers a missing
+// path with the HTML 404 body under a 200, so advertising a card that
+// was never rendered hands crawlers text/html and breaks the preview
+// outright. Only advertise what exists.
+const dynamicOgPath = hasOgCard(pathname) ? `/og/${ogSlugForPathname(pathname)}.png` : null;
 const explicitImage = image && image !== DEFAULT_SOCIAL_IMAGE_PATH;
-const socialImageRaw = explicitImage ? image : dynamicOgPath;
+const socialImageRaw = explicitImage ? image : (dynamicOgPath ?? DEFAULT_SOCIAL_IMAGE_PATH);
 const socialImageUrl = /^https?:\/\//.test(socialImageRaw) ? socialImageRaw : new URL(socialImageRaw, siteOrigin).toString();
 const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
 const socialImageMime = socialImageUrl.endsWith(".svg") ? "image/svg+xml" : socialImageUrl.endsWith(".png") ? "image/png" : undefined;

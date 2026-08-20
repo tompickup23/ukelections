@@ -57,8 +57,13 @@ describe("site metadata helpers", () => {
     }
   });
 
-  it("defaults social images to the SVG card", () => {
-    expect(DEFAULT_SOCIAL_IMAGE_PATH).toBe("/og-card.svg");
+  // Must stay a raster format. Facebook, X, LinkedIn and Slack all decline to
+  // render an SVG og:image, so the old "/og-card.svg" default was a broken
+  // preview everywhere it was used — which was every page without a
+  // Satori-rendered card. Don't relax this back to an SVG.
+  it("defaults social images to a PNG card, not an SVG", () => {
+    expect(DEFAULT_SOCIAL_IMAGE_PATH).toBe("/og-default.png");
+    expect(DEFAULT_SOCIAL_IMAGE_PATH.endsWith(".svg")).toBe(false);
   });
 
   it("builds release collection structured data with an item list", () => {
