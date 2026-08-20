@@ -46,7 +46,10 @@ const ranked = rankedShares(wp?.prediction || null);
 const top = ranked[0];
 
 const tierLabel = { local: "Local council", mayor: "Mayoralty" }[ward.tier] || ward.tier;
-const title = `${ward.ward_name}${ward.council_name ? `. ${ward.council_name}` : ""}`;
+// Titles carry the words people actually search ("<ward> <council> election
+// result"). The bare "Bank Hall. Burnley" form matched no query intent, which
+// cost click-through on pages that were already ranking.
+const title = `${ward.ward_name}${ward.council_name ? `, ${ward.council_name}` : ""}. Election results and 2026 forecast`;
 const description = wp?.prediction
   ? `Forecast for ${ward.ward_name} on Thursday 7 May 2026. Top: ${shortPartyLabel(top[0])} ${formatPct(top[1].pct)}.`
   : `${ward.ward_name} (${ward.council_name}) on Thursday 7 May 2026. ${wp?.cancelled ? "Election cancelled." : "No prediction available."}`;
