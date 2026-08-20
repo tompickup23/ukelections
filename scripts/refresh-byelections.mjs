@@ -186,22 +186,24 @@ async function main() {
     );
     appends.generated_at = new Date().toISOString();
     writeFileSync(APPENDS, JSON.stringify(appends, null, 1));
+  }
 
-    // Fold straight into the history file too, so a model run between this
-    // sweep and the next rebuild already sees the new contests.
-    if (existsSync(HISTORY)) {
-      const doc = JSON.parse(readFileSync(HISTORY, "utf8"));
-      const inHistory = new Set(doc.results.map((r) => r.ballot_paper_id));
-      let folded = 0;
-      for (const row of appends.results) {
-        if (inHistory.has(row.ballot_paper_id)) continue;
-        doc.results.push(row);
-        inHistory.add(row.ballot_paper_id);
-        folded += 1;
-      }
-      if (folded) writeFileSync(HISTORY, JSON.stringify(doc, null, 1));
-      console.log(`  folded ${folded} rows into the history file`);
+  // Fold the sidecar into the history file, so a model run between this sweep
+  // and the next nightly rebuild already sees every contest. Unconditional, not
+  // gated on `added`: after a rebuild has dropped the sidecar rows there is
+  // nothing new to fetch, and that is exactly when the fold is needed.
+  if (existsSync(HISTORY)) {
+    const doc = JSON.parse(readFileSync(HISTORY, "utf8"));
+    const inHistory = new Set(doc.results.map((r) => r.ballot_paper_id));
+    let folded = 0;
+    for (const row of appends.results) {
+      if (inHistory.has(row.ballot_paper_id)) continue;
+      doc.results.push(row);
+      inHistory.add(row.ballot_paper_id);
+      folded += 1;
     }
+    if (folded) writeFileSync(HISTORY, JSON.stringify(doc, null, 1));
+    console.log(`  folded ${folded} rows into the history file`);
   }
   writeFileSync(STATE, JSON.stringify({ last_sweep_date: today, pending: stillPending }, null, 2));
   console.log(`by-election refresh: ${added} appended, ${stillPending.length} pending, swept ${dates.length} days to ${today}`);
