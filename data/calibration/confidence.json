@@ -2,40 +2,45 @@
   "schema_version": "1.0.0",
   "fitted_on": "local.2026-05-07",
   "fitted_on_date": "2026-05-07",
-  "fitted_at": "2026-08-20T23:31:40.384Z",
+  "fitted_at": "2026-08-20T23:53:00.242Z",
   "method": "Realised winner accuracy binned by the predicted margin between first and second place, measured on out-of-fold bias-corrected predictions, validated by a second k-fold grouped by council.",
   "predictor": "margin_first_minus_second",
   "bins": [
     {
       "margin_from_pp": 0,
+      "margin_to_pp": 2,
+      "n": 400,
+      "winner_probability": 0.3575
+    },
+    {
+      "margin_from_pp": 2,
       "margin_to_pp": 5,
-      "n": 918,
-      "winner_probability": 0.4401,
-      "pooled": true
+      "n": 502,
+      "winner_probability": 0.4781
     },
     {
       "margin_from_pp": 5,
       "margin_to_pp": 10,
-      "n": 864,
-      "winner_probability": 0.5301
+      "n": 883,
+      "winner_probability": 0.4983
     },
     {
       "margin_from_pp": 10,
       "margin_to_pp": 15,
-      "n": 505,
-      "winner_probability": 0.5881
+      "n": 506,
+      "winner_probability": 0.6482
     },
     {
       "margin_from_pp": 15,
       "margin_to_pp": 20,
-      "n": 273,
-      "winner_probability": 0.685
+      "n": 308,
+      "winner_probability": 0.7403
     },
     {
       "margin_from_pp": 20,
       "margin_to_pp": 101,
-      "n": 343,
-      "winner_probability": 0.7464,
+      "n": 304,
+      "winner_probability": 0.8125,
       "pooled": true
     }
   ],
@@ -45,45 +50,45 @@
   },
   "validation": {
     "folds": 5,
-    "mean_calibration_error_pp": 6.972,
-    "mean_flat_baseline_error_pp": 4.632,
-    "mean_brier": 0.23878,
-    "mean_flat_baseline_brier": 0.24821,
+    "mean_calibration_error_pp": 5.951,
+    "mean_flat_baseline_error_pp": 4.062,
+    "mean_brier": 0.22792,
+    "mean_flat_baseline_brier": 0.24722,
     "per_fold": [
       {
         "wards": 515,
-        "calibration_error_pp": 4.394,
-        "flat_baseline_error_pp": 3.02,
-        "brier": 0.22971,
-        "flat_baseline_brier": 0.24503
+        "calibration_error_pp": 5.329,
+        "flat_baseline_error_pp": 2.254,
+        "brier": 0.21613,
+        "flat_baseline_brier": 0.24432
       },
       {
         "wards": 629,
-        "calibration_error_pp": 9.174,
-        "flat_baseline_error_pp": 5.867,
-        "brier": 0.24459,
-        "flat_baseline_brier": 0.24388
+        "calibration_error_pp": 8.452,
+        "flat_baseline_error_pp": 5.623,
+        "brier": 0.22781,
+        "flat_baseline_brier": 0.24232
       },
       {
         "wards": 582,
-        "calibration_error_pp": 4.631,
-        "flat_baseline_error_pp": 2.97,
-        "brier": 0.24158,
-        "flat_baseline_brier": 0.24517
+        "calibration_error_pp": 4.339,
+        "flat_baseline_error_pp": 2.364,
+        "brier": 0.22794,
+        "flat_baseline_brier": 0.24431
       },
       {
         "wards": 504,
-        "calibration_error_pp": 8.573,
-        "flat_baseline_error_pp": 2.912,
-        "brier": 0.23044,
-        "flat_baseline_brier": 0.25008
+        "calibration_error_pp": 5.886,
+        "flat_baseline_error_pp": 0.409,
+        "brier": 0.22497,
+        "flat_baseline_brier": 0.24599
       },
       {
         "wards": 673,
-        "calibration_error_pp": 8.09,
-        "flat_baseline_error_pp": 8.393,
-        "brier": 0.24757,
-        "flat_baseline_brier": 0.25688
+        "calibration_error_pp": 5.751,
+        "flat_baseline_error_pp": 9.662,
+        "brier": 0.24275,
+        "flat_baseline_brier": 0.25914
       }
     ],
     "note": "Calibration error is the average gap between the probability the curve would have quoted and the share of those wards we actually got right, on councils the curve never saw."
@@ -93,15 +98,15 @@
     "measured": {
       "high": {
         "n": 1317,
-        "winner_accuracy_pct": 55.5
+        "winner_accuracy_pct": 56.9
       },
       "low": {
         "n": 371,
-        "winner_accuracy_pct": 42.9
+        "winner_accuracy_pct": 41.8
       },
       "medium": {
         "n": 1215,
-        "winner_accuracy_pct": 58.6
+        "winner_accuracy_pct": 59.4
       }
     },
     "note": "The old label carried no information and was inverted at the top: high scored below medium. It was a statement about how much input data a ward had, not about how often we were right."

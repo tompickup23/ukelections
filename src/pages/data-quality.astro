@@ -1,9 +1,22 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadMayHeadline, loadGeHeadline } from "../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 const may = loadMayHeadline();
 const ge = loadGeHeadline();
+// The forward record. A backtest is a replay of a model against an election it
+// was built after; this is what happened when the model was published in
+// advance and then graded. The second is the more honest headline, so it leads.
+let postaudit: any = null;
+try {
+  postaudit = JSON.parse(
+    readFileSync(path.join(process.cwd(), "data/transparency/may-2026-postaudit-2026-05-10.json"), "utf8"),
+  );
+} catch { postaudit = null; }
+const prereg = postaudit?.prereg?.summary || null;
+const live = postaudit?.live?.summary || null;
 ---
 
 <BaseLayout
@@ -20,11 +33,53 @@ const ge = loadGeHeadline();
     </p>
   </section>
 
+  {prereg && live && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">The forward record</p>
+        <h2>What happened when we forecast a real election in advance</h2>
+      </div>
+      <p>
+        On 26 April 2026 we published a forecast for every ward voting on 7 May and recorded its hash so it
+        could not be quietly revised. Then the votes were counted. This is the result, and it is the number
+        that matters most on this page, because everything below it is a replay.
+      </p>
+      <div class="accuracy-grid">
+        <article>
+          <span class="big-number">{(prereg.winner_accuracy * 100).toFixed(1)}%</span>
+          <p class="big-number-label">winners called correctly across {prereg.ballots_evaluated.toLocaleString()} wards, from the forecast locked 11 days before polling day</p>
+        </article>
+        <article>
+          <span class="big-number">{(prereg.major_party_mae_avg * 100).toFixed(2)}pp</span>
+          <p class="big-number-label">average gap between predicted and actual party share, same locked forecast</p>
+        </article>
+        <article>
+          <span class="big-number">{(live.winner_accuracy * 100).toFixed(1)}%</span>
+          <p class="big-number-label">winners called correctly by the forecast as users actually saw it on polling day, after a late Reform realignment adjustment</p>
+        </article>
+        <article>
+          <span class="big-number">{(live.major_party_mae_avg * 100).toFixed(2)}pp</span>
+          <p class="big-number-label">average share gap for the forecast as served</p>
+        </article>
+      </div>
+      <p class="caption">
+        Half the wards called wrong is not a good number and we are not going to dress it up. The full
+        breakdown, what we changed because of it, and what our confidence label turned out to be worth are
+        on <a href="/past-results/">past results</a>.
+      </p>
+    </section>
+  )}
+
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Headline numbers</p>
-      <h2>How well the model would have called past elections</h2>
+      <p class="eyebrow">Backtests, which are replays</p>
+      <h2>How the model scores against elections it did not forecast live</h2>
     </div>
+    <p class="caption">
+      These are replays: the model run against a past election to see how it would have done. They flatter
+      any model relative to a real forward forecast, which is why the locked May 2026 result above leads
+      this page rather than these.
+    </p>
     <div class="accuracy-grid">
       <article>
         <span class="big-number">{(may.backtest_winner_accuracy * 100).toFixed(1)}%</span>

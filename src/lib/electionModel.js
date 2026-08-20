@@ -44,6 +44,12 @@ export const DEFAULT_ASSUMPTIONS = {
  * @param {string} electionType - 'borough' or 'county'
  * @returns {{ parties: Object<string, number>, date: string, year: number, staleness: number } | null}
  */
+// Half-life in years for the recency-weighted baseline, chosen by hold-out in
+// data/calibration/baseline-recency.json. Zero restores the old behaviour of
+// using the single most recent contest. UKE_BASELINE_HALFLIFE overrides both,
+// which is how the candidates were tested.
+export const BASELINE_HALF_LIFE_YEARS = 1;
+
 function getBaseline(wardData, electionType = 'borough') {
   if (!wardData?.history?.length) return null;
 
@@ -56,13 +62,53 @@ function getBaseline(wardData, electionType = 'borough') {
   const election = matching[0] || wardData.history[wardData.history.length - 1];
   if (!election?.candidates?.length) return null;
 
-  const parties = {};
-  for (const c of election.candidates) {
-    // Normalize party names so UKIP→Reform UK continuity is preserved
-    const partyName = normalizePartyName(c.party);
-    // Take the best candidate per party
-    if (!parties[partyName] || c.pct > parties[partyName]) {
-      parties[partyName] = c.pct != null ? c.pct : (c.votes || 0) / (election.turnout_votes || 1);
+  const sharesOf = (contest) => {
+    const out = {};
+    for (const c of contest.candidates || []) {
+      // Normalize party names so UKIP→Reform UK continuity is preserved
+      const partyName = normalizePartyName(c.party);
+      // Take the best candidate per party
+      const share = c.pct != null ? c.pct : (c.votes || 0) / (contest.turnout_votes || 1);
+      if (!out[partyName] || share > out[partyName]) out[partyName] = share;
+    }
+    return out;
+  };
+
+  let parties = sharesOf(election);
+
+  // Optional recency-weighted baseline. Default off: the baseline is the single
+  // most recent contest, which is what the model has always used. Setting a
+  // half-life in years blends the ward's earlier contests in with exponential
+  // decay, which trades noise (one contest, one strong local candidate, one odd
+  // turnout) against staleness (older contests predate the realignment).
+  // Each party is averaged only over the contests it actually stood in, so a
+  // party that entered late is not dragged toward zero by elections it did not
+  // contest, and the result is renormalised. Which way that trade lands is an
+  // empirical question, so it is a switch and not an assumption.
+  const halfLife = Number(process.env.UKE_BASELINE_HALFLIFE ?? BASELINE_HALF_LIFE_YEARS);
+  if (halfLife > 0 && matching.length > 1) {
+    const anchorYear = election.year || parseInt(election.date?.substring(0, 4), 10) || 0;
+    const acc = {};
+    for (const contest of matching) {
+      const year = contest.year || parseInt(contest.date?.substring(0, 4), 10) || anchorYear;
+      const weight = Math.pow(0.5, Math.abs(anchorYear - year) / halfLife);
+      if (!(weight > 0.01)) continue;
+      for (const [party, share] of Object.entries(sharesOf(contest))) {
+        acc[party] ||= { weighted: 0, weight: 0 };
+        acc[party].weighted += share * weight;
+        acc[party].weight += weight;
+      }
+    }
+    const blended = {};
+    let total = 0;
+    for (const [party, a] of Object.entries(acc)) {
+      if (!a.weight) continue;
+      blended[party] = a.weighted / a.weight;
+      total += blended[party];
+    }
+    if (total > 0) {
+      for (const party of Object.keys(blended)) blended[party] /= total;
+      parties = blended;
     }
   }
 

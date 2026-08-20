@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "half_life_years": 1,
+  "fitted_on": "local.2026-05-07",
+  "fitted_at": "2026-08-21T00:50:00.000Z",
+  "method": "The ward baseline was the single most recent contest. This blends the ward's earlier contests in with exponential decay at the half-life below, averaging each party only over the contests it actually stood in and renormalising. Chosen by 5-fold hold-out grouped by council: the half-life is picked on four folds and scored on the fifth.",
+  "candidates_tested_years": [0, 1, 2, 4, 8],
+  "validation": {
+    "design": "5-fold by council, half-life selected on the training folds, scored on the held-out fold",
+    "mean_winner_delta_pp": 0.43,
+    "mean_mae_delta_pp": -0.135,
+    "per_fold": [
+      { "picked_half_life": 1, "winner_delta_pp": -1.55, "mae_delta_pp": -0.202 },
+      { "picked_half_life": 1, "winner_delta_pp": 1.43, "mae_delta_pp": -0.039 },
+      { "picked_half_life": 1, "winner_delta_pp": 0.17, "mae_delta_pp": -0.163 },
+      { "picked_half_life": 1, "winner_delta_pp": 0.6, "mae_delta_pp": -0.109 },
+      { "picked_half_life": 1, "winner_delta_pp": 1.49, "mae_delta_pp": -0.162 }
+    ],
+    "note": "Every fold independently picked a one-year half-life, and MAE improved in every fold. Winner accuracy improved in four of five, so the share-level gain is the solid part and the winner-level gain is not. A one-year half-life is a mild blend: a contest four years older carries a sixteenth of the weight. Longer half-lives were tested and were worse, which agrees with the separate finding that pre-realignment ward results actively mislead."
+  }
+}

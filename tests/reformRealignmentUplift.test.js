@@ -1,4 +1,14 @@
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+// The tier multipliers are fitted now, not hand-set, so read the shipped value
+// rather than hardcoding one that goes stale the next time they are refitted.
+// Metropolitan moved from a hand-set 0.75 to a fitted 1.00 on 21 Aug 2026.
+const TIERS = JSON.parse(
+  readFileSync(path.join(process.cwd(), "data/calibration/reform-regional-multiplier.json"), "utf8"),
+).tiers;
+const metropolitan = TIERS.metropolitan.multiplier;
 import {
   applyReformRealignmentUplift,
   applyGreenCap,
@@ -85,9 +95,10 @@ describe("applyReformRealignmentUplift", () => {
     const r = applyReformRealignmentUplift(baselinePred(), { asian_pct: 0.80 }, {
       councilSlug: "manchester", regionTag: "metropolitan", hasCountyAnchor: false, enabled: true,
     });
-    // 12% × 0.75 metropolitan = 9% — but the original 5% Reform pred is below
-    // that, so target lifts to 9% (still capped by demographic profile).
-    expect(r.prediction["Reform UK"].pct).toBeCloseTo(0.09, 2);
+    // The 80%-Asian point on the calibration curve is a 12% Reform target,
+    // scaled by the metropolitan multiplier. The original 5% prediction is below
+    // that, so it lifts to the target and stays capped by the demographic profile.
+    expect(r.prediction["Reform UK"].pct).toBeCloseTo(0.12 * metropolitan, 2);
   });
 
   it("never reduces Reform — applies as upward floor only", () => {
@@ -107,12 +118,12 @@ describe("applyReformRealignmentUplift", () => {
     expect(r.prediction["Reform UK"].pct).toBeCloseTo(0.36, 2);
   });
 
-  it("metropolitan boroughs get 0.75 multiplier (Manchester floor)", () => {
+  it("metropolitan boroughs get the fitted multiplier (Manchester floor)", () => {
     const r = applyReformRealignmentUplift(baselinePred(), { asian_pct: 0.02 }, {
       councilSlug: "manchester", regionTag: "metropolitan", hasCountyAnchor: false, enabled: true,
     });
-    // 36% × 0.75 = 27%
-    expect(r.prediction["Reform UK"].pct).toBeCloseTo(0.27, 2);
+    // 36% target at this demographic point, scaled by the metropolitan multiplier.
+    expect(r.prediction["Reform UK"].pct).toBeCloseTo(0.36 * metropolitan, 2);
   });
 
   it("non-Reform parties scale pro-rata so the ward sums to 1.0", () => {

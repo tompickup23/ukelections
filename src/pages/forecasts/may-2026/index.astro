@@ -60,12 +60,19 @@ const topParty = headline.seat_tallies[0];
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">How accurate</p>
-      <h2>Tested against the actual May 2024 results</h2>
+      <h2>Replayed on May 2024, then graded for real on May 2026</h2>
     </div>
     <p>
       We replayed the same model against the real May 2024 contests across {headline.ward_count.toLocaleString()} wards.
       The model called the winner correctly in <strong>{(headline.backtest_winner_accuracy * 100).toFixed(1)}%</strong> of contests
       with an average gap of <strong>{(headline.backtest_major_party_mae * 100).toFixed(2)}pp</strong> between predicted and actual party share.
+    </p>
+    <p>
+      Take that figure for what it is. A replay of a model against an election it was built after is not the
+      same test as publishing a forecast in advance and then being graded on it. We did the harder one on
+      7 May 2026, and the model called <strong>49.6%</strong> of wards correctly from the forecast locked
+      eleven days out, with an average share gap of <strong>10.67pp</strong>. That is the number to judge
+      this page by.
     </p>
     <p>
       <a href="/data-quality/2024-backtest/">Full accuracy record →</a>

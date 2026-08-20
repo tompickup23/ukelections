@@ -2,7 +2,9 @@
   "snapshot": {
     "generated_at": "2026-05-20",
     "source": "7 May 2026 step-9b post-audit (live vs shadow MAE per multiplier tier)",
-    "method": "per-tier multiplier left at value where live_mae < shadow_mae and live_signed_bias near zero; London tier set to 0.0 because audit showed live MAE 10.86pp vs shadow 7.43pp (uplift made London bias worse by 3.43pp)"
+    "method": "per-tier multiplier left at value where live_mae < shadow_mae and live_signed_bias near zero; London tier set to 0.0 because audit showed live MAE 10.86pp vs shadow 7.43pp (uplift made London bias worse by 3.43pp)",
+    "revised_at": "2026-08-21",
+    "revision": "Multipliers swept and chosen by hold-out rather than by eye (scripts/sweep-uplift-multipliers.mjs). Only metropolitan changed: every one of the five folds picked 1.00 over the hand-set 0.75, and on its own the change improves four of five folds on both metrics, worth +1.50pp of winner accuracy and -0.085pp of MAE held out. London 0.00 and northern-unitary 1.00 were confirmed by the sweep (4 of 5 folds each) and left alone. The 'other' tier is unresolved: three folds preferred 0.60 and two preferred the hand-set 0.85, and adopting every fold's preference produced one badly negative fold, so it stays at 0.85 until there is a second real election to fit on."
   },
   "tiers": {
     "london": {
@@ -17,7 +19,7 @@
       }
     },
     "metropolitan": {
-      "multiplier": 0.75,
+      "multiplier": 1.0,
       "audit_evidence": {
         "n_wards": 528,
         "pre_uplift_mae_pp": 18.56,
@@ -25,6 +27,14 @@
         "pre_uplift_bias_pp": -18.38,
         "post_uplift_bias_pp": -1.18,
         "verdict": "uplift helped; retain at 0.75"
+      },
+      "fitted": {
+        "chosen_by": "5-fold hold-out by council, 21 Aug 2026",
+        "was": 0.75,
+        "folds_agreeing": "5/5",
+        "held_out_winner_delta_pp": 1.5,
+        "held_out_mae_delta_pp": -0.085,
+        "note": "The 7 May 2026 audit evidence below is what justified 0.75 originally. It was right that the uplift helps here and wrong about how much: the tier wanted full lift."
       }
     },
     "southern_other": {

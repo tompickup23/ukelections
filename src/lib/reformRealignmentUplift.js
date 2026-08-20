@@ -43,6 +43,7 @@
  * predates the realignment signal) does not see it.
  */
 
+import { readFileSync } from "node:fs";
 const REFORM_TARGET_BY_ASIAN_PCT = [
   { asian: 0.00, reform: 0.36 },
   { asian: 0.05, reform: 0.36 },
@@ -97,28 +98,56 @@ const NORTHERN_UNITARY_FULL_LIFT = new Set([
   "warrington",
 ]);
 
+// Tier multipliers were hand-set from the 7 May 2026 audit: read them from the
+// calibration file so they can be FITTED rather than chosen, and overridden per
+// tier by env var while sweeping candidate values. Falls back to the audited
+// hand-set values when the file is absent, so behaviour never silently changes.
+const HAND_SET_TIERS = { london: 0.0, metropolitan: 0.75, county_district: 1.0, other: 0.85, northern_unitary: 1.0 };
+let TIER_MULTIPLIERS = null;
+function tierMultipliers() {
+  if (TIER_MULTIPLIERS) return TIER_MULTIPLIERS;
+  let fromFile = {};
+  try {
+    const url = new URL("../../data/calibration/reform-regional-multiplier.json", import.meta.url);
+    const doc = JSON.parse(readFileSync(url, "utf8"));
+    for (const [tier, cfg] of Object.entries(doc.tiers || {})) {
+      if (typeof cfg?.multiplier === "number") fromFile[tier] = cfg.multiplier;
+    }
+  } catch {
+    fromFile = {};
+  }
+  const merged = { ...HAND_SET_TIERS, ...fromFile };
+  for (const tier of Object.keys(merged)) {
+    const override = process.env[`UKE_UPLIFT_${tier.toUpperCase()}`];
+    if (override != null && override !== "") merged[tier] = Number(override);
+  }
+  TIER_MULTIPLIERS = merged;
+  return merged;
+}
+
 function regionalMultiplier(councilSlug, regionTag) {
+  const tiers = tierMultipliers();
   // Northern unitaries demographically aligned with Reform-realigning 2-tier
   // districts get full lift (parity with 1.00 calibration source).
-  if (NORTHERN_UNITARY_FULL_LIFT.has(councilSlug)) return 1.00;
+  if (NORTHERN_UNITARY_FULL_LIFT.has(councilSlug)) return tiers.northern_unitary;
   // London: zero lift. The 7 May 2026 post-audit (n=218 wards) found that
   // applying any positive multiplier in London made Reform predictions
   // HOTTER on average by 6.7pp. Pre-uplift bias was +2.85pp (already
   // slightly hot); post-uplift bias was +9.51pp. Live MAE 10.86pp vs
   // shadow MAE 7.43pp. London should fall through to the hard
   // plausibility ceiling instead.
-  if (regionTag === "london") return 0.00;
+  if (regionTag === "london") return tiers.london;
   // Metropolitan boroughs: post-audit (n=528) live MAE 9.31pp vs shadow
   // 18.56pp. Uplift helped; retain 0.75.
-  if (regionTag === "metropolitan") return 0.75;
+  if (regionTag === "metropolitan") return tiers.metropolitan;
   // Reform-realigning 2-tier districts already receive the May-2025
   // county anchor and would not normally land here, but if the anchor
   // failed for some reason we still want full lift.
-  if (regionTag === "county_district") return 1.00;
+  if (regionTag === "county_district") return tiers.county_district;
   // Southern unitaries / districts in counties that did NOT contest May
   // 2025. Post-audit (n=750) live MAE 8.45pp vs shadow 17.69pp. Uplift
   // helped; retain 0.85.
-  return 0.85;
+  return tiers.other;
 }
 
 /**
