@@ -9,6 +9,19 @@
 
 UK election intelligence site. The public product direction is candidates, historic results, boundaries, forecasts, confidence intervals, source notes, and transparent backtests. **Gold-standard rule (19 May 2026):** data should be rendered as the visual — never describe a stat in text where a chart can show it.
 
+## Model calibration and by-election feeds (21 Aug 2026)
+
+Read the same-named sections of `CLAUDE.md` before touching the model or the
+by-election data. The two rules that bite hardest:
+
+- **A calibration is a property of the model.** Refit `data/calibration/party-bias.json`
+  and `confidence.json` whenever the engine changes, and never apply either to the
+  election it was fitted on. The apply libraries and the fitters both refuse, because
+  the circular version looks like a success.
+- **Two by-election feeds exist and are not interchangeable**: models read
+  `data/history/dc-historic-results.json`, the site scorecard reads
+  `data/results/local-byelections.json`.
+
 ## Architecture
 
 - Astro static site

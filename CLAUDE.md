@@ -23,7 +23,24 @@ Production does **not** deploy via GitHub Actions. One crontab entry on vps-main
 
 `scripts/refresh-pipeline.mjs` is the source of truth for what runs: ingest →
 features → predictions → backtests → Senedd/Holyrood → GE → vitest → step 9
-`npm run build` → step 10 `wrangler pages deploy dist`
+`npm run build` → step 10 `wrangler pages deploy dist`. Roughly 6 minutes when the
+Democracy Club page cache is warm, closer to 50 when it expires and refetches.
+
+To ship a merged change yourself, without waiting for the cron:
+
+```bash
+ssh vps-main
+cd /root/ukelections && git pull --ff-only --autostash && git log --oneline -1   # the cron does NOT pull
+npm test --silent
+rm -rf dist .astro node_modules/.vite && npm run build                          # ~5 min, 3,820 pages
+rm -rf /tmp/uke-deploy-x && cp -a dist /tmp/uke-deploy-x                        # never deploy the shared dist
+set -a; . /opt/dashboard/.env; set +a
+wrangler pages deploy /tmp/uke-deploy-x --project-name ukelections --branch main --commit-dirty=true
+```
+
+`BUILD_OG=1` renders the OG cards and is opt-in: about 31 minutes for 811 cards,
+so it is deliberately out of the nightly. Pages only advertise a card when one
+was actually built.
 (`UKE_ON_VPS_MAIN=1` makes it deploy the local dist instead of rsyncing).
 
 **Timing — the OG pass is expensive, and the old "~3 min" was wrong.** Measured
@@ -119,6 +136,31 @@ Every detail page renders data as visual, not text. `/polling/` has a trend char
 - LAD24 BUC + WD25 BSC boundaries simplified with mapshaper (152 KB + 2.9 MB).
 - d3-geo at build time, no runtime JS.
 
+## Model calibration (21 Aug 2026)
+
+Three fitted corrections sit between the raw model and the published forecast. Each lives in `data/calibration/`, each carries its own hold-out validation, and each is fitted by a script you re-run after every real election.
+
+| File | What it does | Fitted by | Held-out effect |
+|---|---|---|---|
+| `party-bias.json` | subtracts a per-party constant offset (Labour ran 5.8pp hot, Greens 7.5pp cold) | `scripts/calibrate-party-bias.mjs` | +3.1pp winners, -0.90pp MAE |
+| `confidence.json` | replaces the old high/medium/low label with a winner probability by predicted margin | `scripts/calibrate-confidence.mjs` | Brier 0.228 vs 0.247 flat |
+| `baseline-recency.json` | half-life for blending a ward's earlier contests into its baseline | hold-out sweep, see the file | -0.135pp MAE |
+| `reform-regional-multiplier.json` | step 9b uplift multipliers per region tier | `scripts/sweep-uplift-multipliers.mjs` | +1.50pp winners (metropolitan tier) |
+
+**A calibration is a property of the model, so refit every one of them whenever the engine changes.** Changing the baseline rule or an uplift multiplier moves the residual error the calibrations describe.
+
+**Never apply a calibration to the election it was fitted on.** Both apply-time libraries refuse it by polling date, and the fitters refuse to run on predictions already carrying a correction. Two circularity bugs were caught this way and one only by comparing the live page against working notes: a fit computed on already-corrected predictions came out a quarter too small and looked fine.
+
+**The "other" uplift tier is deliberately unresolved** at its hand-set 0.85: three folds preferred 0.60 and two preferred 0.85, and taking every fold's pick produced one badly negative fold. It needs a second real election, not another opinion.
+
+## By-election data (21 Aug 2026)
+
+Two separate feeds, not interchangeable. **Models** read `data/history/dc-historic-results.json` (gitignored, vps only). **The site's ward scorecard** reads `data/results/local-byelections.json` (tracked, hand-curated). Updating one does nothing for the other.
+
+The Friday sweep (`scripts/refresh-byelections.mjs`) writes the tracked sidecar `data/history/byelection-appends.json`, which `scripts/ingest-dc-historic-results.mjs` merges back on every rebuild. It used to write only into the history file, which the nightly ingest rebuilt from scratch, so every sweep was silently discarded within a day. `--from=` and `--pace=` flags exist for backfills; the DC ballots API rate-limits bulk callers.
+
+**The ingest's page cache expires after 20 hours.** It previously had no expiry at all, replayed a 26 April snapshot nightly for four months, and froze the models' history at 23 April 2026 while looking perfectly healthy.
+
 ## Critical rules
 
 1. **Don't render text where a chart can render the data.** The homepage hero + ConstituencyChoropleth + CommonsHorseshoe are the gold standard. Apply the same treatment to any new page.
@@ -137,6 +179,9 @@ Every detail page renders data as visual, not text. `/polling/` has a trend char
 - Cloudflare Pages: `ukelections` (production)
 - GitHub Pages: `tompickup23.github.io/ukelections/` (auto-mirrored backup)
 - Domain: `ukelections.co.uk` (CF Pages custom domain, behind Cloudflare Access)
+- **`refresh-pipeline.mjs` does NO git pull.** The nightly cron builds whatever is checked out at `/root/ukelections`, so merging to main ships nothing on its own. After any merge you expect to reach production: `git pull --ff-only --autostash` on vps-main, confirm with `git log --oneline -1`, then build.
+- **Never `wrangler pages deploy dist` from the shared checkout.** A concurrent build empties `outDir` mid-upload and publishes an empty site. `cp -a dist /tmp/uke-deploy-x` and deploy the copy.
+- A clean rebuild needs `rm -rf dist .astro node_modules/.vite`, otherwise you get `ERR_MODULE_NOT_FOUND` on prerender chunks.
 
 ## Cross-repo lessons (5 Jul 2026)
 
