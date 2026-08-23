@@ -342,7 +342,9 @@ function controlClass(prob: number) {
 .unitary-head h3 { margin: 0; font-size: 1.2rem; }
 .unitary-sub { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); }
 .control-pill { font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.55rem; border-radius: 999px; text-align: center; line-height: 1.25; max-width: 8.5rem; flex-shrink: 0; }
-.control-pill--majority { background: rgba(18,181,203,0.16); color: var(--text); border: 1px solid #12b5cb; }
+/* Achromatic on purpose: a status pill must not borrow a party's colour, and
+   the old turquoise here read as a Reform claim on a "majority likely" state. */
+.control-pill--majority { background: var(--accent-wash); color: var(--text); border: 1px solid var(--accent); }
 .control-pill--knife { background: rgba(245,158,11,0.14); color: var(--text); border: 1px solid #f59e0b; }
 .control-pill--noc { background: rgba(128,138,153,0.14); color: var(--muted); border: 1px solid var(--border); }
 

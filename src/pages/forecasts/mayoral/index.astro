@@ -380,7 +380,9 @@ function statusPill(status: string) {
 .contest-head h3 { margin: 0; font-size: 1.2rem; }
 .contest-sub { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); }
 .status-pill { font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.55rem; border-radius: 999px; white-space: nowrap; flex-shrink: 0; background: rgba(128,138,153,0.14); color: var(--muted); border: 1px solid var(--border); }
-.status-pill--confirmed { background: rgba(18,181,203,0.16); color: var(--text); border-color: #12b5cb; }
+/* Achromatic: "confirmed" is a scheduling status, not a party fact, and the
+   old turquoise read as Reform. */
+.status-pill--confirmed { background: var(--accent-wash); color: var(--text); border-color: var(--accent); }
 .status-pill--caveat { background: rgba(245,158,11,0.14); color: var(--text); border-color: #f59e0b; }
 .contest-caveat { font-size: 0.85rem; color: var(--muted); border-left: 3px solid #f59e0b; padding-left: 0.9rem; }
 .contest-card--hypothetical { margin-top: 1.25rem; border-style: dashed; }
