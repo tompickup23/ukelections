@@ -231,6 +231,33 @@ def main():
     covered = [w for w in targets if w["gss_code"] in out]
     print(f"Coverage of May 2026 identity: {len(covered)}/{len(targets)} ({100*len(covered)/len(targets):.1f}%)")
 
+    # Refuse to overwrite a good file with a gutted one.
+    #
+    # On 14 August 2026 this script ran on vps-main with .cache/census gone,
+    # skipped every table with a printed note, aggregated zero wards, wrote the
+    # empty result, and the by-election cron's unscoped commit put it on main.
+    # It stayed there for nine days: computeWardDemographicAdjustments() returns
+    # an empty adjustment for an unknown ward, so every ward prediction silently
+    # lost its demographic layer and nothing failed. A skipped input must stop
+    # the write, not shrink it.
+    previous = 0
+    if OUT.exists():
+        try:
+            previous = len(json.load(open(OUT)).get("wards") or {})
+        except (ValueError, OSError):
+            previous = 0
+    allow_shrink = "--allow-shrink" in sys.argv
+    if not out:
+        sys.exit(
+            f"REFUSING TO WRITE: aggregated 0 wards. Check that {CENSUS} holds the "
+            f"census CSVs and that the LSOA lookups exist. Previous file had {previous:,} wards."
+        )
+    if previous and len(out) < previous * 0.5 and not allow_shrink:
+        sys.exit(
+            f"REFUSING TO WRITE: aggregated {len(out):,} wards, less than half the "
+            f"{previous:,} already on file. Pass --allow-shrink if this is intended."
+        )
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT, "w") as f:
         json.dump({
