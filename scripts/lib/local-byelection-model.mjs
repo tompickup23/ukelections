@@ -445,8 +445,20 @@ export function runDraws(central, swing, seedKey, draws = DRAWS, inflation = SIG
     bands[p] = { p10: quantile(s, 0.1), p50: quantile(s, 0.5), p90: quantile(s, 0.9) };
   }
   const winProb = Object.fromEntries(live.map((p) => [p, wins[p] / draws]));
-  const ordered = live.slice().sort((a, b) => (central[b] || 0) - (central[a] || 0));
+  // The strongest lane is the party that wins the most simulations, not the
+  // one with the highest central share. The two usually coincide, but in
+  // tight races a fatter-variance lane can win more draws on a lower central
+  // (Dover and Llantwit Fardre, 23 Aug 2026), and ordering by central share
+  // made the page headline name one party while its own probability table led
+  // with another. Ties break on central share.
+  const ordered = live
+    .slice()
+    .sort((a, b) => winProb[b] - winProb[a] || (central[b] || 0) - (central[a] || 0));
   const leader = ordered[0] ?? null;
+  // margin_pp stays the gap between the top two CENTRAL shares: it describes
+  // the projection, not the simulation, and can differ in sign from the
+  // probability ordering.
+  const byCentral = live.slice().sort((a, b) => (central[b] || 0) - (central[a] || 0));
   return {
     draws,
     sigma_inflation: inflation,
@@ -454,7 +466,7 @@ export function runDraws(central, swing, seedKey, draws = DRAWS, inflation = SIG
     bands,
     winner: leader,
     runner_up: ordered[1] ?? null,
-    margin_pp: ordered.length > 1 ? (central[ordered[0]] - central[ordered[1]]) * 100 : null,
+    margin_pp: byCentral.length > 1 ? (central[byCentral[0]] - central[byCentral[1]]) * 100 : null,
     leader_probability: leader ? winProb[leader] : null,
     too_close_to_call: leader ? winProb[leader] < TOO_CLOSE_TO_CALL : true,
   };

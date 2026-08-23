@@ -367,4 +367,23 @@ describe("calibration table", () => {
     expect(band.standard_error).toBeGreaterThan(0);
     expect(calibration([])).toEqual([]);
   });
+
+  it("names the strongest lane by win probability, not central share", () => {
+    // A fat-variance lane on a lower central share that wins the most draws.
+    // With the old central-share ordering this fixture returned Labour as
+    // winner while the probability table led with Reform UK, which is exactly
+    // the page-contradicts-its-own-table defect found on the Dover and
+    // Llantwit Fardre contests on 23 Aug 2026. Verified divergent: Labour has
+    // the highest central (0.29) and Reform UK the highest win probability.
+    const central = { Labour: 0.29, Conservative: 0.28, "Green Party": 0.27, "Reform UK": 0.16 };
+    const swing = { sigmas: { Labour: 0.04, Conservative: 0.04, "Green Party": 0.04, "Reform UK": 1.5 } };
+    const d = runDraws(central, swing, "fixture-0.16-1.5");
+    const probMax = Object.entries(d.win_probability).sort((a, b) => b[1] - a[1])[0];
+    expect(probMax[0]).toBe("Reform UK");
+    expect(probMax[0]).not.toBe("Labour"); // proves the fixture actually diverges
+    expect(d.winner).toBe(probMax[0]);
+    expect(d.leader_probability).toBe(probMax[1]);
+    // margin_pp keeps describing the central projection's top-two gap.
+    expect(d.margin_pp).toBeCloseTo((0.29 - 0.28) * 100, 5);
+  });
 });
