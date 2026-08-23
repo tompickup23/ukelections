@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-08-23T19:48:38.641Z",
+  "window_from": "2026-05-25",
+  "contests": 122,
+  "forecast_count": 102,
+  "corpus_size": 897,
+  "corpus_newest": "2026-08-20",
+  "corpus_oldest": "2017-05-04",
+  "backtest": {
+    "n": 784,
+    "mae_pp": 7.741756242930622,
+    "winner_called": 561,
+    "winner_called_pct": 0.7155612244897959,
+    "reform_bias_pp": -2.6732012861569086,
+    "reform_n": 292,
+    "recent_since": "2025-05-01",
+    "recent": {
+      "n": 223,
+      "mae_pp": 7.748772897771319,
+      "winner_called": 135,
+      "winner_called_pct": 0.6053811659192825,
+      "confident_n": 119,
+      "confident_called": 83,
+      "confident_called_pct": 0.6974789915966386
+    }
+  },
+  "calibration_table": [
+    {
+      "from": 0.3,
+      "to": 0.55,
+      "n": 100,
+      "mean_stated": 0.43896250000000003,
+      "observed": 0.5,
+      "standard_error": 0.05
+    },
+    {
+      "from": 0.55,
+      "to": 0.7,
+      "n": 71,
+      "mean_stated": 0.6251161971830986,
+      "observed": 0.6338028169014085,
+      "standard_error": 0.057174899223846616
+    },
+    {
+      "from": 0.7,
+      "to": 1,
+      "n": 48,
+      "mean_stated": 0.8210416666666668,
+      "observed": 0.7916666666666666,
+      "standard_error": 0.05861785769491019
+    }
+  ],
+  "party_accuracy": [
+    {
+      "party": "Reform UK",
+      "n": 214,
+      "bias_pp": -1.5934878708130318,
+      "mae_pp": 10.732390435084548
+    },
+    {
+      "party": "Labour",
+      "n": 209,
+      "bias_pp": 1.3806745324038756,
+      "mae_pp": 5.548951270130582
+    },
+    {
+      "party": "Conservative",
+      "n": 223,
+      "bias_pp": 2.53930928286158,
+      "mae_pp": 7.657776896596118
+    },
+    {
+      "party": "Liberal Democrats",
+      "n": 202,
+      "bias_pp": -0.3857138324625643,
+      "mae_pp": 6.375310669311501
+    },
+    {
+      "party": "Green Party",
+      "n": 194,
+      "bias_pp": -2.8033930012139456,
+      "mae_pp": 6.289126149581168
+    },
+    {
+      "party": "Independent",
+      "n": 75,
+      "bias_pp": 2.9993770140874503,
+      "mae_pp": 11.734582709718206
+    },
+    {
+      "party": "Other",
+      "n": 50,
+      "bias_pp": -0.5437172119235442,
+      "mae_pp": 5.215856356965599
+    }
+  ],
+  "sigma_inflation": 1.75,
+  "method_note": "One method, never blended: the ward's own last ordinary result moved by the median swing measured across recent council by-elections that we hold a paired prior result for. Contests without a like-for-like baseline get no number."
+}

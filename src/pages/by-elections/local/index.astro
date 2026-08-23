@@ -1,0 +1,249 @@
+---
+/**
+ * Every scheduled council by-election, with the ones already held graded
+ * against what we said beforehand.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readdirSync, readFileSync, existsSync } from "node:fs";
+import path from "node:path";
+
+const dirAbs = path.join(process.cwd(), "data/contests/local-byelections");
+const files = existsSync(dirAbs)
+  ? readdirSync(dirAbs).filter((f) => f.endsWith(".json") && !f.startsWith("_"))
+  : [];
+const contests = files
+  .map((f) => JSON.parse(readFileSync(path.join(dirAbs, f), "utf8")))
+  .sort((a, b) => a.contest.polling_day.localeCompare(b.contest.polling_day));
+
+const metaPath = path.join(dirAbs, "_meta.json");
+const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, "utf8")) : null;
+const bt = meta?.backtest ?? null;
+
+const today = new Date().toISOString().slice(0, 10);
+const upcoming = contests.filter((c) => c.contest.polling_day >= today);
+const held = contests.filter((c) => c.contest.polling_day < today).reverse();
+
+const prettyDate = (iso: string) =>
+  iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "UTC" }) : "";
+const pct0 = (x: number | null | undefined) => (typeof x === "number" ? `${Math.round(x * 100)}%` : "");
+const pp1 = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed(1) : "");
+
+// Group upcoming contests by polling day: local by-elections come in Thursday
+// batches and reading them as a batch is how the swing actually shows up.
+const byDate = new Map<string, typeof upcoming>();
+for (const c of upcoming) {
+  const k = c.contest.polling_day;
+  if (!byDate.has(k)) byDate.set(k, []);
+  byDate.get(k)!.push(c);
+}
+
+const graded = held.filter((c) => c.result?.grading);
+const gradedRight = graded.filter((c) => c.result.grading.call_correct).length;
+---
+
+<BaseLayout
+  title="Council by-elections"
+  description={`Every scheduled council by-election in Great Britain, one page each: the candidates, the ward's last result, and a projection where the ward gives us an honest baseline to work from.${bt?.recent ? ` The method has called ${Math.round((bt.recent.winner_called_pct ?? 0) * 100)}% of winners since May 2025.` : ""}`}
+>
+  <section class="page-hero">
+    <h1>Council by-elections</h1>
+    <p class="lede">
+      Every scheduled council by-election in Great Britain, one page each. Who is standing, why the
+      seat fell vacant, how the ward last voted, and a projection wherever the ward gives us an
+      honest baseline to work from.
+    </p>
+    {meta && (
+      <p class="note">
+        {meta.contests} contests tracked, {meta.forecast_count} with a projection. Swing measured
+        across {meta.corpus_size} council by-elections paired with the same ward's prior result.
+        Updated {new Date(meta.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.
+      </p>
+    )}
+  </section>
+
+  {bt?.recent && (
+    <section class="card record">
+      <h2>The published record</h2>
+      <p>
+        Projecting every council by-election since May 2025 from only what was known beforehand, the
+        method called the winner <strong>{bt.recent.winner_called} times out of {bt.recent.n}</strong>{" "}
+        ({Math.round((bt.recent.winner_called_pct ?? 0) * 100)}%), with a mean absolute error of{" "}
+        <strong>{pp1(bt.recent.mae_pp)}pp</strong> per party.
+      </p>
+      <p class="note">
+        That is a modest record and it is published deliberately. Council by-elections turn on small
+        electorates, turnout under a quarter and candidate effects no model sees. Where the leader
+        clears our confidence floor we name one; where it does not, the page says too close to call.
+      </p>
+      {graded.length > 0 && (
+        <p class="note">
+          The shorter window below covers only the {graded.length} contests still listed on this page
+          and runs at {Math.round((gradedRight / graded.length) * 100)}%. Both numbers are the same
+          method; the difference is sample size, and neither is picked to flatter it. The longer
+          window starts in May 2025 on purpose: before the realignment the same method called
+          around three quarters of winners, and quoting that would not describe what it will do
+          this Thursday.
+        </p>
+      )}
+      {meta?.calibration_table?.length > 0 && (
+        <table>
+          <thead><tr><th>When we said</th><th>Contests</th><th>Average claim</th><th>We were right</th></tr></thead>
+          <tbody>
+            {meta.calibration_table.map((b: any) => (
+              <tr>
+                <td>{Math.round(b.from * 100)} to {Math.round(Math.min(b.to, 1) * 100)}%</td>
+                <td>{b.n}</td>
+                <td>{Math.round(b.mean_stated * 100)}%</td>
+                <td>
+                  {Math.round(b.observed * 100)}%
+                  {b.standard_error ? <span class="muted"> ± {Math.round(b.standard_error * 100)}</span> : null}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="note">
+          Read across: what we claimed on average, against what actually happened, with the sampling
+          error on the outcome. A well behaved forecaster has those two columns agreeing within it.
+        </p>
+      )}
+      {meta?.party_accuracy?.length > 0 && (
+        <>
+          <h3>And per party, which is a different question</h3>
+          <table>
+            <thead><tr><th>Party</th><th>Contests</th><th>Average miss</th><th>Runs hot or cold</th></tr></thead>
+            <tbody>
+              {meta.party_accuracy.map((p: any) => (
+                <tr>
+                  <td>{shortPartyLabel(p.party)}</td>
+                  <td>{p.n}</td>
+                  <td>{pp1(p.mae_pp)}pp</td>
+                  <td>{p.bias_pp >= 0 ? "+" : ""}{pp1(p.bias_pp)}pp</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="note">
+            Average miss is how far out we are on that party's share, ignoring direction. The last
+            column is the direction: a plus means we tend to put them too high. We publish these
+            rather than quietly subtracting them, because correcting for them was tested and moved
+            the record by a tenth of a point, which is not a real improvement. Reform and independents
+            are the hardest to call, which is what a low-turnout local contest does to a new or
+            personal vote.
+          </p>
+        </>
+      )}
+    </section>
+  )}
+
+  <section class="card">
+    <h2>Upcoming</h2>
+    {upcoming.length === 0 && <p class="note">No council by-elections are currently scheduled.</p>}
+    {[...byDate.entries()].map(([date, list]) => (
+      <div class="date-block">
+        <h3>{prettyDate(date)}</h3>
+        <ul class="contest-list">
+          {list.map((c) => (
+            <li>
+              <a href={`/by-elections/local/${c.slug}/`}>
+                <span class="ward">{c.contest.ward_name}</span>
+                <span class="council">{c.contest.council_name}</span>
+              </a>
+              <span class="call">
+                {c.forecast
+                  ? c.forecast.too_close_to_call
+                    ? "Too close to call"
+                    : (
+                        <span class="party-chip" style={`--chip:${partyColour(c.forecast.winner)}`}>
+                          {shortPartyLabel(c.forecast.winner)} {pct0(c.forecast.leader_probability)}
+                        </span>
+                      )
+                  : <span class="muted">No projection</span>}
+              </span>
+              <span class="field-note">
+                {c.field.candidate_count} candidate{c.field.candidate_count === 1 ? "" : "s"}
+                {c.field.locked ? "" : c.field.candidate_count === 0 ? ", nominations open" : ", field not final"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
+
+  {held.length > 0 && (
+    <section class="card">
+      <h2>Recently held</h2>
+      {graded.length > 0 && (
+        <p class="note">Of the {graded.length} we projected, we called {gradedRight} correctly.</p>
+      )}
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Ward</th><th>Council</th><th>Winner</th><th>We said</th></tr>
+        </thead>
+        <tbody>
+          {held.map((c) => (
+            <tr>
+              <td>{prettyDate(c.contest.polling_day)}</td>
+              <td><a href={`/by-elections/local/${c.slug}/`}>{c.contest.ward_name}</a></td>
+              <td>{c.contest.council_name}</td>
+              <td>
+                {c.result?.declared
+                  ? <span class="party-chip" style={`--chip:${partyColour(c.result.winner_party)}`}>{shortPartyLabel(c.result.winner_party)}</span>
+                  : <span class="muted">Awaited</span>}
+              </td>
+              <td>
+                {c.result?.grading
+                  ? <span class={c.result.grading.call_correct ? "right" : "wrong"}>
+                      {shortPartyLabel(c.result.grading.projected_winner)}
+                      {c.result.grading.call_correct ? " (right)" : " (wrong)"}
+                    </span>
+                  : <span class="muted">{c.forecast ? "Pending" : "No projection"}</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )}
+
+  <section class="card">
+    <p class="note">
+      Contest data from Democracy Club, used under their open licence. Historic ward results from
+      Democracy Club and the Local Elections Archive Project (Andrew Teale), CC BY-SA 3.0.
+    </p>
+    <p><a href="/by-elections/">Parliamentary by-elections</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .card { margin-block: var(--space-8); }
+  .record { border-left: 4px solid var(--accent); padding-left: var(--space-4); }
+  .note { color: var(--text-muted); font-size: var(--text-sm); }
+  .muted { color: var(--text-muted); }
+  .date-block { margin-block: var(--space-6); }
+  .contest-list { list-style: none; padding: 0; }
+  .contest-list li {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: baseline;
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--border);
+  }
+  .contest-list .ward { font-weight: 600; display: block; }
+  .contest-list .council { color: var(--text-muted); font-size: var(--text-sm); display: block; }
+  .field-note { color: var(--text-muted); font-size: var(--text-sm); text-align: right; }
+  .party-chip { border-left: 4px solid var(--chip, var(--border)); padding-left: var(--space-2); }
+  .right { color: var(--status-good, inherit); }
+  .wrong { color: var(--status-bad, inherit); }
+  table { width: 100%; border-collapse: collapse; margin-block: var(--space-4); }
+  th, td { text-align: left; padding: var(--space-2); border-bottom: 1px solid var(--border); }
+  @media (max-width: 40rem) {
+    .contest-list li { grid-template-columns: 1fr; }
+    .field-note { text-align: left; }
+    table { display: block; overflow-x: auto; }
+  }
+</style>

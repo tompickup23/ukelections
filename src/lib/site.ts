@@ -124,6 +124,7 @@ const STATIC_PATHS = [
   "/forecasts/lancashire-unitaries/",
   "/forecasts/mayoral/",
   "/by-elections/",
+  "/by-elections/local/",
   "/by-elections/makerfield/",
   "/by-elections/aberdeen-south/",
   "/by-elections/arbroath-and-broughty-ferry/",
@@ -170,6 +171,13 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     title: "By-elections. Results, forecasts and what's next",
     kind: "page",
     description: "Every Westminster by-election we track, the declared result, and how the forecast or signal compared. Clacton, 13 August 2026: Reform hold, Farage returned on 63.3%, turnout 44.4%. The 18 June 2026 round: Labour held Makerfield (Burnham), Conservatives gained Aberdeen South, SNP held Arbroath and Broughty Ferry. Plus the weekly local council by-election scorecard.",
+    priority: 111
+  },
+  {
+    href: "/by-elections/local/",
+    title: "Council by-elections. Every scheduled contest, one page each",
+    kind: "page",
+    description: "Every scheduled council by-election in Great Britain, with the candidates, the reason the seat fell vacant, how the ward last voted, and a projection wherever the ward gives an honest baseline. The method's record on every council by-election since May 2025 is published alongside it.",
     priority: 111
   },
   {
