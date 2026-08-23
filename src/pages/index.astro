@@ -96,12 +96,13 @@ const description = heroContest
     </p>
     <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
 
-    <h3 style="margin-top:1.5rem">National vote share, current Westminster polling</h3>
+    <h3 style="margin-top:1.5rem">Projected national vote share</h3>
     <PartyBars rows={topNationalShares.map(s => ({ party: s.party, pct: s.share }))} />
 
     <p class="caption">
-      Wikipedia 14-day rolling average + manual Restore Britain overlay (most pollsters embed Restore inside the
-      "Others" cell rather than breaking it out separately).
+      This is our own output, not the polling. It is the turnout-weighted average of all 650 constituency
+      projections, so it differs from the raw polling average that feeds the model. For the polling itself,
+      including the fieldwork window and the pollsters used, see <a href="/polling/">polling transparency</a>.
     </p>
     <p class="muted-row">
       <a href="/forecasts/general-election/">See every constituency →</a>
