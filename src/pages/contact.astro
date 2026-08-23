@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const CONTACT_EMAIL = "info@ukelections.co.uk";
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact UK Elections. Questions, corrections and data queries go to info@ukelections.co.uk, and corrections are applied to the page and noted."
+>
+  <section class="page-hero">
+    <p class="eyebrow">Contact</p>
+    <h1>Get in touch</h1>
+    <p class="lede">
+      Questions, corrections, data queries and anything else go to
+      <a class="contact-email" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+      We read everything; replies can take a few days.
+    </p>
+  </section>
+
+  <section class="section contact-section">
+    <div class="contact-card">
+      <h2>Spotted an error?</h2>
+      <p>
+        Email with the page URL and the correct figure with a source; corrections are
+        applied to the page and noted. UK Elections publishes its record either way,
+        so a correction makes the site better, not worse.
+      </p>
+    </div>
+
+    <div class="contact-card">
+      <h2>Write to us</h2>
+      <p>
+        The form below opens your own email app with the message filled in. Nothing is
+        sent to any server from this page. If the form does not appear, the plain
+        email link above does the same job.
+      </p>
+      <form id="contact-form" hidden>
+        <label for="contact-name">Your name (optional)</label>
+        <input id="contact-name" name="name" type="text" autocomplete="name" />
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" rows="6" required></textarea>
+        <button type="submit" class="button primary">Compose email</button>
+      </form>
+    </div>
+
+    <p class="caption">
+      UK Elections is an independent election intelligence project by Tom Pickup. It is
+      not affiliated with any political party, council, candidate, or election authority.
+    </p>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  // Progressive enhancement: the form is hidden until JS runs, so a no-JS
+  // visitor only sees the plain mailto link. On submit we compose a mailto URL
+  // locally; nothing leaves the browser except via the visitor's own mail app.
+  (function () {
+    var form = document.getElementById("contact-form");
+    if (!form) return;
+    form.removeAttribute("hidden");
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var name = document.getElementById("contact-name").value.trim();
+      var message = document.getElementById("contact-message").value.trim();
+      if (!message) return;
+      var subject = "UK Elections: message" + (name ? " from " + name : "");
+      var body = message + (name ? "\n\n" + name : "");
+      window.location.href =
+        "mailto:info@ukelections.co.uk?subject=" +
+        encodeURIComponent(subject) +
+        "&body=" +
+        encodeURIComponent(body);
+    });
+  })();
+</script>
+
+<style>
+  .contact-email {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .contact-section {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 48rem;
+    padding-top: 0;
+  }
+  .contact-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+  }
+  .contact-card h2 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+  .contact-card p {
+    margin: 0 0 0.75rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  #contact-form {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  #contact-form label {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  #contact-form input,
+  #contact-form textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    background: var(--surface-muted);
+    color: var(--ink);
+    font: inherit;
+  }
+  #contact-form button {
+    justify-self: start;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+</style>
