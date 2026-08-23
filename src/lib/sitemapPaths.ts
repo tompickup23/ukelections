@@ -1,3 +1,5 @@
+import { existsSync, readdirSync } from "node:fs";
+import path from "node:path";
 import { loadIdentity, loadGePredictions } from "./predictions";
 import { getIndexableSitePaths } from "./site";
 
@@ -70,11 +72,28 @@ export function getParliamentSeatPaths(): string[] {
     .map(([slug]) => `/seats/parliament/${slug}/`);
 }
 
+/**
+ * Matches src/pages/by-elections/local/[slug].astro.
+ *
+ * The contest directory is rebuilt on every data refresh and contests age out
+ * of it, so this reads the directory rather than any list held elsewhere. An
+ * absent directory is normal on a fresh clone before the first build.
+ */
+export function getLocalByElectionPaths(): string[] {
+  const dir = path.join(process.cwd(), "data/contests/local-byelections");
+  if (!existsSync(dir)) return [];
+  const paths = readdirSync(dir)
+    .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
+    .map((f) => `/by-elections/local/${f.replace(/\.json$/, "")}/`);
+  return paths.length ? ["/by-elections/local/", ...paths] : [];
+}
+
 export function getAllSitemapPaths(): string[] {
   const paths = new Set<string>([
     ...getIndexableSitePaths(),
     ...getSeatPaths(),
     ...getParliamentSeatPaths(),
+    ...getLocalByElectionPaths(),
   ]);
   return [...paths].sort((a, b) => a.localeCompare(b));
 }

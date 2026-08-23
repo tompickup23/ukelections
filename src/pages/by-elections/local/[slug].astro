@@ -1,0 +1,363 @@
+---
+/**
+ * One page per council by-election.
+ *
+ * Contest files are built by scripts/build-local-byelections.mjs. Every
+ * scheduled contest gets a page whether or not it gets a projection: where the
+ * baseline will not support a number the page says so and shows the structure
+ * instead, which is the precedent set by the Clacton page.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import MiniMap from "../../../components/MiniMap.astro";
+import PartyBars from "../../../components/PartyBars.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readdirSync, readFileSync, existsSync } from "node:fs";
+import path from "node:path";
+
+const DIR = "data/contests/local-byelections";
+
+export async function getStaticPaths() {
+  const dirAbs = path.join(process.cwd(), "data/contests/local-byelections");
+  if (!existsSync(dirAbs)) return [];
+  return readdirSync(dirAbs)
+    .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
+    .map((f) => {
+      const d = JSON.parse(readFileSync(path.join(dirAbs, f), "utf8"));
+      return { params: { slug: d.slug }, props: { contest: d } };
+    });
+}
+
+const { contest: d } = Astro.props;
+const c = d.contest;
+const f = d.field;
+const forecast = d.forecast;
+const prior = d.prior_result;
+const profile = d.ward_profile;
+const result = d.result;
+
+const metaPath = path.join(process.cwd(), DIR, "_meta.json");
+const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, "utf8")) : null;
+const bt = meta?.backtest ?? null;
+
+const pct1 = (x: number | null | undefined) => (typeof x === "number" ? (x * 100).toFixed(1) : null);
+const pp1 = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed(1) : null);
+const prettyDate = (iso: string) =>
+  iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
+
+const title = `${c.ward_name}, ${c.council_name}. Council by-election ${prettyDate(c.polling_day)}`;
+
+const rows = (shares: Record<string, number>) =>
+  Object.entries(shares || {})
+    .filter(([, v]) => v > 0.0005)
+    .sort((a, b) => b[1] - a[1])
+    .map(([party, pct]) => ({ party, pct }));
+
+const forecastRows = forecast
+  ? rows(forecast.central).map((r) => ({
+      ...r,
+      annotation:
+        forecast.win_probability?.[r.party] !== undefined
+          ? `${Math.round(forecast.win_probability[r.party] * 100)}% to win`
+          : null,
+    }))
+  : [];
+
+// The leader is named only where the calibrated probability supports it.
+const leader = forecast?.winner ?? null;
+const leaderProb = forecast?.leader_probability ?? null;
+const tooClose = Boolean(forecast?.too_close_to_call);
+
+const description = forecast
+  ? tooClose
+    ? `Too close to call. ${c.ward_name} in ${c.council_name} votes on ${prettyDate(c.polling_day)}, with ${f.candidate_count} candidates standing. The projection, the ward's last result and what the method cannot see.`
+    : `${shortPartyLabel(leader)} favoured on ${Math.round((leaderProb ?? 0) * 100)}%, from the ward's ${prior?.election_date?.slice(0, 4)} result and the swing measured across recent council by-elections. ${c.ward_name}, ${c.council_name}, polling ${prettyDate(c.polling_day)}.`
+  : `${c.ward_name} in ${c.council_name} votes on ${prettyDate(c.polling_day)}. The candidates, the reason for the vacancy, and why we publish no projection for this one.`;
+
+const statusLabel =
+  d.status === "concluded" ? "Result declared" : d.status === "polls_closed" ? "Polls closed, result awaited" : "Upcoming";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero">
+    {c.ward_gss && (
+      <div class="mini-map-side">
+        <MiniMap
+          focalCode={c.ward_gss}
+          focalKind="ward"
+          focalColour={result?.winner_party ? partyColour(result.winner_party) : leader && !tooClose ? partyColour(leader) : undefined}
+          ariaLabel={`Location of ${c.ward_name} ward`}
+        />
+      </div>
+    )}
+    <p class="eyebrow">Council by-election, {c.council_name}</p>
+    <h1>{c.ward_name}</h1>
+    <p class="lede">
+      Polling day {prettyDate(c.polling_day)}.
+      {c.vacancy_reason ? ` The seat is vacant because ${c.vacancy_reason}.` : " The vacancy reason was not published."}
+      {c.seats_total && c.seats_total > 1 ? ` ${c.ward_name} elects ${c.seats_total} councillors; one seat is being filled.` : ""}
+    </p>
+    <p class="status-pill">{statusLabel}</p>
+  </section>
+
+  {result?.declared && (
+    <section class="card result-card">
+      <h2>The result</h2>
+      <p class="result-headline">
+        <strong>{shortPartyLabel(result.winner_party)}</strong>
+        {result.winner_candidate ? ` won. ${result.winner_candidate}` : " won"}
+        {result.majority_votes !== null ? `, a majority of ${result.majority_votes.toLocaleString("en-GB")} over ${shortPartyLabel(result.runner_up_party)}.` : "."}
+      </p>
+      <PartyBars rows={rows(result.shares)} large={true} />
+      <p class="note">{result.total_votes.toLocaleString("en-GB")} votes cast across {f.candidate_count} candidates.</p>
+      {result.grading && (
+        <p class="grading">
+          Our projection said <strong>{shortPartyLabel(result.grading.projected_winner)}</strong>.
+          {result.grading.call_correct ? " That was right." : " That was wrong."}
+          {" "}Mean absolute error across the parties standing: {pp1(result.grading.mae_pp)}pp.
+        </p>
+      )}
+    </section>
+  )}
+
+  {forecast && !result?.declared && (
+    <section class="card">
+      <h2>{tooClose ? "Too close to call" : `${shortPartyLabel(leader)} favoured`}</h2>
+      <p class="lede">
+        {tooClose
+          ? `No party is clearly ahead. The strongest lane is ${shortPartyLabel(leader)} on ${Math.round((leaderProb ?? 0) * 100)}%, which is not enough to name a favourite in a contest this volatile.`
+          : `${shortPartyLabel(leader)} wins in ${Math.round((leaderProb ?? 0) * 100)}% of runs, on a projected ${pct1(forecast.central[leader])}%.`}
+      </p>
+      <PartyBars rows={forecastRows} large={true} />
+
+      <details class="band-detail">
+        <summary>Ranges, not point estimates</summary>
+        <table>
+          <thead>
+            <tr><th>Party</th><th>Low</th><th>Central</th><th>High</th><th>Wins</th></tr>
+          </thead>
+          <tbody>
+            {forecastRows.map((r) => (
+              <tr>
+                <td>{shortPartyLabel(r.party)}</td>
+                <td>{pct1(forecast.bands?.[r.party]?.p10)}%</td>
+                <td>{pct1(forecast.central[r.party])}%</td>
+                <td>{pct1(forecast.bands?.[r.party]?.p90)}%</td>
+                <td>{Math.round((forecast.win_probability?.[r.party] ?? 0) * 100)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="note">Low and high are the 10th and 90th percentiles of {forecast.win_probability ? "4,000" : ""} simulated contests.</p>
+      </details>
+
+      <h3>What this cannot see</h3>
+      <ul class="plain">
+        {forecast.cannot_see.map((x: string) => <li>{x}</li>)}
+        {forecast.caveats.map((x: string) => <li>{x}</li>)}
+      </ul>
+    </section>
+  )}
+
+  {!forecast && (
+    <section class="card no-forecast">
+      <h2>No projection for this contest</h2>
+      <p>We publish a number when the ward gives us something honest to project from. Here it does not:</p>
+      <ul class="plain">
+        {(d.no_forecast_reason || []).map((x: string) => <li>{x}</li>)}
+      </ul>
+      <p class="note">
+        The candidates, the vacancy and the ward's history are all below. A missing forecast is a
+        statement about the evidence, not about the contest.
+      </p>
+    </section>
+  )}
+
+  <section class="card">
+    <h2>The field</h2>
+    <p class="note">
+      {f.locked
+        ? `Nominations have closed. ${f.candidate_count} candidates are standing.`
+        : `Nominations are still open. ${f.candidate_count} candidates are known so far and the field can still change.`}
+      {c.nominations_close ? ` Nominations close ${prettyDate(c.nominations_close)}.` : ""}
+    </p>
+    <table>
+      <thead><tr><th>Candidate</th><th>Party</th>{result?.declared && <th>Votes</th>}</tr></thead>
+      <tbody>
+        {f.candidates
+          .slice()
+          .sort((a: any, b: any) => (result?.declared ? (b.votes || 0) - (a.votes || 0) : String(a.name).localeCompare(String(b.name))))
+          .map((cand: any) => (
+            <tr>
+              <td>{cand.name}</td>
+              <td><span class="party-chip" style={`--chip:${partyColour(cand.party)}`}>{cand.party_name}</span></td>
+              {result?.declared && <td>{cand.votes?.toLocaleString("en-GB") ?? ""}</td>}
+            </tr>
+          ))}
+      </tbody>
+    </table>
+    {f.sopn_url && (
+      <p class="note"><a href={f.sopn_url} rel="nofollow">Statement of persons nominated</a></p>
+    )}
+  </section>
+
+  {prior && (
+    <section class="card">
+      <h2>Last time in this ward</h2>
+      <p class="note">
+        Ordinary election, {prettyDate(prior.election_date)}.
+        {prior.seats_contested && prior.seats_contested > 1
+          ? ` ${prior.seats_contested} seats were filled, so shares below are the notional single-seat contest: each party's strongest candidate, normalised.`
+          : ""}
+        {!prior.usable_as_baseline
+          ? " The ward boundary has changed since, so this is context rather than a baseline."
+          : ""}
+      </p>
+      <PartyBars rows={rows(prior.shares)} />
+      <p class="note">
+        Source: {prior.source ? <a href={prior.source} rel="nofollow">{prior.source_label}</a> : prior.source_label}
+      </p>
+    </section>
+  )}
+
+  {profile && (
+    <section class="card">
+      <h2>The ward in numbers</h2>
+      <p class="note">
+        Census 2021, aggregated to this ward, with deprivation from IMD 2019.
+        {profile.total_residents ? ` ${profile.total_residents.toLocaleString("en-GB")} residents.` : ""}
+        {" "}Each figure is shown against the median ward in England and Wales, which is what makes
+        it mean anything.
+      </p>
+      <table>
+        <thead><tr><th>Measure</th><th>This ward</th><th>Median ward</th></tr></thead>
+        <tbody>
+          {profile.fields.map((row: any) => (
+            <tr>
+              <td>{row.label}</td>
+              <td><strong>{row.is_decile ? row.value.toFixed(1) : `${(row.value * 100).toFixed(1)}%`}</strong></td>
+              <td class="muted">
+                {row.median === null ? "" : row.is_decile ? row.median.toFixed(1) : `${(row.median * 100).toFixed(1)}%`}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="note">
+        The deprivation decile runs 1 (most deprived tenth of neighbourhoods) to 10 (least), averaged
+        across the ward. These figures describe the ward; they are not an input to the projection
+        above, which works from votes.
+      </p>
+    </section>
+  )}
+
+  {forecast && (
+    <section class="card method">
+      <h2>Method</h2>
+      <p>
+        One method, never blended. The ward's own last ordinary result, moved by the median swing
+        measured across recent council by-elections where we hold the same paired baseline, and
+        applied only to the parties actually on this ballot. A party that is not standing scores
+        nothing; a party standing here for the first time starts from the share first-time entrants
+        actually achieve, which is measured from the same corpus rather than borrowed from national
+        polling.
+      </p>
+      <dl class="method-grid">
+        <div><dt>Baseline</dt><dd>{prettyDate(forecast.baseline.election_date)}</dd></div>
+        <div><dt>Swing measured from</dt><dd>{forecast.swing.contests_used} by-elections</dd></div>
+        <div><dt>Comparison group</dt><dd>{forecast.swing.stratum.replace(/_/g, " ").replace("|", ", ")}</dd></div>
+        <div><dt>Window</dt><dd>{forecast.swing.window_days} days</dd></div>
+      </dl>
+
+      {bt && (
+        <>
+          <h3>How this method has actually done</h3>
+          <p>
+            Tested by projecting every council by-election since {prettyDate(bt.recent_since ?? "2025-05-01")} from
+            only what was known beforehand. Across {bt.recent?.n} contests it called the winner{" "}
+            <strong>{bt.recent?.winner_called} times ({Math.round((bt.recent?.winner_called_pct ?? 0) * 100)}%)</strong>{" "}
+            with a mean absolute error of <strong>{pp1(bt.recent?.mae_pp)}pp</strong> per party.
+            {bt.recent?.confident_n
+              ? ` Restricted to the contests it did not call too close, it was right ${bt.recent.confident_called} times out of ${bt.recent.confident_n}.`
+              : ""}
+          </p>
+          <p class="note">
+            Council by-elections are the hardest thing on this site to project: small electorates,
+            turnout under a quarter, and candidate effects that swamp any national swing. We publish
+            the record so the probability on this page can be read for what it is worth.
+          </p>
+          {meta?.calibration_table?.length > 0 && (
+            <table class="calibration">
+              <thead><tr><th>When we said</th><th>Contests</th><th>We were right</th></tr></thead>
+              <tbody>
+                {meta.calibration_table.map((b: any) => (
+                  <tr>
+                    <td>{Math.round(b.from * 100)} to {Math.round(b.to * 100)}%</td>
+                    <td>{b.n}</td>
+                    <td>{Math.round(b.observed * 100)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
+      )}
+    </section>
+  )}
+
+  <section class="card sources">
+    <h2>Sources</h2>
+    <ul class="plain">
+      {d.sources.map((s: any) => (
+        <li><a href={s.url} rel="nofollow">{s.label}</a></li>
+      ))}
+    </ul>
+    <p class="note">
+      Contest data from Democracy Club, used under their open licence. Historic ward results from
+      Democracy Club and the Local Elections Archive Project.
+      Built {new Date(d.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.
+    </p>
+    <p><a href="/by-elections/local/">All council by-elections</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+  }
+  .status-pill {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+  .card { margin-block: var(--space-8); }
+  .result-card { border-left: 4px solid var(--accent); padding-left: var(--space-4); }
+  .result-headline { font-size: var(--text-lg); }
+  .grading { border-top: 1px solid var(--border); padding-top: var(--space-3); }
+  .no-forecast { border-left: 4px solid var(--border); padding-left: var(--space-4); }
+  ul.plain { list-style: disc; padding-left: var(--space-5); }
+  ul.plain li { margin-block: var(--space-2); }
+  .note { color: var(--text-muted); font-size: var(--text-sm); }
+  .muted { color: var(--text-muted); }
+  .party-chip {
+    border-left: 4px solid var(--chip, var(--border));
+    padding-left: var(--space-2);
+  }
+  table { width: 100%; border-collapse: collapse; margin-block: var(--space-4); }
+  th, td { text-align: left; padding: var(--space-2); border-bottom: 1px solid var(--border); }
+  th:not(:first-child), td:not(:first-child) { text-align: right; }
+  .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--space-4); }
+  .method-grid dt { font-size: var(--text-sm); color: var(--text-muted); }
+  .method-grid dd { margin: 0; font-weight: 600; }
+  .band-detail summary { cursor: pointer; color: var(--text-muted); font-size: var(--text-sm); }
+  @media (max-width: 40rem) {
+    table { display: block; overflow-x: auto; }
+  }
+</style>
