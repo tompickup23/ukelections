@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-08-23T18:34:57.356Z",
+  "window_from": "2026-05-25",
+  "contests": 122,
+  "forecast_count": 104,
+  "corpus_size": 893,
+  "corpus_newest": "2026-08-13",
+  "corpus_oldest": "2017-05-04",
+  "backtest": {
+    "n": 780,
+    "mae_pp": 7.722870646922905,
+    "winner_called": 559,
+    "winner_called_pct": 0.7166666666666667,
+    "reform_bias_pp": -2.674533702850844,
+    "reform_n": 288,
+    "recent_since": "2025-05-01",
+    "recent": {
+      "n": 219,
+      "mae_pp": 7.681637289247774,
+      "winner_called": 133,
+      "winner_called_pct": 0.6073059360730594,
+      "confident_n": 117,
+      "confident_called": 82,
+      "confident_called_pct": 0.7008547008547008
+    }
+  },
+  "calibration_table": [
+    {
+      "from": 0.3,
+      "to": 0.5,
+      "n": 79,
+      "mean_stated": 0.42065822784810125,
+      "observed": 0.5063291139240507
+    },
+    {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 45,
+      "mean_stated": 0.5545166666666665,
+      "observed": 0.5555555555555556
+    },
+    {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 43,
+      "mean_stated": 0.6533662790697674,
+      "observed": 0.6511627906976745
+    },
+    {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 21,
+      "mean_stated": 0.7459166666666668,
+      "observed": 0.9047619047619048
+    },
+    {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 18,
+      "mean_stated": 0.843361111111111,
+      "observed": 0.6111111111111112
+    },
+    {
+      "from": 0.9,
+      "to": 1,
+      "n": 9,
+      "mean_stated": 0.9516944444444445,
+      "observed": 0.8888888888888888
+    }
+  ],
+  "sigma_inflation": 1.75,
+  "method_note": "One method, never blended: the ward's own last ordinary result moved by the median swing measured across recent council by-elections that we hold a paired prior result for. Contests without a like-for-like baseline get no number."
+}

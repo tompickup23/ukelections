@@ -82,6 +82,11 @@ function isoShift(iso, days) {
   return d.toISOString().slice(0, 10);
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Requests that did not get an answer, as opposed to answering "nothing here".
+// Reported at the end because a run that quietly degrades is the failure mode
+// this whole pipeline keeps hitting.
+const transientFailures = [];
 const readJson = (rel) => JSON.parse(readFileSync(p(rel), "utf8"));
 
 // ---------------------------------------------------------------------------
@@ -89,6 +94,17 @@ const readJson = (rel) => JSON.parse(readFileSync(p(rel), "utf8"));
 // by-election feed sat frozen at 23 April 2026 for four months while every
 // timestamp on it looked fresh, so this one is keyed by day.
 // ---------------------------------------------------------------------------
+
+// Democracy Club rate-limits a sweep of this length. Backing off after a 429
+// costs seconds; spacing requests costs milliseconds, so every uncached request
+// goes through one global throttle rather than each caller pacing itself.
+const MIN_REQUEST_GAP_MS = Number(args["gap-ms"] ?? 900);
+let lastRequestAt = 0;
+async function throttle() {
+  const wait = lastRequestAt + MIN_REQUEST_GAP_MS - Date.now();
+  if (wait > 0) await sleep(wait);
+  lastRequestAt = Date.now();
+}
 
 async function getJson(url, cacheKey, { permanent = false, cacheMisses = false } = {}) {
   const cacheFile = cacheKey ? path.join(CACHE_DIR, `${permanent ? "settled" : today}-${cacheKey}.json`) : null;
@@ -98,7 +114,8 @@ async function getJson(url, cacheKey, { permanent = false, cacheMisses = false }
     return hit;
   }
   if (OFFLINE) throw new Error(`offline and not cached: ${url}`);
-  for (let attempt = 0; attempt < 6; attempt++) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await throttle();
     const res = await fetch(url, { headers: { "User-Agent": UA } });
     if (res.ok) {
       const json = await res.json();
@@ -162,7 +179,6 @@ async function fetchScheduledBallots() {
       if (r.group_type || r.cancelled || r.deleted) continue;
       if (!byId.has(r.election_id)) byId.set(r.election_id, r);
     }
-    if (!settled) await sleep(PACE_MS);
   }
   if (short) console.warn(`  ${short} day(s) exceeded one page`);
   console.log(`  swept ${days.length} polling days from ${from} to ${horizonEnd}`);
@@ -305,7 +321,13 @@ async function fetchPriorFromDc(council_slug, ward_slug, before, haveDate) {
     let b;
     try {
       b = await getJson(`${DC}${id}/`, `prior-${id}`, { permanent: true, cacheMisses: true });
-    } catch {
+    } catch (e) {
+      // A 404 means the contest never happened and is cached as such. Anything
+      // else means we simply did not get an answer, which must not be recorded
+      // as "this ward has no history".
+      if (!/^cached miss|^404 /.test(e.message)) {
+        transientFailures.push({ id, what: "prior", message: e.message });
+      }
       continue;
     }
     const cands = b.candidacies || [];
@@ -355,10 +377,15 @@ async function assemble(ballot, priors, corpus, demo) {
   const votingSystem = ballot.voting_system?.slug || null;
 
   let dc = null;
+  let fieldUnavailable = false;
   try {
     dc = await getJson(`${DC}${ballot.election_id}/`, `dc-${ballot.election_id}`);
   } catch (e) {
-    console.warn(`  candidates unavailable for ${ballot.election_id}: ${e.message}`);
+    // A rate-limited fetch is NOT an empty ballot paper. Recorded as unknown
+    // so the run reports it and the next one retries, rather than publishing
+    // "fewer than two parties on the ballot" for a six-candidate contest.
+    fieldUnavailable = true;
+    transientFailures.push({ id: ballot.election_id, what: "candidates", message: e.message });
   }
   const candidacies = dc?.candidacies || [];
   const candidates = candidacies.map((c) => ({
@@ -395,7 +422,11 @@ async function assemble(ballot, priors, corpus, demo) {
   const era = prior ? baselineEra(prior.election_date) : null;
   const swing = estimateSwing(corpus, { asOf: ids.date, era, reformEntering });
 
-  const baseline = assessBaseline({ prior, field, swing, votingSystem, boundaryChanged });
+  const baseline = assessBaseline({ prior, field, swing, votingSystem, boundaryChanged, fieldLocked: dc?.candidates_locked ?? false });
+  if (fieldUnavailable) {
+    baseline.forecastable = false;
+    baseline.blockers = ["The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."];
+  }
 
   // Has it polled, and do we have the result?
   const polled = ids.date <= today;
@@ -424,7 +455,8 @@ async function assemble(ballot, priors, corpus, demo) {
         stratum_used: swing.stratum_used,
         contests_used: swing.n,
         window_days: swing.window_days,
-        ratios: swing.ratios,
+        logodds_shifts: swing.shifts,
+        ratio_at_25pct: swing.ratios,
         entry_shares: swing.entry,
         party_counts: swing.counts,
       },
@@ -585,7 +617,6 @@ async function main() {
       ? `${contest.forecast.winner} ${(contest.forecast.central[contest.forecast.winner] * 100).toFixed(1)}%`
       : `no forecast (${contest.no_forecast_reason.length})`;
     console.log(`  ${contest.contest.polling_day} ${contest.contest.council_name} / ${contest.contest.ward_name}: ${tag}`);
-    await sleep(PACE_MS);
   }
 
   // Drop contests that have aged out of the window so the directory does not
@@ -628,6 +659,12 @@ async function main() {
     )}\n`,
   );
   console.log(`  wrote ${written.size} contests, ${forecast} with a projection`);
+  if (transientFailures.length) {
+    console.warn(`\n  ${transientFailures.length} request(s) got no answer and were NOT recorded as absence:`);
+    for (const t of transientFailures) console.warn(`    ${t.what}: ${t.id}`);
+    console.warn("  Re-run to pick them up. Failures are deliberately not cached.");
+    process.exitCode = 2;
+  }
 }
 
 main().catch((e) => {

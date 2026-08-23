@@ -74,6 +74,20 @@ const description = forecast
     : `${shortPartyLabel(leader)} favoured on ${Math.round((leaderProb ?? 0) * 100)}%, from the ward's ${prior?.election_date?.slice(0, 4)} result and the swing measured across recent council by-elections. ${c.ward_name}, ${c.council_name}, polling ${prettyDate(c.polling_day)}.`
   : `${c.ward_name} in ${c.council_name} votes on ${prettyDate(c.polling_day)}. The candidates, the reason for the vacancy, and why we publish no projection for this one.`;
 
+// The stratum key is machine-readable; this is the human sentence for it.
+function stratumLabel(stratum: string): string {
+  const [era, entry] = String(stratum).split("|");
+  const eras: Record<string, string> = {
+    pre_realignment: "wards last fought before the realignment",
+    ge2024_era: "wards last fought around the 2024 general election",
+    post_may_2025: "wards last fought since May 2025",
+    pooled: "all recent by-elections",
+  };
+  const base = eras[era] ?? era.replace(/_/g, " ");
+  if (!entry) return base;
+  return entry === "reform_entering" ? `${base}, Reform standing for the first time` : `${base}, Reform already standing`;
+}
+
 const statusLabel =
   d.status === "concluded" ? "Result declared" : d.status === "polls_closed" ? "Polls closed, result awaited" : "Upcoming";
 ---
@@ -177,10 +191,12 @@ const statusLabel =
     <h2>The field</h2>
     <p class="note">
       {f.locked
-        ? `Nominations have closed. ${f.candidate_count} candidates are standing.`
-        : `Nominations are still open. ${f.candidate_count} candidates are known so far and the field can still change.`}
-      {c.nominations_close ? ` Nominations close ${prettyDate(c.nominations_close)}.` : ""}
+        ? `Nominations closed${c.nominations_close ? ` on ${prettyDate(c.nominations_close)}` : ""}. ${f.candidate_count} candidate${f.candidate_count === 1 ? " is" : "s are"} standing.`
+        : f.candidate_count === 0
+          ? `No candidates have been published yet${c.nominations_close ? `; nominations close on ${prettyDate(c.nominations_close)}` : ""}. This page fills in as they are.`
+          : `${f.candidate_count} candidate${f.candidate_count === 1 ? " is" : "s are"} known so far and the field can still change${c.nominations_close ? `, up to ${prettyDate(c.nominations_close)}` : ""}.`}
     </p>
+    {f.candidate_count > 0 && (
     <table>
       <thead><tr><th>Candidate</th><th>Party</th>{result?.declared && <th>Votes</th>}</tr></thead>
       <tbody>
@@ -196,6 +212,7 @@ const statusLabel =
           ))}
       </tbody>
     </table>
+    )}
     {f.sopn_url && (
       <p class="note"><a href={f.sopn_url} rel="nofollow">Statement of persons nominated</a></p>
     )}
@@ -265,7 +282,7 @@ const statusLabel =
       <dl class="method-grid">
         <div><dt>Baseline</dt><dd>{prettyDate(forecast.baseline.election_date)}</dd></div>
         <div><dt>Swing measured from</dt><dd>{forecast.swing.contests_used} by-elections</dd></div>
-        <div><dt>Comparison group</dt><dd>{forecast.swing.stratum.replace(/_/g, " ").replace("|", ", ")}</dd></div>
+        <div><dt>Comparison group</dt><dd>{stratumLabel(forecast.swing.stratum)}</dd></div>
         <div><dt>Window</dt><dd>{forecast.swing.window_days} days</dd></div>
       </dl>
 

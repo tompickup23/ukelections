@@ -118,7 +118,10 @@ const gradedRight = graded.filter((c) => c.result.grading.call_correct).length;
                       )
                   : <span class="muted">No projection</span>}
               </span>
-              <span class="field-note">{c.field.candidate_count} candidates{c.field.locked ? "" : ", field not final"}</span>
+              <span class="field-note">
+                {c.field.candidate_count} candidate{c.field.candidate_count === 1 ? "" : "s"}
+                {c.field.locked ? "" : c.field.candidate_count === 0 ? ", nominations open" : ", field not final"}
+              </span>
             </li>
           ))}
         </ul>

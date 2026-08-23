@@ -14,9 +14,10 @@
 //   swing   Measured from UK Elections' own by-election corpus, not from
 //           national voting intention. For every recent council by-election we
 //           also hold that ward's prior ordinary result, so the share change is
-//           observed rather than modelled. Per party we take the MEDIAN ratio
-//           of by-election share to prior share, which is robust to the handful
-//           of contests where a local factor swamps everything.
+//           observed rather than modelled. Per party we take the MEDIAN shift
+//           in LOG-ODDS between the two, which is robust to the handful of
+//           contests where a local factor swamps everything, and which cannot
+//           push a party past the ends of the scale the way a share ratio can.
 //   field   Who is actually standing, from the nomination papers. This is the
 //           part a national model cannot see and the single biggest driver of a
 //           local by-election: a party that does not stand scores nothing, and
@@ -35,10 +36,10 @@
 //   swung across the entire Reform realignment; one last fought in May 2025 is
 //   not. Pooling the two gave St Helens Haydock a projected Green lead of 45%
 //   off a 2022 all-out sweep, in a ward that then voted Reform 33 and Green 7.
-//   Ratios are therefore measured within the era the baseline belongs to.
+//   Shifts are therefore measured within the era the baseline belongs to.
 //
 //   Reform entry. A party entering a ward for the first time mechanically
-//   depresses every other party's share, so the ratio for Labour where Reform
+//   depresses every other party's share, so the shift for Labour where Reform
 //   newly entered is not comparable to one where Reform already stood.
 //
 // The estimator tries era plus entry, falls back to era alone, then to the
@@ -199,6 +200,22 @@ function madSigma(xs) {
   return mad === null ? null : mad * 1.4826;
 }
 
+// Swing is measured on the LOG-ODDS scale, not as a share ratio.
+//
+// A ratio is unbounded above, so a party that already holds a large share of
+// the ward gets pushed somewhere impossible: the Greens won Manchester Burnage
+// on 45.8% in May 2026, and the median Green ratio of 1.76 projected them to
+// 65.6%, which is not a swing, it is arithmetic running off the end of the
+// scale. Log-odds compresses at both ends by construction, so the same
+// underlying movement triples a party on 5% and barely moves one on 46%.
+export function logit(p) {
+  const q = Math.min(1 - 1e-6, Math.max(1e-6, p));
+  return Math.log(q / (1 - q));
+}
+export function invLogit(x) {
+  return 1 / (1 + Math.exp(-x));
+}
+
 export const DEFAULT_WINDOW_DAYS = 365;
 export const MIN_STRATUM_N = 8; // below this, fall back to the pooled estimate
 export const MIN_PARTY_N = 5; // below this, a party gets no ratio of its own
@@ -240,6 +257,7 @@ export function estimateSwing(
   }
   const usedStratum = stratum !== "pooled";
 
+  const shifts = {};
   const ratios = {};
   const sigmas = {};
   const counts = {};
@@ -247,19 +265,23 @@ export function estimateSwing(
   const entryCounts = {};
 
   for (const p of PARTIES) {
-    const logRatios = [];
+    const deltas = [];
     const entries = [];
     for (const c of sample) {
       const f = c.from[p] || 0;
       const t = c.to[p] || 0;
-      if (f >= PRESENT && t >= PRESENT) logRatios.push(Math.log(t / f));
+      if (f >= PRESENT && t >= PRESENT) deltas.push(logit(t) - logit(f));
       else if (f < PRESENT && t >= PRESENT) entries.push(t);
     }
-    counts[p] = logRatios.length;
+    counts[p] = deltas.length;
     entryCounts[p] = entries.length;
-    if (logRatios.length >= MIN_PARTY_N) {
-      ratios[p] = Math.exp(median(logRatios));
-      sigmas[p] = madSigma(logRatios) ?? 0.35;
+    if (deltas.length >= MIN_PARTY_N) {
+      const shift = median(deltas);
+      shifts[p] = shift;
+      // A readable equivalent for anyone reading the JSON or the page: what the
+      // same shift does to a party sitting on 25%, expressed as a share ratio.
+      ratios[p] = invLogit(logit(0.25) + shift) / 0.25;
+      sigmas[p] = madSigma(deltas) ?? 0.5;
     }
     if (entries.length >= MIN_PARTY_N) entry[p] = median(entries);
   }
@@ -271,6 +293,7 @@ export function estimateSwing(
     stratum,
     stratum_used: usedStratum,
     n: sample.length,
+    shifts,
     ratios,
     sigmas,
     counts,
@@ -283,8 +306,11 @@ export function estimateSwing(
 // Projection
 // -----------------------------------------------------------------------------
 
-const RATIO_CLAMP = [0.25, 4]; // a party neither vanishes nor quadruples on swing alone
-const DEFAULT_SIGMA = 0.4; // log-scale, used only where the corpus is too thin
+// Bounds on the log-odds shift. Roughly a factor of three either way at a 25%
+// base share, tightening automatically as the base share approaches 0 or 1,
+// which is the whole reason for working on this scale.
+const SHIFT_CLAMP = [-1.4, 1.4];
+const DEFAULT_SIGMA = 0.7; // log-odds scale, used only where the corpus is too thin
 
 /**
  * Project a contest.
@@ -300,12 +326,12 @@ export function projectContest(base, field, swing) {
     if (!field.has(p)) continue; // not standing scores nothing, full stop
     const b = base[p] || 0;
     if (b >= PRESENT) {
-      const r = swing.ratios[p];
-      if (r === undefined) {
+      const shift = swing.shifts[p];
+      if (shift === undefined) {
         central[p] = b;
         notes.push(`${p} carried unswung: fewer than ${MIN_PARTY_N} comparable contests in the window.`);
       } else {
-        central[p] = b * Math.min(RATIO_CLAMP[1], Math.max(RATIO_CLAMP[0], r));
+        central[p] = invLogit(logit(b) + Math.min(SHIFT_CLAMP[1], Math.max(SHIFT_CLAMP[0], shift)));
       }
     } else {
       const e = swing.entry[p];
@@ -377,8 +403,9 @@ export const DRAWS = 4000;
 // overconfident: contests it put above 90% were won 73% of the time.
 //
 // Fitted on the 223 by-elections since 1 May 2025 by widening the spread until
-// stated probabilities matched observed frequencies. 1.75 minimises reliability
-// error while holding the Brier score at its minimum; above 2.5 both degrade.
+// stated probabilities matched observed frequencies. On the log-odds scale 1.75
+// minimises BOTH the Brier score (0.564) and reliability error (0.072); 1.0
+// leaves the model overconfident and 2.5 throws away contests it could call.
 // Re-fit this when the corpus has meaningfully grown, and publish the table.
 export const SIGMA_INFLATION = 1.75;
 
@@ -403,7 +430,7 @@ export function runDraws(central, swing, seedKey, draws = DRAWS, inflation = SIG
     const draw = {};
     for (const p of live) {
       const sigma = (swing.sigmas[p] ?? DEFAULT_SIGMA) * inflation;
-      draw[p] = central[p] * Math.exp(gauss() * sigma);
+      draw[p] = invLogit(logit(central[p]) + gauss() * sigma);
     }
     const n = normalise(draw);
     let top = live[0];
@@ -553,7 +580,7 @@ export const OLDEST_USABLE_PRIOR = "2018-01-01";
  * Decide whether a contest gets a projection at all. The answer is no more
  * often than yes, and each no carries the reason that goes on the page.
  */
-export function assessBaseline({ prior, field, swing, votingSystem, boundaryChanged }) {
+export function assessBaseline({ prior, field, swing, votingSystem, boundaryChanged, fieldLocked = true }) {
   const blockers = [];
   if (votingSystem === "STV") {
     blockers.push("Scottish STV. Democracy Club does not publish a full per-candidate result for these, so neither the baseline nor the corpus can be built honestly.");
@@ -573,7 +600,14 @@ export function assessBaseline({ prior, field, swing, votingSystem, boundaryChan
     }
   }
   if (field && field.size < 2) {
-    blockers.push("Fewer than two parties on the ballot.");
+    // Most contests reach this state simply because nominations have not opened
+    // yet, three or four weeks out. Saying "fewer than two parties on the
+    // ballot" there reads as though the seat were uncontested.
+    blockers.push(
+      fieldLocked
+        ? "Fewer than two parties on the ballot."
+        : "Nominations have not closed, so the field is not yet known. This page fills in once the statement of persons nominated is published.",
+    );
   }
   if (swing && swing.n < MIN_STRATUM_N) {
     blockers.push(`Only ${swing.n} comparable by-elections in the window, below the minimum of ${MIN_STRATUM_N}.`);

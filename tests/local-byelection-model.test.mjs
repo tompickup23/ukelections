@@ -6,6 +6,7 @@ import {
   sharesFromCandidates,
   fieldFromCandidates,
   baselineEra,
+  logit,
   buildSwingCorpus,
   estimateSwing,
   projectContest,
@@ -133,15 +134,32 @@ describe("swing estimation", () => {
 
   it("recovers the swing that is actually in the corpus", () => {
     const s = estimateSwing(corpus, { asOf: "2026-06-01" });
-    expect(s.ratios["Reform UK"]).toBeCloseTo(2.0, 3);
-    expect(s.ratios.Labour).toBeCloseTo(0.5, 3);
+    // Reform 20% to 40% and Labour 60% to 30%, as log-odds shifts.
+    expect(s.shifts["Reform UK"]).toBeCloseTo(logit(0.4) - logit(0.2), 6);
+    expect(s.shifts.Labour).toBeCloseTo(logit(0.3) - logit(0.6), 6);
     expect(s.n).toBe(12);
+  });
+
+  it("cannot push a party off the end of the scale, which a share ratio can", () => {
+    // Manchester Burnage: the Greens went into the by-election on 45.8% and the
+    // median Green share ratio of 1.76 would have projected them to 65.6%.
+    const s = estimateSwing(corpus, { asOf: "2026-06-01" });
+    const big = projectContest(normalise({ "Reform UK": 0.458, Labour: 0.542 }), new Set(["Reform UK", "Labour"]), s);
+    // The same shift that doubles a party on 20% must move one on 45.8% far less.
+    const small = projectContest(normalise({ "Reform UK": 0.2, Labour: 0.8 }), new Set(["Reform UK", "Labour"]), s);
+    const bigGain = big.central["Reform UK"] / 0.458;
+    const smallGain = small.central["Reform UK"] / 0.2;
+    expect(smallGain).toBeGreaterThan(bigGain);
+    for (const p of PARTIES) {
+      expect(big.central[p]).toBeLessThanOrEqual(1);
+      expect(big.central[p]).toBeGreaterThanOrEqual(0);
+    }
   });
 
   it("never uses a contest that had not yet polled", () => {
     const s = estimateSwing(corpus, { asOf: "2026-01-01" });
     expect(s.n).toBe(0);
-    expect(s.ratios["Reform UK"]).toBeUndefined();
+    expect(s.shifts["Reform UK"]).toBeUndefined();
   });
 
   it("falls back from a thin stratum to the pooled sample and says which it used", () => {
@@ -164,7 +182,7 @@ describe("swing estimation", () => {
     );
     const s = estimateSwing(entryCorpus, { asOf: "2026-06-01" });
     expect(s.entry["Reform UK"]).toBeCloseTo(0.3, 2);
-    expect(s.ratios["Reform UK"]).toBeUndefined();
+    expect(s.shifts["Reform UK"]).toBeUndefined();
   });
 });
 
@@ -206,7 +224,7 @@ describe("projection", () => {
 });
 
 describe("uncertainty", () => {
-  const swing = { ratios: {}, sigmas: { Labour: 0.3, "Reform UK": 0.3 }, entry: {}, counts: {} };
+  const swing = { shifts: {}, ratios: {}, sigmas: { Labour: 0.6, "Reform UK": 0.6 }, entry: {}, counts: {} };
   const central = normalise({ Labour: 0.505, "Reform UK": 0.495 });
 
   it("is deterministic for a given contest", () => {
