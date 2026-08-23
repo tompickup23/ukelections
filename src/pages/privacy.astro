@@ -2,13 +2,19 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Privacy" description="Privacy statement for UK Elections.">
+<BaseLayout title="Privacy" description="Privacy statement for UK Elections: what the site collects, what it sends where, and what it never does.">
   <section class="page-hero">
     <p class="eyebrow">Privacy</p>
-    <h1>No cookies. No analytics. No accounts.</h1>
+    <h1>No cookies. No accounts. No tracking across sites.</h1>
   </section>
   <section class="section prose-block">
-    <p>UK Elections is currently a static site. It does not set cookies, run analytics, collect account data, or store form submissions.</p>
-    <p>When postcode lookup is enabled, the request path and privacy handling will be documented here before release.</p>
+    <p>UK Elections is a static site. It sets no cookies, has no accounts, and never sells or shares data about you.</p>
+    <p>Three things do happen, and you should know about them:</p>
+    <ul>
+      <li><strong>Page-view counting.</strong> We use Cloudflare Web Analytics to count visits. It is cookieless, it does not fingerprint you, and it does not follow you to other sites. We see aggregate page views, not individual visitors.</li>
+      <li><strong>Postcode lookup.</strong> When you type a postcode into the Your area lookup, your browser sends that postcode to Postcodes.io (api.postcodes.io), an open-source service, to find your constituency and ward. We do not store the postcode, and it is not sent anywhere else.</li>
+      <li><strong>Hosting.</strong> The site is served by Cloudflare Pages. Like any web host, Cloudflare processes IP addresses in standard server logs to deliver the site.</li>
+    </ul>
+    <p>Questions or concerns: <a href="mailto:info@ukelections.co.uk">info@ukelections.co.uk</a>.</p>
   </section>
 </BaseLayout>
