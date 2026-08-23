@@ -123,18 +123,13 @@ phases.push(["7g. Render by-election share cards", "scripts/build-byelection-car
 for (const [label, scriptPath, opts] of phases) run(label, scriptPath, opts);
 
 step("8. Run vitest suite", "npm", ["test", "--silent"]);
-// Deliberately built WITHOUT BUILD_OG. That is safe: BaseLayout only
-// advertises per-page cards a build actually rendered, so with the flag
-// off all ~3,800 pages point at the static /og-default.png, which is
-// committed in public/. Nothing dangles.
-//
-// To switch per-page cards on, add `{ env: { ...process.env, BUILD_OG: "1" } }`
-// as a fourth argument here. Measure first: the Satori pass took 31 min for
-// 811 cards on a (loaded) Mac, against 165s for the same build without them,
-// and it has never run on vps-main. This step currently takes ~5m20 there,
-// so the flag could plausibly take the 04:30 nightly from ~6.5 min to an
-// hour. Time one supervised run before letting cron do it unattended.
-step("9. Build Astro static site", "npm", ["run", "build"]);
+// BUILD_OG switched ON 23 Aug 2026 after the supervised timed run the old
+// comment here asked for: on vps-main the full build with the Satori pass
+// took 7m52s wall (456s Astro build), exit 0, 811 cards, 74MB in dist/og/.
+// The 31-minute figure was a loaded Mac and does not transfer. BaseLayout
+// only advertises cards a build actually rendered, so a build with the flag
+// accidentally unset degrades to /og-default.png rather than dangling.
+step("9. Build Astro static site", "npm", ["run", "build"], { env: { ...process.env, BUILD_OG: "1" } });
 
 if (!noDeploy) {
   process.stdout.write("\n=== 10. Deploy to Cloudflare Pages via vps-main ===\n");

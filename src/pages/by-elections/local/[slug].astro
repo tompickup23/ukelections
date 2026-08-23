@@ -12,6 +12,7 @@ import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
+import { SITE_URL } from "../../../lib/site";
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
@@ -107,9 +108,38 @@ const holderSentence = holder?.established
 
 const statusLabel =
   d.status === "concluded" ? "Result declared" : d.status === "polls_closed" ? "Polls closed, result awaited" : "Upcoming";
+
+// Structured data: breadcrumbs on every contest page, and a NewsArticle node
+// once a result is declared (polling day is the stable publication date; the
+// nightly regeneration timestamp is only ever dateModified).
+const pageUrl = `${SITE_URL}/by-elections/local/${d.slug}/`;
+const structuredData: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "UK Elections", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "By-elections", item: `${SITE_URL}/by-elections/` },
+      { "@type": "ListItem", position: 3, name: "Council by-elections", item: `${SITE_URL}/by-elections/local/` },
+      { "@type": "ListItem", position: 4, name: `${c.ward_name}, ${c.council_name}`, item: pageUrl }
+    ]
+  }
+];
+if (result?.winner_party) {
+  structuredData.push({
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: `${c.ward_name} by-election result: ${shortPartyLabel(result.winner_party)} win`,
+    datePublished: c.polling_day,
+    dateModified: d.generated_at,
+    mainEntityOfPage: pageUrl,
+    author: { "@type": "Person", name: "Tom Pickup" },
+    publisher: { "@type": "Organization", name: "UK Elections", url: SITE_URL }
+  });
+}
 ---
 
-<BaseLayout title={title} description={description} image={cardExists ? cardPath : undefined}>
+<BaseLayout title={title} description={description} image={cardExists ? cardPath : undefined} structuredData={structuredData}>
   <section class="page-hero">
     {c.ward_gss && (
       <div class="mini-map-side">
@@ -122,7 +152,7 @@ const statusLabel =
       </div>
     )}
     <p class="eyebrow">Council by-election, {c.council_name}</p>
-    <h1>{c.ward_name}</h1>
+    <h1>{c.ward_name} by-election, {prettyDate(c.polling_day)}</h1>
     <p class="lede">
       Polling day {prettyDate(c.polling_day)}.
       {c.vacancy_reason ? ` The seat is vacant because ${c.vacancy_reason}.` : " The vacancy reason was not published."}
