@@ -257,6 +257,11 @@ async function render(contest, outFile) {
   const png = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
   mkdirSync(path.dirname(outFile), { recursive: true });
   writeFileSync(outFile, png);
+  // A JPEG sibling for the Instagram Content Publishing API, which accepts
+  // only JPEG at a public URL. Same pixels, same nightly refresh.
+  const sharp = (await import("sharp")).default;
+  await sharp(png).flatten({ background: "#0f1317" }).jpeg({ quality: 90 })
+    .toFile(outFile.replace(/\.png$/, ".jpg"));
 }
 
 async function main() {
