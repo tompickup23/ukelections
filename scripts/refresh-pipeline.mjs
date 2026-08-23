@@ -47,6 +47,38 @@ function run(label, scriptPath, opts = {}) {
   }
 }
 
+// Pull before doing anything, on the server only.
+//
+// This pipeline had no git in it at all. The vps-main checkout only ever moved
+// when the SEPARATE Friday by-election cron happened to pull, so merged work
+// sat unbuilt for days: the 20 June CSP and search fix had never gone live when
+// it was found on 11 July. It is worse than untidy for anything time-critical.
+// Council by-elections poll on a Thursday and the Friday pull is the day AFTER,
+// so without this a contest that polled on Thursday would still read "Upcoming"
+// all through Friday.
+//
+// --autostash because the server checkout is permanently dirty with generated
+// data, and --ff-only so this can never invent a merge. A failure here is
+// reported and the run continues on the code already present, which is strictly
+// better than not refreshing at all. Nothing reaches production without passing
+// step 8's test suite first.
+if (process.env.UKE_ON_VPS_MAIN === "1" && !process.argv.includes("--no-pull")) {
+  process.stdout.write(`\n=== [${new Date().toISOString()}] 0. Pull latest main ===\n`);
+  const before = spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: ROOT, encoding: "utf8" }).stdout?.trim();
+  const pull = spawnSync("git", ["pull", "--ff-only", "--autostash", "origin", "main"], {
+    cwd: ROOT,
+    stdio: "inherit",
+    env: process.env,
+  });
+  const after = spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: ROOT, encoding: "utf8" }).stdout?.trim();
+  if (pull.status !== 0) {
+    process.stderr.write(`\n!!! SOFT FAIL [0. Pull latest main] exit=${pull.status}, continuing on ${after}\n`);
+    softFailures.push(`0. Pull latest main (exit ${pull.status})`);
+  } else {
+    process.stdout.write(before === after ? `already current at ${after}\n` : `${before} -> ${after}\n`);
+  }
+}
+
 const phases = [];
 
 if (!skipFetch) {
