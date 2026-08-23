@@ -2,13 +2,18 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Accessibility" description="Accessibility statement for UK Elections.">
+<BaseLayout title="Accessibility" description="Accessibility statement for UK Elections: what works, known limitations, and how to report a problem.">
   <section class="page-hero">
     <p class="eyebrow">Accessibility</p>
     <h1>Readable, keyboard-accessible election data.</h1>
   </section>
   <section class="section prose-block">
-    <p>The scaffold uses semantic HTML, visible focus states, high-contrast text, and a skip link. Interactive lookup and charting features will be tested before launch.</p>
-    <p>Known limitation: the live data explorer is not yet built, so its accessibility cannot be assessed.</p>
+    <p>The site aims for WCAG 2.1 AA. It uses semantic HTML, a skip link, visible focus states, and high-contrast text. Navigation, search, and the postcode lookup are keyboard operable. Maps and charts are rendered as inline SVG, and we aim to keep every key figure available as plain text on the page as well.</p>
+    <p>Known limitations we are working on:</p>
+    <ul>
+      <li>The mobile navigation drawer does not yet trap keyboard focus while open.</li>
+      <li>Some data-dense tables are wide and rely on horizontal scrolling on small screens.</li>
+    </ul>
+    <p>If something on this site does not work for you, tell us at <a href="mailto:info@ukelections.co.uk">info@ukelections.co.uk</a> and name the page. Accessibility reports get fixed ahead of feature work.</p>
   </section>
 </BaseLayout>
