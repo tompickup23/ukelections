@@ -40,7 +40,8 @@
     "validate:sources": "node scripts/validate-source-snapshots.mjs",
     "refresh:rb": "node scripts/fetch-rb-annotations.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "build:local-byelections": "node scripts/build-local-byelections.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.8",

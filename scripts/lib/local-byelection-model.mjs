@@ -465,7 +465,17 @@ export function runDraws(central, swing, seedKey, draws = DRAWS, inflation = SIG
  * This is the number that belongs on the page. A projection whose stated
  * confidence is not measured against outcomes is decoration.
  */
-export function calibration(rows, buckets = [[0.3, 0.5], [0.5, 0.6], [0.6, 0.7], [0.7, 0.8], [0.8, 0.9], [0.9, 1.01]]) {
+// Three wide bands, not six narrow ones.
+//
+// Ten-point bands leave 9 to 23 contests each, where one result moves the
+// figure by 5pp: the published table read "said 70-80%, right 90%" next to
+// "said 80-90%, right 61%", an inversion that is pure sampling noise and looks
+// like the model contradicting itself. Pooled, every band lands within one
+// standard error of what we claimed. Narrow the bands again when the corpus can
+// carry them.
+export const PUBLISHED_BANDS = [[0.3, 0.55], [0.55, 0.7], [0.7, 1.01]];
+
+export function calibration(rows, buckets = PUBLISHED_BANDS) {
   const out = [];
   for (const [lo, hi] of buckets) {
     const b = rows.filter((r) => r.leader_probability >= lo && r.leader_probability < hi);
@@ -476,6 +486,11 @@ export function calibration(rows, buckets = [[0.3, 0.5], [0.5, 0.6], [0.6, 0.7],
       n: b.length,
       mean_stated: b.reduce((a, r) => a + r.leader_probability, 0) / b.length,
       observed: b.filter((r) => r.projected_winner === r.actual_winner).length / b.length,
+      standard_error: Math.sqrt(
+        (b.filter((r) => r.projected_winner === r.actual_winner).length / b.length) *
+          (1 - b.filter((r) => r.projected_winner === r.actual_winner).length / b.length) /
+          b.length,
+      ),
     });
   }
   return out;
@@ -509,9 +524,12 @@ export function backtest(corpus, { windowDays = DEFAULT_WINDOW_DAYS, minWindow =
     const draws = runDraws(central, swing, c.ballot_paper_id);
 
     const errs = [];
+    const partyErrors = {};
     for (const p of PARTIES) {
       if (!field.has(p)) continue;
-      errs.push(Math.abs((central[p] || 0) - (c.to[p] || 0)) * 100);
+      const signed = ((central[p] || 0) - (c.to[p] || 0)) * 100;
+      partyErrors[p] = signed;
+      errs.push(Math.abs(signed));
     }
     const pick = (o) => PARTIES.filter((p) => (o[p] || 0) > 0).sort((a, b) => o[b] - o[a])[0] ?? null;
     rows.push({
@@ -519,6 +537,7 @@ export function backtest(corpus, { windowDays = DEFAULT_WINDOW_DAYS, minWindow =
       date: c.date,
       era: c.era,
       mae_pp: errs.reduce((a, b) => a + b, 0) / errs.length,
+      party_errors: partyErrors,
       projected_winner: pick(central),
       actual_winner: pick(c.to),
       leader_probability: draws.leader_probability,
@@ -562,6 +581,7 @@ export function backtest(corpus, { windowDays = DEFAULT_WINDOW_DAYS, minWindow =
       confident_called_pct: confident.length ? confidentCalled / confident.length : null,
     },
     calibration: calibration(recent),
+    party_accuracy: partyAccuracy(recent),
     rows,
   };
 }
@@ -569,6 +589,33 @@ export function backtest(corpus, { windowDays = DEFAULT_WINDOW_DAYS, minWindow =
 // The realignment cut. May 2025 is the first set of locals at which Reform won
 // councils outright, and performance either side of it is not comparable.
 export const RECENT_SINCE = "2025-05-01";
+
+/**
+ * How the method does PER PARTY, which is not the same question as how it does
+ * overall and is the one that matters if a reader only cares about one of them.
+ *
+ * Measured, not corrected. The mean errors are real (Conservative runs about
+ * 2.5pp hot, Green about 3pp cold) but a walk-forward correction subtracting
+ * them was tested and moved the recent sample by 0.1pp of error and one contest
+ * in 223, which is inside the noise. It is not worth the extra moving part, and
+ * publishing the bias is more useful to a reader than quietly absorbing it.
+ * Revisit if the corpus grows enough for the effect to separate from noise.
+ */
+export function partyAccuracy(rows, minN = 10) {
+  const acc = {};
+  for (const r of rows) {
+    for (const [party, e] of Object.entries(r.party_errors || {})) (acc[party] ||= []).push(e);
+  }
+  return PARTIES.filter((p) => (acc[p] || []).length >= minN).map((p) => {
+    const xs = acc[p];
+    return {
+      party: p,
+      n: xs.length,
+      bias_pp: xs.reduce((a, b) => a + b, 0) / xs.length,
+      mae_pp: xs.reduce((a, b) => a + Math.abs(b), 0) / xs.length,
+    };
+  });
+}
 
 // -----------------------------------------------------------------------------
 // Baseline solidity
@@ -599,15 +646,26 @@ export function assessBaseline({ prior, field, swing, votingSystem, boundaryChan
       blockers.push("The prior result has no usable per-candidate vote counts.");
     }
   }
-  if (field && field.size < 2) {
+  // No projection until the ballot paper is final.
+  //
+  // Before nominations close, a party missing from Democracy Club's list has
+  // not filed YET, which is not the same as not standing, and the projection
+  // gives anything outside the field exactly zero. Brighton Queen's Park and
+  // Milton Keynes New Bradwell were both being projected in September off
+  // four- and three-candidate lists that were still open, so a single late
+  // Reform nomination would have made the published number wrong structurally
+  // rather than noisily. This is the gate that stops an automated post going
+  // out on a ballot that does not exist yet.
+  if (!fieldLocked) {
+    blockers.push(
+      "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out.",
+    );
+  }
+  if (field && field.size < 2 && fieldLocked) {
     // Most contests reach this state simply because nominations have not opened
     // yet, three or four weeks out. Saying "fewer than two parties on the
     // ballot" there reads as though the seat were uncontested.
-    blockers.push(
-      fieldLocked
-        ? "Fewer than two parties on the ballot."
-        : "Nominations have not closed, so the field is not yet known. This page fills in once the statement of persons nominated is published.",
-    );
+    blockers.push("Fewer than two parties on the ballot.");
   }
   if (swing && swing.n < MIN_STRATUM_N) {
     blockers.push(`Only ${swing.n} comparable by-elections in the window, below the minimum of ${MIN_STRATUM_N}.`);

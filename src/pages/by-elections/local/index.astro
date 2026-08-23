@@ -77,19 +77,63 @@ const gradedRight = graded.filter((c) => c.result.grading.call_correct).length;
         electorates, turnout under a quarter and candidate effects no model sees. Where the leader
         clears our confidence floor we name one; where it does not, the page says too close to call.
       </p>
+      {graded.length > 0 && (
+        <p class="note">
+          The shorter window below covers only the {graded.length} contests still listed on this page
+          and runs at {Math.round((gradedRight / graded.length) * 100)}%. Both numbers are the same
+          method; the difference is sample size, and neither is picked to flatter it. The longer
+          window starts in May 2025 on purpose: before the realignment the same method called
+          around three quarters of winners, and quoting that would not describe what it will do
+          this Thursday.
+        </p>
+      )}
       {meta?.calibration_table?.length > 0 && (
         <table>
-          <thead><tr><th>When we said</th><th>Contests</th><th>We were right</th></tr></thead>
+          <thead><tr><th>When we said</th><th>Contests</th><th>Average claim</th><th>We were right</th></tr></thead>
           <tbody>
             {meta.calibration_table.map((b: any) => (
               <tr>
-                <td>{Math.round(b.from * 100)} to {Math.round(b.to * 100)}%</td>
+                <td>{Math.round(b.from * 100)} to {Math.round(Math.min(b.to, 1) * 100)}%</td>
                 <td>{b.n}</td>
-                <td>{Math.round(b.observed * 100)}%</td>
+                <td>{Math.round(b.mean_stated * 100)}%</td>
+                <td>
+                  {Math.round(b.observed * 100)}%
+                  {b.standard_error ? <span class="muted"> ± {Math.round(b.standard_error * 100)}</span> : null}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <p class="note">
+          Read across: what we claimed on average, against what actually happened, with the sampling
+          error on the outcome. A well behaved forecaster has those two columns agreeing within it.
+        </p>
+      )}
+      {meta?.party_accuracy?.length > 0 && (
+        <>
+          <h3>And per party, which is a different question</h3>
+          <table>
+            <thead><tr><th>Party</th><th>Contests</th><th>Average miss</th><th>Runs hot or cold</th></tr></thead>
+            <tbody>
+              {meta.party_accuracy.map((p: any) => (
+                <tr>
+                  <td>{shortPartyLabel(p.party)}</td>
+                  <td>{p.n}</td>
+                  <td>{pp1(p.mae_pp)}pp</td>
+                  <td>{p.bias_pp >= 0 ? "+" : ""}{pp1(p.bias_pp)}pp</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="note">
+            Average miss is how far out we are on that party's share, ignoring direction. The last
+            column is the direction: a plus means we tend to put them too high. We publish these
+            rather than quietly subtracting them, because correcting for them was tested and moved
+            the record by a tenth of a point, which is not a real improvement. Reform and independents
+            are the hardest to call, which is what a low-turnout local contest does to a new or
+            personal vote.
+          </p>
+        </>
       )}
     </section>
   )}

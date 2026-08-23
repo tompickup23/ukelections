@@ -13,6 +13,7 @@ import {
   runDraws,
   backtest,
   calibration,
+  PUBLISHED_BANDS,
   assessBaseline,
   SIGMA_INFLATION,
   TOO_CLOSE_TO_CALL,
@@ -262,15 +263,15 @@ describe("baseline gate", () => {
   const field = new Set(["Labour", "Reform UK"]);
 
   it("passes a recent like-for-like baseline", () => {
-    expect(assessBaseline({ prior: goodPrior, field, swing, votingSystem: "FPTP", boundaryChanged: false }).forecastable).toBe(true);
+    expect(assessBaseline({ prior: goodPrior, field, swing, votingSystem: "FPTP", boundaryChanged: false, fieldLocked: true }).forecastable).toBe(true);
   });
 
   it("blocks Scottish STV, a changed boundary, a missing prior and a stale one", () => {
     const cases = [
-      { prior: goodPrior, votingSystem: "STV", boundaryChanged: false },
-      { prior: goodPrior, votingSystem: "FPTP", boundaryChanged: true },
-      { prior: null, votingSystem: "FPTP", boundaryChanged: false },
-      { prior: { election_date: "2015-05-07", candidates: [{ votes: 10 }, { votes: 5 }] }, votingSystem: "FPTP", boundaryChanged: false },
+      { prior: goodPrior, votingSystem: "STV", boundaryChanged: false, fieldLocked: true },
+      { prior: goodPrior, votingSystem: "FPTP", boundaryChanged: true, fieldLocked: true },
+      { prior: null, votingSystem: "FPTP", boundaryChanged: false, fieldLocked: true },
+      { prior: { election_date: "2015-05-07", candidates: [{ votes: 10 }, { votes: 5 }] }, votingSystem: "FPTP", boundaryChanged: false, fieldLocked: true },
     ];
     for (const c of cases) {
       const a = assessBaseline({ ...c, field, swing });
@@ -279,8 +280,20 @@ describe("baseline gate", () => {
     }
   });
 
+  it("refuses to project a ballot paper that is not final", () => {
+    // Before nominations close, a party absent from the list has not filed yet,
+    // and the projection gives anything outside the field zero. Publishing that
+    // would be wrong structurally, not noisily, and it is what an automated
+    // post would pick up.
+    const open = assessBaseline({ prior: goodPrior, field, swing, votingSystem: "FPTP", boundaryChanged: false, fieldLocked: false });
+    expect(open.forecastable).toBe(false);
+    expect(open.blockers.join(" ")).toMatch(/nominations have not closed/i);
+    // The same contest with a locked ballot is fine.
+    expect(assessBaseline({ prior: goodPrior, field, swing, votingSystem: "FPTP", boundaryChanged: false, fieldLocked: true }).forecastable).toBe(true);
+  });
+
   it("blocks when the corpus in the window is too thin to measure a swing", () => {
-    expect(assessBaseline({ prior: goodPrior, field, swing: { n: 2 }, votingSystem: "FPTP", boundaryChanged: false }).forecastable).toBe(false);
+    expect(assessBaseline({ prior: goodPrior, field, swing: { n: 2 }, votingSystem: "FPTP", boundaryChanged: false, fieldLocked: true }).forecastable).toBe(false);
   });
 });
 
@@ -333,6 +346,14 @@ describe("back-test", () => {
 });
 
 describe("calibration table", () => {
+  it("publishes wide bands, because narrow ones are mostly sampling noise", () => {
+    // Ten-point bands left single-digit samples and produced an inversion that
+    // read as the model contradicting itself.
+    expect(PUBLISHED_BANDS.length).toBeLessThanOrEqual(4);
+    expect(PUBLISHED_BANDS[0][0]).toBeLessThan(PUBLISHED_BANDS[0][1]);
+    expect(PUBLISHED_BANDS.at(-1)[1]).toBeGreaterThan(1);
+  });
+
   it("reports stated against observed, and is empty rather than misleading when thin", () => {
     const rows = Array.from({ length: 20 }, (_, i) => ({
       leader_probability: 0.85,
@@ -340,9 +361,10 @@ describe("calibration table", () => {
       actual_winner: i < 17 ? "Labour" : "Reform UK",
     }));
     const table = calibration(rows);
-    const band = table.find((b) => b.from === 0.8);
+    const band = table.find((b) => b.from === 0.7);
     expect(band.n).toBe(20);
     expect(band.observed).toBeCloseTo(0.85, 2);
+    expect(band.standard_error).toBeGreaterThan(0);
     expect(calibration([])).toEqual([]);
   });
 });

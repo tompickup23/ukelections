@@ -1,71 +1,97 @@
 {
-  "generated_at": "2026-08-23T18:34:57.356Z",
+  "generated_at": "2026-08-23T19:22:28.353Z",
   "window_from": "2026-05-25",
   "contests": 122,
-  "forecast_count": 104,
-  "corpus_size": 893,
-  "corpus_newest": "2026-08-13",
+  "forecast_count": 102,
+  "corpus_size": 897,
+  "corpus_newest": "2026-08-20",
   "corpus_oldest": "2017-05-04",
   "backtest": {
-    "n": 780,
-    "mae_pp": 7.722870646922905,
-    "winner_called": 559,
-    "winner_called_pct": 0.7166666666666667,
-    "reform_bias_pp": -2.674533702850844,
-    "reform_n": 288,
+    "n": 784,
+    "mae_pp": 7.741756242930622,
+    "winner_called": 561,
+    "winner_called_pct": 0.7155612244897959,
+    "reform_bias_pp": -2.6732012861569086,
+    "reform_n": 292,
     "recent_since": "2025-05-01",
     "recent": {
-      "n": 219,
-      "mae_pp": 7.681637289247774,
-      "winner_called": 133,
-      "winner_called_pct": 0.6073059360730594,
-      "confident_n": 117,
-      "confident_called": 82,
-      "confident_called_pct": 0.7008547008547008
+      "n": 223,
+      "mae_pp": 7.748772897771319,
+      "winner_called": 135,
+      "winner_called_pct": 0.6053811659192825,
+      "confident_n": 119,
+      "confident_called": 83,
+      "confident_called_pct": 0.6974789915966386
     }
   },
   "calibration_table": [
     {
       "from": 0.3,
-      "to": 0.5,
-      "n": 79,
-      "mean_stated": 0.42065822784810125,
-      "observed": 0.5063291139240507
+      "to": 0.55,
+      "n": 100,
+      "mean_stated": 0.43896250000000003,
+      "observed": 0.5,
+      "standard_error": 0.05
     },
     {
-      "from": 0.5,
-      "to": 0.6,
-      "n": 45,
-      "mean_stated": 0.5545166666666665,
-      "observed": 0.5555555555555556
-    },
-    {
-      "from": 0.6,
+      "from": 0.55,
       "to": 0.7,
-      "n": 43,
-      "mean_stated": 0.6533662790697674,
-      "observed": 0.6511627906976745
+      "n": 71,
+      "mean_stated": 0.6251161971830986,
+      "observed": 0.6338028169014085,
+      "standard_error": 0.057174899223846616
     },
     {
       "from": 0.7,
-      "to": 0.8,
-      "n": 21,
-      "mean_stated": 0.7459166666666668,
-      "observed": 0.9047619047619048
-    },
-    {
-      "from": 0.8,
-      "to": 0.9,
-      "n": 18,
-      "mean_stated": 0.843361111111111,
-      "observed": 0.6111111111111112
-    },
-    {
-      "from": 0.9,
       "to": 1,
-      "n": 9,
-      "mean_stated": 0.9516944444444445,
-      "observed": 0.8888888888888888
+      "n": 48,
+      "mean_stated": 0.8210416666666668,
+      "observed": 0.7916666666666666,
+      "standard_error": 0.05861785769491019
+    }
+  ],
+  "party_accuracy": [
+    {
+      "party": "Reform UK",
+      "n": 214,
+      "bias_pp": -1.5934878708130318,
+      "mae_pp": 10.732390435084548
+    },
+    {
+      "party": "Labour",
+      "n": 209,
+      "bias_pp": 1.3806745324038756,
+      "mae_pp": 5.548951270130582
+    },
+    {
+      "party": "Conservative",
+      "n": 223,
+      "bias_pp": 2.53930928286158,
+      "mae_pp": 7.657776896596118
+    },
+    {
+      "party": "Liberal Democrats",
+      "n": 202,
+      "bias_pp": -0.3857138324625643,
+      "mae_pp": 6.375310669311501
+    },
+    {
+      "party": "Green Party",
+      "n": 194,
+      "bias_pp": -2.8033930012139456,
+      "mae_pp": 6.289126149581168
+    },
+    {
+      "party": "Independent",
+      "n": 75,
+      "bias_pp": 2.9993770140874503,
+      "mae_pp": 11.734582709718206
+    },
+    {
+      "party": "Other",
+      "n": 50,
+      "bias_pp": -0.5437172119235442,
+      "mae_pp": 5.215856356965599
     }
   ],
   "sigma_inflation": 1.75,

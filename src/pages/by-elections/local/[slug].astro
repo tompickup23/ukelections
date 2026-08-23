@@ -305,12 +305,13 @@ const statusLabel =
           </p>
           {meta?.calibration_table?.length > 0 && (
             <table class="calibration">
-              <thead><tr><th>When we said</th><th>Contests</th><th>We were right</th></tr></thead>
+              <thead><tr><th>When we said</th><th>Contests</th><th>Average claim</th><th>We were right</th></tr></thead>
               <tbody>
                 {meta.calibration_table.map((b: any) => (
                   <tr>
-                    <td>{Math.round(b.from * 100)} to {Math.round(b.to * 100)}%</td>
+                    <td>{Math.round(b.from * 100)} to {Math.round(Math.min(b.to, 1) * 100)}%</td>
                     <td>{b.n}</td>
+                    <td>{Math.round(b.mean_stated * 100)}%</td>
                     <td>{Math.round(b.observed * 100)}%</td>
                   </tr>
                 ))}

@@ -110,6 +110,53 @@ describe.skipIf(!present)("local by-election contest files", () => {
   });
 });
 
+describe.skipIf(!present)("freshness", () => {
+  // These pages are the input to scheduled social posts, so the failure that
+  // matters is not a wrong number, it is a stale one: a contest that polled on
+  // Thursday still reading "Upcoming" on Friday because nothing regenerated.
+  // scripts/build-local-byelections.mjs now runs as phase 7f of the nightly
+  // pipeline; this is the alarm for when that stops happening.
+  const today = new Date().toISOString().slice(0, 10);
+  const daysOld = (iso) => Math.round((Date.parse(today) - Date.parse(iso.slice(0, 10))) / 86400000);
+
+  it("was regenerated recently enough to be trusted", () => {
+    const age = daysOld(meta.generated_at);
+    expect(age, `contest data is ${age} days old. Run npm run build:local-byelections`).toBeLessThan(14);
+  });
+
+  it("does not still call a contest upcoming after it has polled", () => {
+    const stale = contests.filter(
+      ({ doc }) => doc.status === "upcoming" && daysOld(doc.contest.polling_day) > 3,
+    );
+    expect(
+      stale.map((s) => s.file),
+      "these polled more than three days ago and the data still says upcoming",
+    ).toEqual([]);
+  });
+
+  it("keeps each contest's status consistent with its own contents", () => {
+    for (const { file, doc } of contests) {
+      if (doc.result?.declared) {
+        expect(doc.status, `${file}`).toBe("concluded");
+      } else if (doc.contest.polling_day > meta.generated_at.slice(0, 10)) {
+        expect(doc.status, `${file}`).toBe("upcoming");
+      }
+    }
+  });
+
+  it("carries a swing corpus that reaches the most recent polling round", () => {
+    // The corpus used to lag the results the pages were already displaying,
+    // because it came from an archive rebuilt on a different schedule.
+    const newestResult = contests
+      .filter(({ doc }) => doc.result?.declared)
+      .map(({ doc }) => doc.contest.polling_day)
+      .sort()
+      .at(-1);
+    if (!newestResult) return;
+    expect(meta.corpus_newest >= newestResult, `corpus stops at ${meta.corpus_newest}, results reach ${newestResult}`).toBe(true);
+  });
+});
+
 describe.skipIf(!present || !meta)("the published back-test", () => {
   it("reports rates that are possible", () => {
     // A rate above 100% has caught a denominator bug on this estate before.

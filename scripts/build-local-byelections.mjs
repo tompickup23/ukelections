@@ -369,7 +369,13 @@ function slugFor(id) {
   return m ? { council_slug: m[1], ward_slug: m[2], date: m[3], slug: `${m[1]}-${m[2]}-${m[3]}` } : null;
 }
 
-async function assemble(ballot, priors, corpus, demo) {
+/**
+ * Everything that needs the network: the ballot record, who is standing, and
+ * the ward's prior ordinary result. Kept separate from the projection so that
+ * results declared since the last archive refresh can be folded into the swing
+ * corpus BEFORE anything is projected off it.
+ */
+async function gather(ballot, priors) {
   const ids = slugFor(ballot.election_id);
   if (!ids) return null;
   const division = ballot.division || {};
@@ -378,8 +384,15 @@ async function assemble(ballot, priors, corpus, demo) {
 
   let dc = null;
   let fieldUnavailable = false;
+  // A contest that has polled and declared a full result never changes again,
+  // so once we have one it is cached permanently. Without this every nightly
+  // run re-fetches all ~120 contests; with it, only the live ones move.
+  const settledKey = `settled-dc-${ballot.election_id}`;
+  const settledFile = path.join(CACHE_DIR, `${settledKey}.json`);
   try {
-    dc = await getJson(`${DC}${ballot.election_id}/`, `dc-${ballot.election_id}`);
+    dc = existsSync(settledFile)
+      ? JSON.parse(readFileSync(settledFile, "utf8"))
+      : await getJson(`${DC}${ballot.election_id}/`, `dc-${ballot.election_id}`);
   } catch (e) {
     // A rate-limited fetch is NOT an empty ballot paper. Recorded as unknown
     // so the run reports it and the next one retries, rather than publishing
@@ -396,6 +409,14 @@ async function assemble(ballot, priors, corpus, demo) {
     elected: c.result?.elected ?? null,
   }));
   const field = fieldFromCandidates(candidates);
+
+  // Promote to the permanent cache once the result is complete and the poll is
+  // comfortably past, so a late correction still has a window to land.
+  const declared = candidates.length > 0 && candidates.every((c) => c.votes !== null);
+  if (dc && declared && daysAgo(ids.date) > SETTLED_AFTER_DAYS && !existsSync(settledFile)) {
+    mkdirSync(CACHE_DIR, { recursive: true });
+    writeFileSync(settledFile, JSON.stringify(dc));
+  }
 
   let prior = priors.find({
     council_slug: ids.council_slug,
@@ -414,6 +435,13 @@ async function assemble(ballot, priors, corpus, demo) {
   // was fought on different lines, whatever the ward is called now.
   const setStart = division.divisionset?.start_date || null;
   const boundaryChanged = Boolean(prior && setStart && prior.election_date < setStart);
+
+  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable };
+}
+
+/** The pure half: assess, project, grade, and shape the contest file. */
+function assemble(ctx, corpus, demo) {
+  const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable } = ctx;
 
   const reformEntering =
     prior !== null && field.has("Reform UK")
@@ -575,15 +603,58 @@ async function main() {
   const priors = buildPriorIndex(history);
   console.log(`  history: ${history.length} rows, ${priors.ordinaryCount} wards with an ordinary result`);
 
-  const corpus = buildSwingCorpus(priors.byelectionRows, (row) =>
-    priors.find({
-      council_slug: row.council_slug,
-      ward_slug: row.ward_slug,
-      gss: null,
-      before: row.election_date,
-    }),
+  const demo = loadWardDemographics();
+  console.log(`  ward demographics: ${Object.keys(demo.wards).length} wards`);
+
+  const ballots = await fetchScheduledBallots();
+  console.log(`  ${ballots.length} scheduled ballots`);
+
+  // Pass one: everything that touches the network.
+  const gathered = [];
+  for (const b of ballots.sort((x, y) => x.poll_open_date.localeCompare(y.poll_open_date))) {
+    const ctx = await gather(b, priors);
+    if (ctx) gathered.push(ctx);
+  }
+
+  // Results declared since the archive was last refreshed are folded into the
+  // corpus before anything is projected off it. The archive rebuild runs on the
+  // server on its own schedule, so without this the model is systematically a
+  // round or two behind the results it has already fetched and is displaying:
+  // the corpus stopped at 13 August while the pages carried the 20 August round.
+  const fresh = [];
+  const known = new Set(priors.byelectionRows.map((r) => r.ballot_paper_id));
+  for (const ctx of gathered) {
+    if (known.has(ctx.ballot.election_id)) continue;
+    if (ctx.votingSystem === "STV") continue;
+    const withVotes = ctx.candidates.filter((c) => c.votes !== null);
+    if (!ctx.candidates.length || withVotes.length !== ctx.candidates.length) continue;
+    if (!ctx.prior || ctx.boundaryChanged) continue;
+    fresh.push({
+      ballot_paper_id: ctx.ballot.election_id,
+      election_date: ctx.ids.date,
+      tier: "local",
+      council_slug: ctx.ids.council_slug,
+      ward_slug: ctx.ids.ward_slug,
+      is_by_election: true,
+      candidates: ctx.candidates,
+      _prior: ctx.prior,
+    });
+  }
+
+  const corpus = buildSwingCorpus([...priors.byelectionRows, ...fresh], (row) =>
+    row._prior ??
+      priors.find({
+        council_slug: row.council_slug,
+        ward_slug: row.ward_slug,
+        gss: null,
+        before: row.election_date,
+      }),
   );
-  console.log(`  swing corpus: ${corpus.length} by-elections paired with a prior ward result`);
+  console.log(
+    `  swing corpus: ${corpus.length} by-elections paired with a prior ward result` +
+      (fresh.length ? `, including ${fresh.length} declared since the archive was last rebuilt` : ""),
+  );
+  console.log(`  newest contest in the corpus: ${corpus.at(-1)?.date ?? "none"}`);
 
   const bt = backtest(corpus);
   console.log(
@@ -598,17 +669,11 @@ async function main() {
     console.log(`    said ${(b.from * 100).toFixed(0)}-${(b.to * 100).toFixed(0)}%: n=${b.n}, right ${(b.observed * 100).toFixed(0)}%`);
   }
 
-  const demo = loadWardDemographics();
-  console.log(`  ward demographics: ${Object.keys(demo.wards).length} wards`);
-
-  const ballots = await fetchScheduledBallots();
-  console.log(`  ${ballots.length} scheduled ballots`);
-
   mkdirSync(OUT_DIR, { recursive: true });
   const written = new Set();
   let forecast = 0;
-  for (const b of ballots.sort((x, y) => x.poll_open_date.localeCompare(y.poll_open_date))) {
-    const contest = await assemble(b, priors, corpus, demo);
+  for (const ctx of gathered) {
+    const contest = assemble(ctx, corpus, demo);
     if (!contest) continue;
     writeFileSync(path.join(OUT_DIR, `${contest.slug}.json`), `${JSON.stringify(contest, null, 2)}\n`);
     written.add(`${contest.slug}.json`);
@@ -650,6 +715,7 @@ async function main() {
           recent: bt.recent,
         },
         calibration_table: bt.calibration,
+        party_accuracy: bt.party_accuracy,
         sigma_inflation: SIGMA_INFLATION,
         method_note:
           "One method, never blended: the ward's own last ordinary result moved by the median swing measured across recent council by-elections that we hold a paired prior result for. Contests without a like-for-like baseline get no number.",
