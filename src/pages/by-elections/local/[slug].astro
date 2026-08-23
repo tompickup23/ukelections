@@ -95,6 +95,16 @@ function stratumLabel(stratum: string): string {
 const cardPath = `/cards/by-elections/${d.slug}.png`;
 const cardExists = existsSync(path.join(process.cwd(), "public", cardPath));
 
+// Composed as one string rather than interleaved JSX expressions, which were
+// inserting a space before the comma and before the full stop: "held by
+// Independent (Gareth Slater) , who was elected as Labour".
+const esc = (x: string) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const holderSentence = holder?.established
+  ? `The seat was held by <strong>${esc(shortPartyLabel(holder.party))}</strong>` +
+    (holder.member ? ` (${esc(holder.member)})` : "") +
+    "."
+  : "";
+
 const statusLabel =
   d.status === "concluded" ? "Result declared" : d.status === "polls_closed" ? "Polls closed, result awaited" : "Upcoming";
 ---
@@ -125,13 +135,7 @@ const statusLabel =
     <h2>Who is defending it</h2>
     {holder?.established ? (
       <>
-        <p>
-          The seat was held by <strong>{shortPartyLabel(holder.party)}</strong>
-          {holder.member ? ` (${holder.member})` : ""}
-          {holder.elected_as && holder.elected_as !== holder.party
-            ? `, who was elected as ${shortPartyLabel(holder.elected_as)} and later sat as ${holder.party === "Independent" ? "an independent" : shortPartyLabel(holder.party)}`
-            : ""}.
-        </p>
+        <p set:html={holderSentence} />
         {holder.note && <p class="note">{holder.note}</p>}
         {holder.sources?.length > 0 && (
           <p class="note">
@@ -141,7 +145,7 @@ const statusLabel =
                 {i > 0 ? " and " : ""}
                 <a href={s.url} rel="nofollow">{s.label}</a>
               </>
-            ))}.
+            ))}<span>.</span>
           </p>
         )}
       </>
@@ -181,8 +185,8 @@ const statusLabel =
       </p>
       <PartyBars rows={forecastRows} large={true} />
 
-      <details class="band-detail">
-        <summary>Ranges, not point estimates</summary>
+      <div class="band-detail">
+        <h3>Ranges, not point estimates</h3>
         <table>
           <thead>
             <tr><th>Party</th><th>Low</th><th>Central</th><th>High</th><th>Wins</th></tr>
@@ -199,8 +203,18 @@ const statusLabel =
             ))}
           </tbody>
         </table>
-        <p class="note">Low and high are the 10th and 90th percentiles of {forecast.win_probability ? "4,000" : ""} simulated contests.</p>
-      </details>
+        <p class="note">Low and high are the 10th and 90th percentiles of 4,000 simulated contests.</p>
+      </div>
+
+      {bt?.recent && (
+        <p class="track-record">
+          For scale: on this method, since May 2025, we have called{" "}
+          <strong>{bt.recent.winner_called} of {bt.recent.n}</strong> council by-elections right
+          ({Math.round((bt.recent.winner_called_pct ?? 0) * 100)}%), and where we said 70% or better
+          we were right about {meta?.calibration_table?.length ? Math.round((meta.calibration_table.at(-1).observed) * 100) : 79}% of the time.
+          The full record is <a href="#method">below</a>.
+        </p>
+      )}
 
       <h3>What this cannot see</h3>
       <ul class="plain">
@@ -306,7 +320,7 @@ const statusLabel =
   )}
 
   {forecast && (
-    <section class="card method">
+    <section class="card method" id="method">
       <h2>Method</h2>
       <p>
         One method, never blended. The ward's own last ordinary result, moved by the median swing
@@ -413,7 +427,8 @@ const statusLabel =
   .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--space-4); }
   .method-grid dt { font-size: var(--text-sm); color: var(--text-muted); }
   .method-grid dd { margin: 0; font-weight: 600; }
-  .band-detail summary { cursor: pointer; color: var(--text-muted); font-size: var(--text-sm); }
+  .band-detail h3 { font-size: var(--text-sm); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .track-record { border-left: 3px solid var(--border); padding-left: var(--space-3); }
   @media (max-width: 40rem) {
     table { display: block; overflow-x: auto; }
   }
