@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found"
+  description="That page does not exist on UK Elections. Look up a seat, ward or council instead."
+  noIndex={true}
+>
+  <section class="page-hero">
+    <p class="eyebrow">404</p>
+    <h1>That page does not exist.</h1>
+  </section>
+  <section class="section prose-block">
+    <p>The address may be mistyped, or the page may have moved.</p>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/your-area/">Look up your constituency or ward</a></li>
+      <li><a href="/councils/">Councils</a></li>
+      <li><a href="/forecasts/general-election/">General election forecast</a></li>
+      <li><a href="/by-elections/">By-elections</a></li>
+      <li><a href="/polling/">Polling</a></li>
+      <li><a href="/coverage/">Coverage</a></li>
+    </ul>
+  </section>
+</BaseLayout>

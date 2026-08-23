@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadIdentity } from "../src/lib/predictions";
 import { getIndexableSitePaths } from "../src/lib/site";
@@ -8,7 +10,26 @@ import {
   wardSlug,
 } from "../src/lib/sitemapPaths";
 
-describe("sitemap paths", () => {
+// This suite asserts against the real identity corpus, and loadIdentity() reads
+// data/history/dc-historic-results.json, which is 64 MB and gitignored. It exists
+// on vps-main and on a developer machine that has run the pipeline; it does not
+// exist on a GitHub Actions runner, where the suite therefore died on ENOENT and
+// kept CI red on every PR regardless of the change.
+//
+// Skipping where the corpus is absent rather than deleting the assertions: the
+// build that actually gates a deploy is the vps-main one (step 8 of
+// scripts/refresh-pipeline.mjs), and the corpus is present there, so the suite
+// still runs for real everywhere it can protect anything.
+const CORPUS = path.join(process.cwd(), "data/history/dc-historic-results.json");
+const hasCorpus = existsSync(CORPUS);
+
+if (!hasCorpus) {
+  console.warn(
+    `[sitemap-paths] skipped: ${CORPUS} not present. This is expected on a CI runner and NOT expected on vps-main.`
+  );
+}
+
+describe.skipIf(!hasCorpus)("sitemap paths", () => {
   // loadIdentity() reads tens of MB of JSON on first call and memoises it.
   // Pay that in a hook so the cost isn't billed to whichever it() happens to
   // run first — that made this suite fail on timeout whenever the machine was
