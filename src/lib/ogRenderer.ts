@@ -2,8 +2,8 @@
  * ogRenderer.ts. Satori + Resvg rendering pipeline for per-page
  * Open Graph cards.
  *
- * Loaded once per build process. Fonts (Sora + Manrope) live in
- * data/fonts/ and are read on first call.
+ * Loaded once per build process. Fonts (Source Serif 4 + Source Sans 3)
+ * live in data/fonts/ and are read on first call.
  *
  * Gated behind the BUILD_OG environment variable so iteration builds
  * (where you don't care about social previews) skip the ~20 min
@@ -24,23 +24,41 @@ import { Resvg } from "@resvg/resvg-js";
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 
-// Shared dark-surface palette across the three sites.
+// The estate ground. Every social and Open Graph surface across the five
+// estate sites uses the same dark ground with the site's own accent-bright on
+// top; only the accent varies. UK Elections' accent is parchment, the colour
+// of a ballot paper, because on a forecast site every hue is a claim.
+// Values from briefings/uk-network-brand/BRAND-SYSTEM-2026-08-23.md.
 const COLORS = {
-  bg: "#04070d",
-  surface: "#0b1220",
-  text: "#f5f7fb",
-  muted: "#91a7c4",
-  brand: "#12b5cb",         // UK Elections brand cyan (logo tile + footer URL)
+  bg: "#0f1317",
+  surface: "#0f1317",
+  text: "#f4f6f7",
+  muted: "#98a3ac",
+  brand: "#e3d9c3",         // UK Elections accent-bright (mark + footer URL)
 };
 
+// The mark, as a data URI because Satori takes SVG through an img element.
+// Same marked ballot as the favicon and the site header, on the 64 unit grid.
+const MARK_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">' +
+  '<rect x="14" y="10" width="36" height="44" rx="5" fill="#e3d9c3"/>' +
+  '<path d="M24 25l16 16M40 25L24 41" stroke="#0f1317" stroke-width="6.5" stroke-linecap="round" fill="none"/></svg>';
+const MARK_URI = `data:image/svg+xml;base64,${Buffer.from(MARK_SVG).toString("base64")}`;
+
+// Source Serif 4 for display, Source Sans 3 for everything else, matching the
+// site. woff rather than woff2: Satori reads ttf, otf and woff only, and a
+// variable-weight file fails on its fvar table, so these are the static
+// single-weight fontsource files, committed in data/fonts/.
 let _fontCache: any[] | null = null;
 function loadFonts(): any[] {
   if (_fontCache) return _fontCache;
-  const sora800 = readFileSync(resolve(process.cwd(), "data/fonts/Sora-ExtraBold.ttf"));
-  const manrope700 = readFileSync(resolve(process.cwd(), "data/fonts/Manrope-SemiBold.ttf"));
+  const serif600 = readFileSync(resolve(process.cwd(), "data/fonts/source-serif-4-latin-600-normal.woff"));
+  const sans400 = readFileSync(resolve(process.cwd(), "data/fonts/source-sans-3-latin-400-normal.woff"));
+  const sans600 = readFileSync(resolve(process.cwd(), "data/fonts/source-sans-3-latin-600-normal.woff"));
   _fontCache = [
-    { name: "Sora", data: sora800, weight: 800, style: "normal" },
-    { name: "Manrope", data: manrope700, weight: 700, style: "normal" },
+    { name: "Source Serif 4", data: serif600, weight: 600, style: "normal" },
+    { name: "Source Sans 3", data: sans400, weight: 400, style: "normal" },
+    { name: "Source Sans 3", data: sans600, weight: 600, style: "normal" },
   ];
   return _fontCache;
 }
@@ -57,7 +75,7 @@ export interface OgShare {
 export interface OgCardOpts {
   /** Big top-line eyebrow text (e.g. "GENERAL ELECTION FORECAST") */
   eyebrow: string;
-  /** Big main headline (Sora display, the constituency/contest/council name) */
+  /** Big main headline (display serif, the constituency/contest/council name) */
   headline: string;
   /**
    * Replaces the old text subline with a stacked horizontal race bar
@@ -124,8 +142,8 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
         width: OG_WIDTH,
         height: OG_HEIGHT,
         padding: "60px 70px",
-        background: `linear-gradient(135deg, ${COLORS.bg} 0%, ${COLORS.surface} 100%)`,
-        fontFamily: "Manrope",
+        background: COLORS.bg,
+        fontFamily: "Source Sans 3",
         color: COLORS.text,
       },
       children: [
@@ -141,23 +159,8 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
             },
             children: [
               {
-                type: "div",
-                props: {
-                  style: {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
-                    background: COLORS.brand,
-                    color: COLORS.bg,
-                    fontFamily: "Sora",
-                    fontWeight: 800,
-                    fontSize: 16,
-                  },
-                  children: "UKE",
-                },
+                type: "img",
+                props: { src: MARK_URI, width: 40, height: 40 },
               },
               {
                 type: "div",
@@ -172,9 +175,9 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                       props: {
                         style: {
                           display: "flex",
-                          fontFamily: "Sora",
-                          fontWeight: 800,
-                          fontSize: 16,
+                          fontFamily: "Source Serif 4",
+                          fontWeight: 600,
+                          fontSize: 18,
                           color: COLORS.text,
                         },
                         children: "UK Elections",
@@ -216,7 +219,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                   style: {
                     display: "flex",
                     fontSize: 20,
-                    fontWeight: 700,
+                    fontWeight: 600,
                     letterSpacing: 2.8,
                     color: accentColour,
                     textTransform: "uppercase",
@@ -230,11 +233,11 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                 props: {
                   style: {
                     display: "flex",
-                    fontFamily: "Sora",
+                    fontFamily: "Source Serif 4",
                     fontSize: hasShares
                       ? headline.length > 22 ? 64 : 84
                       : headline.length > 24 ? 80 : 96,
-                    fontWeight: 800,
+                    fontWeight: 600,
                     lineHeight: 1.02,
                     letterSpacing: -1.5,
                     color: COLORS.text,
@@ -261,7 +264,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                                 style: {
                                   display: "flex",
                                   fontSize: 16,
-                                  fontWeight: 700,
+                                  fontWeight: 600,
                                   letterSpacing: 2,
                                   color: COLORS.muted,
                                   textTransform: "uppercase",
@@ -298,7 +301,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                                     background: s.colour,
                                     color: "#ffffff",
                                     fontSize: 18,
-                                    fontWeight: 800,
+                                    fontWeight: 600,
                                     lineHeight: 1.05,
                                     padding: "0 4px",
                                   },
@@ -361,14 +364,14 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                                   {
                                     type: "div",
                                     props: {
-                                      style: { display: "flex", fontWeight: 700, color: COLORS.text },
+                                      style: { display: "flex", fontWeight: 600, color: COLORS.text },
                                       children: s.partyLabel,
                                     },
                                   },
                                   {
                                     type: "div",
                                     props: {
-                                      style: { display: "flex", fontWeight: 700, color: COLORS.muted },
+                                      style: { display: "flex", fontWeight: 600, color: COLORS.muted },
                                       children: `${(s.pct * 100).toFixed(1)}%`,
                                     },
                                   },
@@ -396,7 +399,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                         style: {
                           display: "flex",
                           fontSize: 32,
-                          fontWeight: 700,
+                          fontWeight: 600,
                           color: COLORS.muted,
                           maxWidth: OG_WIDTH - 200,
                         },
@@ -427,7 +430,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                   style: {
                     display: "flex",
                     fontSize: 14,
-                    fontWeight: 700,
+                    fontWeight: 600,
                     color: COLORS.brand,
                   },
                   children: "ukelections.co.uk",
@@ -446,7 +449,7 @@ export async function renderOgCard(opts: OgCardOpts): Promise<Buffer> {
                         borderRadius: 999,
                         border: `1px solid ${partyChipColour || accentColour}`,
                         fontSize: 14,
-                        fontWeight: 700,
+                        fontWeight: 600,
                         color: COLORS.text,
                       },
                       children: [

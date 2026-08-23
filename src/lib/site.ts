@@ -75,6 +75,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/coverage/", label: "Coverage", desc: "What we forecast" },
       { href: "/transparency/", label: "Transparency", desc: "Funding & affiliations" },
       { href: "/releases/", label: "Releases", desc: "Version history" },
+      { href: "/contact/", label: "Contact", desc: "Questions and corrections" },
     ],
   },
 ] as const;
@@ -148,7 +149,8 @@ const STATIC_PATHS = [
   "/accessibility/",
   "/coverage/",
   "/past-results/by-region/",
-  "/transparency/"
+  "/transparency/",
+  "/contact/"
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
@@ -312,6 +314,13 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Reform UK share by English region on 7 May 2026: actual vote share, council seats won, and the regional spread of the swing.",
     priority: 79
+  },
+  {
+    href: "/contact/",
+    title: "Contact",
+    kind: "page",
+    description: "How to reach UK Elections. Questions, corrections and data queries go to info@ukelections.co.uk; corrections are applied to the page and noted.",
+    priority: 60
   },
   {
     href: "/transparency/",

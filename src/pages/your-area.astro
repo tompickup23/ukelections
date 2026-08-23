@@ -218,14 +218,14 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
 .lookup-shell { background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 1rem; }
 .lookup-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 .lookup-row input { flex: 1; padding: 0.75rem 1rem; font-size: 1.1rem; border: 1px solid var(--border); border-radius: 6px; }
-.lookup-row button { padding: 0.75rem 1.5rem; font-weight: 600; background: var(--accent-3); color: white; border: 0; border-radius: 6px; cursor: pointer; }
-.lookup-row button:hover { background: #163c6b; }
+.lookup-row button { padding: 0.75rem 1.5rem; font-weight: 600; background: var(--accent-3); color: var(--bg); border: 0; border-radius: 6px; cursor: pointer; }
+.lookup-row button:hover { background: color-mix(in srgb, var(--accent-3) 85%, #000000); }
 .lookup-status { color: var(--muted); margin-top: 0.5rem; min-height: 1.4em; font-size: 0.95rem; }
-.lookup-status.err { color: #c1121f; }
+.lookup-status.err { color: var(--status-bad-text); }
 .lookup-results { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
 .lookup-results ul { list-style: none; padding: 0; margin: 0.5rem 0 0; display: grid; gap: 0.4rem; }
-.lookup-results a { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; background: #f6f8fb; text-decoration: none; color: var(--ink); }
-.lookup-results a:hover { background: #edf2f9; }
+.lookup-results a { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; background: var(--surface-muted); text-decoration: none; color: var(--ink); }
+.lookup-results a:hover { background: color-mix(in srgb, var(--accent-3) 8%, var(--surface-muted)); }
 .council-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; margin-top: 0.5rem; }
 .council-card { display: block; padding: 0.6rem 0.85rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--ink); }
 .council-card:hover { border-color: var(--accent-3); }

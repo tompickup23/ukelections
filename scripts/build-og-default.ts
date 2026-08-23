@@ -25,7 +25,7 @@ const png = await renderOgCard({
   headline: "Every constituency, every forecast",
   subline:
     "650 UK parliamentary seats · 3,700 wards · backtests published on every page",
-  accentColour: "#12b5cb",
+  accentColour: "#e3d9c3",
 });
 
 writeFileSync(OUT, new Uint8Array(png));

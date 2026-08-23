@@ -140,7 +140,7 @@ function buildEntries(): OgEntry[] {
       eyebrow: "UK Elections",
       headline: "Every constituency, every forecast",
       subline: "650 UK parliamentary seats · backtests on every page",
-      accentColour: "#1d4e89",
+      accentColour: "#e3d9c3",
     });
   }
 
@@ -202,7 +202,7 @@ function buildEntries(): OgEntry[] {
     headline: "The numbers driving the forecast",
     shares: pollShares,
     sharesCaption: "Wikipedia 14-day rolling average + Restore Britain overlay",
-    accentColour: "#12b5cb",
+    accentColour: "#e3d9c3",
   });
 
   // 5 & 6. Past results + Councils hub. both share the same "council
@@ -237,7 +237,7 @@ function buildEntries(): OgEntry[] {
     headline: "Every council, before and after May 7",
     shares: councilShares,
     sharesCaption: `${may7.contesting_councils} contested · current control breakdown`,
-    accentColour: "#1d4e89",
+    accentColour: "#e3d9c3",
   });
 
   // 7. Parliament seat pages (650)

@@ -124,8 +124,8 @@ const structuredData = [
     </script>
     <meta name="description" content={description} />
     <meta name="robots" content={robotsContent} />
-    <meta name="theme-color" content="#f7f4ef" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1317" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:locale" content="en_GB" />
@@ -145,7 +145,7 @@ const structuredData = [
     <meta name="twitter:image" content={socialImageUrl} />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     {structuredData.map((item) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
@@ -180,6 +180,14 @@ const structuredData = [
               </span>
               <span class="footer-sister-arrow" aria-hidden="true">&#8599;</span>
             </a>
+            <a class="footer-sister-card footer-sister-card--ukfh" href="https://ukfoodhygiene.co.uk" rel="noopener">
+              <span class="footer-sister-tile" aria-hidden="true">FH</span>
+              <span class="footer-sister-body">
+                <span class="footer-sister-name">ukfoodhygiene.co.uk</span>
+                <span class="footer-sister-tagline">Food hygiene ratings for every UK establishment</span>
+              </span>
+              <span class="footer-sister-arrow" aria-hidden="true">&#8599;</span>
+            </a>
           </div>
         </section>
         <div class="footer-meta">
@@ -190,12 +198,17 @@ const structuredData = [
           <nav aria-label="Footer">
             <a href="/sources/">Sources</a>
             <a href="/methodology/">Methodology</a>
+            <a href="/contact/">Contact</a>
             <a href="/privacy/">Privacy</a>
             <a href="/terms/">Terms</a>
             <a href="/accessibility/">Accessibility</a>
             <a href="https://www.facebook.com/ukelectionspredictions" rel="me noopener">Facebook</a>
           </nav>
         </div>
+        <p class="footer-contact">
+          Contact: <a href="mailto:info@ukelections.co.uk">info@ukelections.co.uk</a>, or use the
+          <a href="/contact/">contact page</a>. Corrections are applied to the page and noted.
+        </p>
       </div>
     </footer>
 
@@ -212,13 +225,13 @@ const structuredData = [
       }
       .footer-meta p { max-width: 48rem; margin: 0; color: var(--muted); line-height: 1.5; }
       .footer-meta nav { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-      .footer-meta nav a { color: var(--ink); font-weight: 800; text-decoration: none; }
+      .footer-meta nav a { color: var(--ink); font-weight: 600; text-decoration: none; }
       .footer-sisters {
         margin: 0 0 1.5rem;
       }
       .footer-sisters-eyebrow {
         font-size: 0.72rem;
-        font-weight: 700;
+        font-weight: 600;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--muted, #5b6b80);
@@ -226,8 +239,21 @@ const structuredData = [
       }
       .footer-sisters-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
         gap: 0.85rem;
+      }
+      .footer-contact {
+        margin: 1.25rem 0 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .footer-contact a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .footer-contact a:hover {
+        text-decoration: underline;
       }
       .footer-sister-card {
         display: grid;
@@ -252,7 +278,7 @@ const structuredData = [
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-weight: 800;
+        font-weight: 600;
         font-size: 0.78rem;
         letter-spacing: 0.04em;
         color: #ffffff;
@@ -264,7 +290,7 @@ const structuredData = [
         min-width: 0;
       }
       .footer-sister-name {
-        font-weight: 700;
+        font-weight: 600;
         font-size: 0.92rem;
         color: var(--ink, #111827);
         line-height: 1.2;
@@ -280,19 +306,26 @@ const structuredData = [
         align-self: start;
         margin-top: 2px;
       }
+      /* Tile colours are each sister's estate accent-deep, from
+         BRAND-SYSTEM-2026-08-23.md, solid fill, no glow. White on each tile
+         computes over 4.5:1 (UKD 7.90, AS 7.69, UKFH 7.81). */
       .footer-sister-card--ukd .footer-sister-tile {
-        background: #4f46e5;
-        box-shadow: 0 6px 14px rgba(79, 70, 229, 0.28);
+        background: #4338ca;
       }
       .footer-sister-card--ukd:hover {
-        border-color: rgba(79, 70, 229, 0.55);
+        border-color: #4338ca;
       }
       .footer-sister-card--as .footer-sister-tile {
-        background: #06b6d4;
-        box-shadow: 0 6px 14px rgba(6, 182, 212, 0.28);
+        background: #2f5773;
       }
       .footer-sister-card--as:hover {
-        border-color: rgba(6, 182, 212, 0.55);
+        border-color: #2f5773;
+      }
+      .footer-sister-card--ukfh .footer-sister-tile {
+        background: #1f5c4a;
+      }
+      .footer-sister-card--ukfh:hover {
+        border-color: #1f5c4a;
       }
       :root[data-theme="dark"] .footer-sister-card:hover {
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);

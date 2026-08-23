@@ -74,7 +74,7 @@ const majorMae = major.map((p) => ({ party: p, mae: b.overall_mae.per_party[p] |
             <td>{m.ward_name}</td>
             <td><strong>{(m.ward_mae * 100).toFixed(1)}pp</strong></td>
             <td>{m.predicted_winner}</td>
-            <td>{m.actual_winner}{m.predicted_winner !== m.actual_winner && <span style="color: #c1121f">{" ←"}</span>}</td>
+            <td>{m.actual_winner}{m.predicted_winner !== m.actual_winner && <span style="color: var(--status-bad-text)">{" ←"}</span>}</td>
           </tr>
         ))}
       </tbody>
@@ -105,7 +105,7 @@ const majorMae = major.map((p) => ({ party: p, mae: b.overall_mae.per_party[p] |
 <style>
 .hero-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
 .stat { background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); flex: 1; min-width: 240px; }
-.stat-num { display: block; font-size: 2.5rem; font-weight: 700; color: var(--accent-2); }
+.stat-num { display: block; font-size: 2.5rem; font-weight: 600; color: var(--accent-2); }
 .stat-label { display: block; font-weight: 600; margin-top: 0.25rem; }
 .stat-detail { display: block; color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem; }
 .mae-table, .miss-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
