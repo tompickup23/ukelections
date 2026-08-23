@@ -34,6 +34,7 @@ const f = d.field;
 const forecast = d.forecast;
 const prior = d.prior_result;
 const profile = d.ward_profile;
+const holder = d.previous_holder;
 const result = d.result;
 
 const metaPath = path.join(process.cwd(), DIR, "_meta.json");
@@ -88,11 +89,17 @@ function stratumLabel(stratum: string): string {
   return entry === "reform_entering" ? `${base}, Reform standing for the first time` : `${base}, Reform already standing`;
 }
 
+// Use the contest's own card as the link preview, but only if it was actually
+// rendered. Advertising a card that does not exist is the bug that left every
+// page on this site pointing at a missing image, so the check is not optional.
+const cardPath = `/cards/by-elections/${d.slug}.png`;
+const cardExists = existsSync(path.join(process.cwd(), "public", cardPath));
+
 const statusLabel =
   d.status === "concluded" ? "Result declared" : d.status === "polls_closed" ? "Polls closed, result awaited" : "Upcoming";
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} image={cardExists ? cardPath : undefined}>
   <section class="page-hero">
     {c.ward_gss && (
       <div class="mini-map-side">
@@ -114,9 +121,39 @@ const statusLabel =
     <p class="status-pill">{statusLabel}</p>
   </section>
 
+  <section class="card holder">
+    <h2>Who is defending it</h2>
+    {holder?.established ? (
+      <>
+        <p>
+          The seat was held by <strong>{shortPartyLabel(holder.party)}</strong>
+          {holder.member ? ` (${holder.member})` : ""}
+          {holder.elected_as && holder.elected_as !== holder.party
+            ? `, who was elected as ${shortPartyLabel(holder.elected_as)} and later sat as ${holder.party === "Independent" ? "an independent" : shortPartyLabel(holder.party)}`
+            : ""}.
+        </p>
+        {holder.note && <p class="note">{holder.note}</p>}
+        {holder.sources?.length > 0 && (
+          <p class="note">
+            Verified against{" "}
+            {holder.sources.map((s: any, i: number) => (
+              <>
+                {i > 0 ? " and " : ""}
+                <a href={s.url} rel="nofollow">{s.label}</a>
+              </>
+            ))}.
+          </p>
+        )}
+      </>
+    ) : (
+      <p class="note">{holder?.note}</p>
+    )}
+  </section>
+
   {result?.declared && (
     <section class="card result-card">
       <h2>The result</h2>
+      {result.outcome && <p class="outcome-line">{result.outcome}</p>}
       <p class="result-headline">
         <strong>{shortPartyLabel(result.winner_party)}</strong>
         {result.winner_candidate ? ` won. ${result.winner_candidate}` : " won"}
@@ -358,6 +395,8 @@ const statusLabel =
   .card { margin-block: var(--space-8); }
   .result-card { border-left: 4px solid var(--accent); padding-left: var(--space-4); }
   .result-headline { font-size: var(--text-lg); }
+  .outcome-line { font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--text-sm); }
+  .holder { border-left: 4px solid var(--border); padding-left: var(--space-4); }
   .grading { border-top: 1px solid var(--border); padding-top: var(--space-3); }
   .no-forecast { border-left: 4px solid var(--border); padding-left: var(--space-4); }
   ul.plain { list-style: disc; padding-left: var(--space-5); }

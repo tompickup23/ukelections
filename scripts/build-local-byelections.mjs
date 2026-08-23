@@ -226,6 +226,16 @@ const DEMO_FIELDS = [
   ["avg_imd_decile", "Deprivation decile"],
 ];
 
+/**
+ * Who held the seat. Hand verified, never derived, and absent by default.
+ * See data/contests/local-byelection-holders.json for why deriving it is wrong.
+ */
+function loadHolders() {
+  const file = p("data/contests/local-byelection-holders.json");
+  if (!existsSync(file)) return {};
+  return JSON.parse(readFileSync(file, "utf8")).holders || {};
+}
+
 function loadWardDemographics() {
   const file = p("data/features/ward-demographics-2021.json");
   if (!existsSync(file)) return { wards: {}, medians: {} };
@@ -440,7 +450,7 @@ async function gather(ballot, priors) {
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
-function assemble(ctx, corpus, demo) {
+function assemble(ctx, corpus, demo, holders) {
   const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable } = ctx;
 
   const reformEntering =
@@ -522,6 +532,11 @@ function assemble(ctx, corpus, demo) {
       majority_votes: ordered.length > 1 ? (ordered[0].votes || 0) - (ordered[1].votes || 0) : null,
       total_votes: totalVotes,
       source: `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/`,
+      outcome: holders[ballot.election_id]
+        ? winnerParty === holders[ballot.election_id].party
+          ? `${winnerParty} hold`
+          : `${winnerParty} gain from ${holders[ballot.election_id].party}`
+        : null,
       grading: forecast
         ? {
             projected_winner: forecast.winner,
@@ -573,6 +588,12 @@ function assemble(ctx, corpus, demo) {
       parties: [...field].sort(),
       candidates,
     },
+    previous_holder: holders[ballot.election_id]
+      ? { ...holders[ballot.election_id], established: true }
+      : {
+          established: false,
+          note: "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you.",
+        },
     ward_profile: wardProfile(demo, gss),
     prior_result: prior
       ? {
@@ -603,6 +624,8 @@ async function main() {
   const priors = buildPriorIndex(history);
   console.log(`  history: ${history.length} rows, ${priors.ordinaryCount} wards with an ordinary result`);
 
+  const holders = loadHolders();
+  console.log(`  verified seat holders: ${Object.keys(holders).length}`);
   const demo = loadWardDemographics();
   console.log(`  ward demographics: ${Object.keys(demo.wards).length} wards`);
 
@@ -673,7 +696,7 @@ async function main() {
   const written = new Set();
   let forecast = 0;
   for (const ctx of gathered) {
-    const contest = assemble(ctx, corpus, demo);
+    const contest = assemble(ctx, corpus, demo, holders);
     if (!contest) continue;
     writeFileSync(path.join(OUT_DIR, `${contest.slug}.json`), `${JSON.stringify(contest, null, 2)}\n`);
     written.add(`${contest.slug}.json`);

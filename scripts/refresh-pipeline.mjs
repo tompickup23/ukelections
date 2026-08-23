@@ -108,6 +108,10 @@ phases.push(["7c. Run GE next-election bulk forecast (650 PCONs)", "scripts/run-
 // until this regenerates. It exits 2 when a request got no answer, which is a
 // signal to re-run rather than a pipeline failure, so it is allowed to soft-fail.
 phases.push(["7f. Build council by-election contests", "scripts/build-local-byelections.mjs", { softFailExitCodes: [2] }]);
+// 7g renders each contest's share card. After 7f, because it reads what 7f
+// wrote, and before the site build, because the page only advertises a card
+// that already exists on disk.
+phases.push(["7g. Render by-election share cards", "scripts/build-byelection-cards.mjs"]);
 // 7d/7e (Makerfield 2026-06-18 by-election forecast + analysis) were REMOVED on
 // 19 Jun 2026: the contest concluded on 18 Jun (Labour hold, Burnham). The
 // forecast is now frozen as a post-mortem (status: "concluded" in the JSON) and
