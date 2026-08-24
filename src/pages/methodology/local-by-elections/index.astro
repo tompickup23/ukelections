@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import {
+  DEFAULT_WINDOW_DAYS,
+  MIN_STRATUM_N,
+  DRAWS,
+  SIGMA_INFLATION,
+  TOO_CLOSE_TO_CALL,
+} from "../../../../scripts/lib/local-byelection-model.mjs";
+
+const ROOT = process.cwd();
+const meta = JSON.parse(
+  readFileSync(path.join(ROOT, "data/contests/local-byelections/_meta.json"), "utf8")
+);
+const bt = meta.backtest;
+const rec = bt.recent;
+const cal = meta.calibration_table || [];
+const cmp = meta.method_comparison ?? null;
+const pct = (x: number | null | undefined, dp = 0) =>
+  typeof x === "number" ? (x * 100).toFixed(dp) : "n/a";
+const pp = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed(1) : "n/a");
+
+const description = `How the council by-election projections are built: the ward's own last result, moved by swing measured only from comparable by-elections (same era, same Reform-entry condition), with the full ${rec.n}-contest record and the pooled comparison published.`;
+---
+
+<BaseLayout title="Methodology, council by-elections" description={description}>
+  <section class="page-hero">
+    <p class="eyebrow">Methodology</p>
+    <h1>The council by-election model</h1>
+    <p class="lede">
+      One method, never blended: the ward's own last ordinary result, moved by the median swing
+      measured across recent council by-elections we hold a like-for-like baseline for. This page
+      is the full design, including the parts each contest page only summarises, and the record
+      that keeps it honest.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>The baseline</h2>
+    <p>
+      Every projection starts from the ward's own last ordinary result, paired at ward level so the
+      starting shares are the shares this exact electorate produced. A contest without a
+      like-for-like baseline gets no number: the page still exists, shows the candidates and the
+      vacancy, and says why we will not project it. As of the last rebuild the paired corpus holds
+      {meta.corpus_size} by-elections, from {meta.corpus_oldest} to {meta.corpus_newest}.
+    </p>
+
+    <h2>The swing, and why it is stratified</h2>
+    <p>
+      The move applied to the baseline is the median per-party shift measured across recent council
+      by-elections, in log-odds space, over a {DEFAULT_WINDOW_DAYS}-day window. But not across all
+      of them at once. Two things make raw pooling wrong:
+    </p>
+    <ul>
+      <li>
+        <strong>Era.</strong> A ward last fought before the Reform realignment has already absorbed
+        a huge structural swing that a ward last fought in May 2025 has not. The corpus is split by
+        when the baseline was fought: before the realignment, around the 2024 general election, and
+        since May 2025.
+      </li>
+      <li>
+        <strong>Whether Reform UK is entering or defending.</strong> A party standing in a ward for
+        the first time mechanically depresses every other party's share, so the shift measured for
+        Labour where Reform newly entered is not comparable to one where Reform already stood. Each
+        era is therefore split again: Reform entering against Reform already standing.
+      </li>
+    </ul>
+    <p>
+      Each contest is projected from the stratum it belongs to, and every contest page names its
+      comparison group and the number of by-elections behind it. A stratum thinner than
+      {MIN_STRATUM_N} contests falls back to the pooled estimate rather than pretending a handful
+      of results is a measurement. A party standing in a ward for the first time starts from the
+      share first-time entrants actually achieve in the corpus, never from national polling.
+    </p>
+
+    {cmp && (
+      <>
+        <h2>Does the stratification earn its place?</h2>
+        <p>{cmp.note}</p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Contests</th><th>Winner called</th><th>Mean absolute error</th><th>Excluding too close</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Stratified (published)</strong></td>
+                <td>{cmp.stratified.n}</td>
+                <td>{cmp.stratified.winner_called} ({pct(cmp.stratified.winner_called_pct)}%)</td>
+                <td>{pp(cmp.stratified.mae_pp)}pp</td>
+                <td>{cmp.stratified.confident_called} of {cmp.stratified.confident_n}</td>
+              </tr>
+              <tr>
+                <td>Pooled</td>
+                <td>{cmp.pooled.n}</td>
+                <td>{cmp.pooled.winner_called} ({pct(cmp.pooled.winner_called_pct)}%)</td>
+                <td>{pp(cmp.pooled.mae_pp)}pp</td>
+                <td>{cmp.pooled.confident_called} of {cmp.pooled.confident_n}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Same corpus, same window, recomputed on every rebuild. If the pooled row ever beats the
+          stratified row, this page will say so, and the method should change.
+        </p>
+      </>
+    )}
+
+    <h2>Uncertainty, and what the probability means</h2>
+    <p>
+      The projection is run through {DRAWS.toLocaleString("en-GB")} simulations with per-party
+      noise scaled from the corpus and inflated by a factor of {SIGMA_INFLATION}. That factor is
+      not a guess: the raw simulation was overconfident against the record (contests it put above
+      90% were won about 73% of the time), so the spread was widened on the full backtest until
+      stated probability matched observed frequency, holding the Brier score at its minimum. The
+      win probability on each page is simply the share of simulations a party wins.
+    </p>
+    <ul>
+      <li>
+        The <strong>strongest lane is the party that wins the most simulations</strong>, not the one
+        with the highest central share; in tight races a fatter-variance lane can win more draws on
+        a lower central projection, and the probability is the honest ranking of a simulation.
+      </li>
+      <li>
+        Below {pct(TOO_CLOSE_TO_CALL)}% the page says <strong>too close to call</strong> and names
+        no favourite.
+      </li>
+    </ul>
+
+    <h2>What the model cannot see</h2>
+    <p>
+      Candidate quality and local name recognition, which decide more council by-elections than
+      national swing does. Ward-level campaigns, and which parties actually knocked on doors.
+      Turnout, which routinely falls below a quarter of the electorate. This is why the record
+      below matters more than any single number.
+    </p>
+
+    <h2>Two deliberate refusals</h2>
+    <ul>
+      <li>
+        <strong>The previous holder is never derived.</strong> Defections, suspensions and
+        independents make "who held the seat" unsafe to infer from results data, so gain and hold
+        language appears only where a holder has been verified by hand against primary sources.
+      </li>
+      <li>
+        <strong>The census profile is not an input.</strong> Each page shows the ward against the
+        median ward because it helps a reader; the projection works from votes.
+      </li>
+    </ul>
+
+    <h2>The record</h2>
+    <p>
+      Tested by projecting every council by-election since {bt.recent_since} from only what was
+      known beforehand: across {rec.n} contests it called the winner {rec.winner_called} times
+      ({pct(rec.winner_called_pct)}%), with a mean absolute error of {pp(rec.mae_pp)}pp per party.
+      Restricted to contests it did not call too close, it was right {rec.confident_called} of
+      {rec.confident_n} times. Stated probability against what happened:
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>When we said</th><th>Contests</th><th>Average claim</th><th>We were right</th></tr>
+        </thead>
+        <tbody>
+          {cal.map((b: any) => (
+            <tr>
+              <td>{pct(b.from)} to {pct(Math.min(b.to, 1))}%</td>
+              <td>{b.n}</td>
+              <td>{pct(b.mean_stated)}%</td>
+              <td>{pct(b.observed)}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p>
+      The whole pipeline reruns nightly, and this page's figures are read from the same file the
+      projections are written to, so they cannot drift apart. Every contest, one page each:
+      <a href="/by-elections/local/">the live list</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; }
+  th, td { text-align: left; padding: 0.45rem 0.9rem 0.45rem 0; border-bottom: 1px solid var(--border); font-variant-numeric: lining-nums tabular-nums; }
+</style>
