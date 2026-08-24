@@ -680,6 +680,11 @@ async function main() {
   console.log(`  newest contest in the corpus: ${corpus.at(-1)?.date ?? "none"}`);
 
   const bt = backtest(corpus);
+  // The pooled variant of the same backtest: identical corpus, stratification
+  // off. Published on /methodology/local-by-elections/ as the evidence that
+  // the era-and-Reform-entry comparison groups earn their place, rather than
+  // asking readers to take the design on trust.
+  const btPooled = backtest(corpus, { stratify: false });
   console.log(
     `  back-test, all time: n=${bt.n}, MAE ${bt.mae_pp === null ? "n/a" : bt.mae_pp.toFixed(2)}pp, winner ${bt.winner_called}/${bt.n}`,
   );
@@ -738,6 +743,11 @@ async function main() {
           recent: bt.recent,
         },
         calibration_table: bt.calibration,
+        method_comparison: {
+          note: "Same corpus, same window, one switch: the stratified method measures swing only from by-elections in the same era and the same Reform-entry condition; pooled uses every paired contest at once.",
+          stratified: bt.recent,
+          pooled: btPooled.recent,
+        },
         party_accuracy: bt.party_accuracy,
         sigma_inflation: SIGMA_INFLATION,
         method_note:

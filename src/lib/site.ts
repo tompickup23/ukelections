@@ -142,6 +142,8 @@ const STATIC_PATHS = [
   "/methodology/",
   "/methodology/general-election/",
   "/methodology/national-model/",
+  "/methodology/demographic-ward-model/",
+  "/methodology/local-by-elections/",
   "/sources/",
   "/releases/",
   "/privacy/",
@@ -265,6 +267,20 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Source-first methodology for candidates, results, boundaries, polls, and probabilistic models.",
     priority: 85
+  },
+  {
+    href: "/methodology/local-by-elections/",
+    title: "Methodology, council by-elections",
+    kind: "page",
+    description: "The full council by-election method: the ward's own last result moved by swing measured only from comparable by-elections (same era, same Reform-entry condition), the calibration fitted on the published record, and the stratified-versus-pooled comparison that justifies the design.",
+    priority: 86
+  },
+  {
+    href: "/methodology/demographic-ward-model/",
+    title: "Methodology, demographic ward model",
+    kind: "page",
+    description: "A machine-learning model of Reform UK's local vote built from Census 2021 ward demographics alone, walk-forward validated against the May 2026 results.",
+    priority: 84
   },
   {
     href: "/sources/",
