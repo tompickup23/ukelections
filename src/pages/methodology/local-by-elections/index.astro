@@ -165,7 +165,7 @@ const description = `How the council by-election projections are built: the ward
           <tr><th>When we said</th><th>Contests</th><th>Average claim</th><th>We were right</th></tr>
         </thead>
         <tbody>
-          {cal.map((b: Record<string, number>) => (
+          {cal.map((b: any) => (
             <tr>
               <td>{pct(b.from)} to {pct(Math.min(b.to, 1))}%</td>
               <td>{b.n}</td>
