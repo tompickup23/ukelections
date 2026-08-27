@@ -62,8 +62,9 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     label: "Browse",
     items: [
-      { href: "/seats/", label: "650 Constituencies", desc: "Seat-by-seat profile" },
+      { href: "/seats/parliament/", label: "650 Constituencies", desc: "Every UK parliamentary seat, with its projection" },
       { href: "/councils/", label: "Councils", desc: "Every English council" },
+      { href: "/seats/", label: "Councils and contests", desc: "Browse councils, mayoralties and the devolved parliaments" },
       { href: "/your-area/", label: "Find Your Ward", desc: "By postcode" },
     ],
   },
@@ -118,6 +119,7 @@ const STATIC_PATHS = [
   "/councils/",
   "/past-results/",
   "/seats/",
+  "/seats/parliament/",
   "/your-area/",
   "/forecasts/",
   "/forecasts/may-2026/",
@@ -347,8 +349,22 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
   }
 ];
 
+/**
+ * The `<title>` as it should ship.
+ *
+ * This used to append " | UK Elections" to every page that did not already say
+ * it, which pushed 89% of the site's titles past the ~60 characters Google
+ * shows and left the median at 73. Dropping the suffix takes that to 42% and a
+ * median of 58, and it costs nothing: Google renders the site name as its own
+ * line from the homepage `WebSite` node and `og:site_name`, both of which this
+ * site sets, so the suffix was spending the most valuable characters in the
+ * result restating what Google already displays beside them.
+ *
+ * A page that names the site itself keeps its own wording. A legacy suffix
+ * passed in by a caller is stripped so the two cannot both appear.
+ */
 export function normalisePageTitle(title: string): string {
-  return /uk\s*elections/i.test(title) ? title : `${title} | ${SITE_NAME}`;
+  return title.replace(new RegExp(`\\s*\\|\\s*${SITE_NAME}\\s*$`, "i"), "").trim();
 }
 
 export function buildAbsoluteUrl(pathname: string): string {

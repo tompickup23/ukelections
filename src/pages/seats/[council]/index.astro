@@ -118,7 +118,10 @@ const seatProjectionRows: SeatProjRow[] = Object.entries(seatProjection as Recor
   }));
 
 const title = `${councilName}. May 7 2026 result and what's next`;
-const description = `${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp} seats up. Next election: ${nextElection.label}.`;
+// Leads with the council name: the previous form started with the control
+// headline and seat counts, which are identical across small councils and
+// collided on 20 pages.
+const description = `${councilName}, 7 May 2026: ${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp} seats. Next: ${nextElection.label}.`;
 const breadcrumbs: Crumb[] = [
   { name: "Councils", href: "/councils/" },
   { name: councilName, href: `/seats/${Astro.params.council}/` }

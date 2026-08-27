@@ -42,7 +42,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build:local-byelections": "node scripts/build-local-byelections.mjs",
-    "build:byelection-cards": "node scripts/build-byelection-cards.mjs"
+    "build:byelection-cards": "node scripts/build-byelection-cards.mjs",
+    "audit:seo": "node scripts/audit-seo.mjs dist"
   },
   "dependencies": {
     "astro": "^6.1.8"

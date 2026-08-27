@@ -64,6 +64,9 @@ const structuredData = [
       All {headline.total_seats.toLocaleString()} UK parliamentary constituencies. Refreshed daily from the latest UK Westminster polling.
       A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
     </p>
+    <p class="meta-row">
+      The table below ranks the closest seats. <a href="/seats/parliament/">Browse all {headline.total_seats} constituencies</a>.
+    </p>
   </section>
 
   <section class="section">
