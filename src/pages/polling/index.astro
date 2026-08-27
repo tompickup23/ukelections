@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { buildDataset, type Crumb } from "../../lib/seo";
+import { SITE_URL } from "../../lib/site";
 import PartyBars from "../../components/PartyBars.astro";
 import PartyTrendChart from "../../components/PartyTrendChart.astro";
 import { partyColour } from "../../lib/predictions";
@@ -77,9 +79,22 @@ const overlay = ukMeta.restore_britain_overlay || null;
 const ukSourceSummary = overlay
   ? `${ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average"} · plus Restore Britain overlay (${pct(overlay.share)}, ${overlay.source?.split(".")[0]?.trim()})`
   : ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average";
+const breadcrumbs: Crumb[] = [{ name: "Polling", href: "/polling/" }];
+const structuredData = [
+  buildDataset({
+    name: "UK Westminster voting intention, rolling polling average",
+    description:
+      "The named-pollster Westminster voting-intention average that feeds the UK Elections forecast, with every poll, its fieldwork window and the pollster behind it.",
+    url: `${SITE_URL}/polling/`,
+    spatialCoverage: "United Kingdom",
+    variableMeasured: ["Vote intention share by party", "Fieldwork dates", "Pollster", "Sample size"],
+    keywords: ["opinion polls", "voting intention", "Westminster polling", "poll of polls"]
+  })
+];
 ---
-
 <BaseLayout
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
   title="UK polling. Current Westminster average and how we use it"
   description={`Where our forecast's national polling input comes from. Current Westminster rolling average, the Restore Britain overlay, plus every refresh on the ledger.`}
 >

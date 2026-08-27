@@ -38,8 +38,12 @@ function classificationLabel(c: string | null | undefined): string {
   }
 }
 
+// Names whichever contest is actually next. The previous version hardcoded
+// "the Makerfield parliamentary by-election" in the branch that fires for ANY
+// upcoming contest, so it would have described the wrong election the moment
+// one appeared.
 const description = heroContest
-  ? `The Makerfield parliamentary by-election on ${heroContest.polling_day_label}, the rolling general-election forecast for every one of the 650 UK constituencies (now including Restore Britain), and an honest backtest of every prediction we've ever published.`
+  ? `${heroContest.short_name} on ${heroContest.polling_day_label}, the rolling general-election forecast for every one of the 650 UK constituencies, and an honest backtest of every prediction we've ever published.`
   : "The rolling general-election forecast for every one of the 650 UK constituencies, plus an honest backtest of every prediction we've ever published.";
 ---
 
@@ -47,12 +51,22 @@ const description = heroContest
   title="UK Elections. Every constituency, every forecast, every backtest"
   description={description}
 >
+  <section class:list={["home-masthead", heroContest && "home-masthead--compact"]}>
+    <h1>UK election forecasts, results and backtests</h1>
+    {!heroContest && (
+      <p class="lede">
+        Every constituency, every council and every by-election, each with the model's
+        record for that place published alongside the forecast.
+      </p>
+    )}
+  </section>
+
   {heroContest && (
     <section class="hero hero-byelection-v2">
       <div class="hero-byelection-grid">
         <header class="hero-byelection-head">
           <p class="eyebrow">Polling day · {heroContest.polling_day_label}</p>
-          <h1>{heroContest.short_name}</h1>
+          <h2 class="hero-byelection-title">{heroContest.short_name}</h2>
           <p class="lede">
             {heroClassification === "toss-up" && heroContest.headline_winner && heroContest.headline_runner_up && heroContest.margin_pp != null
               ? <><strong>{heroContest.margin_pp.toFixed(1)}pp {classificationLabel(heroClassification).toLowerCase()}</strong> between {shortPartyLabel(heroContest.headline_winner)} and {shortPartyLabel(heroContest.headline_runner_up)}. Well inside the model's confidence interval.</>

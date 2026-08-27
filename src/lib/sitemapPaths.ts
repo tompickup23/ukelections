@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { loadIdentity, loadGePredictions } from "./predictions";
 import { getIndexableSitePaths } from "./site";
@@ -86,6 +86,43 @@ export function getLocalByElectionPaths(): string[] {
     .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
     .map((f) => `/by-elections/local/${f.replace(/\.json$/, "")}/`);
   return paths.length ? ["/by-elections/local/", ...paths] : [];
+}
+
+/**
+ * `lastmod` for the paths that have a real content date, and only those.
+ *
+ * Google ignores a lastmod it cannot trust, and stamping every one of the ~3,900
+ * URLs with the nightly build time is exactly the pattern that earns that
+ * distrust: it would claim the whole site changed daily when almost none of it
+ * did. So this covers council by-election pages alone, where the date is a fact
+ * in the contest file (polls closed on polling day) and where freshness is what
+ * the traffic actually turns on. Everything else is emitted without a lastmod,
+ * which is a valid and more honest sitemap than a uniform one.
+ */
+export function getLastmodByPath(
+  dirAbs = path.join(process.cwd(), "data/contests/local-byelections")
+): Record<string, string> {
+  const dir = dirAbs;
+  if (!existsSync(dir)) return {};
+  const out: Record<string, string> = {};
+
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith(".json") || file.startsWith("_")) continue;
+    let contest: { contest?: { polling_day?: string }; slug?: string };
+    try {
+      contest = JSON.parse(readFileSync(path.join(dir, file), "utf8"));
+    } catch {
+      continue;
+    }
+    const pollingDay = contest?.contest?.polling_day;
+    const slug = contest?.slug;
+    if (!pollingDay || !slug) continue;
+    // Date-only is a valid sitemap lastmod and is all this claims to know: the
+    // page settled once the count was in.
+    out[`/by-elections/local/${slug}/`] = pollingDay;
+  }
+
+  return out;
 }
 
 export function getAllSitemapPaths(): string[] {

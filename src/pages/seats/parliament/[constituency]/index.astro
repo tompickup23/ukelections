@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import type { Crumb } from "../../../../lib/seo";
 import MiniMap from "../../../../components/MiniMap.astro";
 import PartyBars from "../../../../components/PartyBars.astro";
 import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
@@ -86,9 +87,14 @@ const winnerShare = ((record.prediction[record.winner]?.pct || 0) * 100).toFixed
 const margin = ((record.majority_pct || 0) * 100).toFixed(1);
 const countryLabel = record.country?.replace(/_/g, " ");
 const regionLabel = record.region?.replace(/_/g, " ");
+const breadcrumbs: Crumb[] = [
+  { name: "Constituencies", href: "/seats/" },
+  { name: record.name, href: `/seats/parliament/${Astro.params.constituency}/` }
+];
 ---
 
 <BaseLayout
+  breadcrumbs={breadcrumbs}
   title={`${record.name}. General election forecast`}
   description={`If a UK general election were held this week, the model predicts ${shortPartyLabel(record.winner)} to win ${record.name} with a ${margin}pp margin over ${shortPartyLabel(record.runner_up)}.`}
 >
@@ -106,7 +112,7 @@ const regionLabel = record.region?.replace(/_/g, " ");
       </div>
     )}
     <p class="eyebrow">General election forecast</p>
-    <h1>{record.name}</h1>
+    <h1>{record.name} constituency</h1>
     <p class="lede">
       Predicted winner: <strong><span class="party-pill" style={`background:${partyColour(record.winner)}`}></span> {shortPartyLabel(record.winner)}</strong>
       with <strong>{winnerShare}%</strong> of the vote, a {margin}pp margin over {shortPartyLabel(record.runner_up)}.

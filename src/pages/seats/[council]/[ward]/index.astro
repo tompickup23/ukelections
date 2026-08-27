@@ -16,6 +16,7 @@ import {
 } from "../../../../lib/predictions";
 import { summariseWardResult, seatsWonLabel } from "../../../../lib/may7WardResult";
 import { shortPartyLabel } from "../../../../lib/siteData";
+import type { Crumb } from "../../../../lib/seo";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -127,13 +128,21 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
       { party: "Conservative", pred: wardBacktest.con_pred || 0, actual: wardBacktest.con_actual || 0, delta: wardBacktest.con_delta || 0 },
     ].filter((r) => r.pred > 0 || r.actual > 0)
   : [];
+// Councils index, then this council, then this ward. Gives the ~3,000 ward
+// pages a crawl path back up (they previously linked upward only from a line at
+// the very bottom) and puts the trail in the SERP in place of the raw URL.
+const breadcrumbs: Crumb[] = [
+  { name: "Councils", href: "/councils/" },
+  { name: ward.council_name || "Council", href: `/seats/${ward.council_slug}/` },
+  { name: ward.ward_name || String(Astro.params.ward), href: `/seats/${ward.council_slug}/${Astro.params.ward}/` }
+];
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs}>
   <section class="page-hero ward-hero">
     <div class="ward-hero-text">
       <p class="eyebrow">{tierLabel} · {ward.council_name}</p>
-      <h1>{ward.ward_name}</h1>
+      <h1>{ward.ward_name}{ward.council_name ? `, ${ward.council_name}` : ""}</h1>
       <p class="lede">
         {ward.winner_count} {ward.winner_count === 1 ? "seat" : "seats"} contested on Thursday 7 May 2026.
         {ward.candidate_count} candidates from {ward.parties_standing.length} {ward.parties_standing.length === 1 ? "party" : "parties"}.

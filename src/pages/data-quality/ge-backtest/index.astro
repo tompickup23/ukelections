@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { buildDataset, type Crumb } from "../../../lib/seo";
+import { SITE_URL } from "../../../lib/site";
 import { loadGeBacktest, partyColour } from "../../../lib/predictions";
 
 const b = loadGeBacktest();
@@ -21,9 +23,25 @@ const top10Worst = [...rows]
 
 const partyMae = b.summary?.stm?.per_party_mae || {};
 const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1]).slice(0, 12);
+const breadcrumbs: Crumb[] = [
+  { name: "Data quality", href: "/data-quality/" },
+  { name: "General election backtest", href: "/data-quality/ge-backtest/" }
+];
+const structuredData = [
+  buildDataset({
+    name: "UK general election model backtest against the 2024 result",
+    description: `Forecast-versus-actual for ${rows.length} boundary-stable constituencies, replaying the constituency model on the 2024 general election from the 2019 result and the polling of the day.`,
+    url: `${SITE_URL}/data-quality/ge-backtest/`,
+    temporalCoverage: "2019-12-12/2024-07-04",
+    spatialCoverage: "United Kingdom",
+    variableMeasured: ["Predicted vote share by party", "Actual vote share by party", "Mean absolute error", "Winner called correctly"],
+    keywords: ["election model", "backtest", "forecast accuracy", "general election 2024"]
+  })
+];
 ---
-
 <BaseLayout
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
   title="GE backtest, data quality"
   description={`Validation of the GE constituency model: predict GE2024 from GE2019 + national polling. ${rows.length} boundary-stable constituencies evaluated.`}
 >
