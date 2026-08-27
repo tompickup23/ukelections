@@ -131,6 +131,14 @@ step("8. Run vitest suite", "npm", ["test", "--silent"]);
 // accidentally unset degrades to /og-default.png rather than dangling.
 step("9. Build Astro static site", "npm", ["run", "build"], { env: { ...process.env, BUILD_OG: "1" } });
 
+// Technical SEO gate over the rendered output, between build and deploy. It
+// catches the class of defect the unit tests structurally cannot: a page with
+// no h1, a page nothing links to, an attribution rendered as a link target.
+// Hard-fails only on binary defects; length budgets are compared against the
+// counts recorded when the gate landed, so they can fall but not rise. Every
+// check has a fixture in tests/audit-seo.test.ts proving it fires.
+step("9b. Technical SEO gate", "node", ["scripts/audit-seo.mjs", "dist"]);
+
 if (!noDeploy) {
   process.stdout.write("\n=== 10. Deploy to Cloudflare Pages via vps-main ===\n");
   // Detect whether we're already running on vps-main (cron context) — if so,

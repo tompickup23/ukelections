@@ -13,9 +13,15 @@ import {
 } from "../src/lib/site";
 
 describe("site metadata helpers", () => {
-  it("normalises page titles without duplicating the site name", () => {
-    expect(normalisePageTitle("Forecasts")).toBe("Forecasts | UK Elections");
-    expect(normalisePageTitle("Forecasts | UK Elections")).toBe("Forecasts | UK Elections");
+  it("does not spend title characters restating the site name", () => {
+    // Google renders the site name as its own line from the homepage WebSite
+    // node and og:site_name. Appending it here pushed 89% of titles past the
+    // ~60 characters Google shows.
+    expect(normalisePageTitle("Forecasts")).toBe("Forecasts");
+    expect(normalisePageTitle("Forecasts | UK Elections")).toBe("Forecasts");
+    expect(normalisePageTitle("UK Elections. Every constituency")).toBe(
+      "UK Elections. Every constituency"
+    );
   });
 
   it("uses the correct site identity", () => {

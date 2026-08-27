@@ -73,8 +73,8 @@ const tooClose = Boolean(forecast?.too_close_to_call);
 
 const description = forecast
   ? tooClose
-    ? `Too close to call. ${c.ward_name} in ${c.council_name} votes on ${prettyDate(c.polling_day)}, with ${f.candidate_count} candidates standing. The projection, the ward's last result and what the method cannot see.`
-    : `${shortPartyLabel(leader)} favoured on ${Math.round((leaderProb ?? 0) * 100)}%, from the ward's ${prior?.election_date?.slice(0, 4)} result and the swing measured across recent council by-elections. ${c.ward_name}, ${c.council_name}, polling ${prettyDate(c.polling_day)}.`
+    ? `Too close to call. ${c.ward_name}, ${c.council_name} votes on ${prettyDate(c.polling_day)}, ${f.candidate_count} candidates standing. The projection and the ward's last result.`
+    : `${c.ward_name}, ${c.council_name}, polling ${prettyDate(c.polling_day)}. ${shortPartyLabel(leader)} favoured on ${Math.round((leaderProb ?? 0) * 100)}%, from the ward's ${prior?.election_date?.slice(0, 4)} result and recent by-election swing.`
   : `${c.ward_name} in ${c.council_name} votes on ${prettyDate(c.polling_day)}. The candidates, the reason for the vacancy, and why we publish no projection for this one.`;
 
 // The stratum key is machine-readable; this is the human sentence for it.

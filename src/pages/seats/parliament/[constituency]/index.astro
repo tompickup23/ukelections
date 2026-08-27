@@ -88,7 +88,7 @@ const margin = ((record.majority_pct || 0) * 100).toFixed(1);
 const countryLabel = record.country?.replace(/_/g, " ");
 const regionLabel = record.region?.replace(/_/g, " ");
 const breadcrumbs: Crumb[] = [
-  { name: "Constituencies", href: "/seats/" },
+  { name: "Constituencies", href: "/seats/parliament/" },
   { name: record.name, href: `/seats/parliament/${Astro.params.constituency}/` }
 ];
 ---

@@ -1,0 +1,139 @@
+---
+/**
+ * Index of all 650 parliamentary constituencies.
+ *
+ * This page exists because the constituency pages had no internal links
+ * pointing at them. Only two pages on the whole site linked to any of them (a
+ * top-50 table on the general election forecast and ten more on the backtest),
+ * so 590 of the 650 were reachable only from sitemap.xml. Google had discovered
+ * them and declined to index most: they arrived with no signal that anything on
+ * the site considered them worth reaching.
+ *
+ * The nav made it worse by labelling /seats/ "650 Constituencies" when /seats/
+ * is the council browser.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadGePredictions, partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { SITE_URL } from "../../../lib/site";
+import type { Crumb } from "../../../lib/seo";
+
+const bundle = loadGePredictions() as { predictions?: Record<string, any> };
+const records = Object.entries(bundle.predictions || {})
+  .filter(([, r]) => Boolean(r?.prediction))
+  .map(([slug, r]) => ({
+    slug,
+    name: r.name as string,
+    country: (r.country || "") as string,
+    region: (r.region || "") as string,
+    winner: r.winner as string,
+    majorityPct: (r.majority_pct || 0) * 100
+  }));
+
+const titleCase = (s: string) =>
+  s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+// Group by country, then region within it. Northern Ireland and Scotland carry
+// no meaningful sub-region in the corpus, so a country with one region renders
+// as a single block rather than a heading that repeats its parent.
+const byCountry = new Map<string, Map<string, typeof records>>();
+for (const rec of records) {
+  const country = rec.country || "unknown";
+  const region = rec.region || country;
+  if (!byCountry.has(country)) byCountry.set(country, new Map());
+  const regions = byCountry.get(country)!;
+  if (!regions.has(region)) regions.set(region, []);
+  regions.get(region)!.push(rec);
+}
+const COUNTRY_ORDER = ["england", "scotland", "wales", "northern_ireland"];
+const countries = [...byCountry.entries()].sort(
+  (a, b) => COUNTRY_ORDER.indexOf(a[0]) - COUNTRY_ORDER.indexOf(b[0])
+);
+for (const [, regions] of countries) {
+  for (const [, list] of regions) list.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+const breadcrumbs: Crumb[] = [{ name: "Constituencies", href: "/seats/parliament/" }];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `All ${records.length} UK parliamentary constituencies`,
+    description: `Every UK parliamentary constituency with its current general election projection.`,
+    url: `${SITE_URL}/seats/parliament/`,
+    inLanguage: "en-GB",
+    isPartOf: { "@id": `${SITE_URL}/#website` }
+  }
+];
+---
+
+<BaseLayout
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
+  title="All 650 UK constituencies"
+  description={`Every one of the ${records.length} UK parliamentary constituencies, with the projected winner and margin for each, grouped by nation and region.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Browse</p>
+    <h1>All {records.length} UK constituencies</h1>
+    <p class="lede">
+      Every UK parliamentary seat with its current projection. Each page carries the
+      2024 result, the model's forecast, the sitting MP and how the model has scored
+      on that seat before.
+    </p>
+    <p class="meta-row">
+      <a href="/forecasts/general-election/">See the national seat projection</a>
+      {" · "}
+      <a href="/your-area/">Find mine by postcode</a>
+    </p>
+  </section>
+
+  {countries.map(([country, regions]) => (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">{titleCase(country)}</p>
+        <h2>
+          {[...regions.values()].reduce((n, l) => n + l.length, 0)} seats in {titleCase(country)}
+        </h2>
+      </div>
+      {[...regions.entries()]
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([region, list]) => (
+          <>
+            {regions.size > 1 && <h3 class="region-heading">{titleCase(region)}</h3>}
+            <div class="council-grid">
+              {list.map((rec) => (
+                <a class="council-card" href={`/seats/parliament/${rec.slug}/`}>
+                  <strong>{rec.name}</strong>
+                  <span class="tier">
+                    <span
+                      class="party-pill"
+                      style={`background:${partyColour(rec.winner)}`}
+                    ></span>
+                    {shortPartyLabel(rec.winner)}, {rec.majorityPct.toFixed(1)}pp
+                  </span>
+                </a>
+              ))}
+            </div>
+          </>
+        ))}
+    </section>
+  ))}
+</BaseLayout>
+
+<style>
+  .region-heading {
+    margin: 1.5rem 0 0.6rem;
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .party-pill {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    margin-right: 0.35rem;
+    vertical-align: baseline;
+  }
+</style>
