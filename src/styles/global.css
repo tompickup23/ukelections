@@ -1582,7 +1582,8 @@ table.council-table th {
   margin-bottom: 1.5rem;
 }
 
-.hero-byelection-head h1 {
+.hero-byelection-head h1,
+.hero-byelection-head .hero-byelection-title {
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 6vw, 4rem);
   line-height: 1.0;
@@ -2432,4 +2433,41 @@ table.council-table th {
     margin: var(--space-sm) 0;
     max-width: 100%;
   }
+}
+
+/* Homepage masthead. Carries the site's only h1, which used to live inside the
+   upcoming-contest hero and therefore vanished entirely whenever no contest was
+   scheduled. Compact when a hero follows it, full-size when it leads the page. */
+.home-masthead {
+  margin: 0 0 2rem;
+}
+
+.home-masthead h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem;
+}
+
+.home-masthead .lede {
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  color: var(--muted);
+  max-width: 56ch;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.home-masthead--compact {
+  margin: 0 0 1.25rem;
+}
+
+.home-masthead--compact h1 {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0;
 }

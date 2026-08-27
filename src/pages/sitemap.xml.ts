@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { buildAbsoluteUrl } from "../lib/site";
-import { getAllSitemapPaths } from "../lib/sitemapPaths";
+import { getAllSitemapPaths, getLastmodByPath } from "../lib/sitemapPaths";
 
 export const prerender = true;
 
@@ -14,8 +14,18 @@ function escapeXml(value: string): string {
 }
 
 export const GET: APIRoute = () => {
+  // Only the paths with a genuine content date carry a lastmod. See
+  // getLastmodByPath() for why a uniform build-time stamp would be worse than none.
+  const lastmod = getLastmodByPath();
   const urlEntries = getAllSitemapPaths()
-    .map((path) => `  <url>\n    <loc>${escapeXml(buildAbsoluteUrl(path))}</loc>\n  </url>`)
+    .map((path) => {
+      const changed = lastmod[path];
+      return (
+        `  <url>\n    <loc>${escapeXml(buildAbsoluteUrl(path))}</loc>` +
+        (changed ? `\n    <lastmod>${escapeXml(changed)}</lastmod>` : "") +
+        `\n  </url>`
+      );
+    })
     .join("\n");
 
   return new Response(

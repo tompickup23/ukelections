@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { buildDataset, type Crumb } from "../../../lib/seo";
+import { SITE_URL } from "../../../lib/site";
 import CommonsHorseshoe from "../../../components/CommonsHorseshoe.astro";
 import ConstituencyChoropleth from "../../../components/ConstituencyChoropleth.astro";
 import { loadGePredictions, loadGeSummary, partyColour } from "../../../lib/predictions";
@@ -24,9 +26,34 @@ const HALFWAY = 326;
 // summary tallies (includes every party, even those below the top-6
 // shown in the bar chart).
 const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, number>;
+// Dataset markup puts the seat projection into Google Dataset Search, which is
+// where journalists and researchers look for exactly this and which nothing on
+// the site currently appears in. No `distribution`: the data is published as
+// this page, not as a download, and claiming a file that does not exist is the
+// quickest way to get an entry pulled.
+const breadcrumbs: Crumb[] = [
+  { name: "Forecasts", href: "/forecasts/" },
+  { name: "General election", href: "/forecasts/general-election/" }
+];
+const structuredData = [
+  buildDataset({
+    name: "UK general election seat projection, all 650 constituencies",
+    description: `Projected winner, vote share and majority for every one of the ${headline.total_seats} UK parliamentary constituencies, produced from the current named-pollster Westminster average and the 2024 result, and refreshed as new polling lands.`,
+    url: `${SITE_URL}/forecasts/general-election/`,
+    spatialCoverage: "United Kingdom",
+    variableMeasured: [
+      "Projected winning party",
+      "Projected vote share by party",
+      "Projected majority",
+      "Forecast confidence band"
+    ],
+    keywords: ["UK general election", "constituency forecast", "opinion polling", "seat projection"]
+  })
+];
 ---
-
 <BaseLayout
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
   title="General election forecast. Every UK constituency"
   description={`Forecast for all ${headline.total_seats} UK constituencies if a general election were held today. Headline: ${top ? `${shortPartyLabel(top.party)} ${top.seats}` : "no clear lead"}.`}
 >
