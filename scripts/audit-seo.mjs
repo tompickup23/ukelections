@@ -11,9 +11,20 @@
  * Two classes of check:
  *
  *   HARD   binary defects. Any occurrence exits non-zero.
- *   BUDGET counts that should not regress. Compared against BUDGETS below, which
- *          are set at the measured value on the day this landed, so the number
- *          can fall freely and any rise fails.
+ *   BUDGET shares of the page count that should not regress.
+ *
+ * Budgets are SHARES, not absolute counts. The first version used counts fixed
+ * at the day's measurement and it failed on vps-main within the hour: 1,653
+ * titles over 60 against a budget of 1,652, because that box holds a slightly
+ * different set of by-election contests. A gate that a night's ordinary data
+ * churn can trip is a gate someone switches off.
+ *
+ * A share with a point or two of headroom still catches everything worth
+ * catching, because the only thing that moves these numbers meaningfully is a
+ * template change, and a template touches hundreds or thousands of pages at
+ * once. Re-appending the site name to every title takes titleOver60 from 42%
+ * to 89%. Lengthening the council title alone moves it four points. Contest
+ * churn moves it by hundredths.
  *
  * Every hard check has a fixture in tests/audit-seo.test.ts proving it can
  * actually fail. A gate nobody has seen fail is decoration.
@@ -21,11 +32,12 @@
 import { readFileSync, existsSync, globSync } from "node:fs";
 import path from "node:path";
 
+/** Percentage of pages. Measured 27 Aug 2026 on vps-main, plus ~1 point. */
 export const BUDGETS = {
-  titleOver60: 1652,
-  titleOver70: 706,
-  descOver155: 37,
-  descUnder70: 473
+  titleOver60: 43,
+  titleOver70: 19,
+  descOver155: 2,
+  descUnder70: 13
 };
 
 const HARD = [
@@ -153,8 +165,11 @@ export function evaluate(result, budgets = BUDGETS) {
     }
   }
   for (const [key, budget] of Object.entries(budgets)) {
-    const actual = result.counts[key] || 0;
-    if (actual > budget) failures.push({ key, kind: "budget", count: actual, budget, examples: [] });
+    const count = result.counts[key] || 0;
+    const share = result.pages ? (count / result.pages) * 100 : 0;
+    if (share > budget) {
+      failures.push({ key, kind: "budget", count, share: Number(share.toFixed(2)), budget, examples: [] });
+    }
   }
   return failures;
 }
@@ -170,7 +185,8 @@ if (process.argv[1] && process.argv[1].endsWith("audit-seo.mjs")) {
   const failures = evaluate(result);
   console.log(`[audit-seo] ${result.pages} pages`);
   for (const [k, v] of Object.entries(result.counts).sort((a, b) => b[1] - a[1])) {
-    console.log(`  ${k}: ${v}`);
+    const share = ((v / result.pages) * 100).toFixed(2);
+    console.log(`  ${k}: ${v} (${share}%)`);
   }
   if (!failures.length) {
     console.log("[audit-seo] PASS");
@@ -181,7 +197,7 @@ if (process.argv[1] && process.argv[1].endsWith("audit-seo.mjs")) {
     console.error(
       f.kind === "hard"
         ? `  HARD ${f.key}: ${f.count}` + (f.examples.length ? `\n       ${f.examples.join("\n       ")}` : "")
-        : `  BUDGET ${f.key}: ${f.count}, over the ${f.budget} recorded when this gate landed`
+        : `  BUDGET ${f.key}: ${f.count} of ${result.pages} pages (${f.share}%), over the ${f.budget}% budget`
     );
   }
   process.exit(1);

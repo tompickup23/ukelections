@@ -141,6 +141,35 @@ describe("every hard check can fail", () => {
   });
 });
 
+describe("budgets are shares, not counts", () => {
+  // The first version of this gate used absolute counts pinned to the day's
+  // measurement. It failed on vps-main within the hour, on 1,653 titles over 60
+  // against a budget of 1,652, because that box carries a slightly different
+  // set of by-election contests. A gate a night's data churn can trip is a gate
+  // someone switches off.
+  it("does not trip when one page of many drifts over", () => {
+    for (let i = 0; i < 200; i += 1) {
+      write(`p${i}/index.html`, GOOD(`Page ${i}`, '<a href="/">Home</a>'));
+    }
+    write("index.html", GOOD("Home", Array.from({ length: 200 }, (_, i) => `<a href="/p${i}/">P${i}</a>`).join("")));
+    // One page of 202 over the limit is 0.5%, well inside a 43% budget.
+    write("p0/index.html", GOOD("A title deliberately far longer than sixty characters so it breaches", '<a href="/">Home</a>'));
+    expect(evaluate(auditDir(dist)).find((f) => f.key === "titleOver60")).toBeUndefined();
+  });
+
+  it("does trip when a template regresses across the whole site", () => {
+    // Re-appending the site name to every title is the regression this budget
+    // exists to catch: it moves the share by tens of points, not fractions.
+    for (let i = 0; i < 50; i += 1) {
+      write(`p${i}/index.html`, GOOD(`Page ${i} with a title long enough to breach the sixty character guide | UK Elections`, '<a href="/">Home</a>'));
+    }
+    write("index.html", GOOD("Home", Array.from({ length: 50 }, (_, i) => `<a href="/p${i}/">P${i}</a>`).join("")));
+    const hit = evaluate(auditDir(dist)).find((f) => f.key === "titleOver60");
+    expect(hit?.kind).toBe("budget");
+    expect(hit!.share).toBeGreaterThan(43);
+  });
+});
+
 describe("budgets", () => {
   it("fails when a count rises above the recorded budget", () => {
     write("page/index.html", GOOD("A title deliberately far longer than sixty characters so that it breaches the budget", ""));
