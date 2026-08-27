@@ -205,3 +205,23 @@ export function newsPublicationDate(pollingDay: string): string {
   const offsetMs = asLondon - probe;
   return new Date(probe - offsetMs).toISOString().replace(/\.\d{3}Z$/, "Z");
 }
+
+/**
+ * `value` if it is an absolute http(s) URL, otherwise null.
+ *
+ * Several source fields in the election corpus hold an attribution rather than
+ * a link: "BBC", "at the count", "Birmingham Mail", and 740 rows carrying the
+ * sentence "LEAP data at https://www.andrewteale.me.uk/leap/downloads". Fed
+ * straight into an `href` they become RELATIVE links, so each one invents a URL
+ * under the current page. Google had crawled at least one of them
+ * (/seats/powys/llandrindod-south/LEAP data at https://...), which is both a
+ * dead link for the reader and crawl budget spent inventing pages on a site
+ * already sitting on 1,629 discovered-but-not-indexed URLs.
+ *
+ * Anything that is not a URL is an attribution and belongs in the text.
+ */
+export function externalHref(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return /^https?:\/\/\S+$/.test(trimmed) ? trimmed : null;
+}

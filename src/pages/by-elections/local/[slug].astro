@@ -13,7 +13,7 @@ import PartyBars from "../../../components/PartyBars.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
 import { SITE_URL } from "../../../lib/site";
-import { buildNewsArticle, newsPublicationDate, type Crumb } from "../../../lib/seo";
+import { buildNewsArticle, externalHref, newsPublicationDate, type Crumb } from "../../../lib/seo";
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
@@ -345,7 +345,9 @@ if (isNews) {
       </p>
       <PartyBars rows={rows(prior.shares)} />
       <p class="note">
-        Source: {prior.source ? <a href={prior.source} rel="nofollow">{prior.source_label}</a> : prior.source_label}
+        Source: {externalHref(prior.source)
+          ? <a href={externalHref(prior.source)} rel="nofollow">{prior.source_label}</a>
+          : prior.source_label}
       </p>
     </section>
   )}

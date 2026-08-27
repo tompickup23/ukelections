@@ -4,6 +4,7 @@ import path from "node:path";
 import { readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
+  externalHref,
   buildBreadcrumbList,
   buildDataset,
   buildNewsArticle,
@@ -234,5 +235,62 @@ describe("sitemap lastmod", () => {
 
   it("returns nothing when the contest directory is absent", () => {
     expect(getLastmodByPath(path.join(dir, "nope"))).toEqual({});
+  });
+});
+
+describe("externalHref", () => {
+  it("passes an absolute http(s) URL through", () => {
+    expect(externalHref("https://www.andrewteale.me.uk/leap/downloads")).toBe(
+      "https://www.andrewteale.me.uk/leap/downloads"
+    );
+    expect(externalHref("http://example.gov.uk/result.pdf")).toBe("http://example.gov.uk/result.pdf");
+  });
+
+  it("rejects the attribution strings the corpus actually holds", () => {
+    // Every one of these was being fed into an href, where a relative value
+    // invents a URL under the current page. 1,663 rows in the ward history
+    // table alone, and Google had crawled one of them.
+    for (const attribution of [
+      "BBC",
+      "FT",
+      "at the count",
+      "Walsall MBC Website",
+      "LEAP data at https://www.andrewteale.me.uk/leap/downloads",
+      "Trafford Council Website: http://www.trafford.gov.uk/about-your-council/elections/docs/Dec"
+    ]) {
+      expect(externalHref(attribution)).toBeNull();
+    }
+  });
+
+  it("rejects a relative path, a protocol-relative URL and a javascript: URL", () => {
+    expect(externalHref("/seats/burnley/")).toBeNull();
+    expect(externalHref("//example.com/x")).toBeNull();
+    expect(externalHref("javascript:alert(1)")).toBeNull();
+  });
+
+  it("handles absent and non-string values", () => {
+    expect(externalHref(null)).toBeNull();
+    expect(externalHref(undefined)).toBeNull();
+    expect(externalHref("")).toBeNull();
+    expect(externalHref("   ")).toBeNull();
+    expect(externalHref(42)).toBeNull();
+  });
+
+  it("trims surrounding whitespace rather than rejecting the URL", () => {
+    expect(externalHref("  https://example.com/a  ")).toBe("https://example.com/a");
+  });
+});
+
+describe("externalHref rejects a URL with trailing prose", () => {
+  // 477 values across the corpora are a real URL followed by a note. They pass
+  // a startsWith("http") check, which is what the ward template used, and then
+  // resolve to a 404 at the target host once the space is percent-encoded.
+  it("rejects a URL followed by a note", () => {
+    expect(
+      externalHref(
+        "https://en.powys.gov.uk/article/16661/Parliamentary-Election-Results.pdf electorate via email"
+      )
+    ).toBeNull();
+    expect(externalHref("LEAP data at https://www.andrewteale.me.uk/leap/downloads")).toBeNull();
   });
 });
