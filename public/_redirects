@@ -1,0 +1,10 @@
+# www serves a complete duplicate of the site under HTTP 200. Every page's
+# canonical tag points at the apex, so Google consolidates rather than indexing
+# both, but it still spends crawl budget fetching the duplicate: the www copies
+# are what most of the 64 "Alternative page with proper canonical tag" URLs are,
+# on a site already sitting on 1,629 discovered-but-not-indexed URLs.
+#
+# A 301 settles it at the edge instead of asking the crawler to work it out.
+# Cloudflare Pages matches on the full URL when the source includes a scheme
+# and host; the 301! forces the redirect even where a static file exists.
+https://www.ukelections.co.uk/* https://ukelections.co.uk/:splat 301!

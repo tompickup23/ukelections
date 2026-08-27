@@ -16,7 +16,7 @@ import {
 } from "../../../../lib/predictions";
 import { summariseWardResult, seatsWonLabel } from "../../../../lib/may7WardResult";
 import { shortPartyLabel } from "../../../../lib/siteData";
-import type { Crumb } from "../../../../lib/seo";
+import { externalHref, type Crumb } from "../../../../lib/seo";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -283,10 +283,10 @@ const breadcrumbs: Crumb[] = [
         {result.provider === "council-pdf-declaration" && "Source: the returning officer's declaration of result. "}
         {result.provider === "wikipedia" && "Source: a community-maintained Wikipedia mirror, not the council's own declaration. Treat it as provisional. "}
         {result.provider === "dc-api" && "Source: Democracy Club's results database. "}
-        {result.sourceUrl && result.sourceUrl.startsWith("http")
-          ? <a href={result.sourceUrl}>View the source</a>
-          : result.sourceArticle
-            ? <a href={result.sourceArticle}>View the source</a>
+        {externalHref(result.sourceUrl)
+          ? <a href={externalHref(result.sourceUrl)} rel="nofollow">View the source</a>
+          : externalHref(result.sourceArticle)
+            ? <a href={externalHref(result.sourceArticle)}>View the source</a>
             : null}
       </p>
     </section>
@@ -406,7 +406,11 @@ const breadcrumbs: Crumb[] = [
                 <td class="muted">{r.is_by_election ? "By-election" : "Cycle"}</td>
                 <td>{shortPartyLabel(top?.party_name) || "n/a"}</td>
                 <td class="num">{share != null ? formatPct(share) : "n/a"}</td>
-                <td>{r.source ? <a href={r.source}>declaration</a> : "n/a"}</td>
+                <td>{externalHref(r.source)
+                  ? <a href={externalHref(r.source)} rel="nofollow">declaration</a>
+                  : r.source
+                    ? <span class="muted">{r.source}</span>
+                    : "n/a"}</td>
               </tr>
             );
           })}
