@@ -43,6 +43,7 @@ import {
   backtest,
   assessBaseline,
   SIGMA_INFLATION,
+  gradeAgainst,
 } from "./lib/local-byelection-model.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
@@ -248,6 +249,26 @@ function sidecarResults() {
     }
   }
   return SIDECAR;
+}
+
+const PUBLISHED_PATH = p("data/cards/published-byelection-forecasts.json");
+
+/** What the live page said before the poll, keyed by slug.
+ *
+ * A contest file is rebuilt every night, and a past contest's projection keeps
+ * moving after polling day as older by-elections are ingested into the swing
+ * corpus. Sheffield Southey's Green lane read 24.7% in the 23 August 2026 build
+ * and 14.0% on the page that was live when polls opened. Grading a result
+ * against tonight's rebuild therefore credits or punishes the model for data it
+ * did not have, which makes the published record wrong in whichever direction
+ * the corpus happened to move. This file is the fix: while a contest is still
+ * upcoming every run overwrites its entry, so the last write before polling day
+ * is by definition what was live, and once it has polled nothing touches it.
+ */
+function loadPublished() {
+  if (!existsSync(PUBLISHED_PATH)) return { doc: null, forecasts: {} };
+  const doc = JSON.parse(readFileSync(PUBLISHED_PATH, "utf8"));
+  return { doc, forecasts: doc.forecasts || {} };
 }
 
 function loadHolders() {
@@ -495,7 +516,7 @@ async function gather(ballot, priors) {
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
-function assemble(ctx, corpus, demo, holders) {
+function assemble(ctx, corpus, demo, holders, published = {}) {
   const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource } = ctx;
 
   const reformEntering =
@@ -582,17 +603,7 @@ function assemble(ctx, corpus, demo, holders) {
           ? `${winnerParty} hold`
           : `${winnerParty} gain from ${holders[ballot.election_id].party}`
         : null,
-      grading: forecast
-        ? {
-            projected_winner: forecast.winner,
-            call_correct: forecast.winner === winnerParty,
-            mae_pp:
-              PARTIES.filter((q) => field.has(q)).reduce(
-                (a, q) => a + Math.abs((forecast.central[q] || 0) - (shares[q] || 0)) * 100,
-                0,
-              ) / Math.max(1, [...field].length),
-          }
-        : null,
+      grading: gradeAgainst(published[ids.slug], forecast, shares, field, winnerParty),
     };
   }
 
@@ -745,9 +756,34 @@ async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   const written = new Set();
   let forecast = 0;
+  const { doc: publishedDoc, forecasts: published } = loadPublished();
+  let snapshotsWritten = 0;
   for (const ctx of gathered) {
-    const contest = assemble(ctx, corpus, demo, holders);
+    const contest = assemble(ctx, corpus, demo, holders, published);
     if (!contest) continue;
+
+    // Snapshot the projection while the contest is still ahead of us. The last
+    // run before polling day is the one that matters, and it is the one this
+    // will have left behind. A contest that has polled is never rewritten: that
+    // is the whole point, and rewriting it would quietly restore the drift this
+    // file exists to stop.
+    if (publishedDoc && contest.forecast && contest.contest.polling_day > today) {
+      const f = contest.forecast;
+      published[contest.slug] = {
+        ...(published[contest.slug] || {}),
+        captured_at: today,
+        page: `https://ukelections.co.uk/by-elections/local/${contest.slug}/`,
+        verdict: f.too_close_to_call ? "Too close to call" : `${f.winner} favoured`,
+        leader_probability_pct: Math.round(f.leader_probability * 100),
+        too_close_to_call: Boolean(f.too_close_to_call),
+        central_pct: Object.fromEntries(
+          Object.entries(f.central)
+            .filter(([, v]) => v > 0)
+            .map(([q, v]) => [q, Number((v * 100).toFixed(1))]),
+        ),
+      };
+      snapshotsWritten += 1;
+    }
     writeFileSync(path.join(OUT_DIR, `${contest.slug}.json`), `${JSON.stringify(contest, null, 2)}\n`);
     written.add(`${contest.slug}.json`);
     if (contest.forecast) forecast += 1;
@@ -764,6 +800,12 @@ async function main() {
     if (f.startsWith("_") || !f.endsWith(".json") || written.has(f)) continue;
     unlinkSync(path.join(OUT_DIR, f));
     console.log(`  removed aged-out contest ${f}`);
+  }
+
+  if (publishedDoc) {
+    publishedDoc.forecasts = published;
+    writeFileSync(PUBLISHED_PATH, `${JSON.stringify(publishedDoc, null, 2)}\n`);
+    console.log(`  snapshotted ${snapshotsWritten} projection(s) as published; ${Object.keys(published).length} held`);
   }
 
   writeFileSync(

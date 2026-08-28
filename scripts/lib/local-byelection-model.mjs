@@ -684,3 +684,34 @@ export function assessBaseline({ prior, field, swing, votingSystem, boundaryChan
   }
   return { forecastable: blockers.length === 0, blockers };
 }
+
+/** Grade a declared result against the forecast we PUBLISHED where we have it,
+ * and against tonight's rebuild only where we do not, saying which in the
+ * output. A grade that silently changes as the corpus grows is not a record.
+ */
+export function gradeAgainst(snapshot, forecast, shares, field, winnerParty) {
+  const lanes = PARTIES.filter((q) => field.has(q));
+  const denom = Math.max(1, [...field].length);
+  if (snapshot && snapshot.central_pct) {
+    const central = Object.fromEntries(Object.entries(snapshot.central_pct).map(([q, v]) => [q, v / 100]));
+    const projectedWinner = Object.keys(central).sort((a, b) => central[b] - central[a])[0] ?? null;
+    return {
+      graded_against: "forecast_as_published",
+      published_captured_at: snapshot.captured_at ?? null,
+      projected_winner: projectedWinner,
+      call_correct: projectedWinner === winnerParty,
+      mae_pp:
+        lanes.reduce((a, q) => a + Math.abs((central[q] || 0) - (shares[q] || 0)) * 100, 0) / denom,
+    };
+  }
+  if (!forecast) return null;
+  return {
+    graded_against: "current_rebuild",
+    note: "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+    projected_winner: forecast.winner,
+    call_correct: forecast.winner === winnerParty,
+    mae_pp:
+      lanes.reduce((a, q) => a + Math.abs((forecast.central[q] || 0) - (shares[q] || 0)) * 100, 0) / denom,
+  };
+}
+
