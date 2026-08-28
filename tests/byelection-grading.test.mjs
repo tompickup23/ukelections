@@ -62,3 +62,31 @@ describe("grading a by-election against the forecast as published", () => {
     expect(g.graded_against).toBe("current_rebuild");
   });
 });
+
+describe("which party counts as the projection's winner", () => {
+  // The page names the probability maximum, not the share maximum, and the two
+  // can differ: a wide lane can lead on central share while a narrower one wins
+  // more simulations. This fixture makes them disagree on purpose, so a grader
+  // that fell back to the share maximum would call it Labour when the page
+  // actually said Reform UK.
+  const split = {
+    captured_at: "2026-08-26",
+    projected_winner: "Reform UK",
+    central_pct: { Labour: 40.0, "Reform UK": 38.0, "Green Party": 22.0 },
+  };
+
+  it("follows the party the page named", () => {
+    const g = gradeAgainst(split, rebuild, actual, field, "Reform UK");
+    expect(g.projected_winner).toBe("Reform UK");
+    expect(g.winner_basis).toBe("named_on_the_page");
+    expect(g.call_correct).toBe(true);
+  });
+
+  it("falls back to the share maximum only for an older snapshot, and says so", () => {
+    const { projected_winner: _drop, ...older } = split;
+    const g = gradeAgainst(older, rebuild, actual, field, "Reform UK");
+    expect(g.projected_winner).toBe("Labour");
+    expect(g.winner_basis).toBe("central_share_maximum");
+    expect(g.call_correct).toBe(false);
+  });
+});

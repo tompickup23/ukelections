@@ -694,10 +694,19 @@ export function gradeAgainst(snapshot, forecast, shares, field, winnerParty) {
   const denom = Math.max(1, [...field].length);
   if (snapshot && snapshot.central_pct) {
     const central = Object.fromEntries(Object.entries(snapshot.central_pct).map(([q, v]) => [q, v / 100]));
-    const projectedWinner = Object.keys(central).sort((a, b) => central[b] - central[a])[0] ?? null;
+    // The party the page NAMED is the probability maximum, not the share
+    // maximum, and the two can differ: a wide lane can lead on central share
+    // while a narrower one wins more simulations. The snapshot records the
+    // named party so grading cannot quietly switch definitions. Falling back to
+    // the share maximum only covers a snapshot written before this field
+    // existed, and says so.
+    const named = snapshot.projected_winner ?? null;
+    const projectedWinner =
+      named ?? (Object.keys(central).sort((a, b) => central[b] - central[a])[0] ?? null);
     return {
       graded_against: "forecast_as_published",
       published_captured_at: snapshot.captured_at ?? null,
+      winner_basis: named ? "named_on_the_page" : "central_share_maximum",
       projected_winner: projectedWinner,
       call_correct: projectedWinner === winnerParty,
       mae_pp:

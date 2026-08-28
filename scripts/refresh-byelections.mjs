@@ -106,8 +106,16 @@ async function main() {
   // by hand between polling day and DC's transcription (the ballots endpoint
   // carries winners days before it carries counts) must stay replaceable, or
   // the hand row silently blocks the authoritative one forever.
+  // Three states, not two. A DC row closes a ballot off because DC produced it.
+  // A row corrected against the returning officer's own declaration ALSO closes
+  // it off, and deliberately outranks DC: Camp Hill on 25 June 2026 was
+  // transcribed as 462 when Nuneaton and Bedworth published 460, and without
+  // this the next sweep would put the wrong figure straight back. Everything
+  // else, meaning a row entered by hand in the gap between polling day and DC's
+  // transcription, stays replaceable.
+  const CLOSED = new Set(["auto_ingested_dc", "corrected_against_declaration"]);
   const have = new Set(
-    appends.results.filter((r) => r.review_status === "auto_ingested_dc").map((r) => r.ballot_paper_id),
+    appends.results.filter((r) => CLOSED.has(r.review_status)).map((r) => r.ballot_paper_id),
   );
   const rowIndex = new Map(appends.results.map((r, i) => [r.ballot_paper_id, i]));
   const state = existsSync(STATE)
