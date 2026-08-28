@@ -516,7 +516,7 @@ async function gather(ballot, priors) {
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
-function assemble(ctx, corpus, demo, holders, published = {}) {
+function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = null) {
   const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource } = ctx;
 
   const reformEntering =
@@ -578,7 +578,11 @@ function assemble(ctx, corpus, demo, holders, published = {}) {
       cannot_see: [
         "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
         "Any ward-level campaign, and which parties actually knocked on doors.",
-        "Turnout. Council by-elections routinely fall below a quarter of the electorate and small electorates move fast.",
+        turnoutFacts
+          ? `Turnout, which across the ${turnoutFacts.n} council by-elections we hold a figure for has run from ` +
+            `${turnoutFacts.min}% to ${turnoutFacts.max}%, median ${turnoutFacts.median}%. A small electorate moves fast ` +
+            `and nothing here has a view on who turns out.`
+          : "Turnout. A small electorate moves fast and nothing here has a view on who turns out.",
       ],
     };
   }
@@ -757,9 +761,27 @@ async function main() {
   const written = new Set();
   let forecast = 0;
   const { doc: publishedDoc, forecasts: published } = loadPublished();
+
+  // The caveat used to assert that council by-elections "routinely fall below a
+  // quarter of the electorate". Measured across the corpus on 28 August 2026
+  // that was simply false: the median is 32% and only a quarter of contests are
+  // under 25%. Deriving it means the sentence cannot drift away from the data
+  // again.
+  const turnouts = history
+    .filter((r) => r.is_by_election && typeof r.turnout_pct === "number" && r.turnout_pct > 0)
+    .map((r) => r.turnout_pct)
+    .sort((a, b) => a - b);
+  const turnoutFacts = turnouts.length >= 20
+    ? {
+        n: turnouts.length,
+        min: Math.round(turnouts[0] * 100),
+        max: Math.round(turnouts[turnouts.length - 1] * 100),
+        median: Math.round(turnouts[turnouts.length >> 1] * 100),
+      }
+    : null;
   let snapshotsWritten = 0;
   for (const ctx of gathered) {
-    const contest = assemble(ctx, corpus, demo, holders, published);
+    const contest = assemble(ctx, corpus, demo, holders, published, turnoutFacts);
     if (!contest) continue;
 
     // Snapshot the projection while the contest is still ahead of us. The last
@@ -774,6 +796,7 @@ async function main() {
         captured_at: today,
         page: `https://ukelections.co.uk/by-elections/local/${contest.slug}/`,
         verdict: f.too_close_to_call ? "Too close to call" : `${f.winner} favoured`,
+        projected_winner: f.winner,
         leader_probability_pct: Math.round(f.leader_probability * 100),
         too_close_to_call: Boolean(f.too_close_to_call),
         central_pct: Object.fromEntries(
