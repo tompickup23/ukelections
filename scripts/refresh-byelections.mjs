@@ -102,7 +102,14 @@ async function main() {
         generated_at: null,
         results: [],
       };
-  const have = new Set(appends.results.map((r) => r.ballot_paper_id));
+  // Only a row Democracy Club itself produced closes a ballot off. Rows entered
+  // by hand between polling day and DC's transcription (the ballots endpoint
+  // carries winners days before it carries counts) must stay replaceable, or
+  // the hand row silently blocks the authoritative one forever.
+  const have = new Set(
+    appends.results.filter((r) => r.review_status === "auto_ingested_dc").map((r) => r.ballot_paper_id),
+  );
+  const rowIndex = new Map(appends.results.map((r, i) => [r.ballot_paper_id, i]));
   const state = existsSync(STATE)
     ? JSON.parse(readFileSync(STATE, "utf8"))
     : { last_sweep_date: "2026-08-08", pending: [] };
@@ -129,6 +136,7 @@ async function main() {
   }
 
   let added = 0;
+  let replaced = 0;
   const stillPending = [];
   for (const id of [...ballotIds].sort()) {
     if (have.has(id)) continue;
@@ -148,7 +156,7 @@ async function main() {
     const m = id.match(/^local\.([^.]+)\.(.+)\.by\.(\d{4}-\d{2}-\d{2})$/);
     if (!m) { console.log("  skip odd id:", id); continue; }
     const [, council_slug, ward_slug, election_date] = m;
-    appends.results.push({
+    const row = {
       ballot_paper_id: id,
       election_date,
       year: +election_date.slice(0, 4),
@@ -172,13 +180,22 @@ async function main() {
         votes: c.result.num_ballots,
         elected: !!(c.result && c.result.elected),
       })),
-    });
-    added += 1;
-    console.log("  + ", id, `(${cands.length} candidates)`);
+    };
+    if (rowIndex.has(id)) {
+      const at = rowIndex.get(id);
+      const was = appends.results[at].review_status;
+      appends.results[at] = row;
+      replaced += 1;
+      console.log("  ~ ", id, `(superseded ${was} with the DC transcription)`);
+    } else {
+      appends.results.push(row);
+      added += 1;
+      console.log("  + ", id, `(${cands.length} candidates)`);
+    }
     await sleep(PACE_MS);
   }
 
-  if (added) {
+  if (added || replaced) {
     appends.results.sort((a, b) =>
       a.election_date === b.election_date
         ? a.ballot_paper_id.localeCompare(b.ballot_paper_id)
@@ -206,7 +223,10 @@ async function main() {
     console.log(`  folded ${folded} rows into the history file`);
   }
   writeFileSync(STATE, JSON.stringify({ last_sweep_date: today, pending: stillPending }, null, 2));
-  console.log(`by-election refresh: ${added} appended, ${stillPending.length} pending, swept ${dates.length} days to ${today}`);
+  console.log(
+    `by-election refresh: ${added} appended, ${replaced} superseded, ${stillPending.length} pending, ` +
+      `swept ${dates.length} days to ${today}`,
+  );
 }
 
 main();

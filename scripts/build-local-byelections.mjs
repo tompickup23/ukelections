@@ -230,6 +230,26 @@ const DEMO_FIELDS = [
  * Who held the seat. Hand verified, never derived, and absent by default.
  * See data/contests/local-byelection-holders.json for why deriving it is wrong.
  */
+/** Names differ in punctuation and middle names between sources; compare on the
+ * letters alone so "St. John Smith" and "St John Smith" are one person. */
+function normaliseName(name) {
+  return String(name || "").toLowerCase().replace(/[^a-z]+/g, "");
+}
+
+let SIDECAR = null;
+/** The tracked by-election sidecar, indexed by ballot id. Empty if absent. */
+function sidecarResults() {
+  if (SIDECAR) return SIDECAR;
+  SIDECAR = new Map();
+  const file = p("data/history/byelection-appends.json");
+  if (existsSync(file)) {
+    for (const row of JSON.parse(readFileSync(file, "utf8")).results || []) {
+      if (row.ballot_paper_id) SIDECAR.set(row.ballot_paper_id, row);
+    }
+  }
+  return SIDECAR;
+}
+
 function loadHolders() {
   const file = p("data/contests/local-byelection-holders.json");
   if (!existsSync(file)) return {};
@@ -420,6 +440,31 @@ async function gather(ballot, priors) {
   }));
   const field = fieldFromCandidates(candidates);
 
+  // Democracy Club records a by-election's WINNER on the ballots endpoint days
+  // before it records the counts, and on 27 August 2026 it did exactly that for
+  // all five contests. The tracked sidecar carries counts entered from the
+  // returning officers' declarations in that gap, so read them here rather than
+  // publishing "result awaited" against a page whose result is public. Matched
+  // on the candidate's name, and only when the sidecar covers every candidate
+  // on the ballot: a partial fill would grade a contest on half a result.
+  let resultSource = null;
+  if (candidates.length && candidates.every((c) => c.votes === null)) {
+    const row = sidecarResults().get(ballot.election_id);
+    if (row) {
+      const byName = new Map((row.candidates || []).map((c) => [normaliseName(c.name), c]));
+      const filled = candidates.map((c) => byName.get(normaliseName(c.name)) || null);
+      if (filled.every(Boolean)) {
+        candidates.forEach((c, i) => {
+          c.votes = Number(filled[i].votes);
+          c.elected = Boolean(filled[i].elected);
+        });
+        resultSource = row.source || null;
+      } else {
+        console.log(`  sidecar row for ${ballot.election_id} does not cover every candidate; left unfilled`);
+      }
+    }
+  }
+
   // Promote to the permanent cache once the result is complete and the poll is
   // comfortably past, so a late correction still has a window to land.
   const declared = candidates.length > 0 && candidates.every((c) => c.votes !== null);
@@ -446,12 +491,12 @@ async function gather(ballot, priors) {
   const setStart = division.divisionset?.start_date || null;
   const boundaryChanged = Boolean(prior && setStart && prior.election_date < setStart);
 
-  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable };
+  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource };
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
 function assemble(ctx, corpus, demo, holders) {
-  const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable } = ctx;
+  const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource } = ctx;
 
   const reformEntering =
     prior !== null && field.has("Reform UK")
@@ -531,7 +576,7 @@ function assemble(ctx, corpus, demo, holders) {
       runner_up_party: ordered[1] ? canonParty(ordered[1].party_name) : null,
       majority_votes: ordered.length > 1 ? (ordered[0].votes || 0) - (ordered[1].votes || 0) : null,
       total_votes: totalVotes,
-      source: `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/`,
+      source: resultSource || `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/`,
       outcome: holders[ballot.election_id]
         ? winnerParty === holders[ballot.election_id].party
           ? `${winnerParty} hold`

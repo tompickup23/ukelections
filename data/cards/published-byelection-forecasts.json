@@ -1,0 +1,80 @@
+{
+  "_readme": "What UK Elections actually published for a contest, captured from the live page before the result was known. Result cards must show the forecast AS PUBLISHED, and the contest files cannot supply it: they are rebuilt nightly and a contest's projection keeps moving after polling day as older by-elections are ingested into the swing corpus. Sheffield Southey's Green lane, for instance, read 24.7% in the 23 August build and 14.0% on the page that was live when polls opened.",
+  "_how_captured": "Read off the live page for each contest on 28 August 2026, before any rebuild carrying the result. The page URL is recorded per contest so the figures can be checked against an archive copy.",
+  "_note_on_precision": "Shares are the page's own one decimal place. Win probabilities are the page's whole numbers.",
+  "forecasts": {
+    "sheffield-southey-2026-08-27": {
+      "captured_at": "2026-08-28",
+      "page": "https://ukelections.co.uk/by-elections/local/sheffield-southey-2026-08-27/",
+      "verdict": "Reform UK favoured",
+      "leader_probability_pct": 68,
+      "too_close_to_call": false,
+      "central_pct": {
+        "Reform UK": 50.3,
+        "Labour": 27.3,
+        "Green Party": 14.0,
+        "Liberal Democrats": 4.3,
+        "Conservative": 4.2
+      },
+      "footnote_override": "The only one of the five where our model named a favourite, and it was right. It still put Labour 10 points too low and the Greens 7.5 points too high."
+    },
+    "wandsworth-trinity-2026-08-27": {
+      "captured_at": "2026-08-28",
+      "page": "https://ukelections.co.uk/by-elections/local/wandsworth-trinity-2026-08-27/",
+      "verdict": "Too close to call",
+      "leader_probability_pct": 53,
+      "too_close_to_call": true,
+      "central_pct": {
+        "Labour": 42.5,
+        "Conservative": 32.0,
+        "Green Party": 17.0,
+        "Liberal Democrats": 4.7,
+        "Reform UK": 3.8
+      },
+      "footnote_override": "We had Labour in front and Labour won, by 127 votes. We were 11.6 points light on the Conservatives and 11.9 points heavy on the Greens."
+    },
+    "newcastle-upon-tyne-throckley-walbottle-newburn-2026-08-27": {
+      "captured_at": "2026-08-28",
+      "page": "https://ukelections.co.uk/by-elections/local/newcastle-upon-tyne-throckley-walbottle-newburn-2026-08-27/",
+      "verdict": "Too close to call",
+      "leader_probability_pct": 55,
+      "too_close_to_call": true,
+      "central_pct": {
+        "Reform UK": 42.4,
+        "Labour": 31.5,
+        "Green Party": 14.5,
+        "Conservative": 7.5,
+        "Liberal Democrats": 4.2
+      },
+      "footnote_override": "We had Reform in front and Reform held. We did not see the Liberal Democrats coming: projected 4.2%, they polled 29.0% and came second."
+    },
+    "dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27": {
+      "captured_at": "2026-08-28",
+      "page": "https://ukelections.co.uk/by-elections/local/dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27/",
+      "verdict": "Too close to call",
+      "leader_probability_pct": 34,
+      "too_close_to_call": true,
+      "central_pct": {
+        "Reform UK": 27.3,
+        "Green Party": 26.5,
+        "Conservative": 22.0,
+        "Independent": 13.7,
+        "Labour": 10.6
+      }
+    },
+    "st-helens-billinge-seneley-green-2026-08-27": {
+      "captured_at": "2026-08-28",
+      "page": "https://ukelections.co.uk/by-elections/local/st-helens-billinge-seneley-green-2026-08-27/",
+      "verdict": "Too close to call",
+      "leader_probability_pct": 46,
+      "too_close_to_call": true,
+      "central_pct": {
+        "Independent": 33.4,
+        "Reform UK": 28.0,
+        "Labour": 21.2,
+        "Green Party": 11.9,
+        "Conservative": 5.6
+      }
+    }
+  }
+}
