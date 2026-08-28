@@ -1,8 +1,8 @@
 {
- "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not.",
+ "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not. Rows polled on 27 August 2026 were entered by hand from the returning officers' declarations and press reports of them, because Democracy Club had recorded winners but no vote counts by 28 August. Each carries its own verification note. DC rows still win on conflict.",
  "source": "https://candidates.democracyclub.org.uk/api/next/ballots/",
- "review_status": "auto_ingested_dc",
- "generated_at": "2026-08-28T09:01:14.751Z",
+ "review_status": "mixed: auto_ingested_dc plus hand verified rows, see each row",
+ "generated_at": "2026-08-28T13:00:00.000Z",
  "results": [
   {
    "ballot_paper_id": "local.cornwall.newquay-porth-tretherras.by.2026-04-23",
@@ -5817,6 +5817,258 @@
      "name": "Liz Morgan-Danvers",
      "party_name": "Liberal Democrats",
      "votes": 68,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.dover.guston-kingsdown-st-margarets-at-cliffe.by.2026-08-27",
+   "election_date": "2026-08-27",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "dover",
+   "ward_slug": "guston-kingsdown-st-margarets-at-cliffe",
+   "is_by_election": true,
+   "turnout_votes": 2668,
+   "turnout_pct": 0.4508,
+   "spoilt_ballots": 4,
+   "electorate": 5919,
+   "source": "https://www.kentonline.co.uk/dover/news/green-party-triumph-in-council-by-election-as-right-wing-vot-344423/",
+   "review_status": "hand_verified_two_sources",
+   "verification": "Vote counts and the 45.08% turnout on an electorate of 5,919 from KentOnline's report of the declaration. Every share reconciles to the independently published shares from electionmapsuk (Green 28.8, Reform 27.5, Con 17.1, Lab 14.6, Restore 10.7, Ind 1.3). Rejected papers are not published: the 4 here is 2,668 ballots less 2,664 valid votes, so replace it when Dover publishes the declaration.",
+   "candidates": [
+    {
+     "name": "Ingrid Dodd",
+     "party_name": "Green Party",
+     "votes": 767,
+     "elected": true
+    },
+    {
+     "name": "James Robert Defriend",
+     "party_name": "Reform UK",
+     "votes": 733,
+     "elected": false
+    },
+    {
+     "name": "David Arthur Hawkes",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 456,
+     "elected": false
+    },
+    {
+     "name": "Steve Wisbey",
+     "party_name": "Labour Party",
+     "votes": 389,
+     "elected": false
+    },
+    {
+     "name": "Jez Hermer",
+     "party_name": "Restore Britain",
+     "votes": 284,
+     "elected": false
+    },
+    {
+     "name": "Graham Richard Wanstall",
+     "party_name": "Independent",
+     "votes": 35,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.newcastle-upon-tyne.throckley-walbottle-newburn.by.2026-08-27",
+   "election_date": "2026-08-27",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "newcastle-upon-tyne",
+   "ward_slug": "throckley-walbottle-newburn",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": 0.329,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://www.hexham-courant.co.uk/news/26502982.reform-uk-fight-off-lib-dem-surge-secure-newcastle-seat/",
+   "review_status": "hand_verified_two_sources",
+   "verification": "Vote counts identical in the Hexham Courant's report of the declaration and on Wikipedia's 2026 Newcastle City Council election page, which also gives turnout as 32.9%, down 11.9 points on May. That reconciles with our own May 2026 record for the ward (44.77% on an electorate of 6,982). Rejected papers and the August electorate are not published, so both are left null rather than derived.",
+   "candidates": [
+    {
+     "name": "Martin Evison",
+     "party_name": "Reform UK",
+     "votes": 901,
+     "elected": true
+    },
+    {
+     "name": "Stephen Kelly",
+     "party_name": "Liberal Democrats",
+     "votes": 670,
+     "elected": false
+    },
+    {
+     "name": "Linda Isabel Wright",
+     "party_name": "Labour and Co-operative Party",
+     "votes": 534,
+     "elected": false
+    },
+    {
+     "name": "Kimberley Barrass",
+     "party_name": "Green Party",
+     "votes": 103,
+     "elected": false
+    },
+    {
+     "name": "Alexis Fernandes",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 101,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.sheffield.southey.by.2026-08-27",
+   "election_date": "2026-08-27",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "sheffield",
+   "ward_slug": "southey",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": 0.1563,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714",
+   "review_status": "hand_verified_two_sources",
+   "verification": "Full candidate counts and the 15.63% turnout from the Sheffield Star's report of the declaration, with the winner's 1,133 and the 297 margin corroborated by the syndicated LDRS copy. One search summary rendered the winning figure as 1,113, which does not reconcile with the published 297 margin over Labour's 836, so 1,133 is the figure. Rejected papers and the electorate are not published.",
+   "candidates": [
+    {
+     "name": "Paul Jakeman",
+     "party_name": "Reform UK",
+     "votes": 1133,
+     "elected": true
+    },
+    {
+     "name": "Jayne Dunn",
+     "party_name": "Labour Party",
+     "votes": 836,
+     "elected": false
+    },
+    {
+     "name": "Daniel John Moy",
+     "party_name": "Green Party",
+     "votes": 146,
+     "elected": false
+    },
+    {
+     "name": "Daniel Gage",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 69,
+     "elected": false
+    },
+    {
+     "name": "Oliver Edward George",
+     "party_name": "Liberal Democrats",
+     "votes": 56,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.st-helens.billinge-seneley-green.by.2026-08-27",
+   "election_date": "2026-08-27",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "st-helens",
+   "ward_slug": "billinge-seneley-green",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": 0.339,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://en.wikipedia.org/wiki/2026_St_Helens_Metropolitan_Borough_Council_election",
+   "review_status": "provisional_single_source",
+   "verification": "PROVISIONAL. One source only. St Helens Borough Council had published no declaration for this by-election as of 28 August 2026 and its ModernGov results system is behind a bot challenge, so these counts come from Wikipedia alone. They are internally consistent: the six counts sum to the stated 2,806 votes and every published share matches that denominator. Replace on the council declaration or on the Democracy Club transcription, both of which win on conflict.",
+   "candidates": [
+    {
+     "name": "Steve Owen",
+     "party_name": "Labour Party",
+     "votes": 1158,
+     "elected": true
+    },
+    {
+     "name": "Karen Hatch",
+     "party_name": "Reform UK",
+     "votes": 892,
+     "elected": false
+    },
+    {
+     "name": "Colin Richard Betts",
+     "party_name": "Independent",
+     "votes": 496,
+     "elected": false
+    },
+    {
+     "name": "Sue Rahman",
+     "party_name": "Green Party",
+     "votes": 106,
+     "elected": false
+    },
+    {
+     "name": "David Michael Titmuss",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 94,
+     "elected": false
+    },
+    {
+     "name": "Tom Middleton-Leonard",
+     "party_name": "Independent",
+     "votes": 60,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.wandsworth.trinity.by.2026-08-27",
+   "election_date": "2026-08-27",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "wandsworth",
+   "ward_slug": "trinity",
+   "is_by_election": true,
+   "turnout_votes": 3290,
+   "turnout_pct": 0.3955,
+   "spoilt_ballots": 7,
+   "electorate": 8319,
+   "source": "https://democracy.wandsworth.gov.uk/mgElectionAreaResults.aspx?ID=108&RPID=319027760",
+   "review_status": "hand_verified_declaration",
+   "verification": "Primary. Wandsworth's own published voting summary: 3,283 valid votes, 7 rejected papers, electorate 8,319. Turnout here is computed as 3,290 of 8,319, which is 39.55%. The council's news release rounds it to 39.56%.",
+   "candidates": [
+    {
+     "name": "Shirin Chiara Georgiani",
+     "party_name": "Labour Party",
+     "votes": 1558,
+     "elected": true
+    },
+    {
+     "name": "Otto Jacobsson",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 1431,
+     "elected": false
+    },
+    {
+     "name": "Sylvain Magne",
+     "party_name": "Green Party",
+     "votes": 168,
+     "elected": false
+    },
+    {
+     "name": "Dylan Connor Peter Henderson",
+     "party_name": "Liberal Democrats",
+     "votes": 75,
+     "elected": false
+    },
+    {
+     "name": "Josh Stanton",
+     "party_name": "Reform UK",
+     "votes": 51,
      "elected": false
     }
    ]
