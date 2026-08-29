@@ -509,6 +509,148 @@ export function calibration(rows, buckets = PUBLISHED_BANDS) {
 }
 
 // -----------------------------------------------------------------------------
+// Full-range reliability
+// -----------------------------------------------------------------------------
+//
+// calibration() above answers "when we NAME a favourite, how often is it
+// right". That is the published table and it is the right table for the
+// headline, but it bins on leader_probability, so every row it produces
+// describes one lane out of the four or five on the ballot. It is structurally
+// incapable of reporting on a small party's stated chance: no input to it can
+// make a "Green 1% to win" row appear, because a 1% lane is never the leader.
+// A guard that cannot fire is worse than no guard, so the tail needs its own
+// table with its own denominator.
+//
+// The two denominators are different things and must never be mixed:
+//   contests  one row per by-election, the leader's lane only
+//   lanes     one row per party on the ballot, every lane
+// 785 contests carry 3,362 lanes, so a rate quoted against the wrong one is out
+// by a factor of four.
+
+/** Wilson score interval. The normal approximation is wrong near zero, which is
+ * exactly where the tail lives: at 1 win in 400 it returns a negative lower
+ * bound and an interval too narrow to be honest. */
+export function wilsonInterval(successes, n, z = 1.96) {
+  if (!n) return [null, null];
+  const phat = successes / n;
+  const denom = 1 + (z * z) / n;
+  const centre = (phat + (z * z) / (2 * n)) / denom;
+  const half = (z * Math.sqrt((phat * (1 - phat)) / n + (z * z) / (4 * n * n))) / denom;
+  return [Math.max(0, centre - half), Math.min(1, centre + half)];
+}
+
+/** Deciles, with the bottom decile split at 5% because that is where the
+ * published small-party numbers actually sit and pooling 0 to 10% hides it. */
+export const RELIABILITY_BANDS = [
+  [0, 0.05], [0.05, 0.1], [0.1, 0.2], [0.2, 0.3], [0.3, 0.4], [0.4, 0.5],
+  [0.5, 0.6], [0.6, 0.7], [0.7, 0.8], [0.8, 0.9], [0.9, 1.0001],
+];
+
+/** Projected-share bands, for the other question a reader asks: "you have put
+ * this party on 7% of the vote, what do you say its chance of winning is, and
+ * what is it really". Bins on the central share, not on the probability. */
+export const SHARE_BANDS = [
+  [0, 5], [5, 10], [10, 20], [20, 30], [30, 40], [40, 50], [50, 100.01],
+];
+
+/**
+ * Flatten backtest rows to one row per lane (party-contest).
+ * Requires rows carrying win_probability, which backtest() attaches.
+ */
+export function toLanes(rows) {
+  const lanes = [];
+  for (const r of rows) {
+    if (!r.win_probability) continue;
+    for (const [party, claimed] of Object.entries(r.win_probability)) {
+      lanes.push({
+        ballot_paper_id: r.ballot_paper_id,
+        date: r.date,
+        party,
+        claimed,
+        won: party === r.actual_winner ? 1 : 0,
+        central_pp: r.central_shares?.[party] ?? null,
+        actual_pp: r.actual_shares?.[party] ?? null,
+      });
+    }
+  }
+  return lanes;
+}
+
+/**
+ * Reliability table over any set of rows, scored on `hit`.
+ *
+ * `binKey` decides which rows fall in a band. `claimKey` is the number being
+ * held to account, and it defaults to the same field. The two come apart in the
+ * share-binned table, where rows are grouped by projected SHARE but the claim
+ * under test is the win PROBABILITY: grouping and claiming on one field there
+ * compares a share against a win rate, which is a units error that renders as a
+ * mean claim of 370%. `honest` is only meaningful when the claim and the
+ * outcome are the same kind of quantity, so it is set only when `comparable`.
+ *
+ * `clampTo` bounds the upper label. Probability bands run to 1.0001 so the top
+ * band includes certainty and should print as 100%; share bands run to 100.
+ */
+export function reliability(
+  rows,
+  { bands = RELIABILITY_BANDS, binKey = "claimed", claimKey = null, hit = (r) => r.won, clampTo = 1, comparable = true } = {},
+) {
+  const claim = claimKey ?? binKey;
+  const out = [];
+  for (const [lo, hi] of bands) {
+    const b = rows.filter((r) => r[binKey] !== null && r[binKey] !== undefined && r[binKey] >= lo && r[binKey] < hi);
+    if (!b.length) continue;
+    const wins = b.reduce((a, r) => a + (hit(r) ? 1 : 0), 0);
+    const meanClaim = b.reduce((a, r) => a + r[claim], 0) / b.length;
+    const observed = wins / b.length;
+    const [ciLow, ciHigh] = wilsonInterval(wins, b.length);
+    out.push({
+      from: lo,
+      to: Math.min(hi, clampTo),
+      n: b.length,
+      wins,
+      mean_claimed: meanClaim,
+      observed,
+      ci_low: ciLow,
+      ci_high: ciHigh,
+      // Dishonest for this band when the claim falls outside the interval the
+      // outcome supports. Null where the two are not the same kind of number.
+      honest: comparable ? meanClaim >= ciLow && meanClaim <= ciHigh : null,
+    });
+  }
+  return out;
+}
+
+/**
+ * Structural bounds that must hold whatever the model says. Each one is a class
+ * of bug that would otherwise reach a page looking like an ordinary number.
+ * Returns a list of violations; empty is the only passing answer.
+ */
+export function probabilityViolations(rows) {
+  const bad = [];
+  for (const r of rows) {
+    const wp = r.win_probability;
+    if (!wp) continue;
+    let sum = 0;
+    for (const [party, v] of Object.entries(wp)) {
+      if (!Number.isFinite(v) || v < 0 || v > 1) {
+        bad.push({ kind: "probability_out_of_range", ballot_paper_id: r.ballot_paper_id, party, value: v });
+      }
+      sum += v;
+    }
+    if (Math.abs(sum - 1) > 1e-6) {
+      bad.push({ kind: "probabilities_do_not_sum_to_one", ballot_paper_id: r.ballot_paper_id, value: sum });
+    }
+    // The party that actually won must have had a lane. A contest whose winner
+    // is absent from the probability map is one where the page published a
+    // complete-looking set of chances that omitted the eventual winner.
+    if (r.actual_winner && !(r.actual_winner in wp)) {
+      bad.push({ kind: "winner_had_no_lane", ballot_paper_id: r.ballot_paper_id, party: r.actual_winner });
+    }
+  }
+  return bad;
+}
+
+// -----------------------------------------------------------------------------
 // Back-test
 // -----------------------------------------------------------------------------
 
@@ -556,6 +698,15 @@ export function backtest(corpus, { windowDays = DEFAULT_WINDOW_DAYS, minWindow =
       too_close_to_call: draws.too_close_to_call,
       reform_projected_pp: (central["Reform UK"] || 0) * 100,
       reform_actual_pp: (c.to["Reform UK"] || 0) * 100,
+      // Every lane, not just the leader's. The published reliability table bins
+      // on leader_probability alone, so it is structurally blind to the other
+      // three lanes on the ballot: a table built from it cannot report on a
+      // small party's stated chance however wrong that chance is. Retaining the
+      // full map is what lets audit-probability-calibration.mjs measure the
+      // whole curve. Additive only, and no published figure reads it.
+      win_probability: { ...draws.win_probability },
+      central_shares: Object.fromEntries([...field].map((p) => [p, (central[p] || 0) * 100])),
+      actual_shares: Object.fromEntries([...field].map((p) => [p, (c.to[p] || 0) * 100])),
     });
   }
 

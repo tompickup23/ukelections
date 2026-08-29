@@ -1,0 +1,666 @@
+{
+  "generated_at": "2026-08-29T12:39:43.957Z",
+  "method_note": "Leave-one-out back-test of the local by-election model, every lane retained. Lanes are party-contests and contests are by-elections; the two denominators are never mixed. Intervals are Wilson score at 95%.",
+  "corpus": {
+    "contests": 898,
+    "oldest": "2017-05-04",
+    "newest": "2026-08-27"
+  },
+  "denominators": {
+    "contests_backtested": 785,
+    "contests_backtested_recent": 224,
+    "lanes": 3362,
+    "lanes_recent": 1088,
+    "recent_since": "2025-05-01"
+  },
+  "structural_violations": [
+    {
+      "kind": "winner_had_no_lane",
+      "ballot_paper_id": "local.lewes.peacehaven-west.by.2022-05-12",
+      "party": "Labour"
+    },
+    {
+      "kind": "winner_had_no_lane",
+      "ballot_paper_id": "local.powys.rhiwcynon.by.2024-06-04",
+      "party": "Conservative"
+    },
+    {
+      "kind": "winner_had_no_lane",
+      "ballot_paper_id": "local.great-yarmouth.caister-south.by.2026-05-07",
+      "party": "Other"
+    }
+  ],
+  "lane_reliability": {
+    "all_time": [
+      {
+        "from": 0,
+        "to": 0.05,
+        "n": 1439,
+        "wins": 30,
+        "mean_claimed": 0.014252953439888817,
+        "observed": 0.020847810979847115,
+        "ci_low": 0.01464171207581047,
+        "ci_high": 0.02960541803188811,
+        "honest": false
+      },
+      {
+        "from": 0.05,
+        "to": 0.1,
+        "n": 332,
+        "wins": 23,
+        "mean_claimed": 0.07170256024096384,
+        "observed": 0.06927710843373494,
+        "ci_low": 0.046602972944068385,
+        "ci_high": 0.10180508609328735,
+        "honest": true
+      },
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "n": 353,
+        "wins": 50,
+        "mean_claimed": 0.14868413597733712,
+        "observed": 0.141643059490085,
+        "ci_low": 0.10911740989602262,
+        "ci_high": 0.18188453606543478,
+        "honest": true
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 250,
+        "wins": 48,
+        "mean_claimed": 0.2451120000000001,
+        "observed": 0.192,
+        "ci_low": 0.14798339072642153,
+        "ci_high": 0.2453390591793465,
+        "honest": true
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 170,
+        "wins": 57,
+        "mean_claimed": 0.3471455882352942,
+        "observed": 0.3352941176470588,
+        "ci_low": 0.26866055081793927,
+        "ci_high": 0.4092071172200906,
+        "honest": true
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 164,
+        "wins": 77,
+        "mean_claimed": 0.4509100609756098,
+        "observed": 0.4695121951219512,
+        "ci_low": 0.3947032268615221,
+        "ci_high": 0.5457167882002981,
+        "honest": true
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 138,
+        "wins": 78,
+        "mean_claimed": 0.5497572463768113,
+        "observed": 0.5652173913043478,
+        "ci_low": 0.48184923695119963,
+        "ci_high": 0.6450528848522769,
+        "honest": true
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 119,
+        "wins": 83,
+        "mean_claimed": 0.6500567226890757,
+        "observed": 0.6974789915966386,
+        "ci_low": 0.6098369413698579,
+        "ci_high": 0.7727696023417185,
+        "honest": true
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 112,
+        "wins": 94,
+        "mean_claimed": 0.7477410714285712,
+        "observed": 0.8392857142857143,
+        "ci_low": 0.7602128201551546,
+        "ci_high": 0.8958554661944815,
+        "honest": false
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 144,
+        "wins": 117,
+        "mean_claimed": 0.8535607638888887,
+        "observed": 0.8125,
+        "ci_low": 0.740940688920251,
+        "ci_high": 0.8678189565381316,
+        "honest": true
+      },
+      {
+        "from": 0.9,
+        "to": 1,
+        "n": 141,
+        "wins": 125,
+        "mean_claimed": 0.9508812056737589,
+        "observed": 0.8865248226950354,
+        "ci_low": 0.8236114617593251,
+        "ci_high": 0.9289347680531044,
+        "honest": false
+      }
+    ],
+    "recent": [
+      {
+        "from": 0,
+        "to": 0.05,
+        "n": 398,
+        "wins": 5,
+        "mean_claimed": 0.014845477386934688,
+        "observed": 0.01256281407035176,
+        "ci_low": 0.005377618000128179,
+        "ci_high": 0.029067795316959955,
+        "honest": true
+      },
+      {
+        "from": 0.05,
+        "to": 0.1,
+        "n": 109,
+        "wins": 10,
+        "mean_claimed": 0.0731559633027523,
+        "observed": 0.09174311926605505,
+        "ci_low": 0.05059688881197748,
+        "ci_high": 0.16068689305570255,
+        "honest": true
+      },
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "n": 152,
+        "wins": 29,
+        "mean_claimed": 0.15053618421052622,
+        "observed": 0.19078947368421054,
+        "ci_low": 0.13625154529439665,
+        "ci_high": 0.26057189594337304,
+        "honest": true
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 134,
+        "wins": 24,
+        "mean_claimed": 0.24538059701492532,
+        "observed": 0.1791044776119403,
+        "ci_low": 0.12341376272345232,
+        "ci_high": 0.25268169757300385,
+        "honest": true
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 95,
+        "wins": 35,
+        "mean_claimed": 0.34481052631578946,
+        "observed": 0.3684210526315789,
+        "ci_low": 0.2782994396773112,
+        "ci_high": 0.4687706198927484,
+        "honest": true
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 62,
+        "wins": 29,
+        "mean_claimed": 0.4515685483870967,
+        "observed": 0.46774193548387094,
+        "ci_low": 0.34908630867622215,
+        "ci_high": 0.5901618262415199,
+        "honest": true
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 46,
+        "wins": 25,
+        "mean_claimed": 0.5536086956521737,
+        "observed": 0.5434782608695652,
+        "ci_low": 0.4017993496608042,
+        "ci_high": 0.67845489578878,
+        "honest": true
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 44,
+        "wins": 28,
+        "mean_claimed": 0.6528352272727272,
+        "observed": 0.6363636363636364,
+        "ci_low": 0.48866107278891047,
+        "ci_high": 0.7621666587250857,
+        "honest": true
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 21,
+        "wins": 19,
+        "mean_claimed": 0.7459166666666668,
+        "observed": 0.9047619047619048,
+        "ci_low": 0.7108541613925933,
+        "ci_high": 0.9734817912030528,
+        "honest": true
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 18,
+        "wins": 11,
+        "mean_claimed": 0.843361111111111,
+        "observed": 0.6111111111111112,
+        "ci_low": 0.3861866858065617,
+        "ci_high": 0.7969500807306884,
+        "honest": false
+      },
+      {
+        "from": 0.9,
+        "to": 1,
+        "n": 9,
+        "wins": 8,
+        "mean_claimed": 0.9516944444444445,
+        "observed": 0.8888888888888888,
+        "ci_low": 0.5649937852319399,
+        "ci_high": 0.9801096286728695,
+        "honest": true
+      }
+    ]
+  },
+  "contest_reliability": {
+    "all_time": [
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 3,
+        "wins": 1,
+        "mean_claimed": 0.27258333333333334,
+        "observed": 0.3333333333333333,
+        "ci_low": 0.0614903152761605,
+        "ci_high": 0.7923450448735121,
+        "honest": true
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 32,
+        "wins": 17,
+        "mean_claimed": 0.36728906250000026,
+        "observed": 0.53125,
+        "ci_low": 0.3644923793257382,
+        "ci_high": 0.6913087009831766,
+        "honest": true
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 96,
+        "wins": 45,
+        "mean_claimed": 0.45638281249999996,
+        "observed": 0.46875,
+        "ci_low": 0.3720590570105098,
+        "ci_high": 0.5678457522072913,
+        "honest": true
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 138,
+        "wins": 78,
+        "mean_claimed": 0.5497572463768113,
+        "observed": 0.5652173913043478,
+        "ci_low": 0.48184923695119963,
+        "ci_high": 0.6450528848522769,
+        "honest": true
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 119,
+        "wins": 83,
+        "mean_claimed": 0.6500567226890757,
+        "observed": 0.6974789915966386,
+        "ci_low": 0.6098369413698579,
+        "ci_high": 0.7727696023417185,
+        "honest": true
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 112,
+        "wins": 94,
+        "mean_claimed": 0.7477410714285712,
+        "observed": 0.8392857142857143,
+        "ci_low": 0.7602128201551546,
+        "ci_high": 0.8958554661944815,
+        "honest": false
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 144,
+        "wins": 117,
+        "mean_claimed": 0.8535607638888887,
+        "observed": 0.8125,
+        "ci_low": 0.740940688920251,
+        "ci_high": 0.8678189565381316,
+        "honest": true
+      },
+      {
+        "from": 0.9,
+        "to": 1,
+        "n": 141,
+        "wins": 125,
+        "mean_claimed": 0.9508812056737589,
+        "observed": 0.8865248226950354,
+        "ci_low": 0.8236114617593251,
+        "ci_high": 0.9289347680531044,
+        "honest": false
+      }
+    ],
+    "recent": [
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 3,
+        "wins": 1,
+        "mean_claimed": 0.27258333333333334,
+        "observed": 0.3333333333333333,
+        "ci_low": 0.0614903152761605,
+        "ci_high": 0.7923450448735121,
+        "honest": true
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 27,
+        "wins": 13,
+        "mean_claimed": 0.36541666666666683,
+        "observed": 0.48148148148148145,
+        "ci_low": 0.3074295064970908,
+        "ci_high": 0.6601467541378958,
+        "honest": true
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 56,
+        "wins": 29,
+        "mean_claimed": 0.4537499999999999,
+        "observed": 0.5178571428571429,
+        "ci_low": 0.3901016225125491,
+        "ci_high": 0.6433199437557326,
+        "honest": true
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 46,
+        "wins": 25,
+        "mean_claimed": 0.5536086956521737,
+        "observed": 0.5434782608695652,
+        "ci_low": 0.4017993496608042,
+        "ci_high": 0.67845489578878,
+        "honest": true
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 44,
+        "wins": 28,
+        "mean_claimed": 0.6528352272727272,
+        "observed": 0.6363636363636364,
+        "ci_low": 0.48866107278891047,
+        "ci_high": 0.7621666587250857,
+        "honest": true
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 21,
+        "wins": 19,
+        "mean_claimed": 0.7459166666666668,
+        "observed": 0.9047619047619048,
+        "ci_low": 0.7108541613925933,
+        "ci_high": 0.9734817912030528,
+        "honest": true
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 18,
+        "wins": 11,
+        "mean_claimed": 0.843361111111111,
+        "observed": 0.6111111111111112,
+        "ci_low": 0.3861866858065617,
+        "ci_high": 0.7969500807306884,
+        "honest": false
+      },
+      {
+        "from": 0.9,
+        "to": 1,
+        "n": 9,
+        "wins": 8,
+        "mean_claimed": 0.9516944444444445,
+        "observed": 0.8888888888888888,
+        "ci_low": 0.5649937852319399,
+        "ci_high": 0.9801096286728695,
+        "honest": true
+      }
+    ],
+    "as_published": [
+      {
+        "from": 0.3,
+        "to": 0.55,
+        "n": 103,
+        "wins": 51,
+        "mean_claimed": 0.4437160194174757,
+        "observed": 0.49514563106796117,
+        "ci_low": 0.40051410341890453,
+        "ci_high": 0.5901262464073804,
+        "honest": true
+      },
+      {
+        "from": 0.55,
+        "to": 0.7,
+        "n": 70,
+        "wins": 44,
+        "mean_claimed": 0.6252035714285716,
+        "observed": 0.6285714285714286,
+        "ci_low": 0.5114698481852806,
+        "ci_high": 0.7322951839917036,
+        "honest": true
+      },
+      {
+        "from": 0.7,
+        "to": 1,
+        "n": 48,
+        "wins": 38,
+        "mean_claimed": 0.8210416666666668,
+        "observed": 0.7916666666666666,
+        "ci_low": 0.6574082647864651,
+        "ci_high": 0.8826985220411018,
+        "honest": true
+      }
+    ]
+  },
+  "share_binned": {
+    "all_time": [
+      {
+        "from": 0,
+        "to": 5,
+        "n": 376,
+        "wins": 5,
+        "mean_claimed": 0.009654920212765955,
+        "observed": 0.013297872340425532,
+        "ci_low": 0.005692988834259383,
+        "ci_high": 0.030747464238811074,
+        "honest": true
+      },
+      {
+        "from": 5,
+        "to": 10,
+        "n": 705,
+        "wins": 17,
+        "mean_claimed": 0.016443971631205666,
+        "observed": 0.024113475177304965,
+        "ci_low": 0.015108758701264519,
+        "ci_high": 0.03827636993678381,
+        "honest": true
+      },
+      {
+        "from": 10,
+        "to": 20,
+        "n": 763,
+        "wins": 41,
+        "mean_claimed": 0.06195740498034075,
+        "observed": 0.053735255570117955,
+        "ci_low": 0.03985483131542175,
+        "ci_high": 0.07208693084249977,
+        "honest": true
+      },
+      {
+        "from": 20,
+        "to": 30,
+        "n": 484,
+        "wins": 90,
+        "mean_claimed": 0.18957231404958688,
+        "observed": 0.1859504132231405,
+        "ci_low": 0.15380944333631044,
+        "ci_high": 0.22303746762823215,
+        "honest": true
+      },
+      {
+        "from": 30,
+        "to": 40,
+        "n": 334,
+        "wins": 117,
+        "mean_claimed": 0.35625598802395203,
+        "observed": 0.3502994011976048,
+        "ci_low": 0.3011015242825157,
+        "ci_high": 0.4029017719367777,
+        "honest": true
+      },
+      {
+        "from": 40,
+        "to": 50,
+        "n": 301,
+        "wins": 178,
+        "mean_claimed": 0.5783795681063123,
+        "observed": 0.5913621262458472,
+        "ci_low": 0.5350145419014593,
+        "ci_high": 0.6454070278580487,
+        "honest": true
+      },
+      {
+        "from": 50,
+        "to": 100,
+        "n": 399,
+        "wins": 334,
+        "mean_claimed": 0.8462869674185464,
+        "observed": 0.8370927318295739,
+        "ci_low": 0.7976734575922576,
+        "ci_high": 0.870082801940025,
+        "honest": true
+      }
+    ],
+    "recent": [
+      {
+        "from": 0,
+        "to": 5,
+        "n": 121,
+        "wins": 2,
+        "mean_claimed": 0.005080578512396692,
+        "observed": 0.01652892561983471,
+        "ci_low": 0.004544498317862633,
+        "ci_high": 0.058267897550181344,
+        "honest": true
+      },
+      {
+        "from": 5,
+        "to": 10,
+        "n": 218,
+        "wins": 1,
+        "mean_claimed": 0.020902522935779825,
+        "observed": 0.0045871559633027525,
+        "ci_low": 0.0008101842766654894,
+        "ci_high": 0.02552211769014326,
+        "honest": true
+      },
+      {
+        "from": 10,
+        "to": 20,
+        "n": 247,
+        "wins": 26,
+        "mean_claimed": 0.08549595141700407,
+        "observed": 0.10526315789473684,
+        "ci_low": 0.07285148466587682,
+        "ci_high": 0.14976549752527488,
+        "honest": true
+      },
+      {
+        "from": 20,
+        "to": 30,
+        "n": 241,
+        "wins": 52,
+        "mean_claimed": 0.23169502074688814,
+        "observed": 0.2157676348547718,
+        "ci_low": 0.16850834375261614,
+        "ci_high": 0.27194621952421266,
+        "honest": true
+      },
+      {
+        "from": 30,
+        "to": 40,
+        "n": 133,
+        "wins": 58,
+        "mean_claimed": 0.4083270676691728,
+        "observed": 0.43609022556390975,
+        "ci_low": 0.3547766954942368,
+        "ci_high": 0.5209920765750753,
+        "honest": true
+      },
+      {
+        "from": 40,
+        "to": 50,
+        "n": 79,
+        "wins": 48,
+        "mean_claimed": 0.6089113924050633,
+        "observed": 0.6075949367088608,
+        "ci_low": 0.4973378852028524,
+        "ci_high": 0.707873023326196,
+        "honest": true
+      },
+      {
+        "from": 50,
+        "to": 100,
+        "n": 49,
+        "wins": 36,
+        "mean_claimed": 0.8053265306122451,
+        "observed": 0.7346938775510204,
+        "ci_low": 0.5973744384734165,
+        "ci_high": 0.8378886875485057,
+        "honest": true
+      }
+    ]
+  },
+  "headline": {
+    "winner_called": 134,
+    "winner_called_of": 224,
+    "at_or_above_70": {
+      "right": 38,
+      "of": 48
+    }
+  }
+}
