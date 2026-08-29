@@ -14,9 +14,9 @@
 // input can close: a lane the page puts at 3% is never the leader, so no result
 // anywhere can put a 3% lane into it. The table's lowest band starts at 30%.
 //
-// A published number nothing can contradict is decoration. Roughly three
-// quarters of the probabilities on these pages sit below 30% and none of them
-// has ever appeared in a reliability table.
+// A published number nothing can contradict is decoration. Seven in ten of the
+// probabilities on these pages sit below 30% (2,374 of 3,362 lanes) and none of
+// them had ever appeared in a reliability table.
 //
 // This script builds the missing tables:
 //

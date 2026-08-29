@@ -36,8 +36,8 @@ party the page names as favourite, and `PUBLISHED_BANDS` starts at 0.30. A lane
 the page puts at 3% is never the leader, so no result anywhere can put a 3% lane
 into that table. The lowest published row is "30 to 55%".
 
-Of the 3,362 lanes in the back-test, 2,242 sit below 30%. None of them had ever
-appeared in a reliability table. This is a guard that cannot fire, and the fix
+Of the 3,362 lanes in the back-test, 2,374 sit below 30%, which is 70.6% of
+them. None of them had ever appeared in a reliability table. This is a guard that cannot fire, and the fix
 is a second table with its own denominator, not a change to the first one.
 
 `tests/probability-reliability.test.mjs` pins this: twenty contests where the
