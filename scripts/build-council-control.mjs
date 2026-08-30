@@ -257,23 +257,38 @@ function main() {
   for (const [slug, seatsUp] of Object.entries(seatsUpByCouncil)) {
     const ocdSlug = SLUG_ALIASES[slug] || slug;
     const ocdEntry = ocd[ocdSlug];
-    if (!ocdEntry) {
-      unmatched.push(slug);
-      continue;
-    }
-    const pre = preMay7Composition(ocdEntry);
-    if (!pre) {
-      unmatched.push(slug);
-      continue;
+    const reg0 = seatRegistry[slug];
+    let pre = ocdEntry ? preMay7Composition(ocdEntry) : null;
+
+    // A council with no composition history is not missing data: it is a
+    // council that did not exist before this election. Local Government
+    // Reorganisation created East Surrey and West Surrey, which elected 72
+    // and 90 members on 7 May. Skipping them left both pages asserting
+    // "No overall control" with nothing behind it and printing "0 of n/a
+    // seats", which is the same defect as Newham calling a largest party off
+    // five seats: a verdict with no basis. They are built from the registry
+    // instead, with no prior composition, which is simply true of them.
+    const inaugural = !pre;
+    if (inaugural) {
+      if (!reg0?.statutory_seats) {
+        unmatched.push(slug);
+        continue;
+      }
+      pre = {
+        year: null,
+        total: reg0.statutory_seats,
+        by_party: Object.fromEntries(PARTIES.map((p) => [p, 0])),
+        raw_majority_label: "",
+      };
     }
     // Chamber size comes from the seat registry, which reconciles the OCD
     // snapshot against AI DOGE's live roster and against the seats actually
     // on the ballot. Taking it from the OCD snapshot alone put Calderdale,
     // Milton Keynes, Essex and Suffolk on a chamber a boundary review had
     // already replaced, and every majority threshold inherited the error.
-    const reg = seatRegistry[slug];
+    const reg = reg0;
     const total = reg?.statutory_seats ?? pre.total ?? 0;
-    if (reg && reg.statutory_seats !== pre.total) {
+    if (reg && !inaugural && reg.statutory_seats !== pre.total) {
       resized.push(`${slug}: ${pre.total} -> ${reg.statutory_seats} (${reg.resolved_by})`);
     }
     const isAllUp = seatsUp >= total - 1; // tolerate off-by-1 (rare boundary edits)
@@ -299,7 +314,9 @@ function main() {
     // Whether control CHANGED is a verdict too, and it needs the same test as
     // the verdict itself. Newham read "Majority lost, previously Labour" off
     // five declared seats: true or not, the count cannot yet say.
-    if (control.status === "undetermined") {
+    if (inaugural) {
+      changeStatus = "first_election";
+    } else if (control.status === "undetermined") {
       changeStatus = "undetermined";
     } else if (control.status === "majority") {
       changeStatus = control.controlling_party === preControl ? "majority_held" : "majority_gained";
@@ -319,6 +336,7 @@ function main() {
         is_all_up: isAllUp,
         cycle_pattern: isAllUp ? "all_up" : (seatsUp / total > 0.4 ? "halves_or_partial" : "thirds_or_partial"),
       },
+      inaugural,
       pre_may7: {
         snapshot_year: pre.year,
         by_party: pre.by_party,

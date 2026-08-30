@@ -77,10 +77,16 @@ const ROWGAP = 10;
 const PAD = 62;
 const cellW = totalSeats > 0 ? (W - (totalSeats - 1) * GAP) / totalSeats : 0;
 const lineX = PAD + threshold * (cellW + GAP) - GAP / 2;
-const rows = [
-  { label: "Before", cells: cellsFor(preNamed) },
-  { label: "After", cells: cellsFor(postNamed) },
-];
+// A council holding its first election has no "before". Drawing an all-empty
+// row would say the seats existed and nobody held them, which is a different
+// and false claim.
+const inaugural: boolean = !!control?.inaugural;
+const rows = inaugural
+  ? [{ label: "Elected", cells: cellsFor(postNamed) }]
+  : [
+      { label: "Before", cells: cellsFor(preNamed) },
+      { label: "After", cells: cellsFor(postNamed) },
+    ];
 const stripH = rows.length * CH + (rows.length - 1) * ROWGAP;
 const TOP = 20;
 
@@ -147,6 +153,8 @@ const leaderName = leaderSlug ? partySlugToName(leaderSlug) : null;
   )}
 
   <figcaption class="cc-caption">
+    {inaugural && <><strong>First election.</strong> This council was created by
+    Local Government Reorganisation, so it has no previous composition.{" "}</>}
     {status === "undetermined" ? (
       <><strong>Not yet decided.</strong> {undeterminedReason}.</>
     ) : status === "majority" && leaderName ? (
