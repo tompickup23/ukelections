@@ -8,3 +8,11 @@
 # Cloudflare Pages matches on the full URL when the source includes a scheme
 # and host; the 301! forces the redirect even where a static file exists.
 https://www.ukelections.co.uk/* https://ukelections.co.uk/:splat 301!
+
+# /accuracy/ is the URL a reader reaches for on a forecasting site, and it was
+# a 404. The page already exists at /data-quality/, which is indexed, so this
+# aliases rather than moves it: one accuracy page, no second copy to drift out
+# of step with the first.
+/accuracy /data-quality/ 301
+/accuracy/ /data-quality/ 301
+

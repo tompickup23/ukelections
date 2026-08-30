@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import MiniMap from "../../../components/MiniMap.astro";
+import CouncilChamber from "../../../components/CouncilChamber.astro";
 import StatCard from "../../../components/StatCard.astro";
 import type { Crumb } from "../../../lib/seo";
 import {
@@ -65,12 +65,30 @@ const reformPre: number = ctlRow?.reform?.pre_seats || 0;
 const reformMajority: boolean = !!ctlRow?.reform?.has_majority;
 const reformLargest: boolean = !!ctlRow?.reform?.is_largest;
 const totalSeats: number = ctlRow?.cycle?.total_seats || 0;
+const undeclaredSeats: number = ctlRow?.may7_wins?.undeclared_seats || 0;
+const vacantSeats: number = ctlRow?.may7_wins?.vacant_seats || 0;
 const seatsUp: number = ctlRow?.cycle?.seats_up || wards.length;
 
+const controlStatus: string | null = ctlRow?.control?.status || null;
 const controlHeadline = (() => {
+  // Newham published "Green Party largest party" off 5 of its 66 seats. A
+  // verdict is only stated where the seats still outstanding cannot change
+  // it; the control record decides that and leaves both fields null when
+  // they could.
+  if (controlStatus === "undetermined") return "Result not yet decided";
   if (controllingParty) return `${partySlugToName(controllingParty)} majority`;
   if (pluralityParty) return `No overall control. ${partySlugToName(pluralityParty)} largest party`;
   return "No overall control";
+})();
+
+// "ncc" is an OCD control status meaning no overall control, not a party.
+// partySlugToName has no case for it and returns the slug it was given, so
+// 45 council pages read "previously ncc". It is also redundant next to
+// "Remained no overall control", so it is dropped rather than translated.
+const previousLabel = (() => {
+  if (!preControlParty || preControlParty === "ncc") return "";
+  if (preControlParty === controllingParty) return "";
+  return `, previously ${partySlugToName(preControlParty)}`;
 })();
 
 const changeLabel = (() => {
@@ -79,6 +97,7 @@ const changeLabel = (() => {
     case "majority_held": return "Majority held";
     case "majority_lost": return "Majority lost";
     case "noc_continued": return "Remained no overall control";
+    case "undetermined": return "Too early to say what changed";
     default: return null;
   }
 })();
@@ -130,25 +149,18 @@ const breadcrumbs: Crumb[] = [
 
 <BaseLayout title={title} description={description} breadcrumbs={breadcrumbs}>
   <section class="page-hero">
-    <div class="mini-map-side">
-      <MiniMap
-        focalName={councilName}
-        focalKind="lad"
-        focalColour={controllingParty ? partyColour(partySlugToName(controllingParty)) : "var(--muted)"}
-        width={240}
-        height={170}
-        ariaLabel={`Location map of ${councilName} on the UK map`}
-      />
-    </div>
     <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Council"} · {councilTypeLabel(cycle?.type)}</p>
     <h1>{councilName}</h1>
     <p class="lede">
       <strong>{controlHeadline}</strong> after May 7 2026.{" "}
-      {changeLabel && <span class="muted">({changeLabel}{preControlParty && preControlParty !== controllingParty ? `, previously ${partySlugToName(preControlParty)}` : ""})</span>}
+      {changeLabel && <span class="muted">({changeLabel}{previousLabel})</span>}
     </p>
     <div class="action-row">
       <a class="button" href="/councils/">← All councils</a>
       <a class="button" href="/your-area/">Find a ward</a>
+    </div>
+    <div class="chamber-side">
+      {ctlRow && <CouncilChamber control={ctlRow} councilName={councilName} />}
     </div>
   </section>
 
@@ -203,6 +215,8 @@ const breadcrumbs: Crumb[] = [
       </div>
       <p class="caption">
         Pre-May-7 composition is the latest OCD snapshot of who held each seat; post is pre minus seats up plus actual winners.
+        {undeclaredSeats > 0 && ` ${undeclaredSeats} of the ${totalSeats} seats have not declared, so these counts are incomplete.`}
+        {vacantSeats > 0 && ` ${vacantSeats} seat${vacantSeats === 1 ? " is" : "s are"} vacant after a cancelled poll.`}
       </p>
     </section>
   )}

@@ -1362,6 +1362,14 @@ table.council-table th {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
 
+/* A seat nobody holds: hollow, to read as an absence rather than a party. */
+.ch-legend-swatch-empty {
+  background: transparent;
+  box-shadow: none;
+  border: 1.2px dashed currentColor;
+  opacity: 0.45;
+}
+
 .ch-legend-swatch-stack {
   display: inline-flex;
   width: auto;
@@ -2433,6 +2441,17 @@ table.council-table th {
     margin: var(--space-sm) 0;
     max-width: 100%;
   }
+}
+
+/* The council chamber graphic. Unlike the 240px locator tile it replaces, this
+   carries real detail (one mark per seat, twice, plus a threshold line) and
+   needs the width to stay legible, so it sits as a full block under the hero
+   text rather than floating beside it. Capped so a 20-seat parish-sized
+   chamber does not stretch its dots across a desktop viewport. */
+.chamber-side {
+  clear: both;
+  margin: var(--space-md) 0 0;
+  max-width: 46rem;
 }
 
 /* Homepage masthead. Carries the site's only h1, which used to live inside the

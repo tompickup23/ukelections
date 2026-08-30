@@ -85,8 +85,12 @@ const sisterLinks = [
 
 const winnerShare = ((record.prediction[record.winner]?.pct || 0) * 100).toFixed(1);
 const margin = ((record.majority_pct || 0) * 100).toFixed(1);
-const countryLabel = record.country?.replace(/_/g, " ");
-const regionLabel = record.region?.replace(/_/g, " ");
+// The slug is unslugged but was never cased, so the page printed
+// "england · north west" under the headline.
+const titleCase = (s?: string | null) =>
+  s ? s.replace(/_/g, " ").replace(/\b[a-z]/g, (c) => c.toUpperCase()) : s;
+const countryLabel = titleCase(record.country);
+const regionLabel = titleCase(record.region);
 const breadcrumbs: Crumb[] = [
   { name: "Constituencies", href: "/seats/parliament/" },
   { name: record.name, href: `/seats/parliament/${Astro.params.constituency}/` }

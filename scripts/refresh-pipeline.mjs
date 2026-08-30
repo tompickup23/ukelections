@@ -112,6 +112,17 @@ phases.push(["7f. Build council by-election contests", "scripts/build-local-byel
 // wrote, and before the site build, because the page only advertises a card
 // that already exists on disk.
 phases.push(["7g. Render by-election share cards", "scripts/build-byelection-cards.mjs"]);
+// 7h reconciles each council's chamber size across the OCD snapshot, AI DOGE's
+// councillor roster and the seats actually on the ballot. It must run before
+// the control build, which takes its majority thresholds from the result.
+// It does NOT re-read the sibling AI DOGE repo: that snapshot is committed and
+// refreshed by hand with scripts/import-aidoge-rosters.mjs, so this stays
+// hermetic and runs anywhere.
+phases.push(["7h. Reconcile council seat counts", "scripts/build-seat-registry.mjs"]);
+// 7i regenerates the accuracy figures the nav and meta descriptions quote.
+// After 7f, because the running by-election record moves every time a result
+// lands, and before the site build that renders it.
+phases.push(["7i. Refresh accuracy headline", "scripts/build-accuracy-headline.mjs"]);
 // 7d/7e (Makerfield 2026-06-18 by-election forecast + analysis) were REMOVED on
 // 19 Jun 2026: the contest concluded on 18 Jun (Labour hold, Burnham). The
 // forecast is now frozen as a post-mortem (status: "concluded" in the JSON) and
