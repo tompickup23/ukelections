@@ -1,0 +1,214 @@
+---
+/**
+ * CouncilChamber.astro — the council page hero graphic.
+ *
+ * Replaces a locator map that drew the council's outline in the controlling
+ * party's colour. That tile asked the reader to recognise a district from its
+ * shape, which almost nobody can do; it rendered grey on the 78 councils in no
+ * overall control, because the colour encoded a party that did not exist; and
+ * it was silently absent on 20 pages where the name lookup missed. Nobody
+ * noticed the absences, which is the clearest evidence it carried nothing.
+ *
+ * What replaces it needs no local knowledge: the chamber, and the number of
+ * seats needed to run it.
+ *
+ *   the horseshoe  one dot per seat, in the arrangement the site already uses
+ *                  for the Commons, with the majority notch and any seat
+ *                  nobody holds drawn hollow.
+ *   the strip      the same chamber before and after the election, against
+ *                  one majority line, so the change is the picture.
+ *
+ * Every number is taken from the reconciled control record: the composition
+ * fills the chamber exactly, or the seats it is short are declared vacant or
+ * still counting and are drawn as such.
+ */
+import CommonsHorseshoe from "./CommonsHorseshoe.astro";
+import { partyColour } from "../lib/predictions";
+import { partySlugToName, shortPartyLabel } from "../lib/siteData";
+
+interface Props {
+  /** The council's row from data/results/may-2026/council-control.json */
+  control: any;
+  councilName: string;
+}
+const { control, councilName } = Astro.props;
+
+const totalSeats: number = control?.cycle?.total_seats || 0;
+const threshold: number = control?.control?.threshold || 0;
+const preByParty: Record<string, number> = control?.pre_may7?.by_party || {};
+const postByParty: Record<string, number> = control?.post_may7?.by_party || {};
+const undeclared: number = control?.may7_wins?.undeclared_seats || 0;
+const vacant: number = control?.may7_wins?.vacant_seats || 0;
+const status: string = control?.control?.status || "";
+
+// The horseshoe keys on display names; the control record keys on slugs.
+const toNames = (bySlug: Record<string, number>) => {
+  const out: Record<string, number> = {};
+  for (const [slug, n] of Object.entries(bySlug)) {
+    if (!n) continue;
+    const name = partySlugToName(slug);
+    out[name] = (out[name] || 0) + n;
+  }
+  return out;
+};
+const postNamed = toNames(postByParty);
+const preNamed = toNames(preByParty);
+
+// Ideological order, matching the horseshoe's own left-to-right convention so
+// the two graphics read the same way round.
+const ORDER = [
+  "Green Party", "Plaid Cymru", "SNP", "Labour", "Independent / Other",
+  "Liberal Democrats", "Conservative", "Reform UK",
+];
+const orderParties = (byName: Record<string, number>) => {
+  const known = ORDER.filter((p) => byName[p]);
+  const rest = Object.keys(byName).filter((p) => !ORDER.includes(p) && byName[p]);
+  return [...known, ...rest];
+};
+const cellsFor = (byName: Record<string, number>) =>
+  orderParties(byName).flatMap((p) => Array<string>(byName[p]).fill(p));
+
+// Strip geometry. Drawn in SVG so the row labels stay locked to their rows at
+// any width, and so it prints.
+const W = 620;
+const GAP = 2;
+const CH = 22;
+const ROWGAP = 10;
+const PAD = 62;
+const cellW = totalSeats > 0 ? (W - (totalSeats - 1) * GAP) / totalSeats : 0;
+const lineX = PAD + threshold * (cellW + GAP) - GAP / 2;
+// A council holding its first election has no "before". Drawing an all-empty
+// row would say the seats existed and nobody held them, which is a different
+// and false claim.
+const inaugural: boolean = !!control?.inaugural;
+const rows = inaugural
+  ? [{ label: "Elected", cells: cellsFor(postNamed) }]
+  : [
+      { label: "Before", cells: cellsFor(preNamed) },
+      { label: "After", cells: cellsFor(postNamed) },
+    ];
+const stripH = rows.length * CH + (rows.length - 1) * ROWGAP;
+const TOP = 20;
+
+const seatWord = (n: number) => `${n} seat${n === 1 ? "" : "s"}`;
+const undeterminedReason: string | null = control?.control?.reason || null;
+
+// The leading party is only named where the count can support it. Where seats
+// are still out, the control record has already withheld the claim.
+const leaderSlug: string | null =
+  control?.control?.controlling_party || control?.control?.plurality_party || null;
+const leaderName = leaderSlug ? partySlugToName(leaderSlug) : null;
+---
+
+<figure class="council-chamber">
+  <CommonsHorseshoe
+    seats={postNamed}
+    total={totalSeats}
+    majority={threshold}
+    labelMinSeats={1}
+    showEmptySeats={true}
+    showHeadline={false}
+    emptySeatsLabel={undeclared > 0 ? "Still counting" : "Vacant"}
+    ariaLabel={`${councilName} council chamber: ${totalSeats} seats, ${threshold} needed for a majority.`}
+  />
+
+  {totalSeats > 0 && (
+    <div class="cc-strip">
+      <svg
+        viewBox={`0 ${-TOP} ${PAD + W} ${stripH + TOP + 6}`}
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label={`${councilName} seats by party before and after 7 May 2026, against the ${threshold} needed for a majority.`}
+      >
+        {rows.map((row, i) => {
+          const y = i * (CH + ROWGAP);
+          return (
+            <>
+              <text class="cc-rowlab" x={PAD - 12} y={y + CH / 2 + 4}>{row.label}</text>
+              {Array.from({ length: totalSeats }, (_, j) => {
+                const party = row.cells[j];
+                return (
+                  <rect
+                    x={PAD + j * (cellW + GAP)}
+                    y={y}
+                    width={cellW}
+                    height={CH}
+                    rx="1.5"
+                    fill={party ? partyColour(party) : "var(--surface-muted)"}
+                    stroke={party ? "none" : "currentColor"}
+                    stroke-opacity={party ? undefined : "0.25"}
+                    stroke-width={party ? undefined : "0.8"}
+                  >
+                    <title>{party ? shortPartyLabel(party) : "Seat not held"}</title>
+                  </rect>
+                );
+              })}
+            </>
+          );
+        })}
+        <line class="cc-line" x1={lineX} y1={-TOP + 8} x2={lineX} y2={stripH + 3} />
+        <text class="cc-linelab" x={lineX + 6} y={-TOP + 14}>{threshold} for a majority</text>
+      </svg>
+    </div>
+  )}
+
+  <figcaption class="cc-caption">
+    {inaugural && <><strong>First election.</strong> This council was created by
+    Local Government Reorganisation, so it has no previous composition.{" "}</>}
+    {status === "undetermined" ? (
+      <><strong>Not yet decided.</strong> {undeterminedReason}.</>
+    ) : status === "majority" && leaderName ? (
+      <><strong>{shortPartyLabel(leaderName)}</strong> holds {seatWord(postByParty[leaderSlug!] || 0)} of {totalSeats}, past the {threshold} needed.</>
+    ) : leaderName ? (
+      <><strong>{shortPartyLabel(leaderName)}</strong> is the largest group on {seatWord(postByParty[leaderSlug!] || 0)}, {threshold - (postByParty[leaderSlug!] || 0)} short of the {threshold} needed to run the council.</>
+    ) : (
+      <>No party reached the {threshold} needed to run the council.</>
+    )}
+    {vacant > 0 && <> {seatWord(vacant)} vacant, poll cancelled.</>}
+    {undeclared > 0 && status !== "undetermined" && <> {seatWord(undeclared)} still to declare.</>}
+  </figcaption>
+</figure>
+
+<style>
+  .council-chamber {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+  }
+  .cc-strip {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .cc-strip svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    color: var(--ink);
+  }
+  .cc-rowlab {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    fill: var(--muted);
+    text-anchor: end;
+  }
+  .cc-line {
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+  .cc-linelab {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    fill: var(--ink);
+    text-transform: uppercase;
+  }
+  .cc-caption {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+</style>

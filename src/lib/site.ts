@@ -1,3 +1,5 @@
+import { ACCURACY_HEADLINE } from "./accuracy-headline";
+
 export const SITE_NAME = "UK Elections";
 export const SITE_URL = "https://ukelections.co.uk";
 export const DEFAULT_DESCRIPTION =
@@ -55,8 +57,8 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     items: [
       { href: "/past-results/", label: "All Past Results", desc: "Every contest we've forecast" },
       { href: "/past-results/by-region/", label: "By Region", desc: "Reform UK share heatmap across the 12 regions" },
-      { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: "May 2024 backtest · 5.7pp MAE" },
-      { href: "/data-quality/", label: "Data Quality", desc: "Sources, coverage, gaps" },
+      { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: ACCURACY_HEADLINE },
+      { href: "/data-quality/", label: "Accuracy record", desc: "Every forecast graded, including the misses" },
     ],
   },
   {

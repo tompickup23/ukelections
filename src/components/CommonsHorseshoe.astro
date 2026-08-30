@@ -21,6 +21,15 @@
  *   majority number = 326            Majority threshold (drawn as a notch)
  *   labelMinSeats number = 12        Don't label parties below this size
  *   ariaLabel string                 a11y description
+ *   showEmptySeats boolean = false   Draw the seats nobody holds. A council
+ *                                    chamber can have real vacancies (a poll
+ *                                    cancelled on a candidate's death, a seat
+ *                                    still counting). Leaving those positions
+ *                                    blank renders a 78-seat council as a
+ *                                    77-seat one, which is the same class of
+ *                                    error as the stale chamber sizes this
+ *                                    component is now fed from the registry.
+ *   emptySeatsLabel string           What to call them in the legend.
  */
 import { partyColour } from "../lib/predictions";
 import { shortPartyLabel } from "../lib/siteData";
@@ -31,6 +40,11 @@ interface Props {
   majority?: number;
   labelMinSeats?: number;
   ariaLabel?: string;
+  showEmptySeats?: boolean;
+  emptySeatsLabel?: string;
+  /** The "N seats, M short of a majority" line under the legend. Off where the
+   *  caller states the verdict itself, so the two do not say the same thing. */
+  showHeadline?: boolean;
 }
 
 const {
@@ -39,6 +53,9 @@ const {
   majority = 326,
   labelMinSeats = 15,
   ariaLabel = "Projected House of Commons composition shown as a horseshoe of seats coloured by party.",
+  showEmptySeats = false,
+  emptySeatsLabel = "Vacant",
+  showHeadline = true,
 } = Astro.props;
 
 // --- Ordering: ideological left-to-right within the horseshoe ---
@@ -140,6 +157,8 @@ for (const party of orderedParties) {
     seatAssignments.push({ party, pos: positions[cursor++] });
   }
 }
+// Whatever is left is a seat in the chamber that nobody currently holds.
+const emptyPositions: Pos[] = showEmptySeats ? positions.slice(cursor) : [];
 
 // --- SVG canvas sizing ---
 const VIEW_W = (OUTER_R + DOT_R + 4) * 2;
@@ -207,6 +226,22 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
       </g>
     )}
 
+    {/* Seats nobody holds, drawn first so party dots sit above them. */}
+    {emptyPositions.length > 0 && (
+      <g class="ch-empty">
+        {emptyPositions.map((pos) => {
+          const { x, y } = dotXY(pos);
+          return (
+            <circle cx={x} cy={y} r={DOT_R} fill="none"
+              stroke="currentColor" stroke-opacity="0.28" stroke-width="1.2"
+              stroke-dasharray="2 2">
+              <title>{emptySeatsLabel}</title>
+            </circle>
+          );
+        })}
+      </g>
+    )}
+
     {/* The dots */}
     <g class="ch-dots">
       {seatAssignments.map(({ party, pos }) => {
@@ -235,6 +270,13 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
         <span class="ch-legend-seats">{l.seats}</span>
       </span>
     ))}
+    {emptyPositions.length > 0 && (
+      <span class="ch-legend-item">
+        <span class="ch-legend-swatch ch-legend-swatch-empty" aria-hidden="true"></span>
+        <span class="ch-legend-name">{emptySeatsLabel}</span>
+        <span class="ch-legend-seats">{emptyPositions.length}</span>
+      </span>
+    )}
     {legend.some((l) => l.seats > 0 && l.seats < labelMinSeats) && (
       <span class="ch-legend-item ch-legend-other">
         <span class="ch-legend-swatch ch-legend-swatch-stack" aria-hidden="true">
@@ -250,7 +292,7 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
     )}
   </figcaption>
 
-  {leadingParty && majority > 0 && (
+  {showHeadline && leadingParty && majority > 0 && (
     <p class="commons-horseshoe-headline">
       <span class="ch-pill" style={`background:${leadingParty.colour}`}></span>
       <strong>{leadingParty.short}</strong>
