@@ -52,6 +52,19 @@ interface Props {
   focalCode?: string;
   focalName?: string;
   focalKind: "pcon" | "lad" | "ward";
+  /**
+   * Boundary fidelity. "simplified" (the default) reads the small committed
+   * files, which is right for the ~3,800 pages that carry one of these.
+   *
+   * "full" reads the raw BUC/BSC boundary instead. This component renders at
+   * build time and ships no JavaScript, so the only cost of the raw file is
+   * parsing it once per Astro process; nothing reaches the browser. Reach for
+   * it where the simplified geometry is too coarse to be honest: the
+   * simplified PCON file takes small urban seats down to four or five
+   * vertices, so Holborn and St Pancras draws as a triangle that is not the
+   * shape of the seat. A map of the wrong shape is worse than no map.
+   */
+  detail?: "simplified" | "full";
   focalColour?: string;
   width?: number;
   height?: number;
@@ -75,6 +88,7 @@ const {
   focalCode,
   focalName,
   focalKind,
+  detail = "simplified",
   focalColour = "var(--accent-3)",
   width = 220,
   height = 150,
@@ -112,20 +126,23 @@ function deltaColour(delta: number, maxAbs: number): string | null {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// File registry. code field name + file path per kind
+// File registry. code field name + file path per kind, at both fidelities.
 const REGISTRY = {
   pcon: {
     file: "data/geography/pcon24-simplified.geojson",
+    fullFile: "data/geography/pcon24-buc-raw.geojson",
     codeField: "PCON24CD",
     nameField: "PCON24NM",
   },
   lad: {
     file: "data/geography/lad24-simplified.geojson",
+    fullFile: "data/geography/lad24-buc-raw.geojson",
     codeField: "LAD24CD",
     nameField: "LAD24NM",
   },
   ward: {
     file: "data/geography/wd25-simplified.geojson",
+    fullFile: "data/geography/wd25-bsc-raw.geojson",
     codeField: "WD25CD",
     nameField: "WD25NM",
   },
@@ -152,10 +169,18 @@ function normName(s: string): string {
     .trim();
 }
 
-function loadCache(kind: keyof typeof REGISTRY): GeoCache | null {
-  if (_cache.has(kind)) return _cache.get(kind)!;
+function loadCache(kind: keyof typeof REGISTRY, fidelity: "simplified" | "full"): GeoCache | null {
+  // Cache key carries the fidelity, so a page asking for "full" cannot poison
+  // the simplified cache the other 3,800 pages share, or vice versa.
+  const cacheKey = `${kind}:${fidelity}`;
+  if (_cache.has(cacheKey)) return _cache.get(cacheKey)!;
   const reg = REGISTRY[kind];
-  const p = resolve(process.cwd(), reg.file);
+  // Fall back to the simplified file rather than rendering nothing if a raw
+  // boundary is missing from the checkout.
+  const wanted = fidelity === "full" ? reg.fullFile : reg.file;
+  const p = existsSync(resolve(process.cwd(), wanted))
+    ? resolve(process.cwd(), wanted)
+    : resolve(process.cwd(), reg.file);
   if (!existsSync(p)) return null;
   const raw = JSON.parse(readFileSync(p, "utf8")) as { features: any[] };
   // Rewinding at load time fixes the winding for every consumer of the cache
@@ -170,11 +195,11 @@ function loadCache(kind: keyof typeof REGISTRY): GeoCache | null {
     if (name) byName.set(normName(name), f);
   }
   const cache: GeoCache = { features: data.features, byCode, byName };
-  _cache.set(kind, cache);
+  _cache.set(cacheKey, cache);
   return cache;
 }
 
-const cache = loadCache(focalKind);
+const cache = loadCache(focalKind, detail);
 let focal: any = null;
 if (cache) {
   if (focalCode) focal = cache.byCode.get(focalCode);

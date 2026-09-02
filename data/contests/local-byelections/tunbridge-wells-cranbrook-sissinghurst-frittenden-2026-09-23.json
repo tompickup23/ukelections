@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T19:48:38.636Z",
+  "generated_at": "2026-09-02T11:01:04.435Z",
   "slug": "tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23",
   "status": "upcoming",
   "contest": {
@@ -26,12 +26,46 @@
     "postal_vote_deadline": "2026-09-08"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 4,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.by.2026-09-23/sopn/2026-08-27T12%3A31%3A06.230908%2B00%3A00/temp.jpeg",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Max Lawson Chesters",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Nicholas Lees",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "David Somers",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Harry James Wormington",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -149,10 +183,117 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.2026-05-07/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.2538606403013183,
+        "Labour": 0,
+        "Conservative": 0.46214689265536724,
+        "Liberal Democrats": 0.14463276836158193,
+        "Green Party": 0.1393596986817326,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.2026-05-07/"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 17,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.18809378317227243,
+        "Labour": -0.4992439712516755,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": 0.04825443100911353,
+        "Green Party": 0.7252604046022582
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8656434565956257,
+        "Labour": 0.6731257816059886,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 1.0366255529843733,
+        "Green Party": 1.630925348720746
+      },
+      "entry_shares": {},
+      "party_counts": {
+        "Reform UK": 17,
+        "Labour": 16,
+        "Conservative": 17,
+        "Liberal Democrats": 12,
+        "Green Party": 12,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 1,
+        "Other": 0
+      }
+    },
+    "central": {
+      "Reform UK": 0.2158910061542081,
+      "Labour": 0,
+      "Conservative": 0.39011796744981647,
+      "Liberal Democrats": 0.14795468115849608,
+      "Green Party": 0.24603634523747922,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.09125,
+      "Conservative": 0.6195,
+      "Liberal Democrats": 0.12825,
+      "Green Party": 0.161
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.1255419203427251,
+        "p50": 0.20291072103306093,
+        "p90": 0.32372300645433744
+      },
+      "Conservative": {
+        "p10": 0.1816680134739864,
+        "p50": 0.3697625352040661,
+        "p90": 0.5429305964213673
+      },
+      "Liberal Democrats": {
+        "p10": 0.04097835768158383,
+        "p50": 0.14851336439932794,
+        "p90": 0.3384314048924897
+      },
+      "Green Party": {
+        "p10": 0.13915092489533543,
+        "p50": 0.23508118222802987,
+        "p90": 0.36276638043622755
+      }
+    },
+    "winner": "Conservative",
+    "runner_up": "Green Party",
+    "margin_pp": 14.408162221233725,
+    "leader_probability": 0.6195,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "sources": [
     {

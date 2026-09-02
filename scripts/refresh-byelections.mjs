@@ -75,6 +75,49 @@ async function getJson(url, attempt = 0) {
   return res.json();
 }
 
+// ---------------------------------------------------------------------------
+// Provenance
+//
+// Tiers, best first:
+//   hand_verified_declaration   the returning officer's own published summary
+//   hand_verified_two_sources   two independent reports that reconcile
+//   auto_ingested_dc            this script
+//   provisional_single_source   one unofficial source, explicitly temporary
+//
+// Only the hand-verified tiers outrank a DC transcription. `provisional` sits
+// below it on purpose: a provisional row's own note says DC wins on conflict,
+// which is what makes it provisional.
+// ---------------------------------------------------------------------------
+
+const isHandVerified = (status) => String(status || "").startsWith("hand_verified");
+
+/** Fields where the incoming DC row genuinely disagrees with the kept row. */
+function conflictingFields(existing, incoming) {
+  const out = [];
+  for (const field of ["turnout_votes", "turnout_pct", "spoilt_ballots", "electorate"]) {
+    const a = existing[field];
+    const b = incoming[field];
+    // Null on either side is absence, not disagreement: the hand-verified rows
+    // deliberately leave a figure null where no source published it, and DC
+    // does the same.
+    if (a == null || b == null) continue;
+    // turnout_pct is stored to 4dp on one side and derived on the other, so
+    // only flag a gap wide enough to be a different number rather than a
+    // different rounding.
+    if (field === "turnout_pct" ? Math.abs(a - b) > 0.001 : a !== b) {
+      out.push({ field, kept: a, dc: b });
+    }
+  }
+  const byName = new Map((existing.candidates || []).map((c) => [c.name, c.votes]));
+  for (const c of incoming.candidates || []) {
+    if (!byName.has(c.name)) continue;
+    if (byName.get(c.name) !== c.votes) {
+      out.push({ field: `votes:${c.name}`, kept: byName.get(c.name), dc: c.votes });
+    }
+  }
+  return out;
+}
+
 function isoDaysBetween(a, b) {
   const out = [];
   const d = new Date(a + "T00:00:00Z");
@@ -145,6 +188,8 @@ async function main() {
 
   let added = 0;
   let replaced = 0;
+  let kept = 0;
+  const conflicts = [];
   const stillPending = [];
   for (const id of [...ballotIds].sort()) {
     if (have.has(id)) continue;
@@ -191,10 +236,41 @@ async function main() {
     };
     if (rowIndex.has(id)) {
       const at = rowIndex.get(id);
-      const was = appends.results[at].review_status;
-      appends.results[at] = row;
-      replaced += 1;
-      console.log("  ~ ", id, `(superseded ${was} with the DC transcription)`);
+      const existing = appends.results[at];
+      const was = existing.review_status;
+      if (isHandVerified(was)) {
+        // A hand-verified row outranks the DC transcription and must not be
+        // silently overwritten by it. This guard is the whole reason the
+        // provenance tiers exist: on the 27 August round the unguarded sweep
+        // replaced Wandsworth Trinity's row, sourced from the council's own
+        // published voting summary, with DC's, which reports 3,283 (valid
+        // votes) where the declaration reports 3,290 ballots cast, and threw
+        // away the verification note explaining the difference. It did the
+        // same to Dover and Sheffield, dropping a turnout figure in each case.
+        // DC transcription has erred before (two errors in the Blackpool 2023
+        // verification), so a disagreement is a thing to look at, not a thing
+        // to apply.
+        const diffs = conflictingFields(existing, row);
+        kept += 1;
+        if (diffs.length) {
+          conflicts.push({ id, was, fields: diffs });
+          console.log("  ! ", id, `(kept ${was}; DC disagrees on ${diffs.map((d) => d.field).join(", ")})`);
+        } else {
+          console.log("  = ", id, `(kept ${was}; DC agrees)`);
+        }
+      } else {
+        // A supersede must not be lossy. DC leaves a field null where the
+        // returning officer did not state it, and null is absence, not a
+        // correction: the St Helens row had a 33.9% turnout from its single
+        // source that DC does not publish, and a straight object swap threw it
+        // away. Carry any figure the incoming row does not have.
+        for (const field of ["turnout_votes", "turnout_pct", "spoilt_ballots", "electorate"]) {
+          if (row[field] == null && existing[field] != null) row[field] = existing[field];
+        }
+        appends.results[at] = row;
+        replaced += 1;
+        console.log("  ~ ", id, `(superseded ${was} with the DC transcription)`);
+      }
     } else {
       appends.results.push(row);
       added += 1;
@@ -231,9 +307,17 @@ async function main() {
     console.log(`  folded ${folded} rows into the history file`);
   }
   writeFileSync(STATE, JSON.stringify({ last_sweep_date: today, pending: stillPending }, null, 2));
+  if (conflicts.length) {
+    console.log(`\n  ${conflicts.length} hand-verified row(s) DC disagrees with. Kept ours; go and look:`);
+    for (const c of conflicts) {
+      for (const d of c.fields) {
+        console.log(`    ${c.id} · ${d.field}: kept ${d.kept} (${c.was}), DC says ${d.dc}`);
+      }
+    }
+  }
   console.log(
-    `by-election refresh: ${added} appended, ${replaced} superseded, ${stillPending.length} pending, ` +
-      `swept ${dates.length} days to ${today}`,
+    `by-election refresh: ${added} appended, ${replaced} superseded, ${kept} hand-verified kept, ` +
+      `${conflicts.length} conflict(s), ${stillPending.length} pending, swept ${dates.length} days to ${today}`,
   );
 }
 

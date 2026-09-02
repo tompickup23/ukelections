@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T19:48:38.638Z",
+  "generated_at": "2026-09-02T11:01:04.467Z",
   "slug": "windsor-and-maidenhead-bray-2026-09-24",
   "status": "upcoming",
   "contest": {
@@ -26,12 +26,54 @@
     "postal_vote_deadline": "2026-09-09"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 5,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.windsor-and-maidenhead.bray.by.2026-09-24/sopn/2026-08-28T15%3A06%3A08.476371%2B00%3A00/Bray.pdf",
+    "parties": [
+      "Conservative",
+      "Independent",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "John Joseph Baldwin",
+        "party_name": "the Borough first Independents",
+        "party": "Independent",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Joanna Korczak",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "William Albert Sennett",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Nigel William Smith",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Clare Stuart-Adams",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -164,10 +206,128 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.windsor-and-maidenhead.bray.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.06095437129919889,
+        "Conservative": 0.2598397770811564,
+        "Liberal Democrats": 0.11041448972483456,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.5687913618948102,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.windsor-and-maidenhead.bray.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 47,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9701232871018278,
+        "Conservative": -0.8159483409889643,
+        "Liberal Democrats": -0.3488983419427112,
+        "Green Party": 0.1280132695070706,
+        "Independent": -1.874713024238506
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4486916040310641,
+        "Conservative": 0.5138774221463401,
+        "Liberal Democrats": 0.761539912250465,
+        "Green Party": 1.0990444843495155,
+        "Independent": 0.19458239592112506
+      },
+      "entry_shares": {
+        "Reform UK": 0.2533152909336942,
+        "Liberal Democrats": 0.04056246619794483,
+        "Green Party": 0.06525679758308157,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 34,
+        "Conservative": 43,
+        "Liberal Democrats": 38,
+        "Green Party": 29,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 7,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.34340220452111964,
+      "Labour": 0.032552530789173424,
+      "Conservative": 0.18217364643879758,
+      "Liberal Democrats": 0.10914442268333671,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.3327271955675726,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.36725,
+      "Labour": 0.002,
+      "Conservative": 0.1175,
+      "Liberal Democrats": 0.0575,
+      "Independent": 0.45575
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.10206737419794674,
+        "p50": 0.30389677842632057,
+        "p90": 0.582306615998222
+      },
+      "Labour": {
+        "p10": 0.009530284878022264,
+        "p50": 0.029808046414474217,
+        "p90": 0.08890063379541423
+      },
+      "Conservative": {
+        "p10": 0.059865554422681044,
+        "p50": 0.16763016308029774,
+        "p90": 0.3800502829561299
+      },
+      "Liberal Democrats": {
+        "p10": 0.027603627886186144,
+        "p50": 0.1017361047706182,
+        "p90": 0.2895645882893536
+      },
+      "Independent": {
+        "p10": 0.009891674733168805,
+        "p50": 0.3017541669130771,
+        "p90": 0.6018183405591065
+      }
+    },
+    "winner": "Independent",
+    "runner_up": "Reform UK",
+    "margin_pp": 1.067500895354706,
+    "leader_probability": 0.45575,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "sources": [
     {

@@ -305,6 +305,12 @@ function prettyDate(iso: string): string {
  *
  * Drop a new file in that directory and a new `[slug]/index.astro` page .
  * the homepage card appears with no further code changes.
+ *
+ * A contest whose polling day is not yet set is stored WITHOUT the date suffix
+ * (`<slug>.json`), which is why the filename match below is a filter and not
+ * just a slug parser: an undated contest has nothing to count down to, so it is
+ * deliberately invisible to the homepage hero while still listing on
+ * /by-elections/. Rename the file the day a writ fixes a polling day.
  */
 export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[] {
   const dirRel = "data/predictions/by-elections";
@@ -445,6 +451,7 @@ export function shortPartyLabel(party: string): string {
     case "Traditional Unionist Voice - TUV": return "TUV";
     case "Sinn Féin": return "Sinn Féin";
     case "Restore Britain": return "Restore";
+    case "National Housing Party United Kingdom": return "National Housing";
     default: return party;
   }
 }

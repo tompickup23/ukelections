@@ -1,27 +1,27 @@
 {
   "snapshot": {
-    "generated_at": "2026-08-08T08:55:34.717Z",
+    "generated_at": "2026-09-02T10:57:20.926Z",
     "model_version": "ukelections.mayoral.v1.0.0",
     "election_target": "May 2027 mayoral elections (supplementary vote)",
     "monte_carlo_draws": 2000,
     "national_polling": {
       "shares": {
-        "Reform UK": 0.23647294589178358,
-        "Labour": 0.25350701402805614,
-        "Conservative": 0.19739478957915832,
-        "Liberal Democrats": 0.10821643286573146,
-        "Green Party": 0.11422845691382769,
+        "Reform UK": 0.2352406902815622,
+        "Labour": 0.2633969118982743,
+        "Conservative": 0.20345140781108084,
+        "Liberal Democrats": 0.09900090826521342,
+        "Green Party": 0.10990009082652134,
         "Independent": 0,
-        "Other": 0.09018036072144289
+        "Other": 0.08900999091734788
       },
-      "label": "10 polls, fieldwork to 2026-08-05",
+      "label": "11 polls, fieldwork to 2026-08-31",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election"
     },
     "voting_system_note": "The English Devolution and Community Empowerment Act 2026 (Royal Assent 29 April 2026, section 63 and Schedule 30) restored the supplementary vote for mayoral and PCC elections. Commencement: SI 2026/656 brought the change into force on 18 June 2026 for elections whose notice is published on or after that date. The 7 May 2026 mayoral elections were the last under first past the post; every contest below uses the supplementary vote.",
     "method_note": "Methods are reported separately and are never blended into a single point estimate. Where methods disagree on the most likely winner the contest is reported as method-split. Party-level projections only until nominations close; candidate effects in mayoral contests are large and the bands are wide by design.",
     "caveats": [
       "Projections are party level. Mayoral contests have strong candidate effects (independents and well known local figures routinely beat party baselines) which cannot be modelled before nominations close.",
-      "The supplementary vote transfer model is calibrated on a thin base: one Reform era SV contest (Greater Manchester, 30 July 2026) plus the pre-2022 SV era. Transfer parameters carry deliberately wide noise.",
+      "The supplementary vote transfer model is calibrated on three verified counts: Greater Manchester 2026 (the one Reform era SV contest, including its per-district second-preference table) and Lancashire's own 2016 and 2021 PCC elections. The Lancashire hypothetical uses county-specific parameters: higher transfer reach (its own contests ran 58 to 66 percent) and weaker left-bloc cohesion (Reform won the GM second-preference battle in the Lancashire-like boroughs of Wigan, Oldham, Rochdale, Tameside and Bury). Parameters still carry deliberately wide noise; SV counts never reveal transfers by source candidate, so splits are pooled estimates.",
       "The GE swing method applies uniform national swing to a general election base; local and mayoral elections routinely deviate from national swing (differential turnout, local parties, incumbency).",
       "Mansfield is forecast subject to its caveat: Nottinghamshire reorganisation may abolish the post, and the contest should be re-verified when nominations open.",
       "No constituency level polling exists for any May 2027 mayoral contest as of generation; the first published poll for a contest supersedes these baselines (wire it in, per the Makerfield lesson)."
@@ -88,7 +88,7 @@
         {
           "id": "ge_swing_2024",
           "label": "GE2024 base + national swing",
-          "description": "General election 2024 results across the Cumberland, Westmorland and Furness area (6 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (10 polls, fieldwork to 2026-08-05). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "description": "General election 2024 results across the Cumberland, Westmorland and Furness area (6 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (11 polls, fieldwork to 2026-08-31). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
           "base": {
             "shares": {
               "Reform UK": 0.16455375865667002,
@@ -104,61 +104,61 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.258,
-              "p10": 0.1774,
-              "p90": 0.3195,
-              "p_reach_runoff": 0.689,
-              "p_win": 0.306
+              "central": 0.2567,
+              "p10": 0.1732,
+              "p90": 0.3186,
+              "p_reach_runoff": 0.665,
+              "p_win": 0.293
             },
             "Labour": {
-              "central": 0.2736,
-              "p10": 0.19,
-              "p90": 0.338,
-              "p_reach_runoff": 0.777,
-              "p_win": 0.483
+              "central": 0.2834,
+              "p10": 0.1983,
+              "p90": 0.3461,
+              "p_reach_runoff": 0.821,
+              "p_win": 0.514
             },
             "Conservative": {
-              "central": 0.2203,
-              "p10": 0.138,
-              "p90": 0.2842,
-              "p_reach_runoff": 0.392,
-              "p_win": 0.157
+              "central": 0.2262,
+              "p10": 0.1447,
+              "p90": 0.2898,
+              "p_reach_runoff": 0.414,
+              "p_win": 0.161
             },
             "Liberal Democrats": {
-              "central": 0.1639,
-              "p10": 0.0827,
-              "p90": 0.23,
-              "p_reach_runoff": 0.132,
-              "p_win": 0.051
+              "central": 0.1546,
+              "p10": 0.0743,
+              "p90": 0.2182,
+              "p_reach_runoff": 0.091,
+              "p_win": 0.031
             },
             "Green Party": {
-              "central": 0.0798,
+              "central": 0.0754,
               "p10": 0,
-              "p90": 0.1468,
-              "p_reach_runoff": 0.011,
-              "p_win": 0.003
+              "p90": 0.1428,
+              "p_reach_runoff": 0.008,
+              "p_win": 0.002
             },
             "Independent": {
-              "central": 0.0038,
+              "central": 0.0037,
               "p10": 0,
-              "p90": 0.0744,
+              "p90": 0.0765,
               "p_reach_runoff": 0,
               "p_win": 0
             },
             "Other": {
-              "central": 0.0006,
+              "central": 0,
               "p10": 0,
-              "p90": 0.0783,
+              "p90": 0.0776,
               "p_reach_runoff": 0.001,
-              "p_win": 0.001
+              "p_win": 0
             }
           },
           "modal_runoff": {
             "pair": "Labour v Reform UK",
-            "probability": 0.485,
+            "probability": 0.5,
             "median_final_split": {
-              "Reform UK": 0.488,
-              "Labour": 0.512
+              "Reform UK": 0.487,
+              "Labour": 0.513
             }
           }
         }
@@ -216,7 +216,7 @@
         {
           "id": "ge_swing_2024",
           "label": "GE2024 base + national swing",
-          "description": "General election 2024 results across the Cheshire East, Cheshire West and Chester, Warrington area (11 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (10 polls, fieldwork to 2026-08-05). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "description": "General election 2024 results across the Cheshire East, Cheshire West and Chester, Warrington area (11 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (11 polls, fieldwork to 2026-08-31). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
           "base": {
             "shares": {
               "Reform UK": 0.15999638831110113,
@@ -232,49 +232,49 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.2535,
-              "p10": 0.1694,
-              "p90": 0.3152,
-              "p_reach_runoff": 0.606,
-              "p_win": 0.159
+              "central": 0.2522,
+              "p10": 0.1651,
+              "p90": 0.3149,
+              "p_reach_runoff": 0.581,
+              "p_win": 0.137
             },
             "Labour": {
-              "central": 0.354,
-              "p10": 0.2667,
-              "p90": 0.4226,
-              "p_reach_runoff": 0.969,
-              "p_win": 0.741
+              "central": 0.3638,
+              "p10": 0.2717,
+              "p90": 0.4258,
+              "p_reach_runoff": 0.967,
+              "p_win": 0.761
             },
             "Conservative": {
-              "central": 0.227,
-              "p10": 0.1407,
-              "p90": 0.2888,
-              "p_reach_runoff": 0.401,
-              "p_win": 0.099
+              "central": 0.233,
+              "p10": 0.1463,
+              "p90": 0.2932,
+              "p_reach_runoff": 0.431,
+              "p_win": 0.101
             },
             "Liberal Democrats": {
-              "central": 0.0516,
+              "central": 0.0424,
               "p10": 0,
-              "p90": 0.1202,
-              "p_reach_runoff": 0.005,
+              "p90": 0.1121,
+              "p_reach_runoff": 0.003,
               "p_win": 0
             },
             "Green Party": {
-              "central": 0.0972,
-              "p10": 0.0155,
-              "p90": 0.1633,
+              "central": 0.0928,
+              "p10": 0.0148,
+              "p90": 0.156,
               "p_reach_runoff": 0.018,
               "p_win": 0.001
             },
             "Independent": {
               "central": 0.0158,
               "p10": 0,
-              "p90": 0.0907,
-              "p_reach_runoff": 0.002,
-              "p_win": 0.001
+              "p90": 0.0928,
+              "p_reach_runoff": 0.001,
+              "p_win": 0
             },
             "Other": {
-              "central": 0.0009,
+              "central": 0,
               "p10": 0,
               "p90": 0.073,
               "p_reach_runoff": 0,
@@ -283,10 +283,10 @@
           },
           "modal_runoff": {
             "pair": "Labour v Reform UK",
-            "probability": 0.575,
+            "probability": 0.548,
             "median_final_split": {
-              "Labour": 0.54,
-              "Reform UK": 0.46
+              "Labour": 0.541,
+              "Reform UK": 0.459
             }
           }
         }
@@ -337,7 +337,7 @@
         {
           "id": "ge_swing_2024",
           "label": "GE2024 base + national swing",
-          "description": "General election 2024 results across the Bedford area (3 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (10 polls, fieldwork to 2026-08-05). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "description": "General election 2024 results across the Bedford area (3 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (11 polls, fieldwork to 2026-08-31). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
           "base": {
             "shares": {
               "Reform UK": 0.13861472991756404,
@@ -353,68 +353,68 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.2321,
-              "p10": 0.1532,
-              "p90": 0.2939,
-              "p_reach_runoff": 0.452,
-              "p_win": 0.169
+              "central": 0.2309,
+              "p10": 0.1557,
+              "p90": 0.2912,
+              "p_reach_runoff": 0.415,
+              "p_win": 0.151
             },
             "Labour": {
-              "central": 0.2882,
-              "p10": 0.2115,
-              "p90": 0.3534,
-              "p_reach_runoff": 0.833,
-              "p_win": 0.528
+              "central": 0.2981,
+              "p10": 0.2218,
+              "p90": 0.3605,
+              "p_reach_runoff": 0.865,
+              "p_win": 0.535
             },
             "Conservative": {
-              "central": 0.258,
-              "p10": 0.1788,
-              "p90": 0.3198,
-              "p_reach_runoff": 0.682,
-              "p_win": 0.295
+              "central": 0.264,
+              "p10": 0.1842,
+              "p90": 0.3256,
+              "p_reach_runoff": 0.699,
+              "p_win": 0.309
             },
             "Liberal Democrats": {
-              "central": 0.0863,
-              "p10": 0.0109,
-              "p90": 0.1514,
-              "p_reach_runoff": 0.009,
-              "p_win": 0.003
+              "central": 0.0771,
+              "p10": 0,
+              "p90": 0.1404,
+              "p_reach_runoff": 0.005,
+              "p_win": 0.001
             },
             "Green Party": {
-              "central": 0.1032,
-              "p10": 0.0235,
-              "p90": 0.1723,
-              "p_reach_runoff": 0.023,
-              "p_win": 0.005
+              "central": 0.0989,
+              "p10": 0.0178,
+              "p90": 0.1662,
+              "p_reach_runoff": 0.015,
+              "p_win": 0.003
             },
             "Independent": {
               "central": 0.0222,
               "p10": 0,
-              "p90": 0.0932,
+              "p90": 0.0942,
               "p_reach_runoff": 0.001,
-              "p_win": 0
+              "p_win": 0.001
             },
             "Other": {
-              "central": 0.01,
+              "central": 0.0088,
               "p10": 0,
-              "p90": 0.0827,
+              "p90": 0.0821,
               "p_reach_runoff": 0.001,
               "p_win": 0
             }
           },
           "modal_runoff": {
             "pair": "Conservative v Labour",
-            "probability": 0.519,
+            "probability": 0.567,
             "median_final_split": {
-              "Conservative": 0.487,
-              "Labour": 0.513
+              "Labour": 0.512,
+              "Conservative": 0.488
             }
           }
         },
         {
           "id": "prior_swing",
           "label": "2023 mayoral result + proportional swing",
-          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (10 polls, fieldwork to 2026-08-05) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
+          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (11 polls, fieldwork to 2026-08-31) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
           "base": {
             "shares": {
               "Reform UK": 0,
@@ -430,61 +430,61 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.1313,
-              "p10": 0.0447,
-              "p90": 0.2024,
-              "p_reach_runoff": 0.133,
-              "p_win": 0.006
+              "central": 0.134,
+              "p10": 0.044,
+              "p90": 0.2061,
+              "p_reach_runoff": 0.125,
+              "p_win": 0.01
             },
             "Labour": {
-              "central": 0.1295,
-              "p10": 0.0422,
-              "p90": 0.2028,
-              "p_reach_runoff": 0.136,
-              "p_win": 0.011
+              "central": 0.1382,
+              "p10": 0.0512,
+              "p90": 0.2122,
+              "p_reach_runoff": 0.148,
+              "p_win": 0.018
             },
             "Conservative": {
-              "central": 0.2083,
-              "p10": 0.1222,
-              "p90": 0.2818,
-              "p_reach_runoff": 0.579,
-              "p_win": 0.037
+              "central": 0.2204,
+              "p10": 0.1333,
+              "p90": 0.2941,
+              "p_reach_runoff": 0.619,
+              "p_win": 0.08
             },
             "Liberal Democrats": {
-              "central": 0.3646,
-              "p10": 0.2676,
-              "p90": 0.4455,
-              "p_reach_runoff": 0.986,
-              "p_win": 0.93
+              "central": 0.3424,
+              "p10": 0.2461,
+              "p90": 0.4192,
+              "p_reach_runoff": 0.971,
+              "p_win": 0.872
             },
             "Green Party": {
-              "central": 0.1404,
-              "p10": 0.0488,
-              "p90": 0.2104,
-              "p_reach_runoff": 0.152,
-              "p_win": 0.015
+              "central": 0.1387,
+              "p10": 0.0489,
+              "p90": 0.2083,
+              "p_reach_runoff": 0.124,
+              "p_win": 0.02
             },
             "Independent": {
               "central": 0,
               "p10": 0,
-              "p90": 0.0818,
+              "p90": 0.0824,
               "p_reach_runoff": 0.004,
               "p_win": 0
             },
             "Other": {
-              "central": 0.0259,
+              "central": 0.0263,
               "p10": 0,
-              "p90": 0.1045,
-              "p_reach_runoff": 0.01,
-              "p_win": 0
+              "p90": 0.1052,
+              "p_reach_runoff": 0.009,
+              "p_win": 0.001
             }
           },
           "modal_runoff": {
             "pair": "Conservative v Liberal Democrats",
-            "probability": 0.568,
+            "probability": 0.595,
             "median_final_split": {
-              "Liberal Democrats": 0.592,
-              "Conservative": 0.408
+              "Liberal Democrats": 0.571,
+              "Conservative": 0.429
             }
           }
         }
@@ -535,7 +535,7 @@
         {
           "id": "ge_swing_2024",
           "label": "GE2024 base + national swing",
-          "description": "General election 2024 results across the Middlesbrough area (2 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (10 polls, fieldwork to 2026-08-05). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "description": "General election 2024 results across the Middlesbrough area (2 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (11 polls, fieldwork to 2026-08-31). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
           "base": {
             "shares": {
               "Reform UK": 0.12927509263354034,
@@ -551,68 +551,68 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.2227,
-              "p10": 0.1478,
-              "p90": 0.2845,
-              "p_reach_runoff": 0.444,
-              "p_win": 0.069
+              "central": 0.2215,
+              "p10": 0.1436,
+              "p90": 0.2774,
+              "p_reach_runoff": 0.404,
+              "p_win": 0.051
             },
             "Labour": {
-              "central": 0.3741,
-              "p10": 0.2873,
-              "p90": 0.4388,
-              "p_reach_runoff": 0.991,
-              "p_win": 0.847
+              "central": 0.384,
+              "p10": 0.2989,
+              "p90": 0.4488,
+              "p_reach_runoff": 0.994,
+              "p_win": 0.872
             },
             "Conservative": {
-              "central": 0.2322,
-              "p10": 0.157,
-              "p90": 0.2923,
-              "p_reach_runoff": 0.548,
-              "p_win": 0.085
+              "central": 0.2383,
+              "p10": 0.1608,
+              "p90": 0.2954,
+              "p_reach_runoff": 0.588,
+              "p_win": 0.077
             },
             "Liberal Democrats": {
-              "central": 0.0249,
+              "central": 0.0157,
               "p10": 0,
-              "p90": 0.098,
+              "p90": 0.0879,
               "p_reach_runoff": 0.001,
               "p_win": 0
             },
             "Green Party": {
-              "central": 0.0872,
-              "p10": 0.0108,
-              "p90": 0.1507,
-              "p_reach_runoff": 0.014,
+              "central": 0.0828,
+              "p10": 0.0067,
+              "p90": 0.1451,
+              "p_reach_runoff": 0.011,
               "p_win": 0
             },
             "Independent": {
               "central": 0.007,
               "p10": 0,
-              "p90": 0.078,
-              "p_reach_runoff": 0.001,
+              "p90": 0.0819,
+              "p_reach_runoff": 0,
               "p_win": 0
             },
             "Other": {
-              "central": 0.0518,
+              "central": 0.0506,
               "p10": 0,
-              "p90": 0.1165,
-              "p_reach_runoff": 0.002,
+              "p90": 0.1178,
+              "p_reach_runoff": 0.003,
               "p_win": 0
             }
           },
           "modal_runoff": {
             "pair": "Conservative v Labour",
-            "probability": 0.539,
+            "probability": 0.581,
             "median_final_split": {
-              "Labour": 0.556,
-              "Conservative": 0.445
+              "Labour": 0.56,
+              "Conservative": 0.441
             }
           }
         },
         {
           "id": "prior_swing",
           "label": "2023 mayoral result + proportional swing",
-          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (10 polls, fieldwork to 2026-08-05) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
+          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (11 polls, fieldwork to 2026-08-31) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
           "base": {
             "shares": {
               "Reform UK": 0,
@@ -628,58 +628,58 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.1262,
-              "p10": 0.0373,
-              "p90": 0.2025,
-              "p_reach_runoff": 0.177,
-              "p_win": 0.016
+              "central": 0.1254,
+              "p10": 0.0361,
+              "p90": 0.2019,
+              "p_reach_runoff": 0.147,
+              "p_win": 0.017
             },
             "Labour": {
-              "central": 0.2061,
-              "p10": 0.1233,
-              "p90": 0.28,
-              "p_reach_runoff": 0.681,
-              "p_win": 0.066
+              "central": 0.2138,
+              "p10": 0.1317,
+              "p90": 0.2882,
+              "p_reach_runoff": 0.726,
+              "p_win": 0.08
             },
             "Conservative": {
-              "central": 0.0666,
+              "central": 0.0685,
               "p10": 0,
-              "p90": 0.1485,
-              "p_reach_runoff": 0.048,
+              "p90": 0.1515,
+              "p_reach_runoff": 0.051,
               "p_win": 0.004
             },
             "Liberal Democrats": {
-              "central": 0.0578,
+              "central": 0.0528,
               "p10": 0,
-              "p90": 0.1368,
-              "p_reach_runoff": 0.038,
+              "p90": 0.1331,
+              "p_reach_runoff": 0.029,
               "p_win": 0.001
             },
             "Green Party": {
-              "central": 0.061,
+              "central": 0.0586,
               "p10": 0,
-              "p90": 0.1389,
-              "p_reach_runoff": 0.03,
-              "p_win": 0.002
+              "p90": 0.1366,
+              "p_reach_runoff": 0.024,
+              "p_win": 0.001
             },
             "Independent": {
-              "central": 0.4342,
-              "p10": 0.3343,
-              "p90": 0.5173,
+              "central": 0.4335,
+              "p10": 0.3334,
+              "p90": 0.5259,
               "p_reach_runoff": 1,
-              "p_win": 0.912
+              "p_win": 0.898
             },
             "Other": {
-              "central": 0.0481,
+              "central": 0.0474,
               "p10": 0,
-              "p90": 0.1248,
-              "p_reach_runoff": 0.025,
+              "p90": 0.1243,
+              "p_reach_runoff": 0.022,
               "p_win": 0
             }
           },
           "modal_runoff": {
             "pair": "Independent v Labour",
-            "probability": 0.681,
+            "probability": 0.726,
             "median_final_split": {
               "Independent": 0.57,
               "Labour": 0.43
@@ -729,7 +729,7 @@
         {
           "id": "ge_swing_2024",
           "label": "GE2024 base + national swing",
-          "description": "General election 2024 results across the Mansfield area (2 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (10 polls, fieldwork to 2026-08-05). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
+          "description": "General election 2024 results across the Mansfield area (2 constituencies apportioned by live postcode share), moved by the uniform national swing between GE2024 and the latest Westminster poll average (11 polls, fieldwork to 2026-08-31). No local dampening applied; mayoral contests routinely deviate from national swing, which the bands reflect.",
           "base": {
             "shares": {
               "Reform UK": 0.2383672825751266,
@@ -745,68 +745,68 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.3318,
-              "p10": 0.2481,
-              "p90": 0.3876,
-              "p_reach_runoff": 0.888,
-              "p_win": 0.643
+              "central": 0.3294,
+              "p10": 0.2457,
+              "p90": 0.3828,
+              "p_reach_runoff": 0.869,
+              "p_win": 0.621
             },
             "Labour": {
-              "central": 0.3021,
-              "p10": 0.2164,
-              "p90": 0.3576,
-              "p_reach_runoff": 0.743,
-              "p_win": 0.215
+              "central": 0.3108,
+              "p10": 0.224,
+              "p90": 0.3616,
+              "p_reach_runoff": 0.77,
+              "p_win": 0.232
             },
             "Conservative": {
-              "central": 0.256,
-              "p10": 0.1763,
-              "p90": 0.3109,
-              "p_reach_runoff": 0.367,
-              "p_win": 0.141
+              "central": 0.2611,
+              "p10": 0.1796,
+              "p90": 0.3116,
+              "p_reach_runoff": 0.36,
+              "p_win": 0.148
             },
             "Liberal Democrats": {
-              "central": 0.0055,
+              "central": 0,
               "p10": 0,
-              "p90": 0.0744,
+              "p90": 0.0705,
               "p_reach_runoff": 0,
               "p_win": 0
             },
             "Green Party": {
-              "central": 0.0773,
+              "central": 0.0727,
               "p10": 0,
-              "p90": 0.1384,
-              "p_reach_runoff": 0.002,
+              "p90": 0.1351,
+              "p_reach_runoff": 0.001,
               "p_win": 0
             },
             "Independent": {
-              "central": 0.0176,
+              "central": 0.0175,
               "p10": 0,
-              "p90": 0.0864,
+              "p90": 0.0847,
               "p_reach_runoff": 0,
               "p_win": 0
             },
             "Other": {
-              "central": 0.0098,
+              "central": 0.0086,
               "p10": 0,
-              "p90": 0.0762,
+              "p90": 0.0776,
               "p_reach_runoff": 0.001,
               "p_win": 0
             }
           },
           "modal_runoff": {
             "pair": "Labour v Reform UK",
-            "probability": 0.63,
+            "probability": 0.638,
             "median_final_split": {
-              "Labour": 0.47,
-              "Reform UK": 0.53
+              "Labour": 0.473,
+              "Reform UK": 0.527
             }
           }
         },
         {
           "id": "prior_swing",
           "label": "2023 mayoral result + proportional swing",
-          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (10 polls, fieldwork to 2026-08-05) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
+          "description": "The mayoralty's own 2023 first-preference result, with each party moved by the ratio of its national polling now (11 polls, fieldwork to 2026-08-31) to its approximate May 2023 level, clamped at x2.5. Parties that did not stand in 2023 but poll above 5% nationally enter at 60% of their national number. Independent votes are carried at their prior level, which only holds if comparable independents stand again. This method carries the incumbency and local-machine signal the GE method misses.",
           "base": {
             "shares": {
               "Reform UK": 0,
@@ -822,58 +822,58 @@
           },
           "parties": {
             "Reform UK": {
-              "central": 0.1405,
-              "p10": 0.0564,
-              "p90": 0.2148,
-              "p_reach_runoff": 0.121,
-              "p_win": 0.052
+              "central": 0.1389,
+              "p10": 0.0532,
+              "p90": 0.2138,
+              "p_reach_runoff": 0.108,
+              "p_win": 0.045
             },
             "Labour": {
-              "central": 0.257,
-              "p10": 0.1708,
-              "p90": 0.3336,
-              "p_reach_runoff": 0.769,
-              "p_win": 0.543
+              "central": 0.2654,
+              "p10": 0.1781,
+              "p90": 0.3402,
+              "p_reach_runoff": 0.797,
+              "p_win": 0.558
             },
             "Conservative": {
-              "central": 0.1773,
-              "p10": 0.0893,
-              "p90": 0.2507,
-              "p_reach_runoff": 0.259,
-              "p_win": 0.125
+              "central": 0.1816,
+              "p10": 0.0962,
+              "p90": 0.2583,
+              "p_reach_runoff": 0.279,
+              "p_win": 0.128
             },
             "Liberal Democrats": {
-              "central": 0.0643,
+              "central": 0.0584,
               "p10": 0,
-              "p90": 0.1405,
-              "p_reach_runoff": 0.017,
-              "p_win": 0.006
+              "p90": 0.1375,
+              "p_reach_runoff": 0.013,
+              "p_win": 0.005
             },
             "Green Party": {
-              "central": 0.0679,
+              "central": 0.0649,
               "p10": 0,
-              "p90": 0.147,
-              "p_reach_runoff": 0.019,
-              "p_win": 0.011
+              "p90": 0.1421,
+              "p_reach_runoff": 0.018,
+              "p_win": 0.01
             },
             "Independent": {
-              "central": 0.2648,
+              "central": 0.2631,
               "p10": 0.1771,
-              "p90": 0.3424,
-              "p_reach_runoff": 0.806,
-              "p_win": 0.264
+              "p90": 0.3375,
+              "p_reach_runoff": 0.782,
+              "p_win": 0.253
             },
             "Other": {
-              "central": 0.0282,
+              "central": 0.0277,
               "p10": 0,
-              "p90": 0.1138,
-              "p_reach_runoff": 0.007,
-              "p_win": 0
+              "p90": 0.109,
+              "p_reach_runoff": 0.003,
+              "p_win": 0.001
             }
           },
           "modal_runoff": {
             "pair": "Independent v Labour",
-            "probability": 0.593,
+            "probability": 0.592,
             "median_final_split": {
               "Labour": 0.521,
               "Independent": 0.479
@@ -901,13 +901,13 @@
     "contest": "Greater Manchester mayoral by-election, 30 July 2026",
     "method": "ge_swing_2024",
     "projected_first_pref": {
-      "Reform UK": 0.2672,
-      "Labour": 0.3445,
-      "Conservative": 0.1192,
-      "Liberal Democrats": 0.0734,
-      "Green Party": 0.1263,
+      "Reform UK": 0.266,
+      "Labour": 0.3544,
+      "Conservative": 0.1253,
+      "Liberal Democrats": 0.0642,
+      "Green Party": 0.1219,
       "Independent": 0.0237,
-      "Other": 0.0457
+      "Other": 0.0445
     },
     "actual_first_pref": {
       "Reform UK": 0.2099,
@@ -919,15 +919,15 @@
       "Other": 0.0868
     },
     "errors_pp": {
-      "Reform UK": 0.0574,
-      "Labour": -0.127,
-      "Conservative": 0.0423,
-      "Liberal Democrats": 0.0458,
-      "Green Party": 0.0045,
+      "Reform UK": 0.0561,
+      "Labour": -0.1171,
+      "Conservative": 0.0484,
+      "Liberal Democrats": 0.0366,
+      "Green Party": 0.0001,
       "Independent": 0.0181,
-      "Other": -0.0411
+      "Other": -0.0422
     },
-    "mae_pp": 4.8,
+    "mae_pp": 4.6,
     "winner_called": true,
     "note": "The method called the Labour winner correctly but understated Labour's first round by a wide margin: a well known incumbent-adjacent candidate on a 25% turnout beat her party's national baseline decisively. That gap is exactly the candidate effect these projections cannot see before nominations, and it is why the bands are wide and the prior_swing method exists.",
     "source_url": "https://www.gmelects.org.uk/result2026/"
@@ -1005,7 +1005,7 @@
       {
         "id": "ge_swing_2024",
         "label": "GE2024 base + national swing",
-        "description": "General election 2024 results across all fourteen Lancashire districts plus Blackburn with Darwen and Blackpool (16 constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (10 polls, fieldwork to 2026-08-05).",
+        "description": "General election 2024 results across the fourteen Lancashire councils, the twelve districts plus Blackburn with Darwen and Blackpool (16 constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (11 polls, fieldwork to 2026-08-31).",
         "base": {
           "shares": {
             "Reform UK": 0.1754705905248772,
@@ -1021,58 +1021,58 @@
         },
         "parties": {
           "Reform UK": {
-            "central": 0.2689,
-            "p10": 0.1931,
-            "p90": 0.3357,
-            "p_reach_runoff": 0.831,
-            "p_win": 0.441
+            "central": 0.2677,
+            "p10": 0.1942,
+            "p90": 0.3387,
+            "p_reach_runoff": 0.808,
+            "p_win": 0.422
           },
           "Labour": {
-            "central": 0.2786,
-            "p10": 0.2036,
-            "p90": 0.3507,
-            "p_reach_runoff": 0.855,
-            "p_win": 0.462
+            "central": 0.2885,
+            "p10": 0.2103,
+            "p90": 0.3561,
+            "p_reach_runoff": 0.873,
+            "p_win": 0.474
           },
           "Conservative": {
-            "central": 0.1982,
-            "p10": 0.1241,
-            "p90": 0.2658,
-            "p_reach_runoff": 0.293,
-            "p_win": 0.089
+            "central": 0.2042,
+            "p10": 0.1292,
+            "p90": 0.2685,
+            "p_reach_runoff": 0.299,
+            "p_win": 0.099
           },
           "Liberal Democrats": {
-            "central": 0.0465,
+            "central": 0.0373,
             "p10": 0,
-            "p90": 0.1099,
-            "p_reach_runoff": 0.001,
-            "p_win": 0.001
+            "p90": 0.1018,
+            "p_reach_runoff": 0,
+            "p_win": 0
           },
           "Green Party": {
-            "central": 0.1016,
-            "p10": 0.0268,
-            "p90": 0.1679,
+            "central": 0.0973,
+            "p10": 0.0229,
+            "p90": 0.1634,
             "p_reach_runoff": 0.015,
             "p_win": 0.004
           },
           "Independent": {
             "central": 0.0484,
             "p10": 0,
-            "p90": 0.1169,
-            "p_reach_runoff": 0.003,
-            "p_win": 0.001
+            "p90": 0.116,
+            "p_reach_runoff": 0.001,
+            "p_win": 0
           },
           "Other": {
-            "central": 0.0578,
+            "central": 0.0567,
             "p10": 0,
-            "p90": 0.127,
+            "p90": 0.1278,
             "p_reach_runoff": 0.003,
-            "p_win": 0.003
+            "p_win": 0.002
           }
         },
         "modal_runoff": {
           "pair": "Labour v Reform UK",
-          "probability": 0.687,
+          "probability": 0.681,
           "median_final_split": {
             "Reform UK": 0.499,
             "Labour": 0.501
@@ -1085,73 +1085,73 @@
         "description": "The county's own most recent local votes, taken from our Lancashire unitaries forecast: each proposed ward's LCC May 2025 division result nudged by the district's 2025 to 2026 borough and by-election swing, Blackburn's May 2026 wards directly, and a Blackpool proxy; electorate-weighted across the four proposed unitaries. Carries the local Reform organisation and independent vote the GE base misses. Not re-swung to current national polling, so it is a picture of votes actually cast in 2025 and 2026.",
         "base": {
           "shares": {
-            "Reform UK": 0.345463610864814,
-            "Labour": 0.20461152484082706,
-            "Conservative": 0.182078860076351,
-            "Liberal Democrats": 0.07016415308634806,
-            "Green Party": 0.10977633449454914,
-            "Independent": 0.0715326247049375,
-            "Other": 0.01637289193217325
+            "Reform UK": 0.3409227744482766,
+            "Labour": 0.20282574816542018,
+            "Conservative": 0.1772498564738117,
+            "Liberal Democrats": 0.0702580156687995,
+            "Green Party": 0.11084038420897718,
+            "Independent": 0.07069886197022544,
+            "Other": 0.02720435906448936
           },
           "source": "data/predictions/lancashire-unitaries/forecast.json (four_unitary vote_share, electorate-weighted)"
         },
         "parties": {
           "Reform UK": {
-            "central": 0.3455,
-            "p10": 0.2714,
-            "p90": 0.4153,
-            "p_reach_runoff": 0.997,
-            "p_win": 0.93
+            "central": 0.3409,
+            "p10": 0.2686,
+            "p90": 0.4159,
+            "p_reach_runoff": 0.995,
+            "p_win": 0.919
           },
           "Labour": {
-            "central": 0.2046,
+            "central": 0.2028,
             "p10": 0.1366,
-            "p90": 0.2661,
-            "p_reach_runoff": 0.574,
-            "p_win": 0.046
+            "p90": 0.2651,
+            "p_reach_runoff": 0.591,
+            "p_win": 0.06
           },
           "Conservative": {
-            "central": 0.1821,
-            "p10": 0.1129,
-            "p90": 0.2428,
-            "p_reach_runoff": 0.36,
-            "p_win": 0.019
+            "central": 0.1772,
+            "p10": 0.1052,
+            "p90": 0.237,
+            "p_reach_runoff": 0.341,
+            "p_win": 0.017
           },
           "Liberal Democrats": {
-            "central": 0.0702,
-            "p10": 0.0014,
-            "p90": 0.1333,
-            "p_reach_runoff": 0.009,
+            "central": 0.0703,
+            "p10": 0.0008,
+            "p90": 0.1338,
+            "p_reach_runoff": 0.012,
             "p_win": 0.001
           },
           "Green Party": {
-            "central": 0.1098,
-            "p10": 0.042,
-            "p90": 0.1706,
-            "p_reach_runoff": 0.049,
+            "central": 0.1108,
+            "p10": 0.0444,
+            "p90": 0.1734,
+            "p_reach_runoff": 0.048,
             "p_win": 0.003
           },
           "Independent": {
-            "central": 0.0715,
+            "central": 0.0707,
             "p10": 0,
-            "p90": 0.1336,
-            "p_reach_runoff": 0.009,
-            "p_win": 0
+            "p90": 0.139,
+            "p_reach_runoff": 0.011,
+            "p_win": 0.001
           },
           "Other": {
-            "central": 0.0164,
+            "central": 0.0272,
             "p10": 0,
-            "p90": 0.0804,
-            "p_reach_runoff": 0.002,
-            "p_win": 0
+            "p90": 0.0898,
+            "p_reach_runoff": 0.003,
+            "p_win": 0.001
           }
         },
         "modal_runoff": {
           "pair": "Labour v Reform UK",
-          "probability": 0.571,
+          "probability": 0.586,
           "median_final_split": {
-            "Reform UK": 0.568,
-            "Labour": 0.432
+            "Reform UK": 0.564,
+            "Labour": 0.436
           }
         }
       }
@@ -1217,7 +1217,20 @@
         }
       ],
       "voting_system_if_called": "Supplementary vote, under s.63 and Schedule 30 of the English Devolution and Community Empowerment Act 2026 (applies to combined county authority mayors). A mechanism in waiting, not a scheduled contest.",
-      "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography."
+      "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography.",
+      "sv_overrides": {
+        "transfer_reach": {
+          "mu": 0.61,
+          "sd": 0.1,
+          "lo": 0.3,
+          "hi": 0.85
+        },
+        "same_bloc_split": {
+          "mu": 0.7,
+          "sd": 0.12
+        },
+        "rationale": "Lancashire's own SV contests show higher transfer reach (0.583 in 2016, 0.656 in 2021) than the global anchor set; GM 2026's per-district second preferences show weaker left-bloc cohesion in Lancashire-like boroughs (Reform won transfers in Wigan/Oldham/Rochdale/Tameside/Bury). Reach centred 0.61; same-bloc split softened 0.74 to 0.70. Verified 8 Aug 2026."
+      }
     }
   ],
   "roster_2028": {
@@ -1456,6 +1469,42 @@
         "Shaun Bailey": 977601
       },
       "source_url": "https://www.londonelects.org.uk/files/London%20Elects%20-%20Results%20Factsheet%202021.pdf"
+    },
+    "lancashire_pcc_2021": {
+      "date": "2021-05-06",
+      "reach": 0.656,
+      "pool": 50739,
+      "transferred": 33279,
+      "runoff_transfer_split": {
+        "labour": 0.546,
+        "conservative": 0.454
+      },
+      "note": "Con won 51.27-48.73. Eliminated pool LD 32,813 + Reform UK 17,926 (fringe-era Reform, 4.83pct: do NOT map onto 2026 Reform). Transfers derived from official first/final counts; OPCC publishes no exhausted breakdown.",
+      "source": "https://www.lancashire-pcc.gov.uk/the-commissioner/elections/"
+    },
+    "lancashire_pcc_2016": {
+      "date": "2016-05-05",
+      "reach": 0.583,
+      "pool": 73151,
+      "transferred": 42648,
+      "runoff_transfer_split": {
+        "conservative": 0.52,
+        "labour": 0.48
+      },
+      "note": "Lab won. UKIP-era pool (UKIP 16.54pct + LD) split near-evenly Con/Lab: right-populist ballots did NOT break heavily Conservative in Lancashire.",
+      "source": "https://www.wyre.gov.uk/directory-record/947/lancashire-police-and-crime-commissioner-election-results-2016"
+    },
+    "gm_2026": {
+      "date": "2026-07-30",
+      "reach": 0.608,
+      "pool": 169949,
+      "transferred": 103326,
+      "runoff_transfer_split": {
+        "labour": 0.562,
+        "reform": 0.438
+      },
+      "district_signal": "Official per-district table: Reform (Astley) WON second preferences in Wigan, Oldham, Rochdale, Tameside and Bury; Labour (Craig) dominated Manchester, Stockport, Trafford. Lancashire's geography resembles the former group, so pooled GM parameters lean Labour when applied to Lancashire.",
+      "source": "https://www.gmelects.org.uk/result2026/ (403s bots; browser UA works)"
     }
   }
 }

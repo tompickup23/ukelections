@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T19:48:38.638Z",
+  "generated_at": "2026-09-02T11:01:04.459Z",
   "slug": "cotswold-blockley-2026-09-24",
   "status": "upcoming",
   "contest": {
@@ -26,14 +26,46 @@
     "postal_vote_deadline": "2026-09-09"
   },
   "field": {
-    "candidate_count": 1,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 5,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.cotswold.blockley.by.2026-09-24/sopn/2026-08-28T15%3A05%3A08.749669%2B00%3A00/Blockley.pdf",
     "parties": [
-      "Liberal Democrats"
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
     ],
     "candidates": [
+      {
+        "name": "Tom Bradley",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Bob Eastoe",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Matt Fincham",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Josh Littler-Jennings",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
       {
         "name": "Danny Loveridge",
         "party_name": "Liberal Democrats",
@@ -149,10 +181,126 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.cotswold.blockley.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0,
+        "Conservative": 0.4369565217391304,
+        "Liberal Democrats": 0,
+        "Green Party": 0.5630434782608695,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.cotswold.blockley.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 47,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9701232871018278,
+        "Conservative": -0.8159483409889643,
+        "Liberal Democrats": -0.3488983419427112,
+        "Green Party": 0.1280132695070706,
+        "Independent": -1.874713024238506
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4486916040310641,
+        "Conservative": 0.5138774221463401,
+        "Liberal Democrats": 0.761539912250465,
+        "Green Party": 1.0990444843495155,
+        "Independent": 0.19458239592112506
+      },
+      "entry_shares": {
+        "Reform UK": 0.2533152909336942,
+        "Liberal Democrats": 0.04056246619794483,
+        "Green Party": 0.06525679758308157,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 34,
+        "Conservative": 43,
+        "Liberal Democrats": 38,
+        "Green Party": 29,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 7,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.22150206224765762,
+      "Labour": 0,
+      "Conservative": 0.22341555083149492,
+      "Liberal Democrats": 0.035468328341250584,
+      "Green Party": 0.5196140585795969,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.175,
+      "Conservative": 0.14725,
+      "Liberal Democrats": 0.00325,
+      "Green Party": 0.6745
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.06425530108825879,
+        "p50": 0.21787048225730432,
+        "p90": 0.4626068167451902
+      },
+      "Conservative": {
+        "p10": 0.08013018560363849,
+        "p50": 0.21889579870473924,
+        "p90": 0.4415513519490852
+      },
+      "Liberal Democrats": {
+        "p10": 0.009206384086217361,
+        "p50": 0.03501245504650326,
+        "p90": 0.11565353457790718
+      },
+      "Green Party": {
+        "p10": 0.1970166457202053,
+        "p50": 0.47383088431072307,
+        "p90": 0.6894540026522545
+      }
+    },
+    "winner": "Green Party",
+    "runner_up": "Reform UK",
+    "margin_pp": 29.619850774810196,
+    "leader_probability": 0.6745,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Labour is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Labour"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "sources": [
     {

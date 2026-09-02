@@ -112,7 +112,7 @@ deploying: `cp -a dist /tmp/uke-deploy-$$ && wrangler pages deploy /tmp/uke-depl
 - `PartyTrendChart.astro` — server-rendered SVG line chart for polling ledger.
 - `CommonsHorseshoe.astro` — 650-dot Parliament composition diagram, pure SVG, ideological left-to-right ordering.
 - `ConstituencyChoropleth.astro` — interactive UK map (650 constituencies, ONS PCS24 BUC simplified to 218KB) with click-through to seat pages, tooltip with party strip, clickable legend filter.
-- `MiniMap.astro` — per-place thumbnail SVG, supports `pcon | lad | ward`. Boundary cache shared at module load.
+- `MiniMap.astro` — per-place thumbnail SVG, supports `pcon | lad | ward`. Boundary cache shared at module load, keyed by kind **and fidelity**. `detail="full"` reads the raw BUC/BSC boundary instead of the simplified one: the component renders at build time and ships no JS, so the raw file costs one parse per Astro process and nothing reaches the browser. Use it wherever the simplified geometry is too coarse to be honest. The simplified PCON file takes small urban seats down to four or five vertices (Holborn and St Pancras: 5; Birmingham Northfield, Bournemouth East, Chelmsford, Cheltenham, Colchester and Exeter: 4), so they draw as triangles that are not the shape of the seat. Holborn opts in; rolling it out to the other 650 seat pages is still open.
 - `Search.astro` — Pagefind UI mount, `/` hotkey, native `<dialog>` modal.
 
 **Per-page elevation (Tier B)**
@@ -153,11 +153,68 @@ Three fitted corrections sit between the raw model and the published forecast. E
 
 **The "other" uplift tier is deliberately unresolved** at its hand-set 0.85: three folds preferred 0.60 and two preferred 0.85, and taking every fold's pick produced one badly negative fold. It needs a second real election, not another opinion.
 
+## Parliamentary by-elections
+
+Contest files live in `data/predictions/by-elections/`. `<slug>-YYYY-MM-DD.json`
+is a contest with a polling day; `<slug>.json` is one that has been announced
+but has no date yet. That distinction is load-bearing, not cosmetic:
+`loadUpcomingElections` only reads dated files, so an undated contest cannot
+reach the homepage countdown and put a hero clock on a date nobody has set,
+while `/by-elections/` lists it either way. **Rename the file the day a writ
+fixes a polling day.** Holborn and St Pancras (Starmer's seat, announced
+1 Sep 2026) is the first of these.
+
+Where there is no poll and no field, publish the freshest same-ground actual
+vote and label it `classification: signal-only` — never a central forecast. For
+a London seat that means the borough election: `build-holborn-byelection.mjs`
+aggregates the ten Camden wards inside the seat from the 7 May 2026 result, the
+same method that beat the GE prior by 5.5pp of MAE at Arbroath. Compute ward
+membership geometrically from the **raw** boundary files; the simplified pair
+loses six of the ten wards on a seat this small.
+
+**A centroid test answers "whole ward in or out", and seats are not made of
+whole wards.** Holborn and St Pancras is ten whole Camden wards plus "Primrose
+Hill (part)", and the test silently drops the part-ward entirely. That is not a
+rounding error: adding the whole of Primrose Hill moves Labour 38.6 to 38.0,
+Green 29.5 to 28.6, and **puts the Conservatives above Reform for third**. So
+always check the Boundary Commission composition against the geometry, publish
+the whole-ward figure, and carry the part-ward variant beside it as a bound
+rather than burying it. `tests/holborn-byelection-signal.test.mjs` locks the
+caveat to the number.
+
+**Validate a derived seat aggregate against a published total.** Running the
+all-candidates rule over all twenty Camden wards reproduces the published
+borough result exactly (Labour 32.84% on 52,281 votes), which is the evidence
+that the ward feed under the seat number is sound. The test asserts it, so feed
+drift fails loudly instead of quietly changing a headline.
+
+**Verify at the primary source, not a search summary.** The first draft of this
+page carried "Restore Britain have confirmed they are standing" from a search
+synthesis; the Wikipedia article says nothing of the kind, and the real basis is
+a Rupert Lowe statement reported secondhand. The Green Party's own release of
+2 September then made a second claim stale: Polanski has **not** been selected,
+and the party says its candidate comes "in due course". Both were caught only by
+fetching the sources.
+
 ## By-election data (21 Aug 2026)
 
 Two separate feeds, not interchangeable. **Models** read `data/history/dc-historic-results.json` (gitignored, vps only). **The site's ward scorecard** reads `data/results/local-byelections.json` (tracked, hand-curated). Updating one does nothing for the other.
 
 The Friday sweep (`scripts/refresh-byelections.mjs`) writes the tracked sidecar `data/history/byelection-appends.json`, which `scripts/ingest-dc-historic-results.mjs` merges back on every rebuild. It used to write only into the history file, which the nightly ingest rebuilt from scratch, so every sweep was silently discarded within a day. `--from=` and `--pace=` flags exist for backfills; the DC ballots API rate-limits bulk callers.
+
+**The sweep never overwrites a hand-verified row (2 Sep 2026).** Provenance tiers,
+best first: `hand_verified_declaration` (the returning officer's own summary),
+`hand_verified_two_sources`, `auto_ingested_dc`, `provisional_single_source`.
+Only the hand-verified tiers outrank DC; `provisional` sits below it on purpose,
+because a provisional row's own note says DC wins. The sweep used to swap the
+row object unconditionally, so on the 27 August round it replaced Wandsworth
+Trinity's council-declaration row with DC's — turning 3,290 ballots cast into
+3,283 valid votes and deleting the note explaining the difference — and did the
+same to Dover and Sheffield. It now keeps ours and prints the disagreement
+instead: **a DC/hand-verified conflict is a thing to go and look at, not a thing
+to apply.** Supersedes of the lower tiers are also non-lossy now: a null in the
+incoming row is absence, not a correction, so any figure DC does not publish is
+carried forward.
 
 **The ingest's page cache expires after 20 hours.** It previously had no expiry at all, replayed a 26 April snapshot nightly for four months, and froze the models' history at 23 April 2026 while looking perfectly healthy.
 
