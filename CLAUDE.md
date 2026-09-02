@@ -237,6 +237,11 @@ carried forward.
 - GitHub Pages: `tompickup23.github.io/ukelections/` (auto-mirrored backup)
 - Domain: `ukelections.co.uk` (CF Pages custom domain, behind Cloudflare Access)
 - **`refresh-pipeline.mjs` does NO git pull.** The nightly cron builds whatever is checked out at `/root/ukelections`, so merging to main ships nothing on its own. After any merge you expect to reach production: `git pull --ff-only --autostash` on vps-main, confirm with `git log --oneline -1`, then build.
+- **That pull fights the cron's own output, twice, and both need handling (2 Sep 2026).** The nightly regenerates ~350 tracked data files and writes new untracked ones, so:
+  1. The pull **aborts** on "untracked working tree files would be overwritten" when your commit tracks a contest file the cron also generated locally. List them, confirm they are all under `data/contests/local-byelections/` (generated, and rebuilt by the pipeline anyway), then `rm` exactly those and pull again.
+  2. The autostash then **conflicts** on the regenerated files, leaving `UU` markers across hundreds of JSON files. Conflict markers in a data file break the build.
+
+  The resolution is `git reset --hard HEAD`: everything conflicting is pipeline output that the next run regenerates. **Check `data/history/byelection-appends.json` first** (`git status data/history/` and `git stash show --name-only stash@{0}`). That sidecar is the durable by-election record, tracked precisely because the history file is gitignored, and it is the one file in the blast radius that a reset could genuinely lose. The stash survives the reset, so leave it rather than dropping it.
 - **Never `wrangler pages deploy dist` from the shared checkout.** A concurrent build empties `outDir` mid-upload and publishes an empty site. `cp -a dist /tmp/uke-deploy-x` and deploy the copy.
 - A clean rebuild needs `rm -rf dist .astro node_modules/.vite`, otherwise you get `ERR_MODULE_NOT_FOUND` on prerender chunks.
 
