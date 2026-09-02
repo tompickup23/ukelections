@@ -59,7 +59,14 @@ import { rewindFeatures } from "../src/lib/geoRewind.ts";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const p = (rel) => path.join(ROOT, rel);
-const read = (rel) => JSON.parse(readFileSync(p(rel), "utf8"));
+// Memoised: the May results feed is 20MB and the ward boundaries 9.3MB, and
+// between the published figure, the two sensitivities and the borough-wide
+// validation this script asks for each of them several times over.
+const _files = new Map();
+const read = (rel) => {
+  if (!_files.has(rel)) _files.set(rel, JSON.parse(readFileSync(p(rel), "utf8")));
+  return _files.get(rel);
+};
 
 const PCON24CD = "E14001290";
 const CAMDEN_LAD = "E09000007";
@@ -104,13 +111,6 @@ function wardsInSeat() {
   return inSeat.map((f) => ({ code: f.properties.WD25CD, name: f.properties.WD25NM }));
 }
 
-/**
- * The part-ward. The Boundary Commission composition for this seat is the ten
- * whole wards above plus "Primrose Hill (part)". A centroid test cannot split
- * a ward, and Primrose Hill's centroid falls in Hampstead and Highgate, so the
- * ten-ward figure excludes it entirely. This returns the whole ward so the
- * file can carry the other bound.
- */
 /** Every Camden ward not already in the seat, for the borough-wide check. */
 function allCamdenWardsExcept(seatWards) {
   const wards = read("data/geography/wd25-bsc-raw.geojson");
@@ -120,6 +120,13 @@ function allCamdenWardsExcept(seatWards) {
     .map((f) => ({ code: f.properties.WD25CD, name: f.properties.WD25NM }));
 }
 
+/**
+ * The part-ward. The Boundary Commission composition for this seat is the ten
+ * whole wards above plus "Primrose Hill (part)". A centroid test cannot split
+ * a ward, and Primrose Hill's centroid falls in Hampstead and Highgate, so the
+ * ten-ward figure excludes it entirely. This returns the whole ward so the
+ * file can carry the other bound.
+ */
 function primroseHill() {
   const wards = read("data/geography/wd25-bsc-raw.geojson");
   const f = wards.features.find(
