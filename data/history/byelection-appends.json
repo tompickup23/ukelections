@@ -2,7 +2,7 @@
  "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not. Rows polled on 27 August 2026 were entered by hand from the returning officers' declarations and press reports of them, because Democracy Club had recorded winners but no vote counts by 28 August. Each carries its own verification note. DC rows still win on conflict.",
  "source": "https://candidates.democracyclub.org.uk/api/next/ballots/",
  "review_status": "mixed: auto_ingested_dc plus hand verified rows, see each row",
- "generated_at": "2026-08-28T13:00:00.000Z",
+ "generated_at": "2026-09-02T11:01:48.771Z",
  "results": [
   {
    "ballot_paper_id": "local.cornwall.newquay-porth-tretherras.by.2026-04-23",
@@ -5980,13 +5980,12 @@
    "council_slug": "st-helens",
    "ward_slug": "billinge-seneley-green",
    "is_by_election": true,
-   "turnout_votes": null,
+   "turnout_votes": 2806,
    "turnout_pct": 0.339,
-   "spoilt_ballots": null,
+   "spoilt_ballots": 6,
    "electorate": null,
-   "source": "https://en.wikipedia.org/wiki/2026_St_Helens_Metropolitan_Borough_Council_election",
-   "review_status": "provisional_single_source",
-   "verification": "PROVISIONAL. One source only. St Helens Borough Council had published no declaration for this by-election as of 28 August 2026 and its ModernGov results system is behind a bot challenge, so these counts come from Wikipedia alone. They are internally consistent: the six counts sum to the stated 2,806 votes and every published share matches that denominator. Replace on the council declaration or on the Democracy Club transcription, both of which win on conflict.",
+   "source": "https://candidates.democracyclub.org.uk/elections/local.st-helens.billinge-seneley-green.by.2026-08-27/",
+   "review_status": "auto_ingested_dc",
    "candidates": [
     {
      "name": "Steve Owen",

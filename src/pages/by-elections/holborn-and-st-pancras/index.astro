@@ -1,0 +1,367 @@
+---
+/**
+ * Holborn and St Pancras. The pre-poll briefing.
+ *
+ * There is no forecast on this page and there should not be one yet: the seat
+ * is not vacant, no writ has been moved, no polling day exists and no
+ * constituency poll has been published. What the page does have is the
+ * strongest substitute available: the Camden borough election of 7 May 2026
+ * across the ten whole wards inside the seat. That is a real vote on this
+ * ground, four months old, and at Arbroath the equivalent signal beat the
+ * general-election prior by 5.5pp of MAE.
+ *
+ * The seat is ten whole wards PLUS "Primrose Hill (part)", which no ward-level
+ * result can split, so the page publishes the ten-ward figure and shows the
+ * whole-Primrose-Hill variant beside it rather than burying the difference.
+ * That variant is the only thing standing between "Reform third" and
+ * "Conservatives third", so the comparison table is not decoration.
+ *
+ * Data: data/predictions/by-elections/holborn-and-st-pancras.json, built by
+ * scripts/build-holborn-byelection.mjs. Note the file carries no ISO date, on
+ * purpose. See the comment at the top of that script.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import MiniMap from "../../../components/MiniMap.astro";
+import PartyBars from "../../../components/PartyBars.astro";
+import { partyColour } from "../../../lib/predictions";
+import { shortPartyLabel } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+const data = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "data/predictions/by-elections/holborn-and-st-pancras.json"),
+    "utf8",
+  ),
+);
+
+const contest = data.contest;
+const signal = data.inputs.camden_signal_2026_05_07;
+const baseline = data.inputs.ge2024_baseline;
+const field = data.field;
+
+const pct1 = (x: number | null | undefined) =>
+  typeof x === "number" ? (x * 100).toFixed(1) : null;
+const pp = (x: number) => `${x > 0 ? "+" : ""}${(x * 100).toFixed(1)}pp`;
+
+// Signal bars carry their swing against GE2024 as the annotation, because the
+// movement is the story here: the Labour share is unremarkable on its own and
+// the Green share is only striking next to 10.4%.
+const signalRows = Object.entries(signal.shares as Record<string, number>).map(
+  ([party, pct]) => {
+    const delta = (signal.swing_vs_ge2024_pp as Record<string, number>)[party] ?? 0;
+    const stood = (baseline.shares as Record<string, number>)[party] != null;
+    return {
+      party,
+      pct,
+      annotation: stood ? pp(delta) : "new",
+      annotationDirection: (!stood ? "up" : delta > 0.005 ? "up" : delta < -0.005 ? "down" : "flat") as
+        | "up"
+        | "down"
+        | "flat",
+    };
+  },
+);
+
+const baselineRows = Object.entries(baseline.shares as Record<string, number>).map(
+  ([party, pct]) => ({
+    party,
+    pct,
+    value: `${(pct * 100).toFixed(1)}%`,
+    annotation: (baseline.votes as Record<string, number>)[party]?.toLocaleString() ?? null,
+    annotationDirection: "flat" as const,
+  }),
+);
+
+// The published figure and its two bounds, as one table. Order matters: the
+// ten-ward row is what the page asserts, and the rows under it are what would
+// have to be true for it to move.
+const variants = [
+  { label: "Ten whole wards (published)", shares: signal.shares as Record<string, number>, lead: true },
+  ...(signal.sensitivities as Array<{ label: string; shares: Record<string, number> }>).map((v) => ({
+    label: v.label,
+    shares: v.shares,
+    lead: false,
+  })),
+];
+const variantParties = ["Labour", "Green Party", "Reform UK", "Conservative", "Liberal Democrats", "Camden People's Alliance"];
+
+const wards = signal.wards as Array<{
+  ward: string;
+  seats: number;
+  turnout_pct: number | null;
+  total_valid_votes: number | null;
+  top_party: string;
+  shares: Record<string, number>;
+}>;
+
+const timeline: Array<{ date: string; event: string }> = [
+  { date: "4 July 2024", event: "Keir Starmer holds the seat with 48.9%, a majority of 11,572 over the independent Andrew Feinstein, and becomes Prime Minister." },
+  { date: "7 May 2026", event: "Camden borough elections. Labour holds the council on 30 of 55 seats, down from 47; the Greens go from 1 seat to 11 and sweep two of the ten wards in this seat." },
+  { date: "June 2026", event: "Starmer resigns as Prime Minister and Labour leader after the May results and a challenge from Andy Burnham, who succeeds him." },
+  { date: "1 September 2026", event: "Starmer tells the Camden New Journal he will stand down as MP after eleven years, to focus on international affairs." },
+  { date: "Not yet", event: "Resignation effected (Chiltern Hundreds or Manor of Northstead), writ moved, and polling day 21 to 27 working days later." },
+];
+---
+
+<BaseLayout
+  title="Holborn and St Pancras by-election. Starmer's seat"
+  description="Keir Starmer announced on 1 September 2026 that he will stand down as MP for Holborn and St Pancras. No date is set and no candidate is selected. The freshest same-ground vote is the Camden borough election of 7 May 2026: across the ten whole wards inside the seat it has Labour on 38.6% and the Greens on 29.5%, up 19.1pp on GE2024."
+>
+  <section class="page-hero">
+    {contest.pcon24cd && (
+      <div class="mini-map-side">
+        <MiniMap
+          focalCode={contest.pcon24cd}
+          focalKind="pcon"
+          detail="full"
+          focalColour={partyColour("Labour")}
+          width={240}
+          height={170}
+          ariaLabel="Location map of Holborn and St Pancras on the UK map"
+        />
+      </div>
+    )}
+    <p class="eyebrow">By-election · date to be set · seat not yet vacant</p>
+    <h1>Holborn and St Pancras by-election</h1>
+    <p class="lede">
+      Keir Starmer announced on 1 September 2026 that he will stand down as MP for Holborn and St
+      Pancras, three months after resigning as Prime Minister. Nothing about the contest is fixed
+      yet: the seat is not vacant, no writ has been moved and not one candidate has been selected.
+      What is fixed is the ground. Camden voted four months ago, and in the ten whole wards inside
+      this seat it split Labour {pct1(signal.shares["Labour"])}, Green {pct1(signal.shares["Green Party"])},
+      a {pp(signal.swing_vs_ge2024_pp["Green Party"])} Green move on the general election.
+    </p>
+    <p class="meta-row">
+      England · London · GE2024: Labour, majority {baseline.majority_votes.toLocaleString()} ({pct1(baseline.majority_pp)}pp)
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Our call</p>
+      <h2>Why there is no forecast here</h2>
+    </div>
+    <div class="backtest-callout">
+      <strong>{data.forecast.headline}</strong>
+      <span class="backtest-detail">{data.inputs.no_polls_note}</span>
+    </div>
+    <p class="caption">
+      Method: signal-only · Provider: UK Elections. After Makerfield we publish a numeric central
+      forecast only where a competitive race gives the models something real to estimate, and a
+      contest with no date, no field and no poll is not that.
+      <a href="/by-elections/makerfield/">What went wrong at Makerfield →</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The freshest same-ground vote</p>
+      <h2>Camden, 7 May 2026, across the seat's ten wards</h2>
+    </div>
+    <div class="page-bars"><PartyBars large={true} rows={signalRows} /></div>
+    <p class="caption">
+      Aggregated across the {signal.wards_in_seat} of Camden's {signal.wards_in_borough} wards that
+      sit wholly inside this constituency, on a turnout of {pct1(signal.turnout_pct)}% and{" "}
+      {signal.total_valid_votes.toLocaleString()} valid votes. Ward membership is computed from ward
+      centroids against the constituency boundary, not asserted. Shares are the best candidate per
+      party in each multi-member ward, independents summed. That is the rule the local by-election
+      model uses, because counting all three of a borough slate's candidates counts the same elector
+      three times. Annotations are the change on GE2024.
+    </p>
+    <p class="caption">{signal.borough_outcome}</p>
+    <div class="backtest-callout" style="margin-top:var(--space-md)">
+      <strong>Does this reconstruct the real borough result? Yes.</strong>
+      <span class="backtest-detail">{signal.validation.note} Run the same rule the returning officer
+      uses over all twenty Camden wards and it returns Labour{" "}
+      {pct1(signal.validation.computed["Labour"])}% and Green{" "}
+      {pct1(signal.validation.computed["Green Party"])}%, against the published{" "}
+      {pct1(signal.validation.published["Labour"])}% and{" "}
+      {pct1(signal.validation.published["Green Party"])}%.</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">How much this could move</p>
+      <h2>The part-ward, and what it changes</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Basis</th>
+          {variantParties.map((party) => (
+            <th class="num">
+              <span class="party-pill" style={`background:${partyColour(party)}`}></span>
+              {shortPartyLabel(party)}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {variants.map((v) => (
+          <tr>
+            <td>{v.lead ? <strong>{v.label}</strong> : v.label}</td>
+            {variantParties.map((party) => (
+              <td class="num">
+                {v.lead ? <strong>{pct1(v.shares[party]) ?? "n/a"}</strong> : (pct1(v.shares[party]) ?? "n/a")}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">{signal.boundary_note}</p>
+    <p class="caption">
+      <strong>What this means for third place.</strong> {signal.sensitivities[0].note} The second row
+      is a boundary question we cannot resolve; the third is a method choice, and it moves the
+      numbers less than the boundary does. Neither touches the Labour lead over the Greens, which is
+      the finding this page actually rests on.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The baseline</p>
+      <h2>Holborn and St Pancras at GE2024</h2>
+    </div>
+    <div class="page-bars"><PartyBars large={true} rows={baselineRows} /></div>
+    <p class="caption">
+      4 July 2024: Keir Starmer (Labour) {baseline.votes["Labour"].toLocaleString()} votes
+      ({pct1(baseline.shares["Labour"])}%), a majority of {baseline.majority_votes.toLocaleString()}{" "}
+      ({pct1(baseline.majority_pp)}pp) over the independent Andrew Feinstein, on a turnout of{" "}
+      {pct1(baseline.turnout_pct)}% ({baseline.turnout_votes.toLocaleString()} votes from an
+      electorate of {baseline.electorate.toLocaleString()}). {baseline.note}
+      <a href={baseline.source_url} rel="external"> Source →</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Ward by ward</p>
+      <h2>Where the seat actually is</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th>Ward</th>
+          <th class="num">Seats</th>
+          <th>Led on share</th>
+          <th class="num">Lab</th>
+          <th class="num">Grn</th>
+          <th class="num">Ref</th>
+          <th class="num">Turnout</th>
+        </tr>
+      </thead>
+      <tbody>
+        {wards.map((w) => (
+          <tr>
+            <td>{w.ward}</td>
+            <td class="num">{w.seats}</td>
+            <td>
+              <span class="party-pill" style={`background:${partyColour(w.top_party)}`}></span>
+              {shortPartyLabel(w.top_party)}
+            </td>
+            <td class="num">{pct1(w.shares["Labour"]) ?? "n/a"}</td>
+            <td class="num">{pct1(w.shares["Green Party"]) ?? "n/a"}</td>
+            <td class="num">{pct1(w.shares["Reform UK"]) ?? "n/a"}</td>
+            <td class="num">{pct1(w.turnout_pct) ?? "n/a"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">
+      The Greens led on share in Holborn &amp; Covent Garden and Regent's Park and took all six
+      seats between them. The Camden People's Alliance, which did not exist at the general election,
+      won a seat in St Pancras and Somers Town by 21 votes, unseating Labour's third candidate.
+      Percentages are shares of the best-candidate-per-party total in each ward. Primrose Hill is
+      not listed: only part of it is in the seat, and no ward-level result can be split.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">How we got here</p>
+      <h2>Timeline</h2>
+    </div>
+    <table class="seat-table">
+      <thead><tr><th>Date</th><th>Event</th></tr></thead>
+      <tbody>
+        {timeline.map((t) => (
+          <tr><td style="white-space:nowrap">{t.date}</td><td>{t.event}</td></tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="caption">{contest.trigger.stated_reason} {contest.timetable_note}</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">The ballot</p>
+      <h2>Who has said anything at all</h2>
+    </div>
+    <div class="backtest-callout">
+      <strong>Not one candidate has been selected, by any party.</strong>
+      <span class="backtest-detail">{field.note}</span>
+    </div>
+    <table class="seat-table" style="margin-top:var(--space-md)">
+      <thead><tr><th>Party</th><th>Name</th><th>Status</th></tr></thead>
+      <tbody>
+        {field.declared.map((c: any) => (
+          <tr>
+            <td>
+              <span class="party-pill" style={`background:${partyColour(c.party)}`}></span>
+              {shortPartyLabel(c.party)}
+            </td>
+            <td>{c.candidate || <span class="muted">not named</span>}</td>
+            <td class="muted">Contesting, candidate not named · {c.note}</td>
+          </tr>
+        ))}
+        {field.floated.map((c: any) => (
+          <tr>
+            <td>
+              <span class="party-pill" style={`background:${partyColour(c.party)}`}></span>
+              {shortPartyLabel(c.party)}
+            </td>
+            <td>{c.candidate}</td>
+            <td class="muted">Speculation only · {c.note}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">What we will grade</p>
+      <h2>The open questions</h2>
+    </div>
+    <ul>
+      {data.watchpoints.map((w: string) => <li>{w}</li>)}
+    </ul>
+    <p class="muted-row">
+      Sources:
+      {data.sources.map((s: any, i: number) => (
+        <>
+          {i > 0 ? " · " : " "}
+          <a href={s.url} rel="external">{s.label}</a>
+        </>
+      ))}
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  /*
+   * Two parties in this seat carry names long enough to ellipsis away in the
+   * shared 7rem label column ("Camden Peo...", "National Hou..."), and the
+   * Camden People's Alliance is central to the story rather than a long-tail
+   * also-ran: it took a seat off Labour in this constituency in May. Widen the
+   * label column on this page only. The shared component keeps its own width,
+   * and the lower bound of the minmax is untouched so narrow viewports still
+   * give the track its space.
+   */
+  .page-bars :global(.bar-row) {
+    grid-template-columns: minmax(5.5rem, 13rem) 1fr minmax(4.5rem, auto);
+  }
+</style>

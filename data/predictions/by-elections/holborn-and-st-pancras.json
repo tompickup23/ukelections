@@ -1,0 +1,404 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "london-borough-overlap-signal-v1",
+  "status": "upcoming",
+  "generated_at": "2026-09-02T11:25:42.009Z",
+  "generated_note": "Built the day after the resignation announcement. No polling day exists yet, so this file deliberately carries no ISO date in its filename and the contest is excluded from the homepage countdown. No constituency poll has been published and the field is not known, so there is no vote-share forecast, only the freshest actual-vote signal, which is the Camden borough election of 7 May 2026 over the ten whole wards inside this seat.",
+  "contest": {
+    "constituency_slug": "holborn-and-st-pancras",
+    "constituency_name": "Holborn and St Pancras",
+    "pcon24cd": "E14001290",
+    "region": "London",
+    "trigger": {
+      "type": "resignation",
+      "departing_mp": "Keir Starmer",
+      "departing_party": "Labour",
+      "announced_at": "2026-09-01",
+      "effected_at": null,
+      "stated_reason": "Starmer told the Camden New Journal on 1 September 2026 that it was 'time to step aside and focus on other issues: international affairs including defence, security, trade and technology in a fast changing world', alongside continued work on violence against women and girls. He had resigned as Prime Minister in June 2026 after a poor set of May local election results and a leadership challenge from Andy Burnham, who succeeded him; this is his departure from the Commons, eleven years after first winning the seat in 2015."
+    },
+    "polling_day": null,
+    "date_status": "tba",
+    "writ_status": "not_moved",
+    "timetable_note": "The seat is not yet vacant. Once the resignation is effected, by appointment to the Chiltern Hundreds or the Manor of Northstead (the two offices of profit that vacate a Commons seat), a writ must be moved, and polling day then falls between 21 and 27 working days later."
+  },
+  "field": {
+    "status": "not_locked",
+    "note": "Nominations cannot open until the writ is moved. Nothing below is a confirmed candidate; it is what has been said publicly, and it is recorded separately from the candidate list on purpose.",
+    "declared": [
+      {
+        "party": "Green Party",
+        "candidate": null,
+        "note": "Leader Zack Polanski framed the by-election on 2 September 2026 as 'a referendum on ending Rip-off Britain' and said the party 'will announce our candidate in due course'. He has not ruled himself out, but as of that statement the Greens had not selected anyone, so treat a Polanski candidacy as unresolved rather than likely."
+      },
+      {
+        "party": "Restore Britain",
+        "candidate": null,
+        "note": "Rupert Lowe has said Restore Britain will stand. Reported secondhand from his statement rather than from a party press release, and no candidate is named."
+      }
+    ],
+    "floated": [
+      {
+        "party": "Independent",
+        "candidate": "Count Binface",
+        "note": "Hinted at standing. Finished second in Clacton on 13 August 2026 with 9,455 votes (26.9%), against a five-party boycott."
+      }
+    ]
+  },
+  "forecast": {
+    "basis": "7 May 2026 Camden borough election over the ten wards inside this seat. No constituency polls exist.",
+    "winner": null,
+    "runner_up": null,
+    "central_shares": null,
+    "ranked": [],
+    "classification": "signal-only",
+    "headline": "No forecast: no polling day, no field, no constituency poll. Freshest same-ground vote (Camden, 7 May 2026, ten wards): Labour 38.6%, Green 29.5%, Reform 9.2%."
+  },
+  "inputs": {
+    "no_polls_note": "No published constituency polling. By-elections get no broadcaster exit poll either. The Camden borough result below is the substitute, and it is a strong one: a real vote, on this ground, four months old.",
+    "ge2024_baseline": {
+      "date": "2024-07-04",
+      "winner_party": "Labour",
+      "winner_candidate": "Keir Starmer",
+      "shares": {
+        "Labour": 0.4892,
+        "Independent": 0.2074,
+        "Green Party": 0.1044,
+        "Conservative": 0.0719,
+        "Reform UK": 0.0614,
+        "Liberal Democrats": 0.0579,
+        "Other": 0.0077
+      },
+      "votes": {
+        "Labour": 18884,
+        "Independent": 8007,
+        "Green Party": 4030,
+        "Conservative": 2776,
+        "Reform UK": 2371,
+        "Liberal Democrats": 2236,
+        "Other": 298
+      },
+      "majority_votes": 11572,
+      "majority_pp": 0.2998,
+      "turnout_votes": 38602,
+      "turnout_pct": 0.541,
+      "electorate": 71300,
+      "turnout_source": "https://en.wikipedia.org/wiki/Holborn_and_St_Pancras",
+      "note": "Andrew Feinstein's 18.9% as an independent was the second-placed vote here, well clear of Reform UK on 6.1%. The challenger lane in this seat has been a left-of-Labour lane, not a Reform one.",
+      "source_url": "https://www.bbc.co.uk/news/election/2024/uk/constituencies/E14001290"
+    },
+    "camden_signal_2026_05_07": {
+      "name": "Camden London Borough Council election, the ten wards inside Holborn and St Pancras",
+      "date": "2026-05-07",
+      "method": "Ward membership computed from ward centroids against the PCON24 boundary. Shares are the best candidate per party in each multi-member ward (independents summed), aggregated across all ten wards and normalised, which is the rule the local by-election model uses.",
+      "wards_in_seat": 10,
+      "wards_in_borough": 20,
+      "boundary_note": "The Boundary Commission composition of this seat is these ten whole Camden wards plus 'Primrose Hill (part)'. No ward-level result exists for the fraction of Primrose Hill that is inside the seat, and a made-up split would be worse than an honest exclusion, so the published figure is the ten whole wards. The variant that adds the whole of Primrose Hill is the other bound, and the true figure sits between the two. Highgate and Gospel Oak, which sat in the predecessor seat, are now in Hampstead and Highgate and are correctly excluded.",
+      "sensitivities": [
+        {
+          "id": "with_whole_primrose_hill",
+          "label": "Adding the whole of Primrose Hill (the part-ward, upper bound)",
+          "shares": {
+            "Labour": 0.3798,
+            "Green Party": 0.2862,
+            "Conservative": 0.0966,
+            "Reform UK": 0.0924,
+            "Liberal Democrats": 0.0718,
+            "Camden People's Alliance": 0.0559,
+            "National Housing Party United Kingdom": 0.0122,
+            "Independent": 0.0051
+          },
+          "note": "Moves Labour to 38.0% and the Greens to 28.6%, and puts the Conservatives above Reform UK for third. The Labour lead over the Greens is barely touched, so the shape of the contest holds, but no third place should be asserted without this caveat."
+        },
+        {
+          "id": "all_candidates_summed",
+          "label": "Summing every candidate instead of the best per party",
+          "shares": {
+            "Labour": 0.3955,
+            "Green Party": 0.2981,
+            "Reform UK": 0.0837,
+            "Conservative": 0.0754,
+            "Camden People's Alliance": 0.0704,
+            "Liberal Democrats": 0.0667,
+            "National Housing Party United Kingdom": 0.0078,
+            "Independent": 0.0023
+          },
+          "note": "Moves Labour to 39.6% and the Greens to 29.8%. This rule counts an elector up to three times in a three-member ward, so it is not the published figure, but it shows the method does not carry the story."
+        }
+      ],
+      "validation": {
+        "method": "The all-candidates rule run over all twenty Camden wards, against the published borough result.",
+        "computed": {
+          "Labour": 0.3284,
+          "Green Party": 0.2714,
+          "Liberal Democrats": 0.1484,
+          "Conservative": 0.1408,
+          "Reform UK": 0.0751,
+          "Camden People's Alliance": 0.0315,
+          "National Housing Party United Kingdom": 0.0035,
+          "Independent": 0.001
+        },
+        "published": {
+          "Labour": 0.3284,
+          "Green Party": 0.2714,
+          "Liberal Democrats": 0.1483,
+          "Conservative": 0.1408,
+          "Reform UK": 0.0751,
+          "Camden People's Alliance": 0.0315
+        },
+        "published_source": "https://en.wikipedia.org/wiki/2026_Camden_London_Borough_Council_election",
+        "note": "Labour and Green reproduce the published borough shares and vote counts exactly. The Conservative count differs by 10 votes in 22,000, which is a transcription difference in one of the two sources and not a defect in the ward feed."
+      },
+      "shares": {
+        "Labour": 0.3859,
+        "Green Party": 0.2954,
+        "Reform UK": 0.0923,
+        "Conservative": 0.0744,
+        "Liberal Democrats": 0.0694,
+        "Camden People's Alliance": 0.0631,
+        "National Housing Party United Kingdom": 0.0138,
+        "Independent": 0.0058
+      },
+      "ranked": [
+        {
+          "party": "Labour",
+          "pct": 0.3859
+        },
+        {
+          "party": "Green Party",
+          "pct": 0.2954
+        },
+        {
+          "party": "Reform UK",
+          "pct": 0.0923
+        },
+        {
+          "party": "Conservative",
+          "pct": 0.0744
+        },
+        {
+          "party": "Liberal Democrats",
+          "pct": 0.0694
+        },
+        {
+          "party": "Camden People's Alliance",
+          "pct": 0.0631
+        },
+        {
+          "party": "National Housing Party United Kingdom",
+          "pct": 0.0138
+        },
+        {
+          "party": "Independent",
+          "pct": 0.0058
+        }
+      ],
+      "turnout_pct": 0.3703,
+      "total_valid_votes": 71109,
+      "top_party": "Labour",
+      "swing_vs_ge2024_pp": {
+        "Labour": -0.1033,
+        "Green Party": 0.191,
+        "Reform UK": 0.0309,
+        "Conservative": 0.0025,
+        "Liberal Democrats": 0.0115,
+        "Camden People's Alliance": 0.0631,
+        "National Housing Party United Kingdom": 0.0138,
+        "Independent": -0.2016,
+        "Other": -0.0077
+      },
+      "wards": [
+        {
+          "ward": "Bloomsbury",
+          "ward_slug": "bloomsbury",
+          "seats": 3,
+          "turnout_pct": 0.3376,
+          "total_valid_votes": 6792,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.3683,
+            "Green Party": 0.3424,
+            "Conservative": 0.1076,
+            "Reform UK": 0.1016,
+            "Liberal Democrats": 0.0801
+          }
+        },
+        {
+          "ward": "Camden Square",
+          "ward_slug": "camden-square",
+          "seats": 2,
+          "turnout_pct": 0.3689,
+          "total_valid_votes": 4212,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.3825,
+            "Green Party": 0.3567,
+            "Liberal Democrats": 0.0705,
+            "Independent": 0.0696,
+            "Reform UK": 0.0696,
+            "Conservative": 0.0511
+          }
+        },
+        {
+          "ward": "Camden Town",
+          "ward_slug": "camden-town",
+          "seats": 2,
+          "turnout_pct": 0.3242,
+          "total_valid_votes": 3148,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.4401,
+            "Green Party": 0.344,
+            "Reform UK": 0.0838,
+            "Conservative": 0.0667,
+            "Liberal Democrats": 0.0655
+          }
+        },
+        {
+          "ward": "Haverstock",
+          "ward_slug": "haverstock",
+          "seats": 3,
+          "turnout_pct": 0.3799,
+          "total_valid_votes": 9683,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.3838,
+            "Green Party": 0.3397,
+            "Liberal Democrats": 0.0986,
+            "Conservative": 0.0899,
+            "Reform UK": 0.0879
+          }
+        },
+        {
+          "ward": "Holborn & Covent Garden",
+          "ward_slug": "holborn-covent-garden",
+          "seats": 3,
+          "turnout_pct": 0.374,
+          "total_valid_votes": 8636,
+          "top_party": "Green Party",
+          "shares": {
+            "Green Party": 0.3893,
+            "Labour": 0.317,
+            "Reform UK": 0.0946,
+            "Conservative": 0.076,
+            "National Housing Party United Kingdom": 0.0665,
+            "Liberal Democrats": 0.0567
+          }
+        },
+        {
+          "ward": "Kentish Town North",
+          "ward_slug": "kentish-town-north",
+          "seats": 2,
+          "turnout_pct": 0.4959,
+          "total_valid_votes": 5677,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.4748,
+            "Green Party": 0.404,
+            "Reform UK": 0.049,
+            "Conservative": 0.0431,
+            "Liberal Democrats": 0.0292
+          }
+        },
+        {
+          "ward": "Kentish Town South",
+          "ward_slug": "kentish-town-south",
+          "seats": 3,
+          "turnout_pct": 0.4126,
+          "total_valid_votes": 9388,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.4262,
+            "Green Party": 0.378,
+            "Reform UK": 0.0804,
+            "Conservative": 0.0648,
+            "Liberal Democrats": 0.0506
+          }
+        },
+        {
+          "ward": "King's Cross",
+          "ward_slug": "kings-cross",
+          "seats": 3,
+          "turnout_pct": 0.3193,
+          "total_valid_votes": 6939,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.4078,
+            "Camden People's Alliance": 0.3027,
+            "Liberal Democrats": 0.0918,
+            "Reform UK": 0.0872,
+            "Conservative": 0.0872,
+            "National Housing Party United Kingdom": 0.0233
+          }
+        },
+        {
+          "ward": "Regent's Park",
+          "ward_slug": "regents-park",
+          "seats": 3,
+          "turnout_pct": 0.3512,
+          "total_valid_votes": 8309,
+          "top_party": "Green Party",
+          "shares": {
+            "Green Party": 0.3826,
+            "Labour": 0.3272,
+            "Reform UK": 0.119,
+            "Conservative": 0.0921,
+            "Liberal Democrats": 0.0636,
+            "National Housing Party United Kingdom": 0.0155
+          }
+        },
+        {
+          "ward": "St Pancras & Somers Town",
+          "ward_slug": "st-pancras-somers-town",
+          "seats": 3,
+          "turnout_pct": 0.3281,
+          "total_valid_votes": 8325,
+          "top_party": "Labour",
+          "shares": {
+            "Labour": 0.3591,
+            "Camden People's Alliance": 0.3285,
+            "Reform UK": 0.1421,
+            "Liberal Democrats": 0.0871,
+            "Conservative": 0.0618,
+            "National Housing Party United Kingdom": 0.0214
+          }
+        }
+      ],
+      "borough_outcome": "Labour held the council with 30 of 55 seats, down from 47 in 2022. The Greens went from 1 seat to 11, the Liberal Democrats to 10, the Conservatives to 3, and the Camden People's Alliance won 1."
+    }
+  },
+  "watchpoints": [
+    "This is not a Reform contest, and that makes it the odd one out. Reform UK took 9.2% across the ten wards in May, up 3.1pp on GE2024 but a distant third or fourth depending on whether Primrose Hill is counted. Every recent by-election narrative on this site has been about the Reform lane. This one is about the Green lane.",
+    "The Green Party is up 19.1pp on GE2024 to 29.5% and swept two of the ten wards outright, taking all three seats in each of Holborn & Covent Garden and Regent's Park. The Greens also won their first ever parliamentary by-election at Gorton and Denton in February 2026, so a strong Green showing here would be a second data point, not a novelty.",
+    "The Greens have not selected a candidate. Zack Polanski has framed the contest as a national referendum and has not ruled himself out, but the party's own statement on 2 September was that a candidate comes 'in due course'. Who they pick is the single biggest open variable in the seat.",
+    "Andrew Feinstein's 18.9% independent vote in 2024 did not evaporate, it reorganised. The Camden People's Alliance took 6.3% across the seat from a standing start and won a seat in St Pancras and Somers Town by 21 votes, unseating Labour's third candidate. Where that lane lands is the difference between a comfortable Labour hold and a contest.",
+    "Labour's 38.6% in May is 10.3pp below its GE2024 share, on a 37.0% local turnout against 54.1% at the general election. Local elections flatter challengers and by-elections flatter them further, so treat 38.6% as a reading of a bad day rather than a floor.",
+    "Turnout is the other unknown. Clacton in August ran at 44.4%; the Camden wards polled at 37.0% in May. A low-turnout autumn contest in a seat with a large private-rented and student population is the scenario in which a well-organised Green or local-alliance campaign outperforms its share."
+  ],
+  "sources": [
+    {
+      "label": "2026 Holborn and St Pancras by-election (Wikipedia), for the 1 September announcement to the Camden New Journal, the TBA date and the candidate speculation",
+      "url": "https://en.wikipedia.org/wiki/2026_Holborn_and_St_Pancras_by-election"
+    },
+    {
+      "label": "Green Party press release, 2 September 2026: Polanski on the by-election and on selecting a candidate",
+      "url": "https://greenparty.org.uk/2026/09/02/polanski-holborn-and-st-pancras-will-be-referendum-on-ending-rip-off-britain/"
+    },
+    {
+      "label": "2026 Camden London Borough Council election (Wikipedia), for the borough seat totals and the published borough-wide shares this page validates against",
+      "url": "https://en.wikipedia.org/wiki/2026_Camden_London_Borough_Council_election"
+    },
+    {
+      "label": "Holborn and St Pancras (Wikipedia), for the 2024 turnout and electorate and the Boundary Commission ward composition including Primrose Hill (part)",
+      "url": "https://en.wikipedia.org/wiki/Holborn_and_St_Pancras"
+    },
+    {
+      "label": "GE2024 result, Holborn and St Pancras (BBC)",
+      "url": "https://www.bbc.co.uk/news/election/2024/uk/constituencies/E14001290"
+    },
+    {
+      "label": "Ward-level May 2026 results (Democracy Club, via this site's own results feed)",
+      "url": "https://candidates.democracyclub.org.uk/"
+    }
+  ]
+}
