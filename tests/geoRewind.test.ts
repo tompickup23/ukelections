@@ -98,9 +98,11 @@ describe("bboxPolygon", () => {
 // boundary files read as the whole sphere, so every map rendered as a solid
 // rectangle. Guards the data as well as the code.
 const BOUNDARY_FILES = [
+  "data/geography/pcon24-detail.geojson",
   "data/geography/pcon24-simplified.geojson",
+  "data/geography/lad24-detail.geojson",
   "data/geography/lad24-simplified.geojson",
-  "data/geography/wd25-simplified.geojson",
+  "data/geography/wd25-detail.geojson",
 ];
 
 describe("shipped boundary files, once rewound", () => {
@@ -124,6 +126,58 @@ describe("shipped boundary files, once rewound", () => {
         expect(south).toBeGreaterThan(49);
         expect(north).toBeLessThan(62);
       }
+    });
+  }
+});
+
+// A second data regression, found 2 Sep 2026. The boundary files were built
+// with a single global simplification tolerance, which strips small urban
+// features to nothing: pcon24-simplified.geojson shipped with a median of 8
+// vertices per seat and a floor of 4, so MiniMap drew Holborn and St Pancras
+// as a pentagon and Exeter as a quadrilateral. A polygon that few points is
+// not a coarse boundary, it is a triangle wearing the name of a constituency.
+//
+// The floors below are what each file's source resolution can actually carry.
+// The ward file is the exception: it is built from the BSC download, in which
+// Brackla East Central is itself a 4-vertex quadrilateral, so no simplification
+// setting can lift it. See scripts/simplify-boundaries.mjs.
+const VERTEX_FLOORS: Array<[string, number]> = [
+  ["data/geography/pcon24-detail.geojson", 40],
+  ["data/geography/pcon24-simplified.geojson", 10],
+  ["data/geography/lad24-detail.geojson", 40],
+  ["data/geography/lad24-simplified.geojson", 10],
+  ["data/geography/wd25-detail.geojson", 4],
+];
+
+function vertexCount(geometry: any): number {
+  let n = 0;
+  const walk = (node: any): void => {
+    if (typeof node[0] === "number") {
+      n++;
+      return;
+    }
+    for (const child of node) walk(child);
+  };
+  if (geometry?.coordinates) walk(geometry.coordinates);
+  return n;
+}
+
+describe("shipped boundary files keep a recognisable outline", () => {
+  for (const [file, floor] of VERTEX_FLOORS) {
+    const path = resolve(process.cwd(), file);
+    const present = existsSync(path);
+
+    it.skipIf(!present)(`${file} has no feature under ${floor} vertices`, () => {
+      const raw = JSON.parse(readFileSync(path, "utf8")) as { features: any[] };
+      const starved = raw.features
+        .map((f) => ({
+          name: Object.entries(f.properties ?? {}).find(([k]) => k.endsWith("NM"))?.[1],
+          n: vertexCount(f.geometry),
+        }))
+        .filter((c) => c.n < floor)
+        .sort((a, b) => a.n - b.n);
+
+      expect(starved.map((c) => `${c.name} (${c.n})`)).toEqual([]);
     });
   }
 });

@@ -98,7 +98,11 @@ for (const row of (identity.pcons || []) as any[]) {
 // Mercator projection fitted to the bounding box of the geometry.
 const projection = geoMercator();
 projection.fitSize([width, height], geo as any);
-const pathGen = geoPath(projection);
+// One decimal place in the emitted path data. d3-geo defaults to three, which
+// at this 800x1000 render is precision down to a thousandth of a pixel and pure
+// page weight. Rounding to 0.1px is invisible here and pays for most of the
+// extra vertices the boundary files gained when they moved to the BGC source.
+const pathGen = geoPath(projection).digits(1);
 
 // Render every feature as a path with embedded data attributes.
 type Rendered = {

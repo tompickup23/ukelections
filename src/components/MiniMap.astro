@@ -4,10 +4,27 @@
  * (constituency / council / ward) highlighted in winner colour, with
  * surrounding context features greyed.
  *
- * Server-rendered via d3-geo at build time. Boundaries are pre-loaded
- * from the simplified GeoJSON files in `data/geography/` and indexed
- * by code on first call. Per-build cost: ~2-4 ms per mini-map after
- * the index warms.
+ * Server-rendered via d3-geo at build time. Boundaries come from
+ * `src/lib/boundaryCache.ts`, which holds the parsed, rewound and indexed
+ * files for the life of the process. Note that this fence is the render body
+ * and re-runs for every page, so a cache kept here would be no cache at all.
+ * that is exactly the bug the lib module was extracted to fix.
+ *
+ * TWO TIERS, and which one a feature comes from depends on its job here.
+ *
+ * The FOCAL feature is drawn from `*-detail.geojson`. A mini-map zooms to one
+ * feature at 220x150, so it is the only consumer that really sees an outline,
+ * and on the old single-tier files Holborn and St Pancras arrived as a 5-point
+ * pentagon and Exeter as a quadrilateral. that reads as a broken graphic
+ * rather than a boundary.
+ *
+ * The surrounding CONTEXT features are drawn from `*-simplified.geojson`. They
+ * render as flat grey fill behind the subject and nobody reads their outlines,
+ * so detail there is invisible, and it is not free: a mini-map emits its
+ * context into the page HTML, and there are thousands of these pages. Drawing
+ * context from the detail tier as well cost 3.2x the site build (1m56s to
+ * 6m16s) and about 7KB of extra path data on every seat and ward page, for no
+ * visible difference. Splitting the tiers keeps the fix and drops the bill.
  *
  * Props:
  *   focalCode: the ONS code of the focal area (e.g. "E14001063" PCON,
@@ -22,31 +39,15 @@
  * component returns null gracefully and the calling page just sees no
  * map.
  */
-import { readFileSync, existsSync } from "node:fs";
-import { resolve } from "node:path";
 import { geoMercator, geoPath } from "d3-geo";
-import { rewindFeatures, bboxPolygon } from "../lib/geoRewind";
-
-// A plain planar coordinate min/max, which is all the neighbour-bbox
-// intersection check needs. Rings reaching here have already been rewound
-// at load, so d3-geo's `geoBounds` would work too, but it costs a spherical
-// pass we have no use for at this scale.
-function flatBbox(feature: any): [number, number, number, number] {
-  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-  const visit = (n: any): void => {
-    if (typeof n[0] === "number" && typeof n[1] === "number") {
-      if (n[0] < x0) x0 = n[0];
-      if (n[1] < y0) y0 = n[1];
-      if (n[0] > x1) x1 = n[0];
-      if (n[1] > y1) y1 = n[1];
-      return;
-    }
-    for (const c of n) visit(c);
-  };
-  visit(feature.geometry?.coordinates ?? []);
-  if (!Number.isFinite(x0)) return [0, 0, 0, 0];
-  return [x0, y0, x1, y1];
-}
+import { bboxPolygon } from "../lib/geoRewind";
+import {
+  BOUNDARY_REGISTRY as REGISTRY,
+  loadBoundaries,
+  flatBbox,
+  normName,
+  type Bbox,
+} from "../lib/boundaryCache";
 
 interface Props {
   focalCode?: string;
@@ -112,69 +113,7 @@ function deltaColour(delta: number, maxAbs: number): string | null {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// File registry. code field name + file path per kind
-const REGISTRY = {
-  pcon: {
-    file: "data/geography/pcon24-simplified.geojson",
-    codeField: "PCON24CD",
-    nameField: "PCON24NM",
-  },
-  lad: {
-    file: "data/geography/lad24-simplified.geojson",
-    codeField: "LAD24CD",
-    nameField: "LAD24NM",
-  },
-  ward: {
-    file: "data/geography/wd25-simplified.geojson",
-    codeField: "WD25CD",
-    nameField: "WD25NM",
-  },
-} as const;
-
-// Module-level cache so the GeoJSON files are loaded + indexed once
-// per Astro process, then shared across every per-page invocation.
-type GeoCache = {
-  features: Array<any>;
-  byCode: Map<string, any>;
-  byName: Map<string, any>;
-};
-const _cache = new Map<string, GeoCache>();
-
-function normName(s: string): string {
-  return s
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[,'’]/g, "")
-    .replace(/[-‐‑‒–.]/g, " ")
-    .replace(/&/g, "and")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function loadCache(kind: keyof typeof REGISTRY): GeoCache | null {
-  if (_cache.has(kind)) return _cache.get(kind)!;
-  const reg = REGISTRY[kind];
-  const p = resolve(process.cwd(), reg.file);
-  if (!existsSync(p)) return null;
-  const raw = JSON.parse(readFileSync(p, "utf8")) as { features: any[] };
-  // Rewinding at load time fixes the winding for every consumer of the cache
-  // at once. See src/lib/geoRewind.ts for why this is necessary.
-  const data = { features: rewindFeatures(raw.features) };
-  const byCode = new Map<string, any>();
-  const byName = new Map<string, any>();
-  for (const f of data.features) {
-    const code = f?.properties?.[reg.codeField];
-    const name = f?.properties?.[reg.nameField];
-    if (code) byCode.set(code, f);
-    if (name) byName.set(normName(name), f);
-  }
-  const cache: GeoCache = { features: data.features, byCode, byName };
-  _cache.set(kind, cache);
-  return cache;
-}
-
-const cache = loadCache(focalKind);
+const cache = loadBoundaries(focalKind);
 let focal: any = null;
 if (cache) {
   if (focalCode) focal = cache.byCode.get(focalCode);
@@ -186,7 +125,6 @@ const hasFocal = !!focal;
 
 // Compute focal bbox + expand by `padding` to give the neighbour
 // context. Then pick every feature whose bbox intersects.
-type Bbox = [number, number, number, number];
 function expandBbox(b: Bbox, factor: number): Bbox {
   const [x0, y0, x1, y1] = b;
   const w = x1 - x0;
@@ -196,7 +134,7 @@ function expandBbox(b: Bbox, factor: number): Bbox {
   return [x0 - dx, y0 - dy, x1 + dx, y1 + dy];
 }
 function bboxOf(feature: any): Bbox {
-  return flatBbox(feature);
+  return cache?.bboxes.get(feature) ?? flatBbox(feature);
 }
 function bboxIntersects(a: Bbox, b: Bbox): boolean {
   return !(a[2] < b[0] || a[0] > b[2] || a[3] < b[1] || a[1] > b[3]);
@@ -214,8 +152,14 @@ if (hasFocal) {
   // Pick context features (excluding focal) whose bbox intersects ours.
   // For ward kind we cap at 80 to keep the SVG svelte.
   const contextFeatures: any[] = [];
+  // The focal feature comes from the detail tier and the context list from the
+  // simplified one, so they are different objects for the same place. Identity
+  // would not exclude it; the ONS code does, and drawing the focal twice would
+  // paint the grey context fill over the highlighted outline.
+  const focalCodeField = REGISTRY[focalKind as keyof typeof REGISTRY].codeField;
+  const focalCd = focal?.properties?.[focalCodeField];
   for (const f of cache!.features) {
-    if (f === focal) continue;
+    if (focalCd && f?.properties?.[focalCodeField] === focalCd) continue;
     const fb = bboxOf(f);
     if (bboxIntersects(focalBbox, fb)) contextFeatures.push(f);
     if (focalKind === "ward" && contextFeatures.length >= 80) break;

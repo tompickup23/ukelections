@@ -7,7 +7,7 @@ Astro static site for UK-wide election intelligence — `ukelections.co.uk`.
 ```bash
 npm test
 npm run check
-npm run build                          # iteration build, ~25s
+npm run build                          # iteration build, ~16s (see the boundary-cache note)
 BUILD_OG=1 npm run build               # full build with all 812 OG cards (slow — see timing note below)
 npm run ge:refresh                     # one-command polling refresh → GE pipeline rerun → Restore Britain overlay
 ```
@@ -32,7 +32,7 @@ To ship a merged change yourself, without waiting for the cron:
 ssh vps-main
 cd /root/ukelections && git pull --ff-only --autostash && git log --oneline -1   # the cron does NOT pull
 npm test --silent
-rm -rf dist .astro node_modules/.vite && npm run build                          # ~5 min, 3,820 pages
+rm -rf dist .astro node_modules/.vite && npm run build                          # was ~5 min; expect well under after the 2 Sep boundary-cache fix, but it has not been timed on vps-main yet
 rm -rf /tmp/uke-deploy-x && cp -a dist /tmp/uke-deploy-x                        # never deploy the shared dist
 set -a; . /opt/dashboard/.env; set +a
 wrangler pages deploy /tmp/uke-deploy-x --project-name ukelections --branch main --commit-dirty=true
@@ -51,12 +51,30 @@ on this Mac 20 Aug 2026, same tree, back to back:
 | `npx astro build` (3,820 pages, no cards) | 165s |
 | `BUILD_OG=1 npx astro build` (+811 cards) | 2,059s |
 
+**Those two numbers were mostly a bug, fixed 2 Sep 2026.** `MiniMap.astro` kept
+its boundary cache in the component's frontmatter fence, which is the render
+body and re-runs per page, so every mini-map page re-read, rewound and
+re-indexed the boundary files from scratch. Instrumenting the build counted
+**2,957 reloads costing 149s**, which was the bulk of the card-free build. The
+cache now lives in `src/lib/boundaryCache.ts`, a real module evaluated once:
+
+| build | before the fix | after |
+|---|---|---|
+| `npx astro build` (3,947 pages, no cards) | 116s | **16s** |
+
+Measured back to back on this Mac, 2 Sep 2026, same tree. The OG pass is
+unaffected. it is Satori time, not boundary time, so `BUILD_OG=1` still costs
+roughly its ~31 minutes on top.
+
 So the Satori pass costs ~31 min for 811 cards, ~2.3s each — roughly 6× the
 300-400ms/card the code comments claim. That Mac run was under heavy load
 (load avg 21), so treat it as an upper bound rather than a clean number.
 
 On vps-main the data phases take ~6 min and the pre-OG build took 5m18s on the
-19-20 Aug runs (`/var/log/ukelections-refresh.log`). The card pass **has never
+19-20 Aug runs (`/var/log/ukelections-refresh.log`). That 5m18s predates the
+2 Sep boundary-cache fix, which cut the same build from 116s to 16s on this
+Mac; the vps figure should fall similarly but has not been re-measured, so read
+the step 9 timestamps after the next cron run before quoting a number. The card pass **has never
 run there**, so the nightly's new total is genuinely unknown — somewhere between
 ~15 min and ~45 min. Read the step 9 → step 10 timestamps after the first cron
 run with cards and replace this paragraph with the real figure.
@@ -111,8 +129,8 @@ deploying: `cp -a dist /tmp/uke-deploy-$$ && wrangler pages deploy /tmp/uke-depl
 - `StatCard.astro` — big-number card with optional sparkline + accent + trend annotation.
 - `PartyTrendChart.astro` — server-rendered SVG line chart for polling ledger.
 - `CommonsHorseshoe.astro` — 650-dot Parliament composition diagram, pure SVG, ideological left-to-right ordering.
-- `ConstituencyChoropleth.astro` — interactive UK map (650 constituencies, ONS PCS24 BUC simplified to 218KB) with click-through to seat pages, tooltip with party strip, clickable legend filter.
-- `MiniMap.astro` — per-place thumbnail SVG, supports `pcon | lad | ward`. Boundary cache shared at module load.
+- `ConstituencyChoropleth.astro` — interactive UK map (650 constituencies, from `pcon24-simplified.geojson`) with click-through to seat pages, tooltip with party strip, clickable legend filter. Renders server-side, so the GeoJSON never ships; what the page carries is 62KB of gzipped SVG path data.
+- `MiniMap.astro` — per-place thumbnail SVG, supports `pcon | lad | ward`. Focal feature from the `*-detail.geojson` tier, grey neighbour context from `*-simplified.geojson`. Boundaries come from `src/lib/boundaryCache.ts`, which is a module so the cache survives between pages.
 - `Search.astro` — Pagefind UI mount, `/` hotkey, native `<dialog>` modal.
 
 **Per-page elevation (Tier B)**
@@ -133,8 +151,9 @@ Every detail page renders data as visual, not text. `/polling/` has a trend char
 - Lazy-loaded UI via dynamic `<script>` injection — dodges Vite's static analyser.
 
 **Per-place mini-maps (Tier C)**
-- LAD24 BUC + WD25 BSC boundaries simplified with mapshaper (152 KB + 2.9 MB).
-- d3-geo at build time, no runtime JS.
+- Loaded through `src/lib/boundaryCache.ts`, which is a module so the parse/rewind/index happens once per process. **Never move that cache into an `.astro` frontmatter fence** — the fence is the render body and re-runs per page, which is exactly the bug that cost 149s per build until 2 Sep 2026.
+- Focal feature from `pcon24-detail.geojson` (2.0 MB), `lad24-detail.geojson` (1.0 MB), `wd25-detail.geojson` (5.1 MB); grey neighbour context from the matching `*-simplified.geojson`, because context detail is invisible but still lands in every page's HTML.
+- d3-geo at build time, no runtime JS, so the detail tier costs page weight nothing.
 
 ## Model calibration (21 Aug 2026)
 
@@ -169,7 +188,9 @@ The Friday sweep (`scripts/refresh-byelections.mjs`) writes the tracked sidecar 
 4. **`BUILD_OG=1` is opt-in everywhere, including the cron.** Builds without it skip the 811-card Satori pass and fall back to the committed `/og-default.png`. That is a supported state, not a broken one — the fallback is a real 1200×630 PNG and every page points at it.
 4b. **Only advertise an OG card the build actually rendered.** `BaseLayout` asks `hasOgCard()` (from `ogEntries.ts`) before pointing `og:image` at `/og/<slug>.png`. Cloudflare Pages serves a missing path as the HTML 404 body under a **200**, so a dangling card URL doesn't 404 — it silently hands crawlers `text/html` and kills the preview. Add a page to `ogEntries.ts` if you want it to have a card; never hand-write the meta path.
 5. **Party colours are saturated by design** — they look fine in both modes; don't dark-mode them.
-6. **Boundaries are committed.** `data/geography/*.geojson` files are checked in (raw + simplified). Re-download via the ArcGIS REST pattern at `services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/...`.
+6. **Boundaries are committed, in two tiers, and rebuilt by script.** `scripts/fetch-boundaries.mjs` downloads from ONS; `scripts/simplify-boundaries.mjs` turns each raw file into a `*-detail.geojson` (MiniMap, zoomed to one feature) and a `*-simplified.geojson` (the whole-UK choropleth and by-region maps). Both tiers are checked in. The `*-bgc-raw` downloads are **gitignored** — 40 MB that only the simplify script reads — so re-fetch rather than clone them. `wd25-bsc-raw.geojson` stays committed because there is no ward BGC to fetch (see below).
+6b. **Simplify proportionally to feature size, never at one global tolerance.** Visvalingam drops points by effective area, so a single tolerance spends the budget on big rural shapes and strips small urban ones to nothing: the old files had a median of 8 vertices per seat and a floor of 4, and MiniMap drew Holborn and St Pancras as a pentagon and Exeter as a triangle. `simplify-boundaries.mjs` scales the interval by each feature's own `sqrt(area)` and enforces a vertex floor, and `tests/geoRewind.test.ts` guards that floor. Measured on the choropleth's own projection, that is ~4x more efficient than a uniform interval at the thing that was broken: lifting Holborn and St Pancras to 19 vertices cost 80KB of gzipped path data area-proportionally and 311KB uniformly.
+6c. **Know which ONS product you are on.** BUC is Ultra Generalised (500m) and is too coarse to simplify from — Holborn and St Pancras is an 8-vertex octagon in raw BUC, so no re-simplification could ever have fixed it. PCON and LAD build from BGC (20m). Wards are stuck on BSC (200m): the ward BGC service is published TilesOnly and refuses feature queries, which is why a handful of City of London wards, and Brackla East Central at 4 vertices, cannot be improved from here.
 7. **Reuse `partyColour()` and `shortPartyLabel()`** — don't create parallel mappings.
 8. **OG card sub-labels follow the page's primary data** — candidate names on by-elections, seat counts on councils, % on vote shares.
 

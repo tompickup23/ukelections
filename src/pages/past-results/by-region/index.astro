@@ -109,7 +109,11 @@ const WIDTH = 800;
 const HEIGHT = 1000;
 const projection = geoMercator();
 projection.fitSize([WIDTH, HEIGHT], lads as any);
-const pathGen = geoPath(projection);
+// One decimal place in the emitted path data. d3-geo defaults to three, which
+// at this 800x1000 render is precision down to a thousandth of a pixel and pure
+// page weight. Rounding to 0.1px is invisible here and pays for most of the
+// extra vertices the boundary files gained when they moved to the BGC source.
+const pathGen = geoPath(projection).digits(1);
 
 type LadPath = { code: string; name: string; regionCode: string; regionName: string; fill: string; share: number; d: string };
 const ladPaths: LadPath[] = [];

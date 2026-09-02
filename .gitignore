@@ -46,3 +46,10 @@ data/history/dc-historic-results.json
 !.env.sample
 **/.env
 **/.env.*
+
+# ONS boundary downloads (scripts/fetch-boundaries.mjs).
+# The BGC product is ~40MB across the two layers, and nothing reads it at
+# build or run time. only scripts/simplify-boundaries.mjs does, to produce the
+# committed *-detail / *-simplified files. Re-fetch rather than clone it.
+data/geography/pcon24-bgc-raw.geojson
+data/geography/lad24-bgc-raw.geojson
