@@ -2,7 +2,7 @@
  "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not. Rows polled on 27 August 2026 were entered by hand from the returning officers' declarations and press reports of them, because Democracy Club had recorded winners but no vote counts by 28 August. Each carries its own verification note. DC rows still win on conflict.",
  "source": "https://candidates.democracyclub.org.uk/api/next/ballots/",
  "review_status": "mixed: auto_ingested_dc plus hand verified rows, see each row",
- "generated_at": "2026-09-02T11:01:48.771Z",
+ "generated_at": "2026-09-04T09:01:16.090Z",
  "results": [
   {
    "ballot_paper_id": "local.cornwall.newquay-porth-tretherras.by.2026-04-23",
@@ -6069,6 +6069,53 @@
      "name": "Josh Stanton",
      "party_name": "Reform UK",
      "votes": 51,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.stroud.kingswood.by.2026-09-02",
+   "election_date": "2026-09-02",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "stroud",
+   "ward_slug": "kingswood",
+   "is_by_election": true,
+   "turnout_votes": 691,
+   "turnout_pct": 0.3729,
+   "spoilt_ballots": 0,
+   "electorate": 1853,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.stroud.kingswood.by.2026-09-02/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Fred Hulls",
+     "party_name": "Liberal Democrats",
+     "votes": 442,
+     "elected": true
+    },
+    {
+     "name": "Louise Jane Tandy",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 109,
+     "elected": false
+    },
+    {
+     "name": "Michael Alun Rees",
+     "party_name": "Reform UK",
+     "votes": 70,
+     "elected": false
+    },
+    {
+     "name": "Alasdair Liddell",
+     "party_name": "Green Party",
+     "votes": 40,
+     "elected": false
+    },
+    {
+     "name": "Claire Louise Cook",
+     "party_name": "Labour Party",
+     "votes": 30,
      "elected": false
     }
    ]
