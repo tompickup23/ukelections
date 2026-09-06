@@ -79,6 +79,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/transparency/", label: "Transparency", desc: "Funding & affiliations" },
       { href: "/releases/", label: "Releases", desc: "Version history" },
       { href: "/contact/", label: "Contact", desc: "Questions and corrections" },
+      { href: "https://aidoge.co.uk", label: "AI DOGE", desc: "Council spending on AI DOGE" },
     ],
   },
 ] as const;

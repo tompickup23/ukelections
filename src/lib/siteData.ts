@@ -455,3 +455,69 @@ export function shortPartyLabel(party: string): string {
     default: return party;
   }
 }
+
+// AI DOGE sister-site link (council spending). Two-step join, both keyed
+// on ONS/GSS code, never on name: council_slug -> lad24cd (this repo's own
+// registry, data/identity/council-slug-to-lad24.json) -> lad24cd -> aidoge
+// council id (data/identity/aidoge-council-map.json, a snapshot of
+// clawd's council_crosswalk.json joined against aidoge-site's published
+// summaries/index.json, every principal council with an ONS code and an
+// aidoge.co.uk page, whether or not it has a published spending total yet).
+// The Barnsley and Sheffield (Boundary Change) Order 2024 reissued both
+// codes from 1 April 2025 (Barnsley E08000016 -> E08000038, Sheffield
+// E08000019 -> E08000039). This repo's own council-slug-to-lad24.json
+// carries the new codes; the aidoge join table (built from clawd's
+// council_crosswalk.json, keyed on the pre-2025 codes the Census 2021
+// base and the LAD24 boundary file still use) does not. ukdemographics
+// hit the identical split and documents it in
+// src/data/lookups/area-code-aliases.json; this is the same two-entry fix.
+const AIDOGE_CODE_ALIASES: Record<string, string> = {
+  E08000038: "E08000016",
+  E08000039: "E08000019",
+};
+
+let _aidogeSlugToLad: Record<string, { lad24cd: string | null }> | null = null;
+let _aidogeCodeToCouncil: Record<string, { id: string; name: string; latest_fy: string | null }> | null = null;
+
+function loadAidogeJoinTables() {
+  if (!_aidogeSlugToLad) {
+    const slugMap = JSON.parse(
+      readFileSync(resolve(process.cwd(), "data/identity/council-slug-to-lad24.json"), "utf8")
+    );
+    _aidogeSlugToLad = slugMap.map;
+  }
+  if (!_aidogeCodeToCouncil) {
+    const councilMap = JSON.parse(
+      readFileSync(resolve(process.cwd(), "data/identity/aidoge-council-map.json"), "utf8")
+    );
+    _aidogeCodeToCouncil = councilMap.councils;
+  }
+  return { slugToLad: _aidogeSlugToLad!, codeToCouncil: _aidogeCodeToCouncil! };
+}
+
+export interface AidogeLink {
+  url: string;
+  name: string;
+  hasSpendingData: boolean;
+}
+
+/**
+ * Resolves a UKE council_slug to its AI DOGE council-spending page, if the
+ * two registries agree on an ONS code. Returns null rather than guessing:
+ * ten council_slugs in council-slug-to-lad24.json have no lad24cd at all
+ * (county-tier remnants), and anything else genuinely absent from the
+ * aidoge crosswalk stays unlinked rather than pointed at a guess.
+ */
+export function getAidogeLink(councilSlug: string): AidogeLink | null {
+  const { slugToLad, codeToCouncil } = loadAidogeJoinTables();
+  const ladEntry = slugToLad[councilSlug];
+  const lad24cd = ladEntry?.lad24cd;
+  if (!lad24cd) return null;
+  const council = codeToCouncil[lad24cd] ?? codeToCouncil[AIDOGE_CODE_ALIASES[lad24cd]];
+  if (!council) return null;
+  return {
+    url: `https://aidoge.co.uk/councils/${council.id}/`,
+    name: council.name,
+    hasSpendingData: !!council.latest_fy,
+  };
+}

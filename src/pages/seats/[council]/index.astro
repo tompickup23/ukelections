@@ -20,6 +20,7 @@ import {
   formatNextElection,
   partySlugToName,
   councilTypeLabel,
+  getAidogeLink,
 } from "../../../lib/siteData";
 
 export async function getStaticPaths() {
@@ -45,6 +46,7 @@ const wards = identity.wards
   .sort((a: any, b: any) => (a.ward_name || "").localeCompare(b.ward_name || ""));
 const tier = wards[0]?.tier || "local";
 const councilName = wards[0]?.council_name || council;
+const aidogeLink = getAidogeLink(council!);
 
 const summaryEntry = summary.councils.find((c: any) => c.council_slug === council);
 const seatProjection = summaryEntry?.predicted_seat_winners || {};
@@ -347,6 +349,20 @@ const breadcrumbs: Crumb[] = [
     </table>
   </section>
 
+  {aidogeLink && (
+    <div class="dg-cross-link">
+      <div class="dg-cross-inner">
+        <span class="dg-cross-label">Council spending</span>
+        <span class="dg-cross-desc">
+          Council spending on AI DOGE: every payment {councilName} has published, searchable by supplier and category.
+        </span>
+        <a href={aidogeLink.url} class="dg-cross-btn" rel="noopener">
+          View {councilName} on AI DOGE &rarr;
+        </a>
+      </div>
+    </div>
+  )}
+
   <section class="section">
     <p><a href="/councils/">← All councils</a></p>
   </section>
@@ -360,4 +376,29 @@ const breadcrumbs: Crumb[] = [
 .winner-hit { font-weight: 600; color: #0e7c4a; }
 .winner-miss { color: var(--ink-soft); }
 .party-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.4rem; vertical-align: middle; }
+
+/* AI DOGE cross-link banner, same shape as the sister-site cross-links on
+   ukdemographics.co.uk (.as-cross-link there), styled with this site's own
+   tokens. */
+.dg-cross-link {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent) 0%, color-mix(in srgb, var(--accent) 3%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: 12px;
+}
+.dg-cross-inner { display: flex; flex-direction: column; gap: 0.5rem; }
+.dg-cross-label { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+.dg-cross-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+.dg-cross-btn {
+  display: inline-block; margin-top: 0.25rem; padding: 0.5rem 1rem;
+  font-size: 0.85rem; font-weight: 600;
+  /* var(--bg) inverts with the theme, same pairing as .button.primary:
+     white on the deep brown in light, near-black on parchment in dark. */
+  color: var(--bg);
+  background: var(--accent); border-radius: 8px; text-decoration: none;
+  transition: opacity 180ms;
+  width: fit-content;
+}
+.dg-cross-btn:hover { opacity: 0.85; }
 </style>
