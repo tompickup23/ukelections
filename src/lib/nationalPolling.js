@@ -43,12 +43,15 @@ function loadOverride() {
     if (!overridePath) return __OVERRIDE_BY_CONSTANT;
     const raw = JSON.parse(readFileSync(overridePath, "utf8"));
     for (const [key, src] of Object.entries(raw.sources || {})) {
-      if (src.review_status === "auto_parsed" && src.shares && src.constant) {
+      if (["auto_parsed", "auto_reconciled"].includes(src.review_status) && src.shares && src.constant) {
         __OVERRIDE_BY_CONSTANT[src.constant] = {
           shares: src.shares,
           fieldwork_window: src.fieldwork_window,
           polls_used: src.polls_used,
-          page: src.page,
+          page: src.page || src.wikipedia?.page || null,
+          source_url: src.url || src.archive_url || src.wikipedia?.url || null,
+          refresh_method: src.refresh_method || null,
+          source_review_status: src.review_status,
           retrieved_at: src.retrieved_at,
           generated_at: raw.generated_at,
           source_key: key,
@@ -70,13 +73,13 @@ function applyOverride(constantName, snapshot) {
     shares: { ...snapshot.shares, ...ov.shares },
     _meta: {
       ...snapshot._meta,
-      label: `${snapshot._meta?.label || constantName} (auto-refreshed from Wikipedia ${ov.fieldwork_window?.latest})`,
+      label: `${snapshot._meta?.label || constantName} (auto-refreshed ${ov.fieldwork_window?.latest})`,
       fieldwork: ov.fieldwork_window
         ? `${ov.fieldwork_window.earliest} to ${ov.fieldwork_window.latest}`
         : snapshot._meta?.fieldwork,
-      source: `Wikipedia rolling 14-day average, ${ov.polls_used} polls`,
-      source_url: `https://en.wikipedia.org/wiki/${ov.page}`,
-      review_status: "auto_refreshed",
+      source: `${ov.refresh_method || "Polling"}, ${ov.polls_used} polls`,
+      source_url: ov.source_url || (ov.page ? `https://en.wikipedia.org/wiki/${ov.page}` : snapshot._meta?.source_url),
+      review_status: ov.source_review_status === "auto_reconciled" ? "auto_reconciled" : "auto_refreshed",
       retrieved_at: ov.retrieved_at,
       parsed_restore_britain: ov.restore_britain || null,
     },

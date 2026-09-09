@@ -14,17 +14,21 @@ npm run ge:refresh                     # one-command polling refresh → GE pipe
 
 ## Build pipeline (production cron, vps-main)
 
-Production does **not** deploy via GitHub Actions. One crontab entry on vps-main
-(`crontab -l` as root) runs the whole thing nightly at 04:30 UTC:
+Production does **not** deploy via GitHub Actions. The Westminster polling
+publication runs independently on vps-main at 04:30 UTC:
 
 ```
-30 4 * * * cd /root/ukelections && CLAWD_DATA=/root/aidoge/burnley-council/data UKE_ROOT=/root/ukelections UKE_ON_VPS_MAIN=1 /usr/bin/node scripts/refresh-pipeline.mjs >> /var/log/ukelections-refresh.log 2>&1
+30 4 * * * /opt/aidoge-monitoring/cron-alert.sh ukelections-polling-refresh 'cd /root/ukelections && UKE_ON_VPS_MAIN=1 /usr/bin/node scripts/publish-polling-update.mjs >> /var/log/ukelections-refresh.log 2>&1'
 ```
 
-`scripts/refresh-pipeline.mjs` is the source of truth for what runs: ingest →
-features → predictions → backtests → Senedd/Holyrood → GE → vitest → step 9
-`npm run build` → step 10 `wrangler pages deploy dist`. Roughly 6 minutes when the
-Democracy Club page cache is warm, closer to 50 when it expires and refetches.
+`scripts/publish-polling-update.mjs` is the source of truth for this release
+path: Westminster polling refresh → GE/mayoral output refresh → tests → full
+build → rendered-site gate → immutable snapshot deployment. It deliberately
+does not invoke the unrelated Census, Democracy Club or static-data phases in
+`refresh-pipeline.mjs`; a failure there must not strand fresh national polling.
+The cron wrapper alerts on a non-zero exit. Run it locally with
+`npm run publish:polling -- --no-deploy` to exercise every gate except the
+production swap.
 
 To ship a merged change yourself, without waiting for the cron:
 

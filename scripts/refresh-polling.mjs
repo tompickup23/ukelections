@@ -24,11 +24,17 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
+import {
+  ROAD_TO_326_ARCHIVE_URL,
+  averagePollRecords,
+  recentRoadTo326Polls,
+} from "./lib/polling-reconciliation.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OVERRIDE = path.join(ROOT, "data/polling/override.json");
 const LEDGER = path.join(ROOT, "data/polling/ledger.json");
 const LATEST = path.join(ROOT, "data/polling/latest.json");
+const POLL_RECORDS = path.join(ROOT, "data/polling/current-polls.json");
 const USER_AGENT = "ukelections.co.uk polling-refresh (contact: tom@ukelections.co.uk)";
 
 const DRY_RUN = process.argv.includes("--dry-run");
@@ -162,6 +168,16 @@ async function fetchWikitext(page) {
   const d = await r.json();
   if (!d.parse?.wikitext) throw new Error(`no wikitext in response for ${page}`);
   return d.parse.wikitext;
+}
+
+async function fetchRoadTo326Archive() {
+  const r = await fetch(ROAD_TO_326_ARCHIVE_URL, {
+    headers: { "user-agent": USER_AGENT, accept: "application/json" },
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status} for Road to 326 archive`);
+  const payload = await r.json();
+  if (!Array.isArray(payload?.polls)) throw new Error("Road to 326 archive has no polls array");
+  return payload;
 }
 
 function extractFirstTable(wt) {
@@ -371,6 +387,34 @@ function rollingAverageSeries(polls, windowDays) {
   return out;
 }
 
+function mergeCurrentPolls(wikipediaPolls, reconciledPolls) {
+  // A source-linked record with the same pollster, end date and party shares is
+  // the same observation, not extra evidence. Keep it once and retain the
+  // richer provenance from the reconciled record. Rows that cannot be matched
+  // exactly remain separate rather than being guessed into a duplicate.
+  const keyFor = (poll) => JSON.stringify([
+    poll.date,
+    poll.pollster,
+    Object.entries(poll.shares).sort(([a], [b]) => a.localeCompare(b)),
+  ]);
+  const merged = new Map(wikipediaPolls.map((poll) => [keyFor(poll), poll]));
+  for (const poll of reconciledPolls) {
+    const chartPoll = {
+      date: poll.fieldwork_end,
+      pollster: poll.pollster,
+      shares: poll.shares,
+      ...(poll.restore_britain_reported != null ? { restore_britain_reported: poll.restore_britain_reported } : {}),
+      source_url: poll.source_url,
+      source_name: poll.source_name,
+      source_status: poll.source_status,
+    };
+    merged.set(keyFor(chartPoll), chartPoll);
+  }
+  return [...merged.values()].sort((left, right) => (
+    left.date.localeCompare(right.date) || left.pollster.localeCompare(right.pollster)
+  ));
+}
+
 function loadExistingOverride() {
   if (!existsSync(OVERRIDE)) return null;
   try { return JSON.parse(readFileSync(OVERRIDE, "utf8")); } catch { return null; }
@@ -411,31 +455,120 @@ async function main() {
       const sha = createHash("sha256").update(wt).digest("hex");
       const tableBody = extractFirstTable(wt);
       const rows = parseRows(tableBody);
-      const avg = averageRecentPolls(rows, spec, WINDOW_DAYS);
+      let avg = averageRecentPolls(rows, spec, WINDOW_DAYS);
       if (!avg) throw new Error(`no valid polls in last ${WINDOW_DAYS} days`);
+      let refreshMethod = "Wikipedia table, unweighted trailing 14-day mean";
+      let sourceDetail = {
+        page: spec.page,
+        url: `https://en.wikipedia.org/wiki/${spec.page}`,
+        wikitext_sha256: sha,
+      };
+      let reconciledPolls = [];
+      let selectedCurrentRecords = [];
+
+      // The Wikipedia table remains a transparent fallback and full-history
+      // source. For the live Westminster window, use the newer source-linked
+      // archive when it is at least as fresh: it supplies fieldwork dates,
+      // sample sizes and direct pollster URLs that Wikipedia parsing loses.
+      if (key === "uk_westminster") {
+        try {
+          const archive = await fetchRoadTo326Archive();
+          const archiveSha = createHash("sha256").update(JSON.stringify(archive)).digest("hex");
+          reconciledPolls = recentRoadTo326Polls(archive, { now: new Date(), windowDays: WINDOW_DAYS });
+          const reconciledAverage = averagePollRecords(reconciledPolls);
+          if (reconciledAverage && reconciledAverage.polls_used >= 2
+            && reconciledAverage.fieldwork_window.latest >= avg.fieldwork_window.latest) {
+            avg = reconciledAverage;
+            refreshMethod = "Source-linked GB poll records, unweighted trailing 14-day mean";
+            sourceDetail = {
+              archive_url: ROAD_TO_326_ARCHIVE_URL,
+              archive_generated_at: archive.generated_at || null,
+              archive_sha256: archiveSha,
+              source_note: "Each recent record links to the publishing pollster; this archive is reconciled against the existing Wikipedia parser.",
+            };
+            selectedCurrentRecords = reconciledPolls;
+          }
+        } catch (err) {
+          process.stderr.write(`! ${spec.label}: Road to 326 reconciliation unavailable; retaining Wikipedia result (${String(err.message || err)})\n`);
+        }
+      }
+
+      const wikipediaPolls = key === "uk_westminster" ? extractPollSeries(rows, spec) : [];
+      if (key === "uk_westminster" && !selectedCurrentRecords.length) {
+        const cutoff = Date.now() - WINDOW_DAYS * 86400 * 1000;
+        selectedCurrentRecords = wikipediaPolls
+          .filter((poll) => Date.parse(`${poll.date}T00:00:00Z`) >= cutoff)
+          .map((poll, index) => ({
+            poll_id: `wikipedia:${poll.date}:${poll.pollster}:${index}`,
+            fieldwork_start: null,
+            fieldwork_end: poll.date,
+            publication_date: null,
+            pollster: poll.pollster,
+            client: null,
+            sample_size: null,
+            mode: null,
+            geography: "GB_or_UK_as_listed",
+            question_type: "general_election_voting_intention",
+            shares: poll.shares,
+            ...(poll.restore_britain_reported != null ? { restore_britain_reported: poll.restore_britain_reported } : {}),
+            source_name: "Wikipedia polling table",
+            source_url: `https://en.wikipedia.org/wiki/${spec.page}`,
+            source_status: "wikipedia_fallback_pending_primary_verification",
+          }));
+      }
+      if (key === "uk_westminster" && !DRY_RUN) {
+        writeFileSync(POLL_RECORDS, JSON.stringify({
+          generated_at: now,
+          source: sourceDetail,
+          method: refreshMethod,
+          window_days: WINDOW_DAYS,
+          records: selectedCurrentRecords,
+          data_quality: selectedCurrentRecords === reconciledPolls
+            ? "source_linked_secondary"
+            : "wikipedia_fallback_pending_primary_verification",
+        }, null, 2));
+        process.stdout.write(`✓ ${spec.label}: wrote current-polls.json (${selectedCurrentRecords.length} current records; ${selectedCurrentRecords === reconciledPolls ? "source-linked" : "Wikipedia fallback"})\n`);
+      }
+
       result.sources[key] = {
         constant: spec.constant,
         label: spec.label,
-        page: spec.page,
-        url: `https://en.wikipedia.org/wiki/${spec.page}`,
         shares: avg.shares,
         polls_used: avg.polls_used,
         fieldwork_window: avg.fieldwork_window,
         ...(avg.folded?.["Restore Britain"]
           ? { restore_britain: avg.folded["Restore Britain"] }
           : {}),
-        wikitext_sha256: sha,
+        refresh_method: refreshMethod,
+        wikipedia: {
+          page: spec.page,
+          url: `https://en.wikipedia.org/wiki/${spec.page}`,
+          wikitext_sha256: sha,
+        },
+        ...sourceDetail,
         retrieved_at: now,
-        review_status: "auto_parsed",
+        review_status: reconciledPolls.length && sourceDetail.archive_url ? "auto_reconciled" : "auto_parsed",
       };
       // Full poll series + retrospective UK Elections rolling average, for
       // /polling/trends/. UK-page only; concluded sources stay frozen.
       if (key === "uk_westminster" && !DRY_RUN) {
-        const polls = extractPollSeries(rows, spec);
+        // Do not mix an archive that is behind the selected fallback into the
+        // historical chart: a same-day row with slightly different published
+        // formatting would otherwise look like a second poll. Reconciliation
+        // only enriches the series when that source was current enough to be
+        // the actual model input above.
+        const polls = sourceDetail.archive_url
+          ? mergeCurrentPolls(wikipediaPolls, reconciledPolls)
+          : wikipediaPolls;
         const series = {
           generated_at: now,
-          source: { page: spec.page, url: `https://en.wikipedia.org/wiki/${spec.page}`, wikitext_sha256: sha },
-          method: `Every GB-wide poll row parsed from the source table (same validity rules as the model anchor: complete share columns, shares summing 0.85 to 1.15). The UK Elections average is the trailing ${WINDOW_DAYS}-day unweighted mean per party, renormalised, computed retrospectively at each poll date; it is exactly the series the seat model anchors on.`,
+          source: {
+            wikipedia: { page: spec.page, url: `https://en.wikipedia.org/wiki/${spec.page}`, wikitext_sha256: sha },
+            ...(sourceDetail.archive_url ? { reconciled_current_window: sourceDetail } : {}),
+          },
+          method: sourceDetail.archive_url
+            ? `Every valid GB-wide poll row parsed from the Wikipedia table, with source-linked records reconciled into the current window when they are at least as fresh. The UK Elections average is the trailing ${WINDOW_DAYS}-day unweighted mean per party, renormalised, computed retrospectively at each poll date; it is exactly the series the seat model anchors on.`
+            : `Every valid GB-wide poll row parsed from the Wikipedia table. The source-linked archive was not as fresh as this run's selected data, so it was not mixed into the series. The UK Elections average is the trailing ${WINDOW_DAYS}-day unweighted mean per party, renormalised, computed retrospectively at each poll date; it is exactly the series the seat model anchors on.`,
           window_days: WINDOW_DAYS,
           polls,
           uke_average: rollingAverageSeries(polls, WINDOW_DAYS),
@@ -443,7 +576,7 @@ async function main() {
         writeFileSync(path.join(ROOT, "data/polling/timeseries.json"), JSON.stringify(series, null, 2));
         process.stdout.write(`✓ ${spec.label}: wrote timeseries.json (${polls.length} polls, ${series.uke_average.length} average points)\n`);
       }
-      process.stdout.write(`✓ ${spec.label}: averaged ${avg.polls_used} polls from ${avg.fieldwork_window.earliest} to ${avg.fieldwork_window.latest}\n`);
+      process.stdout.write(`✓ ${spec.label}: averaged ${avg.polls_used} polls from ${avg.fieldwork_window.earliest} to ${avg.fieldwork_window.latest} (${refreshMethod})\n`);
       for (const [p, v] of Object.entries(avg.shares)) {
         process.stdout.write(`    ${p.padEnd(20)} ${(v * 100).toFixed(1)}%\n`);
       }
