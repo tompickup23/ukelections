@@ -1,11 +1,13 @@
 {
-  "generated_at": "2026-09-02T10:48:10.934Z",
+  "generated_at": "2026-09-09T16:40:50.468Z",
   "source": {
-    "page": "Opinion_polling_for_the_next_United_Kingdom_general_election",
-    "url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-    "wikitext_sha256": "c03e70f14d74e3fa4ccc365460ce176c809f5e358abb6f0ab2c5e792f0a6e0ec"
+    "wikipedia": {
+      "page": "Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "wikitext_sha256": "219150f238ed686ce95cbbaca0b07b779de2598cd9806aab893f295d68eded37"
+    }
   },
-  "method": "Every GB-wide poll row parsed from the source table (same validity rules as the model anchor: complete share columns, shares summing 0.85 to 1.15). The UK Elections average is the trailing 14-day unweighted mean per party, renormalised, computed retrospectively at each poll date; it is exactly the series the seat model anchors on.",
+  "method": "Every valid GB-wide poll row parsed from the Wikipedia table. The source-linked archive was not as fresh as this run's selected data, so it was not mixed into the series. The UK Elections average is the trailing 14-day unweighted mean per party, renormalised, computed retrospectively at each poll date; it is exactly the series the seat model anchors on.",
   "window_days": 14,
   "polls": [
     {
@@ -2846,7 +2848,7 @@
         "Reform UK": 0.23,
         "Liberal Democrats": 0.1,
         "Green Party": 0.09,
-        "SNP": 0.03,
+        "SNP": 0.02,
         "Plaid Cymru": 0.01,
         "Other": 0.06
       },
@@ -2996,6 +2998,78 @@
         "Plaid Cymru": 0.01,
         "Other": 0.03
       }
+    },
+    {
+      "date": "2026-09-02",
+      "pollster": "Find Out Now",
+      "shares": {
+        "Labour": 0.26,
+        "Conservative": 0.2,
+        "Reform UK": 0.21,
+        "Liberal Democrats": 0.1,
+        "Green Party": 0.14,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.01,
+        "Other": 0.06
+      }
+    },
+    {
+      "date": "2026-09-04",
+      "pollster": "Opinium",
+      "shares": {
+        "Labour": 0.28,
+        "Conservative": 0.18,
+        "Reform UK": 0.24,
+        "Liberal Democrats": 0.11,
+        "Green Party": 0.11,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.01,
+        "Other": 0.04
+      }
+    },
+    {
+      "date": "2026-09-06",
+      "pollster": "Freshwater Strategy",
+      "shares": {
+        "Labour": 0.26,
+        "Conservative": 0.2,
+        "Reform UK": 0.25,
+        "Liberal Democrats": 0.11,
+        "Green Party": 0.11,
+        "SNP": 0.02,
+        "Plaid Cymru": 0,
+        "Other": 0.04
+      }
+    },
+    {
+      "date": "2026-09-06",
+      "pollster": "More in Common",
+      "shares": {
+        "Labour": 0.24,
+        "Conservative": 0.22,
+        "Reform UK": 0.23,
+        "Liberal Democrats": 0.12,
+        "Green Party": 0.09,
+        "SNP": 0.02,
+        "Plaid Cymru": 0.01,
+        "Other": 0.06999999999999999
+      },
+      "restore_britain_reported": 0.06
+    },
+    {
+      "date": "2026-09-07",
+      "pollster": "YouGov",
+      "shares": {
+        "Labour": 0.23,
+        "Conservative": 0.2,
+        "Reform UK": 0.23,
+        "Liberal Democrats": 0.11,
+        "Green Party": 0.12,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.01,
+        "Other": 0.06
+      },
+      "restore_britain_reported": 0.04
     }
   ],
   "uke_average": [
@@ -4766,84 +4840,140 @@
     {
       "date": "2026-08-23",
       "shares": {
-        "Labour": 0.2534562211981567,
-        "Conservative": 0.20122887864823355,
-        "Reform UK": 0.24423963133640553,
-        "Liberal Democrats": 0.10522273425499233,
-        "Green Party": 0.10522273425499235,
-        "SNP": 0.029185867895545326,
-        "Plaid Cymru": 0.010752688172043012,
-        "Other": 0.05069124423963135
+        "Labour": 0.2536510376633359,
+        "Conservative": 0.20138355111452735,
+        "Reform UK": 0.24442736356648734,
+        "Liberal Democrats": 0.10530361260568796,
+        "Green Party": 0.10530361260568798,
+        "SNP": 0.02843966179861646,
+        "Plaid Cymru": 0.010760953112990008,
+        "Other": 0.0507302075326672
       },
       "polls_in_window": 13
     },
     {
       "date": "2026-08-24",
       "shares": {
-        "Labour": 0.25645295587010825,
-        "Conservative": 0.19733555370524566,
-        "Reform UK": 0.24562864279766863,
-        "Liberal Democrats": 0.1049125728559534,
-        "Green Party": 0.10574521232306412,
-        "SNP": 0.029142381348875947,
-        "Plaid Cymru": 0.010824313072439633,
-        "Other": 0.049958368026644474
+        "Labour": 0.25666666666666665,
+        "Conservative": 0.1975,
+        "Reform UK": 0.24583333333333335,
+        "Liberal Democrats": 0.10500000000000002,
+        "Green Party": 0.10583333333333333,
+        "SNP": 0.02833333333333334,
+        "Plaid Cymru": 0.010833333333333332,
+        "Other": 0.05000000000000001
       },
       "polls_in_window": 12
     },
     {
       "date": "2026-08-26",
       "shares": {
-        "Labour": 0.2558333333333333,
-        "Conservative": 0.19583333333333328,
-        "Reform UK": 0.24749999999999997,
-        "Liberal Democrats": 0.10416666666666666,
-        "Green Party": 0.10666666666666665,
-        "SNP": 0.029166666666666667,
-        "Plaid Cymru": 0.01083333333333333,
-        "Other": 0.049999999999999996
+        "Labour": 0.25604670558799,
+        "Conservative": 0.1959966638865721,
+        "Reform UK": 0.2477064220183486,
+        "Liberal Democrats": 0.1042535446205171,
+        "Green Party": 0.10675562969140949,
+        "SNP": 0.02835696413678065,
+        "Plaid Cymru": 0.010842368640533775,
+        "Other": 0.05004170141784821
       },
       "polls_in_window": 12
     },
     {
       "date": "2026-08-28",
       "shares": {
-        "Labour": 0.25771476230191825,
-        "Conservative": 0.19683069224353625,
-        "Reform UK": 0.24603836530442033,
-        "Liberal Democrats": 0.10258548790658883,
-        "Green Party": 0.10842368640533778,
-        "SNP": 0.028356964136780655,
-        "Plaid Cymru": 0.01000834028356964,
-        "Other": 0.050041701417848215
+        "Labour": 0.25792988313856424,
+        "Conservative": 0.19699499165275455,
+        "Reform UK": 0.24624373956594323,
+        "Liberal Democrats": 0.10267111853088483,
+        "Green Party": 0.10851419031719534,
+        "SNP": 0.027545909849749587,
+        "Plaid Cymru": 0.010016694490818028,
+        "Other": 0.05008347245409016
       },
       "polls_in_window": 12
     },
     {
       "date": "2026-08-30",
       "shares": {
-        "Labour": 0.26,
-        "Conservative": 0.19785714285714287,
-        "Reform UK": 0.24142857142857146,
-        "Liberal Democrats": 0.10000000000000002,
-        "Green Party": 0.11214285714285717,
-        "SNP": 0.02857142857142858,
-        "Plaid Cymru": 0.009999999999999998,
-        "Other": 0.05000000000000001
+        "Labour": 0.2601858470335954,
+        "Conservative": 0.19799857040743388,
+        "Reform UK": 0.2416011436740529,
+        "Liberal Democrats": 0.10007147962830594,
+        "Green Party": 0.11222301644031452,
+        "SNP": 0.0278770550393138,
+        "Plaid Cymru": 0.01000714796283059,
+        "Other": 0.05003573981415297
       },
       "polls_in_window": 14
     },
     {
       "date": "2026-08-31",
       "shares": {
-        "Labour": 0.2607692307692307,
-        "Conservative": 0.19999999999999996,
-        "Reform UK": 0.23692307692307688,
-        "Liberal Democrats": 0.09999999999999999,
-        "Green Party": 0.11153846153846153,
-        "SNP": 0.029230769230769234,
-        "Plaid Cymru": 0.009999999999999997,
-        "Other": 0.05153846153846153
+        "Labour": 0.26096997690531176,
+        "Conservative": 0.20015396458814474,
+        "Reform UK": 0.23710546574287913,
+        "Liberal Democrats": 0.10007698229407239,
+        "Green Party": 0.11162432640492688,
+        "SNP": 0.028483448806774447,
+        "Plaid Cymru": 0.010007698229407235,
+        "Other": 0.051578137028483455
+      },
+      "polls_in_window": 13
+    },
+    {
+      "date": "2026-09-02",
+      "shares": {
+        "Labour": 0.2631140716069942,
+        "Conservative": 0.2031640299750208,
+        "Reform UK": 0.23313905079100744,
+        "Liberal Democrats": 0.09908409658617817,
+        "Green Party": 0.11240632805995003,
+        "SNP": 0.0283097418817652,
+        "Plaid Cymru": 0.009991673605328889,
+        "Other": 0.0507910074937552
+      },
+      "polls_in_window": 12
+    },
+    {
+      "date": "2026-09-04",
+      "shares": {
+        "Labour": 0.26441199077632593,
+        "Conservative": 0.20138355111452733,
+        "Reform UK": 0.2336664104534973,
+        "Liberal Democrats": 0.09992313604919292,
+        "Green Party": 0.11222136817832437,
+        "SNP": 0.028439661798616452,
+        "Plaid Cymru": 0.009992313604919291,
+        "Other": 0.04996156802459647
+      },
+      "polls_in_window": 13
+    },
+    {
+      "date": "2026-09-06",
+      "shares": {
+        "Labour": 0.2621428571428571,
+        "Conservative": 0.20142857142857143,
+        "Reform UK": 0.235,
+        "Liberal Democrats": 0.10214285714285713,
+        "Green Party": 0.11214285714285716,
+        "SNP": 0.027857142857142858,
+        "Plaid Cymru": 0.009285714285714283,
+        "Other": 0.04999999999999999
+      },
+      "polls_in_window": 14
+    },
+    {
+      "date": "2026-09-07",
+      "shares": {
+        "Labour": 0.2602001539645882,
+        "Conservative": 0.20169361046959203,
+        "Reform UK": 0.23248652809853732,
+        "Liberal Democrats": 0.10238645111624325,
+        "Green Party": 0.11393379522709778,
+        "SNP": 0.02771362586605082,
+        "Plaid Cymru": 0.009237875288683603,
+        "Other": 0.05234795996920708
       },
       "polls_in_window": 13
     }
