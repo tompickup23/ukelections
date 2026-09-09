@@ -18,7 +18,7 @@ Production does **not** deploy via GitHub Actions. The Westminster polling
 publication runs independently on vps-main at 04:30 UTC:
 
 ```
-30 4 * * * /opt/aidoge-monitoring/cron-alert.sh ukelections-polling-refresh 'cd /root/ukelections && UKE_ON_VPS_MAIN=1 /usr/bin/node scripts/publish-polling-update.mjs >> /var/log/ukelections-refresh.log 2>&1'
+30 4 * * * /opt/aidoge-monitoring/cron-alert.sh ukelections-polling-refresh 'cd /root/ukelections-polling-publisher && git fetch origin && git reset --hard origin/main && UKE_ON_VPS_MAIN=1 /usr/bin/node scripts/publish-polling-update.mjs >> /var/log/ukelections-refresh.log 2>&1'
 ```
 
 `scripts/publish-polling-update.mjs` is the source of truth for this release
@@ -26,7 +26,9 @@ path: Westminster polling refresh → GE/mayoral output refresh → tests → fu
 build → rendered-site gate → immutable snapshot deployment. It deliberately
 does not invoke the unrelated Census, Democracy Club or static-data phases in
 `refresh-pipeline.mjs`; a failure there must not strand fresh national polling.
-The cron wrapper alerts on a non-zero exit. Run it locally with
+The cron wrapper alerts on a non-zero exit. Its dedicated publisher checkout
+resets to `origin/main` before each run, so expected generated data from the
+previous run cannot block the next one. Run it locally with
 `npm run publish:polling -- --no-deploy` to exercise every gate except the
 production swap.
 
