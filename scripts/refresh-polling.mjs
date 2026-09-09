@@ -29,12 +29,16 @@ import {
   averagePollRecords,
   recentRoadTo326Polls,
 } from "./lib/polling-reconciliation.mjs";
+import { buildVerificationLedger } from "./lib/polling-verification.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OVERRIDE = path.join(ROOT, "data/polling/override.json");
 const LEDGER = path.join(ROOT, "data/polling/ledger.json");
 const LATEST = path.join(ROOT, "data/polling/latest.json");
 const POLL_RECORDS = path.join(ROOT, "data/polling/current-polls.json");
+const SOURCE_REGISTRY = path.join(ROOT, "data/polling/source-registry.json");
+const PRIMARY_VERIFICATIONS = path.join(ROOT, "data/polling/primary-verifications.json");
+const VERIFICATION_LEDGER = path.join(ROOT, "data/polling/verification-ledger.json");
 const USER_AGENT = "ukelections.co.uk polling-refresh (contact: tom@ukelections.co.uk)";
 
 const DRY_RUN = process.argv.includes("--dry-run");
@@ -420,6 +424,10 @@ function loadExistingOverride() {
   try { return JSON.parse(readFileSync(OVERRIDE, "utf8")); } catch { return null; }
 }
 
+function loadJson(file, fallback) {
+  try { return JSON.parse(readFileSync(file, "utf8")); } catch { return fallback; }
+}
+
 async function main() {
   mkdirSync(path.dirname(OVERRIDE), { recursive: true });
   const now = new Date().toISOString();
@@ -517,7 +525,7 @@ async function main() {
           }));
       }
       if (key === "uk_westminster" && !DRY_RUN) {
-        writeFileSync(POLL_RECORDS, JSON.stringify({
+        const currentPolls = {
           generated_at: now,
           source: sourceDetail,
           method: refreshMethod,
@@ -526,7 +534,15 @@ async function main() {
           data_quality: selectedCurrentRecords === reconciledPolls
             ? "source_linked_secondary"
             : "wikipedia_fallback_pending_primary_verification",
-        }, null, 2));
+        };
+        writeFileSync(POLL_RECORDS, JSON.stringify(currentPolls, null, 2));
+        const verificationLedger = buildVerificationLedger(
+          currentPolls,
+          loadJson(SOURCE_REGISTRY, { target_series: {}, pollsters: {} }),
+          loadJson(PRIMARY_VERIFICATIONS, { records: [] }),
+          now,
+        );
+        writeFileSync(VERIFICATION_LEDGER, JSON.stringify(verificationLedger, null, 2));
         process.stdout.write(`✓ ${spec.label}: wrote current-polls.json (${selectedCurrentRecords.length} current records; ${selectedCurrentRecords === reconciledPolls ? "source-linked" : "Wikipedia fallback"})\n`);
       }
 

@@ -67,6 +67,15 @@ async function main() {
   if (!existsSync(join(ROOT, "data/polling/current-polls.json"))) {
     throw new Error("Current poll-record audit was not written; refusing to publish an update without a run manifest");
   }
+  const verificationArgs = ["scripts/verify-polling-sources.mjs"];
+  if (process.env.UKE_REQUIRE_PRIMARY_POLLING === "1") verificationArgs.push("--require-primary");
+  step(
+    process.env.UKE_REQUIRE_PRIMARY_POLLING === "1"
+      ? "Require primary-verified comparable Westminster polling"
+      : "Build Westminster polling source-check ledger",
+    "node",
+    verificationArgs,
+  );
   // This is a narrowly-scoped publisher. Its gate covers the refreshed
   // aggregate and model-input contract, while the separate broad pipeline
   // continues to own unrelated local-election and static-data tests.

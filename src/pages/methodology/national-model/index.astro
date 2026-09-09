@@ -272,11 +272,17 @@ const hasBacktestHeadline =
     <h2>National polling source</h2>
     <p>
       The UK Westminster, Welsh and Scottish polling values used by the model
-      are auto-refreshed daily as the rolling 14-day average of every
-      pollster published on Wikipedia's polling pages. The current values are
+      are auto-refreshed daily as a rolling 14-day average. Westminster
+      candidates are discovered automatically and published with a public
+      source-check ledger. The verified-only publication path admits a poll
+      only after an original pollster release, fieldwork, geography, question
+      and figures have been independently checked. The current values are
       shown in the per-prediction methodology trace on every ward and
       constituency page, and the raw input is downloadable at
       <a href="/data/polling/override.json"><code>/data/polling/override.json</code></a>.
+      The candidate and source-check records are downloadable at
+      <a href="/data/polling/current-polls.json"><code>/data/polling/current-polls.json</code></a>
+      and <a href="/data/polling/verification-ledger.json"><code>/data/polling/verification-ledger.json</code></a>.
       A static fallback for each polling family lives in
       <code>src/lib/nationalPolling.js</code> in case the auto-refresh fails.
     </p>

@@ -13,6 +13,14 @@ export const PUBLISHED_DATA: PublishedFile[] = [
     path: "polling/current-polls.json",
     label: "The individual current-window polls used by the Westminster average",
   },
+  {
+    path: "polling/verification-ledger.json",
+    label: "The public source and comparability checks for current Westminster polling candidates",
+  },
+  {
+    path: "polling/source-registry.json",
+    label: "The source and comparability policy for Westminster polling verification",
+  },
 ];
 
 export function contentTypeFor(filePath: string): string {

@@ -29,6 +29,9 @@ function readJsonIfExists(rel: string): any | null {
 
 const overrideFile = readJsonIfExists("data/polling/override.json");
 const ledger: any[] = readJsonIfExists("data/polling/ledger.json") || [];
+const verificationLedger = readJsonIfExists("data/polling/verification-ledger.json");
+const verificationRecords: any[] = verificationLedger?.records || [];
+const verificationCounts = verificationLedger?.counts || {};
 
 const ukSnapshot = UK_WESTMINSTER_2026_APRIL_AVERAGE;
 const welshSnapshot = WELSH_2026_APRIL_AVERAGE;
@@ -128,10 +131,44 @@ const structuredData = [
       Coloured number is the change from the 4 July 2024 general-election result.
       Source: <strong>{ukSourceSummary}</strong>{ukMeta.fieldwork ? <>, fieldwork {ukMeta.fieldwork}</> : null}.
       {ukMeta.source_url && (
-        <>{" "}· <a href={ukMeta.source_url} rel="external">Wikipedia source page</a>.</>
+        <>{" "}· <a href={ukMeta.source_url} rel="external">discovery source</a>.</>
       )}
+      {verificationLedger && <>{" "}· <a href="/data/polling/verification-ledger.json">source-check ledger</a>.</>}
     </p>
   </section>
+
+  {verificationLedger && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Independent source check</p>
+        <h2>Which current polls have primary evidence</h2>
+      </div>
+      <div class="backtest-callout">
+        <strong>{verificationCounts.primary_verified || 0} of {verificationRecords.length} current candidates have independently checked first-party evidence.</strong>
+        <span class="backtest-detail">
+          A discovery link is not proof. A poll can enter the verified-only series only when its original pollster release,
+          fieldwork, geography, question and published shares have been checked and recorded. Differently measured series are excluded.
+        </span>
+      </div>
+      <table class="seat-table" style="margin-top:var(--space-md)">
+        <thead><tr><th>Pollster</th><th>Fieldwork</th><th>Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          {verificationRecords.map((record) => (
+            <tr>
+              <td>{record.pollster}</td>
+              <td class="muted">{record.fieldwork_start && record.fieldwork_end ? `${record.fieldwork_start} to ${record.fieldwork_end}` : record.fieldwork_end || "Not recorded"}</td>
+              <td>{record.status.replaceAll("_", " ")}</td>
+              <td>{record.evidence?.primary_url || record.source_url ? <a href={record.evidence?.primary_url || record.source_url} rel="external">{record.evidence ? "Checked release" : "Discovery link"}</a> : "No link"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="caption">
+        <a href="/data/polling/source-registry.json">Source and comparability policy</a>
+        {" "}· <a href="/data/polling/verification-ledger.json">machine-readable ledger</a>.
+      </p>
+    </section>
+  )}
 
   {overlay && (
     <section class="section">
@@ -283,10 +320,10 @@ const structuredData = [
     </div>
     <ol class="numbered-list">
       <li>
-        <strong>Scrape.</strong> Daily, <code>scripts/refresh-polling.mjs</code> pulls the first
-        wikitable from Wikipedia's UK Westminster polling page and parses every poll published in
-        the last 14 days. The Welsh and Scottish sources are frozen at their final pre-election
-        snapshots since the 7 May 2026 devolved elections.
+        <strong>Discover and check.</strong> Daily, <code>scripts/refresh-polling.mjs</code> discovers
+        current Westminster polling candidates and records a public source-check ledger. A separate
+        verified-only path requires independently checked original pollster releases before it can update.
+        The Welsh and Scottish sources are frozen at their final pre-election snapshots since the 7 May 2026 devolved elections.
       </li>
       <li>
         <strong>Average.</strong> Each party's share is the mean across those polls. The snapshot

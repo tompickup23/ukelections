@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "target_series": {
+    "id": "gb-westminster-voting-intention",
+    "label": "Great Britain Westminster voting intention",
+    "geography": "GB",
+    "question_type": "general_election_voting_intention",
+    "accepted_measure_types": ["publisher_headline"],
+    "minimum_verified_polls": 2,
+    "policy": "Only records verified against a pollster's original release may update this series. A source directory, search result, Wikipedia row or social post may discover a poll but cannot verify it."
+  },
+  "pollsters": {
+    "Opinium": {
+      "primary_hosts": ["opinium.com"],
+      "publication_pattern": "political-polling article with linked tables",
+      "default_measure_type": "publisher_headline"
+    },
+    "Survation": {
+      "primary_hosts": ["survation.com", "cdn.survation.com"],
+      "publication_pattern": "archive entry with linked data tables",
+      "default_measure_type": "publisher_headline"
+    },
+    "Ipsos": {
+      "primary_hosts": ["ipsos.com"],
+      "publication_pattern": "Political Monitor release and charts/tables",
+      "default_measure_type": "publisher_headline"
+    },
+    "More in Common": {
+      "primary_hosts": ["moreincommon.org.uk"],
+      "publication_pattern": "voting-intention archive with XLS tables",
+      "default_measure_type": "publisher_headline"
+    },
+    "Find Out Now": {
+      "primary_hosts": ["findoutnow.co.uk"],
+      "publication_pattern": "voting-intention article with published results",
+      "default_measure_type": "publisher_headline"
+    },
+    "YouGov": {
+      "primary_hosts": ["yougov.com", "ygo-assets-websites-editorial-emea.yougov.net", "docs.cdn.yougov.com"],
+      "publication_pattern": "voting-intention article with linked results tables",
+      "default_measure_type": "publisher_headline",
+      "note": "Record whether the published headline is modelled or tabulated; do not substitute the raw table for the headline."
+    },
+    "Lord Ashcroft Polls": {
+      "primary_hosts": ["lordashcroftpolls.com", "lordashcroft.com"],
+      "publication_pattern": "article with full tables",
+      "default_measure_type": "likelihood_to_vote",
+      "eligible_for_target_series": false,
+      "exclusion_reason": "Uses a likelihood-to-vote threshold rather than the target series' standard Westminster voting-intention measure."
+    }
+  }
+}
