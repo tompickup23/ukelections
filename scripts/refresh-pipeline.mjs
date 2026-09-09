@@ -11,12 +11,36 @@
 // Exits non-zero on first failure so cron sends an alert.
 
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const args = new Set(process.argv.slice(2));
 const skipFetch = args.has("--skip-fetch");
 const noDeploy = args.has("--no-deploy");
+
+// IndexNow must receive only URLs whose public data really changed. Hashes are
+// taken before the refresh and compared after it, rather than treating every
+// nightly build as a content update. Each input has an explicit route family:
+// this avoids a blanket re-submission of the four-thousand-page sitemap.
+const INDEXNOW_WATCHES = [
+  {
+    paths: ["data/polling/latest.json", "data/polling/ledger.json", "data/polling/timeseries.json", "data/polling/override.json"],
+    urls: ["/", "/polling/", "/polling/trends/", "/forecasts/general-election/"],
+  },
+  {
+    paths: ["data/predictions/ge-next/constituencies.json"],
+    urls: ["/", "/forecasts/general-election/"],
+    sitemapPrefix: "/seats/parliament/",
+  },
+  {
+    paths: ["data/predictions/mayoral/forecast.json"],
+    urls: ["/", "/forecasts/mayoral/"],
+  },
+];
+const indexNowBefore = snapshotIndexNowInputs();
 
 function step(label, cmd, cmdArgs = [], opts = {}) {
   const { softFailExitCodes = [], ...spawnOpts } = opts;
@@ -150,6 +174,8 @@ step("9. Build Astro static site", "npm", ["run", "build"], { env: { ...process.
 // check has a fixture in tests/audit-seo.test.ts proving it fires.
 step("9b. Technical SEO gate", "node", ["scripts/audit-seo.mjs", "dist"]);
 
+const indexNowManifest = writeIndexNowManifest(indexNowBefore);
+
 if (!noDeploy) {
   process.stdout.write("\n=== 10. Deploy to Cloudflare Pages via vps-main ===\n");
   // Detect whether we're already running on vps-main (cron context) — if so,
@@ -179,8 +205,63 @@ if (!noDeploy) {
       ],
     );
   }
+  if (indexNowManifest) {
+    // Run only after Cloudflare Pages has accepted the build. The notifier
+    // verifies that the public key file is live and logs, rather than failing,
+    // a transient IndexNow outage after a successful release.
+    step(
+      "11. Notify IndexNow of changed canonical URLs",
+      "node",
+      ["scripts/indexnow-submit.mjs", "--file", indexNowManifest],
+      { env: { ...process.env, INDEXNOW_SUBMIT: "1" } },
+    );
+  }
 } else {
   process.stdout.write("\n(skipping deploy — --no-deploy set)\n");
+}
+
+function snapshotIndexNowInputs() {
+  return INDEXNOW_WATCHES.map((watch) => ({
+    ...watch,
+    fingerprints: watch.paths.map((relativePath) => fingerprint(relativePath)),
+  }));
+}
+
+function fingerprint(relativePath) {
+  const absolutePath = path.join(ROOT, relativePath);
+  if (!existsSync(absolutePath)) return null;
+  return createHash("sha256").update(readFileSync(absolutePath)).digest("hex");
+}
+
+function writeIndexNowManifest(before) {
+  const changed = before.filter((watch) =>
+    watch.paths.some((relativePath, index) => watch.fingerprints[index] !== fingerprint(relativePath))
+  );
+  if (!changed.length) return null;
+
+  const urls = new Set();
+  for (const watch of changed) {
+    for (const route of watch.urls) urls.add(`https://ukelections.co.uk${route}`);
+    if (watch.sitemapPrefix) {
+      for (const route of sitemapPathsStartingWith(watch.sitemapPrefix)) {
+        urls.add(`https://ukelections.co.uk${route}`);
+      }
+    }
+  }
+  if (!urls.size) return null;
+
+  const output = path.join(tmpdir(), `ukelections-indexnow-${Date.now()}.json`);
+  writeFileSync(output, JSON.stringify([...urls].sort(), null, 2));
+  process.stdout.write(`IndexNow manifest: ${urls.size} changed canonical URLs\n`);
+  return output;
+}
+
+function sitemapPathsStartingWith(prefix) {
+  const file = path.join(ROOT, "dist", "sitemap.xml");
+  if (!existsSync(file)) throw new Error(`cannot create IndexNow manifest: ${file} is missing`);
+  return [...readFileSync(file, "utf8").matchAll(/<loc>https:\/\/ukelections\.co\.uk([^<]+)<\/loc>/g)]
+    .map(([, route]) => route)
+    .filter((route) => route.startsWith(prefix));
 }
 
 process.stdout.write(`\n=== Pipeline complete [${new Date().toISOString()}] ===\n`);
