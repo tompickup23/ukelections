@@ -67,7 +67,10 @@ async function main() {
   if (!existsSync(join(ROOT, "data/polling/current-polls.json"))) {
     throw new Error("Current poll-record audit was not written; refusing to publish an update without a run manifest");
   }
-  step("Run test suite", "npm", ["test", "--silent"]);
+  // This is a narrowly-scoped publisher. Its gate covers the refreshed
+  // aggregate and model-input contract, while the separate broad pipeline
+  // continues to own unrelated local-election and static-data tests.
+  step("Run polling publication tests", "npm", ["run", "test:polling-publish", "--silent"]);
   step("Build static site", "npm", ["run", "build"], { env: { BUILD_OG: "1" } });
   step("Run rendered-site gate", "node", ["scripts/audit-seo.mjs", "dist"]);
   if (noDeploy) {
