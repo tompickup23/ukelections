@@ -51,6 +51,15 @@ describe("polling primary-source verification", () => {
     expect(evaluatePollingRecord({ ...record, pollster: "Different Measure" }, registry, { records: [] }).status).toBe(NOT_COMPARABLE);
   });
 
+  it("uses the policy's declared accepted measures rather than a hard-coded measure name", () => {
+    const customRegistry = {
+      ...registry,
+      target_series: { ...registry.target_series, accepted_measure_types: ["another_published_measure"] },
+    };
+    const result = evaluatePollingRecord({ ...record, measure_type: "another_published_measure" }, customRegistry, { records: [] });
+    expect(result.checks.measure_type).toBe(true);
+  });
+
   it("publishes a ledger that cannot claim readiness without the minimum verified sample", () => {
     const ledger = buildVerificationLedger({ generated_at: "2026-09-05T00:00:00Z", records: [record] }, registry, { records: [] });
     expect(ledger.publication_ready).toBe(false);

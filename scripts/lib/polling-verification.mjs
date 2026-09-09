@@ -61,6 +61,7 @@ export function evaluatePollingRecord(record, registry, verifications) {
   const target = registry.target_series;
   const pollsterSpec = registry.pollsters?.[record.pollster] || null;
   const evidence = verificationIndex(verifications).get(recordKey(record));
+  const measureType = record.measure_type || pollsterSpec?.default_measure_type || null;
   const checks = {
     fieldwork_start: Boolean(isoDate(record.fieldwork_start)),
     fieldwork_end: Boolean(isoDate(record.fieldwork_end)),
@@ -69,7 +70,7 @@ export function evaluatePollingRecord(record, registry, verifications) {
     shares: shareTotal(record.shares) >= 0.99 && shareTotal(record.shares) <= 1.01,
     geography: record.geography === target.geography,
     question_type: record.question_type === target.question_type,
-    measure_type: (record.measure_type || pollsterSpec?.default_measure_type || null) === "publisher_headline",
+    measure_type: (target.accepted_measure_types || []).includes(measureType),
   };
 
   if (pollsterSpec?.eligible_for_target_series === false) {
