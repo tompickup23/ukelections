@@ -134,6 +134,28 @@ describe.skipIf(!present)("freshness", () => {
     ).toEqual([]);
   });
 
+  it("does not leave a contest awaiting a result for a month", () => {
+    // The assertion above only ever looked at "upcoming", so a contest that
+    // polled and then stalled at "polls_closed" passed it forever. Six did:
+    // every Scottish STV contest in the corpus, four of them for 63 to 77 days,
+    // each with its winner recorded by our own source and shown nowhere. Not
+    // one STV contest had ever reached a published result.
+    //
+    // Either a result or a declaration clears this. Thirty days is deliberately
+    // slack: a returning officer can be slow, and the point is to catch a feed
+    // that has stopped moving, not to chase a council that has not declared.
+    const stalled = contests.filter(
+      ({ doc }) =>
+        doc.status === "polls_closed" &&
+        !doc.declaration?.declared &&
+        daysOld(doc.contest.polling_day) > 30,
+    );
+    expect(
+      stalled.map((s) => s.file),
+      "these polled over a month ago with no result and no declaration",
+    ).toEqual([]);
+  });
+
   it("keeps each contest's status consistent with its own contents", () => {
     for (const { file, doc } of contests) {
       if (doc.result?.declared) {

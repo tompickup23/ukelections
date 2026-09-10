@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:46.706Z",
+  "generated_at": "2026-09-10T11:59:54.914Z",
   "slug": "sheffield-walkley-2026-09-17",
   "status": "upcoming",
   "contest": {
@@ -26,12 +26,62 @@
     "postal_vote_deadline": "2026-09-02"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.sheffield.walkley.by.2026-09-17/sopn/2026-08-21T18%3A39%3A24.114898%2B00%3A00/Walkley.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Other",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Hannah Cawley",
+        "party_name": "Labour and Co-operative Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Isabelle Amy France",
+        "party_name": "Trade Unionist and Socialist Coalition",
+        "party": "Other",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Alex Purvis",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Andrew John Telford",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Sonny Ullah",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Seb Van Bilsen Irias",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -184,11 +234,133 @@
     "source": "https://www.sheffield.gov.uk/your-city-council/elections/local-elections-results-2026#walkley",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.14052193862919415,
+        "Labour": 0.3901634642959564,
+        "Conservative": 0.020934901061084026,
+        "Liberal Democrats": 0.027817608259248637,
+        "Green Party": 0.40063091482649843,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.010037281330656725,
+        "Other": 0.009893891597361629
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.sheffield.gov.uk/your-city-council/elections/local-elections-results-2026#walkley"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 50,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.19639492609587406,
+        "Labour": 0.015595898081841586,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.09869467270646498,
+        "Independent": -0.5082783689441566
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8600259746835713,
+        "Labour": 1.0117424691382662,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.9278185580189771,
+        "Independent": 0.6680830100643725
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
+      "party_counts": {
+        "Reform UK": 49,
+        "Labour": 44,
+        "Conservative": 45,
+        "Liberal Democrats": 34,
+        "Green Party": 42,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.127646259379858,
+      "Labour": 0.42452285774902404,
+      "Conservative": 0.017400319275889465,
+      "Liberal Democrats": 0.023906670310501907,
+      "Green Party": 0.4065238932847266,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.02975,
+      "Labour": 0.5015,
+      "Conservative": 0.00025,
+      "Liberal Democrats": 0.0035,
+      "Green Party": 0.465
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.06143260902666591,
+        "p50": 0.12437529011616087,
+        "p90": 0.25196656980712895
+      },
+      "Labour": {
+        "p10": 0.1524007933033338,
+        "p50": 0.41038030453863317,
+        "p90": 0.6603120155996096
+      },
+      "Conservative": {
+        "p10": 0.004747445483943712,
+        "p50": 0.01688004002596056,
+        "p90": 0.05902427120109162
+      },
+      "Liberal Democrats": {
+        "p10": 0.005217497573077225,
+        "p50": 0.024293524951894283,
+        "p90": 0.10158406735320676
+      },
+      "Green Party": {
+        "p10": 0.11108251166428726,
+        "p50": 0.39193271876186797,
+        "p90": 0.6310345035951115
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Green Party",
+    "margin_pp": 1.799896446429744,
+    "leader_probability": 0.5015,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Other is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Other"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

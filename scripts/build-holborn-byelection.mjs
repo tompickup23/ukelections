@@ -4,12 +4,9 @@
  *
  * Keir Starmer announced on 1 September 2026 that he would stand down as MP
  * for Holborn and St Pancras, three months after resigning as Prime Minister.
- * At the time of writing the resignation has not been effected, no writ has
- * been moved and no polling day exists, so this contest is deliberately
- * DATE-LESS: the output filename carries no ISO date, which keeps it off the
- * homepage countdown (`loadUpcomingElections` only reads `<slug>-YYYY-MM-DD`
- * files) while still listing it on /by-elections/. Rename the file the day a
- * polling day is set.
+ * Starmer vacated the seat on 1 September. Camden published the notice of
+ * election on 8 September, fixing polling day as 8 October, so the output
+ * filename is dated and the contest is eligible for the site countdown.
  *
  * There is no forecast here, for the same reason there was none for Clacton:
  * no constituency poll exists and the field is not known. What does exist is
@@ -49,7 +46,7 @@
  * 52,281 votes, Green 27.14% on 43,206), which is the check that the ward feed
  * underneath this is sound.
  *
- * Output: data/predictions/by-elections/holborn-and-st-pancras.json
+ * Output: data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -70,7 +67,7 @@ const read = (rel) => {
 
 const PCON24CD = "E14001290";
 const CAMDEN_LAD = "E09000007";
-const OUT = "data/predictions/by-elections/holborn-and-st-pancras.json";
+const OUT = "data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json";
 
 const round4 = (x) => Math.round(x * 10000) / 10000;
 
@@ -230,6 +227,23 @@ function camdenSignal(seatWards, opts = {}) {
   };
 }
 
+/** Wards in which a party was actually on the May ballot. */
+function wardsPartyContested(wards, party) {
+  const may = read("data/results/may-2026/local-and-mayor.merged.json");
+  const norm = (s) =>
+    s.toLowerCase().replace(/&/g, " ").replace(/\band\b/g, " ").replace(/[^a-z0-9]+/g, "");
+  const rows = new Map(
+    may.results
+      .filter((r) => r.council_slug === "camden" && !r.is_by_election)
+      .map((r) => [norm(r.ward_slug), r]),
+  );
+  return wards.filter((ward) =>
+    (rows.get(norm(ward.name))?.candidates || []).some(
+      (candidate) => (candidate.party_canonical || candidate.party_name) === party,
+    ),
+  );
+}
+
 // ---------------------------------------------------------------------------
 // 3. GE2024 baseline
 // ---------------------------------------------------------------------------
@@ -282,6 +296,13 @@ const baseline = ge2024Baseline();
 // "Conservatives third".
 const withPartWard = camdenSignal(seatWards, { extraWards: [partWard] });
 const allCandidates = camdenSignal(seatWards, { mode: "all" });
+const greenContestedWards = wardsPartyContested(seatWards, "Green Party");
+if (greenContestedWards.length !== 8) {
+  throw new Error(`expected Greens to have contested 8 of 10 Holborn wards, got ${greenContestedWards.length}`);
+}
+const greenContested = camdenSignal(greenContestedWards);
+const greenExcluded = seatWards.filter((ward) => !greenContestedWards.some((greenWard) => greenWard.code === ward.code));
+const greenExcludedVotes = camdenSignal(greenExcluded).total_valid_votes;
 
 // The validation. The all-candidates rule over all twenty wards must reproduce
 // the borough result the returning officer published. If this ever stops
@@ -306,11 +327,9 @@ const out = {
   status: "upcoming",
   generated_at: new Date().toISOString(),
   generated_note:
-    "Built the day after the resignation announcement. No polling day exists yet, so this file deliberately " +
-    "carries no ISO date in its filename and the contest is excluded from the homepage countdown. " +
-    "No constituency poll has been published and the field is not known, so there is no vote-share forecast, " +
-    "only the freshest actual-vote signal, which is the Camden borough election of 7 May 2026 over the ten " +
-    "whole wards inside this seat.",
+    "Refreshed 10 September 2026. Camden's Notice of Election fixes polling day as 8 October and nominations " +
+    "close on 15 September. No Statement of Persons Nominated and no constituency poll exist, so this remains " +
+    "a signal-only page built from the Camden borough election of 7 May 2026 over the ten whole wards inside the seat.",
   contest: {
     constituency_slug: "holborn-and-st-pancras",
     constituency_name: "Holborn and St Pancras",
@@ -321,7 +340,8 @@ const out = {
       departing_mp: "Keir Starmer",
       departing_party: "Labour",
       announced_at: "2026-09-01",
-      effected_at: null,
+      effected_at: "2026-09-01",
+      effected_by: "Steward and Bailiff of the Three Hundreds of Chiltern",
       stated_reason:
         "Starmer told the Camden New Journal on 1 September 2026 that it was 'time to step aside and focus on " +
         "other issues: international affairs including defence, security, trade and technology in a fast " +
@@ -330,44 +350,54 @@ const out = {
         "from Andy Burnham, who succeeded him; this is his departure from the Commons, eleven years after " +
         "first winning the seat in 2015.",
     },
-    polling_day: null,
-    date_status: "tba",
-    writ_status: "not_moved",
+    polling_day: "2026-10-08",
+    date_status: "confirmed",
+    writ_status: "moved",
+    as_of: "2026-09-10",
     timetable_note:
-      "The seat is not yet vacant. Once the resignation is effected, by appointment to the Chiltern Hundreds " +
-      "or the Manor of Northstead (the two offices of profit that vacate a Commons seat), a writ must be moved, " +
-      "and polling day then falls between 21 and 27 working days later.",
+      "Camden published the Notice of Election on 8 September. Nominations close at 4pm on 15 September and, if contested, polling is on Thursday 8 October. No party name is final until the Statement of Persons Nominated is published.",
   },
   field: {
     status: "not_locked",
+    as_of: "2026-09-10",
     note:
-      "Nominations cannot open until the writ is moved. Nothing below is a confirmed candidate; it is what has " +
-      "been said publicly, and it is recorded separately from the candidate list on purpose.",
+      "Nominations are open but do not close until 15 September, so no ballot paper exists. Every entry below is a party-selection position, not a confirmed nomination.",
     declared: [
       {
-        party: "Green Party",
-        candidate: null,
+        party: "Labour",
+        candidate: "Sagal Abdi-Wali",
+        selection_status: "selected_by_party",
         note:
-          "Leader Zack Polanski framed the by-election on 2 September 2026 as 'a referendum on " +
-          "ending Rip-off Britain' and said the party 'will announce our candidate in due course'. He has not " +
-          "ruled himself out, but as of that statement the Greens had not selected anyone, so treat a Polanski " +
-          "candidacy as unresolved rather than likely.",
+          "Labour members selected the Camden council leader on 9 September, reported by the Camden New Journal on 10 September. This is a party selection, not yet a formal nomination.",
       },
       {
-        party: "Restore Britain",
-        candidate: null,
+        party: "Green Party",
+        candidate: "Zack Polanski",
+        selection_status: "selection_in_progress",
         note:
-          "Rupert Lowe has said Restore Britain will stand. Reported secondhand from his statement rather than " +
-          "from a party press release, and no candidate is named.",
+          "The Green Party leader has put himself forward, but local members have not completed their selection. Hamza Chowdhury is also seeking the nomination, so Polanski is not yet the candidate.",
+      },
+      {
+        party: "Green Party",
+        candidate: "Hamza Chowdhury",
+        selection_status: "selection_in_progress",
+        note:
+          "The Camden Green councillor has put himself forward for the same local member selection as Zack Polanski.",
+      },
+      {
+        party: "Liberal Democrats",
+        candidate: null,
+        selection_status: "selection_in_progress",
+        note:
+          "Camden Liberal Democrats are inviting applications for their by-election candidate. The published deadline is 12 noon on 11 September.",
       },
     ],
-    floated: [
+    floated: [],
+    declined: [
       {
         party: "Independent",
-        candidate: "Count Binface",
-        note:
-          "Hinted at standing. Finished second in Clacton on 13 August 2026 with 9,455 votes (26.9%), against " +
-          "a five-party boycott.",
+        candidate: "Andrew Feinstein",
+        note: "The 2024 runner-up said on 3 September that he will not contest the by-election again.",
       },
     ],
   },
@@ -376,21 +406,20 @@ const out = {
   // dress a signal up as a model. `classification: signal-only` is the same
   // honesty valve the two Scottish seats used.
   forecast: {
-    basis: "7 May 2026 Camden borough election over the ten wards inside this seat. No constituency polls exist.",
+    basis: "7 May 2026 Camden borough election over the ten wards inside this seat. No constituency polls exist and nominations remain open.",
     winner: null,
     runner_up: null,
     central_shares: null,
     ranked: [],
     classification: "signal-only",
     headline:
-      `No forecast: no polling day, no field, no constituency poll. Freshest same-ground vote (Camden, ` +
+      `No forecast: nominations are open and no constituency poll exists. Freshest same-ground vote (Camden, ` +
       `7 May 2026, ten wards): Labour ${pct1(signal.shares["Labour"])}%, Green ` +
       `${pct1(signal.shares["Green Party"])}%, Reform ${pct1(signal.shares["Reform UK"])}%.`,
   },
   inputs: {
     no_polls_note:
-      "No published constituency polling. By-elections get no broadcaster exit poll either. The Camden borough " +
-      "result below is the substitute, and it is a strong one: a real vote, on this ground, four months old.",
+      "No published constituency polling. The Camden borough result below is the substitute: a real vote on this ground, four months old. It is not a forecast and will not be promoted to one before nominations close and relevant evidence exists.",
     ge2024_baseline: baseline,
     camden_signal_2026_05_07: {
       name: "Camden London Borough Council election, the ten wards inside Holborn and St Pancras",
@@ -418,6 +447,18 @@ const out = {
             pct1(withPartWard.shares["Green Party"]) + "%, and puts the Conservatives above Reform UK for " +
             "third. The Labour lead over the Greens is barely touched, so the shape of the contest holds, but " +
             "no third place should be asserted without this caveat.",
+        },
+        {
+          id: "wards_the_greens_contested",
+          label: "Only the eight wards where the Greens stood (Green upper bound)",
+          shares: greenContested.shares,
+          wards_excluded: greenExcluded.map((ward) => ward.name),
+          share_of_seat_excluded: round4(greenExcludedVotes / signal.total_valid_votes),
+          note:
+            "The Greens did not stand in King's Cross or St Pancras & Somers Town, having stood down for the Camden People's Alliance. Those wards are " +
+            pct1(greenExcludedVotes / signal.total_valid_votes) + "% of the seat's valid vote. Across the eight wards they contested the Greens took " +
+            pct1(greenContested.shares["Green Party"]) + "% against Labour's " + pct1(greenContested.shares.Labour) +
+            "%. This is a bound, not a forecast: a by-election has one ballot and no stand-asides.",
         },
         {
           id: "all_candidates_summed",
@@ -461,9 +502,8 @@ const out = {
       "seats in each of Holborn & Covent Garden and Regent's Park. The Greens also won their first ever " +
       "parliamentary by-election at Gorton and Denton in February 2026, so a strong Green showing here would be " +
       "a second data point, not a novelty.",
-    "The Greens have not selected a candidate. Zack Polanski has framed the contest as a national referendum " +
-      "and has not ruled himself out, but the party's own statement on 2 September was that a candidate comes " +
-      "'in due course'. Who they pick is the single biggest open variable in the seat.",
+    "Labour has selected Sagal Abdi-Wali. The Green selection is still open between Zack Polanski and Camden councillor Hamza Chowdhury, so neither is a confirmed candidate and the field cannot support a forecast yet.",
+    "The May Green share is complicated by a stand-aside: the Greens did not contest two of the ten wards inside the seat. Across the eight wards they did contest they were within two points of Labour. That is a useful upper bound, not a by-election prediction.",
     "Andrew Feinstein's 18.9% independent vote in 2024 did not evaporate, it reorganised. The Camden People's " +
       "Alliance took 6.3% across the seat from a standing start and won a seat in St Pancras and Somers Town by " +
       "21 votes, unseating Labour's third candidate. Where that lane lands is the difference between a " +
@@ -477,8 +517,20 @@ const out = {
   ],
   sources: [
     {
-      label: "2026 Holborn and St Pancras by-election (Wikipedia), for the 1 September announcement to the Camden New Journal, the TBA date and the candidate speculation",
-      url: "https://en.wikipedia.org/wiki/2026_Holborn_and_St_Pancras_by-election",
+      label: "Camden Council Notice of Election, 8 September 2026: nominations close on 15 September and polling day is 8 October",
+      url: "https://www.camden.gov.uk/holborn-and-st-pancras-by-election-2026-notice-of-election",
+    },
+    {
+      label: "Camden New Journal, 10 September 2026: Labour selects Sagal Abdi-Wali",
+      url: "https://www.camdennewjournal.co.uk/article/how-it-happened-sagal-abdi-wali-is-selected-as-labour-candidate-in-holborn-and-st-pancras",
+    },
+    {
+      label: "The Guardian, 7 September 2026: Zack Polanski and Hamza Chowdhury seek the Green nomination",
+      url: "https://www.theguardian.com/politics/2026/sep/07/polanski-faces-green-rival-in-his-pursuit-of-keir-starmers-old-seat",
+    },
+    {
+      label: "Liberal Democrats selection advert, 4 September 2026",
+      url: "https://www.libdems.org.uk/become-a-candidate/selection-adverts",
     },
     {
       label: "Green Party press release, 2 September 2026: Polanski on the by-election and on selecting a candidate",

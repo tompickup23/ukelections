@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:44.770Z",
+  "generated_at": "2026-09-10T11:59:52.766Z",
   "slug": "flintshire-argoed-and-new-brighton-2026-07-09",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.flintshire.argoed-and-new-brighton.by.2026-07-09",
     "polling_day": "2026-07-09",
@@ -26,12 +26,62 @@
     "postal_vote_deadline": "2026-06-24"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.flintshire.argoed-and-new-brighton.by.2026-07-09/sopn/2026-06-15T16%3A03%3A01.552711%2B00%3A00/Argoed_and_New_Brighton.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Plaid Cymru",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Faron Hadfield-Jones",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 614,
+        "elected": true
+      },
+      {
+        "name": "Angela Hughes",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 490,
+        "elected": false
+      },
+      {
+        "name": "Jack Morris",
+        "party_name": "Plaid Cymru - The Party of Wales",
+        "party": "Plaid Cymru",
+        "votes": 191,
+        "elected": false
+      },
+      {
+        "name": "Peter Agnew",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 113,
+        "elected": false
+      },
+      {
+        "name": "Hazel Pamela Lynes",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 113,
+        "elected": false
+      },
+      {
+        "name": "Meilir Devine Roberts",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 23,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -89,11 +139,163 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.argoed-and-new-brighton.2022-05-05/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.24563644103873988,
+        "Conservative": 0,
+        "Liberal Democrats": 0.3597275436355896,
+        "Green Party": 0.10302256279267774,
+        "SNP": 0,
+        "Plaid Cymru": 0.14644529587058322,
+        "Restore Britain": 0,
+        "Independent": 0.14516815666240954,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.argoed-and-new-brighton.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 43,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -1.0255388359619246,
+        "Conservative": -0.6307375185213864,
+        "Liberal Democrats": -0.18652929964789455,
+        "Green Party": -0.19192936203206212,
+        "Independent": -0.8038853476288681
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.42708610131973995,
+        "Conservative": 0.6026830617137529,
+        "Liberal Democrats": 0.8667051303671713,
+        "Green Party": 0.8630445797294043,
+        "Independent": 0.519304209212287
+      },
+      "entry_shares": {
+        "Reform UK": 0.25856793145654833,
+        "Liberal Democrats": 0.04246634760278921,
+        "Green Party": 0.07027276930189552,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 30,
+        "Conservative": 42,
+        "Liberal Democrats": 34,
+        "Green Party": 22,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 5,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.28285360964873857,
+      "Labour": 0.11437999961592417,
+      "Conservative": 0,
+      "Liberal Democrats": 0.3478445365165027,
+      "Green Party": 0.09472186221003083,
+      "SNP": 0,
+      "Plaid Cymru": 0.1601999920088038,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.33475,
+      "Labour": 0.043,
+      "Liberal Democrats": 0.447,
+      "Green Party": 0.02975,
+      "Plaid Cymru": 0.1455
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.08060832554681054,
+        "p50": 0.25603161406823904,
+        "p90": 0.4782953894546611
+      },
+      "Labour": {
+        "p10": 0.035965292823244205,
+        "p50": 0.10559478224128464,
+        "p90": 0.24982745723841684
+      },
+      "Liberal Democrats": {
+        "p10": 0.11304865997295181,
+        "p50": 0.31105243614987477,
+        "p90": 0.5331663999762968
+      },
+      "Green Party": {
+        "p10": 0.030360289195353135,
+        "p50": 0.08695761545546626,
+        "p90": 0.21269696162627655
+      },
+      "Plaid Cymru": {
+        "p10": 0.03644043487135727,
+        "p50": 0.14420866063409227,
+        "p90": 0.3619333914008718
+      }
+    },
+    "winner": "Liberal Democrats",
+    "runner_up": "Reform UK",
+    "margin_pp": 6.4990926867764145,
+    "leader_probability": 0.447,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Conservative is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Plaid Cymru carried unswung: fewer than 5 comparable contests in the window."
+    ],
+    "unpriced_parties": [
+      "Conservative"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.3173575129533679,
+      "Labour": 0.07318652849740932,
+      "Conservative": 0.07318652849740932,
+      "Liberal Democrats": 0.39766839378238344,
+      "Green Party": 0.014896373056994818,
+      "SNP": 0,
+      "Plaid Cymru": 0.12370466321243523,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Liberal Democrats",
+    "winner_candidate": "Faron Hadfield-Jones",
+    "runner_up_party": "Reform UK",
+    "majority_votes": 124,
+    "total_votes": 1544,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.argoed-and-new-brighton.by.2026-07-09/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Liberal Democrats",
+      "call_correct": true,
+      "mae_pp": 5.25047630226398
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

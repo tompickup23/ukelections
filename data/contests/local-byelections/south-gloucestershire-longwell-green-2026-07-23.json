@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:45.279Z",
+  "generated_at": "2026-09-10T11:59:53.471Z",
   "slug": "south-gloucestershire-longwell-green-2026-07-23",
   "status": "concluded",
   "contest": {
@@ -150,11 +150,170 @@
       }
     ]
   },
-  "prior_result": null,
-  "forecast": null,
-  "no_forecast_reason": [
-    "No prior ordinary result for this ward in either archive."
-  ],
+  "prior_result": {
+    "election_date": "2023-05-04",
+    "seats_contested": null,
+    "shares": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 0.48486886348352387,
+      "Liberal Democrats": 0.304640215198386,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.2104909213180901,
+      "Other": 0
+    },
+    "candidates": [
+      {
+        "name": "Carol Ann Strange",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 1442
+      },
+      {
+        "name": "Kristopher David Murphy",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 1170
+      },
+      {
+        "name": "Edward Roger Allinson",
+        "party_name": "Liberal Democrats",
+        "votes": 906
+      },
+      {
+        "name": "Christine Price",
+        "party_name": "Independent",
+        "votes": 626
+      },
+      {
+        "name": "Crispin Toby John Allard",
+        "party_name": "Liberal Democrats",
+        "votes": 621
+      }
+    ],
+    "source_label": "Democracy Club",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.south-gloucestershire.longwell-green.2023-05-04/",
+    "usable_as_baseline": true
+  },
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0,
+        "Conservative": 0.48486886348352387,
+        "Liberal Democrats": 0.304640215198386,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.2104909213180901,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.south-gloucestershire.longwell-green.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 42,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9893516793878778,
+        "Conservative": -0.6292945243482393,
+        "Liberal Democrats": -0.23095042199636484,
+        "Green Party": -0.11240182614492411
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44108870212060486,
+        "Conservative": 0.6034220686852264,
+        "Liberal Democrats": 0.8369268287834196,
+        "Green Party": 0.918086656838153
+      },
+      "entry_shares": {
+        "Reform UK": 0.2589455679382189,
+        "Liberal Democrats": 0.04056246619794483,
+        "Green Party": 0.07027276930189552,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 29,
+        "Conservative": 41,
+        "Liberal Democrats": 34,
+        "Green Party": 22,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.28106096221133786,
+      "Labour": 0,
+      "Conservative": 0.3626005824374154,
+      "Liberal Democrats": 0.28006400001104775,
+      "Green Party": 0.07627445534019892,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.29525,
+      "Conservative": 0.41675,
+      "Liberal Democrats": 0.27875,
+      "Green Party": 0.00925
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.08451252311904461,
+        "p50": 0.26994995083005624,
+        "p90": 0.5104749059206612
+      },
+      "Conservative": {
+        "p10": 0.12026098924374598,
+        "p50": 0.3375999335818053,
+        "p90": 0.5690458705747266
+      },
+      "Liberal Democrats": {
+        "p10": 0.07581783323451635,
+        "p50": 0.26177103014430114,
+        "p90": 0.511149261289775
+      },
+      "Green Party": {
+        "p10": 0.025890362828924745,
+        "p50": 0.0724889226994781,
+        "p90": 0.1797046338217643
+      }
+    },
+    "winner": "Conservative",
+    "runner_up": "Reform UK",
+    "margin_pp": 8.153962022607752,
+    "leader_probability": 0.41675,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Labour is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Labour"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": {
     "declared": true,
     "shares": {
@@ -176,8 +335,15 @@
     "total_votes": 2549,
     "source": "https://candidates.democracyclub.org.uk/elections/local.south-gloucestershire.longwell-green.by.2026-07-23/",
     "outcome": null,
-    "grading": null
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Conservative",
+      "call_correct": true,
+      "mae_pp": 4.279813501247989
+    }
   },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:44.157Z",
+  "generated_at": "2026-09-10T11:59:52.181Z",
   "slug": "harborough-lutterworth-east-2026-07-02",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.harborough.lutterworth-east.by.2026-07-02",
     "polling_day": "2026-07-02",
@@ -26,12 +26,54 @@
     "postal_vote_deadline": "2026-06-17"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 5,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.harborough.lutterworth-east.by.2026-07-02/sopn/2026-06-05T15%3A17%3A03.910003%2B00%3A00/Lutterworth_East.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Bill Piper",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 403,
+        "elected": true
+      },
+      {
+        "name": "Sarah Anne Simms",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 386,
+        "elected": false
+      },
+      {
+        "name": "Martin Cullen",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 271,
+        "elected": false
+      },
+      {
+        "name": "Stephen Walkley",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 270,
+        "elected": false
+      },
+      {
+        "name": "Adam Karl Holmes",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 97,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -164,11 +206,160 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.harborough.lutterworth-east.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.06760909649661954,
+        "Labour": 0.3239090350338045,
+        "Conservative": 0.22556853103872157,
+        "Liberal Democrats": 0.3054701905347265,
+        "Green Party": 0.07744314689612784,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.harborough.lutterworth-east.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment",
+      "stratum_used": true,
+      "contests_used": 43,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9841723561133158,
+        "Conservative": -0.6321805126945335,
+        "Liberal Democrats": -0.20172062602472374,
+        "Green Party": -0.21020702076524378,
+        "Independent": -0.2698083522025483
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.443125428430391,
+        "Conservative": 0.601944799404123,
+        "Liberal Democrats": 0.8564359731658013,
+        "Green Party": 0.8507379337854007,
+        "Independent": 0.8115005420293624
+      },
+      "entry_shares": {
+        "Reform UK": 0.2589455679382189,
+        "Liberal Democrats": 0.044370229007633585,
+        "Green Party": 0.06784666502477954,
+        "Independent": 0.15170349907918967
+      },
+      "party_counts": {
+        "Reform UK": 1,
+        "Labour": 33,
+        "Conservative": 43,
+        "Liberal Democrats": 35,
+        "Green Party": 23,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 5,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.09918638284731383,
+      "Labour": 0.22279657708634906,
+      "Conservative": 0.19664680834353546,
+      "Liberal Democrats": 0.38792401502278917,
+      "Green Party": 0.09344621670001228,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.07075,
+      "Labour": 0.1915,
+      "Conservative": 0.1595,
+      "Liberal Democrats": 0.552,
+      "Green Party": 0.02625
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.021146683294212716,
+        "p50": 0.08946423414132566,
+        "p90": 0.2807780303474347
+      },
+      "Labour": {
+        "p10": 0.0739235687987143,
+        "p50": 0.20240893623706938,
+        "p90": 0.39246624101365646
+      },
+      "Conservative": {
+        "p10": 0.05764045005468947,
+        "p50": 0.1757038453556103,
+        "p90": 0.3803337132183131
+      },
+      "Liberal Democrats": {
+        "p10": 0.13890962005401084,
+        "p50": 0.35165788643334905,
+        "p90": 0.5574361152977823
+      },
+      "Green Party": {
+        "p10": 0.02890002230191977,
+        "p50": 0.08374895006392617,
+        "p90": 0.21001373890497874
+      }
+    },
+    "winner": "Liberal Democrats",
+    "runner_up": "Labour",
+    "margin_pp": 16.51274379364401,
+    "leader_probability": 0.552,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Reform UK carried unswung: fewer than 5 comparable contests in the window."
+    ],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.28241065171688856,
+      "Labour": 0.18990889978976874,
+      "Conservative": 0.27049754730203224,
+      "Liberal Democrats": 0.18920812894183603,
+      "Green Party": 0.06797477224947442,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Reform UK",
+    "winner_candidate": "Bill Piper",
+    "runner_up_party": "Conservative",
+    "majority_votes": 17,
+    "total_votes": 1427,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.harborough.lutterworth-east.by.2026-07-02/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Liberal Democrats",
+      "call_correct": false,
+      "mae_pp": 10.283000313122859
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

@@ -457,7 +457,9 @@ async function gather(ballot, priors) {
     party_name: c.party_name ?? c.party?.name ?? null,
     party: canonParty(c.party_name ?? c.party?.name),
     votes: Number.isFinite(Number(c.result?.num_ballots)) ? Number(c.result.num_ballots) : null,
-    elected: c.result?.elected ?? null,
+    // Democracy Club exposes this on the candidacy, not within the optional
+    // result object. Keep the nested fallback for any older cached responses.
+    elected: c.elected ?? c.result?.elected ?? null,
   }));
   const field = fieldFromCandidates(candidates);
 
@@ -611,6 +613,48 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     };
   }
 
+  // Scottish STV by-elections are declared, but their counts never arrive in
+  // the shape the block above needs. Democracy Club records the elected member
+  // on the ballots endpoint and the council publishes a declaration, yet no
+  // per-candidate total comparable to an FPTP count is ever entered, because
+  // under STV the winner emerges after transfers: a single "votes" number would
+  // not mean what it means everywhere else on this site. The sidecar fill above
+  // cannot rescue them for the same reason, which is why it never has.
+  //
+  // Left alone this is not a gap that closes itself. On 10 September 2026 six
+  // STV contests sat at "Polls closed, result awaited", four of them for 63 to
+  // 77 days, each with its winner sitting unmarked in its own candidate list.
+  // Not one STV contest in the corpus had ever reached "concluded".
+  //
+  // So publish the weaker claim and label it as weaker: who won, the turnout
+  // where the source reports one, and a link to the declaration. It is less
+  // than a result and it must not be graded, ranked or fed to the swing corpus
+  // like one. It is still enormously more than "result awaited" three months on.
+  let declaration = null;
+  if (!result && polled) {
+    const winner = candidates.find((c) => c.elected === true);
+    if (winner) {
+      const dcResults = dc?.results || null;
+      declaration = {
+        declared: true,
+        counts_published: false,
+        winner_party: canonParty(winner.party_name),
+        winner_candidate: winner.name ?? null,
+        turnout_votes: Number.isFinite(Number(dcResults?.num_turnout_reported))
+          ? Number(dcResults.num_turnout_reported)
+          : null,
+        turnout_pct: Number.isFinite(Number(dcResults?.turnout_percentage))
+          ? Number(dcResults.turnout_percentage)
+          : null,
+        source: dcResults?.source || resultSource || `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/`,
+        note:
+          votingSystem === "STV"
+            ? "This contest was held under the single transferable vote. The returning officer has declared it and our source records who was elected, but not a per-candidate vote total, because the winner is reached through transfers rather than a single count. No shares, forecast grading or swing figure is published for it."
+            : "Our source records who was elected but has not yet published the per-candidate vote counts. No shares or forecast grading are published until it does.",
+      };
+    }
+  }
+
   const status = result ? "concluded" : polled ? "polls_closed" : "upcoming";
 
   return {
@@ -669,6 +713,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     forecast,
     no_forecast_reason: baseline.forecastable ? null : baseline.blockers,
     result,
+    declaration,
     sources: [
       { label: "Democracy Club, EveryElection", url: `https://elections.democracyclub.org.uk/elections/${ballot.election_id}/` },
       { label: "Democracy Club, candidates", url: `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/` },

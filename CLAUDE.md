@@ -167,8 +167,9 @@ but has no date yet. That distinction is load-bearing, not cosmetic:
 `loadUpcomingElections` only reads dated files, so an undated contest cannot
 reach the homepage countdown and put a hero clock on a date nobody has set,
 while `/by-elections/` lists it either way. **Rename the file the day a writ
-fixes a polling day.** Holborn and St Pancras (Starmer's seat, announced
-1 Sep 2026) is the first of these.
+fixes a polling day.** Holborn and St Pancras is now
+`holborn-and-st-pancras-2026-10-08.json`: Camden's 8 September Notice of
+Election fixed polling day as 8 October 2026.
 
 Where there is no poll and no field, publish the freshest same-ground actual
 vote and label it `classification: signal-only` — never a central forecast. For
@@ -194,19 +195,19 @@ borough result exactly (Labour 32.84% on 52,281 votes), which is the evidence
 that the ward feed under the seat number is sound. The test asserts it, so feed
 drift fails loudly instead of quietly changing a headline.
 
-**Verify at the primary source, not a search summary.** The first draft of this
-page carried "Restore Britain have confirmed they are standing" from a search
-synthesis; the Wikipedia article says nothing of the kind, and the real basis is
-a Rupert Lowe statement reported secondhand. The Green Party's own release of
-2 September then made a second claim stale: Polanski has **not** been selected,
-and the party says its candidate comes "in due course". Both were caught only by
-fetching the sources.
+**Verify at the primary source, not a search summary.** Labour selected Sagal
+Abdi-Wali on 9 September; the Green nomination is still contested between Zack
+Polanski and Hamza Chowdhury, and nominations do not close until 15 September.
+Do not promote selection-seeking names to candidates, or assert that a party is
+standing, until its selection or the statutory nominations is published. The
+first draft carried a Restore Britain claim from a search synthesis that its
+source did not support; it was removed on source-checking.
 
 ## By-election data (21 Aug 2026)
 
 Two separate feeds, not interchangeable. **Models** read `data/history/dc-historic-results.json` (gitignored, vps only). **The site's ward scorecard** reads `data/results/local-byelections.json` (tracked, hand-curated). Updating one does nothing for the other.
 
-The Friday sweep (`scripts/refresh-byelections.mjs`) writes the tracked sidecar `data/history/byelection-appends.json`, which `scripts/ingest-dc-historic-results.mjs` merges back on every rebuild. It used to write only into the history file, which the nightly ingest rebuilt from scratch, so every sweep was silently discarded within a day. `--from=` and `--pace=` flags exist for backfills; the DC ballots API rate-limits bulk callers.
+The Friday 09:00 UTC sweep (`scripts/refresh-byelections.mjs`) writes the tracked sidecar `data/history/byelection-appends.json`, which `scripts/ingest-dc-historic-results.mjs` merges back on every rebuild. It used to write only into the history file, which the nightly ingest rebuilt from scratch, so every sweep was silently discarded within a day. `--from=` and `--pace=` flags exist for backfills; the DC ballots API rate-limits bulk callers.
 
 **The sweep never overwrites a hand-verified row (2 Sep 2026).** Provenance tiers,
 best first: `hand_verified_declaration` (the returning officer's own summary),
@@ -222,7 +223,13 @@ to apply.** Supersedes of the lower tiers are also non-lossy now: a null in the
 incoming row is absence, not a correction, so any figure DC does not publish is
 carried forward.
 
-**The ingest's page cache expires after 20 hours.** It previously had no expiry at all, replayed a 26 April snapshot nightly for four months, and froze the models' history at 23 April 2026 while looking perfectly healthy.
+**The local-contest ingest's live cache is keyed by day.** It previously had no
+expiry at all, replayed a 26 April snapshot nightly for four months, and froze
+the models' history at 23 April 2026 while looking perfectly healthy. Fully
+counted contests become permanent only after 21 days; declared Scottish STV
+contests without comparable candidate counts remain live and are published as a
+declaration, never as a gradeable result. Tests fail any contest left
+`polls_closed` for more than 30 days with neither a result nor a declaration.
 
 ## Critical rules
 

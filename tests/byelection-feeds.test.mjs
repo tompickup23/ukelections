@@ -36,6 +36,18 @@ describe("by-election sidecar", () => {
 describe("local by-election scorecard", () => {
   const doc = read("data/results/local-byelections.json");
 
+  it("does not silently fall more than a fortnight behind live results", () => {
+    // This is deliberately a window check, rather than trusting generated_at:
+    // rewriting an old scorecard must not look like a refresh. Council
+    // by-elections happen most weeks, and a two-week allowance leaves room for
+    // declarations to arrive while making the previous months-long freeze fail.
+    const ageDays = (Date.now() - Date.parse(`${doc.window.to}T00:00:00Z`)) / 86_400_000;
+    expect(
+      ageDays,
+      `scorecard ends on ${doc.window.to}; add the declared rounds before publishing`,
+    ).toBeLessThanOrEqual(14);
+  });
+
   it("declares a window that contains every round it holds, ending on the last one", () => {
     const dates = doc.dates.map((d) => d.date).sort();
     expect(dates.at(0) >= doc.window.from).toBe(true);

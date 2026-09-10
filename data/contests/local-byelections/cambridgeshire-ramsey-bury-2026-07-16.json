@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:45.091Z",
+  "generated_at": "2026-09-10T11:59:53.175Z",
   "slug": "cambridgeshire-ramsey-bury-2026-07-16",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.cambridgeshire.ramsey-bury.by.2026-07-16",
     "polling_day": "2026-07-16",
@@ -26,12 +26,62 @@
     "postal_vote_deadline": "2026-07-01"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.cambridgeshire.ramsey-bury.by.2026-07-16/sopn/2026-06-19T22%3A33%3A49.887547%2B00%3A00/Ramsey_and_Bury.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Independent",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Howard Julian Tobias",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 506,
+        "elected": true
+      },
+      {
+        "name": "Steve Corney",
+        "party_name": "Independent",
+        "party": "Independent",
+        "votes": 417,
+        "elected": false
+      },
+      {
+        "name": "Adela Eva Costello",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 412,
+        "elected": false
+      },
+      {
+        "name": "Sharon Anne Docherty",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 126,
+        "elected": false
+      },
+      {
+        "name": "Francis William Reid",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 123,
+        "elected": false
+      },
+      {
+        "name": "Neil Shailer",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 118,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -98,11 +148,161 @@
     "source": "https://elections.cmis.uk.com/election/electiondetails/1/74",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2025-05-01 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2025-05-01",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.46971270335756315,
+        "Labour": 0.10903426791277258,
+        "Conservative": 0.29387331256490135,
+        "Liberal Democrats": 0.06749740394600208,
+        "Green Party": 0.059882312218760815,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://elections.cmis.uk.com/election/electiondetails/1/74"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 35,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.15220245641230679,
+        "Labour": -0.04200915110896142,
+        "Conservative": -0.31265939937394904,
+        "Liberal Democrats": -0.262090201515061,
+        "Green Party": 0.023837614539415963
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8902365376658105,
+        "Labour": 0.9688251287064689,
+        "Conservative": 0.784134221030173,
+        "Liberal Democrats": 0.8165046117781702,
+        "Green Party": 1.0179845364087141
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.059042709238504784
+      },
+      "party_counts": {
+        "Reform UK": 35,
+        "Labour": 32,
+        "Conservative": 31,
+        "Liberal Democrats": 23,
+        "Green Party": 28,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.4579261225809858,
+      "Labour": 0.1113100834833299,
+      "Conservative": 0.2473620111032435,
+      "Liberal Democrats": 0.05591622135453899,
+      "Green Party": 0.06490640855196687,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.06257915292593491,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.7305,
+      "Labour": 0.06975,
+      "Conservative": 0.142,
+      "Liberal Democrats": 0.00275,
+      "Green Party": 0.03375,
+      "Independent": 0.02125
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.26307387219138734,
+        "p50": 0.3969692605840357,
+        "p90": 0.552611595729156
+      },
+      "Labour": {
+        "p10": 0.022297482909533282,
+        "p50": 0.0968333633426503,
+        "p90": 0.29075590597516593
+      },
+      "Conservative": {
+        "p10": 0.09840332554487664,
+        "p50": 0.21593055200576888,
+        "p90": 0.3747312336039749
+      },
+      "Liberal Democrats": {
+        "p10": 0.01494783941787012,
+        "p50": 0.04999476657930417,
+        "p90": 0.14128664120730652
+      },
+      "Green Party": {
+        "p10": 0.010287070859942092,
+        "p50": 0.058919893168105184,
+        "p90": 0.2214648558473978
+      },
+      "Independent": {
+        "p10": 0.01302506052487064,
+        "p50": 0.05675877285879727,
+        "p90": 0.19321539464475565
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Conservative",
+    "margin_pp": 21.05641114777423,
+    "leader_probability": 0.7305,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.2972972972972973,
+      "Labour": 0.06933019976498238,
+      "Conservative": 0.24206815511163338,
+      "Liberal Democrats": 0.07403055229142186,
+      "Green Party": 0.07226792009400705,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.24500587544065805,
+      "Other": 0
+    },
+    "winner_party": "Reform UK",
+    "winner_candidate": "Howard Julian Tobias",
+    "runner_up_party": "Independent",
+    "majority_votes": 89,
+    "total_votes": 1702,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.cambridgeshire.ramsey-bury.by.2026-07-16/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Reform UK",
+      "call_correct": true,
+      "mae_pp": 6.930085499788205
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",
