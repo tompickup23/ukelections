@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:46.909Z",
+  "generated_at": "2026-09-10T11:59:55.146Z",
   "slug": "brighton-and-hove-queens-park-2026-09-24",
   "status": "upcoming",
   "contest": {
@@ -150,12 +150,183 @@
       }
     ]
   },
-  "prior_result": null,
-  "forecast": null,
-  "no_forecast_reason": [
-    "No prior ordinary result for this ward in either archive."
-  ],
+  "prior_result": {
+    "election_date": "2023-05-04",
+    "seats_contested": null,
+    "shares": {
+      "Reform UK": 0,
+      "Labour": 0.5097929490766648,
+      "Conservative": 0.07442641298265248,
+      "Liberal Democrats": 0.04560716284275322,
+      "Green Party": 0.2395075545607163,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.1306659205372132,
+      "Other": 0
+    },
+    "candidates": [
+      {
+        "name": "Tristram Burden",
+        "party_name": "Labour Party",
+        "votes": 1822
+      },
+      {
+        "name": "Chandni Mistry",
+        "party_name": "Labour Party",
+        "votes": 1702
+      },
+      {
+        "name": "Clare Elizabeth Rainey",
+        "party_name": "Green Party",
+        "votes": 856
+      },
+      {
+        "name": "Mark Strong",
+        "party_name": "Green Party",
+        "votes": 682
+      },
+      {
+        "name": "Adrian Hart",
+        "party_name": "Brighton & Hove Independents",
+        "votes": 467
+      },
+      {
+        "name": "Martin David John Kenig",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 266
+      },
+      {
+        "name": "Thomas Osborne",
+        "party_name": "Liberal Democrats",
+        "votes": 163
+      }
+    ],
+    "source_label": "Democracy Club",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.brighton-and-hove.queens-park.2023-05-04/",
+    "usable_as_baseline": true
+  },
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.5097929490766648,
+        "Conservative": 0.07442641298265248,
+        "Liberal Democrats": 0.04560716284275322,
+        "Green Party": 0.2395075545607163,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.1306659205372132,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.brighton-and-hove.queens-park.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 35,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9867620177505968,
+        "Conservative": -0.7004568853438919,
+        "Liberal Democrats": -0.26018021796800594,
+        "Green Party": -0.051151948990967755
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44210603815035326,
+        "Conservative": 0.5678576460503861,
+        "Liberal Democrats": 0.817746486723126,
+        "Green Party": 0.9621285945599451
+      },
+      "entry_shares": {
+        "Reform UK": 0.2593232044198895,
+        "Liberal Democrats": 0.03862254091396444,
+        "Green Party": 0.06542056074766354
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 22,
+        "Conservative": 34,
+        "Liberal Democrats": 29,
+        "Green Party": 19,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.30764858985701343,
+      "Labour": 0.33143199278285856,
+      "Conservative": 0.04553320545217936,
+      "Liberal Democrats": 0.04215151246470522,
+      "Green Party": 0.27323469944324347,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.37075,
+      "Labour": 0.39925,
+      "Conservative": 0.0105,
+      "Liberal Democrats": 0.00075,
+      "Green Party": 0.21875
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.098663793800959,
+        "p50": 0.29055942146014646,
+        "p90": 0.5001833101101534
+      },
+      "Labour": {
+        "p10": 0.1349746743318751,
+        "p50": 0.30939243171579256,
+        "p90": 0.4992225250678852
+      },
+      "Conservative": {
+        "p10": 0.010256159184974583,
+        "p50": 0.043751053603541985,
+        "p90": 0.15394251245067203
+      },
+      "Liberal Democrats": {
+        "p10": 0.014450856612675478,
+        "p50": 0.039208468447416614,
+        "p90": 0.10460005815751516
+      },
+      "Green Party": {
+        "p10": 0.1391837919912051,
+        "p50": 0.25552094409204507,
+        "p90": 0.42137314999663866
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Reform UK",
+    "margin_pp": 2.378340292584513,
+    "leader_probability": 0.39925,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

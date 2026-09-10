@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const DIR = path.join(process.cwd(), "data/predictions/by-elections");
-const FILE = path.join(DIR, "holborn-and-st-pancras.json");
+const FILE = path.join(DIR, "holborn-and-st-pancras-2026-10-08.json");
 const contest = JSON.parse(readFileSync(FILE, "utf8"));
 const signal = contest.inputs.camden_signal_2026_05_07;
 
@@ -15,13 +15,13 @@ describe("Holborn and St Pancras contest file", () => {
     expect(contest.contest.trigger.announced_at).toBe("2026-09-01");
   });
 
-  // The date-less filename is the mechanism that keeps a contest with no
-  // polling day off the homepage countdown, so the two must agree. If someone
-  // sets a polling day they must also rename the file, and vice versa.
-  it("carries no ISO date in its filename while it has no polling day", () => {
-    expect(contest.contest.polling_day).toBeNull();
-    expect(path.basename(FILE)).toBe("holborn-and-st-pancras.json");
-    expect(path.basename(FILE)).not.toMatch(/-\d{4}-\d{2}-\d{2}\.json$/);
+  // A fixed polling day must travel with a dated filename, otherwise the
+  // homepage's upcoming-election loader cannot find the contest.
+  it("carries the confirmed polling day in its filename", () => {
+    expect(contest.contest.polling_day).toBe("2026-10-08");
+    expect(contest.contest.date_status).toBe("confirmed");
+    expect(contest.contest.writ_status).toBe("moved");
+    expect(path.basename(FILE)).toBe("holborn-and-st-pancras-2026-10-08.json");
   });
 
   it("keeps every dated sibling parseable by the same slug rule", () => {
@@ -80,13 +80,14 @@ describe("Holborn and St Pancras contest file", () => {
     expect(withPart["Conservative"]).toBeGreaterThan(withPart["Reform UK"]);
   });
 
-  it("says nobody has been selected, because nobody has", () => {
+  it("separates a party selection from an unresolved Green nomination", () => {
     expect(contest.field.status).toBe("not_locked");
-    for (const entry of [...contest.field.declared, ...contest.field.floated]) {
-      if (entry.party === "Green Party" || entry.party === "Restore Britain") {
-        expect(entry.candidate).toBeNull();
-      }
-    }
+    const labour = contest.field.declared.find((entry) => entry.party === "Labour");
+    expect(labour.candidate).toBe("Sagal Abdi-Wali");
+    expect(labour.selection_status).toBe("selected_by_party");
+    const greens = contest.field.declared.filter((entry) => entry.party === "Green Party");
+    expect(greens.map((entry) => entry.candidate).sort()).toEqual(["Hamza Chowdhury", "Zack Polanski"]);
+    expect(greens.every((entry) => entry.selection_status === "selection_in_progress")).toBe(true);
   });
 
   it("sources every claim with a URL", () => {

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:45.637Z",
+  "generated_at": "2026-09-10T11:59:53.830Z",
   "slug": "south-tyneside-harton-2026-08-06",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.south-tyneside.harton.by.2026-08-06",
     "polling_day": "2026-08-06",
@@ -26,12 +26,69 @@
     "postal_vote_deadline": "2026-07-22"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 7,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.south-tyneside.harton.by.2026-08-06/sopn/2026-07-10T15%3A34%3A41.268045%2B00%3A00/Harton.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Independent",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Katie Groom",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 628,
+        "elected": true
+      },
+      {
+        "name": "Neil Maxwell",
+        "party_name": "Labour and Co-operative Party",
+        "party": "Labour",
+        "votes": 354,
+        "elected": false
+      },
+      {
+        "name": "Kathryn Kaupa",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 312,
+        "elected": false
+      },
+      {
+        "name": "Karen Louise Myers",
+        "party_name": "Independent",
+        "party": "Independent",
+        "votes": 285,
+        "elected": false
+      },
+      {
+        "name": "Phil Brown",
+        "party_name": "Independent",
+        "party": "Independent",
+        "votes": 119,
+        "elected": false
+      },
+      {
+        "name": "Sam Hill",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 57,
+        "elected": false
+      },
+      {
+        "name": "Mark Robson",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 24,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -154,11 +211,156 @@
     "source": "https://portal.southtyneside.info/elections/Ward.aspx?id=585",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.2923845193508115,
+        "Labour": 0.1031210986267166,
+        "Conservative": 0,
+        "Liberal Democrats": 0,
+        "Green Party": 0.132334581772784,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.4721598002496879,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://portal.southtyneside.info/elections/Ward.aspx?id=585"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 43,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.2018038313541882,
+        "Labour": 0.015595898081841586,
+        "Conservative": -0.27790743360896913,
+        "Liberal Democrats": -0.24783735763989279,
+        "Green Party": -0.04356879522458357
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8563799718755115,
+        "Labour": 1.0117424691382662,
+        "Conservative": 0.8062741170737225,
+        "Liberal Democrats": 0.8258056693376834,
+        "Green Party": 0.9676805458462705
+      },
+      "entry_shares": {
+        "Green Party": 0.12803530947860844,
+        "Independent": 0.12933406714364337
+      },
+      "party_counts": {
+        "Reform UK": 43,
+        "Labour": 38,
+        "Conservative": 38,
+        "Liberal Democrats": 27,
+        "Green Party": 35,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.2638982981730322,
+      "Labour": 0.10931853928601715,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0.13319418709535966,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.49358897544559105,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.1515,
+      "Labour": 0.059,
+      "Green Party": 0.1145,
+      "Independent": 0.675
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.13791461566119598,
+        "p50": 0.24394916724105514,
+        "p90": 0.4152565640884172
+      },
+      "Labour": {
+        "p10": 0.026737724946354367,
+        "p50": 0.10737814975573784,
+        "p90": 0.29687439135912314
+      },
+      "Green Party": {
+        "p10": 0.02417717718688935,
+        "p50": 0.1293674053141951,
+        "p90": 0.3709168059799605
+      },
+      "Independent": {
+        "p10": 0.20427641751191872,
+        "p50": 0.4430888583213296,
+        "p90": 0.6386749627617893
+      }
+    },
+    "winner": "Independent",
+    "runner_up": "Reform UK",
+    "margin_pp": 22.969067727255887,
+    "leader_probability": 0.675,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Conservative is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Liberal Democrats is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Independent carried unswung: fewer than 5 comparable contests in the window."
+    ],
+    "unpriced_parties": [
+      "Conservative",
+      "Liberal Democrats"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.3530073074761102,
+      "Labour": 0.19898819561551434,
+      "Conservative": 0.03204047217537943,
+      "Liberal Democrats": 0.013490725126475547,
+      "Green Party": 0.17537942664418213,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.2270938729623384,
+      "Other": 0
+    },
+    "winner_party": "Reform UK",
+    "winner_candidate": "Katie Groom",
+    "runner_up_party": "Labour",
+    "majority_votes": 274,
+    "total_votes": 1779,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.south-tyneside.harton.by.2026-08-06/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Independent",
+      "call_correct": false,
+      "mae_pp": 8.883170082775088
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

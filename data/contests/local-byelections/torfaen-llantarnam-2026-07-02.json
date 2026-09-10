@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:44.082Z",
+  "generated_at": "2026-09-10T11:59:52.082Z",
   "slug": "torfaen-llantarnam-2026-07-02",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.torfaen.llantarnam.by.2026-07-02",
     "polling_day": "2026-07-02",
@@ -26,12 +26,62 @@
     "postal_vote_deadline": "2026-06-17"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.torfaen.llantarnam.by.2026-07-02/sopn/2026-06-05T15%3A53%3A26.589161%2B00%3A00/Llantarnam.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Plaid Cymru",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Jonathan Edward Hollins",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 505,
+        "elected": true
+      },
+      {
+        "name": "Sean Robert Wharton",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 362,
+        "elected": false
+      },
+      {
+        "name": "Joe Tresidder",
+        "party_name": "Plaid Cymru - The Party of Wales",
+        "party": "Plaid Cymru",
+        "votes": 190,
+        "elected": false
+      },
+      {
+        "name": "Roger Morgan",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 58,
+        "elected": false
+      },
+      {
+        "name": "Tom Pedley",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 49,
+        "elected": false
+      },
+      {
+        "name": "Brendan Roberts",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 18,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -99,11 +149,163 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.torfaen.llantarnam.2022-05-05/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.15179790623577605,
+        "Conservative": 0,
+        "Liberal Democrats": 0,
+        "Green Party": 0.06099226217569413,
+        "SNP": 0,
+        "Plaid Cymru": 0.09831588529813381,
+        "Restore Britain": 0,
+        "Independent": 0.688893946290396,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.torfaen.llantarnam.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 42,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9841723561133158,
+        "Conservative": -0.6307375185213864,
+        "Liberal Democrats": -0.18652929964789455,
+        "Green Party": -0.21020702076524378,
+        "Independent": -0.2698083522025483
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.443125428430391,
+        "Conservative": 0.6026830617137529,
+        "Liberal Democrats": 0.8667051303671713,
+        "Green Party": 0.8507379337854007,
+        "Independent": 0.8115005420293624
+      },
+      "entry_shares": {
+        "Reform UK": 0.2589455679382189,
+        "Liberal Democrats": 0.044370229007633585,
+        "Green Party": 0.07027276930189552,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 33,
+        "Conservative": 42,
+        "Liberal Democrats": 34,
+        "Green Party": 23,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 5,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.5034587614297137,
+      "Labour": 0.12189406439484796,
+      "Conservative": 0,
+      "Liberal Democrats": 0.08626747589619167,
+      "Green Party": 0.0972275799588673,
+      "SNP": 0,
+      "Plaid Cymru": 0.19115211832037937,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.701,
+      "Labour": 0.05125,
+      "Liberal Democrats": 0.0475,
+      "Green Party": 0.0315,
+      "Plaid Cymru": 0.16875
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.20517796138009953,
+        "p50": 0.43084991000636014,
+        "p90": 0.6446135464504482
+      },
+      "Labour": {
+        "p10": 0.0352610905436171,
+        "p50": 0.11335398922308625,
+        "p90": 0.2761033627118681
+      },
+      "Liberal Democrats": {
+        "p10": 0.01872925431193938,
+        "p50": 0.08099267865159365,
+        "p90": 0.2533014498319965
+      },
+      "Green Party": {
+        "p10": 0.030880272865994148,
+        "p50": 0.09007062183451353,
+        "p90": 0.22389145209473424
+      },
+      "Plaid Cymru": {
+        "p10": 0.048957008354659486,
+        "p50": 0.18545656434781277,
+        "p90": 0.40611875706672146
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Plaid Cymru",
+    "margin_pp": 31.23066431093343,
+    "leader_probability": 0.701,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Conservative is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Plaid Cymru carried unswung: fewer than 5 comparable contests in the window."
+    ],
+    "unpriced_parties": [
+      "Conservative"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.4272419627749577,
+      "Labour": 0.3062605752961083,
+      "Conservative": 0.049069373942470386,
+      "Liberal Democrats": 0.015228426395939087,
+      "Green Party": 0.04145516074450085,
+      "SNP": 0,
+      "Plaid Cymru": 0.16074450084602368,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Reform UK",
+    "winner_candidate": "Jonathan Edward Hollins",
+    "runner_up_party": "Labour",
+    "majority_votes": 143,
+    "total_votes": 1182,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.torfaen.llantarnam.by.2026-07-02/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Reform UK",
+      "call_correct": true,
+      "mae_pp": 7.78119616145769
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

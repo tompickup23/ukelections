@@ -2,9 +2,9 @@
 /**
  * Holborn and St Pancras. The pre-poll briefing.
  *
- * There is no forecast on this page and there should not be one yet: the seat
- * is not vacant, no writ has been moved, no polling day exists and no
- * constituency poll has been published. What the page does have is the
+ * There is no forecast on this page and there should not be one yet: the poll
+ * is fixed, but nominations remain open and no constituency poll has been
+ * published. What the page does have is the
  * strongest substitute available: the Camden borough election of 7 May 2026
  * across the ten whole wards inside the seat. That is a real vote on this
  * ground, four months old, and at Arbroath the equivalent signal beat the
@@ -16,9 +16,8 @@
  * That variant is the only thing standing between "Reform third" and
  * "Conservatives third", so the comparison table is not decoration.
  *
- * Data: data/predictions/by-elections/holborn-and-st-pancras.json, built by
- * scripts/build-holborn-byelection.mjs. Note the file carries no ISO date, on
- * purpose. See the comment at the top of that script.
+ * Data: data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json,
+ * built by scripts/build-holborn-byelection.mjs.
  */
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
@@ -30,7 +29,7 @@ import path from "node:path";
 
 const data = JSON.parse(
   readFileSync(
-    path.join(process.cwd(), "data/predictions/by-elections/holborn-and-st-pancras.json"),
+    path.join(process.cwd(), "data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json"),
     "utf8",
   ),
 );
@@ -99,14 +98,16 @@ const timeline: Array<{ date: string; event: string }> = [
   { date: "4 July 2024", event: "Keir Starmer holds the seat with 48.9%, a majority of 11,572 over the independent Andrew Feinstein, and becomes Prime Minister." },
   { date: "7 May 2026", event: "Camden borough elections. Labour holds the council on 30 of 55 seats, down from 47; the Greens go from 1 seat to 11 and sweep two of the ten wards in this seat." },
   { date: "June 2026", event: "Starmer resigns as Prime Minister and Labour leader after the May results and a challenge from Andy Burnham, who succeeds him." },
-  { date: "1 September 2026", event: "Starmer tells the Camden New Journal he will stand down as MP after eleven years, to focus on international affairs." },
-  { date: "Not yet", event: "Resignation effected (Chiltern Hundreds or Manor of Northstead), writ moved, and polling day 21 to 27 working days later." },
+  { date: "1 September 2026", event: "Starmer vacates the seat by taking the Chiltern Hundreds." },
+  { date: "8 September 2026", event: "Camden publishes the Notice of Election. Nominations close on 15 September and polling is fixed for 8 October." },
+  { date: "9 September 2026", event: "Labour members select Sagal Abdi-Wali." },
+  { date: "8 October 2026", event: "Polling day, if the election is contested." },
 ];
 ---
 
 <BaseLayout
   title="Holborn and St Pancras by-election. Starmer's seat"
-  description="Keir Starmer announced on 1 September 2026 that he will stand down as MP for Holborn and St Pancras. No date is set and no candidate is selected. The freshest same-ground vote is the Camden borough election of 7 May 2026: across the ten whole wards inside the seat it has Labour on 38.6% and the Greens on 29.5%, up 19.1pp on GE2024."
+  description="Holborn and St Pancras votes on 8 October 2026. Labour has selected Sagal Abdi-Wali; the Green selection remains open. No constituency poll is published, so this page presents the May Camden result as a signal, not a forecast."
 >
   <section class="page-hero">
     {contest.pcon24cd && (
@@ -122,13 +123,13 @@ const timeline: Array<{ date: string; event: string }> = [
         />
       </div>
     )}
-    <p class="eyebrow">By-election · date to be set · seat not yet vacant</p>
+    <p class="eyebrow">By-election · 8 October 2026 · nominations close 15 September</p>
     <h1>Holborn and St Pancras by-election</h1>
     <p class="lede">
-      Keir Starmer announced on 1 September 2026 that he will stand down as MP for Holborn and St
-      Pancras, three months after resigning as Prime Minister. Nothing about the contest is fixed
-      yet: the seat is not vacant, no writ has been moved and not one candidate has been selected.
-      What is fixed is the ground. Camden voted four months ago, and in the ten whole wards inside
+      Holborn and St Pancras votes on 8 October. Labour has selected Camden council leader Sagal
+      Abdi-Wali, while Zack Polanski and Hamza Chowdhury are seeking the Green nomination. Nominations
+      close on 15 September, so no candidate has yet been formally confirmed. What is fixed is the
+      ground. Camden voted four months ago, and in the ten whole wards inside
       this seat it split Labour {pct1(signal.shares["Labour"])}, Green {pct1(signal.shares["Green Party"])},
       a {pp(signal.swing_vs_ge2024_pp["Green Party"])} Green move on the general election.
     </p>
@@ -148,8 +149,8 @@ const timeline: Array<{ date: string; event: string }> = [
     </div>
     <p class="caption">
       Method: signal-only · Provider: UK Elections. After Makerfield we publish a numeric central
-      forecast only where a competitive race gives the models something real to estimate, and a
-      contest with no date, no field and no poll is not that.
+      forecast only where a competitive race gives the models something real to estimate. This has a
+      date, but not a final field or a constituency poll, so it is not there yet.
       <a href="/by-elections/makerfield/">What went wrong at Makerfield →</a>
     </p>
   </section>
@@ -301,7 +302,7 @@ const timeline: Array<{ date: string; event: string }> = [
       <h2>Who has said anything at all</h2>
     </div>
     <div class="backtest-callout">
-      <strong>Not one candidate has been selected, by any party.</strong>
+      <strong>Selections are moving, but the ballot is not yet fixed.</strong>
       <span class="backtest-detail">{field.note}</span>
     </div>
     <table class="seat-table" style="margin-top:var(--space-md)">
@@ -314,7 +315,7 @@ const timeline: Array<{ date: string; event: string }> = [
               {shortPartyLabel(c.party)}
             </td>
             <td>{c.candidate || <span class="muted">not named</span>}</td>
-            <td class="muted">Contesting, candidate not named · {c.note}</td>
+            <td class="muted">{c.selection_status?.replaceAll("_", " ") ?? "position reported"} · {c.note}</td>
           </tr>
         ))}
         {field.floated.map((c: any) => (
@@ -325,6 +326,13 @@ const timeline: Array<{ date: string; event: string }> = [
             </td>
             <td>{c.candidate}</td>
             <td class="muted">Speculation only · {c.note}</td>
+          </tr>
+        ))}
+        {(field.declined || []).map((c: any) => (
+          <tr>
+            <td><span class="party-pill" style={`background:${partyColour(c.party)}`}></span>{shortPartyLabel(c.party)}</td>
+            <td>{c.candidate}</td>
+            <td class="muted">not standing · {c.note}</td>
           </tr>
         ))}
       </tbody>

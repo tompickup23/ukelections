@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:43.572Z",
+  "generated_at": "2026-09-10T11:59:51.562Z",
   "slug": "denbighshire-rhyl-south-2026-06-25",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.denbighshire.rhyl-south.by.2026-06-25",
     "polling_day": "2026-06-25",
@@ -26,12 +26,62 @@
     "postal_vote_deadline": "2026-06-10"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.denbighshire.rhyl-south.by.2026-06-25/sopn/2026-06-01T14%3A44%3A08.289994%2B00%3A00/Rhyl_South.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Plaid Cymru",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Tony Thomas",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 297,
+        "elected": true
+      },
+      {
+        "name": "Gloria Jane Lambert",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 167,
+        "elected": false
+      },
+      {
+        "name": "Bleddyn Rhys",
+        "party_name": "Plaid Cymru - The Party of Wales",
+        "party": "Plaid Cymru",
+        "votes": 160,
+        "elected": false
+      },
+      {
+        "name": "Crispin Jones",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 131,
+        "elected": false
+      },
+      {
+        "name": "Keith Kirwan",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 10,
+        "elected": false
+      },
+      {
+        "name": "Desmond Gerard Rooney",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 5,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -79,11 +129,162 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.denbighshire.rhyl-south.2022-05-05/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.6259469696969697,
+        "Conservative": 0.3740530303030303,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.denbighshire.rhyl-south.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 42,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9797795001597245,
+        "Conservative": -0.6307375185213864,
+        "Liberal Democrats": -0.18652929964789455,
+        "Green Party": -0.21020702076524378,
+        "Independent": -0.2698083522025483
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44485933095455976,
+        "Conservative": 0.6026830617137529,
+        "Liberal Democrats": 0.8667051303671713,
+        "Green Party": 0.8507379337854007,
+        "Independent": 0.8115005420293624
+      },
+      "entry_shares": {
+        "Reform UK": 0.2653173399148628,
+        "Liberal Democrats": 0.044370229007633585,
+        "Green Party": 0.07420327616303321,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 33,
+        "Conservative": 42,
+        "Liberal Democrats": 34,
+        "Green Party": 23,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 5,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.26242934550968744,
+      "Labour": 0.3816216585830212,
+      "Conservative": 0.23866617011568383,
+      "Liberal Democrats": 0.043887256529575744,
+      "Green Party": 0.07339556926203199,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.278,
+      "Labour": 0.49475,
+      "Conservative": 0.20575,
+      "Liberal Democrats": 0.01,
+      "Green Party": 0.0115
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.07104573147066759,
+        "p50": 0.2425251668566219,
+        "p90": 0.4661374006873969
+      },
+      "Labour": {
+        "p10": 0.16091153729896768,
+        "p50": 0.3443852615696614,
+        "p90": 0.5606783259226268
+      },
+      "Conservative": {
+        "p10": 0.07940623159813574,
+        "p50": 0.21996692450166422,
+        "p90": 0.42440178099859044
+      },
+      "Liberal Democrats": {
+        "p10": 0.010191730350282395,
+        "p50": 0.03995045984253743,
+        "p90": 0.13842211175639751
+      },
+      "Green Party": {
+        "p10": 0.022311428377885745,
+        "p50": 0.06905266951334026,
+        "p90": 0.1771692884242671
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Reform UK",
+    "margin_pp": 11.919231307333378,
+    "leader_probability": 0.49475,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Plaid Cymru is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Plaid Cymru"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.38571428571428573,
+      "Labour": 0.17012987012987013,
+      "Conservative": 0.21688311688311687,
+      "Liberal Democrats": 0.012987012987012988,
+      "Green Party": 0.006493506493506494,
+      "SNP": 0,
+      "Plaid Cymru": 0.2077922077922078,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Reform UK",
+    "winner_candidate": "Tony Thomas",
+    "runner_up_party": "Conservative",
+    "majority_votes": 130,
+    "total_votes": 770,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.denbighshire.rhyl-south.by.2026-06-25/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Labour",
+      "call_correct": false,
+      "mae_pp": 11.035904933226872
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

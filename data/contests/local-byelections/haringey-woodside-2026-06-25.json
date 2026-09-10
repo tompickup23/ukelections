@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:43.781Z",
+  "generated_at": "2026-09-10T11:59:51.788Z",
   "slug": "haringey-woodside-2026-06-25",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.haringey.woodside.by.2026-06-25",
     "polling_day": "2026-06-25",
@@ -26,12 +26,54 @@
     "postal_vote_deadline": "2026-06-10"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 5,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.haringey.woodside.by.2026-06-25/sopn/2026-06-01T14%3A29%3A13.212567%2B00%3A00/temp.jpeg",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Elara Shurety",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 1033,
+        "elected": true
+      },
+      {
+        "name": "Thayahlan Iyngkaran",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 978,
+        "elected": false
+      },
+      {
+        "name": "Ruth Price",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 171,
+        "elected": false
+      },
+      {
+        "name": "Mikeleno Fureraj",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": 110,
+        "elected": false
+      },
+      {
+        "name": "Rakeebah Rahim",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 93,
+        "elected": false
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -248,11 +290,154 @@
     "source": "https://haringey.gov.uk/council-elections/elections-voting/local-elections-may-2026/woodside-ward",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The candidate list could not be read from Democracy Club when this page was built, so we do not know who is standing."
-  ],
-  "result": null,
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.07003686150605581,
+        "Labour": 0.37756714060031593,
+        "Conservative": 0.0832016850974197,
+        "Liberal Democrats": 0.10215903106898368,
+        "Green Party": 0.3670352817272249,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://haringey.gov.uk/council-elections/elections-voting/local-elections-may-2026/woodside-ward"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 21,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.14775418482831082,
+        "Labour": -0.2961166711432826,
+        "Conservative": -0.31242208988157594,
+        "Liberal Democrats": -0.12537396528094086,
+        "Green Party": 0.5006571659476606
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8933190133950665,
+        "Labour": 0.7946155135542321,
+        "Conservative": 0.7842838359028943,
+        "Liberal Democrats": 0.9089428192773387,
+        "Green Party": 1.4192466747694055
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443
+      },
+      "party_counts": {
+        "Reform UK": 21,
+        "Labour": 18,
+        "Conservative": 20,
+        "Liberal Democrats": 14,
+        "Green Party": 14,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 3,
+        "Other": 0
+      }
+    },
+    "central": {
+      "Reform UK": 0.06014377334483979,
+      "Labour": 0.30649879211168524,
+      "Conservative": 0.06138881018020034,
+      "Liberal Democrats": 0.08993357163293668,
+      "Green Party": 0.4820350527303379,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0,
+      "Labour": 0.3075,
+      "Conservative": 0.0295,
+      "Liberal Democrats": 0.04275,
+      "Green Party": 0.62025
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.027866679289249005,
+        "p50": 0.055071748072331284,
+        "p90": 0.10780285740801444
+      },
+      "Labour": {
+        "p10": 0.07635062869754781,
+        "p50": 0.2855331731521519,
+        "p90": 0.5217928616519061
+      },
+      "Conservative": {
+        "p10": 0.01085994350073407,
+        "p50": 0.05897132744736438,
+        "p90": 0.22670995886504752
+      },
+      "Liberal Democrats": {
+        "p10": 0.020212769841045728,
+        "p50": 0.08642238495560225,
+        "p90": 0.2637910083689451
+      },
+      "Green Party": {
+        "p10": 0.22983002460982926,
+        "p50": 0.42694240599188393,
+        "p90": 0.6490400258716983
+      }
+    },
+    "winner": "Green Party",
+    "runner_up": "Labour",
+    "margin_pp": 17.55362606186527,
+    "leader_probability": 0.62025,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.07169811320754717,
+      "Labour": 0.410062893081761,
+      "Conservative": 0.04612159329140461,
+      "Liberal Democrats": 0.0389937106918239,
+      "Green Party": 0.4331236897274633,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Green Party",
+    "winner_candidate": "Elara Shurety",
+    "runner_up_party": "Labour",
+    "majority_votes": 55,
+    "total_votes": 2385,
+    "source": "https://candidates.democracyclub.org.uk/elections/local.haringey.woodside.by.2026-06-25/",
+    "outcome": null,
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Green Party",
+      "call_correct": true,
+      "mae_pp": 4.604737633311326
+    }
+  },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",

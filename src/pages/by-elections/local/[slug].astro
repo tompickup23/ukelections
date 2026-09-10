@@ -107,8 +107,19 @@ const holderSentence = holder?.established
     "."
   : "";
 
+// A contest whose winner our source records but whose counts it does not
+// publish is declared, not awaited. Saying "result awaited" for three months
+// while the winner sits in this page's own candidate list is the version of
+// this page that was live until 10 September 2026.
+const declaration = d.declaration;
 const statusLabel =
-  d.status === "concluded" ? "Result declared" : d.status === "polls_closed" ? "Polls closed, result awaited" : "Upcoming";
+  d.status === "concluded"
+    ? "Result declared"
+    : declaration?.declared
+      ? "Result declared, counts not published"
+      : d.status === "polls_closed"
+        ? "Polls closed, result awaited"
+        : "Upcoming";
 
 // Structured data. Breadcrumbs come from the shared builder so every template
 // agrees on the trail; the NewsArticle is what makes the page eligible for
@@ -215,6 +226,23 @@ if (isNews) {
       <p class="note">{holder?.note}</p>
     )}
   </section>
+
+  {declaration?.declared && (
+    <section class="card result-card">
+      <h2>The result</h2>
+      <p class="result-headline">
+        <strong>{shortPartyLabel(declaration.winner_party)}</strong>
+        {declaration.winner_candidate ? ` won. ${declaration.winner_candidate}` : " won"}
+        {declaration.turnout_votes !== null
+          ? `. Turnout ${declaration.turnout_votes.toLocaleString("en-GB")}${declaration.turnout_pct !== null ? ` (${declaration.turnout_pct}%)` : ""}.`
+          : "."}
+      </p>
+      <p class="note">{declaration.note}</p>
+      <p class="note">
+        <a href={declaration.source} rel="noopener">The declaration this is taken from</a>.
+      </p>
+    </section>
+  )}
 
   {result?.declared && (
     <section class="card result-card">

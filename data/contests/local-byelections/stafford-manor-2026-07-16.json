@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:11:44.898Z",
+  "generated_at": "2026-09-10T11:59:52.966Z",
   "slug": "stafford-manor-2026-07-16",
   "status": "concluded",
   "contest": {
@@ -17,7 +17,7 @@
     "territory": "ENG",
     "voting_system": "FPTP",
     "boundary_set_start": "2015-05-22",
-    "boundary_changed_since_prior": true,
+    "boundary_changed_since_prior": false,
     "vacancy_reason_code": "DEATH",
     "vacancy_reason": "the sitting councillor died",
     "requires_voter_id": "EA-2022",
@@ -143,56 +143,165 @@
     ]
   },
   "prior_result": {
-    "election_date": "2015-05-07",
-    "seats_contested": 2,
+    "election_date": "2023-05-04",
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0,
-      "Labour": 0.4503777025266997,
-      "Conservative": 0.30711122688200054,
+      "Labour": 0.5575163398692811,
+      "Conservative": 0.29411764705882354,
       "Liberal Democrats": 0,
-      "Green Party": 0,
+      "Green Party": 0.14836601307189543,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
       "Independent": 0,
-      "Other": 0.2425110705912998
+      "Other": 0
     },
     "candidates": [
       {
-        "name": "Angela Loughran",
-        "party_name": "Labour",
-        "votes": 1729
+        "name": "Angela Mary Loughran",
+        "party_name": "Labour Party",
+        "votes": 853
       },
       {
-        "name": "Geoff Rowlands",
-        "party_name": "Labour",
-        "votes": 1421
+        "name": "Anne Hobbs",
+        "party_name": "Labour Party",
+        "votes": 785
       },
       {
-        "name": "Cathy Collier",
-        "party_name": "Conservative",
-        "votes": 1179
+        "name": "Alex Oldridge",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 450
       },
       {
-        "name": "Maria Redfern",
-        "party_name": "Conservative",
-        "votes": 1163
+        "name": "Robert Andrew Gwynn",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 432
       },
       {
-        "name": "Richard Duffy",
-        "party_name": "Stafford",
-        "votes": 931
+        "name": "Hayley Percival",
+        "party_name": "Green Party",
+        "votes": 227
       }
     ],
-    "source_label": "Local Elections Archive Project (Andrew Teale), CC BY-SA 3.0",
-    "source": "https://www.andrewteale.me.uk/leap/",
-    "usable_as_baseline": false
+    "source_label": "Democracy Club",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.stafford.manor.2023-05-04/",
+    "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "The ward boundary changed since its last ordinary election, so there is no like-for-like baseline to swing from.",
-    "The last ordinary contest here was 2015-05-07, too far back to swing from."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.5575163398692811,
+        "Conservative": 0.29411764705882354,
+        "Liberal Democrats": 0,
+        "Green Party": 0.14836601307189543,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.stafford.manor.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 42,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9893516793878778,
+        "Conservative": -0.6292945243482393,
+        "Liberal Democrats": -0.23095042199636484,
+        "Green Party": -0.11240182614492411
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44108870212060486,
+        "Conservative": 0.6034220686852264,
+        "Liberal Democrats": 0.8369268287834196,
+        "Green Party": 0.918086656838153
+      },
+      "entry_shares": {
+        "Reform UK": 0.2589455679382189,
+        "Liberal Democrats": 0.04056246619794483,
+        "Green Party": 0.07027276930189552,
+        "Independent": 0.17124006466141062
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 29,
+        "Conservative": 41,
+        "Liberal Democrats": 34,
+        "Green Party": 22,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.2895178989901023,
+      "Labour": 0.35668882302305266,
+      "Conservative": 0.20317044040851523,
+      "Liberal Democrats": 0,
+      "Green Party": 0.1506228375783298,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.3235,
+      "Labour": 0.4335,
+      "Conservative": 0.18975,
+      "Green Party": 0.05325
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.08729919236941046,
+        "p50": 0.26967083654710133,
+        "p90": 0.49809153885405844
+      },
+      "Labour": {
+        "p10": 0.14387955473213754,
+        "p50": 0.32342288146637455,
+        "p90": 0.5371417357583768
+      },
+      "Conservative": {
+        "p10": 0.048724805160875774,
+        "p50": 0.18968167419569287,
+        "p90": 0.42233793228532845
+      },
+      "Green Party": {
+        "p10": 0.058547363570868954,
+        "p50": 0.14420611659977406,
+        "p90": 0.29469623160880765
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Reform UK",
+    "margin_pp": 6.717092403295038,
+    "leader_probability": 0.4335,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": {
     "declared": true,
     "shares": {
@@ -214,8 +323,15 @@
     "total_votes": 1329,
     "source": "https://candidates.democracyclub.org.uk/elections/local.stafford.manor.by.2026-07-16/",
     "outcome": null,
-    "grading": null
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Labour",
+      "call_correct": true,
+      "mae_pp": 1.361597684142854
+    }
   },
+  "declaration": null,
   "sources": [
     {
       "label": "Democracy Club, EveryElection",
