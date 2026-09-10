@@ -31,6 +31,32 @@ function step(label, command, args, options = {}) {
   }
 }
 
+/**
+ * A step whose failure must not strand the publication.
+ *
+ * The by-election contest refresh reaches two Democracy Club APIs. An outage
+ * there is not a reason to withhold validated national polling from the live
+ * site, which is the whole premise of this narrow publisher. So a failure here
+ * warns and the run continues on whatever contest data is already committed,
+ * and the freshness assertion in the gate below decides whether that data is
+ * still fit to publish. Transient outage: publish anyway. Genuinely stale:
+ * block. The distinction is the point; a hard step here could not make it.
+ */
+function softStep(label, command, args, options = {}) {
+  process.stdout.write(`\n=== [${new Date().toISOString()}] ${label} ===\n`);
+  const result = spawnSync(command, args, {
+    cwd: ROOT,
+    stdio: "inherit",
+    env: { ...process.env, ...options.env },
+  });
+  if (result.status !== 0) {
+    process.stdout.write(
+      `\n! ${label} failed (exit ${result.status ?? "unknown"}). ` +
+        `Continuing on the contest data already committed; the freshness gate below will stop the run if it is too old.\n`,
+    );
+  }
+}
+
 function onVpsMain() {
   if (process.env.UKE_ON_VPS_MAIN === "1") return true;
   const result = spawnSync("hostname", [], { encoding: "utf8" });
@@ -76,9 +102,21 @@ async function main() {
     "node",
     verificationArgs,
   );
+  // Regenerate the local by-election contest files before the gate reads them.
+  //
+  // Each file carries its contest's status, and a contest that has polled but
+  // still reads "upcoming" is a factual error on a public election page. The
+  // generator ran only as phase 7f of scripts/refresh-pipeline.mjs, which no
+  // cron invokes, so when this narrow publisher took over the 04:30 slot the
+  // corpus quietly stopped being regenerated: by 10 September 2026 five
+  // contests that polled on 3 September had been published as "upcoming" for a
+  // week, while every scheduled run went green because no test in this path
+  // looked. Regenerating here, and asserting freshness below, closes both ends.
+  softStep("Refresh local by-election contest files", "node", ["scripts/build-local-byelections.mjs"]);
   // This is a narrowly-scoped publisher. Its gate covers the refreshed
-  // aggregate and model-input contract, while the separate broad pipeline
-  // continues to own unrelated local-election and static-data tests.
+  // aggregate and model-input contract, plus the by-election contest freshness
+  // this path now owns because nothing else runs often enough to. The separate
+  // broad pipeline still owns the static-data tests.
   step("Run polling publication tests", "npm", ["run", "test:polling-publish", "--silent"]);
   step("Build static site", "npm", ["run", "build"], { env: { BUILD_OG: "1" } });
   step("Run rendered-site gate", "node", ["scripts/audit-seo.mjs", "dist"]);

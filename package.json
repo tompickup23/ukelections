@@ -34,7 +34,7 @@
     "publish:polling": "node scripts/publish-polling-update.mjs",
     "verify:polling": "node scripts/verify-polling-sources.mjs",
     "verify:polling:strict": "node scripts/verify-polling-sources.mjs --require-primary",
-    "test:polling-publish": "vitest run tests/nationalPolling.test.js tests/polling-reconciliation.test.mjs tests/polling-verification.test.mjs tests/poll-aggregation.test.mjs",
+    "test:polling-publish": "vitest run tests/nationalPolling.test.js tests/polling-reconciliation.test.mjs tests/polling-verification.test.mjs tests/poll-aggregation.test.mjs tests/local-byelection-contests.test.mjs",
     "backtest": "node scripts/run-backtest.mjs",
     "compile:features": "node scripts/compile-area-features.mjs",
     "fetch:source": "node scripts/fetch-source-snapshot.mjs",
