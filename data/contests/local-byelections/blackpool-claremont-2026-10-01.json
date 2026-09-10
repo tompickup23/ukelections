@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.478Z",
+  "generated_at": "2026-09-10T11:11:46.989Z",
   "slug": "blackpool-claremont-2026-10-01",
   "status": "upcoming",
   "contest": {
@@ -18,35 +18,67 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2023-05-04",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "DEATH",
+    "vacancy_reason": "the sitting councillor died",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-09-04",
     "registration_deadline": "2026-09-15",
     "postal_vote_deadline": "2026-09-16"
   },
   "field": {
-    "candidate_count": 3,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 7,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.blackpool.claremont.by.2026-10-01/sopn/2026-09-04T16%3A07%3A01.106036%2B00%3A00/Claremont.pdf",
     "parties": [
       "Conservative",
+      "Green Party",
+      "Independent",
       "Labour",
-      "Reform UK"
+      "Liberal Democrats",
+      "Reform UK",
+      "Restore Britain"
     ],
     "candidates": [
       {
-        "name": "Mark Anthony Butcher",
+        "name": "Kevan Michael Benfold",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Paula Brooksbank",
+        "party_name": "Restore Britain",
+        "party": "Restore Britain",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Mark Butcher",
         "party_name": "Reform UK",
         "party": "Reform UK",
         "votes": null,
         "elected": null
       },
       {
-        "name": "Katie Donnelli-Hunn",
+        "name": "Katie Helen Donnelli-Hunn",
         "party_name": "Labour Party",
         "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Rob Jones",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Kim Sherrie Knight",
+        "party_name": "Independent",
+        "party": "Independent",
         "votes": null,
         "elected": null
       },
@@ -185,10 +217,136 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.blackpool.claremont.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.5233463035019456,
+        "Conservative": 0.21595330739299612,
+        "Liberal Democrats": 0.12062256809338522,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.14007782101167315,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.blackpool.claremont.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 35,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9867620177505968,
+        "Conservative": -0.7004568853438919,
+        "Liberal Democrats": -0.26018021796800594,
+        "Green Party": -0.051151948990967755
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44210603815035326,
+        "Conservative": 0.5678576460503861,
+        "Liberal Democrats": 0.817746486723126,
+        "Green Party": 0.9621285945599451
+      },
+      "entry_shares": {
+        "Reform UK": 0.2593232044198895,
+        "Liberal Democrats": 0.03862254091396444,
+        "Green Party": 0.06542056074766354
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 22,
+        "Conservative": 34,
+        "Liberal Democrats": 29,
+        "Green Party": 19,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.26702625485279907,
+      "Labour": 0.2990544546688666,
+      "Conservative": 0.12384392360872762,
+      "Liberal Democrats": 0.09847277086490547,
+      "Green Party": 0.06736384183550832,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.14423875416919293,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.3405,
+      "Labour": 0.384,
+      "Conservative": 0.1015,
+      "Liberal Democrats": 0.02825,
+      "Green Party": 0.00275,
+      "Independent": 0.143
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.07449176982547143,
+        "p50": 0.23738180509543905,
+        "p90": 0.44388328410539923
+      },
+      "Labour": {
+        "p10": 0.11037195851080038,
+        "p50": 0.26078121061084314,
+        "p90": 0.4526176079597099
+      },
+      "Conservative": {
+        "p10": 0.026832941308551253,
+        "p50": 0.11042166043416413,
+        "p90": 0.2937314547097594
+      },
+      "Liberal Democrats": {
+        "p10": 0.031422378164953656,
+        "p50": 0.08445964126784095,
+        "p90": 0.20132047357495664
+      },
+      "Green Party": {
+        "p10": 0.027138249061602913,
+        "p50": 0.05865478528655428,
+        "p90": 0.1258593498833746
+      },
+      "Independent": {
+        "p10": 0.03274886424519576,
+        "p50": 0.13495452767124297,
+        "p90": 0.3352733159933616
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Reform UK",
+    "margin_pp": 3.2028199816067526,
+    "leader_probability": 0.384,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Restore Britain is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Independent carried unswung: fewer than 5 comparable contests in the window."
+    ],
+    "unpriced_parties": [
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "sources": [
     {

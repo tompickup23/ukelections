@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:03.941Z",
+  "generated_at": "2026-09-10T11:11:44.203Z",
   "slug": "bolton-horwich-north-2026-07-02",
   "status": "concluded",
   "contest": {
@@ -167,7 +167,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.25618301731244847,
       "Labour": 0.11046990931574609,
@@ -182,43 +181,64 @@
     },
     "candidates": [
       {
+        "person_id": 73256,
         "name": "Andrea Jane Finney",
         "party_name": "Horwich & Blackrod First Independents",
-        "votes": 1905
+        "party_ec_id": "PP8024",
+        "votes": 1905,
+        "elected": true
       },
       {
+        "person_id": 128951,
         "name": "Stephen Martindale",
         "party_name": "Reform UK",
-        "votes": 1243
+        "party_ec_id": "PP7931",
+        "votes": 1243,
+        "elected": false
       },
       {
+        "person_id": 128949,
         "name": "Helena Carman",
         "party_name": "Green Party",
-        "votes": 585
+        "party_ec_id": "PP63",
+        "votes": 585,
+        "elected": false
       },
       {
+        "person_id": 128950,
         "name": "Graham Dawson",
         "party_name": "Labour Party",
-        "votes": 536
+        "party_ec_id": "PP53",
+        "votes": 536,
+        "elected": false
       },
       {
+        "person_id": 11670,
         "name": "Carol Forshaw",
         "party_name": "Conservative and Unionist Party",
-        "votes": 257
+        "party_ec_id": "PP52",
+        "votes": 257,
+        "elected": false
       },
       {
+        "person_id": 111524,
         "name": "Charlotte Chloe Minnie Moncado-Sears",
         "party_name": "Independent",
-        "votes": 252
+        "party_ec_id": "ynmp-party:2",
+        "votes": 252,
+        "elected": false
       },
       {
+        "person_id": 77742,
         "name": "Scott James Turner-Preece",
         "party_name": "Liberal Democrats",
-        "votes": 74
+        "party_ec_id": "PP90",
+        "votes": 74,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.bolton.horwich-north.2026-05-07/",
+    "source": "https://www.bolton.gov.uk/news/article/2037/local-election-results-2026",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -227,7 +247,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.25618301731244847,
@@ -242,93 +261,94 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.bolton.horwich-north.2026-05-07/"
+      "source": "https://www.bolton.gov.uk/news/article/2037/local-election-results-2026"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 20,
+      "contests_used": 31,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.10295643063305523,
-        "Labour": -0.2902319840617069,
-        "Conservative": -0.31218478038920283,
-        "Liberal Democrats": -0.10974745950606701,
-        "Green Party": 0.7078944667792584
+        "Reform UK": -0.08758793435584683,
+        "Labour": -0.11116978454475135,
+        "Conservative": -0.31242208988157594,
+        "Liberal Democrats": -0.2549637795774769,
+        "Green Party": 0.2627875236346733
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.9247850704800175,
-        "Labour": 0.7983693048917354,
-        "Conservative": 0.7844334723591913,
-        "Liberal Democrats": 0.9199656131210484,
-        "Green Party": 1.6141780465862157
+        "Reform UK": 0.9357568461637951,
+        "Labour": 0.9189584514352498,
+        "Conservative": 0.7842838359028943,
+        "Liberal Democrats": 0.8211453733082045,
+        "Green Party": 1.2096594589182859
       },
       "entry_shares": {
-        "Green Party": 0.13442113442113443
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.04842342342342342
       },
       "party_counts": {
-        "Reform UK": 20,
-        "Labour": 19,
-        "Conservative": 19,
-        "Liberal Democrats": 12,
-        "Green Party": 13,
+        "Reform UK": 31,
+        "Labour": 28,
+        "Conservative": 28,
+        "Liberal Democrats": 20,
+        "Green Party": 23,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 3,
+        "Independent": 4,
         "Other": 0
       }
     },
     "central": {
-      "Reform UK": 0.23158576946986095,
-      "Labour": 0.08304362459545327,
-      "Conservative": 0.038414597552180706,
+      "Reform UK": 0.24598780019150532,
+      "Labour": 0.10256780021694625,
+      "Conservative": 0.04031958739946494,
       "Liberal Democrats": 0,
-      "Green Party": 0.21266514010232412,
+      "Green Party": 0.1551934163351608,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
-      "Independent": 0.434290868280181,
+      "Independent": 0.45593139585692266,
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.11925,
-      "Labour": 0.065,
-      "Conservative": 0.02125,
-      "Green Party": 0.1185,
-      "Independent": 0.676
+      "Reform UK": 0.11875,
+      "Labour": 0.10725,
+      "Conservative": 0.01175,
+      "Green Party": 0.125,
+      "Independent": 0.63725
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.13833592203857778,
-        "p50": 0.2132334403950329,
-        "p90": 0.3356107182922011
+        "p10": 0.14003465764937104,
+        "p50": 0.21717083109619265,
+        "p90": 0.36010587396541566
       },
       "Labour": {
-        "p10": 0.01604681891366324,
-        "p50": 0.07936434652616466,
-        "p90": 0.26431978159829483
+        "p10": 0.01437245866431387,
+        "p50": 0.09635436175298476,
+        "p90": 0.33623180059117913
       },
       "Conservative": {
-        "p10": 0.0066906539086090165,
-        "p50": 0.03712558648221522,
-        "p90": 0.15727880457640508
+        "p10": 0.008419403550641106,
+        "p50": 0.0374756031164718,
+        "p90": 0.13440116962798232
       },
       "Green Party": {
-        "p10": 0.10698519733485831,
-        "p50": 0.1966160805332088,
-        "p90": 0.33786241805259687
+        "p10": 0.03503767883066185,
+        "p50": 0.14306048200001525,
+        "p90": 0.3580298021455031
       },
       "Independent": {
-        "p10": 0.1691617506786635,
-        "p50": 0.39506746821553146,
-        "p90": 0.5751288408852259
+        "p10": 0.17153974085954785,
+        "p50": 0.39678078275723094,
+        "p90": 0.5954768454112292
       }
     },
     "winner": "Independent",
-    "runner_up": "Reform UK",
-    "margin_pp": 20.270509881032,
-    "leader_probability": 0.676,
+    "runner_up": "Green Party",
+    "margin_pp": 20.994359566541736,
+    "leader_probability": 0.63725,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
@@ -341,7 +361,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -371,7 +391,7 @@
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
       "projected_winner": "Independent",
       "call_correct": true,
-      "mae_pp": 4.8230274526687325
+      "mae_pp": 3.4508706793942423
     }
   },
   "sources": [

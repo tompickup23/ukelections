@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.435Z",
+  "generated_at": "2026-09-10T11:11:46.740Z",
   "slug": "tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23",
   "status": "upcoming",
   "contest": {
@@ -18,8 +18,8 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2024-05-02",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "RESIGNATION",
+    "vacancy_reason": "the sitting councillor resigned",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-08-26",
     "registration_deadline": "2026-09-07",
@@ -144,7 +144,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.2538606403013183,
       "Labour": 0,
@@ -159,28 +158,40 @@
     },
     "candidates": [
       {
+        "person_id": 125476,
         "name": "Alexander Ellison",
         "party_name": "Conservative and Unionist Party",
-        "votes": 1227
+        "party_ec_id": "PP52",
+        "votes": 1227,
+        "elected": true
       },
       {
+        "person_id": 128249,
         "name": "Matthew Beattie",
         "party_name": "Reform UK",
-        "votes": 674
+        "party_ec_id": "PP7931",
+        "votes": 674,
+        "elected": false
       },
       {
+        "person_id": 112975,
         "name": "Vivian Widgery",
         "party_name": "Liberal Democrats",
-        "votes": 384
+        "party_ec_id": "PP90",
+        "votes": 384,
+        "elected": false
       },
       {
+        "person_id": 99980,
         "name": "Paul Jeremy Keith Froome",
         "party_name": "Green Party",
-        "votes": 370
+        "party_ec_id": "PP63",
+        "votes": 370,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.2026-05-07/",
+    "source": "https://democracy.tunbridgewells.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=31",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -189,7 +200,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.2538606403013183,
@@ -204,47 +214,52 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.2026-05-07/"
+      "source": "https://democracy.tunbridgewells.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=31"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 17,
+      "contests_used": 50,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.18809378317227243,
-        "Labour": -0.4992439712516755,
+        "Reform UK": -0.19639492609587406,
+        "Labour": 0.015595898081841586,
         "Conservative": -0.2647282474792766,
-        "Liberal Democrats": 0.04825443100911353,
-        "Green Party": 0.7252604046022582
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.09869467270646498,
+        "Independent": -0.5082783689441566
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.8656434565956257,
-        "Labour": 0.6731257816059886,
+        "Reform UK": 0.8600259746835713,
+        "Labour": 1.0117424691382662,
         "Conservative": 0.8147916560634592,
-        "Liberal Democrats": 1.0366255529843733,
-        "Green Party": 1.630925348720746
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.9278185580189771,
+        "Independent": 0.6680830100643725
       },
-      "entry_shares": {},
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
       "party_counts": {
-        "Reform UK": 17,
-        "Labour": 16,
-        "Conservative": 17,
-        "Liberal Democrats": 12,
-        "Green Party": 12,
+        "Reform UK": 49,
+        "Labour": 44,
+        "Conservative": 45,
+        "Liberal Democrats": 34,
+        "Green Party": 42,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 1,
-        "Other": 0
+        "Independent": 6,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.2158910061542081,
+      "Reform UK": 0.25346250146265464,
       "Labour": 0,
-      "Conservative": 0.39011796744981647,
-      "Liberal Democrats": 0.14795468115849608,
-      "Green Party": 0.24603634523747922,
+      "Conservative": 0.46098843969603703,
+      "Liberal Democrats": 0.13712852861648198,
+      "Green Party": 0.14842053022482646,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -252,37 +267,37 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.09125,
-      "Conservative": 0.6195,
-      "Liberal Democrats": 0.12825,
-      "Green Party": 0.161
+      "Reform UK": 0.11175,
+      "Conservative": 0.6415,
+      "Liberal Democrats": 0.09075,
+      "Green Party": 0.156
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.1255419203427251,
-        "p50": 0.20291072103306093,
-        "p90": 0.32372300645433744
+        "p10": 0.13039103477405514,
+        "p50": 0.22741801986164017,
+        "p90": 0.3771370368818901
       },
       "Conservative": {
-        "p10": 0.1816680134739864,
-        "p50": 0.3697625352040661,
-        "p90": 0.5429305964213673
+        "p10": 0.22301015272138633,
+        "p50": 0.41065850752644134,
+        "p90": 0.6033138951778912
       },
       "Liberal Democrats": {
-        "p10": 0.04097835768158383,
-        "p50": 0.14851336439932794,
-        "p90": 0.3384314048924897
+        "p10": 0.03234745316075521,
+        "p50": 0.13279944941466132,
+        "p90": 0.33271955989547136
       },
       "Green Party": {
-        "p10": 0.13915092489533543,
-        "p50": 0.23508118222802987,
-        "p90": 0.36276638043622755
+        "p10": 0.024120191620140386,
+        "p50": 0.14610297192998312,
+        "p90": 0.40033273011433673
       }
     },
     "winner": "Conservative",
     "runner_up": "Green Party",
-    "margin_pp": 14.408162221233725,
-    "leader_probability": 0.6195,
+    "margin_pp": 20.752593823338238,
+    "leader_probability": 0.6415,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [],
@@ -290,7 +305,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,

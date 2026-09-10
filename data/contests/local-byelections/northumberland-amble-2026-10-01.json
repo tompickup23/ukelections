@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.476Z",
+  "generated_at": "2026-09-10T11:11:46.936Z",
   "slug": "northumberland-amble-2026-10-01",
   "status": "upcoming",
   "contest": {
@@ -18,27 +18,43 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2025-05-01",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "DEATH",
+    "vacancy_reason": "the sitting councillor died",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-09-04",
     "registration_deadline": "2026-09-15",
     "postal_vote_deadline": "2026-09-16"
   },
   "field": {
-    "candidate_count": 2,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 4,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.northumberland.amble.by.2026-10-01/sopn/2026-09-04T15%3A58%3A05.112059%2B00%3A00/Amble.pdf",
     "parties": [
+      "Conservative",
       "Labour",
-      "Reform UK"
+      "Reform UK",
+      "Restore Britain"
     ],
     "candidates": [
+      {
+        "name": "Michael Anthony Joyce",
+        "party_name": "Restore Britain",
+        "party": "Restore Britain",
+        "votes": null,
+        "elected": null
+      },
       {
         "name": "Warren Ladyman",
         "party_name": "Reform UK",
         "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Jenny Richards",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
         "votes": null,
         "elected": null
       },
@@ -170,10 +186,119 @@
     "source": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Councillors-and-Democracy/Elections%20May%202025/Declared%20results%202025/RESULTS-COUNTY-Alnwick-Castle.pdf",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2025-05-01 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2025-05-01",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.4438687392055268,
+        "Labour": 0.3842832469775475,
+        "Conservative": 0.17184801381692574,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Councillors-and-Democracy/Elections%20May%202025/Declared%20results%202025/RESULTS-COUNTY-Alnwick-Castle.pdf"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 50,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.19639492609587406,
+        "Labour": 0.015595898081841586,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.09869467270646498,
+        "Independent": -0.5082783689441566
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8600259746835713,
+        "Labour": 1.0117424691382662,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.9278185580189771,
+        "Independent": 0.6680830100643725
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
+      "party_counts": {
+        "Reform UK": 49,
+        "Labour": 44,
+        "Conservative": 45,
+        "Liberal Democrats": 34,
+        "Green Party": 42,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.4298473330283104,
+      "Labour": 0.42106816615702314,
+      "Conservative": 0.14908450081466634,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.4915,
+      "Labour": 0.4715,
+      "Conservative": 0.037
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.27288680257251263,
+        "p50": 0.4166532553541642,
+        "p90": 0.630296399477759
+      },
+      "Labour": {
+        "p10": 0.15828047390168895,
+        "p50": 0.4033509412784032,
+        "p90": 0.5971305928088243
+      },
+      "Conservative": {
+        "p10": 0.05428949279541845,
+        "p50": 0.1535501945232142,
+        "p90": 0.3241335550729029
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Labour",
+    "margin_pp": 0.877916687128727,
+    "leader_probability": 0.4915,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Restore Britain is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "sources": [
     {

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.316Z",
+  "generated_at": "2026-09-10T11:11:46.206Z",
   "slug": "sheffield-southey-2026-08-27",
   "status": "concluded",
   "contest": {
@@ -167,7 +167,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.49930555555555556,
       "Labour": 0.24513888888888888,
@@ -182,43 +181,64 @@
     },
     "candidates": [
       {
+        "person_id": 135900,
         "name": "Yvonne Sykes",
         "party_name": "Reform UK",
-        "votes": 2157
+        "party_ec_id": "PP7931",
+        "votes": 2157,
+        "elected": true
       },
       {
+        "person_id": 12491,
         "name": "Jayne Dunn",
         "party_name": "Labour and Co-operative Party",
-        "votes": 1059
+        "party_ec_id": "joint-party:53-119",
+        "votes": 1059,
+        "elected": false
       },
       {
+        "person_id": 135899,
         "name": "Tuss Ramzan",
         "party_name": "Green Party",
-        "votes": 557
+        "party_ec_id": "PP63",
+        "votes": 557,
+        "elected": false
       },
       {
+        "person_id": 90309,
         "name": "Andrew Mark Smith",
         "party_name": "Conservative and Unionist Party",
-        "votes": 206
+        "party_ec_id": "PP52",
+        "votes": 206,
+        "elected": false
       },
       {
+        "person_id": 105273,
         "name": "Kevin Grum",
         "party_name": "Liberal Democrats",
-        "votes": 204
+        "party_ec_id": "PP90",
+        "votes": 204,
+        "elected": false
       },
       {
+        "person_id": 135897,
         "name": "Joseph Clark",
         "party_name": "Independent",
-        "votes": 111
+        "party_ec_id": "ynmp-party:2",
+        "votes": 111,
+        "elected": false
       },
       {
+        "person_id": 96487,
         "name": "Harry John Lomas",
         "party_name": "Trade Unionist and Socialist Coalition",
-        "votes": 26
+        "party_ec_id": "PP804",
+        "votes": 26,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.sheffield.southey.2026-05-07/",
+    "source": "https://www.sheffield.gov.uk/your-city-council/elections/local-elections-results-2026#southey",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -227,7 +247,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.49930555555555556,
@@ -242,47 +261,52 @@
         "Other": 0.0060185185185185185
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.sheffield.southey.2026-05-07/"
+      "source": "https://www.sheffield.gov.uk/your-city-council/elections/local-elections-results-2026#southey"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 17,
+      "contests_used": 45,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.18809378317227243,
-        "Labour": -0.4992439712516755,
-        "Conservative": -0.2647282474792766,
-        "Liberal Democrats": 0.04825443100911353,
-        "Green Party": 0.7252604046022582
+        "Reform UK": -0.21086124229618863,
+        "Labour": -0.012950922682471777,
+        "Conservative": -0.26114634805267706,
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.04356879522458357,
+        "Independent": -0.24372526528014504
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.8656434565956257,
-        "Labour": 0.6731257816059886,
-        "Conservative": 0.8147916560634592,
-        "Liberal Democrats": 1.0366255529843733,
-        "Green Party": 1.630925348720746
+        "Reform UK": 0.850299819110354,
+        "Labour": 0.9903182900801141,
+        "Conservative": 0.817118131765136,
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.9676805458462705,
+        "Independent": 0.8285036459541181
       },
-      "entry_shares": {},
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
       "party_counts": {
-        "Reform UK": 17,
-        "Labour": 16,
-        "Conservative": 17,
-        "Liberal Democrats": 12,
-        "Green Party": 12,
+        "Reform UK": 45,
+        "Labour": 39,
+        "Conservative": 40,
+        "Liberal Democrats": 30,
+        "Green Party": 37,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 1,
-        "Other": 0
+        "Independent": 5,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.4825052823711945,
-      "Labour": 0.1756076306400604,
-      "Conservative": 0.039464913651486334,
-      "Liberal Democrats": 0.052728380405074826,
-      "Green Party": 0.24969379293218388,
+      "Reform UK": 0.5028034627590247,
+      "Labour": 0.2731820640866556,
+      "Conservative": 0.04178760031117693,
+      "Liberal Democrats": 0.04254628463675409,
+      "Green Party": 0.13968058820638876,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -290,43 +314,43 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.87275,
-      "Labour": 0.0675,
-      "Conservative": 0.00175,
-      "Liberal Democrats": 0.009,
-      "Green Party": 0.049
+      "Reform UK": 0.6845,
+      "Labour": 0.22225,
+      "Conservative": 0.0005,
+      "Liberal Democrats": 0.00275,
+      "Green Party": 0.09
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.32615021770507485,
-        "p50": 0.44942129505981876,
-        "p90": 0.5771580090954129
+        "p10": 0.29066488696657516,
+        "p50": 0.4473627755872651,
+        "p90": 0.6522925482862685
       },
       "Labour": {
-        "p10": 0.06785216474779679,
-        "p50": 0.1681945296148408,
-        "p90": 0.32579634801021606
+        "p10": 0.07875650318175305,
+        "p50": 0.25111777327334583,
+        "p90": 0.4666682362374564
       },
       "Conservative": {
-        "p10": 0.01063512441174048,
-        "p50": 0.03722656011346673,
-        "p90": 0.11533261287899611
+        "p10": 0.011640936068817874,
+        "p50": 0.03862671287751845,
+        "p90": 0.11571549520965924
       },
       "Liberal Democrats": {
-        "p10": 0.013039423456271551,
-        "p50": 0.05120402142520071,
-        "p90": 0.16473441225107016
+        "p10": 0.010096496392448043,
+        "p50": 0.039825846485361,
+        "p90": 0.13238967511113944
       },
       "Green Party": {
-        "p10": 0.144890964395301,
-        "p50": 0.2308176313812594,
-        "p90": 0.3456636583554952
+        "p10": 0.02628654173241574,
+        "p50": 0.12718898643655374,
+        "p90": 0.3575937300841946
       }
     },
     "winner": "Reform UK",
     "runner_up": "Labour",
-    "margin_pp": 23.281148943901062,
-    "leader_probability": 0.87275,
+    "margin_pp": 22.962139867236907,
+    "leader_probability": 0.6845,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [],
@@ -334,7 +358,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,

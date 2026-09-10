@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.477Z",
+  "generated_at": "2026-09-10T11:11:47.122Z",
   "slug": "northumberland-hirst-2026-10-01",
   "status": "upcoming",
   "contest": {
@@ -18,7 +18,7 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2025-05-01",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
+    "vacancy_reason_code": "FAILURE_TO_ATTEND_MEETINGS",
     "vacancy_reason": null,
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-09-04",
@@ -26,15 +26,33 @@
     "postal_vote_deadline": "2026-09-16"
   },
   "field": {
-    "candidate_count": 2,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.northumberland.hirst.by.2026-10-01/sopn/2026-09-04T16%3A02%3A55.337643%2B00%3A00/Hirst.pdf",
     "parties": [
+      "Conservative",
+      "Independent",
       "Labour",
-      "Reform UK"
+      "Liberal Democrats",
+      "Reform UK",
+      "Restore Britain"
     ],
     "candidates": [
+      {
+        "name": "John Victor Allen",
+        "party_name": "Independent",
+        "party": "Independent",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Calvin Clark",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
       {
         "name": "Kerry Davison",
         "party_name": "Reform UK",
@@ -43,9 +61,23 @@
         "elected": null
       },
       {
-        "name": "Melanie Fox",
+        "name": "David Ferguson",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Melanie Tuesday Fox",
         "party_name": "Labour Party",
         "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Eden Webley",
+        "party_name": "Restore Britain",
+        "party": "Restore Britain",
         "votes": null,
         "elected": null
       }
@@ -170,10 +202,127 @@
     "source": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Councillors-and-Democracy/Elections%20May%202025/Declared%20results%202025/RESULTS-COUNTY-Hirst.pdf",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2025-05-01 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2025-05-01",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.5,
+        "Labour": 0.4308755760368664,
+        "Conservative": 0.06912442396313365,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Councillors-and-Democracy/Elections%20May%202025/Declared%20results%202025/RESULTS-COUNTY-Hirst.pdf"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 50,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.19639492609587406,
+        "Labour": 0.015595898081841586,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.09869467270646498,
+        "Independent": -0.5082783689441566
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8600259746835713,
+        "Labour": 1.0117424691382662,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.9278185580189771,
+        "Independent": 0.6680830100643725
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
+      "party_counts": {
+        "Reform UK": 49,
+        "Labour": 44,
+        "Conservative": 45,
+        "Liberal Democrats": 34,
+        "Green Party": 42,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.43853600398693254,
+      "Labour": 0.4226356441958075,
+      "Conservative": 0.052417095335043185,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.08641125648221674,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.4555,
+      "Labour": 0.463,
+      "Conservative": 0.0015,
+      "Independent": 0.08
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.25393444754680083,
+        "p50": 0.3988428673958869,
+        "p90": 0.6262924546005286
+      },
+      "Labour": {
+        "p10": 0.14452680239650706,
+        "p50": 0.3861278827146592,
+        "p90": 0.5852095698538972
+      },
+      "Conservative": {
+        "p10": 0.01562851281581524,
+        "p50": 0.05121486331813436,
+        "p90": 0.1464035271070324
+      },
+      "Independent": {
+        "p10": 0.009553751381880774,
+        "p50": 0.08502927092270149,
+        "p90": 0.34296267406217124
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Reform UK",
+    "margin_pp": 1.590035979112503,
+    "leader_probability": 0.463,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Liberal Democrats is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Restore Britain is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Liberal Democrats",
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "sources": [
     {

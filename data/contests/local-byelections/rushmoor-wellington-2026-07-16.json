@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.087Z",
+  "generated_at": "2026-09-10T11:11:44.895Z",
   "slug": "rushmoor-wellington-2026-07-16",
   "status": "concluded",
   "contest": {
@@ -152,7 +152,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.2773413897280967,
       "Labour": 0.3329305135951662,
@@ -167,28 +166,40 @@
     },
     "candidates": [
       {
+        "person_id": 124562,
         "name": "Uttar Gurung",
         "party_name": "Labour Party",
-        "votes": 551
+        "party_ec_id": "PP53",
+        "votes": 551,
+        "elected": true
       },
       {
+        "person_id": 132309,
         "name": "Lisa Patterson",
         "party_name": "Reform UK",
-        "votes": 459
+        "party_ec_id": "PP7931",
+        "votes": 459,
+        "elected": false
       },
       {
+        "person_id": 111841,
         "name": "Bishal Gurung",
         "party_name": "Conservative and Unionist Party",
-        "votes": 389
+        "party_ec_id": "PP52",
+        "votes": 389,
+        "elected": false
       },
       {
+        "person_id": 47252,
         "name": "Nadia Noelle Martin",
         "party_name": "Independent",
-        "votes": 256
+        "party_ec_id": "ynmp-party:2",
+        "votes": 256,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.rushmoor.wellington.2026-05-07/",
+    "source": "https://www.rushmoor.gov.uk/media/5xuoseh1/wellington-declaration-of-result-of-poll-7-may-2026.pdf",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -197,7 +208,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.2773413897280967,
@@ -212,49 +222,50 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.rushmoor.wellington.2026-05-07/"
+      "source": "https://www.rushmoor.gov.uk/media/5xuoseh1/wellington-declaration-of-result-of-poll-7-may-2026.pdf"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 19,
+      "contests_used": 35,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.14775418482831104,
-        "Labour": -0.40205455107497096,
-        "Conservative": -0.18878370520476295,
-        "Liberal Democrats": -0.00291057292198893,
-        "Green Party": 0.7078944667792584
+        "Reform UK": -0.15220245641230679,
+        "Labour": -0.04200915110896142,
+        "Conservative": -0.31265939937394904,
+        "Liberal Democrats": -0.262090201515061,
+        "Green Party": 0.023837614539415963
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.893319013395066,
-        "Labour": 0.7293043523435644,
-        "Conservative": 0.8651755679671037,
-        "Liberal Democrats": 0.997818659086381,
-        "Green Party": 1.6141780465862157
+        "Reform UK": 0.8902365376658105,
+        "Labour": 0.9688251287064689,
+        "Conservative": 0.784134221030173,
+        "Liberal Democrats": 0.8165046117781702,
+        "Green Party": 1.0179845364087141
       },
       "entry_shares": {
-        "Green Party": 0.13442113442113443
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.059042709238504784
       },
       "party_counts": {
-        "Reform UK": 19,
-        "Labour": 18,
-        "Conservative": 18,
-        "Liberal Democrats": 11,
-        "Green Party": 13,
+        "Reform UK": 35,
+        "Labour": 32,
+        "Conservative": 31,
+        "Liberal Democrats": 23,
+        "Green Party": 28,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 2,
-        "Other": 0
+        "Independent": 4,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.29742403853911153,
-      "Labour": 0.2993110081213703,
-      "Conservative": 0.2425226968065819,
+      "Reform UK": 0.27868717745077765,
+      "Labour": 0.3638766967439463,
+      "Conservative": 0.20631570709835337,
       "Liberal Democrats": 0,
-      "Green Party": 0.1607422565329362,
+      "Green Party": 0.15112041870692272,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -262,37 +273,37 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.2855,
-      "Labour": 0.3905,
-      "Conservative": 0.2835,
-      "Green Party": 0.0405
+      "Reform UK": 0.201,
+      "Labour": 0.48325,
+      "Conservative": 0.1395,
+      "Green Party": 0.17625
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.17406085907636604,
-        "p50": 0.27743112366058686,
-        "p90": 0.42493904549177436
+        "p10": 0.15222287845662355,
+        "p50": 0.25157694986853674,
+        "p90": 0.4112697909292265
       },
       "Labour": {
-        "p10": 0.10394284135914954,
-        "p50": 0.2798437235531706,
-        "p90": 0.4887671399355909
+        "p10": 0.11014144616044082,
+        "p50": 0.32775583924372653,
+        "p90": 0.5500721653107176
       },
       "Conservative": {
-        "p10": 0.08561420826734914,
-        "p50": 0.23769373563906432,
-        "p90": 0.4412417179520546
+        "p10": 0.08326638831758838,
+        "p50": 0.19455101877574427,
+        "p90": 0.3718322687676663
       },
       "Green Party": {
-        "p10": 0.0787990625625102,
-        "p50": 0.15513818495314957,
-        "p90": 0.2766153312391966
+        "p10": 0.029631062964139844,
+        "p50": 0.15617473254635006,
+        "p90": 0.39494274382937505
       }
     },
     "winner": "Labour",
     "runner_up": "Reform UK",
-    "margin_pp": 0.18869695822587573,
-    "leader_probability": 0.3905,
+    "margin_pp": 8.518951929316865,
+    "leader_probability": 0.48325,
     "too_close_to_call": true,
     "sigma_inflation": 1.75,
     "caveats": [
@@ -304,7 +315,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -334,7 +345,7 @@
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
       "projected_winner": "Labour",
       "call_correct": true,
-      "mae_pp": 6.872920499887455
+      "mae_pp": 4.290292954984418
     }
   },
   "sources": [

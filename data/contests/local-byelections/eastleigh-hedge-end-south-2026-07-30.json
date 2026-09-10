@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.205Z",
+  "generated_at": "2026-09-10T11:11:45.589Z",
   "slug": "eastleigh-hedge-end-south-2026-07-30",
   "status": "concluded",
   "contest": {
@@ -152,7 +152,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.2695675245423189,
       "Labour": 0,
@@ -167,28 +166,40 @@
     },
     "candidates": [
       {
+        "person_id": 122712,
         "name": "John Edward Shepherd",
         "party_name": "Liberal Democrats",
-        "votes": 1634
+        "party_ec_id": "PP90",
+        "votes": 1634,
+        "elected": true
       },
       {
+        "person_id": 127625,
         "name": "Anthony Keith Savage",
         "party_name": "Reform UK",
-        "votes": 1016
+        "party_ec_id": "PP7931",
+        "votes": 1016,
+        "elected": false
       },
       {
+        "person_id": 29108,
         "name": "Jerry Hall",
         "party_name": "Conservative and Unionist Party",
-        "votes": 788
+        "party_ec_id": "PP52",
+        "votes": 788,
+        "elected": false
       },
       {
+        "person_id": 110815,
         "name": "Anna Belle Skinner",
         "party_name": "Green Party",
-        "votes": 331
+        "party_ec_id": "PP63",
+        "votes": 331,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.eastleigh.hedge-end-south.2026-05-07/",
+    "source": "https://www.eastleigh.gov.uk/media/16606/hedge-end-south-borough-declaration-of-results.pdf",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -197,7 +208,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.2695675245423189,
@@ -212,49 +222,50 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.eastleigh.hedge-end-south.2026-05-07/"
+      "source": "https://www.eastleigh.gov.uk/media/16606/hedge-end-south-borough-declaration-of-results.pdf"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 19,
+      "contests_used": 41,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.14775418482831104,
-        "Labour": -0.39919077840156286,
-        "Conservative": -0.2884565139342397,
-        "Liberal Democrats": 0.04825443100911353,
-        "Green Party": 0.7078944667792584
+        "Reform UK": -0.18809378317227243,
+        "Labour": 0.04414271884615495,
+        "Conservative": -0.2910866197386617,
+        "Liberal Democrats": -0.2549637795774769,
+        "Green Party": -0.03847465063003308
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.893319013395066,
-        "Labour": 0.7310136687773986,
-        "Conservative": 0.7995044726030844,
-        "Liberal Democrats": 1.0366255529843733,
-        "Green Party": 1.6141780465862157
+        "Reform UK": 0.8656434565956257,
+        "Labour": 1.0334709792453476,
+        "Conservative": 0.7978233150269576,
+        "Liberal Democrats": 0.8211453733082045,
+        "Green Party": 0.9714224153668691
       },
       "entry_shares": {
-        "Green Party": 0.13442113442113443
+        "Green Party": 0.12803530947860844,
+        "Independent": 0.09949803109861477
       },
       "party_counts": {
-        "Reform UK": 19,
-        "Labour": 18,
-        "Conservative": 18,
-        "Liberal Democrats": 12,
-        "Green Party": 13,
+        "Reform UK": 41,
+        "Labour": 37,
+        "Conservative": 37,
+        "Liberal Democrats": 26,
+        "Green Party": 33,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 2,
-        "Other": 0
+        "Independent": 4,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.23774418962640873,
+      "Reform UK": 0.27348872123123913,
       "Labour": 0,
-      "Conservative": 0.16278734007304838,
-      "Liberal Democrats": 0.4385286302798346,
-      "Green Party": 0.16093984002070835,
+      "Conservative": 0.19268570956314404,
+      "Liberal Democrats": 0.43480116151691867,
+      "Green Party": 0.09902440768869812,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -262,37 +273,37 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.14725,
-      "Conservative": 0.1365,
-      "Liberal Democrats": 0.66575,
-      "Green Party": 0.0505
+      "Reform UK": 0.17875,
+      "Conservative": 0.10125,
+      "Liberal Democrats": 0.62775,
+      "Green Party": 0.09225
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.1353776061391152,
-        "p50": 0.22611883196682392,
-        "p90": 0.36483696395682286
+        "p10": 0.15107882485212598,
+        "p50": 0.2535028620836973,
+        "p90": 0.4049656610763789
       },
       "Conservative": {
-        "p10": 0.04663477189703583,
-        "p50": 0.17068382992794023,
-        "p90": 0.36304961712447664
+        "p10": 0.07520018142907736,
+        "p50": 0.1899171401690703,
+        "p90": 0.34398891559582156
       },
       "Liberal Democrats": {
-        "p10": 0.19297220486167768,
-        "p50": 0.40755996621585533,
-        "p90": 0.5868900353394856
+        "p10": 0.19741881712770348,
+        "p50": 0.3954376227361177,
+        "p90": 0.5738668274903287
       },
       "Green Party": {
-        "p10": 0.08195539649054927,
-        "p50": 0.15624131597528818,
-        "p90": 0.2829338409652497
+        "p10": 0.020596015896232993,
+        "p50": 0.10000787302816203,
+        "p90": 0.3216576686665117
       }
     },
     "winner": "Liberal Democrats",
     "runner_up": "Reform UK",
-    "margin_pp": 20.078444065342584,
-    "leader_probability": 0.66575,
+    "margin_pp": 16.131244028567952,
+    "leader_probability": 0.62775,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
@@ -304,7 +315,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -334,7 +345,7 @@
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
       "projected_winner": "Liberal Democrats",
       "call_correct": true,
-      "mae_pp": 5.056775944154404
+      "mae_pp": 4.0099399150672115
     }
   },
   "sources": [

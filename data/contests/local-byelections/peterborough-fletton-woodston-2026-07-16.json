@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.109Z",
+  "generated_at": "2026-09-10T11:11:45.005Z",
   "slug": "peterborough-fletton-woodston-2026-07-16",
   "status": "concluded",
   "contest": {
@@ -160,7 +160,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.26832018038331457,
       "Labour": 0.09545283727921834,
@@ -175,33 +174,48 @@
     },
     "candidates": [
       {
+        "person_id": 3704,
         "name": "Ed Murphy",
         "party_name": "Green Party",
-        "votes": 1007
+        "party_ec_id": "PP63",
+        "votes": 1007,
+        "elected": true
       },
       {
+        "person_id": 121214,
         "name": "Yvonne Claire Scarrott",
         "party_name": "Reform UK",
-        "votes": 714
+        "party_ec_id": "PP7931",
+        "votes": 714,
+        "elected": false
       },
       {
+        "person_id": 19264,
         "name": "Andy Coles",
         "party_name": "Conservative and Unionist Party",
-        "votes": 428
+        "party_ec_id": "PP52",
+        "votes": 428,
+        "elected": false
       },
       {
+        "person_id": 130139,
         "name": "Steve Harknett",
         "party_name": "Independent",
-        "votes": 258
+        "party_ec_id": "ynmp-party:2",
+        "votes": 258,
+        "elected": false
       },
       {
+        "person_id": 118016,
         "name": "Harvey Woodhouse",
         "party_name": "Labour Party",
-        "votes": 254
+        "party_ec_id": "PP53",
+        "votes": 254,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.peterborough.fletton-woodston.2026-05-07/",
+    "source": "https://www.peterborough.gov.uk/council/elections/election-details",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -210,7 +224,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.26832018038331457,
@@ -225,49 +238,50 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.peterborough.fletton-woodston.2026-05-07/"
+      "source": "https://www.peterborough.gov.uk/council/elections/election-details"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 19,
+      "contests_used": 35,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.14775418482831104,
-        "Labour": -0.40205455107497096,
-        "Conservative": -0.18878370520476295,
-        "Liberal Democrats": -0.00291057292198893,
-        "Green Party": 0.7078944667792584
+        "Reform UK": -0.15220245641230679,
+        "Labour": -0.04200915110896142,
+        "Conservative": -0.31265939937394904,
+        "Liberal Democrats": -0.262090201515061,
+        "Green Party": 0.023837614539415963
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.893319013395066,
-        "Labour": 0.7293043523435644,
-        "Conservative": 0.8651755679671037,
-        "Liberal Democrats": 0.997818659086381,
-        "Green Party": 1.6141780465862157
+        "Reform UK": 0.8902365376658105,
+        "Labour": 0.9688251287064689,
+        "Conservative": 0.784134221030173,
+        "Liberal Democrats": 0.8165046117781702,
+        "Green Party": 1.0179845364087141
       },
       "entry_shares": {
-        "Green Party": 0.13442113442113443
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.059042709238504784
       },
       "party_counts": {
-        "Reform UK": 19,
-        "Labour": 18,
-        "Conservative": 18,
-        "Liberal Democrats": 11,
-        "Green Party": 13,
+        "Reform UK": 35,
+        "Labour": 32,
+        "Conservative": 31,
+        "Liberal Democrats": 23,
+        "Green Party": 28,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 2,
-        "Other": 0
+        "Independent": 4,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.241301239249357,
-      "Labour": 0.06620495898869272,
-      "Conservative": 0.13751943230854208,
+      "Reform UK": 0.2856704410861321,
+      "Labour": 0.10959577847907388,
+      "Conservative": 0.1466647576962735,
       "Liberal Democrats": 0,
-      "Green Party": 0.5549743694534082,
+      "Green Party": 0.4580690227385206,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -275,37 +289,37 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.02275,
-      "Labour": 0.01075,
-      "Conservative": 0.046,
-      "Green Party": 0.9205
+      "Reform UK": 0.2215,
+      "Labour": 0.0815,
+      "Conservative": 0.0595,
+      "Green Party": 0.6375
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.14622143229217266,
-        "p50": 0.23106461732972566,
-        "p90": 0.3401720039444925
+        "p10": 0.1610357710073708,
+        "p50": 0.2714703985275298,
+        "p90": 0.44694559360731023
       },
       "Labour": {
-        "p10": 0.015860493021840498,
-        "p50": 0.06210182033878696,
-        "p90": 0.19774178356698366
+        "p10": 0.0228351034012586,
+        "p50": 0.1055093299569106,
+        "p90": 0.3185626016974546
       },
       "Conservative": {
-        "p10": 0.04057041975777124,
-        "p50": 0.13180566224174844,
-        "p90": 0.31016456906628664
+        "p10": 0.055200601200852226,
+        "p50": 0.1393941734497246,
+        "p90": 0.30050118878400567
       },
       "Green Party": {
-        "p10": 0.3753421082318447,
-        "p50": 0.5214630493483877,
-        "p90": 0.6535444627791875
+        "p10": 0.16235302457574133,
+        "p50": 0.424470369804682,
+        "p90": 0.6125489979668196
       }
     },
     "winner": "Green Party",
-    "runner_up": "Conservative",
-    "margin_pp": 31.36731302040512,
-    "leader_probability": 0.9205,
+    "runner_up": "Reform UK",
+    "margin_pp": 17.239858165238854,
+    "leader_probability": 0.6375,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
@@ -319,7 +333,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -349,7 +363,7 @@
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
       "projected_winner": "Green Party",
       "call_correct": true,
-      "mae_pp": 5.051695790741602
+      "mae_pp": 2.1263617465030613
     }
   },
   "sources": [

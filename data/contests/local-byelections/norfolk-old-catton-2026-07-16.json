@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.102Z",
+  "generated_at": "2026-09-10T11:11:44.952Z",
   "slug": "norfolk-old-catton-2026-07-16",
   "status": "concluded",
   "contest": {
@@ -98,7 +98,6 @@
   "ward_profile": null,
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.3004778972520908,
       "Labour": 0.1586021505376344,
@@ -113,33 +112,48 @@
     },
     "candidates": [
       {
+        "person_id": 131667,
         "name": "Mark Shaun Tucker",
         "party_name": "Reform UK",
-        "votes": 1006
+        "party_ec_id": "PP7931",
+        "votes": 1006,
+        "elected": true
       },
       {
+        "person_id": 1935,
         "name": "Antony Daniel Little",
         "party_name": "Conservative and Unionist Party",
-        "votes": 875
+        "party_ec_id": "PP52",
+        "votes": 875,
+        "elected": false
       },
       {
+        "person_id": 32664,
         "name": "Ian Peter Chapman",
         "party_name": "Green Party",
-        "votes": 628
+        "party_ec_id": "PP63",
+        "votes": 628,
+        "elected": false
       },
       {
+        "person_id": 24064,
         "name": "Bill Couzens",
         "party_name": "Labour Party",
-        "votes": 531
+        "party_ec_id": "PP53",
+        "votes": 531,
+        "elected": false
       },
       {
+        "person_id": 24063,
         "name": "Martin Gowar Callam",
         "party_name": "Liberal Democrats",
-        "votes": 308
+        "party_ec_id": "PP90",
+        "votes": 308,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.norfolk.old-catton.2026-05-07/",
+    "source": "https://elections.norfolk.gov.uk/textresults.aspx",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -148,7 +162,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.3004778972520908,
@@ -163,49 +176,50 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.norfolk.old-catton.2026-05-07/"
+      "source": "https://elections.norfolk.gov.uk/textresults.aspx"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 19,
+      "contests_used": 35,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.14775418482831104,
-        "Labour": -0.40205455107497096,
-        "Conservative": -0.18878370520476295,
-        "Liberal Democrats": -0.00291057292198893,
-        "Green Party": 0.7078944667792584
+        "Reform UK": -0.15220245641230679,
+        "Labour": -0.04200915110896142,
+        "Conservative": -0.31265939937394904,
+        "Liberal Democrats": -0.262090201515061,
+        "Green Party": 0.023837614539415963
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.893319013395066,
-        "Labour": 0.7293043523435644,
-        "Conservative": 0.8651755679671037,
-        "Liberal Democrats": 0.997818659086381,
-        "Green Party": 1.6141780465862157
+        "Reform UK": 0.8902365376658105,
+        "Labour": 0.9688251287064689,
+        "Conservative": 0.784134221030173,
+        "Liberal Democrats": 0.8165046117781702,
+        "Green Party": 1.0179845364087141
       },
       "entry_shares": {
-        "Green Party": 0.13442113442113443
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.059042709238504784
       },
       "party_counts": {
-        "Reform UK": 19,
-        "Labour": 18,
-        "Conservative": 18,
-        "Liberal Democrats": 11,
-        "Green Party": 13,
+        "Reform UK": 35,
+        "Labour": 32,
+        "Conservative": 31,
+        "Liberal Democrats": 23,
+        "Green Party": 28,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 2,
-        "Other": 0
+        "Independent": 4,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.26512534706317853,
-      "Labour": 0.10980578988175348,
-      "Conservative": 0.22218590756559914,
-      "Liberal Democrats": 0.08997461433350247,
-      "Green Party": 0.31290834115596644,
+      "Reform UK": 0.30220997342577854,
+      "Labour": 0.17166361492025878,
+      "Conservative": 0.23057099040704365,
+      "Liberal Democrats": 0.0811002361829831,
+      "Green Party": 0.21445518506393585,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -213,43 +227,43 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.19525,
-      "Labour": 0.08425,
-      "Conservative": 0.2535,
-      "Liberal Democrats": 0.0765,
-      "Green Party": 0.3905
+      "Reform UK": 0.29925,
+      "Labour": 0.1965,
+      "Conservative": 0.1995,
+      "Liberal Democrats": 0.025,
+      "Green Party": 0.27975
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.1446322713420352,
-        "p50": 0.23835584239426094,
-        "p90": 0.3599399855945173
+        "p10": 0.15990677217493496,
+        "p50": 0.2652866309581018,
+        "p90": 0.4139703278437422
       },
       "Labour": {
-        "p10": 0.025991836430109105,
-        "p50": 0.1027958895279151,
-        "p90": 0.27182786923696456
+        "p10": 0.0360663046946961,
+        "p50": 0.15857661798757944,
+        "p90": 0.3763787218515726
       },
       "Conservative": {
-        "p10": 0.0727248591603068,
-        "p50": 0.20260121471527753,
-        "p90": 0.39718707723939645
+        "p10": 0.09141709159110707,
+        "p50": 0.20468930582321393,
+        "p90": 0.3806326671409435
       },
       "Liberal Democrats": {
-        "p10": 0.016286149435551053,
-        "p50": 0.08410786644457016,
-        "p90": 0.26793272784860206
+        "p10": 0.021285385818312862,
+        "p50": 0.0730637108113452,
+        "p90": 0.19618292163403636
       },
       "Green Party": {
-        "p10": 0.16330708781967435,
-        "p50": 0.2800862198590062,
-        "p90": 0.4268089500761356
+        "p10": 0.04564941972013642,
+        "p50": 0.1970163729059784,
+        "p90": 0.43410696154108364
       }
     },
-    "winner": "Green Party",
-    "runner_up": "Conservative",
-    "margin_pp": 4.778299409278791,
-    "leader_probability": 0.3905,
+    "winner": "Reform UK",
+    "runner_up": "Green Party",
+    "margin_pp": 7.163898301873489,
+    "leader_probability": 0.29925,
     "too_close_to_call": true,
     "sigma_inflation": 1.75,
     "caveats": [
@@ -263,7 +277,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -291,9 +305,9 @@
     "grading": {
       "graded_against": "current_rebuild",
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
-      "projected_winner": "Green Party",
+      "projected_winner": "Reform UK",
       "call_correct": false,
-      "mae_pp": 5.0762264826188215
+      "mae_pp": 7.649600004064135
     }
   },
   "sources": [

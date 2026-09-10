@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:03.816Z",
+  "generated_at": "2026-09-10T11:11:43.733Z",
   "slug": "halton-farnworth-2026-06-25",
   "status": "concluded",
   "contest": {
@@ -152,7 +152,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.3641114982578397,
       "Labour": 0.3645470383275261,
@@ -167,28 +166,40 @@
     },
     "candidates": [
       {
+        "person_id": 128315,
         "name": "Luke Williams",
         "party_name": "Labour Party",
-        "votes": 837
+        "party_ec_id": "PP53",
+        "votes": 837,
+        "elected": true
       },
       {
+        "person_id": 128314,
         "name": "Frank Simpson",
         "party_name": "Reform UK",
-        "votes": 836
+        "party_ec_id": "PP7931",
+        "votes": 836,
+        "elected": false
       },
       {
+        "person_id": 128313,
         "name": "Helen Elizabeth McGauley",
         "party_name": "Green Party",
-        "votes": 315
+        "party_ec_id": "PP63",
+        "votes": 315,
+        "elected": false
       },
       {
+        "person_id": 16085,
         "name": "Phil Harper",
         "party_name": "Conservative and Unionist Party",
-        "votes": 308
+        "party_ec_id": "PP52",
+        "votes": 308,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.halton.farnworth.2026-05-07/",
+    "source": "https://hbcnewsroom.co.uk/halton-council-local-elections-2026/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -197,7 +208,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.3641114982578397,
@@ -212,36 +222,36 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.halton.farnworth.2026-05-07/"
+      "source": "https://hbcnewsroom.co.uk/halton-council-local-elections-2026/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 18,
+      "contests_used": 21,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.10009083144999054,
-        "Labour": -0.3020013582248583,
-        "Conservative": -0.31265939937394904,
-        "Liberal Democrats": -0.00291057292198893,
-        "Green Party": 0.7426263424252579
+        "Reform UK": -0.14775418482831082,
+        "Labour": -0.2961166711432826,
+        "Conservative": -0.31242208988157594,
+        "Liberal Democrats": -0.12537396528094086,
+        "Green Party": 0.5006571659476606
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.9268240182418361,
-        "Labour": 0.7908750120149948,
-        "Conservative": 0.784134221030173,
-        "Liberal Democrats": 0.997818659086381,
-        "Green Party": 1.64772640510813
+        "Reform UK": 0.8933190133950665,
+        "Labour": 0.7946155135542321,
+        "Conservative": 0.7842838359028943,
+        "Liberal Democrats": 0.9089428192773387,
+        "Green Party": 1.4192466747694055
       },
       "entry_shares": {
         "Green Party": 0.13442113442113443
       },
       "party_counts": {
-        "Reform UK": 18,
-        "Labour": 17,
-        "Conservative": 17,
-        "Liberal Democrats": 11,
-        "Green Party": 11,
+        "Reform UK": 21,
+        "Labour": 18,
+        "Conservative": 20,
+        "Liberal Democrats": 14,
+        "Green Party": 14,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
@@ -250,11 +260,11 @@
       }
     },
     "central": {
-      "Reform UK": 0.3442462207211647,
-      "Labour": 0.30042360836976445,
-      "Conservative": 0.10268309805743892,
+      "Reform UK": 0.35199173698444086,
+      "Labour": 0.31837310948854214,
+      "Conservative": 0.10839291218345433,
       "Liberal Democrats": 0,
-      "Green Party": 0.2526470728516319,
+      "Green Party": 0.22124224134356274,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -262,37 +272,37 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.39575,
-      "Labour": 0.3985,
-      "Conservative": 0.0685,
-      "Green Party": 0.13725
+      "Reform UK": 0.36025,
+      "Labour": 0.39425,
+      "Conservative": 0.089,
+      "Green Party": 0.1565
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.20417011979143992,
-        "p50": 0.31945051684641806,
-        "p90": 0.4733293564980575
+        "p10": 0.19572909570976887,
+        "p50": 0.3188146562535291,
+        "p90": 0.4976803096086594
       },
       "Labour": {
-        "p10": 0.08185847975420715,
-        "p50": 0.28407063083302386,
-        "p90": 0.503330106415044
+        "p10": 0.08311483470821102,
+        "p50": 0.29446666859950477,
+        "p90": 0.5207781252355883
       },
       "Conservative": {
-        "p10": 0.023331516611364213,
-        "p50": 0.10040577616744173,
-        "p90": 0.2893789154843913
+        "p10": 0.020089946137725526,
+        "p50": 0.10532137900287042,
+        "p90": 0.3237209061079203
       },
       "Green Party": {
-        "p10": 0.13344516854287283,
-        "p50": 0.2383640163378435,
-        "p90": 0.378154036198733
+        "p10": 0.07547131751006088,
+        "p50": 0.20860310499870655,
+        "p90": 0.39682043911830417
       }
     },
     "winner": "Labour",
     "runner_up": "Reform UK",
-    "margin_pp": 4.382261235140023,
-    "leader_probability": 0.3985,
+    "margin_pp": 3.3618627495898723,
+    "leader_probability": 0.39425,
     "too_close_to_call": true,
     "sigma_inflation": 1.75,
     "caveats": [
@@ -304,7 +314,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -334,7 +344,7 @@
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
       "projected_winner": "Labour",
       "call_correct": true,
-      "mae_pp": 9.25291361705923
+      "mae_pp": 8.225112921777077
     }
   },
   "sources": [

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:03.996Z",
+  "generated_at": "2026-09-10T11:11:44.529Z",
   "slug": "camden-regents-park-2026-07-09",
   "status": "concluded",
   "contest": {
@@ -160,7 +160,6 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.11903160726294552,
       "Labour": 0.3271687962340282,
@@ -175,88 +174,136 @@
     },
     "candidates": [
       {
+        "person_id": 128289,
         "name": "Victoria Mery",
         "party_name": "Green Party",
-        "votes": 1138
+        "party_ec_id": "PP63",
+        "votes": 1138,
+        "elected": true
       },
       {
+        "person_id": 138865,
         "name": "Muhammad Abu Naser",
         "party_name": "Green Party",
-        "votes": 1054
+        "party_ec_id": "PP63",
+        "votes": 1054,
+        "elected": true
       },
       {
+        "person_id": 138863,
         "name": "Ruman Jaigirdar",
         "party_name": "Green Party",
-        "votes": 1010
+        "party_ec_id": "PP63",
+        "votes": 1010,
+        "elected": true
       },
       {
+        "person_id": 41425,
         "name": "Nasim Ali",
         "party_name": "Labour Party",
-        "votes": 973
+        "party_ec_id": "PP53",
+        "votes": 973,
+        "elected": false
       },
       {
+        "person_id": 41429,
         "name": "Heather Margaret Johnson",
         "party_name": "Labour Party",
-        "votes": 929
+        "party_ec_id": "PP53",
+        "votes": 929,
+        "elected": false
       },
       {
+        "person_id": 41431,
         "name": "Nadia Shah",
         "party_name": "Labour Party",
-        "votes": 905
+        "party_ec_id": "PP53",
+        "votes": 905,
+        "elected": false
       },
       {
+        "person_id": 138860,
         "name": "Sean Fairbrother",
         "party_name": "Reform UK",
-        "votes": 354
+        "party_ec_id": "PP7931",
+        "votes": 354,
+        "elected": false
       },
       {
+        "person_id": 138861,
         "name": "Dean Goldenberg",
         "party_name": "Reform UK",
-        "votes": 331
+        "party_ec_id": "PP7931",
+        "votes": 331,
+        "elected": false
       },
       {
+        "person_id": 138864,
         "name": "Beverley Janet Martin",
         "party_name": "Reform UK",
-        "votes": 321
+        "party_ec_id": "PP7931",
+        "votes": 321,
+        "elected": false
       },
       {
+        "person_id": 95100,
         "name": "Martin Sheppard",
         "party_name": "Conservative and Unionist Party",
-        "votes": 274
+        "party_ec_id": "PP52",
+        "votes": 274,
+        "elected": false
       },
       {
+        "person_id": 138858,
         "name": "Vladimir Chorniy",
         "party_name": "Conservative and Unionist Party",
-        "votes": 262
+        "party_ec_id": "PP52",
+        "votes": 262,
+        "elected": false
       },
       {
+        "person_id": 94240,
         "name": "Alexandra Marsanu",
         "party_name": "Conservative and Unionist Party",
-        "votes": 240
+        "party_ec_id": "PP52",
+        "votes": 240,
+        "elected": false
       },
       {
+        "person_id": 95096,
         "name": "Christopher Michael Gayford",
         "party_name": "Liberal Democrats",
-        "votes": 189
+        "party_ec_id": "PP90",
+        "votes": 189,
+        "elected": false
       },
       {
+        "person_id": 138866,
         "name": "Mary Elizabeth Stainer",
         "party_name": "Liberal Democrats",
-        "votes": 170
+        "party_ec_id": "PP90",
+        "votes": 170,
+        "elected": false
       },
       {
+        "person_id": 138862,
         "name": "Farhan Islam",
         "party_name": "Liberal Democrats",
-        "votes": 113
+        "party_ec_id": "PP90",
+        "votes": 113,
+        "elected": false
       },
       {
+        "person_id": 138859,
         "name": "Jose Fafian",
         "party_name": "National Housing Party United Kingdom",
-        "votes": 46
+        "party_ec_id": "PP12868",
+        "votes": 46,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.camden.regents-park.2026-05-07/",
+    "source": "https://www.camden.gov.uk/local-election-may-2026-results-regents-park-ward",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -265,7 +312,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.11903160726294552,
@@ -280,105 +326,108 @@
         "Other": 0.01546738399462004
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.camden.regents-park.2026-05-07/"
+      "source": "https://www.camden.gov.uk/local-election-may-2026-results-regents-park-ward"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 19,
+      "contests_used": 31,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.14775418482831104,
-        "Labour": -0.40205455107497096,
-        "Conservative": -0.18878370520476295,
-        "Liberal Democrats": -0.00291057292198893,
-        "Green Party": 0.7078944667792584
+        "Reform UK": -0.14775418482831082,
+        "Labour": -0.11116978454475135,
+        "Conservative": -0.31242208988157594,
+        "Liberal Democrats": -0.24783735763989279,
+        "Green Party": 0.16817524131727252
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.893319013395066,
-        "Labour": 0.7293043523435644,
-        "Conservative": 0.8651755679671037,
-        "Liberal Democrats": 0.997818659086381,
-        "Green Party": 1.6141780465862157
+        "Reform UK": 0.8933190133950665,
+        "Labour": 0.9189584514352498,
+        "Conservative": 0.7842838359028943,
+        "Liberal Democrats": 0.8258056693376834,
+        "Green Party": 1.1313442219489105
       },
       "entry_shares": {
-        "Green Party": 0.13442113442113443
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.04842342342342342
       },
       "party_counts": {
-        "Reform UK": 19,
-        "Labour": 18,
-        "Conservative": 18,
-        "Liberal Democrats": 11,
-        "Green Party": 13,
+        "Reform UK": 31,
+        "Labour": 28,
+        "Conservative": 28,
+        "Liberal Democrats": 19,
+        "Green Party": 24,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 2,
+        "Independent": 4,
         "Other": 0
       }
     },
     "central": {
-      "Reform UK": 0.09962047901720673,
-      "Labour": 0.2342309521138459,
-      "Conservative": 0.07397012408449236,
-      "Liberal Democrats": 0.06048293422293605,
-      "Green Party": 0.5316955105615189,
+      "Reform UK": 0.10454576397756472,
+      "Labour": 0.3036392799742463,
+      "Conservative": 0.0692231572428597,
+      "Liberal Democrats": 0.05037803892348511,
+      "Green Party": 0.42371740011202536,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
-      "Independent": 0,
+      "Independent": 0.04849635976981885,
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0,
-      "Labour": 0.14325,
-      "Conservative": 0.01225,
-      "Liberal Democrats": 0.01425,
-      "Green Party": 0.83025
+      "Reform UK": 0.015,
+      "Labour": 0.38,
+      "Conservative": 0.0235,
+      "Liberal Democrats": 0.008,
+      "Green Party": 0.556,
+      "Independent": 0.0175
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.050688204255321535,
-        "p50": 0.09009099347876688,
-        "p90": 0.1589090101830277
+        "p10": 0.04883567046799926,
+        "p50": 0.09322510104509577,
+        "p90": 0.1842891419327818
       },
       "Labour": {
-        "p10": 0.07222358590734987,
-        "p50": 0.21881307602304806,
-        "p90": 0.42191421716685323
+        "p10": 0.06079715346674599,
+        "p50": 0.2789399441113146,
+        "p90": 0.5409091842165851
       },
       "Conservative": {
-        "p10": 0.01890855279599264,
-        "p50": 0.07067634006594692,
-        "p90": 0.20000327517161323
+        "p10": 0.017814008826363508,
+        "p50": 0.06335886052908975,
+        "p90": 0.18611344471364857
       },
       "Liberal Democrats": {
-        "p10": 0.010609809378791366,
-        "p50": 0.05587234817341693,
-        "p90": 0.21307399519971795
+        "p10": 0.013484597737527495,
+        "p50": 0.04646879011643724,
+        "p90": 0.14704800853927644
       },
       "Green Party": {
-        "p10": 0.33088817529451237,
-        "p50": 0.48117331776984795,
-        "p90": 0.6487355872128411
+        "p10": 0.1273653907632341,
+        "p50": 0.3741907411007209,
+        "p90": 0.6097211159573747
+      },
+      "Independent": {
+        "p10": 0.009218068950868477,
+        "p50": 0.045291112224238955,
+        "p90": 0.17120155027903128
       }
     },
     "winner": "Green Party",
     "runner_up": "Labour",
-    "margin_pp": 29.746455844767294,
-    "leader_probability": 0.83025,
+    "margin_pp": 12.007812013777908,
+    "leader_probability": 0.556,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
-    "caveats": [
-      "Independent is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
-    ],
-    "unpriced_parties": [
-      "Independent"
-    ],
+    "caveats": [],
+    "unpriced_parties": [],
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -408,7 +457,7 @@
       "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
       "projected_winner": "Green Party",
       "call_correct": false,
-      "mae_pp": 10.747651814409744
+      "mae_pp": 6.975727788123528
     }
   },
   "sources": [

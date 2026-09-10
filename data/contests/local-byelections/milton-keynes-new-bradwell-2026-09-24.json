@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-02T11:01:04.444Z",
+  "generated_at": "2026-09-10T11:11:46.780Z",
   "slug": "milton-keynes-new-bradwell-2026-09-24",
   "status": "upcoming",
   "contest": {
@@ -82,7 +82,6 @@
   "ward_profile": null,
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": null,
     "shares": {
       "Reform UK": 0.2643840451817861,
       "Labour": 0.3455700670667137,
@@ -97,58 +96,88 @@
     },
     "candidates": [
       {
+        "person_id": 41752,
         "name": "Stephen Brown",
         "party_name": "Labour Party",
-        "votes": 979
+        "party_ec_id": "PP53",
+        "votes": 979,
+        "elected": true
       },
       {
+        "person_id": 78420,
         "name": "Shanika Caitlin Mahendran",
         "party_name": "Labour Party",
-        "votes": 837
+        "party_ec_id": "PP53",
+        "votes": 837,
+        "elected": true
       },
       {
+        "person_id": 129999,
         "name": "Julian Vernon Camies",
         "party_name": "Reform UK",
-        "votes": 749
+        "party_ec_id": "PP7931",
+        "votes": 749,
+        "elected": false
       },
       {
+        "person_id": 130003,
         "name": "Andrew Graham Naylor",
         "party_name": "Reform UK",
-        "votes": 678
+        "party_ec_id": "PP7931",
+        "votes": 678,
+        "elected": false
       },
       {
+        "person_id": 3355,
         "name": "Alan Francis",
         "party_name": "Green Party",
-        "votes": 616
+        "party_ec_id": "PP63",
+        "votes": 616,
+        "elected": false
       },
       {
+        "person_id": 78345,
         "name": "Gary Nicholas Lloyd",
         "party_name": "Green Party",
-        "votes": 429
+        "party_ec_id": "PP63",
+        "votes": 429,
+        "elected": false
       },
       {
+        "person_id": 90572,
         "name": "Babs Wright",
         "party_name": "Conservative and Unionist Party",
-        "votes": 315
+        "party_ec_id": "PP52",
+        "votes": 315,
+        "elected": false
       },
       {
+        "person_id": 130000,
         "name": "Pavankumar Divve",
         "party_name": "Conservative and Unionist Party",
-        "votes": 280
+        "party_ec_id": "PP52",
+        "votes": 280,
+        "elected": false
       },
       {
+        "person_id": 130002,
         "name": "Stephen Jones",
         "party_name": "Liberal Democrats",
-        "votes": 174
+        "party_ec_id": "PP90",
+        "votes": 174,
+        "elected": false
       },
       {
+        "person_id": 99945,
         "name": "Tim Gomm",
         "party_name": "Liberal Democrats",
-        "votes": 155
+        "party_ec_id": "PP90",
+        "votes": 155,
+        "elected": false
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://candidates.democracyclub.org.uk/elections/local.milton-keynes.new-bradwell.2026-05-07/",
+    "source": "https://milton-keynes.moderngov.co.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=39",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -157,7 +186,6 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.2643840451817861,
@@ -172,47 +200,52 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://candidates.democracyclub.org.uk/elections/local.milton-keynes.new-bradwell.2026-05-07/"
+      "source": "https://milton-keynes.moderngov.co.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=39"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 17,
+      "contests_used": 50,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.18809378317227243,
-        "Labour": -0.4992439712516755,
+        "Reform UK": -0.19639492609587406,
+        "Labour": 0.015595898081841586,
         "Conservative": -0.2647282474792766,
-        "Liberal Democrats": 0.04825443100911353,
-        "Green Party": 0.7252604046022582
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.09869467270646498,
+        "Independent": -0.5082783689441566
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.8656434565956257,
-        "Labour": 0.6731257816059886,
+        "Reform UK": 0.8600259746835713,
+        "Labour": 1.0117424691382662,
         "Conservative": 0.8147916560634592,
-        "Liberal Democrats": 1.0366255529843733,
-        "Green Party": 1.630925348720746
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.9278185580189771,
+        "Independent": 0.6680830100643725
       },
-      "entry_shares": {},
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
       "party_counts": {
-        "Reform UK": 17,
-        "Labour": 16,
-        "Conservative": 17,
-        "Liberal Democrats": 12,
-        "Green Party": 12,
+        "Reform UK": 49,
+        "Labour": 44,
+        "Conservative": 45,
+        "Liberal Democrats": 34,
+        "Green Party": 42,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
-        "Independent": 1,
-        "Other": 0
+        "Independent": 6,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.23208975887619768,
-      "Labour": 0.2455107383093781,
-      "Conservative": 0.08860010206766931,
-      "Liberal Democrats": 0.06499856427079072,
-      "Green Party": 0.36880083647596423,
+      "Reform UK": 0.24913583879309822,
+      "Labour": 0.3814860838719862,
+      "Conservative": 0.09571830976046779,
+      "Liberal Democrats": 0.05389389986419196,
+      "Green Party": 0.2197658677102558,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -220,51 +253,51 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.09625,
-      "Labour": 0.24025,
-      "Conservative": 0.03475,
-      "Liberal Democrats": 0.02325,
-      "Green Party": 0.6055
+      "Reform UK": 0.17,
+      "Labour": 0.499,
+      "Conservative": 0.0325,
+      "Liberal Democrats": 0.02025,
+      "Green Party": 0.27825
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.13812088623733437,
-        "p50": 0.21515296273387363,
-        "p90": 0.322584278565132
+        "p10": 0.12615542719017472,
+        "p50": 0.22140164761383613,
+        "p90": 0.38807729436038785
       },
       "Labour": {
-        "p10": 0.10030324121929435,
-        "p50": 0.2289869422565467,
-        "p90": 0.3921249789211326
+        "p10": 0.11568962216234624,
+        "p50": 0.33650367762304434,
+        "p90": 0.55465958307096
       },
       "Conservative": {
-        "p10": 0.02544937548205171,
-        "p50": 0.08645947510133431,
-        "p90": 0.22009016818744098
+        "p10": 0.02807608141651213,
+        "p50": 0.0901267547431028,
+        "p90": 0.2278545422577032
       },
       "Liberal Democrats": {
-        "p10": 0.017178271960776998,
-        "p50": 0.06231160424802021,
-        "p90": 0.18633410028376438
+        "p10": 0.011962433069883685,
+        "p50": 0.05070428569627779,
+        "p90": 0.17364005376761135
       },
       "Green Party": {
-        "p10": 0.22457289060678357,
-        "p50": 0.34091191074733596,
-        "p90": 0.4717481955698259
+        "p10": 0.03993063822262853,
+        "p50": 0.20458421841892613,
+        "p90": 0.46186449808488006
       }
     },
-    "winner": "Green Party",
-    "runner_up": "Labour",
-    "margin_pp": 12.329009816658612,
-    "leader_probability": 0.6055,
-    "too_close_to_call": false,
+    "winner": "Labour",
+    "runner_up": "Green Party",
+    "margin_pp": 13.235024507888795,
+    "leader_probability": 0.499,
+    "too_close_to_call": true,
     "sigma_inflation": 1.75,
     "caveats": [],
     "unpriced_parties": [],
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1069 council by-elections we hold a figure for has run from 5% to 3403%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1085 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
