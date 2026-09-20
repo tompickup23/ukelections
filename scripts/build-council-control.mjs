@@ -216,6 +216,8 @@ function main() {
   const actualsRel = existsSync(join(REPO, mergedRel)) ? mergedRel : dcOnlyRel;
   console.log(`Actuals source: ${actualsRel}`);
   const actuals = readJson(actualsRel);
+  const generatedAt = new Date().toISOString();
+  const snapshotDate = generatedAt.slice(0, 10);
   const ocd = readJson("data/features/council-composition-history.json").per_council;
 
   // Build seats-up per local council.
@@ -329,6 +331,7 @@ function main() {
     councils.push({
       council_slug: slug,
       council_name: councilNames[slug],
+      snapshotDate,
       ocd_slug: ocdSlug,
       cycle: {
         seats_up: seatsUp,
@@ -412,7 +415,7 @@ function main() {
 
   const out = {
     snapshot: {
-      generated_at: new Date().toISOString(),
+      generated_at: generatedAt,
       election_date: actuals.snapshot.election_date,
       actuals_sha256: actuals.snapshot.sha256,
       method: "pre = OCD 2025 snapshot; up_held approximated as pre[party] * seats_up/total for non-all-up councils; post = pre - up_held + may7_wins; majority threshold = floor(total/2)+1.",

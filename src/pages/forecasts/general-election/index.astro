@@ -5,11 +5,20 @@ import { SITE_URL } from "../../../lib/site";
 import CommonsHorseshoe from "../../../components/CommonsHorseshoe.astro";
 import ConstituencyChoropleth from "../../../components/ConstituencyChoropleth.astro";
 import { loadGePredictions, loadGeSummary, partyColour } from "../../../lib/predictions";
-import { loadGeHeadline, shortPartyLabel } from "../../../lib/siteData";
+import { loadGeHeadline, shortPartyLabel, forecastStamp } from "../../../lib/siteData";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 const ge = loadGePredictions();
 const geSummary = loadGeSummary();
 const headline = loadGeHeadline();
+const pollingSnapshot = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data/polling/override.json"), "utf8"),
+);
+const pollingMeta = pollingSnapshot.sources?.uk_westminster || {};
+const pollingWindow = pollingMeta.fieldwork_window
+  ? `${pollingMeta.fieldwork_window.earliest} to ${pollingMeta.fieldwork_window.latest}`
+  : headline.polling_window;
 
 const predictions = ge.predictions || {};
 const evaluated = Object.values(predictions).filter((p: any) => p?.prediction);
@@ -26,11 +35,8 @@ const HALFWAY = 326;
 // summary tallies (includes every party, even those below the top-6
 // shown in the bar chart).
 const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, number>;
-// Dataset markup puts the seat projection into Google Dataset Search, which is
-// where journalists and researchers look for exactly this and which nothing on
-// the site currently appears in. No `distribution`: the data is published as
-// this page, not as a download, and claiming a file that does not exist is the
-// quickest way to get an entry pulled.
+// The per-constituency JSON is served by the published-data allowlist, so the
+// Dataset distribution below points at a real, build-verified download.
 const breadcrumbs: Crumb[] = [
   { name: "Forecasts", href: "/forecasts/" },
   { name: "General election", href: "/forecasts/general-election/" }
@@ -47,6 +53,7 @@ const structuredData = [
       "Projected majority",
       "Forecast confidence band"
     ],
+    distributionUrl: `${SITE_URL}/data/predictions/ge-next/constituencies.json`,
     keywords: ["UK general election", "constituency forecast", "opinion polling", "seat projection"]
   })
 ];
@@ -54,14 +61,16 @@ const structuredData = [
 <BaseLayout
   breadcrumbs={breadcrumbs}
   structuredData={structuredData}
-  title="General election forecast. Every UK constituency"
-  description={`Forecast for all ${headline.total_seats} UK constituencies if a general election were held today. Headline: ${top ? `${shortPartyLabel(top.party)} ${top.seats}` : "no clear lead"}.`}
+  title="Latest UK opinion polls and general election seat forecast"
+  description={`UK general election projection from the latest published polling snapshot: ${top ? `${shortPartyLabel(top.party)} ${top.seats} seats` : "no clear lead"}, with vote shares and all ${headline.total_seats} constituencies.`}
 >
   <section class="page-hero">
-    <p class="eyebrow">If a UK general election were held today</p>
-    <h1>{top ? `${shortPartyLabel(top.party)} projected to win ${top.seats} seats` : "Every UK constituency, forecast"}</h1>
+    <p class="eyebrow">UK opinion polls and seat prediction</p>
+    <h1>{top ? `${shortPartyLabel(top.party)} projected to win ${top.seats} seats` : "UK general election seat forecast"}</h1>
     <p class="lede">
-      All {headline.total_seats.toLocaleString()} UK parliamentary constituencies. Refreshed daily from the latest UK Westminster polling.
+      This is a modelled seat projection, not an election result or a poll. It covers all
+      {" "}{headline.total_seats.toLocaleString()} UK parliamentary constituencies and was generated
+      {" "}<strong>{forecastStamp(headline.generated_at)}</strong>{pollingWindow ? ` from polling fieldwork ${pollingWindow}` : ""}.
       A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
     </p>
     <p class="meta-row">
@@ -69,10 +78,47 @@ const structuredData = [
     </p>
   </section>
 
+  <section class="section forecast-summary" aria-labelledby="forecast-summary-heading">
+    <div class="section-head">
+      <p class="eyebrow">Answer first</p>
+      <h2 id="forecast-summary-heading">From the latest polls to a 650-seat projection</h2>
+    </div>
+    <dl>
+      <div>
+        <dt>Polling evidence</dt>
+        <dd>{pollingMeta.polls_used || "n/a"} named-pollster Westminster polls, fieldwork {pollingWindow || "window unavailable"}. <a href="/polling/">Inspect every polling input</a>.</dd>
+      </div>
+      <div>
+        <dt>National vote share</dt>
+        <dd>{headline.national_vote_share.slice(0, 3).map((row) => `${shortPartyLabel(row.party)} ${(row.share * 100).toFixed(1)}%`).join(" · ")}. These are modelled national shares.</dd>
+      </div>
+      <div>
+        <dt>Seat projection</dt>
+        <dd>{headline.seat_tallies.slice(0, 4).map((row) => `${shortPartyLabel(row.party)} ${row.seats}`).join(" · ")}. Seats are allocated constituency by constituency.</dd>
+      </div>
+      <div>
+        <dt>Constituency forecasts</dt>
+        <dd><a href="/seats/parliament/">Browse all {headline.total_seats} seats</a> or <a href="/your-area/">find yours by postcode</a>.</dd>
+      </div>
+    </dl>
+    <p class="muted-row">
+      Polling input retrieved {forecastStamp(pollingSnapshot.generated_at)} · Forecast generated {forecastStamp(headline.generated_at)}.
+    </p>
+  </section>
+
+  <aside class="lookup-cta" aria-labelledby="find-constituency-heading">
+    <div>
+      <p class="eyebrow">Your seat</p>
+      <h2 id="find-constituency-heading">Find your parliamentary constituency</h2>
+      <p>Enter a postcode to open the matching Westminster forecast, using the official constituency code.</p>
+    </div>
+    <a class="button primary" href="/your-area/" data-journey="ge-forecast-to-constituency-lookup">Find my constituency</a>
+  </aside>
+
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Every seat coloured by predicted winner</p>
-      <h2>The UK political map, if a general election were held today</h2>
+      <h2>The UK political map in this forecast snapshot</h2>
     </div>
     <ConstituencyChoropleth />
     <p class="caption">
@@ -82,7 +128,7 @@ const structuredData = [
     </p>
   </section>
 
-  <section class="section">
+  <section class="section" id="marginals">
     <div class="section-head">
       <p class="eyebrow">Seats projection</p>
       <h2>How the new House of Commons would look</h2>
@@ -139,19 +185,25 @@ const structuredData = [
     <p class="caption">
       The closest predicted contests on this forecast. These are the seats most likely to flip if the polling moves.
     </p>
-    <table class="seat-table">
-      <thead><tr><th>Constituency</th><th>Predicted winner</th><th>Margin</th><th>Country</th></tr></thead>
-      <tbody>
-        {marginals.map((m: any) => (
-          <tr>
-            <td><a href={`/seats/parliament/${m.slug}/`}>{m.name}</a></td>
-            <td><span class="party-swatch" style={`background:${partyColour(m.winner)}`}></span> {shortPartyLabel(m.winner)}</td>
-            <td class="num">{((m.majority_pct ?? 0) * 100).toFixed(1)}pp</td>
-            <td>{m.country?.replace(/_/g, " ")}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Top 50 marginal constituencies">
+      <table class="seat-table">
+        <thead><tr><th>Constituency</th><th>Predicted winner</th><th>Margin</th><th>Country</th></tr></thead>
+        <tbody>
+          {marginals.map((m: any) => (
+            <tr>
+              <td><a href={`/seats/parliament/${m.slug}/`}>{m.name}</a></td>
+              <td><span class="party-swatch" style={`background:${partyColour(m.winner)}`}></span> {shortPartyLabel(m.winner)}</td>
+              <td class="num">{((m.majority_pct ?? 0) * 100).toFixed(1)}pp</td>
+              <td>{m.country?.replace(/_/g, " ")}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="post-data-action">
+      <a class="button" href="/your-area/" data-journey="ge-marginals-to-constituency-lookup">Find your seat by postcode</a>
+      <a href="/seats/parliament/">Browse all {headline.total_seats} constituencies</a>
+    </p>
   </section>
 
   <section class="section">
@@ -182,7 +234,69 @@ const structuredData = [
       <li><strong>Confidence intervals are not yet shown per seat.</strong> A future release will publish a high/low band on each constituency.</li>
     </ul>
     <p class="caption">
-      Read about the model at <a href="/methodology/">About</a>, see <a href="/polling/">the exact polling numbers feeding the forecast</a>, or look up your own constituency at <a href="/your-area/">Find your ward</a>.
+      Read the <a href="/methodology/general-election/">general election methodology</a>, see <a href="/polling/">the exact polling numbers feeding the forecast</a>, or <a href="/your-area/">find your parliamentary constituency</a>.
+    </p>
+    <p class="muted-row">
+      Download: <a href="/data/predictions/ge-next/summary.json">national summary JSON</a> ·
+      {" "}<a href="/data/predictions/ge-next/constituencies.json">all 650 constituency forecasts</a> ·
+      {" "}<a href="/data/predictions/ge-next/assumptions.json">model assumptions</a>.
     </p>
   </section>
 </BaseLayout>
+
+<style>
+  .lookup-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    padding: var(--space-lg);
+    border-top: 3px solid var(--accent);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-muted);
+  }
+
+  .lookup-cta h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 600;
+  }
+
+  .lookup-cta p:not(.eyebrow) {
+    margin: var(--space-xs) 0 0;
+    color: var(--ink-soft);
+  }
+
+  .lookup-cta .button { flex: 0 0 auto; }
+
+  .post-data-action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .forecast-summary dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .forecast-summary dl div { padding: var(--space-md); border: 1px solid var(--border); border-radius: 10px; }
+  .forecast-summary dt { font-weight: 700; }
+  .forecast-summary dd { margin: var(--space-xs) 0 0; color: var(--ink-soft); }
+
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  @media (max-width: 40rem) {
+    .lookup-cta { align-items: stretch; flex-direction: column; }
+    .lookup-cta .button { width: 100%; }
+  }
+</style>

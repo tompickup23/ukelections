@@ -3,15 +3,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="Where the data comes from"
-  description="Every input that feeds a UK Elections forecast: the candidates, the past results, the polling, the demographics, and the academic research."
+  title="UK election candidate data sources and methodology"
+  description="How UK Elections reports candidate, ballot, result, polling and demographic data, including the authoritative returning-officer records and each ingestion source."
 >
   <section class="page-hero">
     <p class="eyebrow">Data sources</p>
-    <h1>Where the data comes from</h1>
+    <h1>Election candidate data, results and sources</h1>
     <p class="lede">
-      Every forecast on this site is built from public data. Here's the list of feeds, what each one contributes,
-      and how often it refreshes. Direct download links and file paths live on the
+      UK Elections reports a candidate only when a public election record identifies who is standing.
+      The authoritative record is the returning officer's Statement of Persons Nominated; Democracy Club is the
+      structured ingestion layer used to join those records to ballots and area codes. This page lists every other
+      input, what it contributes and how it refreshes. Direct downloads and snapshot timestamps live on the
       <a href="/transparency/">Transparency page</a>.
     </p>
   </section>
@@ -22,9 +24,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h2>Who's standing where</h2>
     </div>
     <ul class="plain-list">
-      <li><strong>Democracy Club</strong>, the open candidate-data charity. Every candidate, ballot paper, and Statement of Persons Nominated for May 7 2026 is sourced from their public CC-BY API. Refreshed nightly.
+      <li><strong>Returning officers.</strong> Each council or parliamentary acting returning officer publishes the Statement of Persons Nominated. That notice is the primary evidence for names, party descriptions and the final ballot.</li>
+      <li><strong>Democracy Club</strong>, the open candidate-data charity. Its public CC-BY API normalises those returning-officer notices into candidate and ballot records with stable identifiers; the May 2026 ingestion refreshed nightly before polling day.
         (<a href="https://democracyclub.org.uk/">democracyclub.org.uk</a>)</li>
     </ul>
+    <p class="caption">
+      Candidate pages link to the relevant Statement of Persons Nominated where the source record supplies one.
+      A candidate's inclusion does not imply endorsement, polling support or a forecast adjustment.
+    </p>
   </section>
 
   <section class="section">

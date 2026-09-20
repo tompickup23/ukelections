@@ -289,6 +289,31 @@ function prettyDate(iso: string): string {
 }
 
 /**
+ * When a refreshed forecast was generated, for stamping on any page that
+ * quotes a number from it.
+ *
+ * Every page carrying the GE seat tally said "refreshed daily" and none of
+ * them said *when*. The tally moves with the polling: it ran 288, then 322,
+ * then 325 across a single month. A reader served a stale cached copy of one
+ * page and a fresh copy of another had no way to tell staleness from
+ * contradiction, and at least one external audit concluded the site published
+ * two different current forecasts. A visible timestamp settles it without
+ * depending on anyone's cache behaving.
+ */
+export function forecastStamp(isoTimestamp: string): string {
+  const d = new Date(isoTimestamp);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+  }) + " UTC";
+}
+
+/**
  * Returns every imminent UK contest the site currently models, ordered by
  * polling day ascending. Skips contests whose polling day has already passed.
  *
@@ -499,6 +524,39 @@ export interface AidogeLink {
   url: string;
   name: string;
   hasSpendingData: boolean;
+}
+
+type UkPlacesRegistryRecord = { slug: string; name: string };
+let _ukPlacesByCode: Record<string, UkPlacesRegistryRecord> | null = null;
+
+function loadUkPlacesRegistry() {
+  if (!_ukPlacesByCode) {
+    _ukPlacesByCode = JSON.parse(
+      readFileSync(resolve(process.cwd(), "data/identity/ukplaces-places.json"), "utf8")
+    );
+  }
+  return _ukPlacesByCode!;
+}
+
+export interface UkPlacesLink {
+  url: string;
+  name: string;
+}
+
+/**
+ * Resolves a council page to the UK Places record through its confirmed GSS
+ * code. The public path comes from the registry, never from a name-derived
+ * slug, so unusual authority names retain their verified destination.
+ */
+export function getUkPlacesLink(councilSlug: string): UkPlacesLink | null {
+  const { slugToLad } = loadAidogeJoinTables();
+  const lad24cd = slugToLad[councilSlug]?.lad24cd;
+  const place = lad24cd ? loadUkPlacesRegistry()[lad24cd] : null;
+  if (!place) return null;
+  return {
+    name: place.name,
+    url: `https://ukplaces.co.uk/places/${place.slug}/`,
+  };
 }
 
 /**

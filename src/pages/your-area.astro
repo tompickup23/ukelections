@@ -1,56 +1,77 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { loadIdentity } from "../lib/predictions";
+import { loadGePredictions, loadIdentity } from "../lib/predictions";
+import type { LookupEntry } from "../lib/electionLookup";
 
 const identity = loadIdentity();
-type IndexEntry = { council: string; council_slug: string; ward?: string | null; ward_slug?: string; tier: string; href: string };
-const wardIndex: IndexEntry[] = [];
-const councils = new Map<string, IndexEntry>();
+const ge = loadGePredictions();
+type CouncilEntry = LookupEntry & { council_slug: string; tier: string };
+const wardIndex: LookupEntry[] = [];
+const councils = new Map<string, CouncilEntry>();
 for (const w of identity.wards) {
   if (w.tier !== "local" && w.tier !== "mayor") continue;
   if (!w.ward_slug) continue;
   wardIndex.push({
-    council: w.council_name,
-    council_slug: w.council_slug,
-    ward: w.ward_name,
-    ward_slug: w.ward_slug,
-    tier: w.tier,
+    kind: "ward",
+    name: w.ward_name || w.ward_slug,
+    secondary: `${w.council_name} ward`,
     href: `/seats/${w.council_slug}/${w.ward_slug}/`,
+    code: w.gss_code,
   });
   if (!councils.has(w.council_slug)) {
     councils.set(w.council_slug, {
-      council: w.council_name,
+      kind: "council",
+      name: w.council_name,
+      secondary: w.tier === "mayor" ? "Mayoralty" : "Local council",
       council_slug: w.council_slug,
       tier: w.tier,
       href: `/seats/${w.council_slug}/`,
     });
   }
 }
-const councilIndex = [...councils.values()].sort((a, b) => a.council.localeCompare(b.council));
-const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
+const councilIndex = [...councils.values()].sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+const constituencyIndex: LookupEntry[] = Object.values(ge.predictions || {})
+  .filter((record: any) => Boolean(record?.prediction && record?.pcon24cd && record?.slug))
+  .map((record: any) => ({
+    kind: "constituency" as const,
+    name: record.name,
+    secondary: "Parliamentary constituency",
+    href: `/seats/parliament/${record.slug}/`,
+    code: record.pcon24cd,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+const indexJson = JSON.stringify({
+  constituencies: constituencyIndex,
+  wards: wardIndex,
+  councils: councilIndex,
+});
 ---
 
-<BaseLayout title="Your Area, find your ward" description="Look up your ward forecast for May 7 2026 by postcode, town, or council name.">
+<BaseLayout title="What is my ward and constituency? UK postcode lookup" description="Enter a UK postcode to find your official council ward and Westminster constituency, or browse every council and parliamentary seat without JavaScript.">
   <section class="page-hero">
     <p class="eyebrow">Your Area</p>
-    <h1>Find your ward forecast</h1>
+    <h1>Find your council ward and constituency</h1>
     <p class="lede">
-      Enter a UK postcode, town name, or council name. We'll route you to the May 7 2026 forecast for your ward.
+      Enter a UK postcode to find both your Westminster parliamentary constituency and your local council ward.
+      The lookup uses the official area codes returned for that postcode, rather than guessing from a place name.
     </p>
   </section>
 
   <section class="lookup-shell">
     <form id="lookup-form" autocomplete="off">
-      <label for="lookup-input"><strong>Postcode, town, council, or ward</strong></label>
+      <label for="lookup-input"><strong>Postcode, constituency, council or ward</strong></label>
       <div class="lookup-row">
-        <input id="lookup-input" name="lookup" type="search" placeholder="e.g. BB12 6PG, Burnley, or Coal Clough" autofocus />
-        <button type="submit">Find</button>
+        <input id="lookup-input" name="lookup" type="search" placeholder="e.g. BB12 6PG, Burnley, or Holborn" autofocus />
+        <button type="submit">Find my elections</button>
       </div>
       <p id="lookup-status" class="lookup-status" aria-live="polite"></p>
+      <p class="privacy-note">
+        Your postcode is sent directly from your browser to <a href="https://postcodes.io/">Postcodes.io</a> to identify the official constituency and ward codes. UK Elections does not store it. <a href="/privacy/">Privacy details</a>.
+      </p>
     </form>
 
     <div id="lookup-results" class="lookup-results" hidden>
-      <h3>Matches</h3>
+      <h2 id="lookup-results-heading">Matches</h2>
       <ul id="lookup-results-list"></ul>
       <p id="lookup-results-overflow" hidden></p>
     </div>
@@ -58,13 +79,47 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Browse</p>
+      <p class="eyebrow">What is my ward?</p>
+      <h2>Ward and constituency mean different election areas</h2>
+    </div>
+    <dl class="area-definitions">
+      <div>
+        <dt>Council ward</dt>
+        <dd>The local area that elects one or more councillors to your local authority. Ward names and boundaries can differ from parliamentary constituencies.</dd>
+      </div>
+      <div>
+        <dt>Parliamentary constituency</dt>
+        <dd>The Westminster seat that elects one Member of Parliament. The site uses the current 2024 constituency boundaries.</dd>
+      </div>
+    </dl>
+    <p>
+      A postcode may sit near a boundary, so town or council names are not a reliable substitute. The postcode
+      tool asks <a href="https://postcodes.io/">Postcodes.io</a> for the official GSS codes and matches those codes
+      to this site's election pages. If the service is unavailable, use the static
+      <a href="/seats/parliament/"> constituency list</a> or <a href="/councils/">council and ward browser</a>.
+    </p>
+  </section>
+
+  <section class="section browse-paths">
+    <div class="section-head">
+      <p class="eyebrow">Westminster</p>
+      <h2>Browse parliamentary constituencies</h2>
+    </div>
+    <p>
+      All {constituencyIndex.length} constituency pages are available without using the postcode lookup, grouped by nation and region.
+    </p>
+    <p><a class="button primary" href="/seats/parliament/">Browse all UK constituencies</a></p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Local elections</p>
       <h2>All {councilIndex.length} councils on the May 7 2026 ballot</h2>
     </div>
     <div class="council-grid">
       {councilIndex.map((c) => (
         <a class="council-card" href={c.href}>
-          <strong>{c.council}</strong>
+          <strong>{c.name}</strong>
           <span class="tier">{c.tier === "mayor" ? "Mayoralty" : "Local council"}</span>
         </a>
       ))}
@@ -72,43 +127,58 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
   </section>
 </BaseLayout>
 
+<style>
+  .area-definitions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-md);
+    margin: 0 0 var(--space-md);
+  }
+  .area-definitions div { padding: var(--space-md); border: 1px solid var(--border); border-radius: 10px; }
+  .area-definitions dt { font-weight: 700; }
+  .area-definitions dd { margin: var(--space-xs) 0 0; color: var(--ink-soft); }
+</style>
+
 <script type="application/json" id="search-index" set:html={indexJson} />
 
-<script is:inline>
+<script>
+  import { resolvePostcodeDestinations, searchElectionLookup } from "../lib/electionLookup";
+  import type { LookupEntry, LookupIndex } from "../lib/electionLookup";
+
   (function () {
-    const data = JSON.parse(document.getElementById("search-index").textContent);
-    const form = document.getElementById("lookup-form");
-    const input = document.getElementById("lookup-input");
-    const status = document.getElementById("lookup-status");
-    const resultsRoot = document.getElementById("lookup-results");
-    const resultsList = document.getElementById("lookup-results-list");
-    const resultsOverflow = document.getElementById("lookup-results-overflow");
+    const indexElement = document.getElementById("search-index")!;
+    const form = document.getElementById("lookup-form") as HTMLFormElement;
+    const input = document.getElementById("lookup-input") as HTMLInputElement;
+    const status = document.getElementById("lookup-status")!;
+    const resultsRoot = document.getElementById("lookup-results")!;
+    const resultsList = document.getElementById("lookup-results-list") as HTMLUListElement;
+    const resultsOverflow = document.getElementById("lookup-results-overflow") as HTMLParagraphElement;
+    const resultsHeading = document.getElementById("lookup-results-heading")!;
+    const data = JSON.parse(indexElement.textContent || "{}") as LookupIndex;
 
     const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 
-    function setStatus(msg, isError) {
+    function setStatus(msg: string, isError = false) {
       status.textContent = msg;
       status.className = "lookup-status" + (isError ? " err" : "");
     }
 
-    function renderResults(items) {
+    function renderResults(items: LookupEntry[], heading = "Matches") {
       while (resultsList.firstChild) resultsList.removeChild(resultsList.firstChild);
       resultsRoot.hidden = items.length === 0;
+      resultsHeading.textContent = heading;
       const visible = items.slice(0, 12);
       visible.forEach(function (m) {
         const li = document.createElement("li");
         const a = document.createElement("a");
         a.href = m.href;
-        if (m.ward) {
-          const strong = document.createElement("strong");
-          strong.textContent = m.ward;
-          a.appendChild(strong);
-          a.appendChild(document.createTextNode("n/a" + m.council));
-        } else {
-          const strong = document.createElement("strong");
-          strong.textContent = m.council;
-          a.appendChild(strong);
-        }
+        a.dataset.journey = m.kind === "constituency" ? "your-area-to-constituency" : "your-area-to-local";
+        const strong = document.createElement("strong");
+        strong.textContent = m.name;
+        const detail = document.createElement("span");
+        detail.textContent = m.secondary;
+        a.appendChild(strong);
+        a.appendChild(detail);
         li.appendChild(a);
         resultsList.appendChild(li);
       });
@@ -120,22 +190,8 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
       }
     }
 
-    function fuzzyFilter(query) {
-      const q = query.toLowerCase().trim();
-      if (q.length < 2) return [];
-      const wardHits = data.wards.filter(function (w) {
-        return (w.ward && w.ward.toLowerCase().includes(q)) || w.council.toLowerCase().includes(q);
-      });
-      const councilHits = data.councils.filter(function (c) {
-        return c.council.toLowerCase().includes(q);
-      });
-      const seen = new Set(wardHits.map(function (w) { return w.council_slug; }));
-      const filteredCouncils = councilHits.filter(function (c) { return !seen.has(c.council_slug); });
-      return wardHits.concat(filteredCouncils);
-    }
-
-    async function postcodeLookup(postcode) {
-      setStatus("Looking up postcode " + postcode + " …");
+    async function postcodeLookup(postcode: string) {
+      setStatus("Looking up postcode " + postcode + "...");
       try {
         const r = await fetch("https://api.postcodes.io/postcodes/" + encodeURIComponent(postcode.replace(/\s+/g, "")));
         if (!r.ok) {
@@ -150,27 +206,16 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
         }
         const ward = result.admin_ward || "";
         const district = result.admin_district || "";
-        setStatus("Postcode " + postcode + " → " + ward + ", " + district);
-        const wardLower = ward.toLowerCase();
-        const districtLower = district.toLowerCase();
-        const matches = data.wards.filter(function (w) {
-          return w.ward.toLowerCase() === wardLower && w.council.toLowerCase() === districtLower;
-        });
-        if (matches.length === 0) {
-          const districtMatches = data.councils.filter(function (c) { return c.council.toLowerCase() === districtLower; });
-          if (districtMatches.length === 0) {
-            const sameCouncilWards = data.wards.filter(function (w) { return w.council.toLowerCase() === districtLower; });
-            renderResults(sameCouncilWards);
-            setStatus(district + " is not on the May 2026 ballot. No forecast available.");
-          } else {
-            renderResults(districtMatches);
-            setStatus(district + " is on the ballot, pick your specific ward from the list.");
-          }
+        const matches = resolvePostcodeDestinations(result, data);
+        if (matches.length > 0) {
+          renderResults(matches, "Your election pages");
+          setStatus("Official postcode match: " + [ward, district].filter(Boolean).join(", ") + ".");
         } else {
-          window.location.href = matches[0].href;
+          renderResults([], "Your election pages");
+          setStatus("We found the postcode, but its official constituency and ward codes do not match a page in the current project data.", true);
         }
-      } catch (e) {
-        setStatus("Lookup failed: " + e.message, true);
+      } catch {
+        setStatus("The postcode service could not be reached. Browse the constituency or council lists below instead.", true);
       }
     }
 
@@ -181,32 +226,33 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
       if (POSTCODE_RE.test(value)) {
         postcodeLookup(value);
       } else {
-        const hits = fuzzyFilter(value);
+        const hits = searchElectionLookup(value, data);
         if (hits.length === 1) {
-          window.location.href = hits[0].href;
+          renderResults(hits, "Match");
+          setStatus("1 match");
         } else if (hits.length === 0) {
-          setStatus("No matches found. Try a council name, ward name, or UK postcode.", true);
-          renderResults([]);
+          setStatus("No matches found. Try a constituency, council, ward or UK postcode.", true);
+          renderResults([], "Matches");
         } else {
           setStatus(hits.length + " matches");
-          renderResults(hits);
+          renderResults(hits, "Matches");
         }
       }
     });
 
-    let inputDebounce;
+    let inputDebounce: ReturnType<typeof setTimeout> | undefined;
     input.addEventListener("input", function () {
-      clearTimeout(inputDebounce);
+      if (inputDebounce) clearTimeout(inputDebounce);
       const value = (input.value || "").trim();
       if (POSTCODE_RE.test(value)) return;
       inputDebounce = setTimeout(function () {
         if (value.length >= 2) {
-          const hits = fuzzyFilter(value);
-          renderResults(hits);
+          const hits = searchElectionLookup(value, data);
+          renderResults(hits, "Matches");
           if (hits.length > 0) setStatus(hits.length + " match" + (hits.length === 1 ? "" : "es"));
           else setStatus("");
         } else {
-          renderResults([]);
+          renderResults([], "Matches");
           setStatus("");
         }
       }, 120);
@@ -223,11 +269,21 @@ const indexJson = JSON.stringify({ wards: wardIndex, councils: councilIndex });
 .lookup-status { color: var(--muted); margin-top: 0.5rem; min-height: 1.4em; font-size: 0.95rem; }
 .lookup-status.err { color: var(--status-bad-text); }
 .lookup-results { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.lookup-results h2 { font-size: var(--text-h3); }
 .lookup-results ul { list-style: none; padding: 0; margin: 0.5rem 0 0; display: grid; gap: 0.4rem; }
-.lookup-results a { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; background: var(--surface-muted); text-decoration: none; color: var(--ink); }
-.lookup-results a:hover { background: color-mix(in srgb, var(--accent-3) 8%, var(--surface-muted)); }
+.lookup-results :global(a) { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; background: var(--surface-muted); text-decoration: none; color: var(--ink); }
+.lookup-results :global(a:hover) { background: color-mix(in srgb, var(--accent-3) 8%, var(--surface-muted)); }
+.lookup-results :global(a strong),
+.lookup-results :global(a span) { display: block; }
+.lookup-results :global(a span) { margin-top: var(--space-2xs); color: var(--ink-soft); font-size: var(--text-small); }
+.privacy-note { margin: var(--space-sm) 0 0; color: var(--ink-soft); font-size: var(--text-small); line-height: 1.5; }
+.browse-paths { padding-top: 0; }
 .council-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; margin-top: 0.5rem; }
 .council-card { display: block; padding: 0.6rem 0.85rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--ink); }
 .council-card:hover { border-color: var(--accent-3); }
 .council-card .tier { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
+@media (max-width: 40rem) {
+  .lookup-row { flex-direction: column; }
+  .lookup-row button { width: 100%; }
+}
 </style>

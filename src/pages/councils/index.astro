@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PartyBars from "../../components/PartyBars.astro";
 import StatCard from "../../components/StatCard.astro";
+import CouncilControlMap from "../../components/CouncilControlMap.astro";
+import type { Crumb } from "../../lib/seo";
 import {
   loadCouncilCycles,
   loadMay7Control,
@@ -10,6 +12,7 @@ import {
   loadMay7Headline,
   formatNextElection,
   partySlugToName,
+  forecastStamp,
 } from "../../lib/siteData";
 import { partyColour } from "../../lib/predictions";
 
@@ -139,24 +142,45 @@ const ePartyToColour = (slug: string | null) => {
     default: return "#9ca3af";
   }
 };
+const breadcrumbs: Crumb[] = [{ name: "Councils", href: "/councils/" }];
+const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
 ---
 
 <BaseLayout
-  title="Council elections. Every council, last result and next vote"
-  description="Every English council, London borough, metropolitan borough and unitary authority. May 7 2026 result, who controls it now, and when residents vote again. Two-tier councils awaiting Local Government Reorganisation are marked TBC."
+  breadcrumbs={breadcrumbs}
+  title="UK council control map and seats after May 2026"
+  description={`Council control map and seat totals after 7 May 2026. Reform UK has ${counts.ref_majority} overall majorities; browse every council's result and next election.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Council elections</p>
-    <h1>Every council, before and after May 7</h1>
+    <h1>UK council control and seats after 7 May 2026</h1>
     <p class="lede">
-      All {counts.total} English and Welsh councils that contested the May 7 2026 ballot. Sort by who controls
-      the council now, or by when residents vote again. Two-tier councils being abolished under Local Government
-      Reorganisation are explicitly marked <strong>TBC</strong> rather than given a misleading date.
+      <strong>Reform UK holds {counts.ref_majority} overall council majorities</strong> in this reconciled snapshot
+      of all {counts.total} English and Welsh councils that contested the 7 May 2026 ballot. The map and table show
+      who has enough councillors to control each authority, every party's seats, and the next known election date.
     </p>
+    {controlUpdated && <p class="meta-row">Control record updated {controlUpdated}. Election date: 7 May 2026.</p>}
     <div class="action-row">
       <a class="button primary" href="/your-area/">Find my council</a>
       <a class="button" href="/past-results/">May 7 results in detail</a>
     </div>
+  </section>
+
+  <section class="section" id="control-map">
+    <div class="section-head">
+      <p class="eyebrow">Council control map</p>
+      <h2>Who controls each council after the May 2026 elections</h2>
+    </div>
+    <p>
+      A party controls a council only when it holds more than half of all council seats. Being the largest party
+      is not the same as control: where nobody reaches that threshold, the council is marked <strong>no overall
+      control (NOC)</strong>. These are local-authority seats, not Westminster parliamentary constituencies.
+    </p>
+    <CouncilControlMap councils={ctl.councils} />
+    <p class="caption">
+      The full council-by-council table below is the text equivalent of the map. It remains usable without
+      JavaScript and links to every council's ward results and seat composition.
+    </p>
   </section>
 
   <section class="section">
@@ -193,7 +217,26 @@ const ePartyToColour = (slug: string | null) => {
     />
     <p class="caption">
       Each bar shows the share of all {compositionTotal} contested councils now held by that
-      party. NOC = no overall control. Drill into individual councils via the table below.
+      party. NOC = no overall control. A party's number of councils is distinct from the number of councillors
+      it holds nationally. Drill into individual councils via the table below.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Sources and downloads</p>
+      <h2>How the council-control record is compiled</h2>
+    </div>
+    <p>
+      Ward winners come from returning-officer declarations published by the relevant councils. The pre-election
+      composition uses the Open Council Data snapshot; the post-election record subtracts seats that were up and
+      adds the declared winners, using an overall-majority threshold of half the council plus one. See the
+      <a href="/sources/"> source register</a> and <a href="/data-quality/">data-quality checks</a>.
+    </p>
+    <p class="muted-row">
+      Download the Reform-majority subset: <a href="/data/transparency/may-2026-reform-controlled-councils.json">JSON</a>
+      {" "}· <a href="/data/transparency/may-2026-reform-controlled-councils.csv">CSV</a>
+      {" "}· <a href="/data/transparency/may-2026-reform-controlled-councils.md">Markdown</a>.
     </p>
   </section>
 
@@ -214,6 +257,7 @@ const ePartyToColour = (slug: string | null) => {
       </div>
     </div>
 
+    <div class="council-table-scroll" tabindex="0" role="region" aria-label="Every council, control and next election">
     <table class="council-table is-sortable" id="council-table">
       <thead>
         <tr>
@@ -266,6 +310,7 @@ const ePartyToColour = (slug: string | null) => {
         ))}
       </tbody>
     </table>
+    </div>
     <p class="caption">
       Two-tier councils (county + district) are being reorganised into unitary authorities under the
       December 2024 English Devolution White Paper. Election dates flip from TBC to a confirmed date as each
@@ -376,6 +421,7 @@ const ePartyToColour = (slug: string | null) => {
 </script>
 
 <style>
+  .council-table-scroll { max-width: 100%; overflow-x: auto; }
   .council-table.is-sortable .th-sort {
     padding: 0;
   }

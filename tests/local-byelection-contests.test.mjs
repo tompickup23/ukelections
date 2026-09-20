@@ -93,6 +93,17 @@ describe.skipIf(!present)("local by-election contest files", () => {
     }
   });
 
+  it("never publishes turnout percentages outside the documented 0-100% range", () => {
+    for (const { file, doc } of contests) {
+      for (const caveat of doc.forecast?.cannot_see || []) {
+        const range = caveat.match(/Turnout, .* has run from (\d+)% to (\d+)%/);
+        if (!range) continue;
+        expect(Number(range[1]), `${file}: minimum turnout`).toBeGreaterThanOrEqual(0);
+        expect(Number(range[2]), `${file}: maximum turnout`).toBeLessThanOrEqual(100);
+      }
+    }
+  });
+
   it("never uses a baseline the boundary review invalidated", () => {
     for (const { file, doc } of contests) {
       if (!doc.forecast) continue;

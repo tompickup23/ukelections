@@ -45,6 +45,7 @@ import {
   SIGMA_INFLATION,
   gradeAgainst,
 } from "./lib/local-byelection-model.mjs";
+import { assertFractionalTurnout, mergeHistoryRows } from "./lib/election-history.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const p = (rel) => path.join(ROOT, rel);
@@ -62,6 +63,7 @@ const args = Object.fromEntries(
   }),
 );
 const OFFLINE = Boolean(args.offline);
+const PRESERVE_FORECASTS = Boolean(args["preserve-forecasts"]);
 const KEEP_DAYS = Number(args["keep-days"] ?? 90);
 const PACE_MS = Number(args.pace ?? 400);
 const today = new Date().toISOString().slice(0, 10);
@@ -191,19 +193,18 @@ async function fetchScheduledBallots() {
 // ---------------------------------------------------------------------------
 
 function loadHistory() {
-  const rows = [];
+  let archiveRows = [];
   // The big DC history file is gitignored and regenerated on the server. A
   // fresh clone has the tracked sidecar only, which is enough to build the
   // corpus but not the ward baselines, so its absence is reported, not fatal.
   if (existsSync(p("data/history/dc-historic-results.json"))) {
-    rows.push(...readJson("data/history/dc-historic-results.json").results);
+    archiveRows = readJson("data/history/dc-historic-results.json").results || [];
   } else {
     console.warn("  note: data/history/dc-historic-results.json absent, ward baselines will be LEAP-only");
   }
-  const seen = new Set(rows.map((r) => r.ballot_paper_id));
-  for (const r of readJson("data/history/byelection-appends.json").results) {
-    if (!seen.has(r.ballot_paper_id)) rows.push(r);
-  }
+  const sidecarRows = readJson("data/history/byelection-appends.json").results || [];
+  const rows = mergeHistoryRows(archiveRows, sidecarRows);
+  assertFractionalTurnout(rows);
   return rows;
 }
 
@@ -235,6 +236,10 @@ const DEMO_FIELDS = [
  * letters alone so "St. John Smith" and "St John Smith" are one person. */
 function normaliseName(name) {
   return String(name || "").toLowerCase().replace(/[^a-z]+/g, "");
+}
+
+function isHandVerified(row) {
+  return row?.review_status === "hand_verified_declaration" || row?.review_status === "hand_verified_two_sources";
 }
 
 let SIDECAR = null;
@@ -471,20 +476,34 @@ async function gather(ballot, priors) {
   // on the candidate's name, and only when the sidecar covers every candidate
   // on the ballot: a partial fill would grade a contest on half a result.
   let resultSource = null;
-  if (candidates.length && candidates.every((c) => c.votes === null)) {
-    const row = sidecarResults().get(ballot.election_id);
-    if (row) {
-      const byName = new Map((row.candidates || []).map((c) => [normaliseName(c.name), c]));
-      const filled = candidates.map((c) => byName.get(normaliseName(c.name)) || null);
-      if (filled.every(Boolean)) {
-        candidates.forEach((c, i) => {
-          c.votes = Number(filled[i].votes);
-          c.elected = Boolean(filled[i].elected);
-        });
-        resultSource = row.source || null;
-      } else {
-        console.log(`  sidecar row for ${ballot.election_id} does not cover every candidate; left unfilled`);
-      }
+  const row = sidecarResults().get(ballot.election_id);
+  if (candidates.length && row) {
+    const rowCandidates = row.candidates || [];
+    const byName = new Map(rowCandidates.map((c) => [normaliseName(c.name), c]));
+    const filled = candidates.map((candidate) => {
+      const named = byName.get(normaliseName(candidate.name));
+      if (named) return named;
+      const sameParty = rowCandidates.filter((c) => canonParty(c.party_name) === candidate.party);
+      return sameParty.length === 1 ? sameParty[0] : null;
+    });
+    const countsAgree = filled.every(
+      (source, i) => source && (candidates[i].votes === null || Number(source.votes) === candidates[i].votes),
+    );
+    const mayFill = candidates.every((c) => c.votes === null) || isHandVerified(row);
+    if (filled.every(Boolean) && countsAgree && mayFill) {
+      candidates.forEach((candidate, i) => {
+        const verified = filled[i];
+        candidate.name = verified.name || candidate.name;
+        candidate.party_name = verified.party_name || candidate.party_name;
+        candidate.party = canonParty(candidate.party_name);
+        candidate.votes = Number(verified.votes);
+        candidate.elected = Boolean(verified.elected);
+      });
+      resultSource = row.source || null;
+    } else if (candidates.every((c) => c.votes === null)) {
+      console.log(`  sidecar row for ${ballot.election_id} does not cover every candidate; left unfilled`);
+    } else if (isHandVerified(row) && !countsAgree) {
+      console.log(`  hand-verified sidecar row for ${ballot.election_id} disagrees with Democracy Club; kept live counts`);
     }
   }
 
@@ -806,6 +825,14 @@ async function main() {
   const written = new Set();
   let forecast = 0;
   const { doc: publishedDoc, forecasts: published } = loadPublished();
+  const existingContests = new Map();
+  if (PRESERVE_FORECASTS && existsSync(OUT_DIR)) {
+    for (const file of readdirSync(OUT_DIR).filter((name) => name.endsWith(".json") && !name.startsWith("_"))) {
+      const existing = JSON.parse(readFileSync(path.join(OUT_DIR, file), "utf8"));
+      if (existing.slug) existingContests.set(existing.slug, existing);
+    }
+    console.log(`  preserving forecast outputs for ${existingContests.size} existing contests`);
+  }
 
   // The caveat used to assert that council by-elections "routinely fall below a
   // quarter of the electorate". Measured across the corpus on 28 August 2026
@@ -829,12 +856,57 @@ async function main() {
     const contest = assemble(ctx, corpus, demo, holders, published, turnoutFacts);
     if (!contest) continue;
 
+    // A release-readiness data repair may need fresh statuses, declared
+    // results and corpus facts without silently republishing a different
+    // forecast. Preserve the prior forecast verbatim, replacing only the
+    // corpus-derived turnout sentence whose source data this run validates.
+    if (PRESERVE_FORECASTS) {
+      const existing = existingContests.get(contest.slug);
+      if (existing) {
+        const freshTurnout = contest.forecast?.cannot_see?.find((line) => line.startsWith("Turnout, which across the "));
+        contest.forecast = existing.forecast;
+        contest.no_forecast_reason = existing.no_forecast_reason;
+        contest.prior_result = existing.prior_result;
+        if (freshTurnout && contest.forecast?.cannot_see) {
+          contest.forecast.cannot_see = contest.forecast.cannot_see.map((line) =>
+            line.startsWith("Turnout, which across the ") ? freshTurnout : line,
+          );
+        }
+        if (contest.result) {
+          // assemble() grades against the freshly calculated projection. A
+          // data-only run replaces that projection with the published one, so
+          // its grade must also stay paired with the forecast readers saw.
+          contest.result.grading = existing.result
+            ? existing.result.grading
+            : gradeAgainst(
+                published[contest.slug],
+                contest.forecast,
+                contest.result.shares,
+                new Set(contest.field.parties),
+                contest.result.winner_party,
+              );
+        }
+      } else {
+        contest.forecast = null;
+        contest.no_forecast_reason = [
+          "Forecast not generated during a data-only refresh.",
+        ];
+        if (contest.result) contest.result.grading = null;
+      }
+    }
+
     // Snapshot the projection while the contest is still ahead of us. The last
     // run before polling day is the one that matters, and it is the one this
     // will have left behind. A contest that has polled is never rewritten: that
     // is the whole point, and rewriting it would quietly restore the drift this
     // file exists to stop.
-    if (publishedDoc && contest.forecast && contest.contest.polling_day > today) {
+    if (
+      publishedDoc &&
+      !PRESERVE_FORECASTS &&
+      contest.forecast &&
+      contest.contest.polling_day > today &&
+      !published[contest.slug]
+    ) {
       const f = contest.forecast;
       published[contest.slug] = {
         ...(published[contest.slug] || {}),
@@ -859,6 +931,20 @@ async function main() {
       ? `${contest.forecast.winner} ${(contest.forecast.central[contest.forecast.winner] * 100).toFixed(1)}%`
       : `no forecast (${contest.no_forecast_reason.length})`;
     console.log(`  ${contest.contest.polling_day} ${contest.contest.council_name} / ${contest.contest.ward_name}: ${tag}`);
+  }
+
+  // An offline, data-only repair can have a shorter cached future horizon than
+  // the last successful online run. Never interpret that missing cache as a
+  // cancellation and delete a still-upcoming published contest. The next
+  // online refresh remains responsible for confirming, updating or removing it.
+  if (PRESERVE_FORECASTS) {
+    for (const [slug, existing] of existingContests) {
+      const file = `${slug}.json`;
+      if (written.has(file) || existing.contest?.polling_day < today) continue;
+      written.add(file);
+      if (existing.forecast) forecast += 1;
+      console.log(`  preserved uncached upcoming contest ${file}`);
+    }
   }
 
   // Drop contests that have aged out of the window so the directory does not

@@ -85,4 +85,10 @@ describe.skipIf(!hasCorpus)("sitemap paths", () => {
     // Sitemaps cap at 50,000 URLs; if the site ever passes that, split the file.
     expect(all.length).toBeLessThan(50_000);
   });
+
+  it("includes standalone forecast and parliamentary by-election pages", () => {
+    const all = getAllSitemapPaths();
+    expect(all).toContain("/forecasts/mayor-of-lancashire/");
+    expect(all).toContain("/by-elections/holborn-and-st-pancras/");
+  });
 });

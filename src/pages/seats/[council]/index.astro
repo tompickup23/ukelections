@@ -11,6 +11,7 @@ import {
   loadMay7Results,
   loadCouncilCycles,
   loadMay7BacktestForCouncil,
+  loadGePredictions,
   rankedShares,
   formatPct,
   partyColour,
@@ -21,6 +22,7 @@ import {
   partySlugToName,
   councilTypeLabel,
   getAidogeLink,
+  getUkPlacesLink,
 } from "../../../lib/siteData";
 
 export async function getStaticPaths() {
@@ -47,6 +49,8 @@ const wards = identity.wards
 const tier = wards[0]?.tier || "local";
 const councilName = wards[0]?.council_name || council;
 const aidogeLink = getAidogeLink(council!);
+const ukPlacesLink = getUkPlacesLink(council!);
+const relatedConstituency = (loadGePredictions().predictions || {})[council!] || null;
 
 const summaryEntry = summary.councils.find((c: any) => c.council_slug === council);
 const seatProjection = summaryEntry?.predicted_seat_winners || {};
@@ -139,7 +143,9 @@ const seatProjectionRows: SeatProjRow[] = Object.entries(seatProjection as Recor
     share: seatTotal > 0 ? (seats as number) / (seatTotal as number) : 0,
   }));
 
-const title = `${councilName}. May 7 2026 result and what's next`;
+const title = council === "essex" || council === "colchester"
+  ? `${councilName} council seats and results, 2026`
+  : `${councilName}. May 7 2026 result and what's next`;
 // Leads with the council name: the previous form started with the control
 // headline and seat counts, which are identical across small councils and
 // collided on 20 pages.
@@ -153,10 +159,14 @@ const breadcrumbs: Crumb[] = [
 <BaseLayout title={title} description={description} breadcrumbs={breadcrumbs}>
   <section class="page-hero">
     <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Council"} · {councilTypeLabel(cycle?.type)}</p>
-    <h1>{councilName}</h1>
+    <h1>{councilName} council seats and election results</h1>
     <p class="lede">
       <strong>{controlHeadline}</strong> after May 7 2026.{" "}
       {changeLabel && <span class="muted">({changeLabel}{previousLabel})</span>}
+    </p>
+    <p class="meta-row">
+      This page covers seats on {councilName} council, not seats in the House of Commons.
+      {relatedConstituency && <> For the Westminster seat, see the <a href={`/seats/parliament/${relatedConstituency.slug}/`}>{relatedConstituency.name} constituency forecast</a>.</>}
     </p>
     <div class="action-row">
       <a class="button" href="/councils/">← All councils</a>
@@ -359,6 +369,16 @@ const breadcrumbs: Crumb[] = [
         <a href={aidogeLink.url} class="dg-cross-btn" rel="noopener">
           View {councilName} on AI DOGE &rarr;
         </a>
+      </div>
+    </div>
+  )}
+
+  {ukPlacesLink && (
+    <div class="dg-cross-link">
+      <div class="dg-cross-inner">
+        <span class="dg-cross-label">Council geography</span>
+        <span class="dg-cross-desc">The shared local-authority geography record and its source coverage.</span>
+        <a href={ukPlacesLink.url} class="dg-cross-btn" rel="noopener">Place record on UK Places</a>
       </div>
     </div>
   )}

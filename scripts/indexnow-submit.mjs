@@ -1,56 +1,131 @@
-import { readFile } from "node:fs/promises";
 import process from "node:process";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
-const SITE_URL = "https://ukelections.co.uk";
-const KEY = "a91c7dba7c9e4ce28d52336e9b1c76e9";
-const KEY_LOCATION = `${SITE_URL}/${KEY}.txt`;
-const args = process.argv.slice(2);
+export const SITE_URL = "https://ukelections.co.uk";
+export const KEY = "a91c7dba7c9e4ce28d52336e9b1c76e9";
 
-if (process.env.INDEXNOW_SUBMIT !== "1") {
-  console.log("IndexNow disabled (set INDEXNOW_SUBMIT=1 after production verification).");
-  process.exit(0);
+export function option(args, name) {
+  const index = args.indexOf(name);
+  return index === -1 ? undefined : args[index + 1];
 }
 
-try {
-  const urls = await urlsFromArgs(args);
+export function values(args, name) {
+  return args.flatMap((arg, index) => arg === name && args[index + 1] ? [args[index + 1]] : []);
+}
+
+export function urlsFromSitemapXml(xml, cutoff) {
+  return [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>(?:\s*<lastmod>([^<]+)<\/lastmod>)?\s*<\/url>/g)]
+    .filter(([, , lastmod]) => lastmod && lastmod >= cutoff)
+    .map(([, url]) => url.replaceAll("&amp;", "&"));
+}
+
+export function validateUrls(urls, siteUrl = SITE_URL) {
+  if (urls.length > 10_000) {
+    throw new Error("IndexNow accepts at most 10,000 canonical URLs per notification.");
+  }
+  const unique = [...new Set(urls)];
+  for (const value of unique) {
+    let url;
+    try {
+      url = new URL(value);
+    } catch {
+      throw new Error(`IndexNow URL is not absolute: ${value}`);
+    }
+    if (url.origin !== siteUrl || url.search || url.hash) {
+      throw new Error(`IndexNow URL must be a same-host canonical URL without query or fragment: ${value}`);
+    }
+  }
+  return unique;
+}
+
+function verifyPublicKeyFile(key) {
+  const keyPath = resolve(process.cwd(), "public", `${key}.txt`);
+  const published = readFileSync(keyPath, "utf8").trim();
+  if (published !== key) throw new Error("The public IndexNow key file does not match the configured key.");
+}
+
+async function verifyLiveKey({ siteUrl, key, fetchImpl }) {
+  const keyLocation = `${siteUrl}/${key}.txt`;
+  const response = await fetchImpl(keyLocation, { headers: { "Cache-Control": "no-cache" } });
+  if (!response.ok || (await response.text()).trim() !== key) {
+    throw new Error(`The public verification file is not live at ${keyLocation}.`);
+  }
+}
+
+async function urlsForArgs({ args, siteUrl, cutoff, fetchImpl }) {
+  const manifest = option(args, "--file");
+  if (manifest) return JSON.parse(readFileSync(resolve(process.cwd(), manifest), "utf8"));
+
+  const localSitemap = option(args, "--sitemap-file");
+  if (localSitemap) {
+    return urlsFromSitemapXml(readFileSync(resolve(process.cwd(), localSitemap), "utf8"), cutoff);
+  }
+  if (args.includes("--sitemap")) {
+    const sitemapUrl = `${siteUrl}/sitemap.xml`;
+    const response = await fetchImpl(sitemapUrl);
+    if (!response.ok) throw new Error(`Could not read ${sitemapUrl}: HTTP ${response.status}`);
+    return urlsFromSitemapXml(await response.text(), cutoff);
+  }
+  return values(args, "--url");
+}
+
+export async function submitIndexNow({
+  siteUrl = SITE_URL,
+  key = KEY,
+  args = process.argv.slice(2),
+  fetchImpl = fetch,
+} = {}) {
+  if (args.includes("--help")) {
+    console.log("Usage: node scripts/indexnow-submit.mjs [--dry-run] (--url URL ... | --file FILE | --sitemap | --sitemap-file FILE) [--lastmod YYYY-MM-DD]");
+    console.log("Live submission additionally requires INDEXNOW_SUBMIT=1 and must run only after a successful production deploy.");
+    return { submitted: false, urls: [], status: null };
+  }
+
+  const dryRun = args.includes("--dry-run");
+  if (!dryRun && process.env.INDEXNOW_SUBMIT !== "1") {
+    console.log("IndexNow disabled (use --dry-run locally, or set INDEXNOW_SUBMIT=1 after a successful production deploy).");
+    return { submitted: false, urls: [], status: null };
+  }
+
+  verifyPublicKeyFile(key);
+  const cutoff = option(args, "--lastmod") ?? new Date().toISOString().slice(0, 10);
+  const urls = validateUrls(await urlsForArgs({ args, siteUrl, cutoff, fetchImpl }), siteUrl);
   if (!urls.length) {
-    console.log("IndexNow: no changed canonical URLs to notify.");
-  } else {
-    await assertLiveKey();
-    for (const batch of chunk(urls, 10_000)) await notify(batch);
-    console.log(`IndexNow notified of ${urls.length} changed canonical URL${urls.length === 1 ? "" : "s"}.`);
+    console.log(`IndexNow: no canonical URLs changed on or after ${cutoff}.`);
+    return { submitted: false, urls, status: null };
   }
-} catch (error) {
-  // A search-notification outage must not retrospectively fail an otherwise
-  // verified production release. The cron log keeps the error actionable.
-  console.warn(`IndexNow warning: ${error instanceof Error ? error.message : String(error)}`);
-}
 
-async function urlsFromArgs(argv) {
-  const fileIndex = argv.indexOf("--file");
-  const fromFile = fileIndex === -1 ? [] : JSON.parse(await readFile(argv[fileIndex + 1], "utf8"));
-  const direct = argv.flatMap((arg, index) => arg === "--url" && argv[index + 1] ? [argv[index + 1]] : []);
-  const urls = [...new Set([...fromFile, ...direct])];
-  if (urls.some((url) => new URL(url).origin !== SITE_URL)) throw new Error("manifest contains a non-canonical host");
-  return urls;
-}
-
-async function assertLiveKey() {
-  const response = await fetch(KEY_LOCATION, { headers: { "Cache-Control": "no-cache" } });
-  if (!response.ok || (await response.text()).trim() !== KEY) {
-    throw new Error(`key file is not yet live at ${KEY_LOCATION}`);
+  if (dryRun) {
+    console.log(`IndexNow dry run: validated ${urls.length} same-host canonical URL${urls.length === 1 ? "" : "s"}; no request sent.`);
+    return { submitted: false, urls, status: null };
   }
-}
 
-async function notify(urlList) {
-  const response = await fetch("https://api.indexnow.org/indexnow", {
+  await verifyLiveKey({ siteUrl, key, fetchImpl });
+  const response = await fetchImpl("https://api.indexnow.org/indexnow", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ host: new URL(SITE_URL).host, key: KEY, keyLocation: KEY_LOCATION, urlList }),
+    body: JSON.stringify({
+      host: new URL(siteUrl).host,
+      key,
+      keyLocation: `${siteUrl}/${key}.txt`,
+      urlList: urls,
+    }),
   });
-  if (!response.ok) throw new Error(`IndexNow returned HTTP ${response.status}`);
+  if (!response.ok) throw new Error(`IndexNow rejected ${urls.length} URLs: HTTP ${response.status}`);
+  console.log(`IndexNow accepted ${urls.length} changed canonical URL${urls.length === 1 ? "" : "s"}: HTTP ${response.status}.`);
+  return { submitted: true, urls, status: response.status };
 }
 
-function chunk(items, size) {
-  return Array.from({ length: Math.ceil(items.length / size) }, (_, index) => items.slice(index * size, index * size + size));
+const isEntryPoint = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isEntryPoint) {
+  try {
+    await submitIndexNow();
+  } catch (error) {
+    // Search notification happens after deployment; log a transient failure
+    // without turning an already successful production swap into a false
+    // deployment failure.
+    console.warn(`IndexNow warning: ${error instanceof Error ? error.message : String(error)}`);
+  }
 }

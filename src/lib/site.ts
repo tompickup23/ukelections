@@ -31,7 +31,7 @@ export const NAV_ITEMS = [
   { href: "/by-elections/", label: "By-elections" },
   { href: "/polling/", label: "Polling" },
   { href: "/past-results/", label: "Past Results" },
-  { href: "/your-area/", label: "Find Your Ward" },
+  { href: "/your-area/", label: "Find Your Elections" },
   { href: "/methodology/", label: "About" },
 ] as const;
 
@@ -67,7 +67,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/seats/parliament/", label: "650 Constituencies", desc: "Every UK parliamentary seat, with its projection" },
       { href: "/councils/", label: "Councils", desc: "Every English council" },
       { href: "/seats/", label: "Councils and contests", desc: "Browse councils, mayoralties and the devolved parliaments" },
-      { href: "/your-area/", label: "Find Your Ward", desc: "By postcode" },
+      { href: "/your-area/", label: "Election Lookup", desc: "Constituency and ward" },
     ],
   },
   {
@@ -128,6 +128,7 @@ const STATIC_PATHS = [
   "/forecasts/may-2026/",
   "/forecasts/general-election/",
   "/forecasts/lancashire-unitaries/",
+  "/forecasts/mayor-of-lancashire/",
   "/forecasts/mayoral/",
   "/by-elections/",
   "/by-elections/local/",
@@ -135,6 +136,7 @@ const STATIC_PATHS = [
   "/by-elections/aberdeen-south/",
   "/by-elections/arbroath-and-broughty-ferry/",
   "/by-elections/clacton/",
+  "/by-elections/holborn-and-st-pancras/",
   "/past-results/may-2025/",
   "/past-results/indicators/",
   "/forecasts/senedd-2026/",
