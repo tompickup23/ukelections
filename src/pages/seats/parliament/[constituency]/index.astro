@@ -3,8 +3,10 @@ import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import { externalHref, type Crumb } from "../../../../lib/seo";
 import MiniMap from "../../../../components/MiniMap.astro";
 import PartyBars from "../../../../components/PartyBars.astro";
+import ExploreNext from "../../../../components/ExploreNext.astro";
 import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
-import { shortPartyLabel } from "../../../../lib/siteData";
+import { shortPartyLabel, forecastStamp } from "../../../../lib/siteData";
+import { buildParliamentaryJourneyLinks } from "../../../../lib/electionJourneys";
 
 export async function getStaticPaths() {
   const ge = loadGePredictions();
@@ -91,16 +93,38 @@ const titleCase = (s?: string | null) =>
   s ? s.replace(/_/g, " ").replace(/\b[a-z]/g, (c) => c.toUpperCase()) : s;
 const countryLabel = titleCase(record.country);
 const regionLabel = titleCase(record.region);
+const geBundle = loadGePredictions();
+const allSeatRecords = Object.values(geBundle.predictions || {}) as any[];
+const exploreLinks = buildParliamentaryJourneyLinks(record, allSeatRecords);
+if (slug === "makerfield") {
+  exploreLinks.unshift(
+    {
+      href: "/by-elections/makerfield/",
+      label: "Makerfield by-election result",
+      description: "Read the 18 June 2026 result, historic results and forecast scorecard.",
+      trackingId: "makerfield-seat-to-byelection",
+    },
+    {
+      href: "https://ukdemographics.co.uk/constituencies/makerfield/",
+      label: "Makerfield population and demographics",
+      description: "See the ONS-sourced population and demographic profile on UK Demographics.",
+      trackingId: "makerfield-seat-to-demographics",
+    },
+  );
+}
 const breadcrumbs: Crumb[] = [
   { name: "Constituencies", href: "/seats/parliament/" },
   { name: record.name, href: `/seats/parliament/${Astro.params.constituency}/` }
 ];
+const pageTitle = slug === "makerfield" || slug === "colchester"
+  ? `${record.name} constituency map and forecast`
+  : `${record.name}. General election forecast`;
 ---
 
 <BaseLayout
   breadcrumbs={breadcrumbs}
-  title={`${record.name}. General election forecast`}
-  description={`If a UK general election were held this week, the model predicts ${shortPartyLabel(record.winner)} to win ${record.name} with a ${margin}pp margin over ${shortPartyLabel(record.runner_up)}.`}
+  title={pageTitle}
+  description={`${record.name} constituency map, 2024 result and current model projection: ${shortPartyLabel(record.winner)} ahead by ${margin}pp over ${shortPartyLabel(record.runner_up)}.`}
 >
   <section class="page-hero">
     {record.pcon24cd && (
@@ -116,14 +140,21 @@ const breadcrumbs: Crumb[] = [
       </div>
     )}
     <p class="eyebrow">General election forecast</p>
-    <h1>{record.name} constituency</h1>
+    <h1>{record.name} constituency map and forecast</h1>
     <p class="lede">
       Predicted winner: <strong><span class="party-pill" style={`background:${partyColour(record.winner)}`}></span> {shortPartyLabel(record.winner)}</strong>
       with <strong>{winnerShare}%</strong> of the vote, a {margin}pp margin over {shortPartyLabel(record.runner_up)}.
     </p>
     <p class="meta-row">
-      {countryLabel}{regionLabel ? ` · ${regionLabel}` : ""}
+      {countryLabel}{regionLabel ? ` · ${regionLabel}` : ""}{record.pcon24cd ? ` · official code ${record.pcon24cd}` : ""}
+      {geBundle.snapshot?.generated_at ? ` · forecast generated ${forecastStamp(geBundle.snapshot.generated_at)}` : ""}
     </p>
+    {slug === "makerfield" && (
+      <p class="meta-row">
+        Related: <a href="/by-elections/makerfield/">18 June 2026 Makerfield by-election result and historic record</a>
+        {" "}· <a href="https://ukdemographics.co.uk/constituencies/makerfield/">ONS-sourced Makerfield population and demographics</a>.
+      </p>
+    )}
   </section>
 
   <section class="section">
@@ -244,6 +275,8 @@ const breadcrumbs: Crumb[] = [
       </p>
     </section>
   )}
+
+  <ExploreNext links={exploreLinks} title={`Explore beyond ${record.name}`} />
 
   <details class="section method-details">
     <summary>How this forecast was built</summary>

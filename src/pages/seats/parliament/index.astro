@@ -32,6 +32,13 @@ const records = Object.entries(bundle.predictions || {})
 
 const titleCase = (s: string) =>
   s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const fragment = (s: string) =>
+  s
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
 // Group by country, then region within it. Northern Ireland and Scotland carry
 // no meaningful sub-region in the corpus, so a country with one region renders
@@ -84,7 +91,7 @@ const structuredData = [
     <p class="meta-row">
       <a href="/forecasts/general-election/">See the national seat projection</a>
       {" · "}
-      <a href="/your-area/">Find mine by postcode</a>
+      <a href="/your-area/">Find my parliamentary constituency</a>
     </p>
   </section>
 
@@ -100,20 +107,22 @@ const structuredData = [
         .sort((a, b) => a[0].localeCompare(b[0]))
         .map(([region, list]) => (
           <>
-            {regions.size > 1 && <h3 class="region-heading">{titleCase(region)}</h3>}
-            <div class="council-grid">
-              {list.map((rec) => (
-                <a class="council-card" href={`/seats/parliament/${rec.slug}/`}>
-                  <strong>{rec.name}</strong>
-                  <span class="tier">
-                    <span
-                      class="party-pill"
-                      style={`background:${partyColour(rec.winner)}`}
-                    ></span>
-                    {shortPartyLabel(rec.winner)}, {rec.majorityPct.toFixed(1)}pp
-                  </span>
-                </a>
-              ))}
+            <div id={`region-${fragment(country)}-${fragment(region)}`} class="region-block">
+              {regions.size > 1 && <h3 class="region-heading">{titleCase(region)}</h3>}
+              <div class="council-grid">
+                {list.map((rec) => (
+                  <a class="council-card" href={`/seats/parliament/${rec.slug}/`}>
+                    <strong>{rec.name}</strong>
+                    <span class="tier">
+                      <span
+                        class="party-pill"
+                        style={`background:${partyColour(rec.winner)}`}
+                      ></span>
+                      {shortPartyLabel(rec.winner)}, {rec.majorityPct.toFixed(1)}pp
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
           </>
         ))}
@@ -128,6 +137,7 @@ const structuredData = [
     color: var(--muted);
     font-weight: 600;
   }
+  .region-block + .region-block { margin-top: 1.5rem; }
   .party-pill {
     display: inline-block;
     width: 0.6rem;

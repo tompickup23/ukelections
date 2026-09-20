@@ -10,9 +10,11 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
+import ExploreNext from "../../../components/ExploreNext.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
 import { SITE_URL } from "../../../lib/site";
+import { buildLocalContestJourneyLinks } from "../../../lib/electionJourneys";
 import { buildNewsArticle, externalHref, newsPublicationDate, type Crumb } from "../../../lib/seo";
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
@@ -22,15 +24,39 @@ const DIR = "data/contests/local-byelections";
 export async function getStaticPaths() {
   const dirAbs = path.join(process.cwd(), "data/contests/local-byelections");
   if (!existsSync(dirAbs)) return [];
-  return readdirSync(dirAbs)
+  const contests = readdirSync(dirAbs)
     .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
-    .map((f) => {
-      const d = JSON.parse(readFileSync(path.join(dirAbs, f), "utf8"));
-      return { params: { slug: d.slug }, props: { contest: d } };
-    });
+    .map((f) => JSON.parse(readFileSync(path.join(dirAbs, f), "utf8")));
+  const identityPath = path.join(process.cwd(), "data/identity/wards-may-2026.json");
+  const identity = existsSync(identityPath)
+    ? JSON.parse(readFileSync(identityPath, "utf8"))
+    : { wards: [] };
+  const wardHrefByGss = new Map<string, string>();
+  for (const ward of identity.wards || []) {
+    if (ward.gss_code && ward.council_slug && ward.ward_slug) {
+      wardHrefByGss.set(
+        ward.gss_code,
+        `/seats/${ward.council_slug}/${ward.ward_slug}/`,
+      );
+    }
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  return contests.map((d) => {
+    const wardHref = d.contest?.ward_gss
+      ? wardHrefByGss.get(d.contest.ward_gss) || null
+      : null;
+    return {
+      params: { slug: d.slug },
+      props: {
+        contest: d,
+        wardHref,
+        relatedLinks: buildLocalContestJourneyLinks(d, contests, today, wardHref),
+      },
+    };
+  });
 }
 
-const { contest: d } = Astro.props;
+const { contest: d, wardHref, relatedLinks } = Astro.props;
 const c = d.contest;
 const f = d.field;
 const forecast = d.forecast;
@@ -202,6 +228,10 @@ if (isNews) {
       {c.seats_total && c.seats_total > 1 ? ` ${c.ward_name} elects ${c.seats_total} councillors; one seat is being filled.` : ""}
     </p>
     <p class="status-pill">{statusLabel}</p>
+    <p class="meta-row journey-shortcuts">
+      <a href="/by-elections/local/">All council by-elections</a>
+      {wardHref && <><span aria-hidden="true"> · </span><a href={wardHref}>Open the {c.ward_name} ward page</a></>}
+    </p>
   </section>
 
   <section class="card holder">
@@ -327,6 +357,8 @@ if (isNews) {
       </p>
     </section>
   )}
+
+  <ExploreNext links={relatedLinks} title="Where to go next" eyebrow="Related election pages" />
 
   <section class="card">
     <h2>The field</h2>
@@ -504,6 +536,7 @@ if (isNews) {
     font-size: var(--text-sm);
     color: var(--text-muted);
   }
+  .journey-shortcuts { margin-top: var(--space-md); }
   .card { margin-block: var(--space-8); }
   .result-card { border-left: 4px solid var(--accent); padding-left: var(--space-4); }
   .result-headline { font-size: var(--text-lg); }

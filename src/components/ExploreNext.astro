@@ -1,0 +1,110 @@
+---
+import type { JourneyLink } from "../lib/electionJourneys";
+
+interface Props {
+  links: JourneyLink[];
+  title?: string;
+  eyebrow?: string;
+}
+
+const {
+  links,
+  title = "Explore next",
+  eyebrow = "Keep exploring",
+} = Astro.props;
+
+const uniqueLinks = links
+  .filter((link, position, all) => all.findIndex((candidate) => candidate.href === link.href) === position)
+  .slice(0, 6);
+---
+
+{uniqueLinks.length > 0 && (
+  <nav class="explore-next" aria-label={title}>
+    <p class="explore-eyebrow">{eyebrow}</p>
+    <h2>{title}</h2>
+    <ul>
+      {uniqueLinks.map((link) => (
+        <li>
+          <a href={link.href} data-journey={link.trackingId}>
+            <span class="explore-label">{link.label}</span>
+            <span class="explore-description">{link.description}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .explore-next {
+    margin-block: var(--space-2xl);
+    padding: var(--space-lg);
+    border-top: 3px solid var(--accent);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-muted);
+  }
+
+  .explore-eyebrow {
+    margin: 0 0 var(--space-xs);
+    color: var(--accent);
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 600;
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    height: 100%;
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent-wash) 50%, var(--surface));
+  }
+
+  .explore-label {
+    display: block;
+    font-weight: 600;
+  }
+
+  .explore-label::after {
+    content: " →";
+    color: var(--accent);
+  }
+
+  .explore-description {
+    display: block;
+    margin-top: var(--space-xs);
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 40rem) {
+    .explore-next { padding: var(--space-md); }
+    ul { grid-template-columns: 1fr; }
+  }
+</style>

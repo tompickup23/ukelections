@@ -5,6 +5,8 @@ import PartyBars from "../../../components/PartyBars.astro";
 import RaceBar from "../../../components/RaceBar.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
+import { buildNewsArticle, newsPublicationDate, type Crumb } from "../../../lib/seo";
+import { SITE_URL } from "../../../lib/site";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
@@ -128,6 +130,19 @@ const pollAvgRanked = (pollAvg?.ranked as Array<{ party: string; pct: number }>)
 const marginCmp = (fvr?.margin_comparison as any) || null;
 const actualMarginPp = marginCmp ? (marginCmp.actual_labour_margin_pp * 100).toFixed(0) : null;
 const benchmarks = ((forecast.benchmarks?.graded as Array<any>) || []);
+const breadcrumbs: Crumb[] = [
+  { name: "By-elections", href: "/by-elections/" },
+  { name: "Makerfield", href: "/by-elections/makerfield/" },
+];
+const articleDescription = "Andy Burnham held Makerfield for Labour on 18 June 2026. Full returning-officer result, historic record, final polls and the published forecast scorecard.";
+const structuredData = isConcluded ? [
+  buildNewsArticle({
+    headline: "Makerfield by-election result 2026: Labour hold",
+    description: articleDescription,
+    url: `${SITE_URL}/by-elections/makerfield/`,
+    datePublished: newsPublicationDate(pollingDay),
+  }),
+] : [];
 
 // Map the margin-comparison contender ids to human labels for the scorecard.
 const CONTENDER_LABELS: Record<string, string> = {
@@ -166,9 +181,11 @@ function classificationLabel(c: string): string {
 ---
 
 <BaseLayout
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
   title={isConcluded ? "Makerfield by-election 2026. Result vs forecast" : "Makerfield by-election. 18 June 2026 forecast"}
   description={isConcluded
-    ? `Andy Burnham (Labour) held Makerfield on 18 June 2026 with a majority of over 9,000 (turnout 58.75%). How the UKE forecast and the final polls compared: the published forecast called Reform; the result was a Labour landslide.`
+    ? `Andy Burnham held Makerfield for Labour on 18 June 2026. Full result, turnout, historic record, final polls and the published forecast scorecard.`
     : `Forecast for the 18 June 2026 Makerfield parliamentary by-election. Central forecast: ${shortPartyLabel(winner)} ${winnerPct}% vs ${shortPartyLabel(runnerUp)} ${runnerUpPct}%, a ${marginPp}pp ${classification}.`}
 >
   {isConcluded ? (
@@ -237,6 +254,22 @@ function classificationLabel(c: string): string {
     </section>
   )}
 
+  <nav class="section" aria-label="Explore Makerfield election information">
+    <div class="section-head">
+      <p class="eyebrow">Explore Makerfield</p>
+      <h2>Result, constituency map, forecast and demographics</h2>
+    </div>
+    <p class="action-row">
+      <a class="button primary" href="/seats/parliament/makerfield/">Makerfield constituency map and current projection</a>
+      <a class="button" href="#historic-record">Historic election results</a>
+      <a class="button" href="https://ukdemographics.co.uk/constituencies/makerfield/">Population and demographics</a>
+    </p>
+    <p class="caption">
+      Population and demographic figures are kept on the related UK Demographics profile, where their ONS sources
+      and methodology are documented; this page does not duplicate them.
+    </p>
+  </nav>
+
   {isConcluded && resultRanked.length > 0 && (
     <section class="section">
       <div class="section-head">
@@ -290,8 +323,7 @@ function classificationLabel(c: string): string {
         minor candidates (Count Binface 95, Monster Raving Loony 45, three Independents, Rejoin EU,
         Libertarian, Climate). Restore Britain's <strong>6.84%</strong> (third, on debut) and the
         Conservative collapse to <strong>2.19%</strong> (−8.7pp) are the two structural surprises.
-        Source: returning officer declaration via the
-        <a href="https://en.wikipedia.org/wiki/2026_Makerfield_by-election"> Wikipedia result box</a>.
+        Source: <a href="https://electionresults.wigan.gov.uk/ParliamentaryElections/Home/Index/3">Wigan Council acting returning officer declaration</a>.
       </p>
     </section>
   )}
@@ -673,11 +705,12 @@ function classificationLabel(c: string): string {
       </tbody>
     </table>
     <p class="caption">
-      Refreshed nightly from Democracy Club Candidates API. Final list confirmed at SoPN publication.
+      Ingested from the Democracy Club Candidates API and checked against Wigan Council's
+      {" "}<a href="https://www.wigan.gov.uk/Docs/PDF/Council/Voting-and-Elections/2026/Makerfield/Statement-of-persons-nominated-and-notice-of-Poll-Makerfield-2026.pdf">Statement of Persons Nominated and Notice of Poll</a>, dated 26 May 2026.
     </p>
   </section>
 
-  <section class="section">
+  <section class="section" id="historic-record">
     <div class="section-head">
       <p class="eyebrow">120-year historical anchor</p>
       <h2>What this seat has always done</h2>
@@ -1041,5 +1074,13 @@ function classificationLabel(c: string): string {
       padding-top: 1.5rem;
     }
     .frozen-divider .eyebrow { color: var(--muted); }
+    @media (max-width: 40rem) {
+      :global(main) { overflow-x: clip; }
+      .seat-table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+    }
   </style>
 </BaseLayout>

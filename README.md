@@ -20,6 +20,21 @@ BUILD_OG=1 npm run build       # full build with 812 OG cards (~3 min)
 npm run ge:refresh             # polling refresh → GE pipeline → Restore Britain overlay (~30s)
 ```
 
+### IndexNow safety
+
+IndexNow is opt-in and runs only after a successful production deploy in the refresh pipeline. Inspect a built
+sitemap without making a network request:
+
+```bash
+node scripts/indexnow-submit.mjs --dry-run --sitemap-file dist/sitemap.xml --lastmod YYYY-MM-DD
+```
+
+For a small explicit set, repeat `--url https://ukelections.co.uk/canonical-path/`. The production refresh pipeline
+passes `--file` with its content-hash manifest, so only canonicals whose built HTML changed are notified. Live
+submission requires `INDEXNOW_SUBMIT=1`; do not submit before the matching pages and public key file are deployed.
+The script rejects foreign hosts, parameters, fragments and batches over 10,000, and deduplicates repeated canonical
+URLs. `--sitemap` reads the production sitemap, while `--sitemap-file` is the local dry-run path.
+
 ## What's shipped
 
 **Pages**

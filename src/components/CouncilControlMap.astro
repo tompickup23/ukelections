@@ -1,0 +1,143 @@
+---
+/**
+ * Static council-control map for the /councils/ index.
+ *
+ * The geometry is the committed ONS LAD24 boundary snapshot. Control labels
+ * come from the same reconciled May 2026 record as the council table below the
+ * map, so the visual and its accessible text equivalent cannot drift apart.
+ * Every mapped council is a normal SVG link; no client JavaScript is required.
+ */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { geoMercator, geoPath } from "d3-geo";
+import { rewindFeatures } from "../lib/geoRewind";
+import { partyColour } from "../lib/predictions";
+import { partySlugToName } from "../lib/siteData";
+
+interface Props {
+  councils: any[];
+  width?: number;
+  height?: number;
+}
+
+const { councils, width = 720, height = 820 } = Astro.props;
+const boundary = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data/geography/lad24-simplified.geojson"), "utf8"),
+) as { type: string; features: any[] };
+const slugMap = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data/identity/council-slug-to-lad24.json"), "utf8"),
+) as { map: Record<string, { lad24cd: string | null }> };
+
+// Barnsley and Sheffield received successor ONS codes in April 2025, while
+// the committed LAD24 geometry necessarily carries their predecessor codes.
+const boundaryCodeAlias: Record<string, string> = {
+  E08000038: "E08000016",
+  E08000039: "E08000019",
+};
+
+const byCode = new Map<string, any>();
+for (const council of councils) {
+  const sourceCode = slugMap.map[council.council_slug]?.lad24cd;
+  const code = sourceCode ? (boundaryCodeAlias[sourceCode] || sourceCode) : null;
+  if (code) byCode.set(code, council);
+}
+
+const geo = { ...boundary, features: rewindFeatures(boundary.features) };
+const projection = geoMercator().fitSize([width, height], geo as any);
+const path = geoPath(projection);
+
+const labelFor = (council: any) => {
+  const controlling = council?.control?.controlling_party;
+  const plurality = council?.control?.plurality_party;
+  if (controlling) return `${partySlugToName(controlling)} majority`;
+  if (plurality) return `No overall control; ${partySlugToName(plurality)} largest party`;
+  return "No overall control";
+};
+const colourFor = (council: any) => {
+  const controlling = council?.control?.controlling_party;
+  return controlling ? partyColour(partySlugToName(controlling)) : "var(--muted)";
+};
+
+const rendered = geo.features
+  .map((feature) => {
+    const code = feature.properties?.LAD24CD;
+    const council = byCode.get(code);
+    return {
+      code,
+      name: council?.council_name || feature.properties?.LAD24NM || code,
+      slug: council?.council_slug || null,
+      label: council ? labelFor(council) : "Not in the 7 May 2026 council election set",
+      fill: council ? colourFor(council) : "var(--surface-muted)",
+      d: path(feature),
+    };
+  })
+  .filter((row) => row.d);
+
+const legend = [
+  ["lab", "Labour majority"],
+  ["ref", "Reform UK majority"],
+  ["con", "Conservative majority"],
+  ["ld", "Liberal Democrat majority"],
+  ["green", "Green majority"],
+].map(([slug, label]) => ({ label, colour: partyColour(partySlugToName(slug)) }));
+---
+
+<figure class="council-control-map">
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    role="img"
+    aria-labelledby="council-map-title council-map-desc"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <title id="council-map-title">Council control after the 7 May 2026 elections</title>
+    <desc id="council-map-desc">
+      Local-authority boundaries are coloured by the party with an overall majority. Grey means no overall control or an authority outside this election set. Each coloured area links to its council result page; the full text table follows the map.
+    </desc>
+    {rendered.map((row) => row.slug ? (
+      <a href={`/seats/${row.slug}/`} aria-label={`${row.name}: ${row.label}`}>
+        <path d={row.d} fill={row.fill} stroke="var(--bg)" stroke-width="0.55">
+          <title>{row.name}: {row.label}</title>
+        </path>
+      </a>
+    ) : (
+      <path d={row.d} fill={row.fill} stroke="var(--bg)" stroke-width="0.45" aria-hidden="true" />
+    ))}
+  </svg>
+  <figcaption>
+    <span class="map-key">
+      {legend.map((item) => (
+        <span><i style={`background:${item.colour}`}></i>{item.label}</span>
+      ))}
+      <span><i style="background:var(--muted)"></i>No overall control</span>
+      <span><i class="not-contested"></i>Outside this election set</span>
+    </span>
+    <span>
+      Boundary source: ONS Local Authority Districts, 2024. County councils and new authorities whose boundaries
+      overlap or post-date the LAD24 layer are listed in the full table rather than given a misleading shape.
+      Select a mapped council for its full seat breakdown.
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .council-control-map { margin: 0; }
+  .council-control-map svg {
+    display: block;
+    width: min(100%, 48rem);
+    height: auto;
+    margin: 0 auto;
+  }
+  .council-control-map path { transition: opacity 120ms ease, stroke-width 120ms ease; }
+  .council-control-map a:hover path,
+  .council-control-map a:focus path { opacity: 0.78; stroke-width: 1.6; }
+  .council-control-map figcaption {
+    display: grid;
+    gap: var(--space-sm);
+    color: var(--muted);
+    font-size: var(--text-small);
+  }
+  .map-key { display: flex; flex-wrap: wrap; gap: 0.45rem 1rem; }
+  .map-key span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .map-key i { width: 0.8rem; height: 0.8rem; border-radius: 2px; }
+  .map-key .not-contested { background: var(--surface-muted); border: 1px solid var(--border); }
+</style>

@@ -5,7 +5,7 @@ import { SITE_URL } from "../../lib/site";
 import PartyBars from "../../components/PartyBars.astro";
 import PartyTrendChart from "../../components/PartyTrendChart.astro";
 import { partyColour } from "../../lib/predictions";
-import { shortPartyLabel } from "../../lib/siteData";
+import { shortPartyLabel, forecastStamp } from "../../lib/siteData";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import {
@@ -78,6 +78,11 @@ function pct(x: number | undefined | null): string {
 }
 
 const ukMeta = ukSnapshot._meta || {};
+const liveUkMeta = overrideFile?.sources?.uk_westminster || {};
+const pollsUsed = liveUkMeta.polls_used || ukMeta.polls_used || null;
+const fieldworkLabel = ukMeta.fieldwork || (liveUkMeta.fieldwork_window
+  ? `${liveUkMeta.fieldwork_window.earliest} to ${liveUkMeta.fieldwork_window.latest}`
+  : null);
 const overlay = ukMeta.restore_britain_overlay || null;
 const ukSourceSummary = overlay
   ? `${ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average"} · plus Restore Britain overlay (${pct(overlay.share)}, ${overlay.source?.split(".")[0]?.trim()})`
@@ -91,6 +96,7 @@ const structuredData = [
     url: `${SITE_URL}/polling/`,
     spatialCoverage: "United Kingdom",
     variableMeasured: ["Vote intention share by party", "Fieldwork dates", "Pollster", "Sample size"],
+    distributionUrl: `${SITE_URL}/data/polling/current-polls.json`,
     keywords: ["opinion polls", "voting intention", "Westminster polling", "poll of polls"]
   })
 ];
@@ -98,23 +104,26 @@ const structuredData = [
 <BaseLayout
   breadcrumbs={breadcrumbs}
   structuredData={structuredData}
-  title="UK polling. Current Westminster average and how we use it"
-  description={`Where our forecast's national polling input comes from. Current Westminster rolling average, the Restore Britain overlay, plus every refresh on the ledger.`}
+  title="Latest UK opinion polls and Westminster polling average"
+  description={`The Westminster polling snapshot used by the UK Elections seat forecast: ${pollsUsed || "named"} polls, fieldwork ${fieldworkLabel || "shown on page"}, with sources and downloads.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Polling transparency</p>
-    <h1>The numbers driving the forecast</h1>
+    <h1>Latest UK opinion polls used in the seat forecast</h1>
     <p class="lede">
       Every UK Elections forecast applies a swing from the 2024 general-election result toward
-      the latest Westminster polling. This page shows exactly what polling we're using right now,
-      where it comes from, and how often it refreshes.
+      the latest published Westminster polling snapshot. This page separates the polling average
+      from the modelled vote shares and seats it later produces, and shows the source window and refresh time.
     </p>
+    {overrideFile?.generated_at && (
+      <p class="meta-row">Polling snapshot generated {forecastStamp(overrideFile.generated_at)} · {pollsUsed || "n/a"} polls used{fieldworkLabel ? ` · fieldwork ${fieldworkLabel}` : ""}.</p>
+    )}
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">UK Westminster vote intention, current</p>
-      <h2>What the polls say today</h2>
+      <p class="eyebrow">UK Westminster vote intention</p>
+      <h2>What the latest published polling snapshot says</h2>
     </div>
     <PartyBars
       large={true}
@@ -134,6 +143,11 @@ const structuredData = [
         <>{" "}· <a href={ukMeta.source_url} rel="external">discovery source</a>.</>
       )}
       {verificationLedger && <>{" "}· <a href="/data/polling/verification-ledger.json">source-check ledger</a>.</>}
+    </p>
+    <p class="muted-row">
+      Download the <a href="/data/polling/current-polls.json">individual polls JSON</a> or
+      {" "}<a href="/data/polling/override.json">the rolling-average input JSON</a>. See the
+      {" "}<a href="/forecasts/general-election/">separate general-election seat projection</a> produced from this input.
     </p>
   </section>
 

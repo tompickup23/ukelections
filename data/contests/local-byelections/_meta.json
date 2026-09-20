@@ -1,118 +1,118 @@
 {
-  "generated_at": "2026-09-10T11:59:55.319Z",
-  "window_from": "2026-06-12",
-  "contests": 130,
+  "generated_at": "2026-09-20T19:06:09.322Z",
+  "window_from": "2026-06-11",
+  "contests": 134,
   "forecast_count": 106,
   "corpus_size": 904,
-  "corpus_newest": "2026-09-03",
+  "corpus_newest": "2026-09-17",
   "corpus_oldest": "2017-05-04",
   "backtest": {
     "n": 791,
-    "mae_pp": 7.664629315864038,
-    "winner_called": 565,
-    "winner_called_pct": 0.7142857142857143,
-    "reform_bias_pp": -2.9805648709848738,
+    "mae_pp": 7.754026606929836,
+    "winner_called": 563,
+    "winner_called_pct": 0.7117572692793932,
+    "reform_bias_pp": -2.310812843302559,
     "reform_n": 299,
     "recent_since": "2025-05-01",
     "recent": {
       "n": 230,
-      "mae_pp": 7.4833097851906425,
-      "winner_called": 139,
-      "winner_called_pct": 0.6043478260869565,
+      "mae_pp": 7.790758729682158,
+      "winner_called": 137,
+      "winner_called_pct": 0.5956521739130435,
       "confident_n": 120,
-      "confident_called": 83,
-      "confident_called_pct": 0.6916666666666667
+      "confident_called": 84,
+      "confident_called_pct": 0.7
     }
   },
   "calibration_table": [
     {
       "from": 0.3,
       "to": 0.55,
-      "n": 108,
-      "mean_stated": 0.4502268518518519,
-      "observed": 0.5185185185185185,
-      "standard_error": 0.04807951212159639
+      "n": 107,
+      "mean_stated": 0.44291355140186917,
+      "observed": 0.48598130841121495,
+      "standard_error": 0.048317822052611564
     },
     {
       "from": 0.55,
       "to": 0.7,
-      "n": 69,
-      "mean_stated": 0.6289637681159421,
-      "observed": 0.6231884057971014,
-      "standard_error": 0.05833742635874388
+      "n": 71,
+      "mean_stated": 0.6243661971830987,
+      "observed": 0.6338028169014085,
+      "standard_error": 0.057174899223846616
     },
     {
       "from": 0.7,
       "to": 1,
-      "n": 51,
-      "mean_stated": 0.8210735294117647,
-      "observed": 0.7843137254901961,
-      "standard_error": 0.057593182040981176
+      "n": 49,
+      "mean_stated": 0.8222346938775511,
+      "observed": 0.7959183673469388,
+      "standard_error": 0.05757556168551458
     }
   ],
   "method_comparison": {
     "note": "Same corpus, same window, one switch: the stratified method measures swing only from by-elections in the same era and the same Reform-entry condition; pooled uses every paired contest at once.",
     "stratified": {
       "n": 230,
-      "mae_pp": 7.4833097851906425,
-      "winner_called": 139,
-      "winner_called_pct": 0.6043478260869565,
+      "mae_pp": 7.790758729682158,
+      "winner_called": 137,
+      "winner_called_pct": 0.5956521739130435,
       "confident_n": 120,
-      "confident_called": 83,
-      "confident_called_pct": 0.6916666666666667
+      "confident_called": 84,
+      "confident_called_pct": 0.7
     },
     "pooled": {
       "n": 230,
-      "mae_pp": 7.902230785539734,
-      "winner_called": 131,
-      "winner_called_pct": 0.5695652173913044,
-      "confident_n": 131,
-      "confident_called": 85,
-      "confident_called_pct": 0.648854961832061
+      "mae_pp": 7.942391291248807,
+      "winner_called": 130,
+      "winner_called_pct": 0.5652173913043478,
+      "confident_n": 122,
+      "confident_called": 80,
+      "confident_called_pct": 0.6557377049180327
     }
   },
   "party_accuracy": [
     {
       "party": "Reform UK",
       "n": 221,
-      "bias_pp": -2.0435317883287283,
-      "mae_pp": 9.531894058100834
+      "bias_pp": -1.1373966920526537,
+      "mae_pp": 10.78913092698324
     },
     {
       "party": "Labour",
       "n": 216,
-      "bias_pp": 0.7829596750375414,
-      "mae_pp": 5.68084780886923
+      "bias_pp": 0.8802156632185941,
+      "mae_pp": 5.8204206601232125
     },
     {
       "party": "Conservative",
       "n": 230,
-      "bias_pp": 2.0224591397800666,
-      "mae_pp": 7.543146946888188
+      "bias_pp": 2.2237538722809034,
+      "mae_pp": 7.711617758013833
     },
     {
       "party": "Liberal Democrats",
       "n": 208,
-      "bias_pp": -0.7021160894562744,
-      "mae_pp": 6.362378035811731
+      "bias_pp": -0.41695646332085123,
+      "mae_pp": 6.397310967242377
     },
     {
       "party": "Green Party",
       "n": 201,
-      "bias_pp": -0.5455336715924587,
-      "mae_pp": 5.913934507537218
+      "bias_pp": -2.658072835779264,
+      "mae_pp": 6.172390867682342
     },
     {
       "party": "Independent",
-      "n": 78,
-      "bias_pp": 2.2434286932075045,
-      "mae_pp": 12.153144853950412
+      "n": 76,
+      "bias_pp": 3.3755767555419514,
+      "mae_pp": 11.995845534124934
     },
     {
       "party": "Other",
-      "n": 49,
-      "bias_pp": -0.231185497222094,
-      "mae_pp": 4.700120075907669
+      "n": 51,
+      "bias_pp": 0.07933270723499525,
+      "mae_pp": 4.817253748085159
     }
   ],
   "sigma_inflation": 1.75,
