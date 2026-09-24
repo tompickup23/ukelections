@@ -32,11 +32,36 @@ previous run cannot block the next one. Run it locally with
 `npm run publish:polling -- --no-deploy` to exercise every gate except the
 production swap.
 
-To ship a merged change yourself, without waiting for the cron:
+**The by-election contest refresh inside it is a deliberate soft step, and it
+warns on most nights.** It reaches two Democracy Club APIs across an ~8 minute
+sweep, and DC rate-limits a few requests in a run that long, so the step exits
+non-zero and the log carries:
+
+```
+! Refresh local by-election contest files failed (exit 2). Continuing on the
+  contest data already committed; the freshness gate below will stop the run
+  if it is too old.
+```
+
+**That line is not an outage.** Exit 2 is the generator's partial-success code:
+it has written the corpus and is reporting the handful of fetches that got no
+answer, which it deliberately does not cache so the next run retries them. It
+fired on 14 of roughly 15 runs to 24 Sep 2026 while every one of those runs
+deployed. A hard step here would let a DC hiccup strand validated national
+polling, which is the one thing this script exists to prevent; the freshness
+assertions in `test:polling-publish` are what actually decide whether the
+contest data is too stale to publish. **Judge the run by the gate, not by this
+warning.** What *would* matter is this line plus a failing freshness test, or
+the line disappearing entirely for weeks, which would mean the sweep had
+stopped running rather than started succeeding.
+
+To ship a merged change yourself, without waiting for the 04:30 cron. **You
+rarely need this** — the cron resets to `origin/main`, so a merged PR is live
+by the next morning regardless. Use it when something must be live today:
 
 ```bash
 ssh vps-main
-cd /root/ukelections && git pull --ff-only --autostash && git log --oneline -1   # the cron does NOT pull
+cd /root/ukelections && git pull --ff-only --autostash && git log --oneline -1   # see the pull-fights-output note under Deployment
 npm test --silent
 rm -rf dist .astro node_modules/.vite && npm run build                          # ~5 min, 3,820 pages
 rm -rf /tmp/uke-deploy-x && cp -a dist /tmp/uke-deploy-x                        # never deploy the shared dist
@@ -44,9 +69,10 @@ set -a; . /opt/dashboard/.env; set +a
 wrangler pages deploy /tmp/uke-deploy-x --project-name ukelections --branch main --commit-dirty=true
 ```
 
-`BUILD_OG=1` renders the OG cards and is opt-in: about 31 minutes for 811 cards,
-so it is deliberately out of the nightly. Pages only advertise a card when one
-was actually built.
+`BUILD_OG=1` renders the OG cards. It is **set by the nightly publisher** and
+costs it ~8-9 minutes (see the measured table below); it stays opt-in for local
+iteration builds, which is why `npm run build` on its own skips the Satori pass.
+Pages only advertise a card when one was actually built.
 (`UKE_ON_VPS_MAIN=1` makes it deploy the local dist instead of rsyncing).
 
 **Timing — the OG pass is expensive, and the old "~3 min" was wrong.** Measured
@@ -61,18 +87,47 @@ So the Satori pass costs ~31 min for 811 cards, ~2.3s each — roughly 6× the
 300-400ms/card the code comments claim. That Mac run was under heavy load
 (load avg 21), so treat it as an upper bound rather than a clean number.
 
-On vps-main the data phases take ~6 min and the pre-OG build took 5m18s on the
-19-20 Aug runs (`/var/log/ukelections-refresh.log`). The card pass **has never
-run there**, so the nightly's new total is genuinely unknown — somewhere between
-~15 min and ~45 min. Read the step 9 → step 10 timestamps after the first cron
-run with cards and replace this paragraph with the real figure.
+That Mac figure never transferred. On vps-main the card pass costs ~8-9 minutes,
+not ~31, and the whole nightly finishes in 22-27 minutes. The measured table is
+under the OG section below; this block is kept only because the ~2.3s/card
+number is still the best evidence of how much a *loaded* machine inflates the
+Satori pass.
 
-If it turns out to be intolerable, dropping `BUILD_OG` is a safe retreat, not a
-regression: every page falls back to `/og-default.png` and nothing dangles.
+**Per-page OG cards are ON in the nightly, and production loses them again
+between runs (verified 24 Sep 2026).** `publish-polling-update.mjs` passes
+`{ env: { BUILD_OG: "1" } }` to its build step and its cards are real: its own
+deployment answers `200 image/png` for `/og/index.png`.
 
-**Per-page OG cards are currently OFF in the nightly, on purpose.** Step 9 runs
-a plain `npm run build`, so every page advertises the committed static
-`/og-default.png` and nothing dangles.
+But **more than one thing deploys this Cloudflare Pages project, and they
+disagree about `BUILD_OG`.** On 24 Sep the 03:57 nightly deployed a build with
+811 cards, then two later direct uploads (no source commit on the deployment,
+landing shortly after #104 and #105 merged) replaced it with a card-less build.
+Within the same hour production went from serving `/og/index.png` to serving
+`/og-default.png`. Both readings were correct; production had changed underneath.
+
+This is degraded, not broken. `hasOgCard()` returns false in a card-less build,
+so those pages honestly advertise the committed default and nothing dangles
+(rule 4b). The cost is a generic preview instead of a per-page one until the
+next nightly restores them.
+
+**To tell which you have, read the homepage's own `og:image`**, not the card
+URL:
+
+```bash
+curl -s https://ukelections.co.uk/ | grep -o 'og:image" content="[^"]*"'
+# .../og/index.png  → this build has cards
+# .../og-default.png → it does not
+```
+
+That line is what the build itself decided, so it cannot be fooled the way a
+card URL can. **If per-page cards matter for a launch, deploy from the publisher
+path or pass `BUILD_OG=1` to whatever you deploy with — a plain `npm run build`
+silently drops all 811.**
+
+The paragraph this replaces said cards were off, citing "step 9 runs a plain
+`npm run build`". Step 9 is in `refresh-pipeline.mjs`, which runs on no cron, so
+it described a build nobody performs. **When a note here explains what the
+nightly does, name the script the crontab actually calls.**
 
 History: `BUILD_OG` was absent from ~Apr until 21 Aug 2026 while `BaseLayout`
 still pointed every page at `/og/<path>.png` regardless. Production had no
@@ -80,9 +135,23 @@ still pointed every page at `/og/<path>.png` regardless. Production had no
 404 body under a 200. The layout now asks `hasOgCard()` first, which makes the
 flag genuinely optional in both directions.
 
-To turn cards on, see the comment on step 9 in `scripts/refresh-pipeline.mjs`.
-**Measure before you do** — the Satori pass has never run on vps-main and could
-take the nightly from ~6.5 min to an hour (see the timing table below).
+**Measured on vps-main, four consecutive nightlies, 21-24 Sep 2026.** The
+"genuinely unknown" guess this replaces feared an hour; the real figure is well
+under half that.
+
+| step | typical | notes |
+|---|---|---|
+| polling + GE refresh | ~10s | |
+| local by-election contest refresh | ~8 min | Democracy Club sweep, paced to avoid rate limits |
+| gate tests | ~4s | |
+| build, `BUILD_OG=1` | **~14 min** | 13m42s / 13m56s / 14m10s / 18m28s |
+| rendered-site gate | ~10s | |
+| **whole nightly** | **~22-27 min** | 03:30 start, deployed before 04:00 |
+
+So the Satori pass costs roughly 8-9 minutes on top of a card-less build, not
+the ~31 min the loaded-Mac measurement below suggested. Dropping `BUILD_OG`
+remains a safe retreat rather than a regression: `BaseLayout` asks `hasOgCard()`
+first and every page falls back to the committed `/og-default.png`.
 
 ### Manual deploy from this Mac
 
@@ -236,7 +305,7 @@ declaration, never as a gradeable result. Tests fail any contest left
 1. **Don't render text where a chart can render the data.** The homepage hero + ConstituencyChoropleth + CommonsHorseshoe are the gold standard. Apply the same treatment to any new page.
 2. **Use design tokens** — `--space-*`, `--text-*`, `--accent-*`, `--status-*`. Never hardcode hex literals in component CSS.
 3. **Every component renders in both light + dark mode** — verify with `@media (prefers-color-scheme: dark)` in your reload cycle.
-4. **`BUILD_OG=1` is opt-in everywhere, including the cron.** Builds without it skip the 811-card Satori pass and fall back to the committed `/og-default.png`. That is a supported state, not a broken one — the fallback is a real 1200×630 PNG and every page points at it.
+4. **`BUILD_OG=1` is opt-in for local builds, and the nightly publisher sets it.** So production has per-page cards and your `npm run build` does not. Builds without it skip the 811-card Satori pass and fall back to the committed `/og-default.png`. That is a supported state, not a broken one — the fallback is a real 1200×630 PNG and every page points at it.
 4b. **Only advertise an OG card the build actually rendered.** `BaseLayout` asks `hasOgCard()` (from `ogEntries.ts`) before pointing `og:image` at `/og/<slug>.png`. Cloudflare Pages serves a missing path as the HTML 404 body under a **200**, so a dangling card URL doesn't 404 — it silently hands crawlers `text/html` and kills the preview. Add a page to `ogEntries.ts` if you want it to have a card; never hand-write the meta path.
 5. **Party colours are saturated by design** — they look fine in both modes; don't dark-mode them.
 6. **Boundaries are committed.** `data/geography/*.geojson` files are checked in (raw + simplified). Re-download via the ArcGIS REST pattern at `services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/...`.
@@ -249,8 +318,10 @@ declaration, never as a gradeable result. Tests fail any contest left
 - Cloudflare Pages: `ukelections` (production)
 - GitHub Pages: `tompickup23.github.io/ukelections/` (auto-mirrored backup)
 - Domain: `ukelections.co.uk` (CF Pages custom domain, behind Cloudflare Access)
-- **`refresh-pipeline.mjs` does NO git pull.** The nightly cron builds whatever is checked out at `/root/ukelections`, so merging to main ships nothing on its own. After any merge you expect to reach production: `git pull --ff-only --autostash` on vps-main, confirm with `git log --oneline -1`, then build.
-- **That pull fights the cron's own output, twice, and both need handling (2 Sep 2026).** The nightly regenerates ~350 tracked data files and writes new untracked ones, so:
+- **Merging to main ships to production on its own, at 04:30 UTC the next morning (verified 24 Sep 2026).** The cron `cd`s into its own checkout, `/root/ukelections-polling-publisher`, and runs `git fetch origin && git reset --hard origin/main` before every run. So a merged PR reaches the live site without anyone touching vps-main. Do not do a manual pull "so the change ships" — it ships anyway.
+- **`refresh-pipeline.mjs` runs on no schedule at all.** Not in the crontab, not a systemd timer — checked both on 24 Sep 2026. Anything documented as "phase 7x of the nightly" has not run since the 04:30 slot passed to `publish-polling-update.mjs`. That is precisely how the local by-election corpus went unregenerated until five contests that polled on 3 September were still published as "upcoming" a week later; the generator is now a step in the publisher itself. **Before relying on any phase of that file, confirm something actually invokes it.**
+- `/root/ukelections` is a *working* checkout, not the production one. The Friday 09:00 sweep uses it (it pulls, commits the by-election sidecar and pushes), and it is where you would do exploratory work. Building and deploying from it is a manual override, not the normal path.
+- **A manual pull in `/root/ukelections` fights that checkout's own generated output, twice, and both need handling (2 Sep 2026).** It regenerates ~350 tracked data files and writes new untracked ones, so:
   1. The pull **aborts** on "untracked working tree files would be overwritten" when your commit tracks a contest file the cron also generated locally. List them, confirm they are all under `data/contests/local-byelections/` (generated, and rebuilt by the pipeline anyway), then `rm` exactly those and pull again.
   2. The autostash then **conflicts** on the regenerated files, leaving `UU` markers across hundreds of JSON files. Conflict markers in a data file break the build.
 
