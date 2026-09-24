@@ -317,6 +317,7 @@ const breadcrumbs: Crumb[] = [
       <p class="eyebrow">All wards</p>
       <h2>Per-ward forecast vs actual</h2>
     </div>
+    <div class="table-scroll" tabindex="0" role="region" aria-label={`${councilName} ward forecasts and results`}>
     <table class="ward-grid">
       <thead>
         <tr>
@@ -357,6 +358,7 @@ const breadcrumbs: Crumb[] = [
         })}
       </tbody>
     </table>
+    </div>
   </section>
 
   {aidogeLink && (

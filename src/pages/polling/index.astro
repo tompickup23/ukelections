@@ -164,19 +164,21 @@ const structuredData = [
           fieldwork, geography, question and published shares have been checked and recorded. Differently measured series are excluded.
         </span>
       </div>
-      <table class="seat-table" style="margin-top:var(--space-md)">
-        <thead><tr><th>Pollster</th><th>Fieldwork</th><th>Status</th><th>Evidence</th></tr></thead>
-        <tbody>
-          {verificationRecords.map((record) => (
-            <tr>
-              <td>{record.pollster}</td>
-              <td class="muted">{record.fieldwork_start && record.fieldwork_end ? `${record.fieldwork_start} to ${record.fieldwork_end}` : record.fieldwork_end || "Not recorded"}</td>
-              <td>{record.status.replaceAll("_", " ")}</td>
-              <td>{record.evidence?.primary_url || record.source_url ? <a href={record.evidence?.primary_url || record.source_url} rel="external">{record.evidence ? "Checked release" : "Discovery link"}</a> : "No link"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Current polling evidence">
+        <table class="seat-table" style="margin-top:var(--space-md)">
+          <thead><tr><th>Pollster</th><th>Fieldwork</th><th>Status</th><th>Evidence</th></tr></thead>
+          <tbody>
+            {verificationRecords.map((record) => (
+              <tr>
+                <td>{record.pollster}</td>
+                <td class="muted">{record.fieldwork_start && record.fieldwork_end ? `${record.fieldwork_start} to ${record.fieldwork_end}` : record.fieldwork_end || "Not recorded"}</td>
+                <td>{record.status.replaceAll("_", " ")}</td>
+                <td>{record.evidence?.primary_url || record.source_url ? <a href={record.evidence?.primary_url || record.source_url} rel="external">{record.evidence ? "Checked release" : "Discovery link"}</a> : "No link"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <p class="caption">
         <a href="/data/polling/source-registry.json">Source and comparability policy</a>
         {" "}· <a href="/data/polling/verification-ledger.json">machine-readable ledger</a>.
@@ -211,22 +213,24 @@ const structuredData = [
         )}
       </p>
       {countOverrides() > 0 && (
-        <table class="seat-table" style="margin-top:var(--space-md)">
-          <thead><tr><th>PCON</th><th class="num">RB share</th><th>Source</th></tr></thead>
-          <tbody>
-            {listOverrides().map((o) => (
-              <tr>
-                <td><code>{o.pcon24cd}</code></td>
-                <td class="num">{(o.share * 100).toFixed(1)}%</td>
-                <td>
-                  {o.wikipedia
-                    ? <a href={o.wikipedia} rel="external">{o.source}</a>
-                    : <span>{o.source}</span>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Restore Britain constituency overrides">
+          <table class="seat-table" style="margin-top:var(--space-md)">
+            <thead><tr><th>PCON</th><th class="num">RB share</th><th>Source</th></tr></thead>
+            <tbody>
+              {listOverrides().map((o) => (
+                <tr>
+                  <td><code>{o.pcon24cd}</code></td>
+                  <td class="num">{(o.share * 100).toFixed(1)}%</td>
+                  <td>
+                    {o.wikipedia
+                      ? <a href={o.wikipedia} rel="external">{o.source}</a>
+                      : <span>{o.source}</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   )}
@@ -251,26 +255,28 @@ const structuredData = [
         For the full picture, <a href="/polling/trends/">every individual poll plotted over time, with
         pollster house effects →</a>
       </p>
-      <table class="seat-table">
-        <thead>
-          <tr>
-            <th>Refresh</th>
-            <th class="num">Polls used</th>
-            {ledgerParties.map((p) => <th class="num">{shortPartyLabel(p)}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {ledgerRows.map((row) => (
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Polling refresh history">
+        <table class="seat-table">
+          <thead>
             <tr>
-              <td>{row.date.split("T")[0]}</td>
-              <td class="num">{row.polls_used}</td>
-              {ledgerParties.map((p) => (
-                <td class="num">{pct(row.shares[p])}</td>
-              ))}
+              <th>Refresh</th>
+              <th class="num">Polls used</th>
+              {ledgerParties.map((p) => <th class="num">{shortPartyLabel(p)}</th>)}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {ledgerRows.map((row) => (
+              <tr>
+                <td>{row.date.split("T")[0]}</td>
+                <td class="num">{row.polls_used}</td>
+                {ledgerParties.map((p) => (
+                  <td class="num">{pct(row.shares[p])}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <p class="caption">
         Movement between rows is real polling drift, not model noise. The parser averages every UK
         Westminster poll within a 14-day window per snapshot.
@@ -292,39 +298,41 @@ const structuredData = [
       so the table below is frozen at the final pre-election averages our forecasts used. It will
       pick up again when post-election fieldwork appears.
     </p>
-    <table class="seat-table">
-      <thead>
-        <tr>
-          <th>Country</th>
-          <th>Source</th>
-          <th>Fieldwork</th>
-          <th>Top party</th>
-          <th class="num">Top share</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Wales</td>
-          <td class="muted">{welshSnapshot._meta?.source || welshSnapshot._meta?.label || "n/a"}</td>
-          <td class="muted">{welshSnapshot._meta?.fieldwork || "n/a"}</td>
-          <td>
-            <span class="party-pill" style={`background:${partyColour(welshRows[0]?.party || "")}`}></span>
-            {shortPartyLabel(welshRows[0]?.party || "n/a")}
-          </td>
-          <td class="num">{pct(welshRows[0]?.share)}</td>
-        </tr>
-        <tr>
-          <td>Scotland</td>
-          <td class="muted">{scottishSnapshot._meta?.source || scottishSnapshot._meta?.label || "n/a"}</td>
-          <td class="muted">{scottishSnapshot._meta?.fieldwork || "n/a"}</td>
-          <td>
-            <span class="party-pill" style={`background:${partyColour(scottishRows[0]?.party || "")}`}></span>
-            {shortPartyLabel(scottishRows[0]?.party || "n/a")}
-          </td>
-          <td class="num">{pct(scottishRows[0]?.share)}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Welsh and Scottish polling snapshots">
+      <table class="seat-table">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Source</th>
+            <th>Fieldwork</th>
+            <th>Top party</th>
+            <th class="num">Top share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wales</td>
+            <td class="muted">{welshSnapshot._meta?.source || welshSnapshot._meta?.label || "n/a"}</td>
+            <td class="muted">{welshSnapshot._meta?.fieldwork || "n/a"}</td>
+            <td>
+              <span class="party-pill" style={`background:${partyColour(welshRows[0]?.party || "")}`}></span>
+              {shortPartyLabel(welshRows[0]?.party || "n/a")}
+            </td>
+            <td class="num">{pct(welshRows[0]?.share)}</td>
+          </tr>
+          <tr>
+            <td>Scotland</td>
+            <td class="muted">{scottishSnapshot._meta?.source || scottishSnapshot._meta?.label || "n/a"}</td>
+            <td class="muted">{scottishSnapshot._meta?.fieldwork || "n/a"}</td>
+            <td>
+              <span class="party-pill" style={`background:${partyColour(scottishRows[0]?.party || "")}`}></span>
+              {shortPartyLabel(scottishRows[0]?.party || "n/a")}
+            </td>
+            <td class="num">{pct(scottishRows[0]?.share)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section">
