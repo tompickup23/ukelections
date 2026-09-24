@@ -818,6 +818,16 @@ input:focus-visible,
 
 /* Tables, share-bar friendly + tabular-aligned */
 
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table-scroll:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .seat-table,
 .council-table,
 .ward-grid,
