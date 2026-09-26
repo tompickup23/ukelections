@@ -763,6 +763,47 @@ async function main() {
     if (ctx) gathered.push(ctx);
   }
 
+  // Pass one-and-a-half: retry the candidate fetches that got no answer.
+  //
+  // The sweep is several hundred requests over about eight minutes and
+  // Democracy Club rate-limits its tail, so a handful of ballots lose their
+  // candidate list to a 429 that outlives the backoff in getJson. A lost list
+  // is not cosmetic: the contest is written with an empty field and its page
+  // tells readers we do not know who is standing. On 26 September 2026 three
+  // were lost, and one of them, North West Leicestershire's Long Whatton and
+  // Diseworth, polls on 1 October. Its page said the field was unknown while
+  // Democracy Club held a locked six-candidate SOPN that answered a single
+  // curl instantly.
+  //
+  // The end-of-run warning already said "re-run to pick them up", and a re-run
+  // by hand recovered all three on the first attempt. So do it here rather
+  // than depend on somebody reading a warning in a log, in a step that is
+  // deliberately soft and therefore never fails the build. By this point the
+  // burst is over, so the retry is a few paced requests against a recovered
+  // endpoint.
+  const lostCandidates = [...new Set(transientFailures.filter((t) => t.what === "candidates").map((t) => t.id))];
+  if (lostCandidates.length) {
+    // Clear their first-attempt entries before retrying. gather() re-records
+    // anything that fails again, so leaving these behind would exit 2 on a run
+    // that actually recovered, and exit 2 is the signal the publisher's soft
+    // step reports. A recovered run should look recovered.
+    for (let i = transientFailures.length - 1; i >= 0; i--) {
+      const t = transientFailures[i];
+      if (t.what === "candidates" && lostCandidates.includes(t.id)) transientFailures.splice(i, 1);
+    }
+    // Worded to avoid the phrase the failure block below uses. A log line that
+    // matches the grep for "got no answer" while reporting a recovery makes the
+    // run look like it failed when it fixed itself.
+    console.log(`\n  retrying ${lostCandidates.length} candidate list(s) the sweep could not fetch`);
+    for (const b of ballots.filter((x) => lostCandidates.includes(x.election_id))) {
+      const ctx = await gather(b, priors);
+      if (!ctx) continue;
+      const at = gathered.findIndex((g) => g.ballot.election_id === b.election_id);
+      if (at >= 0) gathered[at] = ctx;
+      else gathered.push(ctx);
+    }
+  }
+
   // Results declared since the archive was last refreshed are folded into the
   // corpus before anything is projected off it. The archive rebuild runs on the
   // server on its own schedule, so without this the model is systematically a
