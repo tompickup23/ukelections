@@ -101,13 +101,18 @@ const timeline: Array<{ date: string; event: string }> = [
   { date: "1 September 2026", event: "Starmer vacates the seat by taking the Chiltern Hundreds." },
   { date: "8 September 2026", event: "Camden publishes the Notice of Election. Nominations close on 15 September and polling is fixed for 8 October." },
   { date: "9 September 2026", event: "Labour members select Sagal Abdi-Wali." },
-  { date: "8 October 2026", event: "Polling day, if the election is contested." },
+  { date: "15 September 2026", event: "Nominations close at 4pm. The Statement of Persons Nominated fixes a ballot of 15 candidates, with Zack Polanski carrying the Green nomination and George Galloway standing for the Workers Party." },
+  { date: "8 October 2026", event: "Polling day." },
 ];
 ---
 
 <BaseLayout
-  title="Holborn and St Pancras by-election. Starmer's seat"
-  description="Holborn and St Pancras votes on 8 October 2026. Labour has selected Sagal Abdi-Wali; the Green selection remains open. No constituency poll is published, so this page presents the May Camden result as a signal, not a forecast."
+  title="Holborn and St Pancras by-election, 8 October: Starmer's seat"
+  description="Starmer's old seat votes on 8 October 2026. The full 15-candidate ballot, from Labour's Sagal Abdi-Wali to Green leader Zack Polanski and George Galloway. No constituency poll exists, so the May Camden ward result is published as a signal, not a forecast."
+  breadcrumbs={[
+    { name: "By-elections", href: "/by-elections/" },
+    { name: "Holborn and St Pancras", href: "/by-elections/holborn-and-st-pancras/" },
+  ]}
 >
   <section class="page-hero">
     {contest.pcon24cd && (
@@ -123,12 +128,33 @@ const timeline: Array<{ date: string; event: string }> = [
         />
       </div>
     )}
-    <p class="eyebrow">By-election · 8 October 2026 · nominations close 15 September</p>
+    {/* Hero copy follows the field, because the hero is the part people read.
+        Both of these were written for the pre-nomination state and hardcoded
+        to it: eleven days after nominations closed the page still opened
+        "nominations close 15 September" and had Polanski and Chowdhury
+        contesting a selection Polanski had won. */}
+    <p class="eyebrow">
+      By-election · 8 October 2026 · {field.status === "locked"
+        ? `${field.declared.length} candidates standing`
+        : "nominations close 15 September"}
+    </p>
     <h1>Holborn and St Pancras by-election</h1>
     <p class="lede">
-      Holborn and St Pancras votes on 8 October. Labour has selected Camden council leader Sagal
-      Abdi-Wali, while Zack Polanski and Hamza Chowdhury are seeking the Green nomination. Nominations
-      close on 15 September, so no candidate has yet been formally confirmed. What is fixed is the
+      Holborn and St Pancras votes on 8 October.
+      {field.status === "locked" ? (
+        <>
+          {" "}Nominations closed on 15 September and {field.declared.length} candidates are standing,
+          Labour's Camden council leader Sagal Abdi-Wali against the Green Party leader Zack Polanski,
+          with George Galloway standing for the Workers Party.
+        </>
+      ) : (
+        <>
+          {" "}Labour has selected Camden council leader Sagal Abdi-Wali, while Zack Polanski and Hamza
+          Chowdhury are seeking the Green nomination. Nominations close on 15 September, so no candidate
+          has yet been formally confirmed.
+        </>
+      )}
+      {" "}What is fixed is the
       ground. Camden voted four months ago, and in the ten whole wards inside
       this seat it split Labour {pct1(signal.shares["Labour"])}, Green {pct1(signal.shares["Green Party"])},
       a {pp(signal.swing_vs_ge2024_pp["Green Party"])} Green move on the general election.
@@ -299,10 +325,20 @@ const timeline: Array<{ date: string; event: string }> = [
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">The ballot</p>
-      <h2>Who has said anything at all</h2>
+      <h2>{field.status === "locked" ? "The ballot paper" : "Who has said anything at all"}</h2>
     </div>
     <div class="backtest-callout">
-      <strong>Selections are moving, but the ballot is not yet fixed.</strong>
+      {/* Both halves follow the data. Before nominations closed this section
+          listed party-selection positions and had to say so; once the
+          Statement of Persons Nominated exists it is a ballot paper and
+          hedging it would be the inaccuracy. The heading and this line were
+          hardcoded to the first state and still read "not yet fixed" eleven
+          days after nominations closed. */}
+      <strong>
+        {field.status === "locked"
+          ? `Nominations closed. ${field.declared.length} candidates are standing.`
+          : "Selections are moving, but the ballot is not yet fixed."}
+      </strong>
       <span class="backtest-detail">{field.note}</span>
     </div>
     <table class="seat-table" style="margin-top:var(--space-md)">
@@ -315,7 +351,13 @@ const timeline: Array<{ date: string; event: string }> = [
               {shortPartyLabel(c.party)}
             </td>
             <td>{c.candidate || <span class="muted">not named</span>}</td>
-            <td class="muted">{c.selection_status?.replaceAll("_", " ") ?? "position reported"} · {c.note}</td>
+            {/* The separator is conditional: a nominated candidate with
+                nothing further to say about them rendered as "nominated · "
+                with a dangling middot. */}
+            <td class="muted">
+              {c.selection_status?.replaceAll("_", " ") ?? "position reported"}
+              {c.note ? ` · ${c.note}` : ""}
+            </td>
           </tr>
         ))}
         {field.floated.map((c: any) => (

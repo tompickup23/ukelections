@@ -353,44 +353,67 @@ const out = {
     polling_day: "2026-10-08",
     date_status: "confirmed",
     writ_status: "moved",
-    as_of: "2026-09-10",
+    as_of: "2026-09-26",
     timetable_note:
-      "Camden published the Notice of Election on 8 September. Nominations close at 4pm on 15 September and, if contested, polling is on Thursday 8 October. No party name is final until the Statement of Persons Nominated is published.",
+      "Camden published the Notice of Election on 8 September. Nominations closed at 4pm on 15 September and the Statement of Persons Nominated fixed a ballot of 15 candidates. Polling is on Thursday 8 October.",
   },
   field: {
-    status: "not_locked",
-    as_of: "2026-09-10",
+    // Locked on the Statement of Persons Nominated, not on party announcements.
+    //
+    // Until 26 September this block still carried the four party-selection
+    // positions known on 10 September, with a note saying nominations had not
+    // closed and no ballot paper existed. Nominations closed on 15 September.
+    // For eleven days the site's highest-profile page named four candidates
+    // out of fifteen, did not know George Galloway was standing, and described
+    // the Green nomination as an open contest between Zack Polanski and Hamza
+    // Chowdhury after Polanski had been nominated. The field is hand-written
+    // here, so nothing refreshed it: this is what "a campaign fact has a shelf
+    // life of about a day" costs when the fact is hand-held.
+    //
+    // Ballot-paper order, which is alphabetical by surname. Not by party size,
+    // not by expected vote: editorial rule 1 says every party that stands is
+    // surfaced and none is ranked by ideology, and the returning officer's own
+    // order is the one arrangement nobody has to defend.
+    status: "locked",
+    as_of: "2026-09-26",
     note:
-      "Nominations are open but do not close until 15 September, so no ballot paper exists. Every entry below is a party-selection position, not a confirmed nomination.",
+      "Nominations closed at 4pm on 15 September. This is the ballot paper as published in the Statement of Persons Nominated: 15 candidates, in the order they appear on it.",
     declared: [
       {
         party: "Labour",
         candidate: "Sagal Abdi-Wali",
-        selection_status: "selected_by_party",
-        note:
-          "Labour members selected the Camden council leader on 9 September, reported by the Camden New Journal on 10 September. This is a party selection, not yet a formal nomination.",
+        selection_status: "nominated",
+        note: "Leader of Camden Council, selected by Labour members on 9 September.",
       },
+      // Every party named, none bucketed to "Other". Editorial rule 1 says
+      // surface every party that stands a candidate, and a ballot-paper table
+      // that prints "Other" seven times does not. shortPartyLabel() passes an
+      // unmapped name through unchanged and partyColour() falls back to the
+      // neutral slate, so a minor party costs nothing to name properly.
+      { party: "Official Monster Raving Loony Party", candidate: "Barmy Brunch", selection_status: "nominated", note: null },
+      { party: "Conservative", candidate: "Ewan Cameron", selection_status: "nominated", note: null },
+      { party: "Independent", candidate: "Tom Darwood", selection_status: "nominated", note: null },
+      { party: "Climate Party", candidate: "Clare Fischer", selection_status: "nominated", note: null },
+      {
+        party: "Workers Party of Britain",
+        candidate: "George Galloway",
+        selection_status: "nominated",
+        note: "Party leader, and a former MP for Glasgow Kelvin, Bethnal Green and Bow, Bradford West and Rochdale.",
+      },
+      { party: "Restore Britain", candidate: "Tyler Kurtis Johnson", selection_status: "nominated", note: null },
+      { party: "Rejoin EU", candidate: "Briony Anne Lonbay Kapoor", selection_status: "nominated", note: null },
+      { party: "Reform UK", candidate: "Peter Newman", selection_status: "nominated", note: null },
+      { party: "UK Voice", candidate: "Ketankumar Pipaliya", selection_status: "nominated", note: null },
       {
         party: "Green Party",
         candidate: "Zack Polanski",
-        selection_status: "selection_in_progress",
-        note:
-          "The Green Party leader has put himself forward, but local members have not completed their selection. Hamza Chowdhury is also seeking the nomination, so Polanski is not yet the candidate.",
+        selection_status: "nominated",
+        note: "Leader of the Green Party of England and Wales. He won the local selection Hamza Chowdhury also sought.",
       },
-      {
-        party: "Green Party",
-        candidate: "Hamza Chowdhury",
-        selection_status: "selection_in_progress",
-        note:
-          "The Camden Green councillor has put himself forward for the same local member selection as Zack Polanski.",
-      },
-      {
-        party: "Liberal Democrats",
-        candidate: null,
-        selection_status: "selection_in_progress",
-        note:
-          "Camden Liberal Democrats are inviting applications for their by-election candidate. The published deadline is 12 noon on 11 September.",
-      },
+      { party: "Communist League", candidate: "Jonathan Silberman", selection_status: "nominated", note: null },
+      { party: "Christian Peoples Alliance", candidate: "Helen Spiby-Vann", selection_status: "nominated", note: null },
+      { party: "Liberal Democrats", candidate: "Patrick Thomas Stillman", selection_status: "nominated", note: null },
+      { party: "UKIP", candidate: "Ben Walker", selection_status: "nominated", note: null },
     ],
     floated: [],
     declined: [
@@ -413,13 +436,13 @@ const out = {
     ranked: [],
     classification: "signal-only",
     headline:
-      `No forecast: nominations are open and no constituency poll exists. Freshest same-ground vote (Camden, ` +
+      `No forecast: no constituency poll of this seat exists. Freshest same-ground vote (Camden, ` +
       `7 May 2026, ten wards): Labour ${pct1(signal.shares["Labour"])}%, Green ` +
       `${pct1(signal.shares["Green Party"])}%, Reform ${pct1(signal.shares["Reform UK"])}%.`,
   },
   inputs: {
     no_polls_note:
-      "No published constituency polling. The Camden borough result below is the substitute: a real vote on this ground, four months old. It is not a forecast and will not be promoted to one before nominations close and relevant evidence exists.",
+      "No published constituency polling. The Camden borough result below is the substitute: a real vote on this ground, four months old. The field is now known, which removes one of the two reasons there was no forecast here, but the other stands: nothing has polled this seat, and a 15-candidate ballot carrying two party leaders is not something a ward aggregation can price. It is not a forecast and will not be promoted to one without evidence that can carry it.",
     ge2024_baseline: baseline,
     camden_signal_2026_05_07: {
       name: "Camden London Borough Council election, the ten wards inside Holborn and St Pancras",
@@ -502,7 +525,7 @@ const out = {
       "seats in each of Holborn & Covent Garden and Regent's Park. The Greens also won their first ever " +
       "parliamentary by-election at Gorton and Denton in February 2026, so a strong Green showing here would be " +
       "a second data point, not a novelty.",
-    "Labour has selected Sagal Abdi-Wali. The Green selection is still open between Zack Polanski and Camden councillor Hamza Chowdhury, so neither is a confirmed candidate and the field cannot support a forecast yet.",
+    "The ballot is now fixed: 15 candidates, with Labour's Sagal Abdi-Wali against the Green Party's leader Zack Polanski, who won the selection Hamza Chowdhury also sought. George Galloway is standing for the Workers Party. The field being known removes one of the two reasons there is no forecast here; the other stands, because no constituency poll of this seat exists and a 15-candidate ballot with two national party leaders' worth of profile on it is not something a ward-aggregation signal can price.",
     "The May Green share is complicated by a stand-aside: the Greens did not contest two of the ten wards inside the seat. Across the eight wards they did contest they were within two points of Labour. That is a useful upper bound, not a by-election prediction.",
     "Andrew Feinstein's 18.9% independent vote in 2024 did not evaporate, it reorganised. The Camden People's " +
       "Alliance took 6.3% across the seat from a standing start and won a seat in St Pancras and Somers Town by " +
@@ -519,6 +542,11 @@ const out = {
     {
       label: "Camden Council Notice of Election, 8 September 2026: nominations close on 15 September and polling day is 8 October",
       url: "https://www.camden.gov.uk/holborn-and-st-pancras-by-election-2026-notice-of-election",
+    },
+    {
+      label:
+        "Statement of Persons Nominated, via Democracy Club, nominations closed 15 September 2026: the 15-candidate ballot paper this page lists",
+      url: "https://candidates.democracyclub.org.uk/elections/parl.holborn-and-st-pancras.by.2026-10-08/",
     },
     {
       label: "Camden New Journal, 10 September 2026: Labour selects Sagal Abdi-Wali",
