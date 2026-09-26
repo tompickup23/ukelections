@@ -80,14 +80,39 @@ describe("Holborn and St Pancras contest file", () => {
     expect(withPart["Conservative"]).toBeGreaterThan(withPart["Reform UK"]);
   });
 
-  it("separates a party selection from an unresolved Green nomination", () => {
-    expect(contest.field.status).toBe("not_locked");
-    const labour = contest.field.declared.find((entry) => entry.party === "Labour");
-    expect(labour.candidate).toBe("Sagal Abdi-Wali");
-    expect(labour.selection_status).toBe("selected_by_party");
-    const greens = contest.field.declared.filter((entry) => entry.party === "Green Party");
-    expect(greens.map((entry) => entry.candidate).sort()).toEqual(["Hamza Chowdhury", "Zack Polanski"]);
-    expect(greens.every((entry) => entry.selection_status === "selection_in_progress")).toBe(true);
+  it("never calls anyone a candidate before the nominations say so", () => {
+    // This used to assert field.status === "not_locked" and name the two
+    // Greens contesting the selection. That was the state on 10 September, not
+    // a rule, and freezing it meant the only test guarding this field could
+    // not survive nominations closing: it went red on 26 September for the
+    // single reason that the page had finally been brought up to date.
+    //
+    // The rule it was reaching for is the one in CLAUDE.md: do not promote a
+    // selection-seeking name to a candidate, or assert a party is standing,
+    // until its selection or the statutory nominations is published. That
+    // holds in both directions, so assert it in both directions.
+    const { status, declared } = contest.field;
+    expect(["not_locked", "locked"]).toContain(status);
+
+    if (status === "not_locked") {
+      // No ballot paper exists, so nobody may be described as nominated.
+      expect(declared.every((e) => e.selection_status !== "nominated")).toBe(true);
+      expect(declared.every((e) => Boolean(e.note))).toBe(true);
+    } else {
+      // The SOPN exists, so every entry is a nomination and nothing on the
+      // list may still be labelled as a party's internal selection.
+      expect(declared.length).toBeGreaterThan(0);
+      expect(declared.every((e) => e.selection_status === "nominated")).toBe(true);
+      expect(declared.every((e) => Boolean(e.candidate))).toBe(true);
+      // A locked field is a ballot paper: no party may appear twice, which is
+      // what an unresolved selection looked like when two Greens were listed.
+      const parties = declared.map((e) => e.party).filter((p) => p !== "Independent");
+      expect(new Set(parties).size).toBe(parties.length);
+      // Every party named, none swept into a bucket. Editorial rule 1.
+      expect(declared.some((e) => e.party === "Other")).toBe(false);
+      // The claim has to be anchored to the nominations themselves.
+      expect(contest.sources.some((s) => /Statement of Persons Nominated/i.test(s.label))).toBe(true);
+    }
   });
 
   it("sources every claim with a URL", () => {
