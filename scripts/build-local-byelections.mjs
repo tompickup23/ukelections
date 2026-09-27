@@ -814,7 +814,12 @@ async function main() {
     // run look like it failed when it fixed itself.
     console.log(`\n  retrying ${lostCandidates.length} candidate list(s) the sweep could not fetch`);
     for (const b of ballots.filter((x) => lostCandidates.includes(x.election_id))) {
-      const ctx = await gather(b, priors);
+      // resultRows is not optional: gather() dereferences it for the history
+      // fallback. The rebase that brought that parameter in merged this file
+      // without a conflict, because the two changes sit on different lines,
+      // and left this call passing two arguments. It would have thrown on the
+      // first rate-limited fetch, which is most nights.
+      const ctx = await gather(b, priors, resultRows);
       if (!ctx) continue;
       const at = gathered.findIndex((g) => g.ballot.election_id === b.election_id);
       if (at >= 0) gathered[at] = ctx;
