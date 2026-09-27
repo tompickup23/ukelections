@@ -322,6 +322,7 @@ const DEFAULT_SIGMA = 0.7; // log-odds scale, used only where the corpus is too 
 export function projectContest(base, field, swing) {
   const central = {};
   const notes = [];
+  const entryPriced = [];
   for (const p of PARTIES) {
     if (!field.has(p)) continue; // not standing scores nothing, full stop
     const b = base[p] || 0;
@@ -342,12 +343,46 @@ export function projectContest(base, field, swing) {
         notes.push(`${p} is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.`);
       } else {
         central[p] = e;
+        entryPriced.push(p);
       }
     }
   }
+  // Say when a number is an entry prior rather than this ward's own history.
+  //
+  // A party with a prior result here is swung from it. A party without one is
+  // handed the median share that party took where it entered a comparable
+  // contest for the first time, and that median knows the era and the entry
+  // pattern and nothing whatever about this ward. Until now the two arrived on
+  // the page looking identical, and the second is far weaker.
+  //
+  // Queen's Park, Brighton and Hove, 24 September 2026 is the case that forced
+  // this. Reform UK had not stood there in 2023, so it took the entry median of
+  // 25.9%, which normalised to a published 30.8% and a "too close to call"
+  // against Labour. It got 7.0%. Across the four contests in that round where
+  // Reform was an entrant the mean absolute error on its share was 13.2pp, and
+  // signed: far too high in the two graduate-heavy urban wards, too low in the
+  // one post-industrial ward. The single contest where Reform had a real 2023
+  // baseline came in 1.5pp out, and was the only winner the model called.
+  //
+  // The prior itself is not changed here. Conditioning it is a recalibration,
+  // and every calibration on this estate is refitted together against a real
+  // election. This makes the weakness visible instead of silent.
+  if (entryPriced.length) {
+    const described = entryPriced
+      .map((p) => {
+        const n = swing.entry_counts?.[p];
+        return n ? `${p} (median of ${n})` : p;
+      })
+      .join(", ");
+    notes.push(
+      `Priced from an entry prior, not from this ward: ${described}. ` +
+        `A party with no prior result here is given the median share it took where it first entered a comparable contest. ` +
+        `That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page.`,
+    );
+  }
   const unpriced = Object.entries(central).filter(([, v]) => v === null).map(([k]) => k);
   for (const k of unpriced) delete central[k];
-  return { central: normalise(central), notes, unpriced };
+  return { central: normalise(central), notes, unpriced, entry_priced: entryPriced };
 }
 
 // -----------------------------------------------------------------------------

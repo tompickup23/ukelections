@@ -583,6 +583,11 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
         logodds_shifts: swing.shifts,
         ratio_at_25pct: swing.ratios,
         entry_shares: swing.entry,
+        // The sample size behind each entry share. It was computed and thrown
+        // away, so a reader could see that Reform was priced at 25.9% but not
+        // whether that rested on five first-time entries or fifty. An audit
+        // page that publishes the number without its n is not publishing much.
+        entry_counts: swing.entry_counts,
         party_counts: swing.counts,
       },
       central: projected.central,
@@ -596,6 +601,10 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
       sigma_inflation: draws.sigma_inflation,
       caveats: projected.notes,
       unpriced_parties: projected.unpriced,
+      // Which parties on this ballot rest on an entry prior rather than on the
+      // ward's own last result. Machine-readable so the accuracy work can split
+      // its error by the two cases, which is how the Brighton miss was found.
+      entry_priced_parties: projected.entry_priced ?? [],
       cannot_see: [
         "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
         "Any ward-level campaign, and which parties actually knocked on doors.",
