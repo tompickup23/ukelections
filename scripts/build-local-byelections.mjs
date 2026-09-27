@@ -45,7 +45,11 @@ import {
   SIGMA_INFLATION,
   gradeAgainst,
 } from "./lib/local-byelection-model.mjs";
-import { assertFractionalTurnout, mergeHistoryRows } from "./lib/election-history.mjs";
+import {
+  assertFractionalTurnout,
+  candidatesFromHistoryResult,
+  mergeHistoryRows,
+} from "./lib/election-history.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const p = (rel) => path.join(ROOT, rel);
@@ -242,20 +246,6 @@ function isHandVerified(row) {
   return row?.review_status === "hand_verified_declaration" || row?.review_status === "hand_verified_two_sources";
 }
 
-let SIDECAR = null;
-/** The tracked by-election sidecar, indexed by ballot id. Empty if absent. */
-function sidecarResults() {
-  if (SIDECAR) return SIDECAR;
-  SIDECAR = new Map();
-  const file = p("data/history/byelection-appends.json");
-  if (existsSync(file)) {
-    for (const row of JSON.parse(readFileSync(file, "utf8")).results || []) {
-      if (row.ballot_paper_id) SIDECAR.set(row.ballot_paper_id, row);
-    }
-  }
-  return SIDECAR;
-}
-
 const PUBLISHED_PATH = p("data/cards/published-byelection-forecasts.json");
 
 /** What the live page said before the poll, keyed by slug.
@@ -431,7 +421,7 @@ function slugFor(id) {
  * results declared since the last archive refresh can be folded into the swing
  * corpus BEFORE anything is projected off it.
  */
-async function gather(ballot, priors) {
+async function gather(ballot, priors, resultRows) {
   const ids = slugFor(ballot.election_id);
   if (!ids) return null;
   const division = ballot.division || {};
@@ -466,17 +456,30 @@ async function gather(ballot, priors) {
     // result object. Keep the nested fallback for any older cached responses.
     elected: c.elected ?? c.result?.elected ?? null,
   }));
-  const field = fieldFromCandidates(candidates);
-
-  // Democracy Club records a by-election's WINNER on the ballots endpoint days
-  // before it records the counts, and on 27 August 2026 it did exactly that for
-  // all five contests. The tracked sidecar carries counts entered from the
-  // returning officers' declarations in that gap, so read them here rather than
-  // publishing "result awaited" against a page whose result is public. Matched
-  // on the candidate's name, and only when the sidecar covers every candidate
-  // on the ballot: a partial fill would grade a contest on half a result.
   let resultSource = null;
-  const row = sidecarResults().get(ballot.election_id);
+  const row = resultRows.get(ballot.election_id);
+  const historicalCandidates = candidatesFromHistoryResult(row);
+
+  // Upstream candidacy records can disappear after polling day even though the
+  // result is already present in the durable history archive. Restore the full
+  // archived field when that happens, instead of regressing a concluded page to
+  // "result awaited". The helper accepts only complete numeric result rows.
+  if (ids.date <= today && historicalCandidates.length > candidates.length) {
+    candidates.splice(
+      0,
+      candidates.length,
+      ...historicalCandidates.map((candidate) => ({
+        ...candidate,
+        party: canonParty(candidate.party_name),
+      })),
+    );
+    resultSource = row.source || null;
+  }
+
+  // Democracy Club can record a by-election's winner before it records the
+  // counts. The merged history prefers tracked, hand-verified declarations and
+  // lets those durable counts fill that gap. Match every candidate: a partial
+  // fill would grade a contest on half a result.
   if (candidates.length && row) {
     const rowCandidates = row.candidates || [];
     const byName = new Map(rowCandidates.map((c) => [normaliseName(c.name), c]));
@@ -506,6 +509,7 @@ async function gather(ballot, priors) {
       console.log(`  hand-verified sidecar row for ${ballot.election_id} disagrees with Democracy Club; kept live counts`);
     }
   }
+  const field = fieldFromCandidates(candidates);
 
   // Promote to the permanent cache once the result is complete and the poll is
   // comfortably past, so a late correction still has a window to land.
@@ -755,6 +759,11 @@ async function main() {
   console.log(`Local by-election contests, ${from} onward`);
   const history = loadHistory();
   const priors = buildPriorIndex(history);
+  const resultRows = new Map(
+    history
+      .filter((row) => row?.is_by_election && row?.ballot_paper_id)
+      .map((row) => [row.ballot_paper_id, row]),
+  );
   console.log(`  history: ${history.length} rows, ${priors.ordinaryCount} wards with an ordinary result`);
 
   const holders = loadHolders();
@@ -768,7 +777,7 @@ async function main() {
   // Pass one: everything that touches the network.
   const gathered = [];
   for (const b of ballots.sort((x, y) => x.poll_open_date.localeCompare(y.poll_open_date))) {
-    const ctx = await gather(b, priors);
+    const ctx = await gather(b, priors, resultRows);
     if (ctx) gathered.push(ctx);
   }
 
