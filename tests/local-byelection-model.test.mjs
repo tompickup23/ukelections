@@ -222,6 +222,50 @@ describe("projection", () => {
     expect(unpriced).toContain("Plaid Cymru");
     expect(central["Plaid Cymru"]).toBe(0);
   });
+
+  it("says when a party is priced from an entry prior rather than from the ward", () => {
+    // A party swung from the ward's own last result and a party handed the
+    // corpus-wide entry median used to reach the page looking identical, and
+    // the second is much weaker: on 24 September 2026 Reform UK entered
+    // Queen's Park, Brighton and Hove at an entry median of 25.9%, published
+    // 30.8%, and polled 7.0%.
+    // Needs a corpus where Reform genuinely enters, so it has an entry median
+    // at all. The projection corpus above has Reform in every baseline.
+    const entryCorpus = buildSwingCorpus(
+      Array.from({ length: 12 }, (_, i) =>
+        contest(`local.p${i}.w.by.2026-02-01`, "2026-02-01",
+          { "Labour Party": 0.7, "Conservative and Unionist Party": 0.3 },
+          { "Labour Party": 0.4, "Conservative and Unionist Party": 0.3, "Reform UK": 0.3 }),
+      ),
+      findPrior,
+    );
+    const entrySwing = estimateSwing(entryCorpus, { asOf: "2026-06-01" });
+    const base = normalise({ Labour: 0.7, Conservative: 0.3 });
+    const { central, notes, entry_priced } = projectContest(
+      base,
+      new Set(["Labour", "Conservative", "Reform UK"]),
+      entrySwing,
+    );
+    // It is still priced. This is a disclosure, not a behaviour change.
+    expect(central["Reform UK"]).toBeGreaterThan(0);
+    expect(entry_priced).toEqual(["Reform UK"]);
+    const note = notes.find((n) => n.includes("entry prior"));
+    expect(note, "an entry-priced party must produce a caveat").toBeTruthy();
+    expect(note).toContain("Reform UK");
+    // The sample size travels with the claim.
+    expect(note).toMatch(/median of \d+/);
+  });
+
+  it("says nothing about entry priors when every party has a real baseline", () => {
+    const base = normalise({ Labour: 0.5, "Reform UK": 0.3, Conservative: 0.2 });
+    const { notes, entry_priced } = projectContest(
+      base,
+      new Set(["Labour", "Reform UK", "Conservative"]),
+      swing,
+    );
+    expect(entry_priced).toEqual([]);
+    expect(notes.some((n) => n.includes("entry prior"))).toBe(false);
+  });
 });
 
 describe("uncertainty", () => {
