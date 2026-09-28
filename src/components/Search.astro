@@ -35,6 +35,8 @@
     <span class="search-dialog-eyebrow">Search</span>
     <p class="search-dialog-title" id="search-dialog-title">Constituencies, councils, forecasts</p>
   </div>
+  <p class="search-intents"><a href="/your-area/">Find my ward</a> · <a href="/your-area/#representatives">MP, councillors and mayor</a> · <a href="/elections/2027/">2027 election dates</a></p>
+  <div id="search-entities" class="search-entities" hidden><p>Suggested pages</p><ul></ul></div>
   <div id="search-mount" class="search-mount"></div>
   <div class="search-dialog-hint" aria-hidden="true">
     <span><kbd>&crarr;</kbd> open</span>
@@ -46,15 +48,39 @@
 
 <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
 
+<style>
+  .search-intents, .search-entities { margin: var(--space-md); }
+  .search-entities ul { padding-left: var(--space-lg); }
+</style>
+
 <script>
+  import { searchElectionLookup, voterIntentLinks, type LookupIndex } from "../lib/electionLookup";
+  let entities: LookupIndex | null = null;
+  let currentQuery = "";
+  function showEntities(query: string) {
+    currentQuery = query;
+    const box = document.getElementById("search-entities");
+    const list = box?.querySelector("ul");
+    if (!box || !list) return;
+    const matches = [...voterIntentLinks(query), ...(entities ? searchElectionLookup(query, entities) : [])].slice(0, 5);
+    list.replaceChildren();
+    box.hidden = !matches.length;
+    for (const match of matches) {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = match.href;
+      link.textContent = `${match.name} — ${match.secondary}`;
+      item.append(link); list.append(item);
+    }
+  }
+
   // Lazy-load Pagefind UI on the first open. Once initialised, reuse
   // the same instance.
   let pagefindUI: any = null;
 
   function loadPagefindScript(): Promise<any> {
     return new Promise((resolveScript, rejectScript) => {
-      // Bypass Vite's static analyser by injecting a <script> tag.
-      // pagefind-ui.js exposes a global `PagefindUI` constructor.
+      // Load Pagefind through a script element to avoid static bundling.
       const existing = document.getElementById("pagefind-ui-script");
       if (existing) {
         if ((window as any).PagefindUI) {
@@ -90,11 +116,22 @@
       excerptLength: 24,
       placeholder: "Search constituencies, councils, by-elections…",
     });
+    // Fetch a static entity index once. Search text stays in the browser.
+    void fetch("/election-entities.json").then(response => {
+      if (!response.ok) throw new Error("Entity index unavailable");
+      return response.json();
+    }).then(index => { entities = index; showEntities(currentQuery); }).catch(() => { /* Pagefind remains available */ });
+    document.getElementById("search-mount")?.addEventListener("input", event => {
+      if (event.target instanceof HTMLInputElement) showEntities(event.target.value);
+    });
     // Focus the input
     requestAnimationFrame(() => {
       const input = document.querySelector(
         "#search-mount input.pagefind-ui__search-input",
       ) as HTMLInputElement | null;
+      const entitiesBox = document.getElementById("search-entities");
+      const clear = document.querySelector("#search-mount .pagefind-ui__search-clear");
+      if (entitiesBox && clear) clear.after(entitiesBox);
       if (input) input.focus();
     });
   }

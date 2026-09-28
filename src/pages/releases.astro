@@ -25,7 +25,7 @@ const structuredData = buildReleaseCollectionStructuredData(RELEASES, {
 
   <section class="release-list" aria-label="Release diary">
     {RELEASES.map((release) => (
-      <article>
+      <article id={release.id}>
         <time datetime={release.date}>{release.date}</time>
         <h2>{release.title}</h2>
         <p>{release.summary}</p>

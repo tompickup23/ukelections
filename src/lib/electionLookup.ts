@@ -73,8 +73,22 @@ export function searchElectionLookup(query: string, index: LookupIndex): LookupE
         entries.findIndex((candidate) => candidate.href === entry.href) === position,
     )
     .sort((a, b) => {
+      const aExact = a.name.toLocaleLowerCase("en-GB") === needle ? 0 : 1;
+      const bExact = b.name.toLocaleLowerCase("en-GB") === needle ? 0 : 1;
       const aStarts = a.name.toLocaleLowerCase("en-GB").startsWith(needle) ? 0 : 1;
       const bStarts = b.name.toLocaleLowerCase("en-GB").startsWith(needle) ? 0 : 1;
-      return aStarts - bStarts || a.name.localeCompare(b.name, "en-GB");
+      return aExact - bExact || aStarts - bStarts || a.name.localeCompare(b.name, "en-GB");
     });
+}
+
+/** Route common voter questions before broad full-text results. No query leaves the browser. */
+export function voterIntentLinks(query: string): Array<{ name: string; secondary: string; href: string }> {
+  const text = query.trim().toLocaleLowerCase('en-GB');
+  if (/\b2027\b/.test(text) && /election|vote|poll|when|^2027$/.test(text)) {
+    return [{name:'2027 election dates and official sources',secondary:'Coverage and verification notes',href:'/elections/2027/'}];
+  }
+  if (/\b(my|who|find)\b/.test(text) && /\b(mp|councillors?|mayor|representatives?)\b/.test(text)) {
+    return [{name:'Find your MP, councillors and mayor',secondary:'Official representative directories',href:'/your-area/#representatives'}];
+  }
+  return [];
 }

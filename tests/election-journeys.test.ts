@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   resolvePostcodeDestinations,
+  searchElectionLookup,
   type LookupEntry,
 } from "../src/lib/electionLookup";
 import {
@@ -73,6 +74,29 @@ describe("postcode election lookup", () => {
       ),
     ).toEqual([]);
   });
+
+  it("finds a missing-code constituency by name without guessing a postcode match", () => {
+    const missingCode: LookupEntry = {
+      kind: "constituency",
+      name: "Aberdeen North",
+      secondary: "Parliamentary constituency",
+      href: "/seats/parliament/aberdeen-north/",
+      code: null,
+    };
+    const index = { constituencies: [missingCode, constituency], wards: [ward], councils: [] };
+    expect(searchElectionLookup("Aberdeen North", index)).toEqual([missingCode]);
+    for (const code of [undefined, "", "S14000060"]) {
+      expect(resolvePostcodeDestinations({
+        parliamentary_constituency: "Aberdeen North",
+        codes: { parliamentary_constituency: code },
+      }, index)).toEqual([]);
+    }
+    // Adding a missing-code record must not disturb a valid code match.
+    expect(resolvePostcodeDestinations({
+      codes: { parliamentary_constituency: constituency.code },
+    }, index)).toEqual([constituency]);
+  });
+
 });
 
 describe("parliamentary onward journeys", () => {

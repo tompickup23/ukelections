@@ -76,6 +76,7 @@ describe("site metadata helpers", () => {
     const nodes = buildReleaseCollectionStructuredData(
       [
         {
+          id: "scaffold",
           date: "2026-04-18",
           title: "UK Elections scaffold",
           summary: "Initial scaffold for UK-wide contest intelligence.",

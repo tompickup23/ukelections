@@ -116,7 +116,7 @@ const structuredData = [
       from the modelled vote shares and seats it later produces, and shows the source window and refresh time.
     </p>
     {overrideFile?.generated_at && (
-      <p class="meta-row">Polling snapshot generated {forecastStamp(overrideFile.generated_at)} · {pollsUsed || "n/a"} polls used{fieldworkLabel ? ` · fieldwork ${fieldworkLabel}` : ""}.</p>
+      <p class="meta-row"><span data-discovery-ignore>Polling snapshot generated {forecastStamp(overrideFile.generated_at)}</span> · {pollsUsed || "n/a"} polls used{fieldworkLabel ? ` · fieldwork ${fieldworkLabel}` : ""}.</p>
     )}
   </section>
 
@@ -368,7 +368,7 @@ const structuredData = [
       <a href="/methodology/">Full methodology →</a>
       · <a href="/forecasts/general-election/">Current general-election forecast →</a>
       {overrideFile?.generated_at && (
-        <>{" "}· Polling last refreshed <strong>{overrideFile.generated_at.split("T")[0]}</strong>.</>
+        <>{" "}· Polling last refreshed <strong data-discovery-ignore>{overrideFile.generated_at.split("T")[0]}</strong>.</>
       )}
     </p>
   </section>

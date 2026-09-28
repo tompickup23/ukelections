@@ -28,8 +28,9 @@
 // still get a file and a page: they carry the structure and the reason there is
 // no number, which is the Clacton precedent.
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, unlinkSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   PARTIES,
   baselineEra,
@@ -196,7 +197,7 @@ async function fetchScheduledBallots() {
 // Prior ordinary results
 // ---------------------------------------------------------------------------
 
-function loadHistory() {
+export function loadHistory() {
   let archiveRows = [];
   // The big DC history file is gitignored and regenerated on the server. A
   // fresh clone has the tracked sidecar only, which is enough to build the
@@ -305,7 +306,7 @@ function wardProfile(demo, gss) {
   };
 }
 
-function buildPriorIndex(history) {
+export function buildPriorIndex(history) {
   const ordinaryBySlug = new Map();
   const byelectionRows = [];
   for (const r of history) {
@@ -537,7 +538,10 @@ async function gather(ballot, priors, resultRows) {
   const setStart = division.divisionset?.start_date || null;
   const boundaryChanged = Boolean(prior && setStart && prior.election_date < setStart);
 
-  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource };
+  const resultReview = row?.reviewed_at && row.source === resultSource
+    ? { checked_at: row.reviewed_at, review_status: row.review_status, note: row.verification_note }
+    : null;
+  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource, resultReview };
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
@@ -642,6 +646,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
           : `${winnerParty} gain from ${holders[ballot.election_id].party}`
         : null,
       grading: gradeAgainst(published[ids.slug], forecast, shares, field, winnerParty),
+      ...(ctx.resultReview || {}),
     };
   }
 
@@ -890,12 +895,12 @@ async function main() {
   let forecast = 0;
   const { doc: publishedDoc, forecasts: published } = loadPublished();
   const existingContests = new Map();
-  if (PRESERVE_FORECASTS && existsSync(OUT_DIR)) {
+  if (existsSync(OUT_DIR)) {
     for (const file of readdirSync(OUT_DIR).filter((name) => name.endsWith(".json") && !name.startsWith("_"))) {
       const existing = JSON.parse(readFileSync(path.join(OUT_DIR, file), "utf8"));
       if (existing.slug) existingContests.set(existing.slug, existing);
     }
-    console.log(`  preserving forecast outputs for ${existingContests.size} existing contests`);
+    if (PRESERVE_FORECASTS) console.log(`  preserving forecast outputs for ${existingContests.size} existing contests`);
   }
 
   // The caveat used to assert that council by-elections "routinely fall below a
@@ -1004,20 +1009,20 @@ async function main() {
   if (PRESERVE_FORECASTS) {
     for (const [slug, existing] of existingContests) {
       const file = `${slug}.json`;
-      if (written.has(file) || existing.contest?.polling_day < today) continue;
+      if (written.has(file)) continue;
       written.add(file);
       if (existing.forecast) forecast += 1;
-      console.log(`  preserved uncached upcoming contest ${file}`);
+      console.log(`  preserved uncached contest ${file}`);
     }
   }
 
-  // Drop contests that have aged out of the window so the directory does not
-  // grow without bound. Concluded contests older than the window keep their
-  // page only if they are still inside KEEP_DAYS.
-  for (const f of readdirSync(OUT_DIR)) {
-    if (f.startsWith("_") || !f.endsWith(".json") || written.has(f)) continue;
-    unlinkSync(path.join(OUT_DIR, f));
-    console.log(`  removed aged-out contest ${f}`);
+  // Retain previously published routes. Missing fetches and age alone do not
+  // establish cancellation or justify deleting an indexed result archive.
+  for (const [slug, existing] of existingContests) {
+    const file = `${slug}.json`;
+    if (written.has(file)) continue;
+    written.add(file);
+    if (existing.forecast) forecast += 1;
   }
 
   if (publishedDoc) {
@@ -1071,7 +1076,7 @@ async function main() {
   }
 }
 
-main().catch((e) => {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch((e) => {
   console.error(e);
   process.exit(1);
 });

@@ -79,9 +79,6 @@ const mp = record.mp;
 const slug = record.slug;
 // Off-site cross-links. only public, party-neutral references.
 const sisterLinks = [
-  mp?.party === "Labour" || mp?.party === "Labour and Co-operative Party"
-    ? { label: "Labour Tracker MP page", href: `https://labourtracker.co.uk/your-mp/${slug}/` }
-    : null,
   { label: "TheyWorkForYou", href: `https://www.theyworkforyou.com/mp/?p=${encodeURIComponent(slug.replace(/-/g, " "))}` },
 ].filter(Boolean) as Array<{ label: string; href: string }>;
 
@@ -147,7 +144,7 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
     </p>
     <p class="meta-row">
       {countryLabel}{regionLabel ? ` · ${regionLabel}` : ""}{record.pcon24cd ? ` · official code ${record.pcon24cd}` : ""}
-      {geBundle.snapshot?.generated_at ? ` · forecast generated ${forecastStamp(geBundle.snapshot.generated_at)}` : ""}
+      <span data-discovery-ignore>{geBundle.snapshot?.generated_at ? ` · forecast generated ${forecastStamp(geBundle.snapshot.generated_at)}` : ""}</span>
     </p>
     {slug === "makerfield" && (
       <p class="meta-row">

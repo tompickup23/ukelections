@@ -70,7 +70,7 @@ const structuredData = [
     <p class="lede">
       This is a modelled seat projection, not an election result or a poll. It covers all
       {" "}{headline.total_seats.toLocaleString()} UK parliamentary constituencies and was generated
-      {" "}<strong>{forecastStamp(headline.generated_at)}</strong>{pollingWindow ? ` from polling fieldwork ${pollingWindow}` : ""}.
+      {" "}<strong data-discovery-ignore>{forecastStamp(headline.generated_at)}</strong>{pollingWindow ? ` from polling fieldwork ${pollingWindow}` : ""}.
       A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
     </p>
     <p class="meta-row">
@@ -101,7 +101,7 @@ const structuredData = [
         <dd><a href="/seats/parliament/">Browse all {headline.total_seats} seats</a> or <a href="/your-area/">find yours by postcode</a>.</dd>
       </div>
     </dl>
-    <p class="muted-row">
+    <p class="muted-row" data-discovery-ignore>
       Polling input retrieved {forecastStamp(pollingSnapshot.generated_at)} · Forecast generated {forecastStamp(headline.generated_at)}.
     </p>
   </section>
