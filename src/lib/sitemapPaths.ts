@@ -1,4 +1,6 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import articles from "../../data/editorial/articles.json";
+import { validateEditorialRegistry, type EditorialArticle } from "./editorial";
+import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { loadIdentity, loadGePredictions } from "./predictions";
 import { getIndexableSitePaths } from "./site";
@@ -89,45 +91,18 @@ export function getLocalByElectionPaths(): string[] {
 }
 
 /**
- * `lastmod` for the paths that have a real content date, and only those.
- *
- * Google ignores a lastmod it cannot trust, and stamping every one of the ~3,900
- * URLs with the nightly build time is exactly the pattern that earns that
- * distrust: it would claim the whole site changed daily when almost none of it
- * did. So this covers council by-election pages alone, where the date is a fact
- * in the contest file (polls closed on polling day) and where freshness is what
- * the traffic actually turns on. Everything else is emitted without a lastmod,
- * which is a valid and more honest sitemap than a uniform one.
+ * The discovery ledger holds fingerprints, not verified change timestamps.
+ * Omit lastmod until a significant public change has a recorded date. Neither
+ * polling day nor rebuild time proves an update. The argument is kept for callers.
  */
-export function getLastmodByPath(
-  dirAbs = path.join(process.cwd(), "data/contests/local-byelections")
-): Record<string, string> {
-  const dir = dirAbs;
-  if (!existsSync(dir)) return {};
-  const out: Record<string, string> = {};
-
-  for (const file of readdirSync(dir)) {
-    if (!file.endsWith(".json") || file.startsWith("_")) continue;
-    let contest: { contest?: { polling_day?: string }; slug?: string };
-    try {
-      contest = JSON.parse(readFileSync(path.join(dir, file), "utf8"));
-    } catch {
-      continue;
-    }
-    const pollingDay = contest?.contest?.polling_day;
-    const slug = contest?.slug;
-    if (!pollingDay || !slug) continue;
-    // Date-only is a valid sitemap lastmod and is all this claims to know: the
-    // page settled once the count was in.
-    out[`/by-elections/local/${slug}/`] = pollingDay;
-  }
-
-  return out;
+export function getLastmodByPath(_dirAbs?: string): Record<string, string> {
+  return {};
 }
 
 export function getAllSitemapPaths(): string[] {
   const paths = new Set<string>([
     ...getIndexableSitePaths(),
+    ...validateEditorialRegistry(articles as EditorialArticle[]).map(article => article.path),
     ...getSeatPaths(),
     ...getParliamentSeatPaths(),
     ...getLocalByElectionPaths(),

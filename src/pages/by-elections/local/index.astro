@@ -50,7 +50,7 @@ const gradedRight = graded.filter((c) => c.result.grading.call_correct).length;
   <section class="page-hero">
     <h1>Council by-elections</h1>
     <p class="lede">
-      Every scheduled council by-election in Great Britain, one page each. Who is standing, why the
+      Council by-elections we track in Great Britain, one page each. Who is standing, why the
       seat fell vacant, how the ward last voted, and a projection wherever the ward gives us an
       honest baseline to work from.
     </p>
@@ -58,7 +58,7 @@ const gradedRight = graded.filter((c) => c.result.grading.call_correct).length;
       <p class="note">
         {meta.contests} contests tracked, {meta.forecast_count} with a projection. Swing measured
         across {meta.corpus_size} council by-elections paired with the same ward's prior result.
-        Updated {new Date(meta.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.
+        <span data-discovery-ignore>Updated {new Date(meta.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.</span>
       </p>
     )}
   </section>

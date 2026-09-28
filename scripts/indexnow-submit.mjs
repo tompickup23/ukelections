@@ -1,3 +1,4 @@
+import { pageFingerprint } from "./lib/discovery-manifest.mjs";
 import process from "node:process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -48,7 +49,7 @@ function verifyPublicKeyFile(key) {
 
 async function verifyLiveKey({ siteUrl, key, fetchImpl }) {
   const keyLocation = `${siteUrl}/${key}.txt`;
-  const response = await fetchImpl(keyLocation, { headers: { "Cache-Control": "no-cache" } });
+  const response = await fetchImpl(keyLocation, { signal: AbortSignal.timeout(15000), redirect: "manual", headers: { "Cache-Control": "no-cache" } });
   if (!response.ok || (await response.text()).trim() !== key) {
     throw new Error(`The public verification file is not live at ${keyLocation}.`);
   }
@@ -76,6 +77,7 @@ export async function submitIndexNow({
   key = KEY,
   args = process.argv.slice(2),
   fetchImpl = fetch,
+  expectedHashes = null,
 } = {}) {
   if (args.includes("--help")) {
     console.log("Usage: node scripts/indexnow-submit.mjs [--dry-run] (--url URL ... | --file FILE | --sitemap | --sitemap-file FILE) [--lastmod YYYY-MM-DD]");
@@ -103,8 +105,15 @@ export async function submitIndexNow({
   }
 
   await verifyLiveKey({ siteUrl, key, fetchImpl });
+  for (const url of urls) {
+    const page = await fetchImpl(url, { redirect: "manual", signal: AbortSignal.timeout(15000), headers: { "Cache-Control": "no-cache" } });
+    if (page.status !== 200 || !/text\/html/i.test(page.headers.get("content-type") || "") || /noindex/i.test(page.headers.get("x-robots-tag") || "")) throw new Error(`Live URL is not indexable HTML: ${url}`);
+    const hash = pageFingerprint(await page.text(), url);
+    if (expectedHashes && hash !== expectedHashes[url]) throw new Error(`Deployment has not reached the canonical URL: ${url}`);
+  }
   const response = await fetchImpl("https://api.indexnow.org/indexnow", {
     method: "POST",
+    signal: AbortSignal.timeout(15000),
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify({
       host: new URL(siteUrl).host,

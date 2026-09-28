@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "generated_at": "2026-09-20T19:06:09.214Z",
   "slug": "cotswold-blockley-2026-09-24",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.cotswold.blockley.by.2026-09-24",
     "polling_day": "2026-09-24",
@@ -42,36 +42,36 @@
         "name": "Tom Bradley",
         "party_name": "Conservative and Unionist Party",
         "party": "Conservative",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Bob Eastoe",
-        "party_name": "Green Party",
-        "party": "Green Party",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Matt Fincham",
-        "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Josh Littler-Jennings",
-        "party_name": "Labour Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
+        "votes": 431,
+        "elected": true
       },
       {
         "name": "Danny Loveridge",
         "party_name": "Liberal Democrats",
         "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
+        "votes": 230,
+        "elected": false
+      },
+      {
+        "name": "Matt Fincham",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": 59,
+        "elected": false
+      },
+      {
+        "name": "Bob Eastoe",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 54,
+        "elected": false
+      },
+      {
+        "name": "Josh Littler-Jennings",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": 14,
+        "elected": false
       }
     ]
   },
@@ -298,7 +298,39 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.07487309644670051,
+      "Labour": 0.017766497461928935,
+      "Conservative": 0.5469543147208121,
+      "Liberal Democrats": 0.2918781725888325,
+      "Green Party": 0.06852791878172589,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Conservative",
+    "winner_candidate": "Tom Bradley",
+    "runner_up_party": "Liberal Democrats",
+    "majority_votes": 201,
+    "total_votes": 788,
+    "source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf",
+    "outcome": null,
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-09-10",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Green Party",
+      "call_correct": false,
+      "mae_pp": 23.023959390862945
+    },
+    "checked_at": "2026-09-28",
+    "review_status": "hand_verified_declaration",
+    "note": "Official candidate counts total 788; the scanned declaration reports 790 papers issued and 1 rejected. The one-paper difference is unresolved. Candidate names in the feed use shorter forms than the declaration."
+  },
   "declaration": null,
   "sources": [
     {
@@ -308,6 +340,10 @@
     {
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.cotswold.blockley.by.2026-09-24/"
+    },
+    {
+      "label": "Returning officer’s declaration",
+      "url": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf"
     }
   ]
 }

@@ -16,12 +16,14 @@ interface FeedItem {
   link: string;
   description: string;
   isoDate: string;
+  guid: string;
 }
 
 const esc = (s: string) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
-const rfc822 = (iso: string) => new Date(`${iso}T06:00:00Z`).toUTCString();
+// Dates below are sorting keys, not first-publication timestamps. RSS pubDate
+// is optional: omit it until a trustworthy publication ledger exists.
 
 function byElectionResultItems(): FeedItem[] {
   const dirAbs = path.join(process.cwd(), "data/contests/local-byelections");
@@ -46,6 +48,7 @@ function byElectionResultItems(): FeedItem[] {
       title: `${c.ward_name} (${c.council_name}) by-election result: ${result.winner_party} win`,
       link: `${SITE_URL}/by-elections/local/${d.slug}/`,
       description: `${result.winner_party} won the ${c.ward_name} council by-election in ${c.council_name}${majority}. Full result, the prior ward history and how the projection compared are on the page.`,
+      guid: `${SITE_URL}/by-elections/local/${d.slug}/`,
       isoDate: c.polling_day
     });
   }
@@ -55,8 +58,9 @@ function byElectionResultItems(): FeedItem[] {
 export const GET: APIRoute = () => {
   const releaseItems: FeedItem[] = RELEASES.map((r) => ({
     title: r.title,
-    link: `${SITE_URL}/releases/`,
+    link: `${SITE_URL}/releases/#${r.id}`,
     description: r.summary,
+    guid: `urn:ukelections:release:${r.id}`,
     isoDate: r.date
   }));
 
@@ -70,15 +74,14 @@ export const GET: APIRoute = () => {
 <title>UK Elections</title>
 <link>${SITE_URL}/</link>
 <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml"/>
-<description>Forecasts, results and backtests for UK elections: every constituency, every council, every by-election, with the record published either way.</description>
+<description>Forecasts, results and backtests for UK elections: all 650 constituencies and the councils and by-elections we cover, with the record published either way.</description>
 <language>en-GB</language>
 ${items
   .map(
     (i) => `<item>
 <title>${esc(i.title)}</title>
 <link>${esc(i.link)}</link>
-<guid isPermaLink="false">${esc(`${i.link}#${i.isoDate}`)}</guid>
-<pubDate>${rfc822(i.isoDate)}</pubDate>
+<guid isPermaLink="false">${esc(i.guid)}</guid>
 <description>${esc(i.description)}</description>
 </item>`
   )

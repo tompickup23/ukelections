@@ -48,25 +48,21 @@ function controlClass(prob: number) {
 ---
 
 <BaseLayout
-  title="Lancashire reorganisation: new unitary councils forecast"
-  description="Ward-by-ward seat forecast of the four new Lancashire unitary councils approved on 16 July 2026, for the May 2027 shadow-authority elections. 107 wards, 313 councillors, with majority probabilities from a 2,000-run Monte Carlo."
+  title="Lancashire reorganisation: hypothetical council scenarios"
+  description="Hypothetical Lancashire unitary council scenarios. Reorganisation is paused for review; May 2027 elections are expected on existing boundaries."
 >
   <section class="page-hero">
-    <p class="eyebrow">Lancashire local government reorganisation · Ward-by-ward forecast</p>
-    <h1>Four new Lancashire unitaries, ward by ward</h1>
-    <p class="lede">
-      On 16 July 2026 the government chose to replace Lancashire's fifteen councils with <strong>four new unitary
-      authorities</strong>. The first elections are the <strong>May 2027 shadow-authority elections</strong>. This
-      forecasts all <strong>107 proposed wards</strong> and <strong>313 councillors</strong> from the most recent
-      votes cast, then runs the result 2,000 times to size up each council's control.
-    </p>
+    <p class="eyebrow">Lancashire reorganisation · Hypothetical scenarios</p>
+    <h1>Lancashire unitary council scenarios</h1>
+    <p class="lede"><strong>Reorganisation is paused for review.</strong> <a href="https://burnley.gov.uk/local-government-reorganisation-in-lancashire-paused-for-review/">Burnley Council’s 7 September 2026 update</a> says May 2027 elections will use existing council boundaries. Source checked 28 September 2026.</p>
+    <p>The figures below model proposed boundaries and retain their original assumptions. They are not a confirmed election timetable or a forecast of the existing councils’ 2027 elections.</p>
   </section>
 
   <section class="section">
     <div class="backtest-callout backtest-callout--warn">
       <strong>⚠ Scaffold forecast. Proposed wards, no election yet.</strong>
       <span class="backtest-detail">
-        The government's decision is <strong>subject to Parliamentary approval</strong> and the warding is the
+        These scenarios use
         proposed warding, <strong>hypothetical until confirmed through the statutory boundary process</strong>. Seats
         are allocated under first-past-the-post bloc vote: a safe ward's seats all go to the leading party, but a
         close runner-up picks off a seat, and those marginal wards are where most of the uncertainty sits. Blackpool's
@@ -79,10 +75,10 @@ function controlClass(prob: number) {
 
   <section class="section">
     <div class="fact-grid">
-      <div class="fact"><span class="fact-k">Decision</span><span class="fact-v">16 July 2026</span><span class="fact-s">Secretary of State</span></div>
-      <div class="fact"><span class="fact-k">New councils</span><span class="fact-v">4 unitaries</span><span class="fact-s">{four.total_councillors} councillors</span></div>
-      <div class="fact"><span class="fact-k">First elections</span><span class="fact-v">May 2027</span><span class="fact-s">shadow authorities</span></div>
-      <div class="fact"><span class="fact-k">Vesting day</span><span class="fact-v">1 April 2028</span><span class="fact-s">new councils take over</span></div>
+      <div class="fact"><span class="fact-k">Current status</span><span class="fact-v">Paused</span><span class="fact-s">Source checked 28 September 2026</span></div>
+      <div class="fact"><span class="fact-k">Modelled councils</span><span class="fact-v">4 unitaries</span><span class="fact-s">{four.total_councillors} councillors</span></div>
+      <div class="fact"><span class="fact-k">First elections</span><span class="fact-v">Unconfirmed</span><span class="fact-s">shadow authorities</span></div>
+      <div class="fact"><span class="fact-k">Vesting day</span><span class="fact-v">Unconfirmed</span><span class="fact-s">subject to review</span></div>
     </div>
     <p class="name-caveat"><strong>A note on names.</strong> {snap.name_caveat}</p>
     <p class="name-caveat"><strong>Voting system: first past the post.</strong> {snap.voting_system}</p>
@@ -90,8 +86,8 @@ function controlClass(prob: number) {
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">The government's model · {four.proposer}</p>
-      <h2>The four new unitaries, forecast</h2>
+      <p class="eyebrow">Four-authority scenario · {four.proposer}</p>
+      <h2>The four-authority scenario, modelled</h2>
     </div>
 
     <div class="unitary-grid">
@@ -166,8 +162,8 @@ function controlClass(prob: number) {
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">The options that lost</p>
-      <h2>How the vote splits under the rejected models</h2>
+      <p class="eyebrow">Alternative scenarios</p>
+      <h2>How the vote splits under alternative boundaries</h2>
     </div>
     <p class="prose-lead">
       Five configurations were submitted; the government picked four. The rejected 3- and 5-unitary bids have no

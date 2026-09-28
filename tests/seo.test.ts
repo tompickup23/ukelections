@@ -8,10 +8,9 @@ import {
   buildBreadcrumbList,
   buildDataset,
   buildNewsArticle,
-  newsPublicationDate,
   publisherNode
 } from "../src/lib/seo";
-import { collectNewsEntries, newsTitle } from "../src/pages/sitemap-news.xml";
+import { GET as newsSitemap } from "../src/pages/sitemap-news.xml";
 import { getLastmodByPath } from "../src/lib/sitemapPaths";
 
 describe("breadcrumbs", () => {
@@ -32,26 +31,6 @@ describe("breadcrumbs", () => {
     for (const item of node.itemListElement) {
       expect(item.item).toMatch(/^https:\/\/ukelections\.co\.uk\//);
     }
-  });
-});
-
-describe("news publication dates", () => {
-  // Polls close at 22:00 UK local time. The whole point of deriving the offset
-  // is that a summer result is not filed an hour late in Top Stories.
-  it("resolves 22:00 BST to 21:00Z", () => {
-    expect(newsPublicationDate("2026-08-27")).toBe("2026-08-27T21:00:00Z");
-  });
-
-  it("resolves 22:00 GMT to 22:00Z", () => {
-    expect(newsPublicationDate("2026-12-10")).toBe("2026-12-10T22:00:00Z");
-  });
-
-  it("emits a full W3C datetime, not a bare date", () => {
-    expect(newsPublicationDate("2026-05-07")).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
-  });
-
-  it("refuses a value that is not an ISO date", () => {
-    expect(() => newsPublicationDate("last Thursday")).toThrow();
   });
 });
 
@@ -105,85 +84,14 @@ describe("Dataset", () => {
   });
 });
 
-describe("news sitemap titles", () => {
-  it("carries no raw ISO date, which is what a News reader would have seen", () => {
-    expect(newsTitle("Bank Hall", "Burnley", true)).not.toMatch(/\d{4}-\d{2}-\d{2}/);
-  });
-
-  it("falls back to the short form rather than exceeding 110 characters", () => {
-    const long = newsTitle("A".repeat(80), "B".repeat(80), true);
-    expect(long.length).toBeLessThanOrEqual(110);
-    expect(long.startsWith("A".repeat(80))).toBe(true);
-  });
-});
-
-describe("news sitemap window", () => {
-  let dir: string;
-  // 22:00 BST on 27 Aug 2026 is 21:00Z. "Now" is the following morning.
-  const now = Date.parse("2026-08-28T08:00:00Z");
-
-  const write = (slug: string, pollingDay: string, status: string, declared = false) =>
-    writeFileSync(
-      path.join(dir, `${slug}.json`),
-      JSON.stringify({
-        slug,
-        status,
-        contest: { polling_day: pollingDay, ward_name: "Test Ward", council_name: "Test Council" },
-        ...(declared ? { result: { winner_party: "Reform UK" } } : {})
-      })
-    );
-
-  beforeAll(() => {
-    dir = mkdtempSync(path.join(tmpdir(), "uke-news-"));
-    write("declared-yesterday", "2026-08-27", "concluded", true);
-    write("awaiting-yesterday", "2026-08-27", "polls_closed");
-    write("polling-next-week", "2026-09-03", "upcoming");
-    write("polling-tomorrow", "2026-08-29", "upcoming");
-    write("declared-last-month", "2026-07-16", "concluded", true);
-    // Polling day has passed but the contest refresh has not run since, so
-    // `status` still reads "upcoming". Eligibility is decided by the polling
-    // day, not by that field, so this one still belongs in the window.
-    write("stale-status", "2026-08-27", "upcoming", true);
-  });
-
-  afterAll(() => rmSync(dir, { recursive: true, force: true }));
-
-  it("carries only contests polled within the last 48 hours", () => {
-    const slugs = collectNewsEntries(now, dir).map((e) => e.loc.split("/").filter(Boolean).pop());
-    expect(slugs.sort()).toEqual(["awaiting-yesterday", "declared-yesterday", "stale-status"]);
-  });
-
-  it("never advertises a contest that has not happened yet", () => {
-    // The old window ran 48 hours EITHER side of polling day, so a contest
-    // polling tomorrow was published to Google News as already-published news.
-    const slugs = collectNewsEntries(now, dir).map((e) => e.loc);
-    expect(slugs.some((l) => l.includes("polling-tomorrow"))).toBe(false);
-  });
-
-  it("drops out once the contest is more than 48 hours old", () => {
-    // 1 Sept: the 29 Aug contest is now 59 hours old and the 3 Sept one has
-    // still not happened, so nothing is inside the window.
-    const later = Date.parse("2026-09-01T08:00:00Z");
-    expect(collectNewsEntries(later, dir)).toEqual([]);
-  });
-
-  it("admits a contest as soon as its polls close, and not before", () => {
-    const beforeClose = Date.parse("2026-08-29T20:00:00Z"); // 21:00 BST, polls still open
-    const afterClose = Date.parse("2026-08-29T21:30:00Z"); // 22:30 BST, closed
-    const slugs = (at: number) => collectNewsEntries(at, dir).map((e) => e.loc);
-
-    expect(slugs(beforeClose).some((l) => l.includes("polling-tomorrow"))).toBe(false);
-    expect(slugs(afterClose).some((l) => l.includes("polling-tomorrow"))).toBe(true);
-  });
-
-  it("emits a full datetime as the publication date", () => {
-    for (const entry of collectNewsEntries(now, dir)) {
-      expect(entry.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
-    }
-  });
-
-  it("returns nothing rather than throwing when the contest directory is absent", () => {
-    expect(collectNewsEntries(now, path.join(dir, "does-not-exist"))).toEqual([]);
+describe("news sitemap editorial boundary", () => {
+  it("does not advertise automated contest records as articles", async () => {
+    const response = await newsSitemap({} as any);
+    const xml = await response.text();
+    expect(response.headers.get("Content-Type")).toContain("application/xml");
+    expect(xml).toContain("<urlset");
+    expect(xml).not.toContain("<url>");
+    expect(xml).not.toContain("<news:news>");
   });
 });
 
@@ -223,10 +131,8 @@ describe("sitemap lastmod", () => {
 
   afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
-  it("stamps only the paths with a real content date", () => {
-    expect(getLastmodByPath(dir)).toEqual({
-      "/by-elections/local/burnley-bank-hall-2026-08-27/": "2026-08-27"
-    });
+  it("does not present polling day as a content modification", () => {
+    expect(getLastmodByPath(dir)).toEqual({});
   });
 
   it("survives an unparseable or incomplete contest file", () => {

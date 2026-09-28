@@ -39,12 +39,9 @@ describe("AI DOGE sister-site link", () => {
     }
   });
 
-  it("lists AI DOGE in the About mega-menu group with the house-style wording", () => {
-    const about = NAV_GROUPS.find((g) => g.label === "About");
-    expect(about).toBeDefined();
-    const item = about!.items.find((i) => i.href === "https://aidoge.co.uk");
-    expect(item).toBeDefined();
-    expect(item!.desc).toBe("Council spending on AI DOGE");
-    expect(item!.desc).not.toMatch(/—/);
+  it("keeps portfolio links out of the global navigation", () => {
+    expect(NAV_GROUPS.flatMap((group) => group.items).some(
+      (item) => item.href === "https://aidoge.co.uk"
+    )).toBe(false);
   });
 });

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { assertFractionalTurnout, mergeHistoryRows } from "../scripts/lib/election-history.mjs";
+import {
+  assertFractionalTurnout,
+  candidatesFromHistoryResult,
+  mergeHistoryRows,
+} from "../scripts/lib/election-history.mjs";
 
 describe("election-history provenance", () => {
   it("lets a reviewed sidecar correction replace an unreviewed archive row", () => {
@@ -31,6 +35,29 @@ describe("election-history provenance", () => {
     );
 
     expect(merged[0].turnout_pct).toBe(0.3403);
+  });
+});
+
+describe("election-history result fallback", () => {
+  it("restores a complete candidate result with numeric votes", () => {
+    expect(candidatesFromHistoryResult({
+      candidates: [
+        { name: "Jamie Hodgson", party_name: "Reform UK", votes: "426", elected: true },
+        { name: "David Landall", party_name: "Labour Party", votes: 298, elected: false },
+      ],
+    })).toEqual([
+      { name: "Jamie Hodgson", party_name: "Reform UK", votes: 426, elected: true },
+      { name: "David Landall", party_name: "Labour Party", votes: 298, elected: false },
+    ]);
+  });
+
+  it("rejects an incomplete history row rather than declaring a partial result", () => {
+    expect(candidatesFromHistoryResult({
+      candidates: [
+        { name: "Jamie Hodgson", party_name: "Reform UK", votes: 426, elected: true },
+        { name: "David Landall", party_name: "Labour Party", votes: null, elected: false },
+      ],
+    })).toEqual([]);
   });
 });
 

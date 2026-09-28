@@ -45,7 +45,7 @@ export function buildBreadcrumbList(trail: Crumb[]): Record<string, unknown> {
   };
 }
 
-/** The publisher node Google requires on every Article/NewsArticle. */
+/** Shared publisher identity for structured data. */
 export function publisherNode(): Record<string, unknown> {
   return {
     "@type": "Organization",
@@ -65,7 +65,7 @@ export interface NewsArticleInput {
   description: string;
   /** Canonical page URL. */
   url: string;
-  /** ISO 8601 with offset. The date the reported event became reportable. */
+  /** ISO 8601 with offset. The actual first publication of the article, not the event date. */
   datePublished: string;
   /** ISO 8601 with offset. */
   dateModified?: string;
@@ -73,16 +73,15 @@ export interface NewsArticleInput {
 }
 
 /**
- * NewsArticle for a dated contest page.
+ * NewsArticle for reviewed editorial reporting with evidenced publication dates.
  *
- * Google truncates a headline past 110 characters in News surfaces and treats a
- * longer one as a spec violation, so this refuses rather than silently shipping
- * one: a build failure is cheaper than a page quietly dropped from News.
+ * The 110-character bound is a house-style constraint for concise headlines,
+ * not a Google eligibility requirement.
  */
 export function buildNewsArticle(input: NewsArticleInput): Record<string, unknown> {
   if (input.headline.length > 110) {
     throw new Error(
-      `NewsArticle headline is ${input.headline.length} characters, over Google News' 110 limit: ${input.headline}`
+      `NewsArticle headline is ${input.headline.length} characters, over the house-style 110-character limit: ${input.headline}`
     );
   }
   return {
@@ -160,50 +159,6 @@ export function buildDataset(input: DatasetInput): Record<string, unknown> {
         }
       : {})
   };
-}
-
-/**
- * The instant a contest's result became reportable: 22:00 UK local time on
- * polling day, when polls close, expressed as a W3C datetime in UTC.
- *
- * Google News accepts a bare date but reads a full datetime as the article's
- * actual publication moment, which is what decides ordering in Top Stories. The
- * UK offset is derived from the date rather than hardcoded, so a result declared
- * during BST is not filed an hour late (and a December one not an hour early).
- *
- * Shared by the by-election template and sitemap-news.xml so a page and its news
- * sitemap entry can never disagree about when it was published.
- */
-export function newsPublicationDate(pollingDay: string): string {
-  const [year, month, day] = pollingDay.split("-").map(Number);
-  if (!year || !month || !day) {
-    throw new Error(`Not an ISO date: ${pollingDay}`);
-  }
-  // Probe the same wall-clock time as UTC, ask what London calls it, and the
-  // difference is London's offset on that date. Two hours either side of the
-  // DST switchover this is still correct, because the switch happens at 01:00.
-  const probe = Date.UTC(year, month - 1, day, 22, 0, 0);
-  const londonParts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/London",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hourCycle: "h23"
-  }).formatToParts(new Date(probe));
-  const part = (type: string) => Number(londonParts.find((p) => p.type === type)?.value);
-  const asLondon = Date.UTC(
-    part("year"),
-    part("month") - 1,
-    part("day"),
-    part("hour"),
-    part("minute"),
-    part("second")
-  );
-  const offsetMs = asLondon - probe;
-  return new Date(probe - offsetMs).toISOString().replace(/\.\d{3}Z$/, "Z");
 }
 
 /**

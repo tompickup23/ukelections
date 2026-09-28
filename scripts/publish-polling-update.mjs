@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { planDiscovery, readDiscoveryState, finishDiscovery } from "./lib/discovery-manifest.mjs";
+import { submitIndexNow } from "./indexnow-submit.mjs";
 /**
  * Publish the dynamic Westminster polling update without running unrelated
  * static-source jobs. The full nightly refresh still exists for scheduled
@@ -11,7 +13,7 @@
  *   node scripts/publish-polling-update.mjs --no-deploy
  */
 
-import { cpSync, existsSync, mkdirSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -120,10 +122,26 @@ async function main() {
   step("Run polling publication tests", "npm", ["run", "test:polling-publish", "--silent"]);
   step("Build static site", "npm", ["run", "build"], { env: { BUILD_OG: "1" } });
   step("Run rendered-site gate", "node", ["scripts/audit-seo.mjs", "dist"]);
+  const stateFile = join(ROOT, ".cache/discovery/deployed.json");
+  const discovery = planDiscovery(join(ROOT, "dist"), readDiscoveryState(stateFile));
+  console.log(`Discovery: ${discovery.changed.length} changed pages${discovery.baselineOnly ? "; baseline only" : ""}.`);
   if (noDeploy) {
     process.stdout.write("\n(no deploy requested)\n");
   } else {
     deploy();
+    try {
+      const notification = await finishDiscovery({
+        plan: discovery, stateFile, enabled: process.env.INDEXNOW_SUBMIT === "1",
+        submit: async (urls, expectedHashes) => {
+          const file = join(ROOT, ".cache/discovery/pending-urls.json");
+          writeFileSync(file, JSON.stringify(urls));
+          return submitIndexNow({ args: ["--file", file], expectedHashes });
+        },
+      });
+      if (notification.reason) console.warn(`Discovery pending: ${notification.reason}`);
+    } catch (error) {
+      console.warn(`Deployment succeeded; discovery state could not be saved: ${error.message}`);
+    }
   }
   process.stdout.write("\n✓ Polling publication path complete.\n");
 }

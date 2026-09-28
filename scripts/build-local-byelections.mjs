@@ -28,8 +28,9 @@
 // still get a file and a page: they carry the structure and the reason there is
 // no number, which is the Clacton precedent.
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, unlinkSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   PARTIES,
   baselineEra,
@@ -45,7 +46,11 @@ import {
   SIGMA_INFLATION,
   gradeAgainst,
 } from "./lib/local-byelection-model.mjs";
-import { assertFractionalTurnout, mergeHistoryRows } from "./lib/election-history.mjs";
+import {
+  assertFractionalTurnout,
+  candidatesFromHistoryResult,
+  mergeHistoryRows,
+} from "./lib/election-history.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const p = (rel) => path.join(ROOT, rel);
@@ -192,7 +197,7 @@ async function fetchScheduledBallots() {
 // Prior ordinary results
 // ---------------------------------------------------------------------------
 
-function loadHistory() {
+export function loadHistory() {
   let archiveRows = [];
   // The big DC history file is gitignored and regenerated on the server. A
   // fresh clone has the tracked sidecar only, which is enough to build the
@@ -240,20 +245,6 @@ function normaliseName(name) {
 
 function isHandVerified(row) {
   return row?.review_status === "hand_verified_declaration" || row?.review_status === "hand_verified_two_sources";
-}
-
-let SIDECAR = null;
-/** The tracked by-election sidecar, indexed by ballot id. Empty if absent. */
-function sidecarResults() {
-  if (SIDECAR) return SIDECAR;
-  SIDECAR = new Map();
-  const file = p("data/history/byelection-appends.json");
-  if (existsSync(file)) {
-    for (const row of JSON.parse(readFileSync(file, "utf8")).results || []) {
-      if (row.ballot_paper_id) SIDECAR.set(row.ballot_paper_id, row);
-    }
-  }
-  return SIDECAR;
 }
 
 const PUBLISHED_PATH = p("data/cards/published-byelection-forecasts.json");
@@ -315,7 +306,7 @@ function wardProfile(demo, gss) {
   };
 }
 
-function buildPriorIndex(history) {
+export function buildPriorIndex(history) {
   const ordinaryBySlug = new Map();
   const byelectionRows = [];
   for (const r of history) {
@@ -431,7 +422,7 @@ function slugFor(id) {
  * results declared since the last archive refresh can be folded into the swing
  * corpus BEFORE anything is projected off it.
  */
-async function gather(ballot, priors) {
+async function gather(ballot, priors, resultRows) {
   const ids = slugFor(ballot.election_id);
   if (!ids) return null;
   const division = ballot.division || {};
@@ -466,17 +457,30 @@ async function gather(ballot, priors) {
     // result object. Keep the nested fallback for any older cached responses.
     elected: c.elected ?? c.result?.elected ?? null,
   }));
-  const field = fieldFromCandidates(candidates);
-
-  // Democracy Club records a by-election's WINNER on the ballots endpoint days
-  // before it records the counts, and on 27 August 2026 it did exactly that for
-  // all five contests. The tracked sidecar carries counts entered from the
-  // returning officers' declarations in that gap, so read them here rather than
-  // publishing "result awaited" against a page whose result is public. Matched
-  // on the candidate's name, and only when the sidecar covers every candidate
-  // on the ballot: a partial fill would grade a contest on half a result.
   let resultSource = null;
-  const row = sidecarResults().get(ballot.election_id);
+  const row = resultRows.get(ballot.election_id);
+  const historicalCandidates = candidatesFromHistoryResult(row);
+
+  // Upstream candidacy records can disappear after polling day even though the
+  // result is already present in the durable history archive. Restore the full
+  // archived field when that happens, instead of regressing a concluded page to
+  // "result awaited". The helper accepts only complete numeric result rows.
+  if (ids.date <= today && historicalCandidates.length > candidates.length) {
+    candidates.splice(
+      0,
+      candidates.length,
+      ...historicalCandidates.map((candidate) => ({
+        ...candidate,
+        party: canonParty(candidate.party_name),
+      })),
+    );
+    resultSource = row.source || null;
+  }
+
+  // Democracy Club can record a by-election's winner before it records the
+  // counts. The merged history prefers tracked, hand-verified declarations and
+  // lets those durable counts fill that gap. Match every candidate: a partial
+  // fill would grade a contest on half a result.
   if (candidates.length && row) {
     const rowCandidates = row.candidates || [];
     const byName = new Map(rowCandidates.map((c) => [normaliseName(c.name), c]));
@@ -506,6 +510,7 @@ async function gather(ballot, priors) {
       console.log(`  hand-verified sidecar row for ${ballot.election_id} disagrees with Democracy Club; kept live counts`);
     }
   }
+  const field = fieldFromCandidates(candidates);
 
   // Promote to the permanent cache once the result is complete and the poll is
   // comfortably past, so a late correction still has a window to land.
@@ -533,7 +538,10 @@ async function gather(ballot, priors) {
   const setStart = division.divisionset?.start_date || null;
   const boundaryChanged = Boolean(prior && setStart && prior.election_date < setStart);
 
-  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource };
+  const resultReview = row?.reviewed_at && row.source === resultSource
+    ? { checked_at: row.reviewed_at, review_status: row.review_status, note: row.verification_note }
+    : null;
+  return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource, resultReview };
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
@@ -638,6 +646,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
           : `${winnerParty} gain from ${holders[ballot.election_id].party}`
         : null,
       grading: gradeAgainst(published[ids.slug], forecast, shares, field, winnerParty),
+      ...(ctx.resultReview || {}),
     };
   }
 
@@ -743,6 +752,9 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     result,
     declaration,
     sources: [
+      ...(result?.review_status === "hand_verified_declaration" && result.source
+        ? [{ label: "Returning officer declaration (verified)", url: result.source }]
+        : []),
       { label: "Democracy Club, EveryElection", url: `https://elections.democracyclub.org.uk/elections/${ballot.election_id}/` },
       { label: "Democracy Club, candidates", url: `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/` },
     ],
@@ -755,6 +767,11 @@ async function main() {
   console.log(`Local by-election contests, ${from} onward`);
   const history = loadHistory();
   const priors = buildPriorIndex(history);
+  const resultRows = new Map(
+    history
+      .filter((row) => row?.is_by_election && row?.ballot_paper_id)
+      .map((row) => [row.ballot_paper_id, row]),
+  );
   console.log(`  history: ${history.length} rows, ${priors.ordinaryCount} wards with an ordinary result`);
 
   const holders = loadHolders();
@@ -768,7 +785,7 @@ async function main() {
   // Pass one: everything that touches the network.
   const gathered = [];
   for (const b of ballots.sort((x, y) => x.poll_open_date.localeCompare(y.poll_open_date))) {
-    const ctx = await gather(b, priors);
+    const ctx = await gather(b, priors, resultRows);
     if (ctx) gathered.push(ctx);
   }
 
@@ -805,7 +822,12 @@ async function main() {
     // run look like it failed when it fixed itself.
     console.log(`\n  retrying ${lostCandidates.length} candidate list(s) the sweep could not fetch`);
     for (const b of ballots.filter((x) => lostCandidates.includes(x.election_id))) {
-      const ctx = await gather(b, priors);
+      // resultRows is not optional: gather() dereferences it for the history
+      // fallback. The rebase that brought that parameter in merged this file
+      // without a conflict, because the two changes sit on different lines,
+      // and left this call passing two arguments. It would have thrown on the
+      // first rate-limited fetch, which is most nights.
+      const ctx = await gather(b, priors, resultRows);
       if (!ctx) continue;
       const at = gathered.findIndex((g) => g.ballot.election_id === b.election_id);
       if (at >= 0) gathered[at] = ctx;
@@ -876,12 +898,12 @@ async function main() {
   let forecast = 0;
   const { doc: publishedDoc, forecasts: published } = loadPublished();
   const existingContests = new Map();
-  if (PRESERVE_FORECASTS && existsSync(OUT_DIR)) {
+  if (existsSync(OUT_DIR)) {
     for (const file of readdirSync(OUT_DIR).filter((name) => name.endsWith(".json") && !name.startsWith("_"))) {
       const existing = JSON.parse(readFileSync(path.join(OUT_DIR, file), "utf8"));
       if (existing.slug) existingContests.set(existing.slug, existing);
     }
-    console.log(`  preserving forecast outputs for ${existingContests.size} existing contests`);
+    if (PRESERVE_FORECASTS) console.log(`  preserving forecast outputs for ${existingContests.size} existing contests`);
   }
 
   // The caveat used to assert that council by-elections "routinely fall below a
@@ -990,20 +1012,20 @@ async function main() {
   if (PRESERVE_FORECASTS) {
     for (const [slug, existing] of existingContests) {
       const file = `${slug}.json`;
-      if (written.has(file) || existing.contest?.polling_day < today) continue;
+      if (written.has(file)) continue;
       written.add(file);
       if (existing.forecast) forecast += 1;
-      console.log(`  preserved uncached upcoming contest ${file}`);
+      console.log(`  preserved uncached contest ${file}`);
     }
   }
 
-  // Drop contests that have aged out of the window so the directory does not
-  // grow without bound. Concluded contests older than the window keep their
-  // page only if they are still inside KEEP_DAYS.
-  for (const f of readdirSync(OUT_DIR)) {
-    if (f.startsWith("_") || !f.endsWith(".json") || written.has(f)) continue;
-    unlinkSync(path.join(OUT_DIR, f));
-    console.log(`  removed aged-out contest ${f}`);
+  // Retain previously published routes. Missing fetches and age alone do not
+  // establish cancellation or justify deleting an indexed result archive.
+  for (const [slug, existing] of existingContests) {
+    const file = `${slug}.json`;
+    if (written.has(file)) continue;
+    written.add(file);
+    if (existing.forecast) forecast += 1;
   }
 
   if (publishedDoc) {
@@ -1057,7 +1079,7 @@ async function main() {
   }
 }
 
-main().catch((e) => {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch((e) => {
   console.error(e);
   process.exit(1);
 });

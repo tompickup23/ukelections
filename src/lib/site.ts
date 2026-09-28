@@ -3,7 +3,7 @@ import { ACCURACY_HEADLINE } from "./accuracy-headline";
 export const SITE_NAME = "UK Elections";
 export const SITE_URL = "https://ukelections.co.uk";
 export const DEFAULT_DESCRIPTION =
-  "Election intelligence for every UK contest. Candidates, history, forecasts, confidence intervals, source notes, and honest backtests in one place.";
+  "UK election forecasts and results for the contests we cover. Candidates, history, forecasts, confidence intervals, source notes, and honest backtests in one place.";
 // Static fallback card for pages with no Satori-rendered per-page card.
 // Must be a PNG — Facebook, X, LinkedIn and Slack all decline to render
 // an SVG og:image. Regenerate with `npm run build:og-default`.
@@ -12,6 +12,7 @@ export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-default.png";
 export type StructuredDataNode = Record<string, unknown>;
 
 export interface ReleaseEntry {
+  id: string;
   date: string;
   title: string;
   summary: string;
@@ -45,9 +46,9 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     label: "Forecasts",
     items: [
       { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
-      { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "The four new Lancashire unitaries, forecast for the May 2027 shadow elections" },
+      { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "Hypothetical council scenarios; reorganisation is paused for review" },
       { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
-      { href: "/by-elections/", label: "By-elections", desc: "Clacton result: Farage returned on 63.3%. Plus 18 Jun results + weekly ward scorecard" },
+      { href: "/by-elections/", label: "By-elections", desc: "Declared results, upcoming contests and the forecast record" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
       { href: "/polling/trends/", label: "Polling trends", desc: "Every poll plotted over time, with the UK Elections average and pollster house effects" },
     ],
@@ -65,8 +66,9 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     label: "Browse",
     items: [
       { href: "/seats/parliament/", label: "650 Constituencies", desc: "Every UK parliamentary seat, with its projection" },
-      { href: "/councils/", label: "Councils", desc: "Every English council" },
+      { href: "/councils/", label: "Councils", desc: "Browse the councils covered by our results and forecasts" },
       { href: "/seats/", label: "Councils and contests", desc: "Browse councils, mayoralties and the devolved parliaments" },
+      { href: "/elections/2027/", label: "2027 election dates", desc: "Verified sources, schedules and coverage limits" },
       { href: "/your-area/", label: "Election Lookup", desc: "Constituency and ward" },
     ],
   },
@@ -79,7 +81,6 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/transparency/", label: "Transparency", desc: "Funding & affiliations" },
       { href: "/releases/", label: "Releases", desc: "Version history" },
       { href: "/contact/", label: "Contact", desc: "Questions and corrections" },
-      { href: "https://aidoge.co.uk", label: "AI DOGE", desc: "Council spending on AI DOGE" },
     ],
   },
 ] as const;
@@ -87,30 +88,35 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
 export const RELEASES: ReleaseEntry[] = [
   {
     date: "2026-04-20",
+    id: "review-action-audit",
     title: "Review action audit",
     summary: "Added a reproducible local audit pipeline and review-action classes for post-boundary, temporal-validation, winner-signal, and vote-share calibration gaps.",
     sourceUrl: buildAbsoluteUrl("/data-quality/")
   },
   {
     date: "2026-04-18",
+    id: "model-input-validation",
     title: "Model input validation",
     summary: "Added poll aggregate and model feature validation, including asylum route safeguards and area-specific population quality metadata.",
     sourceUrl: buildAbsoluteUrl("/data-quality/")
   },
   {
     date: "2026-04-18",
+    id: "electoral-history-quality-gates",
     title: "Electoral history quality gates",
     summary: "Added boundary-versioned electoral history coverage for local, Westminster, Senedd, Scottish, and STV elections.",
     sourceUrl: buildAbsoluteUrl("/data-quality/")
   },
   {
     date: "2026-04-18",
+    id: "full-election-model-scope",
     title: "Full election model scope",
     summary: "Expanded the modelling plan to cover borough, county, unitary, Westminster, Senedd, and Scottish Parliament election families with source quality gates.",
     sourceUrl: buildAbsoluteUrl("/forecasts/")
   },
   {
     date: "2026-04-18",
+    id: "uk-elections-scaffold",
     title: "UK Elections scaffold",
     summary: "Initial public scaffold, GitHub repository, Cloudflare Pages project, and placeholder deployment.",
     sourceUrl: SITE_URL
@@ -124,6 +130,7 @@ const STATIC_PATHS = [
   "/seats/",
   "/seats/parliament/",
   "/your-area/",
+  "/elections/2027/",
   "/forecasts/",
   "/forecasts/may-2026/",
   "/forecasts/general-election/",
@@ -430,10 +437,9 @@ export function buildReleaseCollectionStructuredData(
         "@type": "ListItem",
         position: index + 1,
         item: {
-          "@type": "NewsArticle",
-          headline: release.title,
+          "@type": "CreativeWork",
+          name: release.title,
           description: release.summary,
-          datePublished: release.date,
           url: release.sourceUrl
         }
       }))

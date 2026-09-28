@@ -1,4 +1,5 @@
 ---
+import reviewedLinks from "../../../../data/identity/contextual-link-reviews.json";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import CouncilChamber from "../../../components/CouncilChamber.astro";
 import StatCard from "../../../components/StatCard.astro";
@@ -48,8 +49,12 @@ const wards = identity.wards
   .sort((a: any, b: any) => (a.ward_name || "").localeCompare(b.ward_name || ""));
 const tier = wards[0]?.tier || "local";
 const councilName = wards[0]?.council_name || council;
-const aidogeLink = getAidogeLink(council!);
-const ukPlacesLink = getUkPlacesLink(council!);
+const route = `/seats/${council}/`;
+const approvedUrls = new Set((reviewedLinks[route as keyof typeof reviewedLinks] || []).map(link => link.url));
+const spendingCandidate = getAidogeLink(council!);
+const placeCandidate = getUkPlacesLink(council!);
+const aidogeLink = spendingCandidate?.hasSpendingData && approvedUrls.has(spendingCandidate.url) ? spendingCandidate : null;
+const ukPlacesLink = placeCandidate && approvedUrls.has(placeCandidate.url) ? placeCandidate : null;
 const relatedConstituency = (loadGePredictions().predictions || {})[council!] || null;
 
 const summaryEntry = summary.councils.find((c: any) => c.council_slug === council);
@@ -65,11 +70,7 @@ const controllingParty: string | null = ctlRow?.control?.controlling_party || nu
 const pluralityParty: string | null = ctlRow?.control?.plurality_party || null;
 const preControlParty: string | null = ctlRow?.control?.pre_control || null;
 const changeStatus: string | null = ctlRow?.control?.change_status || null;
-const reformPost: number = ctlRow?.reform?.post_seats || 0;
-const reformWon: number = ctlRow?.reform?.won_seats || 0;
-const reformPre: number = ctlRow?.reform?.pre_seats || 0;
-const reformMajority: boolean = !!ctlRow?.reform?.has_majority;
-const reformLargest: boolean = !!ctlRow?.reform?.is_largest;
+
 const totalSeats: number = ctlRow?.cycle?.total_seats || 0;
 const undeclaredSeats: number = ctlRow?.may7_wins?.undeclared_seats || 0;
 const vacantSeats: number = ctlRow?.may7_wins?.vacant_seats || 0;
@@ -149,7 +150,7 @@ const title = council === "essex" || council === "colchester"
 // Leads with the council name: the previous form started with the control
 // headline and seat counts, which are identical across small councils and
 // collided on 20 pages.
-const description = `${councilName}, 7 May 2026: ${controlHeadline}. Reform UK won ${reformWon} of ${seatsUp} seats. Next: ${nextElection.label}.`;
+const description = `${councilName}, 7 May 2026: ${controlHeadline}. ${seatsUp} seats contested. Next: ${nextElection.label}.`;
 const breadcrumbs: Crumb[] = [
   { name: "Councils", href: "/councils/" },
   { name: councilName, href: `/seats/${Astro.params.council}/` }
@@ -191,20 +192,15 @@ const breadcrumbs: Crumb[] = [
         )}
       </article>
       <article class="status-card">
-        <p class="status-label">Reform UK</p>
-        <p class="status-value">
-          {reformPost} <span class="muted">of {totalSeats || "n/a"} seats</span>
-        </p>
-        <p class="muted">
-          Won {reformWon} on May 7 · had {reformPre} before
-          {reformMajority && <strong style="color:#0e7c4a"> · majority</strong>}
-          {!reformMajority && reformLargest && <strong> · largest party</strong>}
-        </p>
+        <p class="status-label">Seats contested</p>
+        <p class="status-value">{seatsUp} <span class="muted">of {totalSeats || "n/a"} seats</span></p>
+        <p class="muted">Seats on the 7 May 2026 ballot. Party results are shown below.</p>
       </article>
       <article class="status-card">
         <p class="status-label">Next election</p>
         <p class="status-value">{nextElection.label}</p>
         <p class="muted">{nextElection.reason}</p>
+        {nextElection.checked_at && <p class="caption">Source checked {nextElection.checked_at}. {nextElection.sources.map(source => <a href={source.url}>{source.label}</a>)}</p>}
       </article>
     </div>
   </section>
@@ -236,19 +232,9 @@ const breadcrumbs: Crumb[] = [
 
   {nextElection.is_tbc && (
     <section class="section">
-      <div class="section-head">
-        <p class="eyebrow">Local Government Reorganisation</p>
-        <h2>Why we don't yet know when {councilName} next votes</h2>
-      </div>
-      <p>
-        {councilName} sits in a two-tier county area under review for Local Government Reorganisation following the
-        English Devolution White Paper (December 2024). The county council and its districts are expected to be
-        replaced by one or more new unitary authorities. Until the Statutory Instrument is laid, the next election
-        date is not in our gift to guess.
-      </p>
-      <p>
-        We'll flip this page from <strong>TBC</strong> to a confirmed date the moment the SI publishes.
-      </p>
+      <h2>When does {councilName} next vote?</h2>
+      <p>{nextElection.reason} Boundary reviews, reorganisation and later notices can change a normal cycle.</p>
+      <p><a href="https://www.gov.uk/find-local-council">Check the council’s official election notices</a>, or see our <a href="/elections/2027/">2027 election source guide</a>.</p>
     </section>
   )}
 
@@ -366,7 +352,7 @@ const breadcrumbs: Crumb[] = [
       <div class="dg-cross-inner">
         <span class="dg-cross-label">Council spending</span>
         <span class="dg-cross-desc">
-          Council spending on AI DOGE: every payment {councilName} has published, searchable by supplier and category.
+          Explore the {councilName} spending records held by AI DOGE. Check its source dates and coverage before drawing conclusions.
         </span>
         <a href={aidogeLink.url} class="dg-cross-btn" rel="noopener">
           View {councilName} on AI DOGE &rarr;

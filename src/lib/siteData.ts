@@ -1,3 +1,4 @@
+import electionDateReviews from "../../data/identity/election-date-reviews.json";
 /**
  * siteData.ts. shared headline data shown across the public surface.
  *
@@ -203,31 +204,24 @@ export function formatNextElection(cycle: CouncilCycle | null): {
   date_iso: string | null;
   is_tbc: boolean;
   reason: string;
+  status: string;
+  checked_at: string | null;
+  sources: Array<{ label: string; url: string }>;
 } {
-  if (!cycle) {
-    return { label: "TBC", date_iso: null, is_tbc: true, reason: "Council not yet classified." };
-  }
-  if (cycle.status === "scheduled" && cycle.next_election) {
-    return {
-      label: cycle.next_election_label,
-      date_iso: cycle.next_election,
-      is_tbc: false,
-      reason: cycle.cycle,
-    };
-  }
-  if (cycle.status === "lgr_pending") {
-    return {
-      label: "TBC (Local Government Reorganisation)",
-      date_iso: null,
-      is_tbc: true,
-      reason: cycle.note || cycle.cycle,
-    };
-  }
+  const review = cycle && electionDateReviews[cycle.council_slug as keyof typeof electionDateReviews];
+  if (review) return { ...review, is_tbc: review.status !== "scheduled" };
+  // Generated cycle arithmetic is a model assumption, not an election notice.
+  const year = cycle?.next_election?.slice(0, 4);
   return {
-    label: "TBC",
+    label: year ? `${year} cycle (unverified)` : "Date not verified",
     date_iso: null,
     is_tbc: true,
-    reason: cycle.note || cycle.cycle,
+    status: year ? "expected" : "unknown",
+    checked_at: null,
+    sources: [],
+    reason: year
+      ? "Expected from the stored council cycle; not checked against a current election notice."
+      : "We have not verified the next election date from a current primary source.",
   };
 }
 

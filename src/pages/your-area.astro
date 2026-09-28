@@ -1,4 +1,5 @@
 ---
+import lookupCodes from "../../data/identity/parliament-lookup-codes.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadGePredictions, loadIdentity } from "../lib/predictions";
 import type { LookupEntry } from "../lib/electionLookup";
@@ -30,14 +31,15 @@ for (const w of identity.wards) {
   }
 }
 const councilIndex = [...councils.values()].sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+// Missing boundary codes prevent postcode resolution, not discovery by name.
 const constituencyIndex: LookupEntry[] = Object.values(ge.predictions || {})
-  .filter((record: any) => Boolean(record?.prediction && record?.pcon24cd && record?.slug))
+  .filter((record: any) => Boolean(record?.prediction && record?.slug))
   .map((record: any) => ({
     kind: "constituency" as const,
     name: record.name,
     secondary: "Parliamentary constituency",
     href: `/seats/parliament/${record.slug}/`,
-    code: record.pcon24cd,
+    code: lookupCodes.entries[record.slug as keyof typeof lookupCodes.entries]?.code ?? record.pcon24cd,
   }))
   .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
 const indexJson = JSON.stringify({
@@ -47,7 +49,7 @@ const indexJson = JSON.stringify({
 });
 ---
 
-<BaseLayout title="What is my ward and constituency? UK postcode lookup" description="Enter a UK postcode to find your official council ward and Westminster constituency, or browse every council and parliamentary seat without JavaScript.">
+<BaseLayout title="What is my ward and constituency? UK postcode lookup" description="Enter a UK postcode to find your official council ward and Westminster constituency, or browse all 650 parliamentary seats and the councils we cover without JavaScript.">
   <section class="page-hero">
     <p class="eyebrow">Your Area</p>
     <h1>Find your council ward and constituency</h1>
@@ -100,6 +102,17 @@ const indexJson = JSON.stringify({
     </p>
   </section>
 
+  <section class="section" id="representatives">
+    <h2>Who is my MP?</h2>
+    <p>Use <a href="https://members.parliament.uk/FindYourMP">Parliament’s official MP finder</a> for the current Member of Parliament and contact details. Forecasts on UK Elections describe possible election outcomes.</p>
+    <h2>Who are my councillors?</h2>
+    <p><a href="https://www.gov.uk/find-your-local-councillors">Find your local councillors on GOV.UK</a>. The service directs you to your council’s current records.</p>
+    <h2>Who is my mayor?</h2>
+    <p>Some areas have an elected council or regional mayor; others have a ceremonial mayor. <a href="https://www.gov.uk/find-local-council">Find your council</a> and check its official mayor and combined authority information.</p>
+    <h2>When is the next local election?</h2>
+    <p>See our <a href="/elections/2027/">2027 election dates and source notes</a>. Coverage is still being checked council by council; consult your council’s election notices before making voting plans.</p>
+  </section>
+
   <section class="section browse-paths">
     <div class="section-head">
       <p class="eyebrow">Westminster</p>
@@ -114,7 +127,7 @@ const indexJson = JSON.stringify({
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Local elections</p>
-      <h2>All {councilIndex.length} councils on the May 7 2026 ballot</h2>
+      <h2>Browse our {councilIndex.length} council and mayoral pages</h2>
     </div>
     <div class="council-grid">
       {councilIndex.map((c) => (

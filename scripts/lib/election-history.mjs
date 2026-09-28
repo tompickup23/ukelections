@@ -33,6 +33,37 @@ export function mergeHistoryRows(...groups) {
   return [...byId.values(), ...withoutId];
 }
 
+/**
+ * Return a complete, typed candidate result from a history row. Historical
+ * results are the durable fallback when an upstream ballot endpoint stops
+ * returning candidacies after polling day; incomplete rows must never be used
+ * to manufacture a declared result.
+ */
+export function candidatesFromHistoryResult(row) {
+  const candidates = Array.isArray(row?.candidates) ? row.candidates : [];
+  if (
+    !candidates.length ||
+    candidates.some(
+      (candidate) =>
+        !candidate?.name ||
+        !candidate?.party_name ||
+        candidate?.votes === null ||
+        candidate?.votes === undefined ||
+        candidate?.votes === "" ||
+        !Number.isFinite(Number(candidate?.votes)),
+    )
+  ) {
+    return [];
+  }
+
+  return candidates.map((candidate) => ({
+    name: candidate.name,
+    party_name: candidate.party_name,
+    votes: Number(candidate.votes),
+    elected: Boolean(candidate.elected),
+  }));
+}
+
 /** The history contract stores turnout as a fraction, never percentage points. */
 export function assertFractionalTurnout(rows) {
   const invalid = (rows || []).filter(

@@ -168,7 +168,7 @@ const firstDate = polls[0]?.date;
     <p>
       Source: <a href={series.source.url} rel="noopener">Wikipedia, opinion polling for the next United Kingdom
       general election</a> (every poll cited there to its primary publication). Parsed
-      {new Date(series.generated_at).toISOString().slice(0, 10)}; refreshed with every polling refresh run. The
+      <span data-discovery-ignore>{new Date(series.generated_at).toISOString().slice(0, 10)}</span>; refreshed with every polling refresh run. The
       current average feeds the <a href="/forecasts/general-election/">general election model</a> and the
       <a href="/forecasts/mayoral/">mayoral projections</a> directly.
     </p>

@@ -5,8 +5,7 @@ import PartyBars from "../../../components/PartyBars.astro";
 import RaceBar from "../../../components/RaceBar.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
-import { buildNewsArticle, newsPublicationDate, type Crumb } from "../../../lib/seo";
-import { SITE_URL } from "../../../lib/site";
+import type { Crumb } from "../../../lib/seo";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
@@ -134,15 +133,7 @@ const breadcrumbs: Crumb[] = [
   { name: "By-elections", href: "/by-elections/" },
   { name: "Makerfield", href: "/by-elections/makerfield/" },
 ];
-const articleDescription = "Andy Burnham held Makerfield for Labour on 18 June 2026. Full returning-officer result, historic record, final polls and the published forecast scorecard.";
-const structuredData = isConcluded ? [
-  buildNewsArticle({
-    headline: "Makerfield by-election result 2026: Labour hold",
-    description: articleDescription,
-    url: `${SITE_URL}/by-elections/makerfield/`,
-    datePublished: newsPublicationDate(pollingDay),
-  }),
-] : [];
+// Article markup awaits an evidenced first-publication timestamp.
 
 // Map the margin-comparison contender ids to human labels for the scorecard.
 const CONTENDER_LABELS: Record<string, string> = {
@@ -182,7 +173,6 @@ function classificationLabel(c: string): string {
 
 <BaseLayout
   breadcrumbs={breadcrumbs}
-  structuredData={structuredData}
   title={isConcluded ? "Makerfield by-election 2026. Result vs forecast" : "Makerfield by-election. 18 June 2026 forecast"}
   description={isConcluded
     ? `Andy Burnham held Makerfield for Labour on 18 June 2026. Full result, turnout, historic record, final polls and the published forecast scorecard.`

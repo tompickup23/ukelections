@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "generated_at": "2026-09-20T19:06:09.206Z",
   "slug": "south-staffordshire-wombourne-north-2026-09-24",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.south-staffordshire.wombourne-north.by.2026-09-24",
     "polling_day": "2026-09-24",
@@ -39,39 +39,39 @@
     ],
     "candidates": [
       {
-        "name": "Michael James Jones",
-        "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Elizabeth Beatrice Florence Keeling",
         "party_name": "Conservative and Unionist Party",
         "party": "Conservative",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Claire McIlvenna",
-        "party_name": "Green Party",
-        "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "votes": 864,
+        "elected": true
       },
       {
         "name": "Marie Shortland",
         "party_name": "Reform UK",
         "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "votes": 645,
+        "elected": false
       },
       {
         "name": "Anil Singh",
         "party_name": "Labour and Co-operative Party",
         "party": "Labour",
-        "votes": null,
-        "elected": null
+        "votes": 115,
+        "elected": false
+      },
+      {
+        "name": "Claire McIlvenna",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": 68,
+        "elected": false
+      },
+      {
+        "name": "Michael James Jones",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": 33,
+        "elected": false
       }
     ]
   },
@@ -340,7 +340,39 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.3739130434782609,
+      "Labour": 0.06666666666666667,
+      "Conservative": 0.5008695652173913,
+      "Liberal Democrats": 0.019130434782608695,
+      "Green Party": 0.03942028985507246,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Conservative",
+    "winner_candidate": "Elizabeth Beatrice Florence Keeling",
+    "runner_up_party": "Reform UK",
+    "majority_votes": 219,
+    "total_votes": 1725,
+    "source": "https://www.sstaffs.gov.uk/sites/default/files/2026-09/Doc1.docx",
+    "outcome": null,
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-09-10",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Reform UK",
+      "call_correct": false,
+      "mae_pp": 10.85130434782609
+    },
+    "checked_at": "2026-09-28",
+    "review_status": "hand_verified_declaration",
+    "note": "Scanned declaration embedded in the council DOCX checked visually: 864, 645, 115, 68 and 33 votes, 6 rejected, 1,731 papers issued, 5,514 electorate; official turnout displayed as 31%. Candidate short forms differ from the declaration."
+  },
   "declaration": null,
   "sources": [
     {
@@ -350,6 +382,10 @@
     {
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.south-staffordshire.wombourne-north.by.2026-09-24/"
+    },
+    {
+      "label": "Returning officer’s declaration",
+      "url": "https://www.sstaffs.gov.uk/sites/default/files/2026-09/Doc1.docx"
     }
   ]
 }
