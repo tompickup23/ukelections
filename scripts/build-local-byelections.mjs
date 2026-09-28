@@ -752,6 +752,9 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     result,
     declaration,
     sources: [
+      ...(result?.review_status === "hand_verified_declaration" && result.source
+        ? [{ label: "Returning officer declaration (verified)", url: result.source }]
+        : []),
       { label: "Democracy Club, EveryElection", url: `https://elections.democracyclub.org.uk/elections/${ballot.election_id}/` },
       { label: "Democracy Club, candidates", url: `https://candidates.democracyclub.org.uk/elections/${ballot.election_id}/` },
     ],

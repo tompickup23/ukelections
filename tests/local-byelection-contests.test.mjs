@@ -34,6 +34,15 @@ describe.skipIf(!present)("local by-election contest files", () => {
     }
   });
 
+  it("keeps each verified declaration in the sources rendered on the contest page", () => {
+    for (const { file, doc } of contests) {
+      if (doc.result?.review_status !== "hand_verified_declaration") continue;
+      expect(doc.result.source, `${file}: verified result needs a declaration URL`).toMatch(/^https:\/\//);
+      expect(doc.sources.map((source) => source.url), `${file}: regeneration must retain the declaration link`)
+        .toContain(doc.result.source);
+    }
+  });
+
   it("either carries a projection or says why not, never neither and never both", () => {
     for (const { file, doc } of contests) {
       const hasForecast = Boolean(doc.forecast);
