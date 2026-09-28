@@ -67,9 +67,10 @@ Real crawler-IP access is not proven by user-agent probes. Inspect actual CDN
 request logs before claiming it is. Historical Search Console 404s need their
 reported URL list before choosing redirects; do not redirect them all to home.
 
-The observed www-host redirect issue is not fixed by the existing path redirect
-file alone. Proposed Cloudflare rule, for separate operational review: match
-`http.host eq "www.ukelections.co.uk"`, redirect to the same path on
-`https://ukelections.co.uk`, preserve the query string, use permanent status 301,
-and test both schemes, deep paths and query strings before removing the old rule.
-Do not deploy that configuration as a side effect of the code release.
+The canonical-host redirect is now active in Cloudflare as
+`UK Elections www to canonical HTTPS` (28 September 2026): exact match
+`http.host eq "www.ukelections.co.uk"`, target
+`concat("https://ukelections.co.uk", http.request.uri.path)`, status 301,
+query-string preservation enabled. Both HTTP and HTTPS deep-path probes retain
+the path/query. The ineffective Pages host-source entry has been removed;
+`/accuracy/` redirects remain unchanged. No DNS or WAF policy was changed.
