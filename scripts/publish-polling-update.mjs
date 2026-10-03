@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { planDiscovery, readDiscoveryState, finishDiscovery } from "./lib/discovery-manifest.mjs";
+import { planDiscovery, readDiscoveryState, finishDiscovery, stampDiscoveryDates } from "./lib/discovery-manifest.mjs";
 import { submitIndexNow } from "./indexnow-submit.mjs";
 /**
  * Publish the dynamic Westminster polling update without running unrelated
@@ -125,6 +125,10 @@ async function main() {
   const stateFile = join(ROOT, ".cache/discovery/deployed.json");
   const discovery = planDiscovery(join(ROOT, "dist"), readDiscoveryState(stateFile));
   console.log(`Discovery: ${discovery.changed.length} changed pages${discovery.baselineOnly ? "; baseline only" : ""}.`);
+  // Sitemap lastmod and RSS pubDate come from the ledger, never the build
+  // clock: a route is dated by the run that first deployed its current
+  // content, and left undated where the ledger has no such record.
+  stampDiscoveryDates(join(ROOT, "dist"), discovery);
   if (noDeploy) {
     process.stdout.write("\n(no deploy requested)\n");
   } else {
