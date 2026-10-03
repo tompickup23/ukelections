@@ -30,8 +30,8 @@ concurrency:
 # GitHub Pages serves a stub (the build job): a noindex home page pointing at
 # ukelections.co.uk, and a 404 page that sends any other path to the same
 # path there. Old mirror URLs answer 404, so search engines drop them. The
-# stub does not depend on the backup, so an unreachable production site
-# cannot put the old mirror back.
+# stub depends on neither the backup nor the test job, so an unreachable
+# production site or a failing test cannot leave the old mirror in place.
 jobs:
   backup:
     runs-on: ubuntu-latest
@@ -75,7 +75,10 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-  build:
+  # Post-merge acceptance for main (site-checks.yml is the PR-time gate).
+  # The stub does not wait for it: the stub contains no site code, and a
+  # data-freshness test going stale must not leave the old mirror in place.
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -87,6 +90,11 @@ jobs:
       - run: npm test
       - run: npm run validate:backend
       - run: npm run check
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
       - name: Assemble GitHub Pages stub
         run: |
           set -euo pipefail

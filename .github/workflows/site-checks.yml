@@ -13,8 +13,8 @@ name: Site checks
 # We deliberately do NOT run `npm run build` here. The full build needs
 # the gitignored historic data and is reproduced on vps-main daily at
 # 04:30 UTC, then deployed to Cloudflare Pages. Branch protection treats
-# this lane as the PR-time gate; the canonical build acceptance happens
-# on push-to-main via the GH Pages mirror in deploy.yml.
+# this lane as the PR-time gate; the same checks run again on push to main
+# in the checks job of deploy.yml.
 #
 # Security note: every `run:` step below is pure npm/shell invocation
 # against checked-in package.json scripts — no `${{ github.event.* }}`
