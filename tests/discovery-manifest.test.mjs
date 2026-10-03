@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { pageFingerprint, planDiscovery, finishDiscovery, stampDiscoveryDates } from '../scripts/lib/discovery-manifest.mjs';
+import { pageFingerprint, planDiscovery, finishDiscovery, stampDiscoveryDates, MAX_UNREVIEWED_BATCH } from '../scripts/lib/discovery-manifest.mjs';
 import { submitIndexNow } from '../scripts/indexnow-submit.mjs';
 const origin = 'https://ukelections.co.uk';
 const html = (route, text = 'Result: 10 votes', stamp = '2026-09-20', chrome = 'Old nav') => `<html><head><title>Election</title><link rel="canonical" href="${origin}${route}"><meta name="description" content="Result"></head><body><nav>${chrome}</nav><main><h1>Election</h1><p>${text}</p><span data-discovery-ignore>${stamp}</span><a href="/your-area/">Lookup</a></main></body></html>`;
@@ -40,9 +40,9 @@ describe('page discovery manifest', () => {
       await finishDiscovery({plan,stateFile,enabled:false,submit});expect(submit).toHaveBeenCalledTimes(2);
     } finally { rmSync(root,{recursive:true,force:true}); }
   });
-  it('requires review for batches over 200 URLs', async () => {
+  it('requires review for batches over the unreviewed cap', async () => {
     const root=mkdtempSync(join(tmpdir(),'uke-discovery-'));const submit=vi.fn();
-    const urls=Array.from({length:201},(_,i)=>`${origin}/${i}/`);
+    const urls=Array.from({length:MAX_UNREVIEWED_BATCH+1},(_,i)=>`${origin}/${i}/`);
     try {const result=await finishDiscovery({plan:{pages:Object.fromEntries(urls.map(u=>[u,'hash'])),changed:urls},stateFile:join(root,'state.json'),enabled:true,submit});expect(result.reason).toMatch(/review/);expect(submit).not.toHaveBeenCalled();}
     finally{rmSync(root,{recursive:true,force:true});}
   });
@@ -57,6 +57,12 @@ describe('page discovery manifest', () => {
       }
     } finally { if(previous===undefined)delete process.env.INDEXNOW_SUBMIT;else process.env.INDEXNOW_SUBMIT=previous; }
   });
+});
+it('submits an ordinary night of forecast changes without waiting for review', async () => {
+  const root=mkdtempSync(join(tmpdir(),'uke-discovery-'));const submit=vi.fn().mockResolvedValue({submitted:true});
+  const urls=Array.from({length:788},(_,i)=>`${origin}/${i}/`);
+  try {await finishDiscovery({plan:{pages:Object.fromEntries(urls.map(u=>[u,'hash'])),changed:urls},stateFile:join(root,'state.json'),enabled:true,submit});expect(submit).toHaveBeenCalledTimes(1);}
+  finally{rmSync(root,{recursive:true,force:true});}
 });
 describe('discovery dates', () => {
   const setup = () => {

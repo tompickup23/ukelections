@@ -46,7 +46,7 @@ manifest. Soft 404s, redirects and stale production content fail closed.
 
 Failed notifications remain pending and are retried once on the next successful
 publication. The queue is deduplicated and filtered to current sitemap routes.
-Batches over 200 URLs remain pending for manual review. No historical bulk
+Batches over 1,000 URLs remain pending for manual review (`MAX_UNREVIEWED_BATCH`). The cap was 200 until October 2026; a polling refresh changes all 650 constituency pages, so every night exceeded it and nothing was ever sent. No historical bulk
 bootstrap is supported. API acceptance is not proof of indexing or ranking.
 
 Before authorising the first real notification, review the exact pending URL

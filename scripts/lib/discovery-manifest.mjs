@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, renameSync } from '
 import { join, dirname } from 'node:path';
 import { parse } from 'parse5';
 const ORIGIN = 'https://ukelections.co.uk';
+export const MAX_UNREVIEWED_BATCH = 1000;
 const attr = (node, name) => node.attrs?.find(a => a.name === name)?.value;
 function nodes(node, predicate, out = []) {
   if (predicate(node)) out.push(node);
@@ -123,7 +124,13 @@ export async function finishDiscovery({ plan, stateFile, enabled = false, submit
   const state = { version: 1, pages: plan.pages, pending: urls, changedAt: plan.changedAt || {}, feedSeen: plan.feedSeen || {} };
   atomicJson(stateFile, state); // retain pending work across a network failure
   if (!urls.length) return { submitted: false, urls };
-  if (urls.length > 200) return { submitted: false, urls, reason: 'More than 200 changes; review this batch before submitting.' };
+  // The cap stops an accidental whole-site submission (3,970 routes), not an
+  // ordinary night. A polling refresh genuinely changes every constituency
+  // page, so most nights carry 650 to 800 changed routes. Under the old cap of
+  // 200 the queue on vps-main held 788 URLs on 4 Oct 2026, every recent run
+  // stopped at the cap, and nothing was sent. IndexNow accepts up to 10,000
+  // URLs per request.
+  if (urls.length > MAX_UNREVIEWED_BATCH) return { submitted: false, urls, reason: `More than ${MAX_UNREVIEWED_BATCH} changes; review this batch before submitting.` };
   try {
     const result = await submit(urls, plan.pages);
     if (result.submitted) atomicJson(stateFile, { ...state, pending: [] });
