@@ -5,7 +5,7 @@ UK Elections is currently deployed as a scaffold while `ukelections.co.uk` DNS i
 ## Repositories and environments
 
 - GitHub repository: `https://github.com/tompickup23/ukelections`
-- GitHub Pages placeholder: `https://tompickup23.github.io/ukelections/`
+- GitHub Pages stub: `https://tompickup23.github.io/ukelections/` (noindex; points at the production domain, see `.github/workflows/deploy.yml`)
 - Cloudflare Pages project: `ukelections`
 - Cloudflare Pages placeholder: `https://ukelections.pages.dev/`
 - Production domain: `https://ukelections.co.uk/`

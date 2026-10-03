@@ -6,7 +6,7 @@ Static Astro site for `ukelections.co.uk` — election intelligence for every UK
 
 - GitHub: `https://github.com/tompickup23/ukelections`
 - Cloudflare Pages: `https://ukelections.pages.dev/`
-- GitHub Pages mirror: `https://tompickup23.github.io/ukelections/`
+- GitHub Pages stub (noindex, points at the production domain): `https://tompickup23.github.io/ukelections/`
 - Production domain: `https://ukelections.co.uk/`
 
 ## Commands

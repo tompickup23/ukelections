@@ -26,8 +26,8 @@ by-election data. The two rules that bite hardest:
 
 - Astro static site
 - TypeScript helpers + Vitest unit tests
-- Cloudflare Pages production deployment (custom domain `ukelections.co.uk`, behind Cloudflare Access)
-- GitHub Pages auto-mirror at `tompickup23.github.io/ukelections/`
+- Cloudflare Pages production deployment (custom domain `ukelections.co.uk`, public; not behind Cloudflare Access)
+- GitHub Pages at `tompickup23.github.io/ukelections/` serves only a noindex stub pointing at ukelections.co.uk; the backup copy is a workflow artifact
 - Token-driven CSS in `src/styles/global.css` with system-preference dark mode
 - Build-time visualisation: d3-geo (maps), Satori (OG cards), Pagefind (search), inline SVG (charts)
 
