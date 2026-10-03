@@ -14,16 +14,71 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# The canonical build runs daily on vps-main (cron 04:30 UTC) and deploys to
+# Cloudflare Pages, which serves ukelections.co.uk. GH Actions cannot
+# reproduce that build because the data pipeline depends on the AI DOGE
+# corpus (Companies House, IMD, HP v7.0 ethnic projections, LCC 2025
+# reference) which is gitignored.
+#
+# Until October 2026 this workflow re-served a wget copy of the live site at
+# tompickup23.github.io/ukelections/. wget --convert-links rewrote every
+# canonical to a relative self-reference and left index,follow in place, so
+# Google held a second, indexable copy of the whole site on a stronger domain
+# with nothing marking ukelections.co.uk as the original.
+#
+# Now the copy is kept only as a workflow artifact (the backup job), and
+# GitHub Pages serves a stub (the build job): a noindex home page pointing at
+# ukelections.co.uk, and a 404 page that sends any other path to the same
+# path there. Old mirror URLs answer 404, so search engines drop them. The
+# stub depends on neither the backup nor the test job, so an unreachable
+# production site or a failing test cannot leave the old mirror in place.
 jobs:
-  # The canonical build runs daily on vps-main (cron 04:30 UTC) and deploys
-  # to Cloudflare Pages, which serves ukelections.co.uk. GH Actions cannot
-  # reproduce that build because the data pipeline depends on the AI DOGE
-  # corpus (Companies House, IMD, HP v7.0 ethnic projections, LCC 2025
-  # reference) which is gitignored. Instead, we treat the GH Pages copy as
-  # a mirror: pull the canonical static site from ukelections.co.uk and
-  # re-serve it under tompickup23.github.io/ukelections so the backup
-  # channel cannot diverge from production.
-  build:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Back up canonical build from ukelections.co.uk
+        run: |
+          set -euo pipefail
+          mkdir -p mirror
+          wget \
+            --recursive \
+            --no-parent \
+            --no-host-directories \
+            --convert-links \
+            --adjust-extension \
+            --page-requisites \
+            --span-hosts --domains=ukelections.co.uk \
+            --tries=3 --waitretry=5 \
+            --quiet \
+            --directory-prefix=mirror \
+            https://ukelections.co.uk/ || true
+          # Strip externally-linked files that wget --convert-links created.
+          # wget serialises off-site hrefs (e.g. embedded council moderngov URLs in
+          # seats/* pages) as local paths with colons. actions/upload-artifact@v7
+          # rejects colons because they are illegal on NTFS.
+          # Edit is pure shell: no GitHub event interpolation, no injection risk.
+          find mirror -type f -name '*:*' -delete 2>/dev/null || true
+          find mirror -type d -name '*:*' -prune -exec rm -rf {} + 2>/dev/null || true
+          # Sanity: confirm a few critical pages landed.
+          for p in index.html past-results/index.html forecasts/general-election/index.html your-area/index.html seats/burnley/coal-clough-with-deerplay/index.html; do
+            if [ ! -f "mirror/$p" ]; then
+              echo "::error::Backup missing mirror/$p. Cloudflare Pages production build may be incomplete or unreachable."
+              exit 1
+            fi
+          done
+          echo "Backed up $(find mirror -type f | wc -l) files from ukelections.co.uk"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: site-mirror
+          path: mirror
+          retention-days: 30
+          if-no-files-found: warn
+
+  # Post-merge acceptance for main (site-checks.yml is the PR-time gate).
+  # The stub does not wait for it: the stub contains no site code, and a
+  # data-freshness test going stale must not leave the old mirror in place.
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -35,45 +90,28 @@ jobs:
       - run: npm test
       - run: npm run validate:backend
       - run: npm run check
-      - name: Mirror canonical build from ukelections.co.uk
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Assemble GitHub Pages stub
         run: |
           set -euo pipefail
-          mkdir -p dist
-          wget \
-            --recursive \
-            --no-parent \
-            --no-host-directories \
-            --convert-links \
-            --adjust-extension \
-            --page-requisites \
-            --span-hosts --domains=ukelections.co.uk \
-            --tries=3 --waitretry=5 \
-            --quiet \
-            --directory-prefix=dist \
-            https://ukelections.co.uk/ || true
-          # Strip externally-linked files that wget --convert-links created.
-          # wget serialises off-site hrefs (e.g. embedded council moderngov URLs in
-          # seats/* pages) as local paths with colons. actions/upload-artifact@v7
-          # rejects colons because they are illegal on NTFS.
-          # Edit is pure shell — no GitHub event interpolation, no injection risk.
-          find dist -type f -name '*:*' -delete 2>/dev/null || true
-          find dist -type d -name '*:*' -prune -exec rm -rf {} + 2>/dev/null || true
-          # Sanity: confirm a few critical pages landed.
-          for p in index.html past-results/index.html forecasts/general-election/index.html your-area/index.html seats/burnley/coal-clough-with-deerplay/index.html; do
-            if [ ! -f "dist/$p" ]; then
-              echo "::error::Mirror missing dist/$p — Cloudflare Pages production build may be incomplete or unreachable."
-              exit 1
-            fi
+          mkdir -p stub
+          cp scripts/github-pages-stub/index.html scripts/github-pages-stub/404.html stub/
+          # Gate: the stub must never be indexable or claim to be the original.
+          for f in stub/index.html stub/404.html; do
+            grep -q '<meta name="robots" content="noindex' "$f" || { echo "::error::$f is missing noindex"; exit 1; }
           done
-          echo "Mirrored $(find dist -type f | wc -l) files from ukelections.co.uk"
-      - uses: actions/upload-artifact@v7
-        if: failure()
-        with:
-          name: build-diagnostics
-          path: dist
+          grep -q '<link rel="canonical" href="https://ukelections.co.uk/">' stub/index.html || { echo "::error::stub/index.html is missing the absolute canonical"; exit 1; }
+          if [ "$(find stub -type f | wc -l)" -ne 2 ]; then
+            echo "::error::GitHub Pages stub must contain exactly index.html and 404.html"
+            exit 1
+          fi
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
+          path: stub
 
   deploy:
     needs: build
