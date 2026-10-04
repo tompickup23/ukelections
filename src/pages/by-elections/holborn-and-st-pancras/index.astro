@@ -208,9 +208,8 @@ const timeline: Array<{ date: string; event: string }> = [
       sit wholly inside this constituency, on a turnout of {pct1(signal.turnout_pct)}% and{" "}
       {signal.total_valid_votes.toLocaleString()} valid votes. Ward membership is computed from ward
       centroids against the constituency boundary, not asserted. Shares are the best candidate per
-      party in each multi-member ward, independents summed. That is the rule the local by-election
-      model uses, because counting all three of a borough slate's candidates counts the same elector
-      three times. Annotations are the change on GE2024.
+      party in each multi-member ward, the rule the local by-election model uses, because counting
+      all three of a borough slate's candidates counts the same elector three times. Annotations are the change on GE2024.
     </p>
     <p class="caption">{signal.borough_outcome}</p>
     <div class="backtest-callout" style="margin-top:var(--space-md)">

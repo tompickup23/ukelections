@@ -4,6 +4,7 @@ import {
   canonParty,
   normalise,
   sharesFromCandidates,
+  priorSharesFromCandidates,
   fieldFromCandidates,
   baselineEra,
   logit,
@@ -429,5 +430,44 @@ describe("calibration table", () => {
     expect(d.leader_probability).toBe(probMax[1]);
     // margin_pp keeps describing the central projection's top-two gap.
     expect(d.margin_pp).toBeCloseTo((0.29 - 0.28) * 100, 5);
+  });
+});
+
+describe("prior baseline shares", () => {
+  it("scores an independent slate by its best candidate, as a party slate is scored", () => {
+    // Bray, Windsor and Maidenhead, 4 May 2023 (two seats), top four candidates.
+    const s = priorSharesFromCandidates([
+      { party_name: "the Borough first Independents", votes: 907 },
+      { party_name: "Conservative and Unionist Party", votes: 746 },
+      { party_name: "the Borough first Independents", votes: 726 },
+      { party_name: "Conservative and Unionist Party", votes: 691 },
+    ]);
+    expect(s.Independent).toBeCloseTo(907 / (907 + 746), 6);
+    expect(s.Conservative).toBeCloseTo(746 / (907 + 746), 6);
+    // The old rule summed the slate: 1,633 against 746.
+    expect(sharesFromCandidates([
+      { party_name: "the Borough first Independents", votes: 907 },
+      { party_name: "Conservative and Unionist Party", votes: 746 },
+      { party_name: "the Borough first Independents", votes: 726 },
+    ]).Independent).toBeCloseTo(1633 / (1633 + 746), 6);
+  });
+
+  it("still adds independents standing under different labels", () => {
+    const s = priorSharesFromCandidates([
+      { party_name: "Independent", votes: 300 },
+      { party_name: "Ashfield Independents", votes: 200 },
+      { party_name: "Labour Party", votes: 500 },
+    ]);
+    expect(s.Independent).toBeCloseTo(0.5, 6);
+  });
+
+  it("matches sharesFromCandidates when no label repeats", () => {
+    const cands = [
+      { party_name: "Labour Party", votes: 1000 },
+      { party_name: "Labour Party", votes: 900 },
+      { party_name: "Reform UK", votes: 800 },
+      { party_name: "Independent", votes: 300 },
+    ];
+    expect(priorSharesFromCandidates(cands)).toEqual(sharesFromCandidates(cands));
   });
 });

@@ -140,8 +140,12 @@ function primroseHill() {
 /**
  * Per-party votes in one ward.
  *
- * mode "best" is the published rule and mirrors `sharesFromCandidates` in the
- * local by-election model: the best candidate per party, independents summed.
+ * mode "best" is the published rule: the best candidate per party, candidates
+ * standing simply as "Independent" summed. Since 4 Oct 2026 the local
+ * by-election model scores prior baselines by label instead
+ * (`priorSharesFromCandidates`), which takes the best of several plain
+ * independents rather than their sum. No Camden ward on 7 May 2026 had two
+ * plain independents, so the two rules give identical figures here.
  * mode "all" sums every candidate, which is what a returning officer's own
  * borough-wide total does. "all" exists to cross-check against the published
  * borough result and to carry the method sensitivity; it is not the published

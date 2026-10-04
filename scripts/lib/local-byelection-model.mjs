@@ -121,6 +121,48 @@ export function sharesFromCandidates(candidates) {
   return normalise(best);
 }
 
+/**
+ * Party shares for a ward's PRIOR result, the baseline a by-election is
+ * projected from.
+ *
+ * As sharesFromCandidates, except that independents and "other" candidates are
+ * grouped by their ballot label, each label scored by its best candidate, and
+ * only distinct labels summed. Summing every independent, as
+ * sharesFromCandidates does, is right for a one-seat by-election, but in a
+ * multi-member prior it counts a slate's voters once per candidate: Bray's
+ * 2023 two-member result gave the Borough First Independents 907 + 726 votes
+ * against the Conservatives' best of 746, a 56.9% baseline, and the
+ * Conservatives won the 2026 by-election with the independent on 9.4%. Of 106
+ * forecast contests to 28 Sep 2026, 20 rested on a summed baseline, and all 7
+ * of those that named an independent or "other" winner were wrong.
+ *
+ * Leave-one-out back-test over the 792-contest corpus (4 Oct 2026), since May
+ * 2025: winners 137 to 140 of 231, MAE 7.83 to 7.68pp, Brier 0.560 to 0.553.
+ * Two variants were tested and not adopted: summing plain "Independent"
+ * candidates where the prior looks single-seat (identical result), and
+ * discounting an independent who is not the same person as last time (a factor
+ * fitted before May 2025 changed nothing after it).
+ */
+export function priorSharesFromCandidates(candidates) {
+  const best = {};
+  const byLabel = new Map();
+  for (const c of candidates || []) {
+    const votes = Number(c.votes);
+    if (!Number.isFinite(votes) || votes < 0) continue;
+    const label = c.party_name ?? c.party;
+    const p = canonParty(label);
+    if (p === "Independent" || p === "Other") {
+      const key = `${p}|${String(label ?? "").trim().toLowerCase()}`;
+      const prev = byLabel.get(key);
+      byLabel.set(key, { p, votes: Math.max(prev?.votes || 0, votes) });
+    } else {
+      best[p] = Math.max(best[p] || 0, votes);
+    }
+  }
+  for (const { p, votes } of byLabel.values()) best[p] = (best[p] || 0) + votes;
+  return normalise(best);
+}
+
 /** The set of canonical parties on a ballot, whether or not votes are known. */
 export function fieldFromCandidates(candidates) {
   const out = new Set();
@@ -166,7 +208,7 @@ export function buildSwingCorpus(byelections, findPrior) {
     if (row.voting_system === "STV") continue;
     const prior = findPrior(row);
     if (!prior?.candidates?.length) continue;
-    const from = sharesFromCandidates(prior.candidates);
+    const from = priorSharesFromCandidates(prior.candidates);
     const to = sharesFromCandidates(row.candidates);
     if (!PARTIES.some((p) => to[p] > 0)) continue;
     corpus.push({
@@ -442,6 +484,9 @@ export const DRAWS = 4000;
 // minimises BOTH the Brier score (0.564) and reliability error (0.072); 1.0
 // leaves the model overconfident and 2.5 throws away contests it could call.
 // Re-fit this when the corpus has meaningfully grown, and publish the table.
+// Re-fitted 4 Oct 2026 after the per-label prior baseline, on 213 contests since
+// May 2025: 1.75 still minimises the Brier score (0.559; 1.5 gives 0.562 and
+// 2.0 gives 0.561), so it stands.
 export const SIGMA_INFLATION = 1.75;
 
 // Below this the page says the contest is too close to call rather than naming

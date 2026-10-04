@@ -46,6 +46,17 @@ const description = `How the council by-election projections are built: the ward
       vacancy, and says why we will not project it. As of the last rebuild the paired corpus holds
       {meta.corpus_size} by-elections, from {meta.corpus_oldest} to {meta.corpus_newest}.
     </p>
+    <p>
+      Most wards elect two or three councillors, and a by-election fills one seat, so the baseline is
+      the notional single-seat contest: each party scored by its best candidate. Independents and
+      local groups are scored the same way, by their best candidate under each ballot label, with
+      different labels added together. Until 4 October 2026 every independent candidate was added
+      together, which counted a two- or three-member independent slate's voters once per candidate.
+      At Bray in Windsor and Maidenhead that put the independents on 56.9% of the baseline, and the
+      Conservatives won the by-election. Measured on 4 October 2026 across the 231 by-elections since May
+      2025, each projected with itself left out of the swing measurement, the change took the
+      winners called from 137 to 140 and cut the mean error from 7.83 to 7.68 points.
+    </p>
 
     <h2>The swing, and why it is stratified</h2>
     <p>

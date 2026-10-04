@@ -36,6 +36,7 @@ import {
   baselineEra,
   canonParty,
   sharesFromCandidates,
+  priorSharesFromCandidates,
   fieldFromCandidates,
   buildSwingCorpus,
   estimateSwing,
@@ -550,7 +551,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
 
   const reformEntering =
     prior !== null && field.has("Reform UK")
-      ? (sharesFromCandidates(prior.candidates)["Reform UK"] || 0) < 0.02
+      ? (priorSharesFromCandidates(prior.candidates)["Reform UK"] || 0) < 0.02
       : null;
   const era = prior ? baselineEra(prior.election_date) : null;
   const swing = estimateSwing(corpus, { asOf: ids.date, era, reformEntering });
@@ -568,7 +569,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
 
   let forecast = null;
   if (baseline.forecastable) {
-    const base = sharesFromCandidates(prior.candidates);
+    const base = priorSharesFromCandidates(prior.candidates);
     const projected = projectContest(base, field, swing);
     const draws = runDraws(projected.central, swing, ids.slug);
     forecast = {
@@ -740,7 +741,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
       ? {
           election_date: prior.election_date,
           seats_contested: prior.seats_contested,
-          shares: sharesFromCandidates(prior.candidates),
+          shares: priorSharesFromCandidates(prior.candidates),
           candidates: prior.candidates,
           source_label: prior.source_label,
           source: prior.source,
