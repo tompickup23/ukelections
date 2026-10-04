@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { loadGePredictions } from "../src/lib/predictions";
 import { PARLIAMENT_REGIONS, regionForSeat, seatsByRegion, getParliamentRegionPaths } from "../src/lib/parliamentRegions";
 import { getAllSitemapPaths } from "../src/lib/sitemapPaths";
@@ -35,7 +37,9 @@ describe("parliamentary region hubs", () => {
     expect(regionForSeat(bySlug["skipton-and-ripon"])?.slug).toBe("yorkshire-and-the-humber");
   });
 
-  it("are in the sitemap", () => {
+  // getAllSitemapPaths() reads the gitignored historic corpus, as in
+  // tests/sitemap-paths.test.ts: present on this Mac and vps-main, not on CI.
+  it.skipIf(!existsSync(path.join(process.cwd(), "data/history/dc-historic-results.json")))("are in the sitemap", () => {
     const paths = new Set(getAllSitemapPaths());
     for (const p of getParliamentRegionPaths()) expect(paths.has(p), p).toBe(true);
   });
