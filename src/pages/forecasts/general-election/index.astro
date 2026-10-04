@@ -8,6 +8,7 @@ import { loadGePredictions, loadGeSummary, partyColour } from "../../../lib/pred
 import { loadGeHeadline, shortPartyLabel, forecastStamp } from "../../../lib/siteData";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { PARLIAMENT_REGIONS } from "../../../lib/parliamentRegions";
 
 const ge = loadGePredictions();
 const geSummary = loadGeSummary();
@@ -126,6 +127,14 @@ const structuredData = [
       Northern Irish coastline and Highland sea-lochs are simplified to keep the file under 250 KB.
       Boundary data sourced from the ONS Open Geography Portal (PCS24 BUC, simplified with mapshaper).
     </p>
+    <nav class="region-list" aria-label="Constituencies by region">
+      <p class="caption">Every seat, region by region:</p>
+      <ul>
+        {PARLIAMENT_REGIONS.map((r) => (
+          <li><a href={`/seats/parliament/${r.slug}/`}>{r.name}</a></li>
+        ))}
+      </ul>
+    </nav>
   </section>
 
   <section class="section" id="marginals">
@@ -245,6 +254,14 @@ const structuredData = [
 </BaseLayout>
 
 <style>
+  .region-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
   .lookup-cta {
     display: flex;
     align-items: center;

@@ -53,7 +53,8 @@ const HARD = [
   "badJsonLd",
   "junkHref",
   "duplicateTitles",
-  "orphanPages"
+  "orphanPages",
+  "wardNotLinkedFromCouncil"
 ];
 
 const SITE = "https://ukelections.co.uk";
@@ -151,6 +152,17 @@ export function auditDir(distDir) {
     frontier = next;
   }
   for (const u of all) if (!seen.has(u)) bump("orphanPages", u);
+
+  // Council pages are the ward hubs: each must link every ward page under it
+  // in plain HTML, so a ward is never more than one hop from its council.
+  for (const u of all) {
+    const m = u.match(/^\/seats\/([^/]+)\/([^/]+)\/$/);
+    if (!m || m[1] === "parliament") continue;
+    const council = `/seats/${m[1]}/`;
+    if (!all.has(council)) continue;
+    const links = linksFrom.get(council) || new Set();
+    if (!links.has(u) && !links.has(u.slice(0, -1))) bump("wardNotLinkedFromCouncil", u);
+  }
 
   delete counts.__noindex;
   delete examples.__noindexUrls;

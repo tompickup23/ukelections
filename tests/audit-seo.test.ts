@@ -132,6 +132,15 @@ describe("every hard check can fail", () => {
     expect(hit.examples).toContain("/lonely/");
   });
 
+  it("wardNotLinkedFromCouncil, so a ward stays one hop from its council", () => {
+    // Reachable through another page, but missing from its own council hub.
+    write("seats/burnley/index.html", GOOD("Burnley", '<a href="/">Home</a>'));
+    write("seats/burnley/bank-hall/index.html", GOOD("Bank Hall", '<a href="/seats/burnley/">Burnley</a>'));
+    write("index.html", GOOD("Home", '<a href="/seats/burnley/">Burnley</a> <a href="/seats/burnley/bank-hall/">Bank Hall</a>'));
+    const hit = fire("wardNotLinkedFromCouncil");
+    expect(hit.examples).toContain("/seats/burnley/bank-hall/");
+  });
+
   it("does not count a noindex page as an orphan", () => {
     write(
       "404.html",
