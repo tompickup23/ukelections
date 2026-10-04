@@ -211,6 +211,14 @@ Every detail page renders data as visual, not text. `/polling/` has a trend char
 - LAD24 BUC + WD25 BSC boundaries simplified with mapshaper (152 KB + 2.9 MB).
 - d3-geo at build time, no runtime JS.
 
+## Search discovery (Oct 2026)
+
+- **Opening summaries are generated, never typed.** `src/lib/pageSummaries.ts` writes the first paragraph on constituency, ward, council by-election and region pages from the record the page renders. They name no individual and never paraphrase a demographic model step. `tests/page-summaries.test.ts` locks this.
+- **Seat swings use the model's GE2024 baseline step**, via `seatSwings()`. Matching 2024 ballot labels against model party names showed the whole projected share as the swing on 649 of 650 seat pages until 4 Oct 2026.
+- **Region hubs** (`/seats/parliament/<region>/`, `src/lib/parliamentRegions.ts`) are the crawl path to the 650 seats. Region comes from the ONS code where the model record is wrong or empty; the hub totals are tested against the 2024 allocation.
+- **lastmod and RSS pubDate come from the discovery ledger**, stamped by the publisher before deploy. See `docs/discovery-release.md`. Never date a route by the build clock.
+- **Search Console baseline and re-measure date:** `docs/seo/README.md`.
+
 ## Model calibration (21 Aug 2026)
 
 Three fitted corrections sit between the raw model and the published forecast. Each lives in `data/calibration/`, each carries its own hold-out validation, and each is fitted by a script you re-run after every real election.
