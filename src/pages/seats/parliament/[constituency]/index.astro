@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
-import { externalHref, type Crumb } from "../../../../lib/seo";
+import { externalHref, buildDataset, type Crumb } from "../../../../lib/seo";
 import MiniMap from "../../../../components/MiniMap.astro";
 import PartyBars from "../../../../components/PartyBars.astro";
 import ExploreNext from "../../../../components/ExploreNext.astro";
 import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
-import { shortPartyLabel, forecastStamp } from "../../../../lib/siteData";
+import { shortPartyLabel, forecastStamp, loadPollingFieldworkLatest } from "../../../../lib/siteData";
+import { constituencySummary, seatSwings } from "../../../../lib/pageSummaries";
+import { regionForSeat, seatsByRegion } from "../../../../lib/parliamentRegions";
+import { SITE_URL } from "../../../../lib/site";
 import { buildParliamentaryJourneyLinks } from "../../../../lib/electionJourneys";
 
 export async function getStaticPaths() {
@@ -109,9 +112,32 @@ if (slug === "makerfield") {
     },
   );
 }
+const region = regionForSeat(record);
+const regionSeatCount = region ? seatsByRegion(allSeatRecords).get(region.slug)?.length ?? 0 : 0;
+const summary = constituencySummary(
+  record,
+  backtestRows.length
+    ? { predictedWinner: backtestPredictedWinner, actualWinner: backtestActualWinner, winnerCorrect: backtestWinnerCorrect, mae: backtestMae }
+    : null,
+);
+const swings = seatSwings(record);
 const breadcrumbs: Crumb[] = [
   { name: "Constituencies", href: "/seats/parliament/" },
+  ...(region ? [{ name: region.name, href: `/seats/parliament/${region.slug}/` }] : []),
   { name: record.name, href: `/seats/parliament/${Astro.params.constituency}/` }
+];
+const pollingLatest = loadPollingFieldworkLatest();
+const structuredData = [
+  buildDataset({
+    name: `${record.name} general election projection`,
+    description: `Projected vote share by party for the ${record.name} parliamentary constituency, with the 2024 general election result it is projected from and the model's 2024 backtest for the seat.`,
+    url: `${SITE_URL}/seats/parliament/${slug}/`,
+    temporalCoverage: pollingLatest ? `2024-07-04/${pollingLatest}` : undefined,
+    dateModified: pollingLatest ?? undefined,
+    spatialCoverage: `${record.name} UK parliamentary constituency`,
+    variableMeasured: ["Projected vote share by party", "2024 general election vote share by party", "Projected winner and margin"],
+    keywords: [record.name, "general election forecast", "constituency projection"],
+  }),
 ];
 const pageTitle = slug === "makerfield" || slug === "colchester"
   ? `${record.name} constituency map and forecast`
@@ -120,6 +146,7 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
 
 <BaseLayout
   breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
   title={pageTitle}
   description={`${record.name} constituency map, 2024 result and current model projection: ${shortPartyLabel(record.winner)} ahead by ${margin}pp over ${shortPartyLabel(record.runner_up)}.`}
 >
@@ -154,6 +181,15 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
     )}
   </section>
 
+  {summary.length > 0 && (
+    <section class="section seat-summary">
+      <p>
+        {summary.join(" ")}
+        {region && <>{" "}{record.name} is one of {regionSeatCount} constituencies in {region.prose}; <a href={`/seats/parliament/${region.slug}/`}>see the projection for each of them</a>.</>}
+      </p>
+    </section>
+  )}
+
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Predicted vote share</p>
@@ -162,8 +198,10 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
     <div class="party-bars party-bars-large">
       {ranked.map(([party, payload]: any) => {
         const pct = (payload.pct || 0);
-        const ge24 = ge2024Ranked.find((c: any) => c.party_name === party || c.party === party);
-        const swing = pct - (ge24?.pct || 0);
+        // Against the model's own 2024 baseline, which uses the same party
+        // names as the projection. Matching ballot descriptions instead showed
+        // Labour and Co-operative seats as a Labour gain of the whole share.
+        const swing = swings[party] ?? 0;
         return (
           <div class="bar-row">
             <span class="bar-label">{shortPartyLabel(party)}</span>

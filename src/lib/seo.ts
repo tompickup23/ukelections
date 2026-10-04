@@ -108,6 +108,8 @@ export interface DatasetInput {
   url: string;
   /** e.g. "2024-07-04/2026-08-27" or "2026-05-07". */
   temporalCoverage?: string;
+  /** YYYY-MM-DD the data last changed in substance, never a build date. */
+  dateModified?: string;
   /** Free-text area the data covers, e.g. "United Kingdom". */
   spatialCoverage?: string;
   /** The quantities the dataset actually reports. */
@@ -142,6 +144,7 @@ export function buildDataset(input: DatasetInput): Record<string, unknown> {
     },
     publisher: publisherNode(),
     ...(input.temporalCoverage ? { temporalCoverage: input.temporalCoverage } : {}),
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
     ...(input.spatialCoverage
       ? { spatialCoverage: { "@type": "Place", name: input.spatialCoverage } }
       : {}),
@@ -158,6 +161,52 @@ export function buildDataset(input: DatasetInput): Record<string, unknown> {
           ]
         }
       : {})
+  };
+}
+
+export interface ElectionEventInput {
+  /** e.g. "Bray by-election, Windsor and Maidenhead". */
+  name: string;
+  description: string;
+  /** Canonical page URL. */
+  url: string;
+  /** Polling day, YYYY-MM-DD. */
+  pollingDay: string;
+  /** The area voting, e.g. the ward or constituency. */
+  area: string;
+  /** The council or returning officer's authority. */
+  authority: string;
+}
+
+/**
+ * Event node for a scheduled poll. Only for contests still to be held: once
+ * polls close the page is a result, and an Event in the past would be stale.
+ * Dates only, because polling hours vary by election type.
+ */
+export function buildElectionEvent(input: ElectionEventInput): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    startDate: input.pollingDay,
+    endDate: input.pollingDay,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    isAccessibleForFree: true,
+    inLanguage: "en-GB",
+    location: {
+      "@type": "Place",
+      name: input.area,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: input.area,
+        addressRegion: input.authority,
+        addressCountry: "GB"
+      }
+    },
+    organizer: { "@type": "GovernmentOrganization", name: input.authority }
   };
 }
 

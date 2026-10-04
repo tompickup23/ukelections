@@ -11,6 +11,7 @@ import {
   buildParliamentaryJourneyLinks,
   type LocalContestJourneyRecord,
 } from "../src/lib/electionJourneys";
+import { PARLIAMENT_REGIONS } from "../src/lib/parliamentRegions";
 
 const ROOT = process.cwd();
 const ge = JSON.parse(
@@ -102,6 +103,7 @@ describe("postcode election lookup", () => {
 describe("parliamentary onward journeys", () => {
   it("generates only real internal destinations and never links to itself", () => {
     const slugs = new Set(seatRecords.map((record) => record.slug));
+    const regionSlugs = new Set(PARLIAMENT_REGIONS.map((region) => region.slug));
     for (const record of seatRecords) {
       const links = buildParliamentaryJourneyLinks(record, seatRecords);
       expect(links.length).toBeGreaterThanOrEqual(4);
@@ -111,8 +113,8 @@ describe("parliamentary onward journeys", () => {
       for (const link of links) {
         if (/^\/seats\/parliament\/[^#]+\/$/.test(link.href)) {
           const slug = link.href.split("/").filter(Boolean).at(-1);
-          expect(slugs.has(slug), link.href).toBe(true);
-        } else if (link.href.startsWith("/seats/parliament/#region-")) {
+          expect(slugs.has(slug) || regionSlugs.has(slug ?? ""), link.href).toBe(true);
+        } else if (link.href === "/seats/parliament/") {
           expect(
             existsSync(path.join(ROOT, "src/pages/seats/parliament/index.astro")),
           ).toBe(true);

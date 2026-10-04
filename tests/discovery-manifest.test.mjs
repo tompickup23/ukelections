@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { pageFingerprint, planDiscovery, finishDiscovery } from '../scripts/lib/discovery-manifest.mjs';
+import { pageFingerprint, planDiscovery, finishDiscovery, stampDiscoveryDates, MAX_UNREVIEWED_BATCH } from '../scripts/lib/discovery-manifest.mjs';
 import { submitIndexNow } from '../scripts/indexnow-submit.mjs';
 const origin = 'https://ukelections.co.uk';
 const html = (route, text = 'Result: 10 votes', stamp = '2026-09-20', chrome = 'Old nav') => `<html><head><title>Election</title><link rel="canonical" href="${origin}${route}"><meta name="description" content="Result"></head><body><nav>${chrome}</nav><main><h1>Election</h1><p>${text}</p><span data-discovery-ignore>${stamp}</span><a href="/your-area/">Lookup</a></main></body></html>`;
@@ -40,9 +40,9 @@ describe('page discovery manifest', () => {
       await finishDiscovery({plan,stateFile,enabled:false,submit});expect(submit).toHaveBeenCalledTimes(2);
     } finally { rmSync(root,{recursive:true,force:true}); }
   });
-  it('requires review for batches over 200 URLs', async () => {
+  it('requires review for batches over the unreviewed cap', async () => {
     const root=mkdtempSync(join(tmpdir(),'uke-discovery-'));const submit=vi.fn();
-    const urls=Array.from({length:201},(_,i)=>`${origin}/${i}/`);
+    const urls=Array.from({length:MAX_UNREVIEWED_BATCH+1},(_,i)=>`${origin}/${i}/`);
     try {const result=await finishDiscovery({plan:{pages:Object.fromEntries(urls.map(u=>[u,'hash'])),changed:urls},stateFile:join(root,'state.json'),enabled:true,submit});expect(result.reason).toMatch(/review/);expect(submit).not.toHaveBeenCalled();}
     finally{rmSync(root,{recursive:true,force:true});}
   });
@@ -56,5 +56,66 @@ describe('page discovery manifest', () => {
         expect(fetchImpl.mock.calls.some(([,opts])=>opts?.method==='POST')).toBe(false);
       }
     } finally { if(previous===undefined)delete process.env.INDEXNOW_SUBMIT;else process.env.INDEXNOW_SUBMIT=previous; }
+  });
+});
+it('submits an ordinary night of forecast changes without waiting for review', async () => {
+  const root=mkdtempSync(join(tmpdir(),'uke-discovery-'));const submit=vi.fn().mockResolvedValue({submitted:true});
+  const urls=Array.from({length:788},(_,i)=>`${origin}/${i}/`);
+  try {await finishDiscovery({plan:{pages:Object.fromEntries(urls.map(u=>[u,'hash'])),changed:urls},stateFile:join(root,'state.json'),enabled:true,submit});expect(submit).toHaveBeenCalledTimes(1);}
+  finally{rmSync(root,{recursive:true,force:true});}
+});
+describe('discovery dates', () => {
+  const setup = () => {
+    const root = mkdtempSync(join(tmpdir(), 'uke-dates-'));
+    writeFileSync(join(root, 'sitemap.xml'), `<urlset>\n  <url>\n    <loc>${origin}/a/</loc>\n  </url>\n  <url>\n    <loc>${origin}/b/</loc>\n  </url>\n</urlset>\n`);
+    for (const route of ['a', 'b']) { mkdirSync(join(root, route)); writeFileSync(join(root, route, 'index.html'), html(`/${route}/`)); }
+    writeFileSync(join(root, 'rss.xml'), `<rss><channel>\n<item>\n<title>Old</title>\n<guid isPermaLink="false">urn:old</guid>\n</item>\n</channel></rss>\n`);
+    return root;
+  };
+  const lastmods = (root) => Object.fromEntries([...readFileSync(join(root, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>(?:\s*<lastmod>([^<]+)<\/lastmod>)?/g)].map(m => [m[1], m[2] ?? null]));
+  it('dates a route by the run that first deployed its current content, never the build clock', () => {
+    const root = setup();
+    try {
+      const first = planDiscovery(root, null, '2026-10-01T04:40:00.000Z');
+      expect(Object.values(first.changedAt)).toEqual([null, null]);
+      stampDiscoveryDates(root, first);
+      expect(lastmods(root)).toEqual({ [`${origin}/a/`]: null, [`${origin}/b/`]: null });
+
+      writeFileSync(join(root, 'a/index.html'), html('/a/', 'Result: 11 votes'));
+      const second = planDiscovery(root, first, '2026-10-02T04:40:00.123Z');
+      expect(second.changedAt).toEqual({ [`${origin}/a/`]: '2026-10-02T04:40:00.123Z', [`${origin}/b/`]: null });
+
+      const third = planDiscovery(root, second, '2026-10-03T04:40:00.000Z');
+      expect(third.changed).toEqual([]);
+      expect(third.changedAt[`${origin}/a/`]).toBe('2026-10-02T04:40:00.123Z');
+      stampDiscoveryDates(root, third);
+      expect(lastmods(root)).toEqual({ [`${origin}/a/`]: '2026-10-02T04:40:00Z', [`${origin}/b/`]: null });
+    } finally { rmSync(root, { recursive: true, force: true }); }
+  });
+  it('gives a feed item a pubDate only from the run that first published it', () => {
+    const root = setup();
+    try {
+      const first = planDiscovery(root, null, '2026-10-01T04:40:00.000Z');
+      const second = planDiscovery(root, first, '2026-10-02T04:40:00.000Z');
+      expect(second.feedSeen).toEqual({ 'urn:old': null });
+      writeFileSync(join(root, 'rss.xml'), `<rss><channel>\n<item>\n<title>New &amp; declared</title>\n<guid isPermaLink="false">urn:new&amp;1</guid>\n</item>\n<item>\n<title>Old</title>\n<guid isPermaLink="false">urn:old</guid>\n</item>\n</channel></rss>\n`);
+      const third = planDiscovery(root, second, '2026-10-03T04:40:00.000Z');
+      expect(third.feedSeen).toEqual({ 'urn:old': null, 'urn:new&1': '2026-10-03T04:40:00.000Z' });
+      stampDiscoveryDates(root, third);
+      const feed = readFileSync(join(root, 'rss.xml'), 'utf8');
+      expect(feed).toContain('<guid isPermaLink="false">urn:new&amp;1</guid>\n<pubDate>Sat, 03 Oct 2026 04:40:00 GMT</pubDate>');
+      expect(feed.match(/<pubDate>/g)).toHaveLength(1);
+    } finally { rmSync(root, { recursive: true, force: true }); }
+  });
+  it('keeps the dates in the saved state', async () => {
+    const root = setup();
+    try {
+      const plan = planDiscovery(root, planDiscovery(root, null, '2026-10-01T00:00:00.000Z'), '2026-10-02T00:00:00.000Z');
+      const stateFile = join(root, 'state.json');
+      await finishDiscovery({ plan, stateFile, enabled: false, submit: vi.fn() });
+      const saved = JSON.parse(readFileSync(stateFile, 'utf8'));
+      expect(saved.changedAt).toEqual(plan.changedAt);
+      expect(saved.feedSeen).toEqual({ 'urn:old': null });
+    } finally { rmSync(root, { recursive: true, force: true }); }
   });
 });

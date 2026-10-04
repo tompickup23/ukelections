@@ -4,6 +4,7 @@ import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { loadIdentity, loadGePredictions } from "./predictions";
 import { getIndexableSitePaths } from "./site";
+import { getParliamentRegionPaths } from "./parliamentRegions";
 
 /**
  * Every URL the sitemap should carry.
@@ -91,8 +92,9 @@ export function getLocalByElectionPaths(): string[] {
 }
 
 /**
- * The discovery ledger holds fingerprints, not verified change timestamps.
- * Omit lastmod until a significant public change has a recorded date. Neither
+ * The build leaves lastmod out. The publisher adds it after the build, from the
+ * discovery ledger's record of the run that first deployed each route's current
+ * content (stampDiscoveryDates in scripts/lib/discovery-manifest.mjs). Neither
  * polling day nor rebuild time proves an update. The argument is kept for callers.
  */
 export function getLastmodByPath(_dirAbs?: string): Record<string, string> {
@@ -105,6 +107,7 @@ export function getAllSitemapPaths(): string[] {
     ...validateEditorialRegistry(articles as EditorialArticle[]).map(article => article.path),
     ...getSeatPaths(),
     ...getParliamentSeatPaths(),
+    ...getParliamentRegionPaths(),
     ...getLocalByElectionPaths(),
   ]);
   return [...paths].sort((a, b) => a.localeCompare(b));

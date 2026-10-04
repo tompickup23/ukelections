@@ -1,6 +1,6 @@
 ---
 /**
- * Index of all 650 parliamentary constituencies.
+ * Index of all 650 parliamentary constituencies, by nation and region.
  *
  * This page exists because the constituency pages had no internal links
  * pointing at them. Only two pages on the whole site linked to any of them (a
@@ -9,56 +9,26 @@
  * them and declined to index most: they arrived with no signal that anything on
  * the site considered them worth reaching.
  *
- * The nav made it worse by labelling /seats/ "650 Constituencies" when /seats/
- * is the council browser.
+ * Since October 2026 it links the twelve region hubs rather than all 650 seats
+ * in one list: each hub lists its seats with the 2024 and projected winners, and
+ * the home page links the hubs directly, so every seat is two clicks from home
+ * through a page of at most 91 links.
  */
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { loadGePredictions, partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
 import { SITE_URL } from "../../../lib/site";
+import { PARLIAMENT_REGIONS, seatsByRegion } from "../../../lib/parliamentRegions";
+import { tally } from "../../../lib/pageSummaries";
 import type { Crumb } from "../../../lib/seo";
 
 const bundle = loadGePredictions() as { predictions?: Record<string, any> };
-const records = Object.entries(bundle.predictions || {})
-  .filter(([, r]) => Boolean(r?.prediction))
-  .map(([slug, r]) => ({
-    slug,
-    name: r.name as string,
-    country: (r.country || "") as string,
-    region: (r.region || "") as string,
-    winner: r.winner as string,
-    majorityPct: (r.majority_pct || 0) * 100
-  }));
-
-const titleCase = (s: string) =>
-  s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-const fragment = (s: string) =>
-  s
-    .normalize("NFKD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-
-// Group by country, then region within it. Northern Ireland and Scotland carry
-// no meaningful sub-region in the corpus, so a country with one region renders
-// as a single block rather than a heading that repeats its parent.
-const byCountry = new Map<string, Map<string, typeof records>>();
-for (const rec of records) {
-  const country = rec.country || "unknown";
-  const region = rec.region || country;
-  if (!byCountry.has(country)) byCountry.set(country, new Map());
-  const regions = byCountry.get(country)!;
-  if (!regions.has(region)) regions.set(region, []);
-  regions.get(region)!.push(rec);
-}
-const COUNTRY_ORDER = ["england", "scotland", "wales", "northern_ireland"];
-const countries = [...byCountry.entries()].sort(
-  (a, b) => COUNTRY_ORDER.indexOf(a[0]) - COUNTRY_ORDER.indexOf(b[0])
-);
-for (const [, regions] of countries) {
-  for (const [, list] of regions) list.sort((a, b) => a.name.localeCompare(b.name));
-}
+const records = Object.values(bundle.predictions || {}).filter((r) => Boolean(r?.prediction));
+const byRegion = seatsByRegion(records);
+const hubs = PARLIAMENT_REGIONS.map((region) => {
+  const seats = byRegion.get(region.slug) || [];
+  return { region, count: seats.length, leaders: tally(seats.map((r: any) => r.winner || null)).slice(0, 3) };
+});
 
 const breadcrumbs: Crumb[] = [{ name: "Constituencies", href: "/seats/parliament/" }];
 const structuredData = [
@@ -66,7 +36,7 @@ const structuredData = [
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `All ${records.length} UK parliamentary constituencies`,
-    description: `Every UK parliamentary constituency with its current general election projection.`,
+    description: `Every UK parliamentary constituency with its current general election projection, by nation and region.`,
     url: `${SITE_URL}/seats/parliament/`,
     inLanguage: "en-GB",
     isPartOf: { "@id": `${SITE_URL}/#website` }
@@ -78,15 +48,15 @@ const structuredData = [
   breadcrumbs={breadcrumbs}
   structuredData={structuredData}
   title="All 650 UK constituencies"
-  description={`Every one of the ${records.length} UK parliamentary constituencies, with the projected winner and margin for each, grouped by nation and region.`}
+  description={`Every one of the ${records.length} UK parliamentary constituencies, by nation and region, with the projected winner and margin in each seat.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Browse</p>
     <h1>All {records.length} UK constituencies</h1>
     <p class="lede">
-      Every UK parliamentary seat with its current projection. Each page carries the
-      2024 result, the model's forecast, the sitting MP and how the model has scored
-      on that seat before.
+      Every UK parliamentary seat, grouped by nation and English region. Each region page lists its
+      seats with the 2024 winner, the projected winner and the margin; each seat page carries the
+      2024 result, the model's forecast, the sitting MP and how the model has scored on that seat before.
     </p>
     <p class="meta-row">
       <a href="/forecasts/general-election/">See the national seat projection</a>
@@ -95,49 +65,28 @@ const structuredData = [
     </p>
   </section>
 
-  {countries.map(([country, regions]) => (
-    <section class="section">
-      <div class="section-head">
-        <p class="eyebrow">{titleCase(country)}</p>
-        <h2>
-          {[...regions.values()].reduce((n, l) => n + l.length, 0)} seats in {titleCase(country)}
-        </h2>
-      </div>
-      {[...regions.entries()]
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(([region, list]) => (
-          <>
-            <div id={`region-${fragment(country)}-${fragment(region)}`} class="region-block">
-              {regions.size > 1 && <h3 class="region-heading">{titleCase(region)}</h3>}
-              <div class="council-grid">
-                {list.map((rec) => (
-                  <a class="council-card" href={`/seats/parliament/${rec.slug}/`}>
-                    <strong>{rec.name}</strong>
-                    <span class="tier">
-                      <span
-                        class="party-pill"
-                        style={`background:${partyColour(rec.winner)}`}
-                      ></span>
-                      {shortPartyLabel(rec.winner)}, {rec.majorityPct.toFixed(1)}pp
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </>
-        ))}
-    </section>
-  ))}
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">By nation and region</p>
+      <h2>Twelve regions, {records.length} seats</h2>
+    </div>
+    <div class="council-grid">
+      {hubs.map(({ region, count, leaders }) => (
+        <a class="council-card" href={`/seats/parliament/${region.slug}/`}>
+          <strong>{region.name}</strong>
+          <span class="tier">{count} seats</span>
+          <span class="tier">
+            Projected: {leaders.map(([party, n], i) => (
+              <>{i > 0 && ", "}<span class="party-pill" style={`background:${partyColour(party)}`}></span>{shortPartyLabel(party)} {n}</>
+            ))}
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .region-heading {
-    margin: 1.5rem 0 0.6rem;
-    font-size: 1rem;
-    color: var(--muted);
-    font-weight: 600;
-  }
-  .region-block + .region-block { margin-top: 1.5rem; }
   .party-pill {
     display: inline-block;
     width: 0.6rem;

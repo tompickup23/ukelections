@@ -1,0 +1,144 @@
+---
+/**
+ * One hub per nation and English region, listing every seat in it with its
+ * projected winner.
+ *
+ * These replace the single 650-item list at /seats/parliament/ as the crawl
+ * path to the constituency pages: the home page links all twelve in plain
+ * HTML, and each lists 18 to 91 seats. The slugs share a URL level with the
+ * constituency slugs; tests/parliament-regions.test.ts fails on a clash.
+ */
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import PartyBars from "../../../../components/PartyBars.astro";
+import { loadGePredictions, partyColour } from "../../../../lib/predictions";
+import { shortPartyLabel } from "../../../../lib/siteData";
+import { PARLIAMENT_REGIONS, seatsByRegion, type ParliamentRegion } from "../../../../lib/parliamentRegions";
+import { regionSummary, ge2024Winner, tally } from "../../../../lib/pageSummaries";
+import { SITE_URL } from "../../../../lib/site";
+import type { Crumb } from "../../../../lib/seo";
+
+export async function getStaticPaths() {
+  return PARLIAMENT_REGIONS.map((region) => ({ params: { region: region.slug }, props: { region } }));
+}
+
+const { region } = Astro.props as { region: ParliamentRegion };
+const all = Object.values((loadGePredictions() as any).predictions || {}).filter((r: any) => r?.prediction);
+const seats = seatsByRegion(all).get(region.slug) || [];
+const summary = regionSummary(region.prose, seats);
+const projected = tally(seats.map((r: any) => r.winner || null));
+const others = PARLIAMENT_REGIONS.filter((r) => r.slug !== region.slug);
+
+const url = `${SITE_URL}/seats/parliament/${region.slug}/`;
+const breadcrumbs: Crumb[] = [
+  { name: "Constituencies", href: "/seats/parliament/" },
+  { name: region.name, href: `/seats/parliament/${region.slug}/` },
+];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${region.name} constituencies`,
+    description: `Every parliamentary constituency in ${region.prose} with its 2024 winner and current projection.`,
+    url,
+    inLanguage: "en-GB",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+  },
+];
+---
+
+<BaseLayout
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
+  title={`${region.name} constituencies and forecast`}
+  description={`All ${seats.length} parliamentary constituencies in ${region.prose}: the 2024 winner, the projected winner and the margin in each seat.`}
+>
+  <section class="page-hero">
+    <p class="eyebrow">General election forecast by region</p>
+    <h1>{region.name} constituencies</h1>
+    <p class="lede">{summary.join(" ")}</p>
+    <p class="meta-row">
+      <a href="/seats/parliament/">All UK constituencies by region</a>
+      {" · "}
+      <a href="/forecasts/general-election/">The national seat projection</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Projected seats</p>
+      <h2>Projected winners across {seats.length} seats</h2>
+    </div>
+    <PartyBars
+      rows={projected.map(([party, n]) => ({
+        party,
+        pct: n / seats.length,
+        value: `${n} ${n === 1 ? "seat" : "seats"}`,
+      }))}
+    />
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Every seat</p>
+      <h2>The {seats.length} constituencies in {region.prose}</h2>
+    </div>
+    <table class="seat-table">
+      <thead>
+        <tr>
+          <th scope="col">Constituency</th>
+          <th scope="col">2024 winner</th>
+          <th scope="col">Projected winner</th>
+          <th scope="col" class="num">Margin</th>
+        </tr>
+      </thead>
+      <tbody>
+        {seats.map((r: any) => {
+          const won = ge2024Winner(r);
+          return (
+            <tr>
+              <td><a href={`/seats/parliament/${r.slug}/`}>{r.name}</a></td>
+              <td>{won && <><span class="party-pill" style={`background:${partyColour(won)}`}></span> {shortPartyLabel(won)}</>}</td>
+              <td><span class="party-pill" style={`background:${partyColour(r.winner)}`}></span> {shortPartyLabel(r.winner)}</td>
+              <td class="num">{((r.majority_pct || 0) * 100).toFixed(1)}pp</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+    <p class="caption">
+      Margin is the projected lead of the winner over the second-placed party, in percentage points.
+      Each constituency page sets out the 2024 result, the projection and the model's record on that seat.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Elsewhere</p>
+      <h2>Other nations and regions</h2>
+    </div>
+    <ul class="region-links">
+      {others.map((r) => (
+        <li><a href={`/seats/parliament/${r.slug}/`}>{r.name}</a></li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .party-pill {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    margin-right: 0.35rem;
+    vertical-align: baseline;
+  }
+  .region-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

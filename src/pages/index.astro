@@ -11,6 +11,7 @@ import {
   loadUpcomingElections,
   shortPartyLabel,
 } from "../lib/siteData";
+import { PARLIAMENT_REGIONS } from "../lib/parliamentRegions";
 
 const upcoming = loadUpcomingElections();
 const ge = loadGeHeadline();
@@ -122,6 +123,14 @@ const description = heroContest
       <a href="/forecasts/general-election/">See every constituency →</a>
       · <a href="/your-area/">Look up my constituency →</a>
     </p>
+    <nav class="region-list" aria-label="Constituencies by region">
+      <h3>Constituencies by region</h3>
+      <ul>
+        {PARLIAMENT_REGIONS.map((r) => (
+          <li><a href={`/seats/parliament/${r.slug}/`}>{r.name}</a></li>
+        ))}
+      </ul>
+    </nav>
   </section>
 
   <section class="section">
@@ -176,3 +185,14 @@ const description = heroContest
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .region-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

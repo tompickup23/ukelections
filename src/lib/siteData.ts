@@ -117,6 +117,26 @@ export function loadGeHeadline(): GeHeadline {
   };
 }
 
+let _pollingLatest: string | null | undefined;
+/**
+ * Last fieldwork day of the newest poll in the Westminster average the GE
+ * forecast is built on (data/polling/override.json). This is the date the
+ * forecast speaks for. It moves only when a new poll enters the average, unlike
+ * the snapshot's generated_at, which the nightly rewrites even when nothing
+ * changed, and which the discovery fingerprint deliberately ignores.
+ */
+export function loadPollingFieldworkLatest(): string | null {
+  if (_pollingLatest !== undefined) return _pollingLatest;
+  try {
+    const ov = JSON.parse(readFileSync(resolve(process.cwd(), "data/polling/override.json"), "utf8"));
+    const latest = ov?.sources?.uk_westminster?.fieldwork_window?.latest;
+    _pollingLatest = typeof latest === "string" && /^\d{4}-\d{2}-\d{2}$/.test(latest) ? latest : null;
+  } catch {
+    _pollingLatest = null;
+  }
+  return _pollingLatest;
+}
+
 export interface Countdown {
   days_until: number;
   has_passed: boolean;

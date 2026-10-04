@@ -1,3 +1,5 @@
+import { regionForSeat } from "./parliamentRegions";
+
 export interface JourneyLink {
   href: string;
   label: string;
@@ -10,6 +12,7 @@ export interface ParliamentaryJourneyRecord {
   name: string;
   country?: string | null;
   region?: string | null;
+  pcon24cd?: string | null;
   majority_pct?: number | null;
 }
 
@@ -24,14 +27,6 @@ export interface LocalContestJourneyRecord {
   };
   result?: { declared?: boolean } | null;
 }
-
-const fragment = (value: string) =>
-  value
-    .normalize("NFKD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
 
 const addUnique = (links: JourneyLink[], link: JourneyLink, selfHref?: string) => {
   if (link.href === selfHref || links.some((existing) => existing.href === link.href)) return;
@@ -73,11 +68,15 @@ export function buildParliamentaryJourneyLinks(
     trackingId: "seat-to-methodology",
   }, selfHref);
 
-  const country = current.country || "uk";
-  const region = current.region || country;
-  addUnique(links, {
-    href: `/seats/parliament/#region-${fragment(country)}-${fragment(region)}`,
-    label: `Browse ${String(region).replace(/_/g, " ")} constituencies`,
+  const hub = regionForSeat(current);
+  addUnique(links, hub ? {
+    href: `/seats/parliament/${hub.slug}/`,
+    label: `Browse ${hub.name} constituencies`,
+    description: "Compare this seat with the other constituencies in its region.",
+    trackingId: "seat-to-region",
+  } : {
+    href: "/seats/parliament/",
+    label: "Browse UK constituencies by region",
     description: "Compare this seat with the other constituencies in its region.",
     trackingId: "seat-to-region",
   }, selfHref);

@@ -22,8 +22,10 @@ interface FeedItem {
 const esc = (s: string) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
-// Dates below are sorting keys, not first-publication timestamps. RSS pubDate
-// is optional: omit it until a trustworthy publication ledger exists.
+// Dates below are sorting keys, not first-publication timestamps. The build
+// emits no pubDate; the publisher adds one from the discovery ledger's record
+// of the run that first deployed each item (stampDiscoveryDates), and leaves
+// items it has no such record for undated.
 
 function byElectionResultItems(): FeedItem[] {
   const dirAbs = path.join(process.cwd(), "data/contests/local-byelections");
