@@ -17,6 +17,7 @@ import {
 import { summariseWardResult, seatsWonLabel } from "../../../../lib/may7WardResult";
 import { shortPartyLabel } from "../../../../lib/siteData";
 import { externalHref, type Crumb } from "../../../../lib/seo";
+import { wardSummary } from "../../../../lib/pageSummaries";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -128,6 +129,22 @@ const btParties: Array<{ party: string; pred: number; actual: number; delta: num
       { party: "Conservative", pred: wardBacktest.con_pred || 0, actual: wardBacktest.con_actual || 0, delta: wardBacktest.con_delta || 0 },
     ].filter((r) => r.pred > 0 || r.actual > 0)
   : [];
+// The 7 May 2026 result against the published forecast, in prose, for the
+// reader who searched "<ward> election result". Built from the same summary
+// and backtest row the sections below render.
+const summary = result && result.seatsByParty.length > 0
+  ? wardSummary({
+      wardName: ward.ward_name || String(Astro.params.ward),
+      councilName: ward.council_name || "this council",
+      seatsWon: seatsWon!,
+      seats: result.seats,
+      turnoutPct: result.turnoutPct,
+      majority: result.majority,
+      majorityOverParty: result.majorityOverParty,
+      incomplete: result.incomplete,
+      backtest: wardBacktest,
+    })
+  : [];
 // Councils index, then this council, then this ward. Gives the ~3,000 ward
 // pages a crawl path back up (they previously linked upward only from a line at
 // the very bottom) and puts the trail in the SERP in place of the raw URL.
@@ -170,6 +187,12 @@ const breadcrumbs: Crumb[] = [
       </div>
     )}
   </section>
+
+  {summary.length > 0 && (
+    <section class="section seat-summary">
+      <p>{summary.join(" ")}</p>
+    </section>
+  )}
 
   {wp?.cancelled && (
     <section class="section prose-block">

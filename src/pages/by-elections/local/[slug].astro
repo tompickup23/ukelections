@@ -14,7 +14,9 @@ import ExploreNext from "../../../components/ExploreNext.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
 import { buildLocalContestJourneyLinks } from "../../../lib/electionJourneys";
-import { externalHref, type Crumb } from "../../../lib/seo";
+import { externalHref, buildElectionEvent, type Crumb } from "../../../lib/seo";
+import { byElectionResultSummary } from "../../../lib/pageSummaries";
+import { SITE_URL } from "../../../lib/site";
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
@@ -152,6 +154,24 @@ const description = d.status === "concluded" || declaration?.declared || d.statu
   ? `${c.ward_name}, ${c.council_name}, ${prettyDate(c.polling_day)}: ${statusLabel.toLowerCase()}. Sources and pre-election record.`
   : previewDescription;
 
+// Who won, by how much, how the shares moved and where the result comes
+// from, ahead of the tables: the first thing a reader searching
+// "<ward> by-election result" the morning after needs.
+const resultSummary = byElectionResultSummary(d);
+// Status alone is not enough: a contest file can still read "upcoming" after
+// polling day if the overnight refresh missed it.
+const pollStillToCome = new Date().toISOString().slice(0, 10) <= c.polling_day;
+const structuredData = d.status === "upcoming" && pollStillToCome
+  ? [buildElectionEvent({
+      name: `${c.ward_name} by-election, ${c.council_name}`,
+      description: `Council by-election for ${c.ward_name} ward, ${c.council_name}, on ${prettyDate(c.polling_day)}.`,
+      url: `${SITE_URL}/by-elections/local/${d.slug}/`,
+      pollingDay: c.polling_day,
+      area: c.ward_name,
+      authority: c.council_name,
+    })]
+  : [];
+
 // These generated contest records remain ordinary election information pages.
 const breadcrumbs: Crumb[] = [
   { name: "By-elections", href: "/by-elections/" },
@@ -160,7 +180,7 @@ const breadcrumbs: Crumb[] = [
 ];
 ---
 
-<BaseLayout title={title} description={description} image={cardExists ? cardPath : undefined} breadcrumbs={breadcrumbs}>
+<BaseLayout title={title} description={description} image={cardExists ? cardPath : undefined} breadcrumbs={breadcrumbs} structuredData={structuredData}>
   <section class="page-hero">
     {c.ward_gss && (
       <div class="mini-map-side">
@@ -180,6 +200,7 @@ const breadcrumbs: Crumb[] = [
       {c.seats_total && c.seats_total > 1 ? ` ${c.ward_name} elects ${c.seats_total} councillors; one seat is being filled.` : ""}
     </p>
     <p class="status-pill">{statusLabel}</p>
+    {resultSummary.length > 0 && <p class="result-summary">{resultSummary.join(" ")}</p>}
     {result?.note && <p class="note"><strong>Result source review, {result.checked_at}:</strong> {result.note}</p>}
     <p class="meta-row journey-shortcuts">
       <a href="/by-elections/local/">All council by-elections</a>

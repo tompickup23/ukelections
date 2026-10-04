@@ -24,6 +24,8 @@ import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
+import { buildElectionEvent } from "../../../lib/seo";
+import { SITE_URL } from "../../../lib/site";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
@@ -35,6 +37,19 @@ const data = JSON.parse(
 );
 
 const contest = data.contest;
+// An Event only while the poll is still to come. The nightly rebuild drops it
+// the day after polling, when the page becomes a result.
+const pollStillToCome = new Date().toISOString().slice(0, 10) <= contest.polling_day;
+const structuredData = pollStillToCome
+  ? [buildElectionEvent({
+      name: `${contest.constituency_name} by-election`,
+      description: `UK Parliament by-election for ${contest.constituency_name} on 8 October 2026.`,
+      url: `${SITE_URL}/by-elections/holborn-and-st-pancras/`,
+      pollingDay: contest.polling_day,
+      area: contest.constituency_name,
+      authority: "London Borough of Camden",
+    })]
+  : [];
 const signal = data.inputs.camden_signal_2026_05_07;
 const baseline = data.inputs.ge2024_baseline;
 const field = data.field;
@@ -113,6 +128,7 @@ const timeline: Array<{ date: string; event: string }> = [
     { name: "By-elections", href: "/by-elections/" },
     { name: "Holborn and St Pancras", href: "/by-elections/holborn-and-st-pancras/" },
   ]}
+  structuredData={structuredData}
 >
   <section class="page-hero">
     {contest.pcon24cd && (
