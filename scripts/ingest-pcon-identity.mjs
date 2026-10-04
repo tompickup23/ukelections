@@ -82,7 +82,7 @@ function inferCountry(pcon24cd, slug) {
   // perth, dunfermline, livingston, paisley, motherwell, falkirk, renfrew,
   // arbroath, ayr, fife, lothian, lanarkshire, ross, sutherland, caithness,
   // moray, banffshire, argyll, lochaber, hebrides, orkney, shetland, na-h-eileanan
-  if (/aberdeen|airdrie|alloa|angus|arbroath|argyll|ayr|bathgate|berwickshire|caithness|coatbridge|cowdenbeath|cumbernauld|dumfries|dunbartonshire|dundee|dunfermline|east-kilbride|east-lothian|edinburgh|falkirk|fife|glasgow|glenrothes|gordon|hamilton|highland|inverness|kilmarnock|kirkcaldy|lanark|livingston|lothian|midlothian|mid-dunbartonshire|mid-lanark|mid-scotland|mid-fife|midlothian|moray|na-h-eileanan|paisley|perth|renfrew|ross|rutherglen|stirling|sutherland|west-aberdeenshire|west-dunbartonshire|west-lothian|hamilton-and-clyde|gordon-and-buchan|stirling-and-strathallan|loch|tweed|borders|orkney|shetland/.test(slug)) {
+  if (/aberdeen|airdrie|alloa|angus|arbroath|argyll|ayr|bathgate|berwickshire|caithness|coatbridge|cowdenbeath|cumbernauld|dumfries|dunbartonshire|dundee|dunfermline|east-kilbride|east-lothian|edinburgh|falkirk|fife|glasgow|glenrothes|gordon|hamilton|highland|inverness|kilmarnock|kirkcaldy|lanark|livingston|lothian|midlothian|mid-dunbartonshire|mid-lanark|mid-scotland|mid-fife|midlothian|moray|na-h-eileanan|paisley|perth|renfrew|ross|rutherglen|stirling|motherwell|sutherland|west-aberdeenshire|west-dunbartonshire|west-lothian|hamilton-and-clyde|gordon-and-buchan|stirling-and-strathallan|loch|tweed|borders|orkney|shetland/.test(slug)) {
     return "scotland";
   }
   // NI slugs
