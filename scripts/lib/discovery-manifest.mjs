@@ -130,10 +130,22 @@ export async function finishDiscovery({ plan, stateFile, enabled = false, submit
   // 200 the queue on vps-main held 788 URLs on 4 Oct 2026, every recent run
   // stopped at the cap, and nothing was sent. IndexNow accepts up to 10,000
   // URLs per request.
-  if (urls.length > MAX_UNREVIEWED_BATCH) return { submitted: false, urls, reason: `More than ${MAX_UNREVIEWED_BATCH} changes; review this batch before submitting.` };
+  //
+  // The cap applies to tonight's changes, not to the retained queue. Checking
+  // the queue meant one deliberate site-wide change (3,721 routes on 4 Oct
+  // 2026) left more than the cap pending, and since every later night only
+  // added to it, nothing was ever sent again. A backlog drains in capped
+  // batches instead: tonight's changes first, then the oldest pending routes.
+  const tonight = enabled && !plan.baselineOnly ? [...new Set(plan.changed)].filter(u => plan.pages[u]) : [];
+  if (tonight.length > MAX_UNREVIEWED_BATCH) return { submitted: false, urls, reason: `More than ${MAX_UNREVIEWED_BATCH} changes; review this batch before submitting.` };
+  const tonightSet = new Set(tonight);
+  const batch = [...tonight, ...urls.filter(u => !tonightSet.has(u))].slice(0, MAX_UNREVIEWED_BATCH);
   try {
-    const result = await submit(urls, plan.pages);
-    if (result.submitted) atomicJson(stateFile, { ...state, pending: [] });
+    const result = await submit(batch, plan.pages);
+    if (result.submitted) {
+      const sent = new Set(batch);
+      atomicJson(stateFile, { ...state, pending: urls.filter(u => !sent.has(u)) });
+    }
     return result;
   } catch (error) {
     return { submitted: false, urls, reason: String(error.message || error) };
