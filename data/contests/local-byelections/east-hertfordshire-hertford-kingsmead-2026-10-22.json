@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-10T11:59:55.315Z",
+  "generated_at": "2026-10-06T03:37:20.534Z",
   "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
   "status": "upcoming",
   "contest": {
@@ -26,12 +26,54 @@
     "postal_vote_deadline": "2026-10-07"
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 5,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.east-hertfordshire.hertford-kingsmead.by.2026-10-22/sopn/2026-09-25T16%3A11%3A20.146504%2B00%3A00/Hertford_Kingsmead.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Rosemary Anne Bolton",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Christopher Edmund Valentine Bush",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Elif Nergis Lewis",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Dawn Katherine Anne Newell",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Drew Waller-Downes",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -224,10 +266,141 @@
     "source": "https://www.eastherts.gov.uk/elections-and-voting/elections-2023/hertford-kingsmead-ward",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.1582360570687419,
+        "Conservative": 0.2637267617812365,
+        "Liberal Democrats": 0.21011673151750973,
+        "Green Party": 0.3679204496325119,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.eastherts.gov.uk/elections-and-voting/elections-2023/hertford-kingsmead-ward"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 35,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9867620177505968,
+        "Conservative": -0.6307375185213864,
+        "Liberal Democrats": -0.26486255149858806,
+        "Green Party": -0.17365170329888047
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44210603815035326,
+        "Conservative": 0.6026830617137529,
+        "Liberal Democrats": 0.8147045203576389,
+        "Green Party": 0.8754797613520691
+      },
+      "entry_shares": {
+        "Reform UK": 0.2713114754098361,
+        "Liberal Democrats": 0.03556185162163855,
+        "Green Party": 0.06533867916537256
+      },
+      "entry_counts": {
+        "Reform UK": 35,
+        "Labour": 1,
+        "Conservative": 1,
+        "Liberal Democrats": 6,
+        "Green Party": 14,
+        "SNP": 0,
+        "Plaid Cymru": 3,
+        "Restore Britain": 2,
+        "Independent": 4,
+        "Other": 2
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 22,
+        "Conservative": 34,
+        "Liberal Democrats": 27,
+        "Green Party": 19,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 0
+      }
+    },
+    "central": {
+      "Reform UK": 0.2726863058657757,
+      "Labour": 0.0658188578256139,
+      "Conservative": 0.16091925349313219,
+      "Liberal Democrats": 0.17037172316669388,
+      "Green Party": 0.33020385964878435,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.33725,
+      "Labour": 0.01175,
+      "Conservative": 0.184,
+      "Liberal Democrats": 0.0815,
+      "Green Party": 0.3855
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.08016155652591736,
+        "p50": 0.2543055323924459,
+        "p90": 0.47536367414228786
+      },
+      "Labour": {
+        "p10": 0.017984356187195096,
+        "p50": 0.06002983724683025,
+        "p90": 0.1646536138086651
+      },
+      "Conservative": {
+        "p10": 0.030951031801314755,
+        "p50": 0.15278617522035493,
+        "p90": 0.3856826642645222
+      },
+      "Liberal Democrats": {
+        "p10": 0.06418861303346045,
+        "p50": 0.15175094997688937,
+        "p90": 0.3014525691841866
+      },
+      "Green Party": {
+        "p10": 0.14286640545293078,
+        "p50": 0.29073465984812935,
+        "p90": 0.4711093542330513
+      }
+    },
+    "winner": "Green Party",
+    "runner_up": "Reform UK",
+    "margin_pp": 5.7517553783008655,
+    "leader_probability": 0.3855,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Reform UK (median of 35). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Reform UK"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

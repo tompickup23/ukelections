@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-20T19:06:08.778Z",
+  "generated_at": "2026-10-06T03:37:18.360Z",
   "slug": "flintshire-connahs-quay-central-2026-07-09",
   "status": "concluded",
   "contest": {
@@ -95,11 +95,186 @@
     "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
   },
   "ward_profile": null,
-  "prior_result": null,
-  "forecast": null,
-  "no_forecast_reason": [
-    "No prior ordinary result for this ward in either archive."
-  ],
+  "prior_result": {
+    "election_date": "2022-05-05",
+    "seats_contested": null,
+    "shares": {
+      "Reform UK": 0,
+      "Labour": 0.34065934065934067,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.6593406593406593,
+      "Other": 0
+    },
+    "candidates": [
+      {
+        "name": "Bernie Attridge",
+        "party_name": "Independent",
+        "votes": 780
+      },
+      {
+        "name": "Debbie Owen",
+        "party_name": "Independent",
+        "votes": 626
+      },
+      {
+        "name": "Ryan O'Gorman",
+        "party_name": "Labour Party",
+        "votes": 403
+      },
+      {
+        "name": "Tracey Jane Sutton-Postlethwaite",
+        "party_name": "Labour Party",
+        "votes": 308
+      }
+    ],
+    "source_label": "Democracy Club",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.connahs-quay-central.2022-05-05/",
+    "usable_as_baseline": true
+  },
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.34065934065934067,
+        "Conservative": 0,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.6593406593406593,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.connahs-quay-central.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 43,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -1.067020547531758,
+        "Conservative": -0.6307375185213864,
+        "Liberal Democrats": -0.18652929964789455,
+        "Green Party": -0.19192936203206212,
+        "Independent": -0.8038853476288681
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4115176134925074,
+        "Conservative": 0.6026830617137529,
+        "Liberal Democrats": 0.8667051303671713,
+        "Green Party": 0.8630445797294043,
+        "Independent": 0.519304209212287
+      },
+      "entry_shares": {
+        "Reform UK": 0.25856793145654833,
+        "Liberal Democrats": 0.04246634760278921,
+        "Green Party": 0.07027276930189552,
+        "Independent": 0.17124006466141062
+      },
+      "entry_counts": {
+        "Reform UK": 43,
+        "Labour": 1,
+        "Conservative": 1,
+        "Liberal Democrats": 8,
+        "Green Party": 17,
+        "SNP": 0,
+        "Plaid Cymru": 3,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 4
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 30,
+        "Conservative": 42,
+        "Liberal Democrats": 34,
+        "Green Party": 22,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 5,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.27392311437566635,
+      "Labour": 0.15988593459081013,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0.07444595203490167,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.49174499899862184,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.2955,
+      "Labour": 0.10775,
+      "Green Party": 0.021,
+      "Independent": 0.57575
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.08370950245735073,
+        "p50": 0.2798324204273236,
+        "p90": 0.5773605303264071
+      },
+      "Labour": {
+        "p10": 0.06051403383578705,
+        "p50": 0.1586782589490376,
+        "p90": 0.38060157695579266
+      },
+      "Green Party": {
+        "p10": 0.023853990617557563,
+        "p50": 0.07400131365379181,
+        "p90": 0.21010913602917605
+      },
+      "Independent": {
+        "p10": 0.04191436989965143,
+        "p50": 0.44460385766321897,
+        "p90": 0.6924515966256849
+      }
+    },
+    "winner": "Independent",
+    "runner_up": "Reform UK",
+    "margin_pp": 21.782188462295547,
+    "leader_probability": 0.57575,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Conservative is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Plaid Cymru is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Priced from an entry prior, not from this ward: Reform UK (median of 43), Green Party (median of 17). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [
+      "Conservative",
+      "Plaid Cymru"
+    ],
+    "entry_priced_parties": [
+      "Reform UK",
+      "Green Party"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": {
     "declared": true,
     "shares": {
@@ -121,7 +296,13 @@
     "total_votes": 532,
     "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.connahs-quay-central.by.2026-07-09/",
     "outcome": null,
-    "grading": null
+    "grading": {
+      "graded_against": "current_rebuild",
+      "note": "No snapshot of the projection as published exists for this contest, so it is graded against the current rebuild. That grade can move as older by-elections are ingested into the swing corpus.",
+      "projected_winner": "Independent",
+      "call_correct": false,
+      "mae_pp": 13.672530447984618
+    }
   },
   "declaration": null,
   "sources": [
