@@ -140,8 +140,11 @@ function parseOpdrts(s) {
   // Day(s) are the numeric parts that aren't the year
   const dayParts = parts.filter((p, i) => i !== yearIdx && i !== monthIdx && /^\d{1,2}$/.test(p));
   if (dayParts.length === 0) return null;
-  // Use the latest day (poll completion)
-  const day = Math.max(...dayParts.map((p) => parseInt(p, 10)));
+  // The last day given is the completion date, and the month is its month.
+  // Not the largest day: {{opdrts|30|2|October|2026}} is 30 September to
+  // 2 October, and taking the maximum dated it 30 October, a future date the
+  // averaging then discarded (Opinium for the Observer, 7 Oct 2026).
+  const day = parseInt(dayParts[dayParts.length - 1], 10);
   return new Date(Date.UTC(year, month, day));
 }
 
@@ -193,6 +196,13 @@ function extractFirstTable(wt) {
   return after.slice(0, end);
 }
 
+function insideMarkup(text) {
+  const count = (re) => (text.match(re) || []).length;
+  return count(/\{\{/g) > count(/\}\}/g)
+    || count(/\[\[/g) > count(/\]\]/g)
+    || count(/<ref(?![^>]*\/>)[^>]*>/g) > count(/<\/ref>/g);
+}
+
 function parseRows(tableBody) {
   // Header rows are everything before the first "|-" data separator that
   // follows the header "!" lines. We split on "\n|-" and skip rows that
@@ -208,7 +218,11 @@ function parseRows(tableBody) {
     let buf = "";
     for (const line of lines) {
       if (!line.trim()) continue;
-      if (line.startsWith("|")) {
+      // A citation can run over several lines, and its continuation lines
+      // start with "|url=" and the like. Those belong to the open cell: read as
+      // new cells they shift every column, and the row fails the area check
+      // (YouGov 4 to 5 Oct 2026 was dropped this way).
+      if (line.startsWith("|") && !insideMarkup(buf)) {
         if (buf.trim()) cells.push(buf);
         buf = line.slice(1);
       } else {

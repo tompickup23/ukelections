@@ -64,6 +64,21 @@ it('submits an ordinary night of forecast changes without waiting for review', a
   try {await finishDiscovery({plan:{pages:Object.fromEntries(urls.map(u=>[u,'hash'])),changed:urls},stateFile:join(root,'state.json'),enabled:true,submit});expect(submit).toHaveBeenCalledTimes(1);}
   finally{rmSync(root,{recursive:true,force:true});}
 });
+it('drains a backlog over the cap in capped batches instead of stalling', async () => {
+  const root=mkdtempSync(join(tmpdir(),'uke-discovery-'));const stateFile=join(root,'state.json');
+  const urls=Array.from({length:2500},(_,i)=>`${origin}/${i}/`);const pages=Object.fromEntries(urls.map(u=>[u,'hash']));
+  const submit=vi.fn().mockResolvedValue({submitted:true});
+  try {
+    writeFileSync(stateFile,JSON.stringify({version:1,pages,pending:urls.slice(0,2400)}));
+    await finishDiscovery({plan:{pages,changed:urls.slice(2400)},stateFile,enabled:true,submit});
+    expect(submit).toHaveBeenCalledTimes(1);
+    const sent=submit.mock.calls[0][0];expect(sent).toHaveLength(MAX_UNREVIEWED_BATCH);expect(sent.slice(0,100)).toEqual(urls.slice(2400));
+    expect(JSON.parse(readFileSync(stateFile)).pending).toHaveLength(2500-MAX_UNREVIEWED_BATCH);
+    await finishDiscovery({plan:{pages,changed:[]},stateFile,enabled:true,submit});
+    await finishDiscovery({plan:{pages,changed:[]},stateFile,enabled:true,submit});
+    expect(submit).toHaveBeenCalledTimes(3);expect(JSON.parse(readFileSync(stateFile)).pending).toEqual([]);
+  } finally{rmSync(root,{recursive:true,force:true});}
+});
 describe('discovery dates', () => {
   const setup = () => {
     const root = mkdtempSync(join(tmpdir(), 'uke-dates-'));

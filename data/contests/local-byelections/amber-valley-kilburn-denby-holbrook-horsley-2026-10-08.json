@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-20T19:06:09.285Z",
+  "generated_at": "2026-10-06T03:37:20.255Z",
   "slug": "amber-valley-kilburn-denby-holbrook-horsley-2026-10-08",
   "status": "upcoming",
   "contest": {
@@ -236,10 +236,137 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.amber-valley.kilburn-denby-holbrook-horsley.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.10612375761462008,
+        "Labour": 0.3712728438602116,
+        "Conservative": 0.34145559474190446,
+        "Liberal Democrats": 0.06059634498236614,
+        "Green Party": 0.12055145880089772,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.amber-valley.kilburn-denby-holbrook-horsley.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment",
+      "stratum_used": true,
+      "contests_used": 38,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -1.0723151025275448,
+        "Conservative": -0.6321805126945335,
+        "Liberal Democrats": -0.26068127484921405,
+        "Green Party": -0.17365170329888047
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.409567070494482,
+        "Conservative": 0.601944799404123,
+        "Liberal Democrats": 0.8174205628442265,
+        "Green Party": 0.8754797613520691
+      },
+      "entry_shares": {
+        "Reform UK": 0.2589455679382189,
+        "Liberal Democrats": 0.03556185162163855,
+        "Green Party": 0.061670025122615324
+      },
+      "entry_counts": {
+        "Reform UK": 38,
+        "Labour": 1,
+        "Conservative": 1,
+        "Liberal Democrats": 6,
+        "Green Party": 16,
+        "SNP": 0,
+        "Plaid Cymru": 3,
+        "Restore Britain": 2,
+        "Independent": 4,
+        "Other": 3
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 25,
+        "Conservative": 37,
+        "Liberal Democrats": 30,
+        "Green Party": 19,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.1787867010986386,
+      "Labour": 0.2832164407902135,
+      "Conservative": 0.3639339543939416,
+      "Liberal Democrats": 0,
+      "Green Party": 0.17406290371720629,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.17075,
+      "Labour": 0.27225,
+      "Conservative": 0.47475,
+      "Green Party": 0.08225
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.04368249227852464,
+        "p50": 0.17279977229072063,
+        "p90": 0.40572101274034555
+      },
+      "Labour": {
+        "p10": 0.1127611404517827,
+        "p50": 0.2621745081690892,
+        "p90": 0.46660218926904984
+      },
+      "Conservative": {
+        "p10": 0.09840833620385907,
+        "p50": 0.33537558103528453,
+        "p90": 0.5618700125030405
+      },
+      "Green Party": {
+        "p10": 0.06530406979707104,
+        "p50": 0.1640656856156873,
+        "p90": 0.3292817430863412
+      }
+    },
+    "winner": "Conservative",
+    "runner_up": "Labour",
+    "margin_pp": 8.071751360372808,
+    "leader_probability": 0.47475,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Reform UK carried unswung: fewer than 5 comparable contests in the window.",
+      "Restore Britain is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Restore Britain"
+    ],
+    "entry_priced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

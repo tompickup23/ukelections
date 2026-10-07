@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-20T19:06:09.304Z",
+  "generated_at": "2026-10-06T03:37:20.405Z",
   "slug": "wiltshire-salisbury-milford-2026-10-15",
   "status": "upcoming",
   "contest": {
@@ -27,7 +27,7 @@
   },
   "field": {
     "candidate_count": 4,
-    "locked": false,
+    "locked": true,
     "sopn_published": true,
     "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.wiltshire.salisbury-milford.by.2026-10-15/sopn/2026-09-18T16%3A14%3A48.508148%2B00%3A00/Salisbury_Milford.pdf",
     "parties": [
@@ -45,13 +45,6 @@
         "elected": null
       },
       {
-        "name": "Mac McIntyre Brown",
-        "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Laura Elizabeth Jones",
         "party_name": "Conservative and Unionist Party",
         "party": "Conservative",
@@ -62,6 +55,13 @@
         "name": "Simon Edgar Lever",
         "party_name": "Reform UK",
         "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Mac McIntyre Brown",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
         "votes": null,
         "elected": null
       }
@@ -202,10 +202,134 @@
     "source": "https://elections.wiltshire.gov.uk/Home/Division/9130",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2025-05-01 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2025-05-01",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.18090787716955942,
+        "Labour": 0.08678237650200267,
+        "Conservative": 0.23965287049399198,
+        "Liberal Democrats": 0.438584779706275,
+        "Green Party": 0.0540720961281709,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://elections.wiltshire.gov.uk/Home/Division/9130"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 55,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.22028224566196655,
+        "Labour": 0.1626557660015882,
+        "Conservative": -0.3061999400024178,
+        "Liberal Democrats": -0.23221085186501894,
+        "Green Party": -0.23305324380775128,
+        "Independent": -0.11652273000901092
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8440090918134795,
+        "Labour": 1.126871317122185,
+        "Conservative": 0.7882143749442534,
+        "Liberal Democrats": 0.8360929628547713,
+        "Green Party": 0.8355360002588199,
+        "Independent": 0.9151749196392648
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
+      "entry_counts": {
+        "Reform UK": 0,
+        "Labour": 1,
+        "Conservative": 2,
+        "Liberal Democrats": 3,
+        "Green Party": 5,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 4,
+        "Independent": 10,
+        "Other": 1
+      },
+      "party_counts": {
+        "Reform UK": 54,
+        "Labour": 48,
+        "Conservative": 48,
+        "Liberal Democrats": 36,
+        "Green Party": 45,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 2
+      }
+    },
+    "central": {
+      "Reform UK": 0.18314204821572236,
+      "Labour": 0.12236168803858676,
+      "Conservative": 0.22916057375821078,
+      "Liberal Democrats": 0.4653356899874801,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.0435,
+      "Labour": 0.0745,
+      "Conservative": 0.17575,
+      "Liberal Democrats": 0.70625
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.10632237406140783,
+        "p50": 0.1730688654089973,
+        "p90": 0.2877074609561234
+      },
+      "Labour": {
+        "p10": 0.03439998747336488,
+        "p50": 0.11933489233057035,
+        "p90": 0.3070670683990011
+      },
+      "Conservative": {
+        "p10": 0.10017651432880063,
+        "p50": 0.22134808476799078,
+        "p90": 0.4033564908315818
+      },
+      "Liberal Democrats": {
+        "p10": 0.2179432415218147,
+        "p50": 0.434310631360902,
+        "p90": 0.615706694515641
+      }
+    },
+    "winner": "Liberal Democrats",
+    "runner_up": "Conservative",
+    "margin_pp": 23.61751162292693,
+    "leader_probability": 0.70625,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "entry_priced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

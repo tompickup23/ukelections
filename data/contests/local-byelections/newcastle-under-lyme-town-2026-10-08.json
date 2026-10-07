@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-09-20T19:06:09.294Z",
+  "generated_at": "2026-10-06T03:37:20.297Z",
   "slug": "newcastle-under-lyme-town-2026-10-08",
   "status": "upcoming",
   "contest": {
@@ -250,10 +250,140 @@
     "source": "https://www.newcastle-staffs.gov.uk/downloads/file/3894/town",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.2713114754098361,
+        "Labour": 0.2827868852459016,
+        "Conservative": 0.16147540983606556,
+        "Liberal Democrats": 0.06885245901639345,
+        "Green Party": 0.2155737704918033,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.newcastle-staffs.gov.uk/downloads/file/3894/town"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 56,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.21105839330330411,
+        "Labour": 0.13618197028685164,
+        "Conservative": -0.31218478038920283,
+        "Liberal Democrats": -0.2165843460901451,
+        "Green Party": -0.19155696919174225,
+        "Independent": -0.11652273000901092
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8501678246513974,
+        "Labour": 1.1055674743983974,
+        "Conservative": 0.7844334723591913,
+        "Liberal Democrats": 0.8464742333870289,
+        "Green Party": 0.8632966542061545,
+        "Independent": 0.9151749196392648
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Independent": 0.0888787452835334
+      },
+      "entry_counts": {
+        "Reform UK": 0,
+        "Labour": 1,
+        "Conservative": 2,
+        "Liberal Democrats": 3,
+        "Green Party": 5,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 4,
+        "Independent": 10,
+        "Other": 1
+      },
+      "party_counts": {
+        "Reform UK": 55,
+        "Labour": 49,
+        "Conservative": 49,
+        "Liberal Democrats": 37,
+        "Green Party": 46,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 2
+      }
+    },
+    "central": {
+      "Reform UK": 0.2552534764954372,
+      "Labour": 0.3429183632549804,
+      "Conservative": 0.13611201691981054,
+      "Liberal Democrats": 0.061925048373503266,
+      "Green Party": 0.2037910949562685,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.18675,
+      "Labour": 0.461,
+      "Conservative": 0.05225,
+      "Liberal Democrats": 0.03125,
+      "Green Party": 0.26875
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.13881465883572447,
+        "p50": 0.22930697280311885,
+        "p90": 0.3718588849634523
+      },
+      "Labour": {
+        "p10": 0.11966682022897654,
+        "p50": 0.305303720333782,
+        "p90": 0.5075500188336596
+      },
+      "Conservative": {
+        "p10": 0.04999946371779255,
+        "p50": 0.12292115357270776,
+        "p90": 0.2604445990010903
+      },
+      "Liberal Democrats": {
+        "p10": 0.013604252981836717,
+        "p50": 0.05961268427175012,
+        "p90": 0.19223634288601557
+      },
+      "Green Party": {
+        "p10": 0.044193669979983724,
+        "p50": 0.19541838853650975,
+        "p90": 0.4243493442805977
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Green Party",
+    "margin_pp": 8.766488675954315,
+    "leader_probability": 0.461,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [],
+    "unpriced_parties": [],
+    "entry_priced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [
