@@ -30,9 +30,20 @@ IMD_CANDIDATES = [
     Path("/root/aidoge/burnley-council/data/imd2019_cache.json"),
     Path("/root/clawd/burnley-council/data/imd2019_cache.json"),
 ]
-IMD = next((p for p in IMD_CANDIDATES if p and p.exists()), None)
 OUT = ROOT / "data/features/ward-demographics-2021.json"
 IDENTITY = ROOT / "data/identity/wards-may-2026.json"
+
+def find_imd_cache(candidates):
+    for candidate in candidates:
+        if candidate is None:
+            continue
+        try:
+            if candidate.is_file():
+                return candidate
+        except PermissionError:
+            # Machine-specific fallback directories may be inaccessible in CI.
+            continue
+    return None
 
 def normalise(h: str) -> str:
     return " ".join(h.lower().replace("\n", " ").replace(";", " ").split())
@@ -193,7 +204,8 @@ def main():
             print(f"  loaded wd{year}: {len(normalised):,} LSOAs")
         except Exception as e:
             print(f"  skip wd{year}: {e}")
-    imd = json.load(open(IMD)) if IMD else {}
+    imd_path = find_imd_cache(IMD_CANDIDATES)
+    imd = json.load(open(imd_path)) if imd_path else {}
 
     if not imd:
         sys.exit("REFUSING TO WRITE: IMD input is missing; set UKE_IMD_CACHE to the source cache.")
