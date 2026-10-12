@@ -134,3 +134,30 @@ describe('discovery dates', () => {
     } finally { rmSync(root, { recursive: true, force: true }); }
   });
 });
+
+it('dates by-election pages from the publication ledger without creating fingerprint churn', () => {
+  const root=mkdtempSync(join(tmpdir(),'uke-contest-dates-'));
+  const route='/by-elections/local/example/';
+  const url=origin+route;
+  const file=join(root,route,'index.html');
+  mkdirSync(join(root,route),{recursive:true});
+  const page=html(route,'Result: 10 votes').replace('</head>','<script type="application/ld+json">{"@type":"WebPage","name":"Example"}</script></head>').replace('</main>','<p data-content-updated data-discovery-ignore data-pagefind-ignore hidden></p></main>');
+  writeFileSync(file,page);
+  writeFileSync(join(root,'sitemap.xml'),`<urlset><url><loc>${url}</loc></url></urlset>`);
+  try {
+    const baseline=planDiscovery(root,null,'2026-10-01T00:00:00Z');
+    stampDiscoveryDates(root,baseline);
+    expect(readFileSync(file,'utf8')).not.toContain('dateModified');
+    writeFileSync(file,page.replace('Result: 10 votes','Result: 11 votes'));
+    const changed=planDiscovery(root,baseline,'2026-10-12T22:00:00Z');
+    stampDiscoveryDates(root,changed);
+    const dated=readFileSync(file,'utf8');
+    expect(dated).toContain('"dateModified":"2026-10-12T22:00:00Z"');
+    expect(dated).toContain('Last updated <time datetime="2026-10-12T22:00:00Z">12 October 2026</time>');
+    expect(pageFingerprint(dated,url)).toBe(changed.pages[url]);
+    const unchanged=planDiscovery(root,changed,'2026-10-13T22:00:00Z');
+    expect(unchanged.changed).toEqual([]);
+    stampDiscoveryDates(root,unchanged);
+    expect(readFileSync(file,'utf8')).toBe(dated);
+  } finally {rmSync(root,{recursive:true,force:true});}
+});

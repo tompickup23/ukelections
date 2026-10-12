@@ -1,0 +1,13 @@
+/* Shared detail-page controls; tables keep native semantics inside scroll regions. */
+.detail-nav { display:flex; flex-wrap:wrap; gap:var(--space-md); margin-block:var(--space-lg); }
+.compact-hero { max-width:none; padding-block:var(--space-xl) var(--space-lg); }
+.compact-hero h1 { font-size:var(--text-h1); }
+.compact-hero .lede { font-size:var(--text-body); }
+.archived-analysis { border:1px solid var(--border); padding:var(--space-md); min-width:0; }
+.archived-analysis > summary { cursor:pointer; font-size:var(--text-h3); font-weight:600; }
+.by-election-scroll { width:100%; max-width:100%; overflow-x:auto; margin-block:var(--space-md); }
+.by-election-scroll table { width:100%; border-collapse:collapse; }
+.by-election-scroll caption { text-align:left; color:var(--muted); font-size:var(--text-small); padding-block:var(--space-xs); }
+.by-election-scroll th,.by-election-scroll td { padding:var(--space-xs); vertical-align:top; }
+.by-election-scroll:focus-visible { outline:2px solid var(--focus-ring); outline-offset:2px; }
+.by-election-scroll .num { white-space:nowrap; }

@@ -1,3 +1,4 @@
+import { byElectionResultCards } from "./byElectionCards";
 /**
  * ogEntries.ts. single source of truth for which pages get a
  * Satori-rendered Open Graph card, and what goes on it.
@@ -105,7 +106,9 @@ function topSharesAbsolute(
 function buildEntries(): OgEntry[] {
   if (!BUILD_OG) return [];
 
-  const out: OgEntry[] = [];
+  // A scoped build validates the complete by-election card set without rendering unrelated cards.
+  if (process.env.BUILD_OG_SCOPE === "by-elections") return byElectionResultCards();
+  const out: OgEntry[] = byElectionResultCards();
 
   // 1. Homepage. promote whatever the soonest upcoming contest is
   const upcoming = loadUpcomingElections();

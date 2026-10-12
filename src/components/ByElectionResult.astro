@@ -1,4 +1,5 @@
 ---
+import "../styles/by-election-details.css";
 /**
  * ByElectionResult.astro — generic result-first renderer for a CONCLUDED
  * by-election whose data file carries `result`, `inputs` (ge2024_baseline +
@@ -52,7 +53,7 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
   <div class="hero-byelection-grid">
     <header class="hero-byelection-head">
       <p class="eyebrow">Result · {pollingDayLabel}</p>
-      <h1>{contest.constituency_name} by-election</h1>
+      <h1>{contest.constituency_name} by-election result</h1>
       <p class="lede">
         <strong>{result.outcome}.</strong> {result.winner_candidate} ({shortPartyLabel(winnerParty)})
         won on <strong>{pct1(result.shares[winnerParty])}%</strong>, a
@@ -68,8 +69,9 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
       <span class="result-badge-party" style={`background:${partyColour(winnerParty)}`}>{shortPartyLabel(winnerParty)}</span>
     </div>
   </div>
-  <RaceBar shares={resultRanked} candidates={candidateList} title="Declared result (vote share)" />
+  <RaceBar shares={resultRanked} candidates={candidateList} title="Declared result (vote share)" ariaLabel="Declared vote shares by party" labelMinPct={0.15} />
 </section>
+<nav class="detail-nav" aria-label="On this page"><a href="#result">Full result and source</a><a href="#signal">Pre-election evidence</a>{benchmarks.length > 0 && <a href="#comparison">Comparison</a>}</nav>
 
 <section class="section">
   <div class="section-head">
@@ -84,11 +86,12 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
 <section class="section">
   <div class="section-head">
     <p class="eyebrow">Declared result · {pollingDayLabel.split(",").slice(-1)}</p>
-    <h2>Full result</h2>
+    <h2 id="result">Full result</h2>
   </div>
-  <table class="seat-table">
+  <div class="by-election-scroll" role="region" aria-label="Declared votes, shares and changes since GE2024" tabindex="0"><table class="seat-table">
+<caption>Declared votes, shares and changes since GE2024</caption>
     <thead>
-      <tr><th>Party</th><th class="num">Votes</th><th class="num">Share</th><th class="num">Swing vs GE2024</th></tr>
+      <tr><th scope="col">Candidate</th><th scope="col">Party</th><th class="num" scope="col">Votes</th><th class="num" scope="col">Share</th><th class="num" scope="col">Swing vs GE2024</th></tr>
     </thead>
     <tbody>
       {resultRanked.map((row) => {
@@ -96,7 +99,7 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
         const sw = result.swing_vs_ge2024_pp?.[row.party];
         return (
           <tr>
-            <td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
+            <td>{candidateByParty[row.party] || "Not recorded"}</td><td><span class="party-pill" style={`background:${partyColour(row.party)}`}></span> {shortPartyLabel(row.party)}</td>
             <td class="num">{typeof v === "number" ? v.toLocaleString() : "n/a"}</td>
             <td class="num">{pct1(row.pct)}%</td>
             <td class="num">
@@ -107,17 +110,17 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
           </tr>
         );
       })}
-      <tr><td><strong>Majority</strong></td><td class="num"><strong>{result.majority_votes.toLocaleString()}</strong></td><td class="num"><strong>{(result.margin_pp * 100).toFixed(1)}pp</strong></td><td class="num">n/a</td></tr>
-      <tr><td><strong>Turnout</strong></td><td class="num"><strong>{result.turnout_votes.toLocaleString()}</strong></td><td class="num"><strong>{pct1(result.turnout_pct)}%</strong></td><td class="num">n/a</td></tr>
+      <tr><td colspan="2"><strong>Majority</strong></td><td class="num"><strong>{result.majority_votes.toLocaleString()}</strong></td><td class="num"><strong>{(result.margin_pp * 100).toFixed(1)}pp</strong></td><td class="num">n/a</td></tr>
+      <tr><td colspan="2"><strong>Turnout</strong></td><td class="num"><strong>{result.turnout_votes.toLocaleString()}</strong></td><td class="num"><strong>{pct1(result.turnout_pct)}%</strong></td><td class="num">n/a</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <p class="caption">Source: returning officer declaration via {result.sources?.[0] ? <a href={result.sources[0]}>primary record</a> : "official declaration"}.</p>
 </section>
 
 <section class="section">
   <div class="section-head">
     <p class="eyebrow">The signal · no constituency polls existed</p>
-    <h2>What the freshest data pointed to</h2>
+    <h2 id="signal">What the freshest data pointed to</h2>
   </div>
   <p>{inputs.no_polls_note}</p>
   {calls.length > 0 && (
@@ -137,7 +140,7 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
     {ge && (
       <div>
         <h3>GE2024 baseline (4 Jul 2024)</h3>
-        <p class="caption">The year-old general-election result, a naive prior.</p>
+        <p class="caption">The 2024 general-election result, used as a historical baseline.</p>
         <RaceBar shares={geRanked} height={52} showLegend={true} title={null} ariaLabel="GE2024 baseline" />
       </div>
     )}
@@ -148,11 +151,12 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Scorecard · how every forecaster did</p>
-      <h2>Forecasts vs result</h2>
+      <h2 id="comparison">Forecasts vs result</h2>
     </div>
-    <table class="seat-table">
+    <div class="by-election-scroll" role="region" aria-label="Pre-election comparisons against the result" tabindex="0"><table class="seat-table">
+<caption>Pre-election comparisons against the result</caption>
       <thead>
-        <tr><th>Forecaster</th><th>Type</th><th>Predicted winner</th><th class="num">Share MAE</th><th>Call</th></tr>
+        <tr><th scope="col">Forecaster</th><th scope="col">Type</th><th scope="col">Predicted winner</th><th class="num" scope="col">Share MAE</th><th scope="col">Call</th></tr>
       </thead>
       <tbody>
         <tr class="scorecard-actual">
@@ -178,7 +182,7 @@ const marginPp = (result.margin_pp * 100).toFixed(1);
           </tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">{benchNote}</p>
     {(fvr.narrative || []).map((n: string) => (<p>{n}</p>))}
   </section>

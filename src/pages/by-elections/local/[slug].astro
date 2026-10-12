@@ -1,4 +1,5 @@
 ---
+import "../../../styles/by-election-details.css";
 /**
  * One page per council by-election.
  *
@@ -7,6 +8,7 @@
  * baseline will not support a number the page says so and shows the structure
  * instead, which is the precedent set by the Clacton page.
  */
+import { localMetadata, isDeclared } from "../../../lib/byElections";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
@@ -75,7 +77,8 @@ const pp1 = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed
 const prettyDate = (iso: string) =>
   iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
 
-const title = `${c.ward_name}, ${c.council_name}. Council by-election ${prettyDate(c.polling_day)}`;
+const { title, description, status: statusLabel } = localMetadata(d);
+const declared = isDeclared(d);
 
 const rows = (shares: Record<string, number>) =>
   Object.entries(shares || {})
@@ -98,12 +101,6 @@ const leader = forecast?.winner ?? null;
 const leaderProb = forecast?.leader_probability ?? null;
 const tooClose = Boolean(forecast?.too_close_to_call);
 
-const previewDescription = forecast
-  ? tooClose
-    ? `Too close to call. ${c.ward_name}, ${c.council_name} votes on ${prettyDate(c.polling_day)}, ${f.candidate_count} candidates standing. The projection and the ward's last result.`
-    : `${c.ward_name}, ${c.council_name}, polling ${prettyDate(c.polling_day)}. ${shortPartyLabel(leader)} favoured on ${Math.round((leaderProb ?? 0) * 100)}%, from the ward's ${prior?.election_date?.slice(0, 4)} result and recent by-election swing.`
-  : `${c.ward_name} in ${c.council_name} votes on ${prettyDate(c.polling_day)}. The candidates, the reason for the vacancy, and why we publish no projection for this one.`;
-
 // The stratum key is machine-readable; this is the human sentence for it.
 function stratumLabel(stratum: string): string {
   const [era, entry] = String(stratum).split("|");
@@ -122,7 +119,9 @@ function stratumLabel(stratum: string): string {
 // rendered. Advertising a card that does not exist is the bug that left every
 // page on this site pointing at a missing image, so the check is not optional.
 const cardPath = `/cards/by-elections/${d.slug}.png`;
-const cardExists = existsSync(path.join(process.cwd(), "public", cardPath));
+// These are pre-election forecast cards. A declared result must not advertise
+// an old forecast as its social preview.
+const cardExists = !d.result?.declared && !d.declaration?.declared && existsSync(path.join(process.cwd(), "public", cardPath));
 
 // Composed as one string rather than interleaved JSX expressions, which were
 // inserting a space before the comma and before the full stop: "held by
@@ -139,21 +138,6 @@ const holderSentence = holder?.established
 // while the winner sits in this page's own candidate list is the version of
 // this page that was live until 10 September 2026.
 const declaration = d.declaration;
-const statusLabel =
-  d.status === "concluded"
-    ? "Result declared"
-    : declaration?.declared
-      ? "Result declared, counts not published"
-      : d.status === "polls_closed"
-        ? "Polls closed, result awaited"
-        : "Upcoming";
-
-// Use the same recorded status as the visible badge. A winner field alone is
-// not a declaration, and a declaration without counts must not promise totals.
-const description = d.status === "concluded" || declaration?.declared || d.status === "polls_closed"
-  ? `${c.ward_name}, ${c.council_name}, ${prettyDate(c.polling_day)}: ${statusLabel.toLowerCase()}. Sources and pre-election record.`
-  : previewDescription;
-
 // Who won, by how much, how the shares moved and where the result comes
 // from, ahead of the tables: the first thing a reader searching
 // "<ward> by-election result" the morning after needs.
@@ -181,7 +165,7 @@ const breadcrumbs: Crumb[] = [
 ---
 
 <BaseLayout title={title} description={description} image={cardExists ? cardPath : undefined} breadcrumbs={breadcrumbs} structuredData={structuredData}>
-  <section class="page-hero">
+  <section class="page-hero compact-hero">
     {c.ward_gss && (
       <div class="mini-map-side">
         <MiniMap
@@ -193,23 +177,98 @@ const breadcrumbs: Crumb[] = [
       </div>
     )}
     <p class="eyebrow">Council by-election, {c.council_name}</p>
-    <h1>{c.ward_name} by-election, {prettyDate(c.polling_day)}</h1>
+    <h1>{c.ward_name} by-election{declared ? " result" : ""}</h1>
     <p class="lede">
       Polling day {prettyDate(c.polling_day)}.
-      {c.vacancy_reason ? ` The seat is vacant because ${c.vacancy_reason}.` : " The vacancy reason was not published."}
-      {c.seats_total && c.seats_total > 1 ? ` ${c.ward_name} elects ${c.seats_total} councillors; one seat is being filled.` : ""}
+      {!declared && (c.vacancy_reason ? ` The seat is vacant because ${c.vacancy_reason}.` : " The vacancy reason was not published.")}
+      {!declared && c.seats_total && c.seats_total > 1 ? ` ${c.ward_name} elects ${c.seats_total} councillors; one seat is being filled.` : ""}
     </p>
     <p class="status-pill">{statusLabel}</p>
-    {resultSummary.length > 0 && <p class="result-summary">{resultSummary.join(" ")}</p>}
-    {result?.note && <p class="note"><strong>Result source review, {result.checked_at}:</strong> {result.note}</p>}
+    {resultSummary.length > 0 && <p class="result-summary">{resultSummary[0]}</p>}
     <p class="meta-row journey-shortcuts">
       <a href="/by-elections/local/">All council by-elections</a>
       {wardHref && <><span aria-hidden="true"> · </span><a href={wardHref}>Open the {c.ward_name} ward page</a></>}
     </p>
   </section>
 
+  <nav class="detail-nav" aria-label="On this page">
+    {declared && <a href="#result">Result</a>}
+    <a href="#candidates">Candidates{result?.declared ? " and votes" : ""}</a>
+    {!declared && forecast && <a href="#projection">Projection</a>}
+    {prior && <a href="#previous-result">Previous result</a>}
+    <a href="#sources">Sources</a>
+  </nav>
+
+  {declaration?.declared && (
+    <section class="card result-card" id="result">
+      <h2>The result</h2>
+      <p class="result-headline">
+        <strong>{declaration.winner_candidate || shortPartyLabel(declaration.winner_party)}</strong>{` elected for ${shortPartyLabel(declaration.winner_party)}.`}
+        {declaration.turnout_votes != null && ` Turnout ${declaration.turnout_votes.toLocaleString("en-GB")}${declaration.turnout_pct != null ? ` (${declaration.turnout_pct}%)` : ""}.`}
+      </p>
+      <p class="note">{declaration.note}</p>
+      <p class="note">
+        <a href={declaration.source} rel="noopener">The declaration this is taken from</a>.
+      </p>
+    </section>
+  )}
+
+  {result?.declared && (
+    <section class="card result-card" id="result">
+      <h2>The result</h2>
+      {result.outcome && <p class="outcome-line">{result.outcome}</p>}
+      <p class="result-headline">
+        <strong>{result.winner_candidate || shortPartyLabel(result.winner_party)}</strong>{` elected for ${shortPartyLabel(result.winner_party)}${result.majority_votes != null ? `, a majority of ${result.majority_votes.toLocaleString("en-GB")} over ${shortPartyLabel(result.runner_up_party)}` : ""}.`}
+      </p>
+      <PartyBars rows={rows(result.shares)} large={true} />
+      <p class="note">{result.total_votes.toLocaleString("en-GB")} valid votes across {f.candidate_count} candidates.</p>
+      {resultSummary.length > 1 && <p class="note">{resultSummary.slice(1).join(" ")}</p>}
+      {result.grading && (
+        <p class="grading">
+          {result.grading.graded_against === "forecast_as_published" ? "The saved pre-poll forecast said" : "The retrospective model reconstruction selected"} <strong>{shortPartyLabel(result.grading.projected_winner)}</strong>.
+          {result.grading.call_correct ? " That matched the winner." : " That did not match the winner."}
+          {result.grading.graded_against !== "forecast_as_published" && " No saved pre-poll forecast is available; this is not a published forecast score."}
+          {" "}Mean absolute error across the parties standing: {pp1(result.grading.mae_pp)}pp.
+        </p>
+      )}
+    </section>
+  )}
+
+  <section class="card" id="candidates">
+    <h2>{declared ? "Candidates and results" : "Candidates"}</h2>
+    <p class="note">
+      {f.locked
+        ? `Nominations closed${c.nominations_close ? ` on ${prettyDate(c.nominations_close)}` : ""}. ${f.candidate_count} candidate${f.candidate_count === 1 ? "" : "s"} ${declared ? "stood" : "standing"}.`
+        : f.candidate_count === 0
+          ? `No candidates have been published yet${c.nominations_close ? `; nominations close on ${prettyDate(c.nominations_close)}` : ""}. This page fills in as they are.`
+          : `${f.candidate_count} candidate${f.candidate_count === 1 ? " is" : "s are"} known so far and the field can still change${c.nominations_close ? `, up to ${prettyDate(c.nominations_close)}` : ""}.`}
+    </p>
+    {f.candidate_count > 0 && (
+    <div class="by-election-scroll" role="region" aria-label="Candidate votes and parties" tabindex="0"><table>
+      <caption>{declared ? "Declared candidate results" : "Candidates on the ballot"}</caption>
+      <thead><tr><th scope="col">Candidate</th><th scope="col">Party</th>{result?.declared && <><th scope="col">Votes</th><th scope="col">Share of valid votes</th></>}</tr></thead>
+      <tbody>
+        {f.candidates
+          .slice()
+          .sort((a: any, b: any) => (result?.declared ? (b.votes || 0) - (a.votes || 0) : String(a.name).localeCompare(String(b.name))))
+          .map((cand: any) => (
+            <tr>
+              <td>{cand.name}{declared && cand.elected && <strong class="elected-label"> · Elected</strong>}</td>
+              <td><span class="party-chip" style={`--chip:${partyColour(cand.party)}`}>{cand.party_name}</span></td>
+              {result?.declared && <><td>{cand.votes?.toLocaleString("en-GB") ?? "Not reported"}</td><td>{typeof cand.votes === "number" && result.total_votes > 0 ? `${pct1(cand.votes / result.total_votes)}%` : "Not reported"}</td></>}
+            </tr>
+          ))}
+      </tbody>
+    </table></div>
+    )}
+    {f.sopn_url && (
+      <p class="note"><a href={f.sopn_url} rel="nofollow">Statement of persons nominated</a></p>
+    )}
+  </section>
+
   <section class="card holder">
-    <h2>Who is defending it</h2>
+    <h2>{declared ? "Who held the seat before the by-election" : "Who is defending it"}</h2>
+    {declared && <p>{c.vacancy_reason ? `The vacancy arose because ${c.vacancy_reason}.` : "The vacancy reason was not published."}{c.seats_total > 1 ? ` ${c.ward_name} elects ${c.seats_total} councillors; one seat was filled.` : ""}</p>}
     {holder?.established ? (
       <>
         <p set:html={holderSentence} />
@@ -231,46 +290,8 @@ const breadcrumbs: Crumb[] = [
     )}
   </section>
 
-  {declaration?.declared && (
-    <section class="card result-card">
-      <h2>The result</h2>
-      <p class="result-headline">
-        <strong>{shortPartyLabel(declaration.winner_party)}</strong>
-        {declaration.winner_candidate ? ` won. ${declaration.winner_candidate}` : " won"}
-        {declaration.turnout_votes !== null
-          ? `. Turnout ${declaration.turnout_votes.toLocaleString("en-GB")}${declaration.turnout_pct !== null ? ` (${declaration.turnout_pct}%)` : ""}.`
-          : "."}
-      </p>
-      <p class="note">{declaration.note}</p>
-      <p class="note">
-        <a href={declaration.source} rel="noopener">The declaration this is taken from</a>.
-      </p>
-    </section>
-  )}
-
-  {result?.declared && (
-    <section class="card result-card">
-      <h2>The result</h2>
-      {result.outcome && <p class="outcome-line">{result.outcome}</p>}
-      <p class="result-headline">
-        <strong>{shortPartyLabel(result.winner_party)}</strong>
-        {result.winner_candidate ? ` won. ${result.winner_candidate}` : " won"}
-        {result.majority_votes !== null ? `, a majority of ${result.majority_votes.toLocaleString("en-GB")} over ${shortPartyLabel(result.runner_up_party)}.` : "."}
-      </p>
-      <PartyBars rows={rows(result.shares)} large={true} />
-      <p class="note">{result.total_votes.toLocaleString("en-GB")} votes cast across {f.candidate_count} candidates.</p>
-      {result.grading && (
-        <p class="grading">
-          Our projection said <strong>{shortPartyLabel(result.grading.projected_winner)}</strong>.
-          {result.grading.call_correct ? " That was right." : " That was wrong."}
-          {" "}Mean absolute error across the parties standing: {pp1(result.grading.mae_pp)}pp.
-        </p>
-      )}
-    </section>
-  )}
-
-  {forecast && !result?.declared && (
-    <section class="card">
+  {forecast && !declared && (
+    <section class="card" id="projection">
       <h2>{tooClose ? "Too close to call" : `${shortPartyLabel(leader)} favoured`}</h2>
       <p class="lede">
         {tooClose
@@ -281,9 +302,10 @@ const breadcrumbs: Crumb[] = [
 
       <div class="band-detail">
         <h3>Ranges, not point estimates</h3>
-        <table>
+        <div class="by-election-scroll" role="region" aria-label="Projected share ranges and winning probabilities" tabindex="0"><table>
+<caption>Projected share ranges and winning probabilities</caption>
           <thead>
-            <tr><th>Party</th><th>Low</th><th>Central</th><th>High</th><th>Wins</th></tr>
+            <tr><th scope="col">Party</th><th scope="col">Low</th><th scope="col">Central</th><th scope="col">High</th><th scope="col">Wins</th></tr>
           </thead>
           <tbody>
             {forecastRows.map((r) => (
@@ -296,16 +318,16 @@ const breadcrumbs: Crumb[] = [
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
         <p class="note">Low and high are the 10th and 90th percentiles of 4,000 simulated contests.</p>
       </div>
 
       {bt?.recent && (
         <p class="track-record">
-          For scale: on this method, since May 2025, we have called{" "}
+          In the retrospective backtest since May 2025, the method called{" "}
           <strong>{bt.recent.winner_called} of {bt.recent.n}</strong> council by-elections right
-          ({Math.round((bt.recent.winner_called_pct ?? 0) * 100)}%), and where we said 70% or better
-          we were right about {meta?.calibration_table?.length ? Math.round((meta.calibration_table.at(-1).observed) * 100) : 79}% of the time.
+          ({Math.round((bt.recent.winner_called_pct ?? 0) * 100)}%), and where the backtest assigned 70% or better
+          the backtest was correct about {meta?.calibration_table?.length ? Math.round((meta.calibration_table.at(-1).observed) * 100) : 79}% of the time.
           The full record is <a href="#method">below</a>.
         </p>
       )}
@@ -320,7 +342,7 @@ const breadcrumbs: Crumb[] = [
 
   {!forecast && (
     <section class="card no-forecast">
-      <h2>No projection for this contest</h2>
+      <h2>{declared ? "No pre-election projection" : "No projection for this contest"}</h2>
       <p>We publish a number when the ward gives us something honest to project from. Here it does not:</p>
       <ul class="plain">
         {(d.no_forecast_reason || []).map((x: string) => <li>{x}</li>)}
@@ -332,41 +354,8 @@ const breadcrumbs: Crumb[] = [
     </section>
   )}
 
-  <ExploreNext links={relatedLinks} title="Where to go next" eyebrow="Related election pages" />
-
-  <section class="card">
-    <h2>The field</h2>
-    <p class="note">
-      {f.locked
-        ? `Nominations closed${c.nominations_close ? ` on ${prettyDate(c.nominations_close)}` : ""}. ${f.candidate_count} candidate${f.candidate_count === 1 ? " is" : "s are"} standing.`
-        : f.candidate_count === 0
-          ? `No candidates have been published yet${c.nominations_close ? `; nominations close on ${prettyDate(c.nominations_close)}` : ""}. This page fills in as they are.`
-          : `${f.candidate_count} candidate${f.candidate_count === 1 ? " is" : "s are"} known so far and the field can still change${c.nominations_close ? `, up to ${prettyDate(c.nominations_close)}` : ""}.`}
-    </p>
-    {f.candidate_count > 0 && (
-    <table>
-      <thead><tr><th>Candidate</th><th>Party</th>{result?.declared && <th>Votes</th>}</tr></thead>
-      <tbody>
-        {f.candidates
-          .slice()
-          .sort((a: any, b: any) => (result?.declared ? (b.votes || 0) - (a.votes || 0) : String(a.name).localeCompare(String(b.name))))
-          .map((cand: any) => (
-            <tr>
-              <td>{cand.name}</td>
-              <td><span class="party-chip" style={`--chip:${partyColour(cand.party)}`}>{cand.party_name}</span></td>
-              {result?.declared && <td>{cand.votes?.toLocaleString("en-GB") ?? ""}</td>}
-            </tr>
-          ))}
-      </tbody>
-    </table>
-    )}
-    {f.sopn_url && (
-      <p class="note"><a href={f.sopn_url} rel="nofollow">Statement of persons nominated</a></p>
-    )}
-  </section>
-
   {prior && (
-    <section class="card">
+    <section class="card" id="previous-result">
       <h2>Last time in this ward</h2>
       <p class="note">
         Ordinary election, {prettyDate(prior.election_date)}.
@@ -390,13 +379,14 @@ const breadcrumbs: Crumb[] = [
     <section class="card">
       <h2>The ward in numbers</h2>
       <p class="note">
-        Census 2021, aggregated to this ward, with deprivation from IMD 2019.
-        {profile.total_residents ? ` ${profile.total_residents.toLocaleString("en-GB")} residents.` : ""}
-        {" "}Each figure is shown against the median ward in England and Wales, which is what makes
-        it mean anything.
+        Census 2021, aggregated from small areas assigned to this ward, with deprivation from IMD 2019. These are best-fit area estimates, not exact ward counts.
+        {profile.total_residents ? ` ${profile.total_residents.toLocaleString("en-GB")} residents in the matched Census areas.` : ""}
+        {profile.lookup_year && ` Geography lookup: ${profile.lookup_year}.`}
+        {" "}Each figure is shown against the median in our England and Wales ward dataset, which includes the boundary versions covered by the source lookups.
       </p>
-      <table>
-        <thead><tr><th>Measure</th><th>This ward</th><th>Median ward</th></tr></thead>
+      <div class="by-election-scroll" role="region" aria-label="Ward demographic comparison" tabindex="0"><table>
+<caption>Ward demographic comparison</caption>
+        <thead><tr><th scope="col">Measure</th><th scope="col">This ward</th><th scope="col">Median ward</th></tr></thead>
         <tbody>
           {profile.fields.map((row: any) => (
             <tr>
@@ -408,11 +398,11 @@ const breadcrumbs: Crumb[] = [
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
       <p class="note">
         The deprivation decile runs 1 (most deprived tenth of neighbourhoods) to 10 (least), averaged
         across the ward. These figures describe the ward; they are not an input to the projection
-        above, which works from votes.
+        above, which works from votes. <a href="https://www.ons.gov.uk/datasets/TS021/editions/2021/versions/3">ONS Census 2021 population source</a>.
       </p>
     </section>
   )}
@@ -443,10 +433,10 @@ const breadcrumbs: Crumb[] = [
 
       {bt && (
         <>
-          <h3>How this method has actually done</h3>
+          <h3>Retrospective backtest</h3>
           <p>
-            Tested by projecting every council by-election since {prettyDate(bt.recent_since ?? "2025-05-01")} from
-            only what was known beforehand. Across {bt.recent?.n} contests it called the winner{" "}
+            Retrospectively tested against council by-elections since {prettyDate(bt.recent_since ?? "2025-05-01")} from
+            inputs dated before each poll. These are reconstructed predictions, not a record of forecasts published at the time. Across {bt.recent?.n} contests it called the winner{" "}
             <strong>{bt.recent?.winner_called} times ({Math.round((bt.recent?.winner_called_pct ?? 0) * 100)}%)</strong>{" "}
             with a mean absolute error of <strong>{pp1(bt.recent?.mae_pp)}pp</strong> per party.
             {bt.recent?.confident_n
@@ -459,8 +449,9 @@ const breadcrumbs: Crumb[] = [
             the record so the probability on this page can be read for what it is worth.
           </p>
           {meta?.calibration_table?.length > 0 && (
-            <table class="calibration">
-              <thead><tr><th>When we said</th><th>Contests</th><th>Average claim</th><th>We were right</th></tr></thead>
+            <div class="by-election-scroll" role="region" aria-label="Retrospective probability calibration" tabindex="0"><table class="calibration">
+<caption>Retrospective probability calibration</caption>
+              <thead><tr><th scope="col">Backtest probability</th><th scope="col">Contests</th><th scope="col">Average claim</th><th scope="col">We were right</th></tr></thead>
               <tbody>
                 {meta.calibration_table.map((b: any) => (
                   <tr>
@@ -471,15 +462,18 @@ const breadcrumbs: Crumb[] = [
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           )}
         </>
       )}
     </section>
   )}
 
-  <section class="card sources">
+  <ExploreNext links={relatedLinks} title="Where to go next" eyebrow="Related election pages" />
+
+  <section class="card sources" id="sources">
     <h2>Sources</h2>
+    {result?.note && <p class="note"><strong>Result source review, {prettyDate(result.checked_at)}:</strong> {result.note}</p>}
     <ul class="plain">
       {d.sources.map((s: any) => (
         <li><a href={s.url} rel="nofollow">{s.label}</a></li>
@@ -495,46 +489,51 @@ const breadcrumbs: Crumb[] = [
 </BaseLayout>
 
 <style>
+  .compact-hero { max-width:none; padding-block:var(--space-xl) var(--space-lg); }
+  .compact-hero h1 { font-size:var(--text-h1); }
+  .compact-hero .lede { font-size:var(--text-body); }
+  .detail-nav { display:flex; flex-wrap:wrap; gap:var(--space-md); margin-block:var(--space-lg); }
+  .result-summary { max-width:80ch; }
+  .elected-label { color:var(--status-good-text); font-size:var(--text-small); }
+  caption { text-align:left; color:var(--muted); font-size:var(--text-small); padding-block:var(--space-xs); }
   .eyebrow {
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    margin-bottom: var(--space-2);
+    font-size: var(--text-small);
+    color: var(--muted);
+    margin-bottom: var(--space-xs);
   }
   .status-pill {
     display: inline-block;
-    padding: var(--space-1) var(--space-3);
+    padding: var(--space-2xs) var(--space-sm);
     border: 1px solid var(--border);
     border-radius: 999px;
-    font-size: var(--text-sm);
-    color: var(--text-muted);
+    font-size: var(--text-small);
+    color: var(--muted);
   }
   .journey-shortcuts { margin-top: var(--space-md); }
-  .card { margin-block: var(--space-8); }
-  .result-card { border-left: 4px solid var(--accent); padding-left: var(--space-4); }
-  .result-headline { font-size: var(--text-lg); }
-  .outcome-line { font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--text-sm); }
-  .holder { border-left: 4px solid var(--border); padding-left: var(--space-4); }
-  .grading { border-top: 1px solid var(--border); padding-top: var(--space-3); }
-  .no-forecast { border-left: 4px solid var(--border); padding-left: var(--space-4); }
-  ul.plain { list-style: disc; padding-left: var(--space-5); }
-  ul.plain li { margin-block: var(--space-2); }
-  .note { color: var(--text-muted); font-size: var(--text-sm); }
-  .muted { color: var(--text-muted); }
+  .card { margin-block: var(--space-2xl); }
+  .result-card { border-left: 4px solid var(--accent); padding-left: var(--space-md); }
+  .result-headline { font-size: var(--text-h3); }
+  .outcome-line { font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--text-small); }
+  .holder { border-left: 4px solid var(--border); padding-left: var(--space-md); }
+  .grading { border-top: 1px solid var(--border); padding-top: var(--space-sm); }
+  .no-forecast { border-left: 4px solid var(--border); padding-left: var(--space-md); }
+  ul.plain { list-style: disc; padding-left: var(--space-lg); }
+  ul.plain li { margin-block: var(--space-xs); }
+  .note { color: var(--muted); font-size: var(--text-small); }
+  .muted { color: var(--muted); }
   .party-chip {
     border-left: 4px solid var(--chip, var(--border));
-    padding-left: var(--space-2);
+    padding-left: var(--space-xs);
   }
-  table { width: 100%; border-collapse: collapse; margin-block: var(--space-4); }
-  th, td { text-align: left; padding: var(--space-2); border-bottom: 1px solid var(--border); }
-  th:not(:first-child), td:not(:first-child) { text-align: right; }
-  .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--space-4); }
-  .method-grid dt { font-size: var(--text-sm); color: var(--text-muted); }
+  table { width: 100%; border-collapse: collapse; margin-block: var(--space-md); }
+  th, td { text-align: left; padding: var(--space-xs); border-bottom: 1px solid var(--border); }
+  th:nth-child(n+3), td:nth-child(n+3) { text-align: right; }
+  .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--space-md); }
+  .method-grid dt { font-size: var(--text-small); color: var(--muted); }
   .method-grid dd { margin: 0; font-weight: 600; }
-  .band-detail h3 { font-size: var(--text-sm); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .track-record { border-left: 3px solid var(--border); padding-left: var(--space-3); }
-  @media (max-width: 40rem) {
-    table { display: block; overflow-x: auto; }
-  }
+  .band-detail h3 { font-size: var(--text-small); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .track-record { border-left: 3px solid var(--border); padding-left: var(--space-sm); }
+
 </style>

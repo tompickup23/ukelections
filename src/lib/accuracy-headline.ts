@@ -25,9 +25,9 @@ export const ACCURACY_OUT_OF_SAMPLE = {
 
 export const ACCURACY_RUNNING = {
   "label": "Council by-elections since May 2025",
-  "contests": 223,
-  "winnerAccuracyPct": 60.5,
-  "maePp": 7.7
+  "contests": 239,
+  "winnerAccuracyPct": 61.9,
+  "maePp": 7.3
 } as const;
 
 export const ACCURACY_BACKTEST_2024 = {

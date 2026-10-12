@@ -82,8 +82,10 @@
   "ward_profile": {
     "gss": "E05009372",
     "ward_name": "Hackney Central",
-    "total_residents": 51924,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 12981,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 7,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -288,7 +290,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://www.hackney.gov.uk/council-and-elections/elections-and-voting/election-results/local-election-results",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 3
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

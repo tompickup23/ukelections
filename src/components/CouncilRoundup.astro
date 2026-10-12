@@ -1,0 +1,28 @@
+---
+import { partyColour } from "../lib/predictions";
+import { roundupHref, prettyElectionDate } from "../lib/byElections";
+const { dates, contests, openFirst = true } = Astro.props;
+const newestFirst = [...dates].sort((a,b) => b.date.localeCompare(a.date));
+---
+{newestFirst.map((d, i) => (
+  <details class="roundup" open={openFirst && i === 0}>
+    <summary><strong>{prettyElectionDate(d.date)}</strong> · {d.contests.length} contests</summary>
+    <div class="table-scroll" role="region" aria-label={`Council results ${prettyElectionDate(d.date)}`} tabindex="0">
+      <table class="seat-table">
+        <thead><tr><th>Ward</th><th>Council</th><th>Winner</th><th>Previously</th><th>Result notes</th></tr></thead>
+        <tbody>{d.contests.map((c: any) => {
+          const href = roundupHref(d.date, c, contests);
+          return <tr><td>{href ? <a href={href}>{c.ward}</a> : c.ward}</td><td>{c.council}</td>
+            <td><span class="party-pill" style={`background:${partyColour(c.winner.split(" / ")[0])}`}></span>{c.winner}{c.share_pct != null ? ` (${c.share_pct.toFixed(1)}%)` : ""}</td>
+            <td>{c.previous}</td><td>{c.note || ""}</td></tr>;
+        })}</tbody>
+      </table>
+    </div>
+    <p class="caption">Sources: {d.sources.map((s: any,i: number) => <>{i ? " · " : ""}<a href={s.url} rel="external">{s.label}</a></>)}</p>
+  </details>
+))}
+<style>
+  .roundup { margin-block:var(--space-md); padding:var(--space-md); border:1px solid var(--border); background:var(--surface); }
+  summary { cursor:pointer; }
+  .roundup[open] summary { margin-bottom:var(--space-md); }
+</style>

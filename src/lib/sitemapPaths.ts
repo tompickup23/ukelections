@@ -1,3 +1,4 @@
+import { archiveYears } from "./byElections";
 import articles from "../../data/editorial/articles.json";
 import { validateEditorialRegistry, type EditorialArticle } from "./editorial";
 import { existsSync, readdirSync } from "node:fs";
@@ -109,6 +110,8 @@ export function getAllSitemapPaths(): string[] {
     ...getParliamentSeatPaths(),
     ...getParliamentRegionPaths(),
     ...getLocalByElectionPaths(),
+    "/by-elections/archive/",
+    ...archiveYears().map(year => `/by-elections/archive/${year}/`),
   ]);
   return [...paths].sort((a, b) => a.localeCompare(b));
 }

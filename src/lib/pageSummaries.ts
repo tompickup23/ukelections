@@ -267,7 +267,7 @@ export function byElectionResultSummary(d: any): string[] {
       }
     }
     s.push(
-      `In all, ${result.total_votes.toLocaleString("en-GB")} votes were cast. The result is taken from ${sourceLabel(result)}${result.checked_at ? `, checked on ${prettyDate(result.checked_at)}` : ""}.`,
+      `In all, ${result.total_votes.toLocaleString("en-GB")} valid votes were counted. The result is taken from ${sourceLabel(result)}${result.checked_at ? `, checked on ${prettyDate(result.checked_at)}` : ""}.`,
     );
     return s;
   }

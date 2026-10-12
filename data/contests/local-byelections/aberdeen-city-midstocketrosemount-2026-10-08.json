@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-06T03:37:20.301Z",
+  "generated_at": "2026-10-12T20:44:23.568Z",
   "slug": "aberdeen-city-midstocketrosemount-2026-10-08",
-  "status": "upcoming",
+  "status": "polls_closed",
   "contest": {
     "ballot_paper_id": "local.aberdeen-city.midstocketrosemount.by.2026-10-08",
     "polling_day": "2026-10-08",
@@ -48,13 +48,6 @@
         "elected": null
       },
       {
-        "name": "Jeff Diack",
-        "party_name": "Scottish National Party (SNP)",
-        "party": "SNP",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Freddie John",
         "party_name": "Conservative and Unionist Party",
         "party": "Conservative",
@@ -95,12 +88,31 @@
         "party": "Labour",
         "votes": null,
         "elected": null
+      },
+      {
+        "name": "Jeff Diack",
+        "party_name": "Scottish National Party (SNP)",
+        "party": "SNP",
+        "votes": null,
+        "elected": true
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "SNP",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 8 October by-election; not inferred from the ward-wide vote. Reviewed 12 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/aberdeen-city-council-midstrocket-rosemount-8-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": null,
   "prior_result": {
@@ -170,8 +182,24 @@
     "The last ordinary contest here was 2017-05-04, too far back to swing from."
   ],
   "result": null,
-  "declaration": null,
+  "declaration": {
+    "declared": true,
+    "counts_published": false,
+    "winner_party": "SNP",
+    "winner_candidate": "Jeff Diack",
+    "turnout_votes": 3121,
+    "turnout_pct": 26.5,
+    "source": "https://sites.aberdeencity.gov.uk/news/midstocketrosemount-aberdeen-city-council-ward-by-election-result",
+    "checked_at": "2026-10-12",
+    "review_status": "hand_verified_declaration",
+    "first_preference_votes": 3088,
+    "note": "The council declared Jeff Diack (SNP) elected under STV. It reports 861 first preferences for him, 3,121 ballots cast and 26.5% turnout. The eight first-preference counts sum to 3,088; the council news release does not explain the 33-ballot difference. First preferences are not a final-round margin or an FPTP result; this declaration is not forecast-graded."
+  },
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://sites.aberdeencity.gov.uk/news/midstocketrosemount-aberdeen-city-council-ward-by-election-result"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.aberdeen-city.midstocketrosemount.by.2026-10-08/"
@@ -180,5 +208,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.aberdeen-city.midstocketrosemount.by.2026-10-08/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-10-12"
 }

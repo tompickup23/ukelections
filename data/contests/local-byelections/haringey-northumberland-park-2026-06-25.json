@@ -82,8 +82,10 @@
   "ward_profile": {
     "gss": "E05013596",
     "ward_name": "Northumberland Park",
-    "total_residents": 64044,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 16011,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 8,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -272,7 +274,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://haringey.gov.uk/council-elections/elections-voting/local-elections-may-2026/northumberland-park-ward",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 3
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-06T03:37:20.297Z",
+  "generated_at": "2026-10-12T20:44:23.568Z",
   "slug": "newcastle-under-lyme-town-2026-10-08",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.newcastle-under-lyme.town.by.2026-10-08",
     "polling_day": "2026-10-08",
@@ -39,51 +39,65 @@
     ],
     "candidates": [
       {
-        "name": "Conna Douglas Eynon",
-        "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Andrew Fox-Hewitt",
         "party_name": "Labour and Co-operative Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
+        "votes": 431,
+        "elected": true,
+        "party": "Labour"
       },
       {
         "name": "Adam Griffiths",
         "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Morgan Inwood",
-        "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
+        "votes": 249,
+        "elected": false,
+        "party": "Reform UK"
       },
       {
         "name": "Mark Allan Jones",
         "party_name": "Green Party",
-        "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "votes": 115,
+        "elected": false,
+        "party": "Green Party"
+      },
+      {
+        "name": "Conna Douglas Eynon",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 110,
+        "elected": false,
+        "party": "Conservative"
+      },
+      {
+        "name": "Morgan Inwood",
+        "party_name": "Liberal Democrats",
+        "votes": 27,
+        "elected": false,
+        "party": "Liberal Democrats"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Reform UK",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 8 October by-election; not inferred from the ward-wide vote. Reviewed 12 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.newcastle-staffs.gov.uk/news/article/587/borough-council-by-election-result-declared"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.aldc.org/2026/10/newcastle-under-lyme-bc-town-8-october-2026/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05011432",
     "ward_name": "Town",
-    "total_residents": 19604,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 4901,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 3,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -248,7 +262,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://www.newcastle-staffs.gov.uk/downloads/file/3894/town",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 2
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",
@@ -380,13 +395,49 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1105 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.26716738197424894,
+      "Labour": 0.4624463519313305,
+      "Conservative": 0.11802575107296137,
+      "Liberal Democrats": 0.028969957081545063,
+      "Green Party": 0.12339055793991416,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Labour",
+    "winner_candidate": "Andrew Fox-Hewitt",
+    "runner_up_party": "Reform UK",
+    "majority_votes": 182,
+    "total_votes": 932,
+    "source": "https://www.newcastle-staffs.gov.uk/news/article/587/borough-council-by-election-result-declared",
+    "outcome": "Labour gain from Reform UK",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-10-06",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Labour",
+      "call_correct": true,
+      "mae_pp": 5.264549356223178
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-10-12",
+    "note": "All five candidate counts and the 182-vote majority match the council release; 932 valid votes. Council turnout 23.2%. Electorate, rejected ballots and total ballots retained from Democracy Club, which reconciles 932 valid plus two rejected to 934."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.newcastle-staffs.gov.uk/news/article/587/borough-council-by-election-result-declared"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.newcastle-under-lyme.town.by.2026-10-08/"
@@ -395,5 +446,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.newcastle-under-lyme.town.by.2026-10-08/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-10-12"
 }

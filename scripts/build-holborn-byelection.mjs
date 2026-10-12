@@ -49,7 +49,7 @@
  * Output: data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { geoContains, geoCentroid } from "d3-geo";
 import { rewindFeatures } from "../src/lib/geoRewind.ts";
@@ -68,6 +68,10 @@ const read = (rel) => {
 const PCON24CD = "E14001290";
 const CAMDEN_LAD = "E09000007";
 const OUT = "data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json";
+if (existsSync(p(OUT)) && read(OUT).status === "concluded") {
+  console.log("Holborn and St Pancras is concluded; preserving its published signal and result.");
+  process.exit(0);
+}
 
 const round4 = (x) => Math.round(x * 10000) / 10000;
 

@@ -26,12 +26,22 @@
     "postal_vote_deadline": "2026-11-04"
   },
   "field": {
-    "candidate_count": 0,
+    "candidate_count": 1,
     "locked": false,
     "sopn_published": false,
     "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "parties": [
+      "Labour"
+    ],
+    "candidates": [
+      {
+        "name": "Lorraine Drinkwater",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -40,8 +50,10 @@
   "ward_profile": {
     "gss": "E05015673",
     "ward_name": "Portchester Wicor",
-    "total_residents": 12360,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 6180,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 4,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -158,7 +170,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://moderngov.fareham.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=28",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 1
   },
   "forecast": null,
   "no_forecast_reason": [

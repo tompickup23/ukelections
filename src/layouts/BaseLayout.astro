@@ -184,6 +184,7 @@ const structuredData = [
           </ol>
         </nav>
       )}
+      {pathname.startsWith("/by-elections/") && <p class="caption" data-content-updated data-discovery-ignore data-pagefind-ignore hidden></p>}
       <slot />
     </main>
     <footer class="site-footer">

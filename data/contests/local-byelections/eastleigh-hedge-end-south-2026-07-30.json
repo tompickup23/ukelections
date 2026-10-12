@@ -82,8 +82,10 @@
   "ward_profile": {
     "gss": "E05011197",
     "ward_name": "Hedge End South",
-    "total_residents": 43480,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 10870,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 7,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -200,7 +202,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://www.eastleigh.gov.uk/media/16606/hedge-end-south-borough-declaration-of-results.pdf",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 1
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

@@ -82,8 +82,10 @@
   "ward_profile": {
     "gss": "E05010854",
     "ward_name": "Sweyne Park and Grange",
-    "total_residents": 26772,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 6693,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 4,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -216,7 +218,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://rochford.moderngov.co.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=3",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 1
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

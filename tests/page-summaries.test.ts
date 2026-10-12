@@ -71,7 +71,7 @@ describe("by-election result summary", () => {
     expect(byElectionResultSummary(bray)).toEqual([
       "The Conservatives won the Bray by-election in Windsor and Maidenhead on 24 September 2026 with 36.1% of the vote, 26 votes ahead of the Liberal Democrats.",
       "Against the ward's May 2023 result, the Conservative share rose 1.3 points and the Liberal Democrat share rose 20.1 points.",
-      "In all, 2,063 votes were cast. The result is taken from the returning officer's declaration, checked on 28 September 2026.",
+      "In all, 2,063 valid votes were counted. The result is taken from the returning officer's declaration, checked on 28 September 2026.",
     ]);
   });
 

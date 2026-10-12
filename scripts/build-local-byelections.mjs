@@ -97,6 +97,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // this whole pipeline keeps hitting.
 const transientFailures = [];
 const readJson = (rel) => JSON.parse(readFileSync(p(rel), "utf8"));
+const verifiedDeclarations = readJson("data/results/local-byelection-declarations.json").declarations;
 
 // ---------------------------------------------------------------------------
 // Fetching, with a cache that expires. A cache with no expiry is how the
@@ -274,7 +275,7 @@ function loadHolders() {
   return JSON.parse(readFileSync(file, "utf8")).holders || {};
 }
 
-function loadWardDemographics() {
+export function loadWardDemographics() {
   const file = p("data/features/ward-demographics-2021.json");
   if (!existsSync(file)) return { wards: {}, medians: {} };
   const wards = JSON.parse(readFileSync(file, "utf8")).wards || {};
@@ -289,14 +290,16 @@ function loadWardDemographics() {
   return { wards, medians };
 }
 
-function wardProfile(demo, gss) {
+export function wardProfile(demo, gss) {
   const w = gss ? demo.wards[gss] : null;
   if (!w) return null;
   return {
     gss,
     ward_name: w.ward_name ?? null,
     total_residents: w.total_residents ?? null,
-    source: "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    source: w._source || "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    lookup_year: w.lookup_year || null,
+    lsoa_count: w.lsoa_count || null,
     fields: DEMO_FIELDS.filter(([k]) => typeof w[k] === "number").map(([key, label]) => ({
       key,
       label,
@@ -305,6 +308,12 @@ function wardProfile(demo, gss) {
       is_decile: key === "avg_imd_decile",
     })),
   };
+}
+
+export function priorSeatCount(prior) {
+  if (Number.isInteger(prior?.seats_contested) && prior.seats_contested > 0) return prior.seats_contested;
+  const elected = prior?.candidates?.filter(c => c.elected === true).length || 0;
+  return elected > 0 ? elected : null;
 }
 
 export function buildPriorIndex(history) {
@@ -546,7 +555,7 @@ async function gather(ballot, priors, resultRows) {
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
-function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = null) {
+export function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = null) {
   const { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource } = ctx;
 
   const reformEntering =
@@ -565,7 +574,8 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
   // Has it polled, and do we have the result?
   const polled = ids.date <= today;
   const declaredCandidates = candidates.filter((c) => c.votes !== null);
-  const haveResult = declaredCandidates.length > 0 && declaredCandidates.length === candidates.length;
+  // First preferences can be complete even when transfers elect someone else.
+  const haveResult = votingSystem !== "STV" && declaredCandidates.length > 0 && declaredCandidates.length === candidates.length;
 
   let forecast = null;
   if (baseline.forecastable) {
@@ -578,7 +588,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
       never_blended: true,
       baseline: {
         election_date: prior.election_date,
-        seats_contested: prior.seats_contested,
+        seats_contested: priorSeatCount(prior),
         notional_single_seat: (prior.seats_contested ?? 1) > 1,
         shares: base,
         source_label: prior.source_label,
@@ -693,6 +703,9 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     }
   }
 
+  if (!result && polled && verifiedDeclarations[ballot.election_id]) {
+    declaration = verifiedDeclarations[ballot.election_id];
+  }
   const status = result ? "concluded" : polled ? "polls_closed" : "upcoming";
 
   return {
@@ -740,7 +753,7 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     prior_result: prior
       ? {
           election_date: prior.election_date,
-          seats_contested: prior.seats_contested,
+          seats_contested: priorSeatCount(prior),
           shares: priorSharesFromCandidates(prior.candidates),
           candidates: prior.candidates,
           source_label: prior.source_label,
@@ -753,6 +766,9 @@ function assemble(ctx, corpus, demo, holders, published = {}, turnoutFacts = nul
     result,
     declaration,
     sources: [
+      ...(declaration?.review_status === "hand_verified_declaration"
+        ? [{ label: "Returning officer declaration (verified)", url: declaration.source }]
+        : []),
       ...(result?.review_status === "hand_verified_declaration" && result.source
         ? [{ label: "Returning officer declaration (verified)", url: result.source }]
         : []),

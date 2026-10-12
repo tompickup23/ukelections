@@ -1,4 +1,5 @@
 ---
+import "../../../styles/by-election-details.css";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import HeroClock from "../../../components/HeroClock.astro";
 import PartyBars from "../../../components/PartyBars.astro";
@@ -204,7 +205,7 @@ function classificationLabel(c: string): string {
         <RaceBar
           shares={resultRanked}
           candidates={candidateList}
-          title="Declared result (vote share)"
+          title="Declared result (vote share)" ariaLabel="Declared vote shares by party" labelMinPct={0.15}
         />
       ) : (
         <p class="caption result-pending">
@@ -247,6 +248,7 @@ function classificationLabel(c: string): string {
   <nav class="section" aria-label="Explore Makerfield election information">
     <div class="section-head">
       <p class="eyebrow">Explore Makerfield</p>
+      <nav class="detail-nav" aria-label="On this page"><a href="#result">Full result</a><a href="#comparison">Forecast comparison</a><a href="#archive">Archived forecast and sources</a></nav>
       <h2>Result, constituency map, forecast and demographics</h2>
     </div>
     <p class="action-row">
@@ -264,15 +266,16 @@ function classificationLabel(c: string): string {
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Declared result · 18 June 2026</p>
-        <h2>Full result</h2>
+        <h2 id="result">Full result</h2>
       </div>
-      <table class="seat-table">
+      <div class="by-election-scroll" role="region" aria-label="Declared Makerfield result" tabindex="0"><table class="seat-table">
+<caption>Declared Makerfield result</caption>
         <thead>
           <tr>
-            <th>Party</th>
-            <th class="num">Votes</th>
-            <th class="num">Share</th>
-            <th class="num">Swing vs GE2024</th>
+            <th scope="col">Party</th>
+            <th class="num" scope="col">Votes</th>
+            <th class="num" scope="col">Share</th>
+            <th class="num" scope="col">Swing vs GE2024</th>
           </tr>
         </thead>
         <tbody>
@@ -307,7 +310,7 @@ function classificationLabel(c: string): string {
             <td class="num"><span class="swing-up">+{(result.turnout_change_pp * 100).toFixed(1)}pp</span></td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
       <p class="caption">
         Labour <strong>hold</strong>; Andy Burnham returns to Parliament. "Other" aggregates eight
         minor candidates (Count Binface 95, Monster Raving Loony 45, three Independents, Rejoin EU,
@@ -322,7 +325,7 @@ function classificationLabel(c: string): string {
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Scorecard · how the forecast did</p>
-        <h2>Forecast vs result</h2>
+        <h2 id="comparison">Forecast vs result</h2>
       </div>
       <p>
         The published UKE forecast called this seat for <strong>Reform UK</strong> (a 1.4pp
@@ -331,13 +334,14 @@ function classificationLabel(c: string): string {
         the margin. Every fieldwork-based poll, and the 85%-weighted branch of the model's own
         scenario set, had Labour ahead.
       </p>
-      <table class="seat-table">
+      <div class="by-election-scroll" role="region" aria-label="Published forecast compared with the result" tabindex="0"><table class="seat-table">
+<caption>Published forecast compared with the result</caption>
         <thead>
           <tr>
-            <th>Estimate</th>
-            <th class="num">Lab lead (Lab − Reform)</th>
-            <th class="num">Error vs result</th>
-            <th>Winner call</th>
+            <th scope="col">Estimate</th>
+            <th class="num" scope="col">Lab lead (Lab − Reform)</th>
+            <th class="num" scope="col">Error vs result</th>
+            <th scope="col">Winner call</th>
           </tr>
         </thead>
         <tbody>
@@ -362,7 +366,7 @@ function classificationLabel(c: string): string {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
       <p class="caption">
         "Error vs result" is the signed gap between each estimate's Labour-minus-Reform margin and
         the actual <strong>+{actualMarginPp}pp</strong> (Labour 54.8% to Reform 34.5%). Everyone
@@ -383,13 +387,14 @@ function classificationLabel(c: string): string {
         Our forecast was not the only one to get Makerfield wrong, and the constituency polls were not
         the only ones to get it right. Ranked by accuracy against the result (Labour 54.8 / Reform 34.5):
       </p>
-      <table class="seat-table">
+      <div class="by-election-scroll" role="region" aria-label="Forecaster comparison" tabindex="0"><table class="seat-table">
+<caption>Forecaster comparison</caption>
         <thead>
           <tr>
-            <th>Forecaster</th>
-            <th class="num">Share MAE</th>
-            <th class="num">Margin err</th>
-            <th>Called</th>
+            <th scope="col">Forecaster</th>
+            <th class="num" scope="col">Share MAE</th>
+            <th class="num" scope="col">Margin err</th>
+            <th scope="col">Called</th>
           </tr>
         </thead>
         <tbody>
@@ -411,7 +416,7 @@ function classificationLabel(c: string): string {
               </tr>
             ))}
         </tbody>
-      </table>
+      </table></div>
       <p class="caption">
         Share MAE = mean absolute error across each forecaster's reported parties (<span class="muted">*partial: headline parties only</span>).
         Margin err = signed Labour-minus-Reform vs the actual +20.3pp; every forecaster understated Labour, because
@@ -453,17 +458,18 @@ function classificationLabel(c: string): string {
         shares={pollAvgRanked}
         title={`Final-polls poll-of-polls: ${pollAvg.headline}`}
       />
-      <table class="seat-table">
+      <div class="by-election-scroll" role="region" aria-label="Constituency polls" tabindex="0"><table class="seat-table">
+<caption>Constituency polls</caption>
         <thead>
           <tr>
-            <th>Pollster</th>
-            <th>Fieldwork</th>
-            <th class="num">n</th>
-            <th class="num">Lab</th>
-            <th class="num">Reform</th>
-            <th class="num">Restore</th>
-            <th class="num">Grn</th>
-            <th class="num">Lab lead</th>
+            <th scope="col">Pollster</th>
+            <th scope="col">Fieldwork</th>
+            <th class="num" scope="col">n</th>
+            <th class="num" scope="col">Lab</th>
+            <th class="num" scope="col">Reform</th>
+            <th class="num" scope="col">Restore</th>
+            <th class="num" scope="col">Grn</th>
+            <th class="num" scope="col">Lab lead</th>
           </tr>
         </thead>
         <tbody>
@@ -490,7 +496,7 @@ function classificationLabel(c: string): string {
             <td class="num"><strong><span class="swing-up">+{(pollAvg.labour_lead_pp * 100).toFixed(1)}</span></strong></td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
       <p class="caption">
         {finalPolls.no_exit_poll_note} A poll-of-polls of these five (Labour +7) would have called
         the seat correctly; the most recent poll (Convergent, to 12 Jun) had Labour +12. Even so,
@@ -500,6 +506,8 @@ function classificationLabel(c: string): string {
     </section>
   )}
 
+  <details class="section archived-analysis" id="archive" open={!isConcluded}>
+    <summary>Archived forecast and analysis, frozen 26 May 2026</summary>
   {isConcluded && (
     <section class="section frozen-divider">
       <div class="section-head">
@@ -640,16 +648,17 @@ function classificationLabel(c: string): string {
       aggregate uses the current (May 2023+) boundaries, which is what was actually voted
       on 7 May 2026.
     </p>
-    <table class="seat-table">
+    <div class="by-election-scroll" role="region" aria-label="Ward election signal" tabindex="0"><table class="seat-table">
+<caption>Ward election signal</caption>
       <thead>
         <tr>
-          <th>Ward</th>
-          <th class="num">Turnout</th>
-          <th class="num">Reform</th>
-          <th class="num">Labour</th>
-          <th class="num">Green</th>
-          <th class="num">Con</th>
-          <th class="num">LD</th>
+          <th scope="col">Ward</th>
+          <th class="num" scope="col">Turnout</th>
+          <th class="num" scope="col">Reform</th>
+          <th class="num" scope="col">Labour</th>
+          <th class="num" scope="col">Green</th>
+          <th class="num" scope="col">Con</th>
+          <th class="num" scope="col">LD</th>
         </tr>
       </thead>
       <tbody>
@@ -674,7 +683,7 @@ function classificationLabel(c: string): string {
           <td class="num"><strong>{pct(wardAgg["Liberal Democrats"] || 0)}%</strong></td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
   </section>
 
   <section class="section">
@@ -682,8 +691,9 @@ function classificationLabel(c: string): string {
       <p class="eyebrow">Candidates</p>
       <h2>Who is contesting the seat</h2>
     </div>
-    <table class="seat-table">
-      <thead><tr><th>Party</th><th>Candidate</th><th>Status</th></tr></thead>
+    <div class="by-election-scroll" role="region" aria-label="Original candidate field" tabindex="0"><table class="seat-table">
+<caption>Original candidate field</caption>
+      <thead><tr><th scope="col">Party</th><th scope="col">Candidate</th><th scope="col">Status</th></tr></thead>
       <tbody>
         {candidates.map((c: any) => (
           <tr>
@@ -693,7 +703,7 @@ function classificationLabel(c: string): string {
           </tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">
       Ingested from the Democracy Club Candidates API and checked against Wigan Council's
       {" "}<a href="https://www.wigan.gov.uk/Docs/PDF/Council/Voting-and-Elections/2026/Makerfield/Statement-of-persons-nominated-and-notice-of-Poll-Makerfield-2026.pdf">Statement of Persons Nominated and Notice of Poll</a>, dated 26 May 2026.
@@ -709,8 +719,9 @@ function classificationLabel(c: string): string {
       {history.summary}
       The seat voted <strong>{(history.brexit_2016_leave_pct * 100).toFixed(0)}% Leave</strong> at the 2016 referendum.
     </p>
-    <table class="seat-table">
-      <thead><tr><th class="num">Year</th><th>Winner</th><th class="num">Lab share</th><th>Runner-up</th><th class="num">Majority</th></tr></thead>
+    <div class="by-election-scroll" role="region" aria-label="Historical elections" tabindex="0"><table class="seat-table">
+<caption>Historical elections</caption>
+      <thead><tr><th class="num" scope="col">Year</th><th scope="col">Winner</th><th class="num" scope="col">Lab share</th><th scope="col">Runner-up</th><th class="num" scope="col">Majority</th></tr></thead>
       <tbody>
         {history.makerfield_results.map((r: any) => (
           <tr>
@@ -722,7 +733,7 @@ function classificationLabel(c: string): string {
           </tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">
       Sources: Wikipedia, House of Commons Library general election briefings.
       Predecessor seat <strong>{history.predecessor_seat.name}</strong> held by Labour {history.predecessor_seat.period}.
@@ -743,18 +754,19 @@ function classificationLabel(c: string): string {
       to the 2024 council baseline and the 2026 result, then computes the
       Reform swing.
     </p>
-    <table class="seat-table">
+    <div class="by-election-scroll" role="region" aria-label="Ward demographics and vote shares" tabindex="0"><table class="seat-table">
+<caption>Ward demographics and vote shares</caption>
       <thead>
         <tr>
-          <th>Ward</th>
-          <th class="num">IMD</th>
-          <th class="num">% no-quals</th>
-          <th class="num">% degree</th>
-          <th class="num">% retired</th>
-          <th class="num">% social rent</th>
-          <th class="num">Reform 2024</th>
-          <th class="num">Reform 2026</th>
-          <th class="num">Swing</th>
+          <th scope="col">Ward</th>
+          <th class="num" scope="col">IMD</th>
+          <th class="num" scope="col">% no-quals</th>
+          <th class="num" scope="col">% degree</th>
+          <th class="num" scope="col">% retired</th>
+          <th class="num" scope="col">% social rent</th>
+          <th class="num" scope="col">Reform 2024</th>
+          <th class="num" scope="col">Reform 2026</th>
+          <th class="num" scope="col">Swing</th>
         </tr>
       </thead>
       <tbody>
@@ -784,7 +796,7 @@ function classificationLabel(c: string): string {
           );
         })}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">
       <strong>n/c</strong> = "no contest": Reform UK did not stand under their own
       party label in this ward at the 2024 council elections, so a clean 2024 → 2026
@@ -811,8 +823,9 @@ function classificationLabel(c: string): string {
       That's 72% of the cross-ward variation in Reform vote explained by those
       four demographic axes alone. Single-predictor Pearson correlations:
     </p>
-    <table class="seat-table">
-      <thead><tr><th>Predictor</th><th class="num">Pearson r (with Reform 2026 %)</th><th>Direction</th></tr></thead>
+    <div class="by-election-scroll" role="region" aria-label="Demographic model comparison" tabindex="0"><table class="seat-table">
+<caption>Demographic model comparison</caption>
+      <thead><tr><th scope="col">Predictor</th><th class="num" scope="col">Pearson r (with Reform 2026 %)</th><th scope="col">Direction</th></tr></thead>
       <tbody>
         {Object.entries(regression.single_predictor_pearson)
           .sort((a: any, b: any) => Math.abs(b[1]) - Math.abs(a[1]))
@@ -827,7 +840,7 @@ function classificationLabel(c: string): string {
             </tr>
           ))}
       </tbody>
-    </table>
+    </table></div>
     <p>
       The strongest single predictor is the <strong>degree-holder share
       (r = -0.853)</strong>. Reform wins big in low-education wards
@@ -844,8 +857,9 @@ function classificationLabel(c: string): string {
       demographic fundamentals predicted (likely candidate-quality or
       hyper-local effect); negative = the opposite.
     </p>
-    <table class="seat-table">
-      <thead><tr><th>Ward</th><th class="num">Actual</th><th class="num">Predicted</th><th class="num">Residual</th></tr></thead>
+    <div class="by-election-scroll" role="region" aria-label="Ward model errors" tabindex="0"><table class="seat-table">
+<caption>Ward model errors</caption>
+      <thead><tr><th scope="col">Ward</th><th class="num" scope="col">Actual</th><th class="num" scope="col">Predicted</th><th class="num" scope="col">Residual</th></tr></thead>
       <tbody>
         {regression.multiple_regression.ward_fits
           .slice()
@@ -863,7 +877,7 @@ function classificationLabel(c: string): string {
             </tr>
           ))}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">
       <strong>Bryn-with-Ashton-North</strong> over-performs the model by +5pp,
       the biggest residual in the seat. Worth flagging as a candidate /
@@ -886,16 +900,17 @@ function classificationLabel(c: string): string {
       surface the LAD-wide aggregate as a directional read for the parliamentary seat;
       Welsh seats and councils outside the 2026 cycle are flagged.
     </p>
-    <table class="seat-table">
+    <div class="by-election-scroll" role="region" aria-label="Comparable seats" tabindex="0"><table class="seat-table">
+<caption>Comparable seats</caption>
       <thead>
         <tr>
-          <th>Constituency</th>
-          <th>Region</th>
-          <th class="num">GE2024 Lab maj</th>
-          <th>1 May 2026 host council</th>
-          <th class="num">Reform 2026</th>
-          <th class="num">Labour 2026</th>
-          <th class="num">Reform lead</th>
+          <th scope="col">Constituency</th>
+          <th scope="col">Region</th>
+          <th class="num" scope="col">GE2024 Lab maj</th>
+          <th scope="col">1 May 2026 host council</th>
+          <th class="num" scope="col">Reform 2026</th>
+          <th class="num" scope="col">Labour 2026</th>
+          <th class="num" scope="col">Reform lead</th>
         </tr>
       </thead>
       <tbody>
@@ -926,7 +941,7 @@ function classificationLabel(c: string): string {
           <td class="num"><strong><span class="swing-up">+{makerfieldLead.toFixed(1)}pp</span></strong></td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3 style="margin-top:1.5rem;">What the comparators tell us</h3>
     <ul class="plain-list">
@@ -1010,6 +1025,8 @@ function classificationLabel(c: string): string {
       <a href="/methodology/">Read the full UKE methodology →</a> ·
       <a href={`https://github.com/tompickup23/ukelections/blob/main/data/predictions/by-elections/makerfield-2026-06-18.json`}>Raw forecast JSON →</a>
     </p>
+  </details>
+
   </details>
 
   <style>

@@ -18,8 +18,8 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2025-05-01",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "RESIGNATION",
+    "vacancy_reason": "the sitting councillor resigned",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-09-18",
     "registration_deadline": "2026-09-29",
@@ -75,7 +75,9 @@
     "gss": "E05016256",
     "ward_name": "Salisbury Milford",
     "total_residents": 5489,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 4,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -200,7 +202,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://elections.wiltshire.gov.uk/Home/Division/9130",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 1
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

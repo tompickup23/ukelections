@@ -88,3 +88,28 @@ the path/query. The ineffective Pages host-source entry has been removed;
   undated baseline.
 - IndexNow has been enabled in the vps-main cron since 28 September 2026. The
   unreviewed batch cap is 1,000 (see above).
+
+## By-election presentation update, 12 October 2026
+
+- Declared council contests use result titles and descriptions naming the recorded
+  winner. Upcoming and awaited contests have separate metadata. STV declarations
+  use “STV result declared”; first preferences are never presented as an FPTP margin.
+- The publisher stamps by-election `WebPage.dateModified` and the visible update
+  date from the existing discovery ledger, alongside sitemap dates. A baseline
+  with no recorded date remains undated. These output dates are excluded from
+  fingerprints, so stamping cannot create a permanent update loop. Standalone
+  Astro preview builds omit publication dates; the source-review date remains visible.
+- The council hub has filters, two recent polling rounds, upcoming polls and
+  expandable earlier results. Filters expand matching earlier results. With
+  JavaScript disabled, controls stay hidden and all result links remain in HTML.
+- `/by-elections/archive/` lists only years present in the coverage. Year pages
+  retain individual contests and source-linked roundup-only records, explicitly
+  labelled as incomplete historical coverage. Existing contest URLs are unchanged.
+- Saved pre-poll forecasts are counted separately from retrospective model
+  reconstructions. The weekly roundup shows every recorded party alphabetically.
+- All recorded results have per-page OG entries. Normal publisher builds include
+  them with `BUILD_OG=1`; `BUILD_OG_SCOPE=by-elections` can limit a local QA build
+  to the result-card set. Leave that scope unset for a production release.
+- The rendered SEO gate rejects stale local result metadata or upcoming Event
+  markup on declared contests. The publisher test subset includes the new
+  presentation and ledger-date regression tests.
