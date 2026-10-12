@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""P3: Aggregate Census 2021 + IMD 2019 from LSOA → ward (WD22).
+"""P3: Aggregate Census 2021 + IMD 2019 using one lookup vintage per ward.
 
 Adds: TS021 ethnicity, TS030 religion, TS054 tenure, TS066 economic activity,
 TS067 qualifications, TS004 country of birth, plus IMD 2019 sub-domains.
 """
 import csv, json, os, sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Auto-detect ROOT: env var → script location → home dir fallback.
@@ -12,10 +13,10 @@ if os.environ.get("UKE_ROOT"):
     ROOT = Path(os.environ["UKE_ROOT"])
 else:
     ROOT = Path(__file__).resolve().parent.parent
-CENSUS = ROOT / ".cache/census"
+CENSUS = Path(os.environ.get("UKE_CENSUS_CACHE", ROOT / ".cache/census"))
 # Multi-year LSOA→ward lookups: aggregate using whichever year matches each
-# 2026 ward's GSS code (some wards are still on WD22 boundaries, others changed
-# in 2023/24/25 ward reviews — we union all four to maximise coverage).
+# ward GSS code. Newest available lookup wins; older-only codes retain coverage
+# without counting the same population again in each annual lookup.
 LOOKUP_PATHS = {
     "22": ROOT / "data/features/lsoa21-to-ward.json",
     "23": ROOT / "data/features/lsoa21-to-ward-wd23.json",
@@ -23,12 +24,13 @@ LOOKUP_PATHS = {
     "25": ROOT / "data/features/lsoa21-to-ward-wd25.json",
 }
 IMD_CANDIDATES = [
+    Path(os.environ["UKE_IMD_CACHE"]) if os.environ.get("UKE_IMD_CACHE") else None,
     Path(os.environ["CLAWD_DATA"]) / "imd2019_cache.json" if os.environ.get("CLAWD_DATA") else None,
     Path("/Users/tompickup/clawd/burnley-council/data/imd2019_cache.json"),
     Path("/root/aidoge/burnley-council/data/imd2019_cache.json"),
     Path("/root/clawd/burnley-council/data/imd2019_cache.json"),
 ]
-IMD = next((p for p in IMD_CANDIDATES if p and p.exists()), IMD_CANDIDATES[1])
+IMD = next((p for p in IMD_CANDIDATES if p and p.exists()), None)
 OUT = ROOT / "data/features/ward-demographics-2021.json"
 IDENTITY = ROOT / "data/identity/wards-may-2026.json"
 
@@ -135,6 +137,39 @@ def load_table(table_key, info):
     print(f"  loaded {table_key}: {len(out):,} LSOAs, {len(cols)-1} fields")
     return out
 
+def aggregate_wards(lookups, tables, imd):
+    """Use the newest available lookup for each GSS code, never pool vintages.
+
+    Older lookups retain retired ward codes; they cannot add neighbourhoods to
+    a ward already covered by a newer lookup. Each LSOA is counted once per ward.
+    """
+    selected = {}
+    for year in sorted(lookups, reverse=True):
+        grouped = {}
+        for lsoa, info in lookups[year].items():
+            if info.get("wdcd"):
+                grouped.setdefault(info["wdcd"], {})[lsoa] = info
+        for ward, members in grouped.items():
+            selected.setdefault(ward, (year, members))
+    agg = {}
+    for wd, (year, members) in selected.items():
+        info = next(iter(members.values()))
+        row = {"ward_name": info["wdnm"], "lad22cd": info.get("ladcd"),
+               "wd_year": year, "lsoa_count": len(members),
+               "imd_sum": 0, "imd_count": 0, "totals": {}}
+        for lsoa in members:
+            if lsoa in imd and imd[lsoa].get("decile"):
+                row["imd_sum"] += imd[lsoa]["decile"]
+                row["imd_count"] += 1
+            for tkey, lsoa_data in tables.items():
+                if lsoa not in lsoa_data:
+                    continue
+                totals = row["totals"].setdefault(tkey, {})
+                for name, value in lsoa_data[lsoa].items():
+                    totals[name] = totals.get(name, 0) + value
+        agg[wd] = row
+    return agg
+
 def main():
     print("Loading Census tables...")
     tables = {k: load_table(k, info) for k, info in TABLES.items()}
@@ -158,27 +193,12 @@ def main():
             print(f"  loaded wd{year}: {len(normalised):,} LSOAs")
         except Exception as e:
             print(f"  skip wd{year}: {e}")
-    imd = json.load(open(IMD)) if IMD.exists() else {}
+    imd = json.load(open(IMD)) if IMD else {}
 
-    print("Aggregating to ward (one row per (year, ward GSS) pair)...")
-    agg = {}
-    for year, lookup in lookups.items():
-        for lsoa, ward_info in lookup.items():
-            wd = ward_info["wdcd"]
-            if not wd: continue
-            if wd not in agg:
-                agg[wd] = {"ward_name": ward_info["wdnm"], "lad22cd": ward_info.get("ladcd"), "wd_year": year, "imd_sum": 0, "imd_count": 0, "totals": {}}
-            # IMD
-            if lsoa in imd and imd[lsoa].get("decile"):
-                agg[wd]["imd_sum"] += imd[lsoa]["decile"]
-                agg[wd]["imd_count"] += 1
-            # Census tables
-            for tkey, lsoa_data in tables.items():
-                if lsoa not in lsoa_data: continue
-                t = agg[wd]["totals"].setdefault(tkey, {})
-                for fname, val in lsoa_data[lsoa].items():
-                    t[fname] = t.get(fname, 0) + val
-    print(f"Wards aggregated (across all WD years): {len(agg):,}")
+    if not imd:
+        sys.exit("REFUSING TO WRITE: IMD input is missing; set UKE_IMD_CACHE to the source cache.")
+    agg = aggregate_wards(lookups, tables, imd)
+    print(f"Wards aggregated (one lookup vintage per ward): {len(agg):,}")
 
     out = {}
     for wd, v in agg.items():
@@ -223,7 +243,9 @@ def main():
             "total_residents": eth_total,
             "ward_name": v["ward_name"],
             "lad22cd": v["lad22cd"],
-            "_source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004) LSOA→WD22 + IMD2019",
+            "lookup_year": "20" + v["wd_year"],
+            "lsoa_count": v["lsoa_count"],
+            "_source": f"Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD{v['wd_year']} + IMD2019",
         }
 
     identity = json.load(open(IDENTITY))
@@ -258,12 +280,17 @@ def main():
             f"{previous:,} already on file. Pass --allow-shrink if this is intended."
         )
 
+    # Preserve the existing GSS order so arithmetic repairs remain reviewable.
+    if OUT.exists():
+        old_keys = list(json.load(open(OUT)).get("wards", {}))
+        keys = old_keys + sorted(set(out) - set(old_keys))
+        out = {key: out[key] for key in keys if key in out}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT, "w") as f:
         json.dump({
             "snapshot": {
-                "generated_at": "2026-04-25",
-                "method": "Census 2021 6-table LSOA aggregation to WD22 + IMD2019",
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+                "method": "Census 2021 6-table LSOA best-fit aggregation; newest available WD22–WD25 lookup per ward + IMD2019",
                 "tables": list(TABLES.keys()),
             },
             "summary": {

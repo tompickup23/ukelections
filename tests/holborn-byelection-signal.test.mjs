@@ -36,7 +36,7 @@ describe("Holborn and St Pancras contest file", () => {
   // winner appears in `forecast.winner` the by-elections index starts printing
   // it as a pre-election call and grading it.
   it("publishes a signal, never a central forecast", () => {
-    expect(contest.status).toBe("upcoming");
+    expect(contest.status).toBe("concluded");
     expect(contest.forecast.classification).toBe("signal-only");
     expect(contest.forecast.winner).toBeNull();
     expect(contest.forecast.runner_up).toBeNull();

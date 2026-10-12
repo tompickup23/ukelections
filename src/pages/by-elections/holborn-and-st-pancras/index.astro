@@ -1,24 +1,6 @@
 ---
-/**
- * Holborn and St Pancras. The pre-poll briefing.
- *
- * There is no forecast on this page and there should not be one yet: the poll
- * is fixed, but nominations remain open and no constituency poll has been
- * published. What the page does have is the
- * strongest substitute available: the Camden borough election of 7 May 2026
- * across the ten whole wards inside the seat. That is a real vote on this
- * ground, four months old, and at Arbroath the equivalent signal beat the
- * general-election prior by 5.5pp of MAE.
- *
- * The seat is ten whole wards PLUS "Primrose Hill (part)", which no ward-level
- * result can split, so the page publishes the ten-ward figure and shows the
- * whole-Primrose-Hill variant beside it rather than burying the difference.
- * That variant is the only thing standing between "Reform third" and
- * "Conservatives third", so the comparison table is not decoration.
- *
- * Data: data/predictions/by-elections/holborn-and-st-pancras-2026-10-08.json,
- * built by scripts/build-holborn-byelection.mjs.
- */
+import "../../../styles/by-election-details.css";
+// Declared result, with the published pre-election signal retained for comparison.
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
@@ -52,7 +34,8 @@ const structuredData = pollStillToCome
   : [];
 const signal = data.inputs.camden_signal_2026_05_07;
 const baseline = data.inputs.ge2024_baseline;
-const field = data.field;
+const result = data.result;
+const resultRows = result.candidates.map((c: any) => ({ party: c.party, pct: c.votes / result.total_valid_votes }));
 
 const pct1 = (x: number | null | undefined) =>
   typeof x === "number" ? (x * 100).toFixed(1) : null;
@@ -117,20 +100,20 @@ const timeline: Array<{ date: string; event: string }> = [
   { date: "8 September 2026", event: "Camden publishes the Notice of Election. Nominations close on 15 September and polling is fixed for 8 October." },
   { date: "9 September 2026", event: "Labour members select Sagal Abdi-Wali." },
   { date: "15 September 2026", event: "Nominations close at 4pm. The Statement of Persons Nominated fixes a ballot of 15 candidates, with Zack Polanski carrying the Green nomination and George Galloway standing for the Workers Party." },
-  { date: "8 October 2026", event: "Polling day." },
+  { date: "8 October 2026", event: "Polling day. Sagal Abdi-Wali elected for Labour with 12,292 votes and a majority of 3,364." },
 ];
 ---
 
 <BaseLayout
-  title="Holborn and St Pancras by-election, 8 October: Starmer's seat"
-  description="Starmer's old seat votes on 8 October 2026. The full 15-candidate ballot, from Labour's Sagal Abdi-Wali to Green leader Zack Polanski and George Galloway. No constituency poll exists, so the May Camden ward result is published as a signal, not a forecast."
+  title="Holborn and St Pancras by-election result: Labour hold"
+  description="Holborn and St Pancras, 8 October 2026: Sagal Abdi-Wali wins for Labour with 12,292 votes and a majority of 3,364. Full results and sources."
   breadcrumbs={[
     { name: "By-elections", href: "/by-elections/" },
     { name: "Holborn and St Pancras", href: "/by-elections/holborn-and-st-pancras/" },
   ]}
   structuredData={structuredData}
 >
-  <section class="page-hero">
+  <section class="page-hero compact-hero">
     {contest.pcon24cd && (
       <div class="mini-map-side">
         <MiniMap
@@ -144,63 +127,56 @@ const timeline: Array<{ date: string; event: string }> = [
         />
       </div>
     )}
-    {/* Hero copy follows the field, because the hero is the part people read.
-        Both of these were written for the pre-nomination state and hardcoded
-        to it: eleven days after nominations closed the page still opened
-        "nominations close 15 September" and had Polanski and Chowdhury
-        contesting a selection Polanski had won. */}
-    <p class="eyebrow">
-      By-election · 8 October 2026 · {field.status === "locked"
-        ? `${field.declared.length} candidates standing`
-        : "nominations close 15 September"}
-    </p>
-    <h1>Holborn and St Pancras by-election</h1>
+    <p class="eyebrow">Declared result · 8 October 2026 · Labour hold</p>
+    <h1>Holborn and St Pancras by-election result</h1>
     <p class="lede">
-      Holborn and St Pancras votes on 8 October.
-      {field.status === "locked" ? (
-        <>
-          {" "}Nominations closed on 15 September and {field.declared.length} candidates are standing,
-          Labour's Camden council leader Sagal Abdi-Wali against the Green Party leader Zack Polanski,
-          with George Galloway standing for the Workers Party.
-        </>
-      ) : (
-        <>
-          {" "}Labour has selected Camden council leader Sagal Abdi-Wali, while Zack Polanski and Hamza
-          Chowdhury are seeking the Green nomination. Nominations close on 15 September, so no candidate
-          has yet been formally confirmed.
-        </>
-      )}
-      {" "}What is fixed is the
-      ground. Camden voted four months ago, and in the ten whole wards inside
-      this seat it split Labour {pct1(signal.shares["Labour"])}, Green {pct1(signal.shares["Green Party"])},
-      a {pp(signal.swing_vs_ge2024_pp["Green Party"])} Green move on the general election.
+      Sagal Abdi-Wali held Holborn and St Pancras for Labour with {result.votes.Labour.toLocaleString("en-GB")} votes
+      ({pct1(result.shares.Labour)}%). Zack Polanski finished second for the Greens with
+      {" "}{result.votes["Green Party"].toLocaleString("en-GB")} votes ({pct1(result.shares["Green Party"])}%).
+      The majority was {result.majority_votes.toLocaleString("en-GB")}; Camden reports turnout of {result.turnout_pct * 100}%.
     </p>
     <p class="meta-row">
       England · London · GE2024: Labour, majority {baseline.majority_votes.toLocaleString()} ({pct1(baseline.majority_pp)}pp)
     </p>
   </section>
+<nav class="detail-nav" aria-label="On this page"><a href="#result">Full result</a><a href="#signal">Archived signal</a><a href="#sources">Sources</a></nav>
 
   <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">Our call</p>
-      <h2>Why there is no forecast here</h2>
-    </div>
-    <div class="backtest-callout">
-      <strong>{data.forecast.headline}</strong>
-      <span class="backtest-detail">{data.inputs.no_polls_note}</span>
+    <div class="section-head"><p class="eyebrow">Official declaration</p><h2 id="result">The result</h2></div>
+    <PartyBars rows={resultRows} large={true} />
+    <div class="table-scroll" role="region" aria-label="Declared candidate results" tabindex="0">
+    <div class="by-election-scroll" role="region" aria-label="All Holborn and St Pancras candidate results" tabindex="0"><table class="seat-table">
+<caption>All Holborn and St Pancras candidate results</caption>
+      <thead><tr><th scope="col">Candidate</th><th scope="col">Party</th><th scope="col">Votes</th><th scope="col">Share</th></tr></thead>
+      <tbody>{result.candidates.map((c: any) => (
+        <tr><td>{c.name}{c.elected ? " (elected)" : ""}</td><td>{c.party}</td>
+          <td>{c.votes.toLocaleString("en-GB")}</td><td>{pct1(c.votes / result.total_valid_votes)}%</td></tr>
+      ))}</tbody>
+    </table></div>
     </div>
     <p class="caption">
-      Method: signal-only · Provider: UK Elections. After Makerfield we publish a numeric central
-      forecast only where a competitive race gives the models something real to estimate. The date and
-      the field are fixed, but no constituency poll of this seat has been published, so it is not
-      there yet.
-      <a href="/by-elections/makerfield/">What went wrong at Makerfield →</a>
+      {result.total_valid_votes.toLocaleString("en-GB")} valid votes; {result.rejected_ballots} rejected ballots.
+      <a href={result.source}>Camden Council declaration</a>. Checked {result.checked_at}.
+    </p>
+    <p class="caption">{result.verification}</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><p class="eyebrow">Published record</p><h2 id="signal">The pre-election signal</h2></div>
+    <p class="caption">
+      UK Elections published a May 2026 Camden ward-vote signal for this contest, with no central
+      forecast or winner call. That signal is retained below as historical context and is not counted
+      as a successful forecast. The result and the earlier local-election signal measure different contests.
+    </p>
+    <p class="caption">
+      The signal put Labour at {pct1(signal.shares.Labour)}% and the Greens at {pct1(signal.shares["Green Party"])}%.
+      The declared by-election shares were {pct1(result.shares.Labour)}% and {pct1(result.shares["Green Party"])}% respectively.
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">The freshest same-ground vote</p>
+      <p class="eyebrow">Archived local-election signal</p>
       <h2>Camden, 7 May 2026, across the seat's ten wards</h2>
     </div>
     <div class="page-bars"><PartyBars large={true} rows={signalRows} /></div>
@@ -229,12 +205,14 @@ const timeline: Array<{ date: string; event: string }> = [
       <p class="eyebrow">How much this could move</p>
       <h2>The part-ward, and what it changes</h2>
     </div>
-    <table class="seat-table">
+    <div class="table-scroll" role="region" aria-label="Archived signal sensitivity" tabindex="0">
+    <div class="by-election-scroll" role="region" aria-label="Published ward signal and part-ward sensitivity" tabindex="0"><table class="seat-table">
+<caption>Published ward signal and part-ward sensitivity</caption>
       <thead>
         <tr>
-          <th>Basis</th>
+          <th scope="col">Basis</th>
           {variantParties.map((party) => (
-            <th class="num">
+            <th class="num" scope="col">
               <span class="party-pill" style={`background:${partyColour(party)}`}></span>
               {shortPartyLabel(party)}
             </th>
@@ -253,7 +231,8 @@ const timeline: Array<{ date: string; event: string }> = [
           </tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
+    </div>
     <p class="caption">{signal.boundary_note}</p>
     <p class="caption">
       <strong>What this means for third place.</strong> {signal.sensitivities[0].note} The second row
@@ -284,16 +263,18 @@ const timeline: Array<{ date: string; event: string }> = [
       <p class="eyebrow">Ward by ward</p>
       <h2>Where the seat actually is</h2>
     </div>
-    <table class="seat-table">
+    <div class="table-scroll" role="region" aria-label="Archived ward results" tabindex="0">
+    <div class="by-election-scroll" role="region" aria-label="Wards within the constituency" tabindex="0"><table class="seat-table">
+<caption>Wards within the constituency</caption>
       <thead>
         <tr>
-          <th>Ward</th>
-          <th class="num">Seats</th>
-          <th>Led on share</th>
-          <th class="num">Lab</th>
-          <th class="num">Grn</th>
-          <th class="num">Ref</th>
-          <th class="num">Turnout</th>
+          <th scope="col">Ward</th>
+          <th class="num" scope="col">Seats</th>
+          <th scope="col">Led on share</th>
+          <th class="num" scope="col">Lab</th>
+          <th class="num" scope="col">Grn</th>
+          <th class="num" scope="col">Ref</th>
+          <th class="num" scope="col">Turnout</th>
         </tr>
       </thead>
       <tbody>
@@ -312,7 +293,8 @@ const timeline: Array<{ date: string; event: string }> = [
           </tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
+    </div>
     <p class="caption">
       The Greens led on share in Holborn &amp; Covent Garden and Regent's Park and took all six
       seats between them. The Camden People's Alliance, which did not exist at the general election,
@@ -327,84 +309,22 @@ const timeline: Array<{ date: string; event: string }> = [
       <p class="eyebrow">How we got here</p>
       <h2>Timeline</h2>
     </div>
-    <table class="seat-table">
-      <thead><tr><th>Date</th><th>Event</th></tr></thead>
+    <div class="table-scroll" role="region" aria-label="Election timeline" tabindex="0">
+    <div class="by-election-scroll" role="region" aria-label="By-election timeline" tabindex="0"><table class="seat-table">
+<caption>By-election timeline</caption>
+      <thead><tr><th scope="col">Date</th><th scope="col">Event</th></tr></thead>
       <tbody>
         {timeline.map((t) => (
           <tr><td style="white-space:nowrap">{t.date}</td><td>{t.event}</td></tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
+    </div>
     <p class="caption">{contest.trigger.stated_reason} {contest.timetable_note}</p>
   </section>
 
   <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">The ballot</p>
-      <h2>{field.status === "locked" ? "The ballot paper" : "Who has said anything at all"}</h2>
-    </div>
-    <div class="backtest-callout">
-      {/* Both halves follow the data. Before nominations closed this section
-          listed party-selection positions and had to say so; once the
-          Statement of Persons Nominated exists it is a ballot paper and
-          hedging it would be the inaccuracy. The heading and this line were
-          hardcoded to the first state and still read "not yet fixed" eleven
-          days after nominations closed. */}
-      <strong>
-        {field.status === "locked"
-          ? `Nominations closed. ${field.declared.length} candidates are standing.`
-          : "Selections are moving, but the ballot is not yet fixed."}
-      </strong>
-      <span class="backtest-detail">{field.note}</span>
-    </div>
-    <table class="seat-table" style="margin-top:var(--space-md)">
-      <thead><tr><th>Party</th><th>Name</th><th>Status</th></tr></thead>
-      <tbody>
-        {field.declared.map((c: any) => (
-          <tr>
-            <td>
-              <span class="party-pill" style={`background:${partyColour(c.party)}`}></span>
-              {shortPartyLabel(c.party)}
-            </td>
-            <td>{c.candidate || <span class="muted">not named</span>}</td>
-            {/* The separator is conditional: a nominated candidate with
-                nothing further to say about them rendered as "nominated · "
-                with a dangling middot. */}
-            <td class="muted">
-              {c.selection_status?.replaceAll("_", " ") ?? "position reported"}
-              {c.note ? ` · ${c.note}` : ""}
-            </td>
-          </tr>
-        ))}
-        {field.floated.map((c: any) => (
-          <tr>
-            <td>
-              <span class="party-pill" style={`background:${partyColour(c.party)}`}></span>
-              {shortPartyLabel(c.party)}
-            </td>
-            <td>{c.candidate}</td>
-            <td class="muted">Speculation only · {c.note}</td>
-          </tr>
-        ))}
-        {(field.declined || []).map((c: any) => (
-          <tr>
-            <td><span class="party-pill" style={`background:${partyColour(c.party)}`}></span>{shortPartyLabel(c.party)}</td>
-            <td>{c.candidate}</td>
-            <td class="muted">not standing · {c.note}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">What we will grade</p>
-      <h2>The open questions</h2>
-    </div>
-    <ul>
-      {data.watchpoints.map((w: string) => <li>{w}</li>)}
-    </ul>
+    <div class="section-head"><h2 id="sources">Sources</h2></div>
     <p class="muted-row">
       Sources:
       {data.sources.map((s: any, i: number) => (

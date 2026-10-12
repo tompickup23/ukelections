@@ -90,8 +90,10 @@
   "ward_profile": {
     "gss": "E05013668",
     "ward_name": "Regent's Park",
-    "total_residents": 47744,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 11936,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 7,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -304,7 +306,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://www.camden.gov.uk/local-election-may-2026-results-regents-park-ward",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 3
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

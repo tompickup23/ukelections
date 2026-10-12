@@ -1,0 +1,44 @@
+---
+const { contests } = Astro.props;
+const councils = [...new Set(contests.map((d: any) => d.contest.council_name))].sort() as string[];
+const dates = [...new Set(contests.map((d: any) => d.contest.polling_day))].sort().reverse() as string[];
+import { prettyElectionDate } from "../lib/byElections";
+---
+<form class="contest-filters" data-contest-filters hidden role="search" aria-label="Filter council by-elections">
+  <div class="filter-field"><label for="by-election-council">Council</label><select id="by-election-council" name="council"><option value="">All councils</option>{councils.map(c => <option value={c}>{c}</option>)}</select></div>
+  <div class="filter-field"><label for="by-election-date">Polling date</label><select id="by-election-date" name="date"><option value="">All dates</option>{dates.map(d => <option value={d}>{prettyElectionDate(d)}</option>)}</select></div>
+  <button type="reset">Clear filters</button>
+  <p role="status" aria-live="polite" data-filter-status></p>
+</form>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contest-filters]');
+  if (form) {
+    const council = form.elements.namedItem('council') as HTMLSelectElement;
+    const date = form.elements.namedItem('date') as HTMLSelectElement;
+    const items = [...document.querySelectorAll<HTMLElement>('[data-contest-item]')];
+    const groups = [...document.querySelectorAll<HTMLElement>('[data-contest-group]')];
+    const update = () => {
+      let count = 0;
+      for (const item of items) {
+        item.hidden = Boolean((council.value && item.dataset.council !== council.value) || (date.value && item.dataset.date !== date.value));
+        if (!item.hidden) count++;
+      }
+      for (const group of groups) group.hidden = !group.querySelector('[data-contest-item]:not([hidden])');
+      for (const detail of document.querySelectorAll<HTMLDetailsElement>('[data-filter-expand]')) detail.open = Boolean(council.value || date.value) && !detail.hidden;
+      form.querySelector('[data-filter-status]')!.textContent = count ? `${count} contest${count === 1 ? '' : 's'} found` : 'No contests match these filters. Clear filters to see all contests.';
+    };
+    form.hidden = false;
+    form.addEventListener('change', update);
+    form.addEventListener('reset', () => { council.value = ''; date.value = ''; update(); });
+    form.addEventListener('submit', event => event.preventDefault());
+    update();
+  }
+</script>
+<style>
+  .contest-filters { display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: end; margin-block: var(--space-lg); }
+  .contest-filters[hidden] { display: none; }
+  .filter-field { display: grid; gap: var(--space-xs); flex: 1; min-width: 0; font-weight: 600; }
+  select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border); padding: var(--space-xs); max-width: 100%; }
+  [role="status"] { flex-basis: 100%; color: var(--muted); margin: 0; }
+  @media(max-width:40rem) { .filter-field { flex-basis: 100%; } }
+</style>

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-06T03:37:20.338Z",
+  "generated_at": "2026-10-12T20:44:23.577Z",
   "slug": "lambeth-myatts-fields-2026-10-08",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.lambeth.myatts-fields.by.2026-10-08",
     "polling_day": "2026-10-08",
@@ -40,65 +40,79 @@
     ],
     "candidates": [
       {
-        "name": "Yemi Awolola",
-        "party_name": "Christian Peoples Alliance",
-        "party": "Other",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Christopher David French",
-        "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Molly Hartill",
         "party_name": "Labour and Co-operative Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "John Francis Hindson",
-        "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Anya Krycek",
-        "party_name": "The Socialist Party of Great Britain",
-        "party": "Other",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Mark Mckee",
-        "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "votes": 1026,
+        "elected": true,
+        "party": "Labour"
       },
       {
         "name": "Sonia Winifred",
         "party_name": "Green Party",
-        "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "votes": 815,
+        "elected": false,
+        "party": "Green Party"
+      },
+      {
+        "name": "Christopher David French",
+        "party_name": "Liberal Democrats",
+        "votes": 189,
+        "elected": false,
+        "party": "Liberal Democrats"
+      },
+      {
+        "name": "John Francis Hindson",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 74,
+        "elected": false,
+        "party": "Conservative"
+      },
+      {
+        "name": "Mark Mckee",
+        "party_name": "Reform UK",
+        "votes": 58,
+        "elected": false,
+        "party": "Reform UK"
+      },
+      {
+        "name": "Yemi Awolola",
+        "party_name": "Christian Peoples Alliance",
+        "votes": 26,
+        "elected": false,
+        "party": "Other"
+      },
+      {
+        "name": "Anya Krycek",
+        "party_name": "The Socialist Party of Great Britain",
+        "votes": 9,
+        "elected": false,
+        "party": "Other"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Labour",
+    "member": "Annie Gallop",
+    "note": "Former holding party checked against the linked reporting of the 8 October by-election; not inferred from the ward-wide vote. Reviewed 12 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://love.lambeth.gov.uk/lambeth-date-set-for-myatts-fields-by-election-following-death-of-local-councillor/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.aldc.org/2026/10/lambeth-lbc-myatts-fields-8-october-2026-2/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05014107",
     "ward_name": "Myatt's Fields",
-    "total_residents": 39988,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 9997,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 6,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -271,7 +285,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://moderngov.lambeth.gov.uk/mgElectionAreaResults.aspx?XXR=0&ID=300&RPID=140235621",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 2
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",
@@ -407,13 +422,49 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1105 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.02639963586709149,
+      "Labour": 0.46700045516613564,
+      "Conservative": 0.033682294037323625,
+      "Liberal Democrats": 0.08602639963586708,
+      "Green Party": 0.3709604005461994,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0.015930814747382796
+    },
+    "winner_party": "Labour",
+    "winner_candidate": "Molly Hartill",
+    "runner_up_party": "Green Party",
+    "majority_votes": 211,
+    "total_votes": 2197,
+    "source": "https://moderngov.lambeth.gov.uk/mgElectionAreaResults.aspx?ID=315&RPID=301356569",
+    "outcome": "Labour hold",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-10-06",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Labour",
+      "call_correct": true,
+      "mae_pp": 1.7985889849795171
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-10-12",
+    "note": "All seven counts match the council result and sum to 2,197 valid votes. Council electorate 8,376. Seven rejected papers are retained from Democracy Club; the council HTML does not state rejected ballots or turnout. No turnout percentage has been inferred."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://moderngov.lambeth.gov.uk/mgElectionAreaResults.aspx?ID=315&RPID=301356569"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.lambeth.myatts-fields.by.2026-10-08/"
@@ -422,5 +473,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.lambeth.myatts-fields.by.2026-10-08/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-10-12"
 }

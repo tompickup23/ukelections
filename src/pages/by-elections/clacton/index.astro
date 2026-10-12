@@ -1,4 +1,5 @@
 ---
+import "../../../styles/by-election-details.css";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
@@ -61,10 +62,11 @@ const timeline: Array<{ date: string; event: string }> = [
 ---
 
 <BaseLayout
-  title="Clacton by-election 2026. 13 August"
-  description="Nigel Farage resigned as MP for Clacton on 8 July 2026, re-contested the seat on 13 August and was returned on 63.3% against a five-party boycott, with turnout at 44.4%. The declared result on a record 34-candidate ballot, and why we published no vote-share forecast."
+  breadcrumbs={[{name:"By-elections",href:"/by-elections/"},{name:"Clacton",href:"/by-elections/clacton/"}]}
+  title="Clacton by-election result, 13 August 2026"
+  description="Clacton result, 13 August 2026: Nigel Farage elected with 22,239 votes and a majority of 12,784. Full results for all 34 candidates and official sources."
 >
-  <section class="page-hero">
+  <section class="page-hero compact-hero">
     {contest.pcon24cd && (
       <div class="mini-map-side">
         <MiniMap
@@ -78,7 +80,7 @@ const timeline: Array<{ date: string; event: string }> = [
       </div>
     )}
     <p class="eyebrow">By-election · Thursday 13 August 2026 · declared</p>
-    <h1>Clacton by-election</h1>
+    <h1>Clacton by-election result</h1>
     <p class="lede">
       Nigel Farage resigned as MP for Clacton on 8 July 2026, amid a parliamentary standards
       investigation into his financial interests, in order to trigger a by-election and stand in it
@@ -89,8 +91,9 @@ const timeline: Array<{ date: string; event: string }> = [
     <p class="meta-row">England · East of England · GE2024: Reform UK, majority 8,405 (18.3pp)</p>
   </section>
 
+  <nav class="detail-nav" aria-label="On this page"><a href="#result">Result</a><a href="#candidate-results">All candidate results</a><a href="#archive">Archived analysis</a><a href="#sources">Sources</a></nav>
   {declared && (
-    <section class="section">
+    <section class="section" id="result">
       <div class="section-head">
         <p class="eyebrow">Declared result · 13 August 2026</p>
         <h2>{result.outcome || call?.outcome}</h2>
@@ -125,6 +128,23 @@ const timeline: Array<{ date: string; event: string }> = [
     </section>
   )}
 
+  {declared && result.candidates?.length > 0 && (
+    <section class="section" id="candidate-results">
+      <h2>Full candidate results</h2>
+      <div class="by-election-scroll" role="region" aria-label="All 34 Clacton candidate results" tabindex="0"><table class="seat-table">
+<caption>All 34 Clacton candidate results</caption>
+        <thead><tr><th scope="col">Candidate</th><th scope="col">Ballot description</th><th class="num" scope="col">Votes</th><th class="num" scope="col">Share</th></tr></thead>
+        <tbody>{result.candidates.slice().sort((a:any,b:any)=>b.votes-a.votes).map((candidate:any)=>(
+          <tr><td>{candidate.candidate}{candidate.candidate === result.winner_candidate && <strong> · Elected</strong>}</td><td>{candidate.description}</td><td class="num">{candidate.votes.toLocaleString("en-GB")}</td><td class="num">{pct1(candidate.votes/result.valid_votes)}%</td></tr>
+        ))}</tbody>
+      </table></div>
+      <p class="caption">Shares are of {result.valid_votes.toLocaleString("en-GB")} valid votes. <a href="https://www.tendringdc.gov.uk/news/clacton-by-election-result-declared-after-record-breaking-election">Tendring's official result</a> lists all {result.candidates.length} candidates.</p>
+    </section>
+  )}
+
+  <details class="section archived-analysis" id="archive" open={!declared}>
+    <summary>Archived call, polling and pre-election analysis</summary>
+    <p class="caption">The original analysis below is preserved for comparison. References to future outcomes describe what was known before the result; the declared counts appear above.</p>
   {showCall && (
     <section class="section">
       <div class="section-head">
@@ -195,14 +215,15 @@ const timeline: Array<{ date: string; event: string }> = [
       <p class="eyebrow">How we got here</p>
       <h2>Timeline</h2>
     </div>
-    <table class="seat-table">
-      <thead><tr><th>Date</th><th>Event</th></tr></thead>
+    <div class="by-election-scroll" role="region" aria-label="Clacton by-election timeline" tabindex="0"><table class="seat-table">
+<caption>Clacton by-election timeline</caption>
+      <thead><tr><th scope="col">Date</th><th scope="col">Event</th></tr></thead>
       <tbody>
         {timeline.map((t) => (
           <tr><td style="white-space:nowrap">{t.date}</td><td>{t.event}</td></tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">
       {contest.trigger.stated_reason}
       {" "}{contest.precedent_note}
@@ -212,17 +233,18 @@ const timeline: Array<{ date: string; event: string }> = [
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">The ballot</p>
-      <h2>Who is standing, and who is not</h2>
+      <h2>Who stood, and who did not</h2>
     </div>
     <div class="backtest-callout">
-      <strong>Five parties are boycotting: {data.boycott.parties_not_standing.map((p: string) => shortPartyLabel(p)).join(", ")}.</strong>
+      <strong>Five parties did not stand: {data.boycott.parties_not_standing.map((p: string) => shortPartyLabel(p)).join(", ")}.</strong>
       <span class="backtest-detail">{data.boycott.note}</span>
     </div>
     {data.field && (
       <p class="caption" style="margin-top:var(--space-md)">{data.field.record_note}</p>
     )}
-    <table class="seat-table" style="margin-top:var(--space-md)">
-      <thead><tr><th>Candidate</th><th>Party</th><th>Status</th></tr></thead>
+    <div class="by-election-scroll" role="region" aria-label="Selected candidates in the original pre-election analysis" tabindex="0"><table class="seat-table" style="margin-top:var(--space-md)">
+<caption>Selected candidates in the original pre-election analysis</caption>
+      <thead><tr><th scope="col">Candidate</th><th scope="col">Party</th><th scope="col">Status</th></tr></thead>
       <tbody>
         {data.candidates.map((c: any) => (
           <tr>
@@ -235,7 +257,7 @@ const timeline: Array<{ date: string; event: string }> = [
           </tr>
         ))}
       </tbody>
-    </table>
+    </table></div>
     <p class="caption">
       The most notable of the {data.field ? data.field.candidate_count : ""} candidates on the ballot;
       nominations closed 17 July 2026. The balance are minor-party, novelty (several Monster Raving Loony)
@@ -262,8 +284,8 @@ const timeline: Array<{ date: string; event: string }> = [
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">What we will grade</p>
-      <h2>The open questions</h2>
+      <p class="eyebrow">Pre-election record</p>
+      <h2>Questions recorded before polling</h2>
     </div>
     <p>
       With no mainstream opposition, the winner call carries almost no information: John Curtice expects
@@ -275,6 +297,10 @@ const timeline: Array<{ date: string; event: string }> = [
       of Farage, but that is a novelty measure of sentiment, not a turnout-weighted vote intention, and we
       are not treating it as a forecast.
     </p>
+  </section>
+  </details>
+  <section class="section" id="sources">
+    <h2>Sources</h2>
     <p class="muted-row">
       Sources:
       {data.sources.map((s: any, i: number) => (

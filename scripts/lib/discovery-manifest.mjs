@@ -33,7 +33,12 @@ export function pageFingerprint(html, expectedUrl) {
   const ordered = value => Array.isArray(value) ? value.map(ordered)
     : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, ordered(value[key])])) : value;
   const structured = find('script').filter(n => attr(n, 'type') === 'application/ld+json')
-    .map(n => JSON.stringify(ordered(JSON.parse((n.childNodes || []).map(c => c.value || '').join(''))))).sort();
+    .map(n => {
+      const value = JSON.parse((n.childNodes || []).map(c => c.value || '').join(''));
+      // Publication-ledger dates are output metadata, not a reason to re-date content.
+      if (expectedUrl.startsWith(`${ORIGIN}/by-elections/`) && value['@type'] === 'WebPage') delete value.dateModified;
+      return JSON.stringify(ordered(value));
+    }).sort();
   const text = [visible(find('title')[0] || {}), attr(description || {}, 'content') || '', visible(main), ...structured]
     .join(' ').replace(/\s+/g, ' ').trim();
   return createHash('sha256').update(text).digest('hex');
@@ -98,6 +103,24 @@ export function stampDiscoveryDates(dist, plan) {
     return when ? entry.replace('</loc>', `</loc>\n    <lastmod>${escapeXml(w3c(when))}</lastmod>`) : entry;
   });
   writeFileSync(sitemapFile, sitemap);
+  for (const [url, when] of Object.entries(plan.changedAt || {})) {
+    const route = new URL(url);
+    if (!when || route.origin !== ORIGIN || !route.pathname.startsWith('/by-elections/')) continue;
+    const file = join(dist, route.pathname, 'index.html');
+    if (!existsSync(file)) continue;
+    const iso = w3c(when);
+    const label = new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/London' });
+    const html = readFileSync(file, 'utf8')
+      .replace(/<p\b[^>]*data-content-updated[^>]*>[\s\S]*?<\/p>/g,
+        `<p class="caption" data-content-updated data-discovery-ignore data-pagefind-ignore>Last updated <time datetime="${iso}">${label}</time>.</p>`)
+      .replace(/(<script\b[^>]*type="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/g, (match, start, json, end) => {
+        const value = JSON.parse(json);
+        if (value['@type'] !== 'WebPage') return match;
+        value.dateModified = iso;
+        return start + JSON.stringify(value).replaceAll('<', '\\u003c') + end;
+      });
+    writeFileSync(file, html);
+  }
   const feedFile = join(dist, 'rss.xml');
   if (existsSync(feedFile)) {
     const feed = readFileSync(feedFile, 'utf8').replace(/<item>([\s\S]*?)<\/item>/g, (item, inner) => {

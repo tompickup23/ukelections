@@ -125,7 +125,7 @@ async function main() {
   const stateFile = join(ROOT, ".cache/discovery/deployed.json");
   const discovery = planDiscovery(join(ROOT, "dist"), readDiscoveryState(stateFile));
   console.log(`Discovery: ${discovery.changed.length} changed pages${discovery.baselineOnly ? "; baseline only" : ""}.`);
-  // Sitemap lastmod and RSS pubDate come from the ledger, never the build
+  // Sitemap lastmod, by-election page update dates and RSS pubDate come from the ledger, never the build
   // clock: a route is dated by the run that first deployed its current
   // content, and left undated where the ledger has no such record.
   stampDiscoveryDates(join(ROOT, "dist"), discovery);

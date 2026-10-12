@@ -1,4 +1,6 @@
 ---
+import CouncilRoundup from "../../components/CouncilRoundup.astro";
+import { loadLocalContests, partyScorecard } from "../../lib/byElections";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { partyColour } from "../../lib/predictions";
 import { shortPartyLabel } from "../../lib/siteData";
@@ -80,18 +82,8 @@ type LocalContest = { ward: string; council: string; winner: string; previous: s
 const localDates: Array<{ date: string; sources: Array<{ label: string; url: string }>; contests: LocalContest[] }> =
   localData.dates || [];
 const localAll: LocalContest[] = localDates.flatMap((d) => d.contests);
-// Reform scorecard derived from the rows themselves so the numbers always
-// match the table.
-const refWins = localAll.filter((c) => c.winner.includes("Reform"));
-const refGains = refWins.filter((c) => !c.previous.includes("Reform")).length;
-const refHolds = refWins.filter((c) => c.previous.includes("Reform")).length;
-const refLossRows = localAll.filter((c) => c.previous.includes("Reform") && !c.winner.includes("Reform"));
-const refLosses = refLossRows.length;
-// Named in the prose from the rows themselves, so the list cannot drift from
-// the table underneath it as new rounds land.
-const refLossList = refLossRows
-  .map((c) => `${c.ward} (${c.council}) to ${shortPartyLabel(c.winner)}`)
-  .join(", ");
+const councilContests = loadLocalContests();
+const partyRows = partyScorecard(localAll);
 function prettyDate(iso: string): string {
   return iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
 }
@@ -137,19 +129,21 @@ const leaderboard: Lead[] = [
 ---
 
 <BaseLayout
-  title="UK parliamentary by-elections. Results, forecasts and what's next"
-  description="UK Westminster by-election results and how our forecasts compared. Holborn and St Pancras votes on 8 October 2026, with Labour's Sagal Abdi-Wali selected and the Green nomination unresolved. Clacton on 13 August 2026: Reform hold, Farage returned on 63.3% with turnout at 44.4%. Plus the 18 June 2026 round and a rolling local council by-election scorecard."
+  title="UK by-election results, candidates and upcoming polls"
+  description={`UK parliamentary and council by-election results, candidates and upcoming polls. Council results through ${prettyDate(localData.window.to)}, with sources and the forecast record.`}
 >
-  <section class="hero">
+  <section class="hero compact-hero">
     <p class="eyebrow">By-elections</p>
-    <h1>Westminster by-elections</h1>
+    <h1>UK by-election results and upcoming polls</h1>
     <p class="lede">
-      Every by-election we track, the declared result, and how the pre-election forecast or
-      signal compared. {concluded.length} concluded contest{concluded.length === 1 ? "" : "s"}{upcoming.length > 0 ? `, ${upcoming.length} upcoming` : ""}.
+      Parliamentary and council by-elections we track, with declared results and upcoming polls. For Westminster, the pre-election forecast or
+      signal is preserved alongside each result. {concluded.length} concluded contest{concluded.length === 1 ? "" : "s"}{upcoming.length > 0 ? `, ${upcoming.length} upcoming` : ""}.
     </p>
   </section>
 
-  <section class="section">
+  <nav aria-label="By-election sections" class="journey-shortcuts"><a href="/by-elections/local/">Council results and upcoming polls</a> · <a href="#parliamentary">Parliamentary results</a> · <a href="#council-results">Weekly council results</a> · <a href="/by-elections/archive/">Results by year</a></nav>
+  <section class="section" id="parliamentary">
+    <h2>Parliamentary by-elections</h2>
     <div class="byelection-grid">
       {contests.map((c) => (
         <a class="byelection-card" href={c.href}>
@@ -185,10 +179,10 @@ const leaderboard: Lead[] = [
       ))}
     </div>
     <p class="caption">
-      Holborn and St Pancras votes on 8 October after Camden issued the Notice of Election. Labour has
-      selected Sagal Abdi-Wali and the Green nomination is contested, but nominations do not close until
-      15 September. Until then there is no forecast, only a transparent same-ground signal from the May
-      Camden election. Clacton, on 13 August 2026, went as called: Nigel Farage resigned, re-contested his own seat
+      Labour held Holborn and St Pancras on 8 October. Sagal Abdi-Wali received 12,292 votes,
+      a majority of 3,364 over Green candidate Zack Polanski. Camden reports turnout of 38.76%.
+      UK Elections published a local-election signal for the seat, not a forecast; it is not graded as a winner call.
+ Clacton, on 13 August 2026, went as called: Nigel Farage resigned, re-contested his own seat
       against a five-party boycott and was returned on 63.3% of the vote, with turnout down to
       44.4%. The 18 June 2026 round was a split verdict: Labour held Makerfield (Andy Burnham) against a UKE forecast that wrongly
       called Reform; the Conservatives gained Aberdeen South in an upset no area signal saw
@@ -197,11 +191,26 @@ const leaderboard: Lead[] = [
     </p>
   </section>
 
+  <section class="section" id="council-results">
+    <div class="section-head"><p class="eyebrow">Council by-elections · {prettyDate(localData.window.from)} to {prettyDate(localData.window.to)}</p><h2>Latest weekly council results</h2></div>
+    <p><a href="/by-elections/local/">Browse council by-elections by council or polling date</a>, including candidates, results and saved forecasts. <a href="/by-elections/archive/">Explore the results archive</a>.</p>
+    <CouncilRoundup dates={localDates} contests={councilContests} />
+    <h2>Gains, holds and losses by party</h2>
+    <p>{localAll.length} contests in this roundup. Parties are listed alphabetically; gains and losses compare the winner with the previous holder recorded in the sources. Independent labels may cover different people and groups.</p>
+    <div class="table-scroll" role="region" aria-label="All-party council by-election scorecard" tabindex="0">
+      <table class="seat-table"><thead><tr><th>Party</th><th>Wins</th><th>Gains</th><th>Holds</th><th>Losses</th><th>Net change</th></tr></thead>
+      <tbody>{partyRows.map(r => <tr><td><span class="party-pill" style={`background:${partyColour(r.party)}`}></span>{r.party}</td><td>{r.wins}</td><td>{r.gains}</td><td>{r.holds}</td><td>{r.losses}</td><td>{r.net > 0 ? "+" : ""}{r.net}</td></tr>)}</tbody></table>
+    </div>
+    {localData.pending_note && <p class="caption">{localData.pending_note}</p>}
+    <p class="caption">{localData.method_note}</p>
+  </section>
+
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Leaderboard · who called it best</p>
-      <h2>Forecaster accuracy, 18 June 2026</h2>
+      <h2>Forecaster comparisons: June–August 2026</h2>
     </div>
+    <div class="table-scroll" role="region" aria-label="Forecaster comparison" tabindex="0">
     <table class="seat-table">
       <thead>
         <tr>
@@ -222,6 +231,7 @@ const leaderboard: Lead[] = [
         ))}
       </tbody>
     </table>
+    </div>
     <p class="caption">
       Where real constituency polls existed (Makerfield only), they beat every model. The two seat
       models that ignore polls (our published forecast and Electoral Calculus) called Makerfield for
@@ -232,67 +242,12 @@ const leaderboard: Lead[] = [
     </p>
   </section>
 
-  <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">Local council by-elections · {localData.window.from} to {localData.window.to}</p>
-      <h2>The weekly ward scorecard</h2>
-    </div>
-    <p class="local-pointer">
-      Every scheduled council by-election now has its own page, with the candidates, the ward's last
-      result and a projection where the ward supports one:
-      <a href="/by-elections/local/">council by-elections</a>.
-    </p>
-    <p>
-      Westminster by-elections are rare; council by-elections happen most Thursdays and are the
-      highest-frequency real-vote signal between general elections. Across the
-      {localAll.length} ward contests since {prettyDate(localData.window.from)}, Reform UK made
-      <strong>{refGains} gain{refGains === 1 ? "" : "s"}</strong>, held
-      <strong>{refHolds}</strong> of its own seats and lost
-      <strong>{refLosses}</strong>: {refLossList}. Three of those losses came in the four weeks to
-      13 August: both Grays seats in Thurrock, on a night Labour took back seats that Reform
-      councillors elected in May had vacated within weeks, and Almondbury in Kirklees, where the
-      Liberal Democrats won back one of the three seats Reform had swept three months earlier.
-      Reform is still gaining, mostly from the Conservatives, and it is now also losing what it
-      defends. That mean-reversion is exactly why our Lancashire unitary model swings each ward off
-      the 2025 county result rather than freezing it. The gains came off Labour, the Conservatives
-      and independents across England, Wales and, notably, Scotland (Larkhall, South Lanarkshire,
-      under STV).
-    </p>
-    {localData.pending_note && <p class="muted">{localData.pending_note}</p>}
-    {localDates.map((d) => (
-      <details class="local-date">
-        <summary>
-          <strong>{prettyDate(d.date)}</strong> · {d.contests.length} contest{d.contests.length === 1 ? "" : "s"}
-          · Reform {d.contests.filter((c) => c.winner.includes("Reform")).length} win{d.contests.filter((c) => c.winner.includes("Reform")).length === 1 ? "" : "s"}
-        </summary>
-        <table class="seat-table">
-          <thead><tr><th>Ward</th><th>Council</th><th>Winner</th><th>Previously</th><th>Notes</th></tr></thead>
-          <tbody>
-            {d.contests.map((c) => (
-              <tr>
-                <td>{c.ward}</td>
-                <td class="muted">{c.council}</td>
-                <td>
-                  <span class="party-pill" style={`background:${partyColour(c.winner.split(" / ")[0])}`}></span>
-                  {c.winner}{c.share_pct != null ? ` (${c.share_pct.toFixed(1)}%)` : ""}
-                </td>
-                <td class="muted">{c.previous}</td>
-                <td class="muted">{c.note || ""}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p class="caption">
-          Sources: {d.sources.map((s, i) => (
-            <>{i > 0 ? " · " : ""}<a href={s.url} rel="external">{s.label}</a></>
-          ))}
-        </p>
-      </details>
-    ))}
-    <p class="caption">{localData.method_note}</p>
-  </section>
 
   <style>
+  .compact-hero { max-width:none; padding-block:var(--space-xl) var(--space-lg); }
+  .compact-hero h1 { font-size:var(--text-h1); }
+  .compact-hero .lede { font-size:var(--text-body); max-width:none; margin-top:var(--space-md); }
+
     .byelection-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap:1.25rem; }
     .byelection-card { display:block; padding:1.25rem 1.4rem; border:1px solid var(--border); border-radius:16px; background:var(--panel-bg); text-decoration:none; color:inherit; transition: border-color .15s, transform .15s; }
     .byelection-card:hover { border-color: var(--accent); transform: translateY(-2px); }

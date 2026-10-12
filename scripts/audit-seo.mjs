@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { auditByElectionMetadata } from "./lib/by-election-seo.mjs";
 /**
  * Technical SEO gate over the built site.
  *
@@ -41,6 +42,7 @@ export const BUDGETS = {
 };
 
 const HARD = [
+  "staleByElectionMetadata",
   "noTitle",
   "noDesc",
   "noH1",
@@ -74,6 +76,11 @@ export function auditDir(distDir) {
   for (const file of files) {
     const html = readFileSync(file, "utf8");
     const url = "/" + path.relative(distDir, file).replace(/index\.html$/, "").replace(/\\/g, "/");
+    const localContestSlug = url.match(/^\/by-elections\/local\/([^/]+)\/$/)?.[1];
+    if (localContestSlug) {
+      const dataFile = path.join(process.cwd(), "data/contests/local-byelections", `${localContestSlug}.json`);
+      if (existsSync(dataFile)) for (const issue of auditByElectionMetadata(html, JSON.parse(readFileSync(dataFile, "utf8")))) bump("staleByElectionMetadata", `${url} :: ${issue}`);
+    }
     // Inline SVG carries its own <title>, and scripts carry markup in strings.
     const body = html.replace(/<svg[\s\S]*?<\/svg>/g, "").replace(/<script[\s\S]*?<\/script>/g, "");
     const isNoIndex = /<meta name="robots" content="noindex/.test(html);

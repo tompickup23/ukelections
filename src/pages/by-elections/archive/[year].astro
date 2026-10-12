@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ByElectionFilters from "../../../components/ByElectionFilters.astro";
+import CouncilRoundup from "../../../components/CouncilRoundup.astro";
+import { archiveYears, loadLocalContests, loadParliamentContests, isDeclared, localStatus, roundupHref, prettyElectionDate } from "../../../lib/byElections";
+import { readFileSync } from "node:fs";
+export function getStaticPaths() { return archiveYears().map(year=>({params:{year}})); }
+const {year} = Astro.params;
+const today = new Date().toISOString().slice(0,10);
+const past = (d:any)=>d.contest.polling_day?.startsWith(year) && d.contest.polling_day < today;
+const local = loadLocalContests().filter(past).sort((a,b)=>b.contest.polling_day.localeCompare(a.contest.polling_day)||a.contest.council_name.localeCompare(b.contest.council_name));
+const parliament = loadParliamentContests().filter(past).sort((a,b)=>b.contest.polling_day.localeCompare(a.contest.polling_day));
+const roundup = JSON.parse(readFileSync("data/results/local-byelections.json","utf8"));
+// Retain sourced roundup-only coverage without inventing detail URLs or repeating rows.
+const additional = roundup.dates.filter((d:any)=>d.date.startsWith(year)).map((d:any)=>({...d,contests:d.contests.filter((c:any)=>!roundupHref(d.date,c,local))})).filter((d:any)=>d.contests.length);
+---
+<BaseLayout title={`${year} UK by-election results archive`} description={`Parliamentary and council by-election results covered by UK Elections in ${year}. Browse winners, polling dates, councils and source-linked result pages.`}
+ breadcrumbs={[{name:"By-elections",href:"/by-elections/"},{name:"Results archive",href:"/by-elections/archive/"},{name:`${year} results`,href:`/by-elections/archive/${year}/`}]}>
+  <section class="page-hero compact-hero"><h1>{year} by-election results</h1><p class="lede">The contests in our {year} coverage, newest first. Result-awaited entries remain labelled until a declaration is recorded. Coverage is not a complete register of every UK by-election.</p></section>
+  <section class="section"><h2>Parliamentary by-elections</h2>
+    <ul>{parliament.map(d=><li><a href={`/by-elections/${d.fileSlug}/`}>{d.contest.constituency_name}</a> · {prettyElectionDate(d.contest.polling_day)} · {isDeclared(d) ? d.result.outcome || d.result.winner_candidate || "Result declared" : "Result awaited"}</li>)}</ul>
+  </section>
+  <section class="section"><h2>Council by-elections</h2>
+    <ByElectionFilters contests={local} />
+    <div class="table-scroll" role="region" aria-label={`${year} council results`} tabindex="0">
+      <table class="seat-table"><thead><tr><th>Polling date</th><th>Ward</th><th>Council</th><th>Winner / status</th></tr></thead>
+      <tbody>{local.map(d=><tr data-contest-item data-council={d.contest.council_name} data-date={d.contest.polling_day}>
+        <td>{prettyElectionDate(d.contest.polling_day)}</td><td><a href={`/by-elections/local/${d.slug}/`}>{d.contest.ward_name}</a></td><td>{d.contest.council_name}</td><td>{isDeclared(d) ? `${(d.result || d.declaration).winner_candidate || ""} · ${(d.result || d.declaration).winner_party}` : localStatus(d)}</td>
+      </tr>)}</tbody></table>
+    </div>
+  </section>
+  {additional.length > 0 && <section class="section"><h2>Additional sourced council results</h2><p>These results are preserved in our weekly roundups but have no matching individual contest page. The council filters above apply to the individual contest records.</p><CouncilRoundup dates={additional} contests={local} openFirst={false} /></section>}
+  <p><a href="/by-elections/local/">Latest council results and upcoming polls</a> · <a href="/by-elections/archive/">All archive years</a></p>
+</BaseLayout>
+<style>
+  .compact-hero { max-width:none; padding-block:var(--space-xl) var(--space-lg); }
+  .compact-hero h1 { font-size:var(--text-h1); }
+  .compact-hero .lede { font-size:var(--text-body); max-width:none; margin-top:var(--space-md); }
+[data-contest-item][hidden] { display:none; }</style>

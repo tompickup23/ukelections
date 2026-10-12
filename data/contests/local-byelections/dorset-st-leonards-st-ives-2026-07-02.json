@@ -74,8 +74,10 @@
   "ward_profile": {
     "gss": "E05012713",
     "ward_name": "St Leonards & St Ives",
-    "total_residents": 31604,
-    "source": "ONS Census 2021 (LSOA aggregation) plus IMD 2019",
+    "total_residents": 7901,
+    "source": "Census 2021 (TS021+TS030+TS054+TS066+TS067+TS004), LSOA best-fit to WD25 + IMD2019",
+    "lookup_year": "2025",
+    "lsoa_count": 4,
     "fields": [
       {
         "key": "no_quals_pct",
@@ -192,7 +194,8 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://www.dorsetcouncil.gov.uk/w/dorset-council-all-wards-elections-on-2-may-2024?redirect=%2Fcouncillors-committees-elections%2Felections-and-voting%2Felection-results%2Fresults-of-elections-referenda-and-polls",
-    "usable_as_baseline": true
+    "usable_as_baseline": true,
+    "seats_contested": 2
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",

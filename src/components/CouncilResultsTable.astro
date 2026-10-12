@@ -1,0 +1,46 @@
+---
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+import { isDeclared, prettyElectionDate } from "../lib/byElections";
+interface Props { contests: any[]; }
+const { contests } = Astro.props;
+---
+<div class="table-scroll" role="region" aria-label="Council by-election results" tabindex="0">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Ward</th><th>Council</th><th>Winner</th><th>Saved pre-poll forecast</th></tr>
+        </thead>
+        <tbody>
+          {contests.map((c) => (
+            <tr data-contest-item data-council={c.contest.council_name} data-date={c.contest.polling_day}>
+              <td>{prettyElectionDate(c.contest.polling_day)}</td>
+              <td><a href={`/by-elections/local/${c.slug}/`}>{c.contest.ward_name}</a></td>
+              <td>{c.contest.council_name}</td>
+              <td>
+                {c.result?.declared
+                  ? <span class="party-chip" style={`--chip:${partyColour(c.result.winner_party)}`}>{shortPartyLabel(c.result.winner_party)}</span>
+                  : c.declaration?.declared
+                    ? <span class="party-chip" style={`--chip:${partyColour(c.declaration.winner_party)}`}>{shortPartyLabel(c.declaration.winner_party)}</span>
+                  : <span class="muted">Awaited</span>}
+              </td>
+              <td>
+                {c.result?.grading?.graded_against === "forecast_as_published" && typeof c.result.grading.call_correct === "boolean"
+                  ? <span class={c.result.grading.call_correct ? "right" : "wrong"}>
+                      {shortPartyLabel(c.result.grading.projected_winner)}
+                      {c.result.grading.call_correct ? " (right)" : " (wrong)"}
+                    </span>
+                  : <span class="muted">{isDeclared(c) ? c.forecast ? "No saved pre-poll forecast" : "No projection" : "Awaiting result"}</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+</div>
+<style>
+  table {width:100%;border-collapse:collapse;}
+  td:first-child {white-space:nowrap;}
+  th,td {text-align:left;padding:var(--space-xs);border-bottom:1px solid var(--border);}
+  .party-chip {border-left:4px solid var(--chip,var(--border));padding-left:var(--space-xs);}
+  .right {color:var(--status-good-text);} .wrong {color:var(--status-bad-text);} .muted {color:var(--muted);}
+  [hidden] {display:none;}
+</style>
