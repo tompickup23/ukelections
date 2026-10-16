@@ -2,7 +2,7 @@
  "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not. Rows polled on 27 August 2026 were entered by hand from the returning officers' declarations and press reports of them, because Democracy Club had recorded winners but no vote counts by 28 August. Each carries its own verification note. DC rows still win on conflict.",
  "source": "https://candidates.democracyclub.org.uk/api/next/ballots/",
  "review_status": "mixed: auto_ingested_dc plus hand verified rows, see each row",
- "generated_at": "2026-10-09T08:02:29.007Z",
+ "generated_at": "2026-10-16T08:01:14.685Z",
  "results": [
   {
    "ballot_paper_id": "local.cornwall.newquay-porth-tretherras.by.2026-04-23",
@@ -7130,6 +7130,55 @@
    ]
   },
   {
+   "ballot_paper_id": "local.amber-valley.kilburn-denby-holbrook-horsley.by.2026-10-08",
+   "election_date": "2026-10-08",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "amber-valley",
+   "ward_slug": "kilburn-denby-holbrook-horsley",
+   "is_by_election": true,
+   "turnout_votes": 2290,
+   "turnout_pct": 0.3429,
+   "spoilt_ballots": 3,
+   "electorate": 6678,
+   "source": "https://www.ambervalley.gov.uk/media/2363/declaration-of-result-of-poll-kilburn-denby-holbrook-horsley.pdf",
+   "review_status": "hand_verified_declaration",
+   "reviewed_at": "2026-10-12",
+   "candidates": [
+    {
+     "name": "Andrew Michael Bayton",
+     "party_name": "Labour Party",
+     "votes": 364,
+     "elected": false
+    },
+    {
+     "name": "Paul Moss",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 386,
+     "elected": false
+    },
+    {
+     "name": "Edward Hudson Oakenfull",
+     "party_name": "Restore Britain",
+     "votes": 246,
+     "elected": false
+    },
+    {
+     "name": "Bess Saunders",
+     "party_name": "Green Party",
+     "votes": 674,
+     "elected": true
+    },
+    {
+     "name": "Juliette Nicola Stevens",
+     "party_name": "Reform UK",
+     "votes": 617,
+     "elected": false
+    }
+   ],
+   "verification_note": "Five candidate counts sum to 2,287 valid votes; three rejected papers reconcile to 2,290 verified ballots. Electorate 6,678; council turnout 34.29%. Verification statement: https://www.ambervalley.gov.uk/media/2362/verification-statement-kilburn-denby-holbrook-horsley.pdf"
+  },
+  {
    "ballot_paper_id": "local.lambeth.myatts-fields.by.2026-10-08",
    "election_date": "2026-10-08",
    "year": 2026,
@@ -7240,53 +7289,239 @@
    "verification_note": "All five candidate counts and the 182-vote majority match the council release; 932 valid votes. Council turnout 23.2%. Electorate, rejected ballots and total ballots retained from Democracy Club, which reconciles 932 valid plus two rejected to 934."
   },
   {
-   "ballot_paper_id": "local.amber-valley.kilburn-denby-holbrook-horsley.by.2026-10-08",
-   "election_date": "2026-10-08",
+   "ballot_paper_id": "local.stroud.rodborough.by.2026-10-13",
+   "election_date": "2026-10-13",
    "year": 2026,
    "tier": "local",
-   "council_slug": "amber-valley",
-   "ward_slug": "kilburn-denby-holbrook-horsley",
+   "council_slug": "stroud",
+   "ward_slug": "rodborough",
    "is_by_election": true,
-   "turnout_votes": 2290,
-   "turnout_pct": 0.3429,
-   "spoilt_ballots": 3,
-   "electorate": 6678,
-   "source": "https://www.ambervalley.gov.uk/media/2363/declaration-of-result-of-poll-kilburn-denby-holbrook-horsley.pdf",
-   "review_status": "hand_verified_declaration",
-   "reviewed_at": "2026-10-12",
+   "turnout_votes": 1486,
+   "turnout_pct": 0.42229999999999995,
+   "spoilt_ballots": 2,
+   "electorate": 3519,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.stroud.rodborough.by.2026-10-13/",
+   "review_status": "auto_ingested_dc",
    "candidates": [
     {
-     "name": "Andrew Michael Bayton",
+     "name": "John Bloxsom",
      "party_name": "Labour Party",
-     "votes": 364,
-     "elected": false
-    },
-    {
-     "name": "Paul Moss",
-     "party_name": "Conservative and Unionist Party",
-     "votes": 386,
-     "elected": false
-    },
-    {
-     "name": "Edward Hudson Oakenfull",
-     "party_name": "Restore Britain",
-     "votes": 246,
-     "elected": false
-    },
-    {
-     "name": "Bess Saunders",
-     "party_name": "Green Party",
-     "votes": 674,
+     "votes": 697,
      "elected": true
     },
     {
-     "name": "Juliette Nicola Stevens",
+     "name": "Robin Layfield",
+     "party_name": "Green Party",
+     "votes": 470,
+     "elected": false
+    },
+    {
+     "name": "Gerald Michael O'Brien",
      "party_name": "Reform UK",
-     "votes": 617,
+     "votes": 191,
+     "elected": false
+    },
+    {
+     "name": "Christopher John Easton",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 103,
+     "elected": false
+    },
+    {
+     "name": "George William James",
+     "party_name": "Liberal Democrats",
+     "votes": 23,
      "elected": false
     }
-   ],
-   "verification_note": "Five candidate counts sum to 2,287 valid votes; three rejected papers reconcile to 2,290 verified ballots. Electorate 6,678; council turnout 34.29%. Verification statement: https://www.ambervalley.gov.uk/media/2362/verification-statement-kilburn-denby-holbrook-horsley.pdf"
+   ]
+  },
+  {
+   "ballot_paper_id": "local.flintshire.higher-kinnerton.by.2026-10-15",
+   "election_date": "2026-10-15",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "flintshire",
+   "ward_slug": "higher-kinnerton",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": null,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.higher-kinnerton.by.2026-10-15/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Josh Swash",
+     "party_name": "Flintshire People's Voice",
+     "votes": 566,
+     "elected": true
+    },
+    {
+     "name": "Carl Mather",
+     "party_name": "Reform UK",
+     "votes": 21,
+     "elected": false
+    },
+    {
+     "name": "Oliver Martin Wilson",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 21,
+     "elected": false
+    },
+    {
+     "name": "Kristina Renshaw",
+     "party_name": "Heritage Party",
+     "votes": 10,
+     "elected": false
+    },
+    {
+     "name": "Penny Brett-Roberts",
+     "party_name": "Independent",
+     "votes": 2,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.leicestershire.shepshed.by.2026-10-15",
+   "election_date": "2026-10-15",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "leicestershire",
+   "ward_slug": "shepshed",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": null,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.leicestershire.shepshed.by.2026-10-15/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Jane Lennie",
+     "party_name": "Labour Party",
+     "votes": 1163,
+     "elected": true
+    },
+    {
+     "name": "Stuart Brian Wood",
+     "party_name": "Reform UK",
+     "votes": 1110,
+     "elected": false
+    },
+    {
+     "name": "Sarah Louise Monk",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 819,
+     "elected": false
+    },
+    {
+     "name": "Alec McKenzie",
+     "party_name": "Restore Britain",
+     "votes": 228,
+     "elected": false
+    },
+    {
+     "name": "Katy Brookes-Duncan",
+     "party_name": "Liberal Democrats",
+     "votes": 115,
+     "elected": false
+    },
+    {
+     "name": "David Neil Kellock",
+     "party_name": "Green Party",
+     "votes": 112,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.mid-devon.bradninch.by.2026-10-15",
+   "election_date": "2026-10-15",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "mid-devon",
+   "ward_slug": "bradninch",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": null,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.mid-devon.bradninch.by.2026-10-15/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Mary Ryan",
+     "party_name": "Liberal Democrats",
+     "votes": 476,
+     "elected": true
+    },
+    {
+     "name": "Liam O'Brien",
+     "party_name": "Reform UK",
+     "votes": 91,
+     "elected": false
+    },
+    {
+     "name": "Dirk McFarlane-Aitken",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 37,
+     "elected": false
+    },
+    {
+     "name": "Piers Martin Kotting",
+     "party_name": "Labour Party",
+     "votes": 31,
+     "elected": false
+    },
+    {
+     "name": "Kirsty MacKenzie",
+     "party_name": "Green Party",
+     "votes": 21,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.wiltshire.salisbury-milford.by.2026-10-15",
+   "election_date": "2026-10-15",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "wiltshire",
+   "ward_slug": "salisbury-milford",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": null,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.wiltshire.salisbury-milford.by.2026-10-15/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Mac McIntyre Brown",
+     "party_name": "Liberal Democrats",
+     "votes": 759,
+     "elected": true
+    },
+    {
+     "name": "Laura Elizabeth Jones",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 605,
+     "elected": false
+    },
+    {
+     "name": "Simon Edgar Lever",
+     "party_name": "Reform UK",
+     "votes": 189,
+     "elected": false
+    },
+    {
+     "name": "Sony Assuon",
+     "party_name": "Labour Party",
+     "votes": 110,
+     "elected": false
+    }
+   ]
   }
  ],
  "reviewed_at": "2026-09-28"
