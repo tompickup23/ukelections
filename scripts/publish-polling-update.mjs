@@ -13,7 +13,7 @@ import { submitIndexNow } from "./indexnow-submit.mjs";
  *   node scripts/publish-polling-update.mjs --no-deploy
  */
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -70,24 +70,38 @@ function deploy() {
   if (onVpsMain()) {
     const snapshot = join("/tmp", deploymentId);
     mkdirSync(snapshot, { recursive: true });
-    cpSync(join(ROOT, "dist"), join(snapshot, "dist"), { recursive: true });
-    step("Deploy immutable build snapshot to Cloudflare Pages", "bash", [
-      "-lc",
-      `set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy ${join(snapshot, "dist")} --project-name ukelections --branch main --commit-dirty=true`,
-    ]);
+    try {
+      cpSync(join(ROOT, "dist"), join(snapshot, "dist"), { recursive: true });
+      step("Deploy immutable build snapshot to Cloudflare Pages", "bash", [
+        "-lc",
+        `set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy ${join(snapshot, "dist")} --project-name ukelections --branch main --commit-dirty=true`,
+      ]);
+    } finally {
+      // Pages holds the upload once wrangler returns. Each run left about
+      // 300 MB here, and /tmp's own cleaner never caught them.
+      rmSync(snapshot, { recursive: true, force: true });
+    }
     return;
   }
 
   const remoteSnapshot = `/tmp/${deploymentId}`;
-  step("Copy immutable build snapshot to vps-main", "rsync", [
-    "-az",
-    "dist/",
-    `vps-main:${remoteSnapshot}/`,
-  ]);
-  step("Deploy immutable build snapshot to Cloudflare Pages", "ssh", [
-    "vps-main",
-    `set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy ${remoteSnapshot} --project-name ukelections --branch main --commit-dirty=true`,
-  ]);
+  try {
+    step("Copy immutable build snapshot to vps-main", "rsync", [
+      "-az",
+      "dist/",
+      `vps-main:${remoteSnapshot}/`,
+    ]);
+    step("Deploy immutable build snapshot to Cloudflare Pages", "ssh", [
+      "vps-main",
+      `set -a; . /opt/dashboard/.env; set +a; wrangler pages deploy ${remoteSnapshot} --project-name ukelections --branch main --commit-dirty=true`,
+    ]);
+  } finally {
+    // A failed cleanup only leaves the snapshot behind; it must not mask the deploy result.
+    const cleanup = spawnSync("ssh", ["vps-main", `rm -rf ${remoteSnapshot}`], { stdio: "inherit" });
+    if (cleanup.status !== 0) {
+      process.stdout.write(`\n! Could not remove ${remoteSnapshot} on vps-main (exit ${cleanup.status ?? "unknown"}).\n`);
+    }
+  }
 }
 
 async function main() {
