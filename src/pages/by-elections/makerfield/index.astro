@@ -101,9 +101,9 @@ const candidateList = Object.entries(candidateByParty).map(([party, candidate]) 
 }));
 
 // Scenario A / B central-share rankings for the side-by-side bars
-function sortShares(shares: Record<string, number>) {
+function sortShares(shares: Record<string, number>, minShare = 0.005) {
   return Object.entries(shares)
-    .filter(([, p]) => (p as number) > 0.005)
+    .filter(([, p]) => (p as number) > minShare)
     .sort((a, b) => (b[1] as number) - (a[1] as number))
     .map(([party, pct]) => ({ party, pct: pct as number }));
 }
@@ -124,7 +124,10 @@ const result = (forecast.result as any) || null;
 const finalPolls = (forecast.final_polls as any) || null;
 const fvr = (forecast.forecast_vs_result as any) || null;
 const resultShares = (result?.shares as Record<string, number> | null) || null;
-const resultRanked = resultShares ? sortShares(resultShares) : [];
+// A declared result lists every party that polled. The 0.5% floor suits the
+// scenario bars, but it dropped the Lib Dems' 163 votes from the result table.
+const resultRanked = resultShares ? sortShares(resultShares, 0) : [];
+const turnoutLabel = result?.turnout_pct ? `${(result.turnout_pct * 100).toFixed(2)}%` : null;
 const pollAvg = (finalPolls?.poll_of_polls as any) || null;
 const pollAvgRanked = (pollAvg?.ranked as Array<{ party: string; pct: number }>) || [];
 const marginCmp = (fvr?.margin_comparison as any) || null;
@@ -189,7 +192,7 @@ function classificationLabel(c: string): string {
             <strong>Labour hold.</strong> Andy Burnham returned to Parliament on
             <strong> 54.8%</strong>, a <strong>9,231-vote majority</strong> (+{actualMarginPp}pp) over
             Reform UK's Robert Kenyon (34.5%), with <strong>Restore Britain third</strong> (6.8%).
-            Turnout <strong>58.75%</strong>, up 6.4pp on GE2024. Wigan borough · North West ·
+            Turnout <strong>{turnoutLabel}</strong>, up {(result.turnout_change_pp * 100).toFixed(1)}pp on GE2024. Wigan borough · North West ·
             {forecast.contest.pcon24cd}.
           </p>
         </header>
@@ -210,7 +213,7 @@ function classificationLabel(c: string): string {
       ) : (
         <p class="caption result-pending">
           Declared overnight: <strong>Labour hold</strong>, Burnham majority
-          <strong> over 9,000</strong>, turnout <strong>45,510 (58.75%)</strong>, finishing order
+          <strong> over 9,000</strong>, turnout <strong>{result.turnout_votes?.toLocaleString()} ({turnoutLabel})</strong>, finishing order
           Labour › Reform UK › Restore Britain. The full per-candidate vote breakdown appears
           here once the returning officer publishes it.
         </p>
@@ -501,7 +504,7 @@ function classificationLabel(c: string): string {
         {finalPolls.no_exit_poll_note} A poll-of-polls of these five (Labour +7) would have called
         the seat correctly; the most recent poll (Convergent, to 12 Jun) had Labour +12. Even so,
         all five understated the eventual ≈+{actualMarginPp}pp margin, and all five over-stated
-        Reform, because the high 58.75% turnout broke for Burnham harder than likely-voter models assumed.
+        Reform, because the high {turnoutLabel} turnout broke for Burnham harder than likely-voter models assumed.
       </p>
     </section>
   )}
