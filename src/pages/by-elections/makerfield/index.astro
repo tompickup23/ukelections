@@ -692,10 +692,10 @@ function classificationLabel(c: string): string {
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Candidates</p>
-      <h2>Who is contesting the seat</h2>
+      <h2>Who stood</h2>
     </div>
-    <div class="by-election-scroll" role="region" aria-label="Original candidate field" tabindex="0"><table class="seat-table">
-<caption>Original candidate field</caption>
+    <div class="by-election-scroll" role="region" aria-label="Candidates nominated" tabindex="0"><table class="seat-table">
+<caption>Candidates nominated</caption>
       <thead><tr><th scope="col">Party</th><th scope="col">Candidate</th><th scope="col">Status</th></tr></thead>
       <tbody>
         {candidates.map((c: any) => (
@@ -708,8 +708,10 @@ function classificationLabel(c: string): string {
       </tbody>
     </table></div>
     <p class="caption">
-      Ingested from the Democracy Club Candidates API and checked against Wigan Council's
-      {" "}<a href="https://www.wigan.gov.uk/Docs/PDF/Council/Voting-and-Elections/2026/Makerfield/Statement-of-persons-nominated-and-notice-of-Poll-Makerfield-2026.pdf">Statement of Persons Nominated and Notice of Poll</a>, dated 26 May 2026.
+      The 14 candidates on Wigan Council's
+      {" "}<a href="https://www.wigan.gov.uk/Docs/PDF/Council/Voting-and-Elections/2026/Makerfield/Statement-of-persons-nominated-and-notice-of-Poll-Makerfield-2026.pdf">Statement of Persons Nominated and Notice of Poll</a> (26 May 2026),
+      with votes from the <a href="https://electionresults.wigan.gov.uk/ParliamentaryElections/Home/Index/3">declaration</a>.
+      {forecast.candidates_note ? <>{" "}{forecast.candidates_note}</> : null}
     </p>
   </section>
 
