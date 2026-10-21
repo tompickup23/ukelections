@@ -647,6 +647,11 @@ export function assemble(ctx, corpus, demo, holders, published = {}, turnoutFact
       shares,
       winner_party: winnerParty,
       winner_candidate: ordered[0]?.name ?? null,
+      // "Other" pools every minor label, so Flintshire People's Voice's 566
+      // votes at Higher Kinnerton read as an "Other" win on 92.9%, which was
+      // the Heritage Party's 10 added in. Keep the winner's own label and votes.
+      winner_party_name: ordered[0]?.party_name ?? null,
+      winner_votes: ordered[0]?.votes ?? null,
       runner_up_party: ordered[1] ? canonParty(ordered[1].party_name) : null,
       majority_votes: ordered.length > 1 ? (ordered[0].votes || 0) - (ordered[1].votes || 0) : null,
       total_votes: totalVotes,

@@ -14,7 +14,7 @@ import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
 import ExploreNext from "../../../components/ExploreNext.astro";
 import { partyColour } from "../../../lib/predictions";
-import { shortPartyLabel } from "../../../lib/siteData";
+import { resultWinnerLabel, shortPartyLabel } from "../../../lib/siteData";
 import { buildLocalContestJourneyLinks } from "../../../lib/electionJourneys";
 import { externalHref, buildElectionEvent, type Crumb } from "../../../lib/seo";
 import { byElectionResultSummary } from "../../../lib/pageSummaries";
@@ -218,7 +218,7 @@ const breadcrumbs: Crumb[] = [
       <h2>The result</h2>
       {result.outcome && <p class="outcome-line">{result.outcome}</p>}
       <p class="result-headline">
-        <strong>{result.winner_candidate || shortPartyLabel(result.winner_party)}</strong>{` elected for ${shortPartyLabel(result.winner_party)}${result.majority_votes != null ? `, a majority of ${result.majority_votes.toLocaleString("en-GB")} over ${shortPartyLabel(result.runner_up_party)}` : ""}.`}
+        <strong>{result.winner_candidate || resultWinnerLabel(result)}</strong>{` elected for ${resultWinnerLabel(result)}${result.majority_votes != null ? `, a majority of ${result.majority_votes.toLocaleString("en-GB")} over ${shortPartyLabel(result.runner_up_party)}` : ""}.`}
       </p>
       <PartyBars rows={rows(result.shares)} large={true} />
       <p class="note">{result.total_votes.toLocaleString("en-GB")} valid votes across {f.candidate_count} candidates.</p>
