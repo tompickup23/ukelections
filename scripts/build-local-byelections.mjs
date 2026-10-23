@@ -647,6 +647,11 @@ export function assemble(ctx, corpus, demo, holders, published = {}, turnoutFact
       shares,
       winner_party: winnerParty,
       winner_candidate: ordered[0]?.name ?? null,
+      // "Other" pools every minor label, so Flintshire People's Voice's 566
+      // votes at Higher Kinnerton read as an "Other" win on 92.9%, which was
+      // the Heritage Party's 10 added in. Keep the winner's own label and votes.
+      winner_party_name: ordered[0]?.party_name ?? null,
+      winner_votes: ordered[0]?.votes ?? null,
       runner_up_party: ordered[1] ? canonParty(ordered[1].party_name) : null,
       majority_votes: ordered.length > 1 ? (ordered[0].votes || 0) - (ordered[1].votes || 0) : null,
       total_votes: totalVotes,
@@ -984,6 +989,45 @@ async function main() {
       }
     }
 
+    // A candidate list Democracy Club did not return is unknown, not empty, and
+    // tonight's rebuild of this contest is the weaker of the two copies we hold.
+    // On 20 October 2026 one timeout on Newcastle-under-Lyme Town left a declared
+    // contest graded against its published snapshot but with no forecast, the
+    // test gate refused it, and nothing deployed that night. Keep what the last
+    // good build knew: its field, result and declaration where tonight found
+    // none (an STV winner is only ever read from that candidate list), and its
+    // assessment whole (forecast, the prior it rests on and the boundary test it
+    // passed). Mixing tonight's degraded boundary read with last night's
+    // forecast is how a rate-limited run publishes a projection across a
+    // boundary change.
+    const existing = !PRESERVE_FORECASTS && ctx.fieldUnavailable ? existingContests.get(contest.slug) : null;
+    if (existing && !contest.result && !contest.declaration) {
+      contest.field = existing.field;
+      contest.result = existing.result;
+      contest.declaration = existing.declaration;
+      if (existing.result) contest.status = existing.status;
+    }
+    if (existing) {
+      if (existing.forecast) {
+        contest.forecast = existing.forecast;
+        contest.no_forecast_reason = existing.no_forecast_reason;
+        contest.prior_result = existing.prior_result;
+        contest.contest.boundary_changed_since_prior = existing.contest.boundary_changed_since_prior;
+        if (contest.result) {
+          contest.result.grading =
+            existing.result?.grading ??
+            gradeAgainst(
+              published[contest.slug],
+              contest.forecast,
+              contest.result.shares,
+              new Set(contest.field.parties),
+              contest.result.winner_party,
+            );
+        }
+        console.log(`  kept the last good build of ${contest.slug}: its candidate list did not load`);
+      }
+    }
+
     // Snapshot the projection while the contest is still ahead of us. The last
     // run before polling day is the one that matters, and it is the one this
     // will have left behind. A contest that has polled is never rewritten: that
@@ -992,6 +1036,7 @@ async function main() {
     if (
       publishedDoc &&
       !PRESERVE_FORECASTS &&
+      !ctx.fieldUnavailable &&
       contest.forecast &&
       contest.contest.polling_day > today &&
       !published[contest.slug]

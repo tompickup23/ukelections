@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-06T03:37:20.688Z",
+  "generated_at": "2026-10-21T03:36:54.311Z",
   "slug": "halton-beechwood-heath-2026-10-29",
   "status": "upcoming",
   "contest": {
@@ -162,6 +162,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
+    "seats_contested": 1,
     "shares": {
       "Reform UK": 0.3953142432130904,
       "Labour": 0,
@@ -210,8 +211,7 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://hbcnewsroom.co.uk/halton-council-local-elections-2026/",
-    "usable_as_baseline": true,
-    "seats_contested": 1
+    "usable_as_baseline": true
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",
@@ -219,6 +219,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
+      "seats_contested": 1,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.3953142432130904,
@@ -238,26 +239,27 @@
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 55,
+      "contests_used": 59,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.22028224566196655,
-        "Labour": 0.1626557660015882,
+        "Reform UK": -0.23446869904894121,
+        "Labour": 0.2122188658789934,
         "Conservative": -0.3061999400024178,
         "Liberal Democrats": -0.23221085186501894,
-        "Green Party": -0.23305324380775128,
+        "Green Party": -0.26632564675087167,
         "Independent": -0.11652273000901092
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.8440090918134795,
-        "Labour": 1.126871317122185,
+        "Reform UK": 0.8346007615277542,
+        "Labour": 1.1674186347869782,
         "Conservative": 0.7882143749442534,
         "Liberal Democrats": 0.8360929628547713,
-        "Green Party": 0.8355360002588199,
+        "Green Party": 0.8137557215375324,
         "Independent": 0.9151749196392648
       },
       "entry_shares": {
         "Green Party": 0.13442113442113443,
+        "Restore Britain": 0.06515242080095636,
         "Independent": 0.0888787452835334
       },
       "entry_counts": {
@@ -268,16 +270,16 @@
         "Green Party": 5,
         "SNP": 0,
         "Plaid Cymru": 0,
-        "Restore Britain": 4,
+        "Restore Britain": 5,
         "Independent": 10,
         "Other": 1
       },
       "party_counts": {
-        "Reform UK": 54,
-        "Labour": 48,
-        "Conservative": 48,
-        "Liberal Democrats": 36,
-        "Green Party": 45,
+        "Reform UK": 58,
+        "Labour": 52,
+        "Conservative": 52,
+        "Liberal Democrats": 40,
+        "Green Party": 48,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
@@ -286,63 +288,68 @@
       }
     },
     "central": {
-      "Reform UK": 0.41797847906458124,
+      "Reform UK": 0.3851096256392967,
       "Labour": 0,
       "Conservative": 0,
-      "Liberal Democrats": 0.4740438738270371,
+      "Liberal Democrats": 0.44085952553425295,
       "Green Party": 0,
       "SNP": 0,
       "Plaid Cymru": 0,
-      "Restore Britain": 0,
-      "Independent": 0.10797764710838177,
+      "Restore Britain": 0.07361192791898401,
+      "Independent": 0.10041892090746632,
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.4115,
-      "Liberal Democrats": 0.58725,
-      "Independent": 0.00125
+      "Reform UK": 0.39325,
+      "Liberal Democrats": 0.58,
+      "Restore Britain": 0.025,
+      "Independent": 0.00175
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.2964824248993294,
-        "p50": 0.41237588536554604,
-        "p90": 0.593936441287889
+        "p10": 0.2472252303566325,
+        "p50": 0.36760299031491894,
+        "p90": 0.5347639949334314
       },
       "Liberal Democrats": {
-        "p10": 0.2541907045629707,
-        "p50": 0.47020233554936863,
-        "p90": 0.6074893779379847
+        "p10": 0.20754616502105014,
+        "p50": 0.4225185858084334,
+        "p90": 0.5824170607580511
+      },
+      "Restore Britain": {
+        "p10": 0.016936374779806255,
+        "p50": 0.07393721822578808,
+        "p90": 0.22998080722737657
       },
       "Independent": {
-        "p10": 0.05387739546983242,
-        "p50": 0.11078091344090224,
-        "p90": 0.2027607778521126
+        "p10": 0.047284320712190714,
+        "p50": 0.0979026115995013,
+        "p90": 0.1885348302752813
       }
     },
     "winner": "Liberal Democrats",
     "runner_up": "Reform UK",
-    "margin_pp": 5.606539476245587,
-    "leader_probability": 0.58725,
+    "margin_pp": 5.574989989495627,
+    "leader_probability": 0.58,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
       "Labour is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
       "Conservative is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
-      "Restore Britain is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
-      "Priced from an entry prior, not from this ward: Independent (median of 10). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Restore Britain (median of 5), Independent (median of 10). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [
       "Labour",
-      "Conservative",
-      "Restore Britain"
+      "Conservative"
     ],
     "entry_priced_parties": [
+      "Restore Britain",
       "Independent"
     ],
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1097 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-06T03:37:20.729Z",
+  "generated_at": "2026-10-21T03:36:54.392Z",
   "slug": "newark-and-sherwood-dover-beck-2026-10-29",
   "status": "upcoming",
   "contest": {
@@ -183,10 +183,144 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.newark-and-sherwood.dover-beck.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.2878464818763326,
+        "Conservative": 0.7121535181236673,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.newark-and-sherwood.dover-beck.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 29,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9867620177505968,
+        "Conservative": -0.6307375185213864,
+        "Liberal Democrats": -0.26486255149858806,
+        "Green Party": -0.11550912045192274
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.44210603815035326,
+        "Conservative": 0.6026830617137529,
+        "Liberal Democrats": 0.8147045203576389,
+        "Green Party": 0.9158905103989347
+      },
+      "entry_shares": {
+        "Reform UK": 0.2713114754098361,
+        "Liberal Democrats": 0.03556185162163855,
+        "Green Party": 0.07177717188591722
+      },
+      "entry_counts": {
+        "Reform UK": 29,
+        "Labour": 1,
+        "Conservative": 1,
+        "Liberal Democrats": 6,
+        "Green Party": 12,
+        "SNP": 0,
+        "Plaid Cymru": 3,
+        "Restore Britain": 0,
+        "Independent": 3,
+        "Other": 2
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 18,
+        "Conservative": 28,
+        "Liberal Democrats": 23,
+        "Green Party": 16,
+        "SNP": 0,
+        "Plaid Cymru": 1,
+        "Restore Britain": 0,
+        "Independent": 4,
+        "Other": 0
+      }
+    },
+    "central": {
+      "Reform UK": 0.2516927443632108,
+      "Labour": 0.12147635522703187,
+      "Conservative": 0.527253640129581,
+      "Liberal Democrats": 0.03299034814420168,
+      "Green Party": 0.06658691213597466,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.231,
+      "Labour": 0.074,
+      "Conservative": 0.691,
+      "Liberal Democrats": 0.0005,
+      "Green Party": 0.0035
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.07152466366612999,
+        "p50": 0.2389176034555839,
+        "p90": 0.4901751660757375
+      },
+      "Labour": {
+        "p10": 0.031843448260329275,
+        "p50": 0.12334752880982564,
+        "p90": 0.3276357050689136
+      },
+      "Conservative": {
+        "p10": 0.19452652327769024,
+        "p50": 0.47646300531043945,
+        "p90": 0.688737311300022
+      },
+      "Liberal Democrats": {
+        "p10": 0.011624508225729866,
+        "p50": 0.03166621571468631,
+        "p90": 0.08668785918632095
+      },
+      "Green Party": {
+        "p10": 0.026921641817307353,
+        "p50": 0.062154697715565074,
+        "p90": 0.14716594764885285
+      }
+    },
+    "winner": "Conservative",
+    "runner_up": "Reform UK",
+    "margin_pp": 27.556089576637017,
+    "leader_probability": 0.691,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Reform UK (median of 29), Liberal Democrats (median of 6), Green Party (median of 12). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Reform UK",
+      "Liberal Democrats",
+      "Green Party"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

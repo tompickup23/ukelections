@@ -1,6 +1,6 @@
 ---
 import { partyColour } from "../lib/predictions";
-import { shortPartyLabel } from "../lib/siteData";
+import { resultWinnerLabel, shortPartyLabel } from "../lib/siteData";
 import { isDeclared, prettyElectionDate } from "../lib/byElections";
 interface Props { contests: any[]; }
 const { contests } = Astro.props;
@@ -18,7 +18,7 @@ const { contests } = Astro.props;
               <td>{c.contest.council_name}</td>
               <td>
                 {c.result?.declared
-                  ? <span class="party-chip" style={`--chip:${partyColour(c.result.winner_party)}`}>{shortPartyLabel(c.result.winner_party)}</span>
+                  ? <span class="party-chip" style={`--chip:${partyColour(c.result.winner_party)}`}>{resultWinnerLabel(c.result)}</span>
                   : c.declaration?.declared
                     ? <span class="party-chip" style={`--chip:${partyColour(c.declaration.winner_party)}`}>{shortPartyLabel(c.declaration.winner_party)}</span>
                   : <span class="muted">Awaited</span>}

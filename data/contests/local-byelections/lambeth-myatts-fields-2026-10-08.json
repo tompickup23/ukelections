@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-12T20:44:23.577Z",
+  "generated_at": "2026-10-21T03:36:54.065Z",
   "slug": "lambeth-myatts-fields-2026-10-08",
   "status": "concluded",
   "contest": {
@@ -42,51 +42,51 @@
       {
         "name": "Molly Hartill",
         "party_name": "Labour and Co-operative Party",
+        "party": "Labour",
         "votes": 1026,
-        "elected": true,
-        "party": "Labour"
+        "elected": true
       },
       {
         "name": "Sonia Winifred",
         "party_name": "Green Party",
+        "party": "Green Party",
         "votes": 815,
-        "elected": false,
-        "party": "Green Party"
+        "elected": false
       },
       {
         "name": "Christopher David French",
         "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
         "votes": 189,
-        "elected": false,
-        "party": "Liberal Democrats"
+        "elected": false
       },
       {
         "name": "John Francis Hindson",
         "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
         "votes": 74,
-        "elected": false,
-        "party": "Conservative"
+        "elected": false
       },
       {
         "name": "Mark Mckee",
         "party_name": "Reform UK",
+        "party": "Reform UK",
         "votes": 58,
-        "elected": false,
-        "party": "Reform UK"
+        "elected": false
       },
       {
         "name": "Yemi Awolola",
         "party_name": "Christian Peoples Alliance",
+        "party": "Other",
         "votes": 26,
-        "elected": false,
-        "party": "Other"
+        "elected": false
       },
       {
         "name": "Anya Krycek",
         "party_name": "The Socialist Party of Great Britain",
+        "party": "Other",
         "votes": 9,
-        "elected": false,
-        "party": "Other"
+        "elected": false
       }
     ]
   },
@@ -181,6 +181,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
+    "seats_contested": 2,
     "shares": {
       "Reform UK": 0.05334566759173605,
       "Labour": 0.3635522664199815,
@@ -285,8 +286,7 @@
     ],
     "source_label": "Democracy Club",
     "source": "https://moderngov.lambeth.gov.uk/mgElectionAreaResults.aspx?XXR=0&ID=300&RPID=140235621",
-    "usable_as_baseline": true,
-    "seats_contested": 2
+    "usable_as_baseline": true
   },
   "forecast": {
     "method": "ward_prior_plus_byelection_swing",
@@ -294,6 +294,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
+      "seats_contested": 2,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.05334566759173605,
@@ -422,7 +423,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1105 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -455,8 +456,8 @@
       "call_correct": true,
       "mae_pp": 1.7985889849795171
     },
-    "review_status": "hand_verified_declaration",
     "checked_at": "2026-10-12",
+    "review_status": "hand_verified_declaration",
     "note": "All seven counts match the council result and sum to 2,197 valid votes. Council electorate 8,376. Seven rejected papers are retained from Democracy Club; the council HTML does not state rejected ballots or turnout. No turnout percentage has been inferred."
   },
   "declaration": null,
@@ -473,6 +474,5 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.lambeth.myatts-fields.by.2026-10-08/"
     }
-  ],
-  "result_updated_at": "2026-10-12"
+  ]
 }
