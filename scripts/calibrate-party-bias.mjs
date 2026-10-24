@@ -20,7 +20,7 @@
 //
 // Usage:
 //   node scripts/calibrate-party-bias.mjs                        # May 2026
-//   node scripts/calibrate-party-bias.mjs --predictions=P --actuals=A --label=L
+//   node scripts/calibrate-party-bias.mjs --predictions=P --actuals=A --label=L [--out=path]
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -35,7 +35,7 @@ const arg = (name, fallback) => {
 const PREDICTIONS = arg("predictions", "data/predictions/may-2026/local-and-mayor.json");
 const ACTUALS = arg("actuals", "data/results/may-2026/local-and-mayor.merged.json");
 const LABEL = arg("label", "local.2026-05-07");
-const OUT = p("data/calibration/party-bias.json");
+const OUT = p(arg("out", "data/calibration/party-bias.json"));
 const FOLDS = Number(arg("folds", "5"));
 const MAJOR = ["Labour", "Conservative", "Liberal Democrats", "Reform UK", "Green Party"];
 

@@ -24,7 +24,7 @@
 //      fit the bins on four fifths, score calibration error on the held-out
 //      fifth. A curve that only works on the councils it saw is noise.
 //
-// Usage: node scripts/calibrate-confidence.mjs [--folds=5]
+// Usage: node scripts/calibrate-confidence.mjs [--folds=5] [--predictions=P] [--out=path]
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -40,7 +40,7 @@ const PREDICTIONS = arg("predictions", "data/predictions/may-2026/local-and-mayo
 const ACTUALS = arg("actuals", "data/results/may-2026/local-and-mayor.merged.json");
 const LABEL = arg("label", "local.2026-05-07");
 const FOLDS = Number(arg("folds", "5"));
-const OUT = p("data/calibration/confidence.json");
+const OUT = p(arg("out", "data/calibration/confidence.json"));
 const MAJOR = ["Labour", "Conservative", "Liberal Democrats", "Reform UK", "Green Party"];
 // Wide at the bottom where contests are genuinely coin flips, wider at the top
 // where there are few wards and the model is rarely wrong for interesting reasons.

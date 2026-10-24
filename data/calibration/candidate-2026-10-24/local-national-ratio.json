@@ -1,0 +1,209 @@
+{
+  "snapshot": {
+    "fitted_by": "scripts/fit-candidate-engine-2026-10-24.mjs",
+    "fitted_on": "May 2025 county and unitary elections (data/history/dc-historic-results.json, election_date 2025-05-01)",
+    "westminster_poll_may_2025": {
+      "shares": {
+        "Reform UK": 0.255,
+        "Labour": 0.245,
+        "Conservative": 0.22,
+        "Liberal Democrats": 0.135,
+        "Green Party": 0.085
+      },
+      "source": "UK_WESTMINSTER_2025_MAY_AVERAGE in src/lib/nationalPolling.js at 5e85c84: a hand-set cross-pollster average, no named source"
+    },
+    "ge2024_national": {
+      "Labour": 0.337,
+      "Conservative": 0.236,
+      "Reform UK": 0.143,
+      "Liberal Democrats": 0.122,
+      "Green Party": 0.069
+    },
+    "protocol": "docs/local-engine-holdout-2026-10-24.md",
+    "caveat": "County GE2024 shares come from constituency-name matching, so some counties rest on a few constituencies (Lincolnshire on 3, Oxfordshire on 2); four councils had no match and are left out."
+  },
+  "ratio": {
+    "Reform UK": 1.0026,
+    "Labour": 0.6654,
+    "Conservative": 0.8275,
+    "Liberal Democrats": 1.034,
+    "Green Party": 1.1338
+  },
+  "councils": [
+    {
+      "council": "buckinghamshire",
+      "contests": 49,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "cambridgeshire",
+      "contests": 59,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "cornwall",
+      "contests": 87,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "county-durham",
+      "contests": 51,
+      "used": false,
+      "reason": "no GE2024 constituency match"
+    },
+    {
+      "council": "derbyshire",
+      "contests": 64,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "devon",
+      "contests": 58,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "doncaster",
+      "contests": 21,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "gloucestershire",
+      "contests": 55,
+      "used": true,
+      "ge2024_via": "6 districts, 5 constituencies"
+    },
+    {
+      "council": "hertfordshire",
+      "contests": 78,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "isles-of-scilly",
+      "contests": 1,
+      "used": false,
+      "reason": "no GE2024 constituency match"
+    },
+    {
+      "council": "kent",
+      "contests": 72,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "lancashire",
+      "contests": 82,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "leicestershire",
+      "contests": 53,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "lincolnshire",
+      "contests": 70,
+      "used": true,
+      "ge2024_via": "7 districts, 3 constituencies"
+    },
+    {
+      "council": "north-northamptonshire",
+      "contests": 30,
+      "used": false,
+      "reason": "no GE2024 constituency match"
+    },
+    {
+      "council": "northumberland",
+      "contests": 69,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "nottinghamshire",
+      "contests": 55,
+      "used": true,
+      "ge2024_via": "7 districts, 6 constituencies"
+    },
+    {
+      "council": "oxfordshire",
+      "contests": 69,
+      "used": true,
+      "ge2024_via": "5 districts, 2 constituencies"
+    },
+    {
+      "council": "shropshire",
+      "contests": 72,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "staffordshire",
+      "contests": 62,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "warwickshire",
+      "contests": 57,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "west-northamptonshire",
+      "contests": 35,
+      "used": false,
+      "reason": "no GE2024 constituency match"
+    },
+    {
+      "council": "wiltshire",
+      "contests": 98,
+      "used": true,
+      "ge2024_via": "own"
+    },
+    {
+      "council": "worcestershire",
+      "contests": 53,
+      "used": true,
+      "ge2024_via": "own"
+    }
+  ],
+  "polls_to_cutoff": {
+    "date": "2026-04-24",
+    "shares": {
+      "Labour": 0.1889400921658986,
+      "Conservative": 0.1827956989247312,
+      "Reform UK": 0.2549923195084486,
+      "Liberal Democrats": 0.12058371735791094,
+      "Green Party": 0.1605222734254992,
+      "SNP": 0.027649769585253465,
+      "Plaid Cymru": 0.008448540706605223,
+      "Other": 0.05606758832565286
+    },
+    "polls_in_window": 13,
+    "polls": [
+      "2026-04-12 Freshwater Strategy",
+      "2026-04-13 YouGov",
+      "2026-04-13 More in Common",
+      "2026-04-15 Find Out Now",
+      "2026-04-15 Ipsos",
+      "2026-04-16 Find Out Now",
+      "2026-04-16 Trajectory Partnership",
+      "2026-04-17 Opinium",
+      "2026-04-20 YouGov",
+      "2026-04-20 More in Common",
+      "2026-04-23 Find Out Now",
+      "2026-04-24 Techne",
+      "2026-04-24 Opinium"
+    ],
+    "source": "data/polling/timeseries.json uke_average (trailing 14-day mean of every GB poll in the Wikipedia table), last value dated on or before the cut-off"
+  },
+  "calibration_strength": 0.65
+}
