@@ -1,0 +1,999 @@
+{
+  "generated_by": "scripts/build-byelection-post-mortem.mjs",
+  "forecasts_source": "data/cards/published-byelection-forecasts.json (the live page before the result)",
+  "results_source": "data/history/byelection-appends.json (each row carries its declaration URL and review status)",
+  "definitions": {
+    "called": "The party the page named as most likely to win came first on votes.",
+    "mean_absolute_error_pp": "Mean over the parties in the published projection of |projected share minus actual share|, in percentage points."
+  },
+  "overall": {
+    "contests": 32,
+    "winners_called": 14,
+    "mean_absolute_error_pp": 9.31,
+    "named_favourite": {
+      "contests": 12,
+      "called": 4
+    },
+    "too_close_to_call": {
+      "contests": 20,
+      "called": 10
+    }
+  },
+  "months": [
+    {
+      "month": "2026-08",
+      "contests": 5,
+      "winners_called": 3,
+      "mean_absolute_error_pp": 7.01,
+      "named_favourite": {
+        "contests": 1,
+        "called": 1
+      },
+      "too_close_to_call": {
+        "contests": 4,
+        "called": 2
+      },
+      "misses": [
+        {
+          "slug": "dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27",
+          "date": "2026-08-27",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Green Party",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "st-helens-billinge-seneley-green-2026-08-27",
+          "date": "2026-08-27",
+          "projected_winner": "Independent",
+          "actual_winner": "Labour",
+          "too_close_to_call": true
+        }
+      ]
+    },
+    {
+      "month": "2026-09",
+      "contests": 15,
+      "winners_called": 4,
+      "mean_absolute_error_pp": 11.54,
+      "named_favourite": {
+        "contests": 6,
+        "called": 0
+      },
+      "too_close_to_call": {
+        "contests": 9,
+        "called": 4
+      },
+      "misses": [
+        {
+          "slug": "rhondda-cynon-taf-llantwit-fardre-2026-09-03",
+          "date": "2026-09-03",
+          "projected_winner": "Independent",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "manchester-burnage-2026-09-10",
+          "date": "2026-09-10",
+          "projected_winner": "Green Party",
+          "actual_winner": "Labour",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "north-east-derbyshire-eckington-south-renishaw-2026-09-10",
+          "date": "2026-09-10",
+          "projected_winner": "Independent",
+          "actual_winner": "Reform UK",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "west-suffolk-haverhill-west-2026-09-10",
+          "date": "2026-09-10",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "bassetlaw-east-markham-2026-09-15",
+          "date": "2026-09-15",
+          "projected_winner": "Conservative",
+          "actual_winner": "Reform UK",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "charnwood-wreake-valley-2026-09-17",
+          "date": "2026-09-17",
+          "projected_winner": "Green Party",
+          "actual_winner": "Conservative",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23",
+          "date": "2026-09-23",
+          "projected_winner": "Conservative",
+          "actual_winner": "Liberal Democrats",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "brighton-and-hove-queens-park-2026-09-24",
+          "date": "2026-09-24",
+          "projected_winner": "Labour",
+          "actual_winner": "Green Party",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "cotswold-blockley-2026-09-24",
+          "date": "2026-09-24",
+          "projected_winner": "Green Party",
+          "actual_winner": "Conservative",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "south-staffordshire-wombourne-north-2026-09-24",
+          "date": "2026-09-24",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "windsor-and-maidenhead-bray-2026-09-24",
+          "date": "2026-09-24",
+          "projected_winner": "Independent",
+          "actual_winner": "Conservative",
+          "too_close_to_call": false
+        }
+      ]
+    },
+    {
+      "month": "2026-10",
+      "contests": 12,
+      "winners_called": 7,
+      "mean_absolute_error_pp": 7.49,
+      "named_favourite": {
+        "contests": 5,
+        "called": 3
+      },
+      "too_close_to_call": {
+        "contests": 7,
+        "called": 4
+      },
+      "misses": [
+        {
+          "slug": "northumberland-amble-2026-10-01",
+          "date": "2026-10-01",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Labour",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "amber-valley-kilburn-denby-holbrook-horsley-2026-10-08",
+          "date": "2026-10-08",
+          "projected_winner": "Conservative",
+          "actual_winner": "Green Party",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "stroud-rodborough-2026-10-13",
+          "date": "2026-10-13",
+          "projected_winner": "Green Party",
+          "actual_winner": "Labour",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "leicestershire-shepshed-2026-10-15",
+          "date": "2026-10-15",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Labour",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
+          "date": "2026-10-22",
+          "projected_winner": "Green Party",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        }
+      ]
+    }
+  ],
+  "model_changes": [
+    {
+      "date": "2026-08-23",
+      "ref": "fa29b02",
+      "change": "A page for every council by-election, with a projection measured against past by-elections."
+    },
+    {
+      "date": "2026-08-23",
+      "ref": "e397c2e",
+      "change": "Swing applied on log-odds rather than as a flat share; an open nomination no longer reads as an empty ballot."
+    },
+    {
+      "date": "2026-08-23",
+      "ref": "33dad92",
+      "change": "The named favourite became the party that wins most often across 4,000 simulated contests, not the largest central share."
+    },
+    {
+      "date": "2026-08-28",
+      "ref": "b44604b",
+      "change": "Results graded against the forecast as published, not against the nightly rebuild."
+    },
+    {
+      "date": "2026-09-27",
+      "ref": "PR 109",
+      "change": "Pages say when a projection rests on an entry prior for a party that did not stand last time."
+    },
+    {
+      "date": "2026-10-04",
+      "ref": "PR 115",
+      "change": "Independent slates scored by their best candidate in the ward baseline, ending a double count of independent votes."
+    }
+  ],
+  "rescore_post_115": {
+    "available": true,
+    "window": "2026-09-01 to 2026-10-31",
+    "method": "Leave-one-out harness (scripts/lib/local-byelection-model.mjs, backtest), which projects each contest from by-elections polled before it. The harness's error is over every party on the ballot, so its MAE is not on exactly the same basis as the published one.",
+    "published": {
+      "contests": 14,
+      "winners_called": 7,
+      "mean_absolute_error_pp": 7.69
+    },
+    "rescored": {
+      "contests": 14,
+      "winners_called": 8,
+      "mean_absolute_error_pp": 7.01
+    },
+    "changed_call": [
+      {
+        "slug": "northumberland-amble-2026-10-01",
+        "date": "2026-10-01",
+        "published": "Reform UK",
+        "rescored": "Labour",
+        "now_called": true
+      }
+    ],
+    "not_scored": [
+      "rhondda-cynon-taf-llantwit-fardre-2026-09-03",
+      "north-east-derbyshire-eckington-south-renishaw-2026-09-10",
+      "north-somerset-hutton-locking-2026-09-10",
+      "bassetlaw-east-markham-2026-09-15",
+      "charnwood-wreake-valley-2026-09-17",
+      "brighton-and-hove-queens-park-2026-09-24",
+      "cotswold-blockley-2026-09-24",
+      "south-staffordshire-wombourne-north-2026-09-24",
+      "windsor-and-maidenhead-bray-2026-09-24",
+      "blackpool-claremont-2026-10-01",
+      "north-west-leicestershire-long-whatton-diseworth-2026-10-01",
+      "amber-valley-kilburn-denby-holbrook-horsley-2026-10-08",
+      "mid-devon-bradninch-2026-10-15"
+    ],
+    "contests": [
+      {
+        "slug": "oxfordshire-chesterton-launton-2026-09-03",
+        "date": "2026-09-03",
+        "published": {
+          "projected_winner": "Liberal Democrats",
+          "called": true,
+          "mae_pp": 4.56
+        },
+        "rescored": {
+          "projected_winner": "Liberal Democrats",
+          "called": true,
+          "mae_pp": 4.6
+        }
+      },
+      {
+        "slug": "manchester-burnage-2026-09-10",
+        "date": "2026-09-10",
+        "published": {
+          "projected_winner": "Green Party",
+          "called": false,
+          "mae_pp": 11.78
+        },
+        "rescored": {
+          "projected_winner": "Green Party",
+          "called": false,
+          "mae_pp": 7.46
+        }
+      },
+      {
+        "slug": "west-suffolk-haverhill-west-2026-09-10",
+        "date": "2026-09-10",
+        "published": {
+          "projected_winner": "Reform UK",
+          "called": false,
+          "mae_pp": 10.14
+        },
+        "rescored": {
+          "projected_winner": "Reform UK",
+          "called": false,
+          "mae_pp": 9.45
+        }
+      },
+      {
+        "slug": "sheffield-walkley-2026-09-17",
+        "date": "2026-09-17",
+        "published": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 4.73
+        },
+        "rescored": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 3.96
+        }
+      },
+      {
+        "slug": "tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23",
+        "date": "2026-09-23",
+        "published": {
+          "projected_winner": "Conservative",
+          "called": false,
+          "mae_pp": 11.81
+        },
+        "rescored": {
+          "projected_winner": "Conservative",
+          "called": false,
+          "mae_pp": 11.62
+        }
+      },
+      {
+        "slug": "milton-keynes-new-bradwell-2026-09-24",
+        "date": "2026-09-24",
+        "published": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 6.46
+        },
+        "rescored": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 5.82
+        }
+      },
+      {
+        "slug": "northumberland-amble-2026-10-01",
+        "date": "2026-10-01",
+        "published": {
+          "projected_winner": "Reform UK",
+          "called": false,
+          "mae_pp": 6.28
+        },
+        "rescored": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 6.85
+        }
+      },
+      {
+        "slug": "northumberland-hirst-2026-10-01",
+        "date": "2026-10-01",
+        "published": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 7.43
+        },
+        "rescored": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 6.72
+        }
+      },
+      {
+        "slug": "lambeth-myatts-fields-2026-10-08",
+        "date": "2026-10-08",
+        "published": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 1.84
+        },
+        "rescored": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 1.83
+        }
+      },
+      {
+        "slug": "newcastle-under-lyme-town-2026-10-08",
+        "date": "2026-10-08",
+        "published": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 5.26
+        },
+        "rescored": {
+          "projected_winner": "Labour",
+          "called": true,
+          "mae_pp": 5.26
+        }
+      },
+      {
+        "slug": "stroud-rodborough-2026-10-13",
+        "date": "2026-10-13",
+        "published": {
+          "projected_winner": "Green Party",
+          "called": false,
+          "mae_pp": 16.02
+        },
+        "rescored": {
+          "projected_winner": "Green Party",
+          "called": false,
+          "mae_pp": 13.12
+        }
+      },
+      {
+        "slug": "leicestershire-shepshed-2026-10-15",
+        "date": "2026-10-15",
+        "published": {
+          "projected_winner": "Reform UK",
+          "called": false,
+          "mae_pp": 5.56
+        },
+        "rescored": {
+          "projected_winner": "Reform UK",
+          "called": false,
+          "mae_pp": 5.53
+        }
+      },
+      {
+        "slug": "wiltshire-salisbury-milford-2026-10-15",
+        "date": "2026-10-15",
+        "published": {
+          "projected_winner": "Liberal Democrats",
+          "called": true,
+          "mae_pp": 6.72
+        },
+        "rescored": {
+          "projected_winner": "Liberal Democrats",
+          "called": true,
+          "mae_pp": 6.85
+        }
+      },
+      {
+        "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
+        "date": "2026-10-22",
+        "published": {
+          "projected_winner": "Green Party",
+          "called": false,
+          "mae_pp": 9.04
+        },
+        "rescored": {
+          "projected_winner": "Green Party",
+          "called": false,
+          "mae_pp": 9.12
+        }
+      }
+    ]
+  },
+  "pending_results": [
+    "south-kesteven-grantham-st-wulframs-2026-10-22",
+    "carmarthenshire-saron-2026-10-22",
+    "leeds-calverley-farsley-2026-10-22",
+    "bassetlaw-worksop-east-2026-10-29",
+    "halton-beechwood-heath-2026-10-29",
+    "dudley-st-jamess-2026-10-29",
+    "wychavon-hartlebury-2026-10-22",
+    "nottinghamshire-southwell-2026-10-29",
+    "newark-and-sherwood-dover-beck-2026-10-29",
+    "bournemouth-christchurch-and-poole-penn-hill-2026-11-05",
+    "hyndburn-huncoat-2026-11-12",
+    "suffolk-bosmere-2026-11-12",
+    "north-east-lincolnshire-croft-baker-2026-11-12",
+    "oldham-failsworth-west-2026-11-12",
+    "wigan-hindley-green-2026-11-12",
+    "staffordshire-moorlands-cheddleton-2026-11-12"
+  ],
+  "contests": [
+    {
+      "slug": "dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27",
+      "council_name": "Dover",
+      "ward_name": "Guston, Kingsdown & St Margaret's-at-Cliffe",
+      "date": "2026-08-27",
+      "council_slug": "dover",
+      "page": "https://ukelections.co.uk/by-elections/local/dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 34,
+      "too_close_to_call": true,
+      "actual_winner": "Green Party",
+      "called": false,
+      "mae_pp": 4.76,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://www.kentonline.co.uk/dover/news/green-party-triumph-in-council-by-election-as-right-wing-vot-344423/"
+    },
+    {
+      "slug": "newcastle-upon-tyne-throckley-walbottle-newburn-2026-08-27",
+      "council_name": "Newcastle upon Tyne",
+      "ward_name": "Throckley, Walbottle & Newburn",
+      "date": "2026-08-27",
+      "council_slug": "newcastle-upon-tyne",
+      "page": "https://ukelections.co.uk/by-elections/local/newcastle-upon-tyne-throckley-walbottle-newburn-2026-08-27/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 55,
+      "too_close_to_call": true,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 9.95,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://www.hexham-courant.co.uk/news/26502982.reform-uk-fight-off-lib-dem-surge-secure-newcastle-seat/"
+    },
+    {
+      "slug": "sheffield-southey-2026-08-27",
+      "council_name": "Sheffield",
+      "ward_name": "Southey",
+      "date": "2026-08-27",
+      "council_slug": "sheffield",
+      "page": "https://ukelections.co.uk/by-elections/local/sheffield-southey-2026-08-27/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 68,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 4.14,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714"
+    },
+    {
+      "slug": "st-helens-billinge-seneley-green-2026-08-27",
+      "council_name": "St. Helens",
+      "ward_name": "Billinge & Seneley Green",
+      "date": "2026-08-27",
+      "council_slug": "st-helens",
+      "page": "https://ukelections.co.uk/by-elections/local/st-helens-billinge-seneley-green-2026-08-27/",
+      "projected_winner": "Independent",
+      "leader_probability_pct": 46,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 9.56,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.st-helens.billinge-seneley-green.by.2026-08-27/"
+    },
+    {
+      "slug": "wandsworth-trinity-2026-08-27",
+      "council_name": "Wandsworth",
+      "ward_name": "Trinity",
+      "date": "2026-08-27",
+      "council_slug": "wandsworth",
+      "page": "https://ukelections.co.uk/by-elections/local/wandsworth-trinity-2026-08-27/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 53,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 6.62,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://democracy.wandsworth.gov.uk/mgElectionAreaResults.aspx?ID=108&RPID=319027760"
+    },
+    {
+      "slug": "oxfordshire-chesterton-launton-2026-09-03",
+      "council_name": "Oxfordshire",
+      "ward_name": "Chesterton & Launton",
+      "date": "2026-09-03",
+      "council_slug": "oxfordshire",
+      "page": "https://ukelections.co.uk/by-elections/local/oxfordshire-chesterton-launton-2026-09-03/",
+      "projected_winner": "Liberal Democrats",
+      "leader_probability_pct": 53,
+      "too_close_to_call": true,
+      "actual_winner": "Liberal Democrats",
+      "called": true,
+      "mae_pp": 4.56,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.oxfordshire.chesterton-launton.by.2026-09-03/"
+    },
+    {
+      "slug": "rhondda-cynon-taf-llantwit-fardre-2026-09-03",
+      "council_name": "Rhondda Cynon Taf",
+      "ward_name": "Llantwit Fardre",
+      "date": "2026-09-03",
+      "council_slug": "rhondda-cynon-taf",
+      "page": "https://ukelections.co.uk/by-elections/local/rhondda-cynon-taf-llantwit-fardre-2026-09-03/",
+      "projected_winner": "Independent",
+      "leader_probability_pct": 36,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 13.48,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.rhondda-cynon-taf.llantwit-fardre.by.2026-09-03/"
+    },
+    {
+      "slug": "manchester-burnage-2026-09-10",
+      "council_name": "Manchester",
+      "ward_name": "Burnage",
+      "date": "2026-09-10",
+      "council_slug": "manchester",
+      "page": "https://ukelections.co.uk/by-elections/local/manchester-burnage-2026-09-10/",
+      "projected_winner": "Green Party",
+      "leader_probability_pct": 96,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 11.78,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.manchester.gov.uk/online-directories/the-council-and-democracy-directories/elections-and-voting-directories/elections-directories/election-results/local-elections/local-by-elections/burnage-ward-local-by-election-10-september-2026"
+    },
+    {
+      "slug": "north-east-derbyshire-eckington-south-renishaw-2026-09-10",
+      "council_name": "North East Derbyshire",
+      "ward_name": "Eckington South & Renishaw",
+      "date": "2026-09-10",
+      "council_slug": "north-east-derbyshire",
+      "page": "https://ukelections.co.uk/by-elections/local/north-east-derbyshire-eckington-south-renishaw-2026-09-10/",
+      "projected_winner": "Independent",
+      "leader_probability_pct": 36,
+      "too_close_to_call": true,
+      "actual_winner": "Reform UK",
+      "called": false,
+      "mae_pp": 8.42,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.north-east-derbyshire.eckington-south-renishaw.by.2026-09-10/"
+    },
+    {
+      "slug": "north-somerset-hutton-locking-2026-09-10",
+      "council_name": "North Somerset",
+      "ward_name": "Hutton & Locking",
+      "date": "2026-09-10",
+      "council_slug": "north-somerset",
+      "page": "https://ukelections.co.uk/by-elections/local/north-somerset-hutton-locking-2026-09-10/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 48,
+      "too_close_to_call": true,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 6.21,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://n-somerset.gov.uk/news/hutton-locking-ward-election-results"
+    },
+    {
+      "slug": "west-suffolk-haverhill-west-2026-09-10",
+      "council_name": "West Suffolk",
+      "ward_name": "Haverhill West",
+      "date": "2026-09-10",
+      "council_slug": "west-suffolk",
+      "page": "https://ukelections.co.uk/by-elections/local/west-suffolk-haverhill-west-2026-09-10/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 44,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 10.14,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://haverhill-tc.gov.uk/wp-content/uploads/Declaration-of-results-Haverhill-West-10-September-2026.pdf"
+    },
+    {
+      "slug": "bassetlaw-east-markham-2026-09-15",
+      "council_name": "Bassetlaw",
+      "ward_name": "East Markham",
+      "date": "2026-09-15",
+      "council_slug": "bassetlaw",
+      "page": "https://ukelections.co.uk/by-elections/local/bassetlaw-east-markham-2026-09-15/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 69,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": false,
+      "mae_pp": 13.74,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.bassetlaw.gov.uk/council-and-democracy/elections-in-bassetlaw/elections-2026/east-markham-by-election/declaration-of-result-of-poll/"
+    },
+    {
+      "slug": "charnwood-wreake-valley-2026-09-17",
+      "council_name": "Charnwood",
+      "ward_name": "Wreake Valley",
+      "date": "2026-09-17",
+      "council_slug": "charnwood",
+      "page": "https://ukelections.co.uk/by-elections/local/charnwood-wreake-valley-2026-09-17/",
+      "projected_winner": "Green Party",
+      "leader_probability_pct": 60,
+      "too_close_to_call": false,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 12.84,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.charnwood.wreake-valley.by.2026-09-17/"
+    },
+    {
+      "slug": "sheffield-walkley-2026-09-17",
+      "council_name": "Sheffield",
+      "ward_name": "Walkley",
+      "date": "2026-09-17",
+      "council_slug": "sheffield",
+      "page": "https://ukelections.co.uk/by-elections/local/sheffield-walkley-2026-09-17/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 50,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 4.73,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.sheffield.walkley.by.2026-09-17/"
+    },
+    {
+      "slug": "tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23",
+      "council_name": "Tunbridge Wells",
+      "ward_name": "Cranbrook, Sissinghurst & Frittenden",
+      "date": "2026-09-23",
+      "council_slug": "tunbridge-wells",
+      "page": "https://ukelections.co.uk/by-elections/local/tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 64,
+      "too_close_to_call": false,
+      "actual_winner": "Liberal Democrats",
+      "called": false,
+      "mae_pp": 11.81,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://tunbridgewells.gov.uk/council/voting-and-elections/elections/wednesday-23-september-2026/declaration-of-result-of-poll"
+    },
+    {
+      "slug": "brighton-and-hove-queens-park-2026-09-24",
+      "council_name": "Brighton and Hove",
+      "ward_name": "Queen's Park",
+      "date": "2026-09-24",
+      "council_slug": "brighton-and-hove",
+      "page": "https://ukelections.co.uk/by-elections/local/brighton-and-hove-queens-park-2026-09-24/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 40,
+      "too_close_to_call": true,
+      "actual_winner": "Green Party",
+      "called": false,
+      "mae_pp": 10.01,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.brighton-hove.gov.uk/council-and-democracy/voting-and-elections/declaration-result-queens-park-election-24-september-2026"
+    },
+    {
+      "slug": "cotswold-blockley-2026-09-24",
+      "council_name": "Cotswold",
+      "ward_name": "Blockley",
+      "date": "2026-09-24",
+      "council_slug": "cotswold",
+      "page": "https://ukelections.co.uk/by-elections/local/cotswold-blockley-2026-09-24/",
+      "projected_winner": "Green Party",
+      "leader_probability_pct": 66,
+      "too_close_to_call": false,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 28.34,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf"
+    },
+    {
+      "slug": "milton-keynes-new-bradwell-2026-09-24",
+      "council_name": "Milton Keynes",
+      "ward_name": "New Bradwell",
+      "date": "2026-09-24",
+      "council_slug": "milton-keynes",
+      "page": "https://ukelections.co.uk/by-elections/local/milton-keynes-new-bradwell-2026-09-24/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 50,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 6.46,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.milton-keynes.gov.uk/sites/default/files/2026-09/New%20Bradwell%20Declaration%20of%20Result%20of%20Poll.pdf"
+    },
+    {
+      "slug": "south-staffordshire-wombourne-north-2026-09-24",
+      "council_name": "South Staffordshire",
+      "ward_name": "Wombourne North",
+      "date": "2026-09-24",
+      "council_slug": "south-staffordshire",
+      "page": "https://ukelections.co.uk/by-elections/local/south-staffordshire-wombourne-north-2026-09-24/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 41,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 10.85,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.sstaffs.gov.uk/sites/default/files/2026-09/Doc1.docx"
+    },
+    {
+      "slug": "windsor-and-maidenhead-bray-2026-09-24",
+      "council_name": "Windsor and Maidenhead",
+      "ward_name": "Bray",
+      "date": "2026-09-24",
+      "council_slug": "windsor-and-maidenhead",
+      "page": "https://ukelections.co.uk/by-elections/local/windsor-and-maidenhead-bray-2026-09-24/",
+      "projected_winner": "Independent",
+      "leader_probability_pct": 70,
+      "too_close_to_call": false,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 19.73,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.rbwm.gov.uk/sites/default/files/2026-09/elections_results_bray_by-election_20260924.pdf"
+    },
+    {
+      "slug": "blackpool-claremont-2026-10-01",
+      "council_name": "Blackpool",
+      "ward_name": "Claremont",
+      "date": "2026-10-01",
+      "council_slug": "blackpool",
+      "page": "https://ukelections.co.uk/by-elections/local/blackpool-claremont-2026-10-01/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 38,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 8.99,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.blackpool.claremont.by.2026-10-01/"
+    },
+    {
+      "slug": "north-west-leicestershire-long-whatton-diseworth-2026-10-01",
+      "council_name": "North West Leicestershire",
+      "ward_name": "Long Whatton & Diseworth",
+      "date": "2026-10-01",
+      "council_slug": "north-west-leicestershire",
+      "page": "https://ukelections.co.uk/by-elections/local/north-west-leicestershire-long-whatton-diseworth-2026-10-01/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 61,
+      "too_close_to_call": false,
+      "actual_winner": "Conservative",
+      "called": true,
+      "mae_pp": 5.48,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.north-west-leicestershire.long-whatton-diseworth.by.2026-10-01/"
+    },
+    {
+      "slug": "northumberland-amble-2026-10-01",
+      "council_name": "Northumberland",
+      "ward_name": "Amble",
+      "date": "2026-10-01",
+      "council_slug": "northumberland",
+      "page": "https://ukelections.co.uk/by-elections/local/northumberland-amble-2026-10-01/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 49,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 6.28,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.northumberland.amble.by.2026-10-01/"
+    },
+    {
+      "slug": "northumberland-hirst-2026-10-01",
+      "council_name": "Northumberland",
+      "ward_name": "Hirst",
+      "date": "2026-10-01",
+      "council_slug": "northumberland",
+      "page": "https://ukelections.co.uk/by-elections/local/northumberland-hirst-2026-10-01/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 46,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 7.43,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.northumberland.hirst.by.2026-10-01/"
+    },
+    {
+      "slug": "amber-valley-kilburn-denby-holbrook-horsley-2026-10-08",
+      "council_name": "Amber Valley",
+      "ward_name": "Kilburn, Denby, Holbrook & Horsley",
+      "date": "2026-10-08",
+      "council_slug": "amber-valley",
+      "page": "https://ukelections.co.uk/by-elections/local/amber-valley-kilburn-denby-holbrook-horsley-2026-10-08/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 47,
+      "too_close_to_call": true,
+      "actual_winner": "Green Party",
+      "called": false,
+      "mae_pp": 13.26,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.ambervalley.gov.uk/media/2363/declaration-of-result-of-poll-kilburn-denby-holbrook-horsley.pdf"
+    },
+    {
+      "slug": "lambeth-myatts-fields-2026-10-08",
+      "council_name": "Lambeth",
+      "ward_name": "Myatt's Fields",
+      "date": "2026-10-08",
+      "council_slug": "lambeth",
+      "page": "https://ukelections.co.uk/by-elections/local/lambeth-myatts-fields-2026-10-08/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 54,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 1.84,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://moderngov.lambeth.gov.uk/mgElectionAreaResults.aspx?ID=315&RPID=301356569"
+    },
+    {
+      "slug": "newcastle-under-lyme-town-2026-10-08",
+      "council_name": "Newcastle-under-Lyme",
+      "ward_name": "Town",
+      "date": "2026-10-08",
+      "council_slug": "newcastle-under-lyme",
+      "page": "https://ukelections.co.uk/by-elections/local/newcastle-under-lyme-town-2026-10-08/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 46,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 5.26,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.newcastle-staffs.gov.uk/news/article/587/borough-council-by-election-result-declared"
+    },
+    {
+      "slug": "stroud-rodborough-2026-10-13",
+      "council_name": "Stroud",
+      "ward_name": "Rodborough",
+      "date": "2026-10-13",
+      "council_slug": "stroud",
+      "page": "https://ukelections.co.uk/by-elections/local/stroud-rodborough-2026-10-13/",
+      "projected_winner": "Green Party",
+      "leader_probability_pct": 56,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 16.02,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.stroud.gov.uk/media/vsaj31nj/declaration-of-results-rodborough-district-ward.pdf"
+    },
+    {
+      "slug": "leicestershire-shepshed-2026-10-15",
+      "council_name": "Leicestershire",
+      "ward_name": "Shepshed",
+      "date": "2026-10-15",
+      "council_slug": "leicestershire",
+      "page": "https://ukelections.co.uk/by-elections/local/leicestershire-shepshed-2026-10-15/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 67,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 5.56,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.leicestershire.gov.uk/sites/default/files/2026-10/Declaration-of-result-of-poll-for-Shepshed.pdf"
+    },
+    {
+      "slug": "mid-devon-bradninch-2026-10-15",
+      "council_name": "Mid Devon",
+      "ward_name": "Bradninch",
+      "date": "2026-10-15",
+      "council_slug": "mid-devon",
+      "page": "https://ukelections.co.uk/by-elections/local/mid-devon-bradninch-2026-10-15/",
+      "projected_winner": "Liberal Democrats",
+      "leader_probability_pct": 90,
+      "too_close_to_call": false,
+      "actual_winner": "Liberal Democrats",
+      "called": true,
+      "mae_pp": 4.05,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.middevon.gov.uk/your-council/voting-elections/2026-elections/result-of-poll-bradninch-district-councillor/"
+    },
+    {
+      "slug": "wiltshire-salisbury-milford-2026-10-15",
+      "council_name": "Wiltshire",
+      "ward_name": "Salisbury Milford",
+      "date": "2026-10-15",
+      "council_slug": "wiltshire",
+      "page": "https://ukelections.co.uk/by-elections/local/wiltshire-salisbury-milford-2026-10-15/",
+      "projected_winner": "Liberal Democrats",
+      "leader_probability_pct": 71,
+      "too_close_to_call": false,
+      "actual_winner": "Liberal Democrats",
+      "called": true,
+      "mae_pp": 6.72,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://elections.wiltshire.gov.uk/home/Division/9173"
+    },
+    {
+      "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
+      "council_name": "East Hertfordshire",
+      "ward_name": "Hertford Kingsmead",
+      "date": "2026-10-22",
+      "council_slug": "east-hertfordshire",
+      "page": "https://ukelections.co.uk/by-elections/local/east-hertfordshire-hertford-kingsmead-2026-10-22/",
+      "projected_winner": "Green Party",
+      "leader_probability_pct": 39,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 9.04,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx"
+    }
+  ]
+}
