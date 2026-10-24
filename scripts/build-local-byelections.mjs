@@ -659,7 +659,7 @@ export function assemble(ctx, corpus, demo, holders, published = {}, turnoutFact
       outcome: holders[ballot.election_id]
         ? winnerParty === holders[ballot.election_id].party
           ? `${winnerParty} hold`
-          : `${winnerParty} gain from ${holders[ballot.election_id].party}`
+          : `${winnerParty === "Other" ? ordered[0].party_name : winnerParty} gain from ${holders[ballot.election_id].party}`
         : null,
       grading: gradeAgainst(published[ids.slug], forecast, shares, field, winnerParty),
       ...(ctx.resultReview || {}),

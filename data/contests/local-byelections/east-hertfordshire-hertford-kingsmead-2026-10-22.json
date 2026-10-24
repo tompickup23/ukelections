@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-21T03:36:54.232Z",
+  "generated_at": "2026-10-24T03:36:55.741Z",
   "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.east-hertfordshire.hertford-kingsmead.by.2026-10-22",
     "polling_day": "2026-10-22",
@@ -41,43 +41,55 @@
       {
         "name": "Rosemary Anne Bolton",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
+        "votes": 575,
+        "elected": true,
+        "party": "Conservative"
+      },
+      {
+        "name": "Drew Antony Waller-Downes",
+        "party_name": "Green Party",
+        "votes": 529,
+        "elected": false,
+        "party": "Green Party"
       },
       {
         "name": "Christopher Edmund Valentine Bush",
         "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "votes": 253,
+        "elected": false,
+        "party": "Reform UK"
+      },
+      {
+        "name": "Dawn Kathleen Anne Newell",
+        "party_name": "Labour Party",
+        "votes": 164,
+        "elected": false,
+        "party": "Labour"
       },
       {
         "name": "Elif Nergis Lewis",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Dawn Katherine Anne Newell",
-        "party_name": "Labour Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Drew Waller-Downes",
-        "party_name": "Green Party",
-        "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "votes": 110,
+        "elected": false,
+        "party": "Liberal Democrats"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Green Party",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 22 October by-election; not inferred from the ward-wide vote. Reviewed 24 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/east-hertfordshire-dc-hertford-kingsmead-22-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-10-22/east-hertfordshire-hertford-kingsmead/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05015367",
@@ -405,9 +417,47 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.15511955855303494,
+      "Labour": 0.10055180870631514,
+      "Conservative": 0.3525444512568976,
+      "Liberal Democrats": 0.0674432863274065,
+      "Green Party": 0.3243408951563458,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Conservative",
+    "winner_candidate": "Rosemary Anne Bolton",
+    "winner_party_name": "Conservative and Unionist Party",
+    "winner_votes": 575,
+    "runner_up_party": "Green Party",
+    "majority_votes": 46,
+    "total_votes": 1631,
+    "source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx",
+    "outcome": "Conservative gain from Green Party",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-10-06",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Green Party",
+      "call_correct": false,
+      "mae_pp": 9.043850398528512
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-10-24",
+    "note": "Five candidate counts sum to 1,631 valid votes; one rejected paper reconciles to 1,632 ballot papers issued. Electorate 6,781; council turnout 24.07%. Shares agree with the Election Maps UK report of the declaration (Con 35.3, Grn 32.4, Ref 15.5, Lab 10.1, LD 6.7). Democracy Club had no result at 15:00 BST on 24 October."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.east-hertfordshire.hertford-kingsmead.by.2026-10-22/"
@@ -416,5 +466,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.east-hertfordshire.hertford-kingsmead.by.2026-10-22/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-10-24"
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-21T03:36:54.129Z",
+  "generated_at": "2026-10-24T03:36:55.647Z",
   "slug": "leicestershire-shepshed-2026-10-15",
   "status": "concluded",
   "contest": {
@@ -42,50 +42,62 @@
       {
         "name": "Jane Lennie",
         "party_name": "Labour Party",
-        "party": "Labour",
         "votes": 1163,
-        "elected": true
+        "elected": true,
+        "party": "Labour"
       },
       {
         "name": "Stuart Brian Wood",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 1110,
-        "elected": false
+        "elected": false,
+        "party": "Reform UK"
       },
       {
         "name": "Sarah Louise Monk",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 819,
-        "elected": false
+        "elected": false,
+        "party": "Conservative"
       },
       {
         "name": "Alec McKenzie",
         "party_name": "Restore Britain",
-        "party": "Restore Britain",
         "votes": 228,
-        "elected": false
+        "elected": false,
+        "party": "Restore Britain"
       },
       {
         "name": "Katy Brookes-Duncan",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 115,
-        "elected": false
+        "elected": false,
+        "party": "Liberal Democrats"
       },
       {
         "name": "David Neil Kellock",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 112,
-        "elected": false
+        "elected": false,
+        "party": "Green Party"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Reform UK",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 15 October by-election; not inferred from the ward-wide vote. Reviewed 24 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/leicestershire-cc-shepshed-15-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-10-15/leicestershire-shepshed/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": null,
   "prior_result": {
@@ -304,11 +316,13 @@
     },
     "winner_party": "Labour",
     "winner_candidate": "Jane Lennie",
+    "winner_party_name": "Labour Party",
+    "winner_votes": 1163,
     "runner_up_party": "Reform UK",
     "majority_votes": 53,
     "total_votes": 3547,
-    "source": "https://candidates.democracyclub.org.uk/elections/local.leicestershire.shepshed.by.2026-10-15/",
-    "outcome": null,
+    "source": "https://www.leicestershire.gov.uk/sites/default/files/2026-10/Declaration-of-result-of-poll-for-Shepshed.pdf",
+    "outcome": "Labour gain from Reform UK",
     "grading": {
       "graded_against": "forecast_as_published",
       "published_captured_at": "2026-10-06",
@@ -316,10 +330,17 @@
       "projected_winner": "Reform UK",
       "call_correct": false,
       "mae_pp": 5.702058077248378
-    }
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-10-21",
+    "note": "Six candidate counts sum to 3,547 valid votes; seven rejected papers reconcile to 3,554 ballot papers issued. Electorate 11,988; council turnout 29.65%. Declaration dated 16 October 2026. Counts agree with the Democracy Club record."
   },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.leicestershire.gov.uk/sites/default/files/2026-10/Declaration-of-result-of-poll-for-Shepshed.pdf"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.leicestershire.shepshed.by.2026-10-15/"
@@ -328,5 +349,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.leicestershire.shepshed.by.2026-10-15/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-10-21"
 }

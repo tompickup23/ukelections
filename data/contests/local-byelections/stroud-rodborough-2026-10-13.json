@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-21T03:36:54.087Z",
+  "generated_at": "2026-10-24T03:36:55.605Z",
   "slug": "stroud-rodborough-2026-10-13",
   "status": "concluded",
   "contest": {
@@ -41,43 +41,55 @@
       {
         "name": "John Bloxsom",
         "party_name": "Labour Party",
-        "party": "Labour",
         "votes": 697,
-        "elected": true
+        "elected": true,
+        "party": "Labour"
       },
       {
         "name": "Robin Layfield",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 470,
-        "elected": false
+        "elected": false,
+        "party": "Green Party"
       },
       {
         "name": "Gerald Michael O'Brien",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 191,
-        "elected": false
+        "elected": false,
+        "party": "Reform UK"
       },
       {
         "name": "Christopher John Easton",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 103,
-        "elected": false
+        "elected": false,
+        "party": "Conservative"
       },
       {
         "name": "George William James",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 23,
-        "elected": false
+        "elected": false,
+        "party": "Liberal Democrats"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Labour",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 13 October by-election; not inferred from the ward-wide vote. Reviewed 24 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/stroud-dc-rodborough-13-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-10-13/stroud-rodborough/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05013194",
@@ -385,11 +397,13 @@
     },
     "winner_party": "Labour",
     "winner_candidate": "John Bloxsom",
+    "winner_party_name": "Labour Party",
+    "winner_votes": 697,
     "runner_up_party": "Green Party",
     "majority_votes": 227,
     "total_votes": 1484,
-    "source": "https://candidates.democracyclub.org.uk/elections/local.stroud.rodborough.by.2026-10-13/",
-    "outcome": null,
+    "source": "https://www.stroud.gov.uk/media/vsaj31nj/declaration-of-results-rodborough-district-ward.pdf",
+    "outcome": "Labour hold",
     "grading": {
       "graded_against": "forecast_as_published",
       "published_captured_at": "2026-10-06",
@@ -397,10 +411,17 @@
       "projected_winner": "Green Party",
       "call_correct": false,
       "mae_pp": 13.123288409703502
-    }
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-10-21",
+    "note": "Five candidate counts sum to 1,484 valid votes; two rejected papers reconcile to 1,486 ballot papers issued. Electorate 3,519; council turnout 42.23%. Counts agree with the Democracy Club record."
   },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.stroud.gov.uk/media/vsaj31nj/declaration-of-results-rodborough-district-ward.pdf"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.stroud.rodborough.by.2026-10-13/"
@@ -409,5 +430,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.stroud.rodborough.by.2026-10-13/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-10-21"
 }

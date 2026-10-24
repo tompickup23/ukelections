@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-10-21T03:36:54.688Z",
-  "window_from": "2026-07-23",
-  "contests": 161,
+  "generated_at": "2026-10-24T03:36:56.100Z",
+  "window_from": "2026-07-26",
+  "contests": 165,
   "forecast_count": 131,
-  "corpus_size": 916,
-  "corpus_newest": "2026-10-15",
+  "corpus_size": 918,
+  "corpus_newest": "2026-10-22",
   "corpus_oldest": "2017-05-04",
   "backtest": {
-    "n": 803,
-    "mae_pp": 7.581994308354882,
+    "n": 805,
+    "mae_pp": 7.578499652660083,
     "winner_called": 577,
-    "winner_called_pct": 0.7185554171855542,
-    "reform_bias_pp": -2.550924389996078,
-    "reform_n": 311,
+    "winner_called_pct": 0.7167701863354037,
+    "reform_bias_pp": -2.5292578833726678,
+    "reform_n": 313,
     "recent_since": "2025-05-01",
     "recent": {
-      "n": 242,
-      "mae_pp": 7.301433822156065,
+      "n": 244,
+      "mae_pp": 7.292203998951493,
       "winner_called": 149,
-      "winner_called_pct": 0.6157024793388429,
+      "winner_called_pct": 0.610655737704918,
       "confident_n": 126,
       "confident_called": 86,
       "confident_called_pct": 0.6825396825396826
@@ -28,10 +28,10 @@
     {
       "from": 0.3,
       "to": 0.55,
-      "n": 114,
-      "mean_stated": 0.44954605263157893,
-      "observed": 0.5526315789473685,
-      "standard_error": 0.046569125840593986
+      "n": 116,
+      "mean_stated": 0.4498512931034483,
+      "observed": 0.5431034482758621,
+      "standard_error": 0.04625101049657801
     },
     {
       "from": 0.55,
@@ -53,19 +53,19 @@
   "method_comparison": {
     "note": "Same corpus, same window, one switch: the stratified method measures swing only from by-elections in the same era and the same Reform-entry condition; pooled uses every paired contest at once.",
     "stratified": {
-      "n": 242,
-      "mae_pp": 7.301433822156065,
+      "n": 244,
+      "mae_pp": 7.292203998951493,
       "winner_called": 149,
-      "winner_called_pct": 0.6157024793388429,
+      "winner_called_pct": 0.610655737704918,
       "confident_n": 126,
       "confident_called": 86,
       "confident_called_pct": 0.6825396825396826
     },
     "pooled": {
-      "n": 242,
-      "mae_pp": 7.805084395536557,
-      "winner_called": 135,
-      "winner_called_pct": 0.5578512396694215,
+      "n": 244,
+      "mae_pp": 7.799665272849321,
+      "winner_called": 136,
+      "winner_called_pct": 0.5573770491803278,
       "confident_n": 138,
       "confident_called": 88,
       "confident_called_pct": 0.6376811594202898
@@ -74,45 +74,45 @@
   "party_accuracy": [
     {
       "party": "Reform UK",
-      "n": 233,
-      "bias_pp": -1.5272824814783454,
-      "mae_pp": 9.284829461887435
+      "n": 235,
+      "bias_pp": -1.5071363846439119,
+      "mae_pp": 9.217078331654552
     },
     {
       "party": "Labour",
-      "n": 227,
-      "bias_pp": 0.6142984939883757,
-      "mae_pp": 5.873145154813427
+      "n": 229,
+      "bias_pp": 0.5761551299829618,
+      "mae_pp": 5.854629622322756
     },
     {
       "party": "Conservative",
-      "n": 242,
-      "bias_pp": 1.966031828384913,
-      "mae_pp": 7.283477591022298
+      "n": 244,
+      "bias_pp": 1.8430001294333822,
+      "mae_pp": 7.330693638995081
     },
     {
       "party": "Liberal Democrats",
-      "n": 219,
-      "bias_pp": -0.609688135086728,
-      "mae_pp": 6.173568869500035
+      "n": 220,
+      "bias_pp": -0.6027659857431178,
+      "mae_pp": 6.14965803245916
     },
     {
       "party": "Green Party",
-      "n": 210,
-      "bias_pp": -0.1386309175954498,
-      "mae_pp": 6.039870892446823
+      "n": 212,
+      "bias_pp": -0.10131611314017368,
+      "mae_pp": 6.018897943977172
     },
     {
       "party": "Independent",
-      "n": 79,
-      "bias_pp": 1.0154105449607436,
-      "mae_pp": 10.778250602601872
+      "n": 80,
+      "bias_pp": 1.255866142561422,
+      "mae_pp": 10.896670699482037
     },
     {
       "party": "Other",
-      "n": 52,
-      "bias_pp": -1.2064768107283024,
-      "mae_pp": 4.286063193829271
+      "n": 53,
+      "bias_pp": -1.2022621090139745,
+      "mae_pp": 4.223743088660208
     }
   ],
   "sigma_inflation": 1.75,
