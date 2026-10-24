@@ -45,6 +45,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     label: "Forecasts",
     items: [
+      { href: "/elections/", label: "Next elections", desc: "Every body's next election date, with its legal source and what we publish for it" },
       { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
       { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "Hypothetical council scenarios; reorganisation is paused for review" },
       { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
@@ -68,7 +69,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/seats/parliament/", label: "650 Constituencies", desc: "Every UK parliamentary seat, with its projection" },
       { href: "/councils/", label: "Councils", desc: "Browse the councils covered by our results and forecasts" },
       { href: "/seats/", label: "Councils and contests", desc: "Browse councils, mayoralties and the devolved parliaments" },
-      { href: "/elections/2027/", label: "2027 election dates", desc: "Verified sources, schedules and coverage limits" },
+      { href: "/elections/2027/", label: "6 May 2027 councils", desc: "Councils whose next election we have verified for 6 May 2027; no forecasts yet" },
       { href: "/your-area/", label: "Election Lookup", desc: "Constituency and ward" },
     ],
   },
@@ -130,6 +131,7 @@ const STATIC_PATHS = [
   "/seats/",
   "/seats/parliament/",
   "/your-area/",
+  "/elections/",
   "/elections/2027/",
   "/forecasts/",
   "/forecasts/may-2026/",
@@ -170,6 +172,13 @@ const STATIC_PATHS = [
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
+  {
+    href: "/elections/",
+    title: "Next UK elections: dates and sources",
+    kind: "page",
+    description: "When the next general election, council elections, mayoral elections, Senedd and Scottish Parliament elections are due, with the statute or official notice behind each date and what this site does and does not cover.",
+    priority: 112
+  },
   {
     href: "/past-results/indicators/",
     title: "Demographic indicators, backtest 2025 → 2026",

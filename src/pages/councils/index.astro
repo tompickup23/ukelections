@@ -104,7 +104,8 @@ rows.sort((a, b) => a.name.localeCompare(b.name));
 const counts = {
   total: rows.length,
   scheduled: rows.filter((r) => !r.next_is_tbc).length,
-  lgr: rows.filter((r) => r.next_is_tbc).length,
+  unverified: rows.filter((r) => r.next_is_tbc).length,
+  y2027: rows.filter((r) => r.next_iso?.startsWith("2027")).length,
   ref_majority: rows.filter((r) => r.status_group === "ref_majority").length,
 };
 
@@ -186,7 +187,7 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">At a glance</p>
-      <h2>{counts.ref_majority} Reform majorities, {counts.scheduled} next dates known, {counts.lgr} awaiting LGR</h2>
+      <h2>{counts.ref_majority} Reform majorities, {counts.scheduled} next dates verified, {counts.y2027} voting on 6 May 2027</h2>
     </div>
 
     <div class="stat-card-row">
@@ -203,9 +204,9 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
         accent={partyColour("Reform UK")}
       />
       <StatCard
-        icon="pause"
-        value={String(counts.lgr)}
-        label="councils whose next election is on hold while Local Government Reorganisation is consulted"
+        icon="calendar"
+        value={String(counts.y2027)}
+        label="of these councils next vote on 6 May 2027, verified from an electoral change order or council notice"
       />
     </div>
 
@@ -253,7 +254,7 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
         <button type="button" class="chip" data-filter="ref_majority">Reform majorities ({counts.ref_majority})</button>
         <button type="button" class="chip" data-filter="other_majority">Other majorities ({rows.filter(r => r.status_group === "other_majority").length})</button>
         <button type="button" class="chip" data-filter="noc">No overall control ({rows.filter(r => r.status_group === "noc").length})</button>
-        <button type="button" class="chip" data-filter="lgr">Awaiting LGR ({counts.lgr})</button>
+        <button type="button" class="chip" data-filter="lgr">Date not verified ({counts.unverified})</button>
       </div>
     </div>
 
@@ -303,7 +304,7 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
             </td>
             <td>
               {r.next_is_tbc
-                ? <span class="tbc-pill" title="Local Government Reorganisation">{r.next_label}</span>
+                ? <span class="tbc-pill" title="No primary source verified for the next election">{r.next_label}</span>
                 : <span>{r.next_label}</span>}
             </td>
           </tr>
@@ -312,10 +313,10 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
     </table>
     </div>
     <p class="caption">
-      Two-tier councils (county + district) are being reorganised into unitary authorities under the
-      December 2024 English Devolution White Paper. Election dates flip from TBC to a confirmed date as each
-      Statutory Instrument is laid. See <a href="/methodology/">our methodology</a> for how we classify
-      councils.
+      A next election date appears only where we have read it in the council's electoral change order or its own
+      election notices; polling day is the statutory first Thursday in May. "Not verified" means we found no such
+      source, not that the election is cancelled. Councils being abolished say so. See every body's next election on the
+      <a href="/elections/">election calendar</a>.
     </p>
   </section>
 

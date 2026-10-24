@@ -1,21 +1,92 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CALENDAR, councilsVotingIn, allCouncilRecords, longDate, NEXT_ELECTIONS_CHECKED_AT } from "../../lib/nextElections";
+import { loadIdentity } from "../../lib/predictions";
+
+const covered = new Set<string>(
+  loadIdentity().wards.filter((w: any) => w.tier === "local" || w.tier === "mayor").map((w: any) => w.council_slug),
+);
+const voting = councilsVotingIn(2027).filter((c) => c.nation === "E");
+const unverifiedEngland = allCouncilRecords().filter((c) => c.nation === "E" && c.status === "unverified");
+const england = CALENDAR.find((r) => r.id === "local-council-2027")!;
+const mayors = CALENDAR.find((r) => r.id === "mayors-2027")!;
+const scotland = CALENDAR.find((r) => r.id === "scottish-councils-2027")!;
+const wales = CALENDAR.find((r) => r.id === "welsh-councils-2027")!;
+const PATTERN: Record<string, string> = { thirds: "A third of seats", halves: "Half of seats", whole: "All seats" };
 ---
-<BaseLayout title="2027 local elections: dates and official sources" description="England’s ordinary local election timetable is for 6 May 2027. Check council coverage, Lancashire’s reorganisation update and official voting information." breadcrumbs={[{name: "2027 elections", href: "/elections/2027/"}]}>
+<BaseLayout
+  title="6 May 2027 elections: which councils vote"
+  description="Councils in England whose next ordinary election we have verified for Thursday 6 May 2027, plus the mayoral contests and the Scottish and Welsh council elections that day. Every entry cites its electoral change order or council notice. No 2027 council forecasts are published yet."
+  breadcrumbs={[{ name: "Next elections", href: "/elections/" }, { name: "6 May 2027", href: "/elections/2027/" }]}
+>
   <section class="page-hero">
-    <p class="eyebrow">Election dates · Sources checked 28 September 2026</p>
-    <h1>When are the 2027 local elections?</h1>
-    <p class="lede">The Electoral Commission publishes an England local government election timetable for <strong>Thursday 6 May 2027</strong>. This does not mean every council has an election that day.</p>
+    <p class="eyebrow">Thursday 6 May 2027 · Sources checked {longDate(NEXT_ELECTIONS_CHECKED_AT)}</p>
+    <h1>Who votes on 6 May 2027?</h1>
+    <p class="lede">
+      <strong>We have not published forecasts for the 2027 council elections yet.</strong> This page lists the
+      councils whose 2027 election we have verified, with the source for each, so you can see what is coming.
+    </p>
   </section>
+
   <section class="section">
-    <h2>England: scheduled ordinary polling day</h2>
-    <p><a href="https://www.electoralcommission.org.uk/guidance-returning-officers-administering-local-government-elections-england/planning-election/developing-plans-election/election-timetable">The Electoral Commission’s timetable</a> is the source for 6 May. Council cycles, boundary changes and formal election notices determine which seats are contested.</p>
-    <p>This is a source guide, not a complete UK ballot list. We have not verified every council, mayoralty or election in the devolved nations for 2027. By-elections can happen on other dates.</p>
-    <h2>Lancashire: reorganisation paused</h2>
-    <p><a href="https://burnley.gov.uk/local-government-reorganisation-in-lancashire-paused-for-review/">Burnley Council’s 7 September 2026 update</a> says Lancashire reorganisation is paused for review and May 2027 elections will use existing council boundaries. It does not confirm an election in every Lancashire authority.</p>
-    <p>Our <a href="/forecasts/lancashire-unitaries/">unitary council scenarios</a> remain hypothetical. They are not a confirmed 2027 election programme.</p>
+    <h2>Why 6 May</h2>
+    <p>
+      {england.summary} The day is set by the <a href={england.sources[0].url}>{england.sources[0].label}</a>. In
+      reorganisation areas, the government's <a href={england.sources[1].url}>letter of 7 September 2026</a> says
+      elections "will go ahead to existing council boundaries".
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">England · {voting.length} councils verified</p>
+      <h2>English councils voting on 6 May 2027</h2>
+    </div>
+    <div class="table-scroll" role="region" aria-label="English councils voting on 6 May 2027" tabindex="0">
+      <table class="seat-table">
+        <thead><tr><th>Council</th><th>Seats up</th><th>Source for the year</th></tr></thead>
+        <tbody>
+          {voting.map((c) => (
+            <tr>
+              <td><a href={`/seats/${c.slug}/`}>{c.name}</a>{!covered.has(c.slug) && <span class="muted"> (no results on this site)</span>}</td>
+              <td>{PATTERN[c.pattern] || "Not stated"}</td>
+              <td>{c.source_url ? <a href={c.source_url}>{c.source_label}</a> : c.source_label}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    {unverifiedEngland.length > 0 && (
+      <p class="caption">
+        A further {unverifiedEngland.length} English councils have no verified next-election year, so they are not
+        listed here even where 2027 is likely. Their pages say "Not verified". Check those councils' own election notices.
+      </p>
+    )}
+  </section>
+
+  <section class="section">
+    <h2>Also on 6 May 2027</h2>
+    <ul>
+      <li><a href={mayors.href!}>{mayors.body}</a>: {mayors.summary}</li>
+      <li><strong>{scotland.body}.</strong> {scotland.summary} Source: <a href={scotland.sources[0].url}>{scotland.sources[0].label}</a>.</li>
+      <li><strong>{wales.body}.</strong> {wales.summary} Source: <a href={wales.sources[0].url}>{wales.sources[0].label}</a>.</li>
+    </ul>
+    <p><a href="/elections/">See every body's next election</a>, including the general election deadline.</p>
+  </section>
+
+  <section class="section">
+    <h2>Lancashire</h2>
+    <p>
+      Reorganisation in Lancashire is paused for review, so the May 2027 elections there are to the existing councils.
+      Our <a href="/forecasts/lancashire-unitaries/">unitary council scenarios</a> are hypothetical and are not a forecast of those elections.
+    </p>
+  </section>
+
+  <section class="section">
     <h2>Check your own ballot</h2>
-    <p><a href="/your-area/">Find your ward and constituency</a>, then <a href="https://www.gov.uk/find-local-council">check your council’s election notices</a> for candidates, deadlines and polling arrangements. Published model assumptions cannot establish those facts.</p>
-    <p><a href="/by-elections/local/">Browse the local by-elections we track</a> or <a href="/councils/">browse our council coverage</a>.</p>
+    <p>
+      <a href="/your-area/">Look up your postcode</a>, then <a href="https://www.gov.uk/find-local-council">check your council's notice of election</a>
+      for candidates and polling arrangements.
+    </p>
   </section>
 </BaseLayout>

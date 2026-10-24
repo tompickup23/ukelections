@@ -12,6 +12,18 @@ export interface LookupIndex {
   constituencies: LookupEntry[];
   wards: LookupEntry[];
   councils: LookupEntry[];
+  districts?: DistrictEntry[];
+}
+
+/** A principal council keyed by its ONS district code, covered by the site or not. */
+export interface DistrictEntry {
+  code: string;
+  name: string;
+  href: string;
+  covered: boolean;
+  /** "scheduled" (date verified), "abolished", or "unknown". */
+  status: string;
+  next_label: string;
 }
 
 export interface PostcodeResult {
@@ -21,6 +33,7 @@ export interface PostcodeResult {
   codes?: {
     parliamentary_constituency?: string | null;
     admin_ward?: string | null;
+    admin_district?: string | null;
   } | null;
 }
 
@@ -59,6 +72,46 @@ export function resolvePostcodeDestinations(
   );
 }
 
+/**
+ * What the voter's council is doing next, from the postcode's district code.
+ * Without this a postcode in a council we do not cover returned only the
+ * constituency, with no word on the council at all.
+ */
+export function councilNoticeForPostcode(
+  result: PostcodeResult,
+  districts: DistrictEntry[] | undefined,
+): { entry: LookupEntry; message: string } | null {
+  const code = cleanCode(result.codes?.admin_district);
+  if (!code) return null;
+  if (code.startsWith("N")) {
+    return null;
+  }
+  const district = (districts || []).find((d) => cleanCode(d.code) === code);
+  if (!district) return null;
+
+  const forecast = district.covered
+    ? "Its 7 May 2026 results and forecast record are on its page."
+    : "We have not published a forecast for it yet.";
+  let message: string;
+  if (district.status === "abolished") {
+    message = `Your council, ${district.name}, is being abolished, so it has no further elections. ${district.covered ? "" : "We publish no forecast for it."}`.trim();
+  } else if (district.status === "scheduled") {
+    message = `Your council, ${district.name}, next votes on ${district.next_label}. ${forecast}`;
+  } else {
+    message = `Your council is ${district.name}. We have not verified its next election date. ${forecast}`;
+  }
+  return {
+    entry: {
+      kind: "council",
+      name: district.name,
+      secondary: district.status === "scheduled" ? `Council · next election ${district.next_label}` : "Council · next election not verified",
+      href: district.href,
+      code: district.code,
+    },
+    message,
+  };
+}
+
 export function searchElectionLookup(query: string, index: LookupIndex): LookupEntry[] {
   const needle = query.trim().toLocaleLowerCase("en-GB");
   if (needle.length < 2) return [];
@@ -84,8 +137,11 @@ export function searchElectionLookup(query: string, index: LookupIndex): LookupE
 /** Route common voter questions before broad full-text results. No query leaves the browser. */
 export function voterIntentLinks(query: string): Array<{ name: string; secondary: string; href: string }> {
   const text = query.trim().toLocaleLowerCase('en-GB');
+  if (/\bnext\b/.test(text) && /\b(election|elections|vote|poll)\b/.test(text)) {
+    return [{name:'When is the next election?',secondary:'Every body we track, with the source for each date',href:'/elections/'}];
+  }
   if (/\b2027\b/.test(text) && /election|vote|poll|when|^2027$/.test(text)) {
-    return [{name:'2027 election dates and official sources',secondary:'Coverage and verification notes',href:'/elections/2027/'}];
+    return [{name:'Who votes on 6 May 2027',secondary:'Councils, mayors and sources; no 2027 council forecasts yet',href:'/elections/2027/'}];
   }
   if (/\b(my|who|find)\b/.test(text) && /\b(mp|councillors?|mayor|representatives?)\b/.test(text)) {
     return [{name:'Find your MP, councillors and mayor',secondary:'Official representative directories',href:'/your-area/#representatives'}];

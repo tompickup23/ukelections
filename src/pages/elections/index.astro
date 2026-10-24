@@ -1,0 +1,131 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CALENDAR, NOT_COVERED, NEXT_ELECTIONS_CHECKED_AT, longDate, type CalendarRow } from "../../lib/nextElections";
+import { isDeclared } from "../../lib/byElections";
+import { readdirSync, readFileSync, existsSync } from "node:fs";
+import path from "node:path";
+
+// The next council by-election comes from the same contest files as
+// /by-elections/local/, so the two pages cannot disagree.
+const dirAbs = path.join(process.cwd(), "data/contests/local-byelections");
+const today = new Date().toISOString().slice(0, 10);
+const upcomingLocal = (existsSync(dirAbs) ? readdirSync(dirAbs) : [])
+  .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
+  .map((f) => JSON.parse(readFileSync(path.join(dirAbs, f), "utf8")))
+  .filter((c) => !isDeclared(c) && c.contest?.polling_day >= today)
+  .sort((a, b) => a.contest.polling_day.localeCompare(b.contest.polling_day));
+const nextLocalDay: string | null = upcomingLocal[0]?.contest.polling_day ?? null;
+const nextLocalCount = upcomingLocal.filter((c) => c.contest.polling_day === nextLocalDay).length;
+
+const byElectionRow: CalendarRow | null = nextLocalDay
+  ? {
+      id: "council-by-elections",
+      body: "Council by-elections",
+      date_iso: nextLocalDay,
+      date_label: longDate(nextLocalDay),
+      date_kind: "fixed",
+      coverage: "forecast",
+      coverage_label: `${upcomingLocal.length} upcoming polls tracked`,
+      href: "/by-elections/local/",
+      summary: `${nextLocalCount} council by-election${nextLocalCount === 1 ? "" : "s"} on the next polling day. Dates come from each council's notice of election via Democracy Club; the full list is on the by-elections page.`,
+      sources: [{ label: "Democracy Club, elections API", url: "https://elections.democracyclub.org.uk/" }],
+    }
+  : null;
+
+const rows = [...(byElectionRow ? [byElectionRow] : []), ...CALENDAR];
+
+const COVERAGE_CLASS: Record<string, string> = {
+  forecast: "cov cov--forecast",
+  partial: "cov cov--partial",
+  roster: "cov cov--partial",
+  archive: "cov cov--partial",
+  not_covered: "cov cov--none",
+};
+
+const description =
+  "When every UK election we track is next due: council by-elections, the 6 May 2027 council and mayoral elections, London in 2028, the general election deadline, the Senedd and Holyrood. Each date cites its primary source.";
+---
+<BaseLayout
+  title="Next UK elections: dates and sources"
+  description={description}
+  breadcrumbs={[{ name: "Next elections", href: "/elections/" }]}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Election calendar · Sources checked {longDate(NEXT_ELECTIONS_CHECKED_AT)}</p>
+    <h1>When is the next election?</h1>
+    <p class="lede">
+      Every body we track, in date order, with what we publish for it and the law or official notice behind the date.
+      A date marked "no later than" is a deadline, not a fixed polling day.
+    </p>
+  </section>
+
+  <section class="section">
+    <ol class="timeline">
+      {rows.map((row) => (
+        <li class="timeline-row" id={row.id}>
+          <div class="timeline-date">
+            {row.date_iso ? <time datetime={row.date_iso}>{row.date_label}</time> : <span>{row.date_label}</span>}
+          </div>
+          <div class="timeline-body">
+            <h2 class="timeline-title">
+              {row.href ? <a href={row.href}>{row.body}</a> : row.body}
+            </h2>
+            <p class={COVERAGE_CLASS[row.coverage] || "cov"}>{row.coverage_label}</p>
+            <p>{row.summary}</p>
+            {row.sources.length > 0 && (
+              <details class="timeline-sources">
+                <summary>Source{row.sources.length === 1 ? "" : "s"} for this date</summary>
+                <ul>
+                  {row.sources.map((source) => (
+                    <li>
+                      <a href={source.url}>{source.label}</a>
+                      {source.quote && <q>{source.quote}</q>}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Coverage limits</p>
+      <h2>What this site does not cover</h2>
+    </div>
+    <ul class="not-covered">
+      {NOT_COVERED.map((item) => (
+        <li><strong>{item.body}.</strong> {item.note}</li>
+      ))}
+    </ul>
+    <p>
+      For any election, the council's notice of election is the authority on who is standing and where to vote.
+      <a href="https://www.gov.uk/find-local-council">Find your council on GOV.UK</a>, or
+      <a href="/your-area/">look up your postcode</a> here.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.timeline { list-style: none; margin: 0; padding: 0; border-left: 3px solid var(--border); }
+.timeline-row { position: relative; display: grid; grid-template-columns: minmax(9rem, 13rem) 1fr; gap: 0.5rem 1.25rem; padding: 1rem 0 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+.timeline-row::before { content: ""; position: absolute; left: -0.55rem; top: 1.35rem; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+.timeline-date { font-family: var(--font-display); font-weight: 700; color: var(--ink); line-height: 1.3; }
+.timeline-title { margin: 0 0 0.25rem; font-size: var(--text-h3); }
+.timeline-body p { margin: 0.25rem 0; }
+.cov { display: inline-block; font-size: 0.8rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.cov--forecast { color: var(--status-good-text); border-color: currentColor; }
+.cov--partial { color: var(--status-warn-text); border-color: var(--status-warn-border); background: var(--status-warn-bg); }
+.cov--none { color: var(--muted); }
+.timeline-sources { margin-top: 0.5rem; font-size: 0.9rem; }
+.timeline-sources summary { cursor: pointer; color: var(--muted); }
+.timeline-sources ul { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+.timeline-sources q { display: block; color: var(--ink-soft); margin-top: 0.15rem; }
+.not-covered li { margin-bottom: 0.4rem; }
+@media (max-width: 640px) {
+  .timeline-row { grid-template-columns: 1fr; }
+}
+</style>

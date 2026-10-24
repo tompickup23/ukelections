@@ -1,68 +1,96 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { loadMayHeadline, loadGeHeadline, countdownToMay, shortPartyLabel } from "../lib/siteData";
-import { partyColour } from "../lib/predictions";
+import { loadMayHeadline, loadGeHeadline, shortPartyLabel } from "../lib/siteData";
+import { CALENDAR } from "../lib/nextElections";
 
 const may = loadMayHeadline();
 const ge = loadGeHeadline();
-const cd = countdownToMay();
+const geRow = CALENDAR.find((r) => r.id === "general-election")!;
+const seneddRow = CALENDAR.find((r) => r.id === "senedd")!;
+const holyroodRow = CALENDAR.find((r) => r.id === "holyrood")!;
 ---
 
-<BaseLayout title="All forecasts" description="Every UK election forecast on the site, in one place.">
+<BaseLayout title="All forecasts" description="Every forecast on the site, current and archived: the general election projection, the May 2027 mayoral races, council by-elections, and the 7 May 2026 council, Senedd and Holyrood forecasts.">
   <section class="page-hero">
     <p class="eyebrow">All forecasts</p>
-    <h1>Every UK election, forecast.</h1>
+    <h1>Every forecast we publish</h1>
     <p class="lede">
-      Four election families, one model, one accuracy record. Pick the contest you're interested in.
+      Current forecasts first, then the 2026 contests, which are archived with their results.
+      For when each election is next due, see the <a href="/elections/">election calendar</a>.
     </p>
   </section>
 
   <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Current</p>
+      <h2>Forecasts for elections still to come</h2>
+    </div>
     <div class="feature-list">
-      <article>
-        <h3>May 7. English councils + mayoralties</h3>
-        <p>
-          {may.council_count} councils, {may.ward_count.toLocaleString()} wards, {may.seats_total.toLocaleString()} seats.
-          {cd.has_passed ? "Live tracking." : `${cd.days_until} days to go.`}
-        </p>
-        <p><a href="/forecasts/may-2026/">See the May 7 forecast →</a></p>
-      </article>
-      <article>
-        <h3>Senedd Cymru 2026</h3>
-        <p>The first election under the new closed-list PR system: 16 super-constituencies × 6 list seats = 96 seats.</p>
-        <p><a href="/forecasts/senedd-2026/">See the Senedd forecast →</a></p>
-      </article>
-      <article>
-        <h3>Scottish Parliament 2026</h3>
-        <p>73 constituency seats (FPTP) + 56 regional list seats (d'Hondt) = 129 seats.</p>
-        <p><a href="/forecasts/holyrood-2026/">See the Holyrood forecast →</a></p>
-      </article>
       <article>
         <h3>UK general election</h3>
         <p>
-          {ge.total_seats.toLocaleString()} constituencies. Refreshed daily.
+          {ge.total_seats.toLocaleString()} constituencies, refreshed daily.
           {ge.seat_tallies[0] ? ` Headline: ${shortPartyLabel(ge.seat_tallies[0].party)} ${ge.seat_tallies[0].seats} seats.` : ""}
+          The election is due {geRow.date_label.toLowerCase()} unless called earlier.
         </p>
-        <p><a href="/forecasts/general-election/">See the GE forecast →</a></p>
+        <p><a href="/forecasts/general-election/">See the general election projection →</a></p>
       </article>
       <article>
-        <h3>May 2027 mayoral elections. First under the restored supplementary vote</h3>
+        <h3>6 May 2027 mayoral elections</h3>
         <p>
-          Five directly elected mayoral contests on 6 May 2027: the first mayors of Cumbria and of Cheshire and
-          Warrington, plus re-elections in Bedford, Middlesbrough and Mansfield. Two labelled methods per race,
-          supplementary vote runoff modelling, and win probabilities. Plus the 2028 roster and the Lancashire
-          mayoral question.
+          Five directly elected mayoral contests: the first mayors of Cumbria and of Cheshire and Warrington, plus
+          Bedford, Middlesbrough and Mansfield, under the restored supplementary vote. Leicester's City Mayor is due
+          the same day but is not yet forecast. Plus the 2028 roster.
         </p>
         <p><a href="/forecasts/mayoral/">See the mayoral projections →</a></p>
       </article>
       <article>
-        <h3>Lancashire reorganisation. 4 new unitaries</h3>
+        <h3>Council by-elections</h3>
+        <p>Every scheduled council by-election in Great Britain, with a projection wherever the ward gives an honest baseline.</p>
+        <p><a href="/by-elections/local/">See upcoming council by-elections →</a></p>
+      </article>
+      <article>
+        <h3>6 May 2027 council elections</h3>
         <p>
-          The government approved four new Lancashire unitary councils on 16 July 2026, replacing fifteen
-          councils. A ward-by-ward forecast of all 107 proposed wards and 313 councillors for the May 2027
-          elections, with majority probabilities, plus the rejected 3- and 5-unitary options.
+          No forecasts published yet. We list the councils whose 2027 election we have verified, with the source for
+          each.
         </p>
-        <p><a href="/forecasts/lancashire-unitaries/">See the reorganisation forecast →</a></p>
+        <p><a href="/elections/2027/">See who votes on 6 May 2027 →</a></p>
+      </article>
+      <article>
+        <h3>Lancashire reorganisation (hypothetical)</h3>
+        <p>
+          Reorganisation is paused for review, so the May 2027 elections in Lancashire are to the existing councils.
+          Our unitary council scenarios are hypothetical and are not a forecast of those elections.
+        </p>
+        <p><a href="/forecasts/lancashire-unitaries/">See the scenarios →</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Archived</p>
+      <h2>The 7 May 2026 contests</h2>
+    </div>
+    <div class="feature-list">
+      <article>
+        <h3>English councils, 7 May 2026</h3>
+        <p>
+          {may.council_count} councils, {may.ward_count.toLocaleString()} wards, {may.seats_total.toLocaleString()} seats.
+          The locked forecast, the results and how the two compared.
+        </p>
+        <p><a href="/forecasts/may-2026/">See the 2026 council forecast and results →</a></p>
+      </article>
+      <article>
+        <h3>Senedd Cymru 2026</h3>
+        <p>The first election under the closed-list system: 16 constituencies of 6 seats, 96 in all. Next Senedd election: {seneddRow.date_label}.</p>
+        <p><a href="/forecasts/senedd-2026/">See the Senedd 2026 archive →</a></p>
+      </article>
+      <article>
+        <h3>Scottish Parliament 2026</h3>
+        <p>73 constituency seats and 56 regional list seats, 129 in all. Next Scottish Parliament election: {holyroodRow.date_label}.</p>
+        <p><a href="/forecasts/holyrood-2026/">See the Holyrood 2026 archive →</a></p>
       </article>
     </div>
   </section>
@@ -73,7 +101,8 @@ const cd = countdownToMay();
       <h2>Search by postcode</h2>
     </div>
     <p>
-      Type a postcode, town name, or council name and we'll route you to the exact contest you'll be voting in.
+      Type a postcode, town name, or council name and we'll route you to your constituency, and to your ward where we
+      cover it.
     </p>
     <p><a class="button primary" href="/your-area/">Find my ward →</a></p>
   </section>
