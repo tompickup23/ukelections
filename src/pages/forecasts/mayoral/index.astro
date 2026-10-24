@@ -41,6 +41,12 @@ function winRows(m: any) {
     .sort((a, b) => b.p_win - a.p_win);
 }
 
+const WATCH_LABELS: Record<string, string> = {
+  scheduled_not_forecast: "Due 6 May 2027, not forecast",
+  unresolved: "Unresolved",
+  not_scheduled: "Not scheduled",
+};
+
 function statusPill(status: string) {
   if (status === "confirmed") return { cls: "status-pill status-pill--confirmed", label: "Confirmed" };
   if (status === "scheduled_with_caveat") return { cls: "status-pill status-pill--caveat", label: "Scheduled, see caveat" };
@@ -56,12 +62,12 @@ function statusPill(status: string) {
     <p class="eyebrow">Mayoral projections · Supplementary vote</p>
     <h1>The May 2027 mayoral races, projected</h1>
     <p class="lede">
-      Five directly elected mayoral contests are scheduled for <strong>6 May 2027</strong>: the first mayors of
+      Six directly elected mayoral contests are scheduled for <strong>6 May 2027</strong>. We forecast five: the first mayors of
       <strong>Cumbria</strong> and <strong>Cheshire and Warrington</strong>, and re-elections in
       <strong>Bedford</strong>, <strong>Middlesbrough</strong> and <strong>Mansfield</strong>. They are the first
       scheduled elections under the restored <strong>supplementary vote</strong>, so winning takes a top-two finish
       and then a transfer round. We project each race two ways and give win probabilities from
-      {snap.monte_carlo_draws.toLocaleString()} simulated runs.
+      {snap.monte_carlo_draws.toLocaleString()} simulated runs. The sixth, Leicester City Mayor, is listed below without a forecast.
     </p>
   </section>
 
@@ -249,11 +255,11 @@ function statusPill(status: string) {
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Watchlist</p>
-        <h2>Unresolved contests</h2>
+        <h2>Due but not forecast, or unresolved</h2>
       </div>
       {otherWatch.map((w: any) => (
         <div class="watch-item">
-          <h3>{w.label} <span class="rejected-tag">{w.status}</span></h3>
+          <h3>{w.label} <span class="rejected-tag">{WATCH_LABELS[w.status] || w.status}</span></h3>
           <p>{w.status_note}</p>
         </div>
       ))}
