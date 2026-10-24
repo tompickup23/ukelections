@@ -473,6 +473,15 @@ export function shortPartyLabel(party: string): string {
   }
 }
 
+/**
+ * The winner of a declared council result as readers should see it. A winner
+ * filed under the pooled "Other" lane is named by its own ballot label.
+ */
+export function resultWinnerLabel(result: any): string {
+  if (result?.winner_party === "Other" && result.winner_party_name) return result.winner_party_name;
+  return shortPartyLabel(result?.winner_party);
+}
+
 // AI DOGE sister-site link (council spending). Two-step join, both keyed
 // on ONS/GSS code, never on name: council_slug -> lad24cd (this repo's own
 // registry, data/identity/council-slug-to-lad24.json) -> lad24cd -> aidoge
