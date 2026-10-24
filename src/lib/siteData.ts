@@ -1,4 +1,4 @@
-import electionDateReviews from "../../data/identity/election-date-reviews.json";
+import { councilNextElection, type NextElectionLabel } from "./nextElections";
 /**
  * siteData.ts. shared headline data shown across the public surface.
  *
@@ -215,34 +215,12 @@ export function councilTypeLabel(type: string | undefined | null): string {
 }
 
 /**
- * Public-facing label for a council's next election. Always prefer this over
- * raw cycle.next_election so we display "TBC (Local Government Reorganisation)"
- * rather than a fabricated date for 2-tier councils.
+ * Public-facing label for a council's next election. Dates come only from
+ * council-next-elections.json records verified against an electoral change
+ * order or the council's own notices; anything else shows "Not verified".
  */
-export function formatNextElection(cycle: CouncilCycle | null): {
-  label: string;
-  date_iso: string | null;
-  is_tbc: boolean;
-  reason: string;
-  status: string;
-  checked_at: string | null;
-  sources: Array<{ label: string; url: string }>;
-} {
-  const review = cycle && electionDateReviews[cycle.council_slug as keyof typeof electionDateReviews];
-  if (review) return { ...review, is_tbc: review.status !== "scheduled" };
-  // Generated cycle arithmetic is a model assumption, not an election notice.
-  const year = cycle?.next_election?.slice(0, 4);
-  return {
-    label: year ? `${year} cycle (unverified)` : "Date not verified",
-    date_iso: null,
-    is_tbc: true,
-    status: year ? "expected" : "unknown",
-    checked_at: null,
-    sources: [],
-    reason: year
-      ? "Expected from the stored council cycle; not checked against a current election notice."
-      : "We have not verified the next election date from a current primary source.",
-  };
+export function formatNextElection(cycle: CouncilCycle | null): NextElectionLabel {
+  return councilNextElection(cycle?.council_slug);
 }
 
 // ---------- Upcoming elections ----------
@@ -493,6 +471,15 @@ export function shortPartyLabel(party: string): string {
     case "National Housing Party United Kingdom": return "National Housing";
     default: return party;
   }
+}
+
+/**
+ * The winner of a declared council result as readers should see it. A winner
+ * filed under the pooled "Other" lane is named by its own ballot label.
+ */
+export function resultWinnerLabel(result: any): string {
+  if (result?.winner_party === "Other" && result.winner_party_name) return result.winner_party_name;
+  return shortPartyLabel(result?.winner_party);
 }
 
 // AI DOGE sister-site link (council spending). Two-step join, both keyed

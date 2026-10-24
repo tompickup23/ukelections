@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MiniMap from "./MiniMap.astro";
+import { councilNextElection, councilNextRecord } from "../lib/nextElections";
+
+/**
+ * Placeholder for a principal council that held no contest on 7 May 2026, so
+ * has no results or forecast here. It exists so the URL answers the voter's
+ * question (when, and is there a forecast?) instead of returning a 404.
+ */
+interface Props { council: string }
+const { council } = Astro.props;
+const record = councilNextRecord(council)!;
+const next = councilNextElection(council);
+const nationLabel = { E: "England", W: "Wales", S: "Scotland" }[record.nation];
+const route = `/seats/${council}/`;
+const isAbolished = next.status === "abolished";
+const description = isAbolished
+  ? `${record.name}: no further elections, the council is being abolished. No forecast published.`
+  : `${record.name}: next election ${next.date_iso ? next.label : "not yet verified"}. No forecast published yet.`;
+---
+<BaseLayout
+  title={`${record.name}: next council election`}
+  description={description}
+  noIndex={true}
+  breadcrumbs={[
+    { name: "Councils", href: "/councils/" },
+    { name: record.name, href: route },
+  ]}
+>
+  <section class="page-hero">
+    <p class="eyebrow">{nationLabel} · Council not covered</p>
+    <h1>{record.name}</h1>
+    <p class="lede">
+      {isAbolished
+        ? "This council is being abolished, so it has no further ordinary elections. We publish no results or forecast for it."
+        : "We have not published a forecast for this council yet. It had no contest on 7 May 2026, so we hold no recent results here either."}
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="stub-grid">
+      <article class="stub-card">
+        <p class="stub-label">Next election</p>
+        <p class="stub-value">{next.label}</p>
+        <p class="muted">{next.reason}</p>
+        {next.sources.length > 0 && (
+          <p class="caption">
+            Checked {next.checked_at}. Source{next.sources.length === 1 ? "" : "s"}:{" "}
+            {next.sources.map((source, i) => (
+              <>{i > 0 && "; "}<a href={source.url}>{source.label}</a></>
+            ))}
+          </p>
+        )}
+        {record.quote && <blockquote class="stub-quote">“{record.quote}”</blockquote>}
+      </article>
+      {record.lad24cd && (
+        <article class="stub-card stub-map">
+          <MiniMap focalKind="lad" focalCode={record.lad24cd} ariaLabel={`Map of ${record.name}`} />
+        </article>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>What you can do here</h2>
+    <ul>
+      <li><a href="/elections/">See every body's next election</a>, with the source for each date.</li>
+      {next.date_iso?.startsWith("2027") && <li><a href="/elections/2027/">See the councils voting on 6 May 2027</a>.</li>}
+      <li><a href="/your-area/">Look up your postcode</a> for your Westminster constituency and its projection.</li>
+      <li><a href="https://www.gov.uk/find-local-council">Find {record.name}'s website on GOV.UK</a> for its notice of election, candidates and polling stations.</li>
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+.stub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: var(--space-sm); }
+.stub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+.stub-label { margin: 0 0 0.25rem; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.stub-value { margin: 0 0 0.25rem; font-size: 1.25rem; font-weight: 600; color: var(--ink); }
+.stub-quote { margin: 0.75rem 0 0; padding-left: 0.75rem; border-left: 3px solid var(--border); color: var(--ink-soft); font-size: 0.9rem; }
+.stub-map { display: flex; align-items: center; justify-content: center; }
+</style>

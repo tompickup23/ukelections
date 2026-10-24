@@ -54,7 +54,7 @@ describe('publication provenance',()=>{
   });
   it('does not promote stored cycle arithmetic to a verified election date',()=>{
     const unreviewed=formatNextElection({council_slug:'test',next_election:'2027-05-06',status:'scheduled'} as any);
-    expect(unreviewed.date_iso).toBeNull();expect(unreviewed.status).toBe('expected');expect(unreviewed.checked_at).toBeNull();
-    const burnley=formatNextElection({council_slug:'burnley'} as any);expect(burnley.label).toBe('May 2027 (scheduled)');expect(burnley.sources).toHaveLength(1);
+    expect(unreviewed.date_iso).toBeNull();expect(unreviewed.status).toBe('unknown');expect(unreviewed.label).toBe('Not verified');expect(unreviewed.checked_at).toBeNull();
+    const burnley=formatNextElection({council_slug:'burnley'} as any);expect(burnley.label).toBe('Thursday 6 May 2027');expect(burnley.sources.length).toBeGreaterThanOrEqual(2);
   });
 });

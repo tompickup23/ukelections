@@ -2,7 +2,8 @@
 import lookupCodes from "../../data/identity/parliament-lookup-codes.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadGePredictions, loadIdentity } from "../lib/predictions";
-import type { LookupEntry } from "../lib/electionLookup";
+import type { DistrictEntry, LookupEntry } from "../lib/electionLookup";
+import { allCouncilRecords, councilNextElection } from "../lib/nextElections";
 
 const identity = loadIdentity();
 const ge = loadGePredictions();
@@ -30,6 +31,33 @@ for (const w of identity.wards) {
     });
   }
 }
+// Councils with no 7 May 2026 contest have a placeholder page; list them so a
+// name search or a postcode in (say) Ribble Valley says what happens next.
+const districtIndex: DistrictEntry[] = [];
+for (const record of allCouncilRecords()) {
+  const next = councilNextElection(record.slug);
+  const covered = councils.has(record.slug);
+  if (record.lad24cd) {
+    districtIndex.push({
+      code: record.lad24cd,
+      name: record.name,
+      href: `/seats/${record.slug}/`,
+      covered,
+      status: next.status,
+      next_label: next.label,
+    });
+  }
+  if (!covered && record.lad24cd) {
+    councils.set(record.slug, {
+      kind: "council",
+      name: record.name,
+      secondary: "Council · no forecast yet",
+      council_slug: record.slug,
+      tier: "none",
+      href: `/seats/${record.slug}/`,
+    });
+  }
+}
 const councilIndex = [...councils.values()].sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
 // Missing boundary codes prevent postcode resolution, not discovery by name.
 const constituencyIndex: LookupEntry[] = Object.values(ge.predictions || {})
@@ -46,6 +74,7 @@ const indexJson = JSON.stringify({
   constituencies: constituencyIndex,
   wards: wardIndex,
   councils: councilIndex,
+  districts: districtIndex,
 });
 ---
 
@@ -110,7 +139,7 @@ const indexJson = JSON.stringify({
     <h2>Who is my mayor?</h2>
     <p>Some areas have an elected council or regional mayor; others have a ceremonial mayor. <a href="https://www.gov.uk/find-local-council">Find your council</a> and check its official mayor and combined authority information.</p>
     <h2>When is the next local election?</h2>
-    <p>See our <a href="/elections/2027/">2027 election dates and source notes</a>. Coverage is still being checked council by council; consult your council’s election notices before making voting plans.</p>
+    <p>See <a href="/elections/">every body’s next election</a> and <a href="/elections/2027/">the councils voting on 6 May 2027</a>. We give a council’s date only where we have verified it; consult your council’s election notices before making voting plans.</p>
   </section>
 
   <section class="section browse-paths">
@@ -155,7 +184,7 @@ const indexJson = JSON.stringify({
 <script type="application/json" id="search-index" set:html={indexJson} />
 
 <script>
-  import { resolvePostcodeDestinations, searchElectionLookup } from "../lib/electionLookup";
+  import { councilNoticeForPostcode, resolvePostcodeDestinations, searchElectionLookup } from "../lib/electionLookup";
   import type { LookupEntry, LookupIndex } from "../lib/electionLookup";
 
   (function () {
@@ -220,9 +249,11 @@ const indexJson = JSON.stringify({
         const ward = result.admin_ward || "";
         const district = result.admin_district || "";
         const matches = resolvePostcodeDestinations(result, data);
+        const notice = councilNoticeForPostcode(result, data.districts);
+        if (notice && !matches.some((m) => m.href.startsWith(notice.entry.href))) matches.push(notice.entry);
         if (matches.length > 0) {
           renderResults(matches, "Your election pages");
-          setStatus("Official postcode match: " + [ward, district].filter(Boolean).join(", ") + ".");
+          setStatus("Official postcode match: " + [ward, district].filter(Boolean).join(", ") + "." + (notice ? " " + notice.message : ""));
         } else {
           renderResults([], "Your election pages");
           setStatus("We found the postcode, but its official constituency and ward codes do not match a page in the current project data.", true);
