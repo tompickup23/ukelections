@@ -261,7 +261,7 @@ const timeline: Array<{ date: string; event: string }> = [
     <p class="caption">
       The most notable of the {data.field ? data.field.candidate_count : ""} candidates on the ballot;
       nominations closed 17 July 2026. The balance are minor-party, novelty (several Monster Raving Loony)
-      and independent candidates.
+      and independent candidates.{data.field?.correction_note ? <>{" "}{data.field.correction_note}</> : null}
     </p>
   </section>
 
