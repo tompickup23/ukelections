@@ -1,75 +1,161 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { CALENDAR, councilsVotingIn, allCouncilRecords, longDate, NEXT_ELECTIONS_CHECKED_AT } from "../../lib/nextElections";
+import { CALENDAR, longDate } from "../../lib/nextElections";
 import { loadIdentity } from "../../lib/predictions";
+import data from "../../../data/identity/councils-2027.json";
 
 const covered = new Set<string>(
   loadIdentity().wards.filter((w: any) => w.tier === "local" || w.tier === "mayor").map((w: any) => w.council_slug),
 );
-const voting = councilsVotingIn(2027).filter((c) => c.nation === "E");
-const unverifiedEngland = allCouncilRecords().filter((c) => c.nation === "E" && c.status === "unverified");
 const england = CALENDAR.find((r) => r.id === "local-council-2027")!;
 const mayors = CALENDAR.find((r) => r.id === "mayors-2027")!;
-const scotland = CALENDAR.find((r) => r.id === "scottish-councils-2027")!;
-const wales = CALENDAR.find((r) => r.id === "welsh-councils-2027")!;
-const PATTERN: Record<string, string> = { thirds: "A third of seats", halves: "Half of seats", whole: "All seats" };
+const mhclg = england.sources[1];
+const councils: any[] = data.councils;
+const t: any = data.totals;
+const rec: any = data.reconciliation;
+const ocd: any = rec.open_council_data;
+const NATIONS: Array<[string, string]> = [["E", "England"], ["S", "Scotland"], ["W", "Wales"]];
+const conflicts = data.not_verified.filter((c: any) => c.conflict);
+const otherUnverified = data.not_verified.filter((c: any) => !c.conflict);
+const n = (x: number) => x.toLocaleString("en-GB");
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+function electionLabel(le: any): string {
+  if (!le?.date) return "";
+  const m = String(le.date).match(/^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/);
+  if (!m) return String(le.date);
+  if (m[3]) return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
+  if (m[2]) return `${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
+  return m[1];
+}
+function controlLabel(c: any): string {
+  if (!c?.label) return "";
+  return c.label;
+}
+const sources = (c: any) =>
+  [
+    ["year", c.year_source],
+    ["seats", c.seats_up?.source_url ? { url: c.seats_up.source_url, label: c.seats_up.source_label } : null],
+    ["control", c.control?.source_url ? { url: c.control.source_url, label: c.control.source_label } : null],
+    ["last poll", c.last_election?.source_url ? { url: c.last_election.source_url, label: c.last_election.source_label } : null],
+  ].filter(([, s]) => s && (s as any).url) as Array<[string, { url: string; label: string }]>;
 ---
 <BaseLayout
   title="6 May 2027 elections: which councils vote"
-  description="Councils in England whose next ordinary election we have verified for Thursday 6 May 2027, plus the mayoral contests and the Scottish and Welsh council elections that day. Every entry cites its electoral change order or council notice. No 2027 council forecasts are published yet."
+  description="Every council in Great Britain whose next election we have verified for Thursday 6 May 2027, with the seats up, the cycle, who controls it now and when it last voted, each from the council's own page, its electoral change order or the statute. No 2027 council forecasts are published."
   breadcrumbs={[{ name: "Next elections", href: "/elections/" }, { name: "6 May 2027", href: "/elections/2027/" }]}
 >
   <section class="page-hero">
-    <p class="eyebrow">Thursday 6 May 2027 · Sources checked {longDate(NEXT_ELECTIONS_CHECKED_AT)}</p>
+    <p class="eyebrow">Thursday 6 May 2027 · Sources checked {longDate(data.checked_at)}</p>
     <h1>Who votes on 6 May 2027?</h1>
     <p class="lede">
-      <strong>We have not published forecasts for the 2027 council elections yet.</strong> This page lists the
-      councils whose 2027 election we have verified, with the source for each, so you can see what is coming.
+      We have verified <strong>{t.councils_verified} councils</strong> voting that day: {t.by_nation.E} in England,
+      {t.by_nation.S} in Scotland and {t.by_nation.W} in Wales. <strong>We have not published forecasts for them.</strong>
     </p>
   </section>
 
   <section class="section">
-    <h2>Why 6 May</h2>
+    <h2>How this list is built</h2>
     <p>
-      {england.summary} The day is set by the <a href={england.sources[0].url}>{england.sources[0].label}</a>. In
-      reorganisation areas, the government's <a href={england.sources[1].url}>letter of 7 September 2026</a> says
-      elections "will go ahead to existing council boundaries".
+      A council is listed when its electoral change order, the statute or its own election page sets its next election
+      in 2027. The seats up, the council's current control and its last election are each read from the council's own
+      page, its order or the statute, and every figure links to where we read it. Where we could not find a source, the
+      cell is blank. We do not estimate. That matters most for councils that elect by thirds: their seats up are set by the
+      notice of election, which councils publish in March, so most are blank for now.
+    </p>
+    <p>
+      Polling day is the first Thursday in May, set by the <a href={england.sources[0].url}>{england.sources[0].label}</a>.
+      In reorganisation areas, the government's <a href={mhclg.url}>letter of 7 September 2026</a> says that "{mhclg.quote}".
     </p>
   </section>
 
   <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">England · {voting.length} councils verified</p>
-      <h2>English councils voting on 6 May 2027</h2>
-    </div>
-    <div class="table-scroll" role="region" aria-label="English councils voting on 6 May 2027" tabindex="0">
-      <table class="seat-table">
-        <thead><tr><th>Council</th><th>Seats up</th><th>Source for the year</th></tr></thead>
-        <tbody>
-          {voting.map((c) => (
-            <tr>
-              <td><a href={`/seats/${c.slug}/`}>{c.name}</a>{!covered.has(c.slug) && <span class="muted"> (no results on this site)</span>}</td>
-              <td>{PATTERN[c.pattern] || "Not stated"}</td>
-              <td>{c.source_url ? <a href={c.source_url}>{c.source_label}</a> : c.source_label}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    {unverifiedEngland.length > 0 && (
-      <p class="caption">
-        A further {unverifiedEngland.length} English councils have no verified next-election year, so they are not
-        listed here even where 2027 is likely. Their pages say "Not verified". Check those councils' own election notices.
-      </p>
-    )}
+    <h2>Checking the count</h2>
+    <ul>
+      <li>
+        <strong>Our list:</strong> {t.councils_verified} councils verified. Seats up are sourced for {t.councils_with_seats_up} of
+        them, {n(t.seats_up_sourced)} seats in all. {t.councils_seats_up_blank} councils have no sourced seat count yet.
+      </li>
+      <li>
+        <strong>Not yet verified:</strong> {t.english_councils_not_verified} English councils, listed below. Most are likely to vote
+        on 6 May 2027, but no order or council page we have read says so.
+      </li>
+      {ocd && (
+        <li>
+          <strong>Open Council Data</strong> lists {ocd.totals.councils} councils and {n(ocd.totals.seats_ending_2027)} seats ending in
+          2027 (<a href="http://opencouncildata.co.uk/elections.php">May 2027 elections</a>, Open Council Data UK, CC BY-SA 4.0,
+          retrieved {longDate(ocd.retrieved)}). We use it only to check our list, never as a source for a council's figures.
+        </li>
+      )}
+      <li>
+        <strong>Pollcheck</strong> gives {rec.pollcheck.councils} councils and {n(rec.pollcheck.seats)} seats. We use that only as a check.
+      </li>
+    </ul>
+  </section>
+
+  {NATIONS.map(([code, nation]) => {
+    const rows = councils.filter((c) => c.nation === code);
+    return (
+      <section class="section">
+        <div class="section-head">
+          <p class="eyebrow">{nation} · {rows.length} councils</p>
+          <h2>{nation}: councils voting on 6 May 2027</h2>
+        </div>
+        <div class="table-scroll" role="region" aria-label={`${nation} councils voting on 6 May 2027`} tabindex="0">
+          <table class="seat-table">
+            <thead><tr><th>Council</th><th>Cycle</th><th>Seats up</th><th>Control now</th><th>Last election</th><th>Sources</th></tr></thead>
+            <tbody>
+              {rows.map((c) => (
+                <tr>
+                  <td>{covered.has(c.slug) ? <a href={`/seats/${c.slug}/`}>{c.name}</a> : c.name}</td>
+                  <td>{c.cycle || ""}</td>
+                  <td title={c.seats_up?.value == null ? c.seats_up?.note || "" : ""}>{c.seats_up?.value != null ? <>{c.seats_up.value}{c.total_seats?.value != null && c.seats_up.value !== c.total_seats.value && <span class="muted"> of {c.total_seats.value}</span>}</> : <span class="muted">Not sourced{c.total_seats?.value != null && ` (${c.total_seats.value} seats in all)`}</span>}</td>
+                  <td title={c.control?.basis || c.control?.note || ""}>{controlLabel(c.control) || <span class="muted">Not sourced</span>}</td>
+                  <td>{electionLabel(c.last_election) || <span class="muted">Not sourced</span>}</td>
+                  <td class="source-links">{sources(c).map(([k, s], i) => <>{i > 0 ? " · " : ""}<a href={s.url} title={s.label}>{k}</a></>)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="section">
+    <h2>Four councils whose own pages disagree</h2>
+    <p>
+      These councils' own pages say something different from the government letter of 7 September 2026, which says
+      "{mhclg.quote}". We have not found an order that settles it, so they stay "Not verified". We quote each council's page where its site lets us read it automatically.
+    </p>
+    {conflicts.map((c: any) => (
+      <div class="conflict">
+        <h3>{c.name}</h3>
+        <p>
+          <strong>The council:</strong> {c.conflict.council_page.quote ? <>"{c.conflict.council_page.quote}"</> : c.conflict.council_page.withheld}
+          (<a href={c.conflict.council_page.source_url}>{c.conflict.council_page.source_label}</a>{c.conflict.council_page.page_date ? `, ${c.conflict.council_page.page_date}` : ""}).
+        </p>
+        <p><strong>The government:</strong> "{mhclg.quote}" (<a href={mhclg.url}>{mhclg.label}</a>).</p>
+        {c.conflict.statutory && <p><strong>Statute:</strong> "{c.conflict.statutory.quote}" (<a href={c.conflict.statutory.source_url}>{c.conflict.statutory.source_label}</a>).</p>}
+      </div>
+    ))}
+  </section>
+
+  <section class="section">
+    <h2>English councils not yet verified</h2>
+    <p>
+      We have no order or council page that sets these councils' next election, so we give no date. Check each council's own
+      election notices.
+    </p>
+    <ul class="columns">
+      {otherUnverified.map((c: any) => <li>{c.name}</li>)}
+    </ul>
   </section>
 
   <section class="section">
     <h2>Also on 6 May 2027</h2>
     <ul>
       <li><a href={mayors.href!}>{mayors.body}</a>: {mayors.summary}</li>
-      <li><strong>{scotland.body}.</strong> {scotland.summary} Source: <a href={scotland.sources[0].url}>{scotland.sources[0].label}</a>.</li>
-      <li><strong>{wales.body}.</strong> {wales.summary} Source: <a href={wales.sources[0].url}>{wales.sources[0].label}</a>.</li>
     </ul>
     <p><a href="/elections/">See every body's next election</a>, including the general election deadline.</p>
   </section>
@@ -90,3 +176,9 @@ const PATTERN: Record<string, string> = { thirds: "A third of seats", halves: "H
     </p>
   </section>
 </BaseLayout>
+
+<style>
+  .source-links { white-space: nowrap; font-size: var(--text-small, 0.875rem); }
+  .conflict { border-left: 3px solid var(--rule, #ccc); padding-left: var(--space-md, 1rem); margin-block: var(--space-md, 1rem); }
+  .columns { columns: 16rem; }
+</style>
