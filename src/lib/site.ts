@@ -141,6 +141,7 @@ const STATIC_PATHS = [
   "/forecasts/mayoral/",
   "/by-elections/",
   "/by-elections/local/",
+  "/by-elections/post-mortem/",
   "/by-elections/makerfield/",
   "/by-elections/aberdeen-south/",
   "/by-elections/arbroath-and-broughty-ferry/",

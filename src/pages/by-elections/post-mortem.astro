@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import pm from "../../../data/transparency/byelection-post-mortem.json";
+
+const MONTHS: Record<string, string> = { "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December" };
+const monthLabel = (m: string) => `${MONTHS[m.slice(5, 7)]} ${m.slice(0, 4)}`;
+const longDate = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const byslug = new Map(pm.contests.map((c: any) => [c.slug, c]));
+const name = (slug: string) => { const c: any = byslug.get(slug); return c ? `${c.ward_name}, ${c.council_name}` : slug; };
+const o = pm.overall;
+const first = pm.contests[0]?.date;
+const last = pm.contests[pm.contests.length - 1]?.date;
+const r: any = pm.rescore_post_115;
+const pct = (a: number, b: number) => (b ? Math.round((100 * a) / b) : 0);
+---
+<BaseLayout
+  title="Council by-election forecast post-mortem"
+  description="How UK Elections' published council by-election forecasts did against the results, month by month: winners called, mean error, every miss listed, and the dated changes to the model."
+  breadcrumbs={[{ name: "By-elections", href: "/by-elections/" }, { name: "Council results", href: "/by-elections/local/" }, { name: "Post-mortem", href: "/by-elections/post-mortem/" }]}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Council by-elections · {longDate(first)} to {longDate(last)}</p>
+    <h1>How our by-election forecasts did</h1>
+    <p class="lede">
+      We published a forecast for {o.contests} council by-elections that now have a result. The party we named as most
+      likely to win came first in <strong>{o.winners_called}</strong> of them. Our projected vote shares were out by
+      <strong>{o.mean_absolute_error_pp.toFixed(1)} points</strong> per party on average.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>The record, as published</h2>
+    <p>
+      Each forecast is the one the contest page showed before the result, captured into a fixed file. It is never
+      recalculated afterwards. {o.too_close_to_call.contests} of the {o.contests} pages said the contest was too close
+      to call, and the party they had narrowly ahead came first in {o.too_close_to_call.called}. Where the page named a
+      favourite outright ({o.named_favourite.contests} contests), it was right in {o.named_favourite.called}.
+    </p>
+    <div class="table-scroll" role="region" aria-label="Forecast record by month" tabindex="0">
+      <table class="seat-table">
+        <thead><tr><th>Month</th><th>Contests</th><th>Winner called</th><th>Mean error per party</th></tr></thead>
+        <tbody>
+          {pm.months.map((m: any) => (
+            <tr><td>{monthLabel(m.month)}</td><td>{m.contests}</td><td>{m.winners_called} ({pct(m.winners_called, m.contests)}%)</td><td>{m.mean_absolute_error_pp.toFixed(1)} points</td></tr>
+          ))}
+          <tr><td><strong>All</strong></td><td>{o.contests}</td><td>{o.winners_called} ({pct(o.winners_called, o.contests)}%)</td><td>{o.mean_absolute_error_pp.toFixed(1)} points</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Every miss</h2>
+    {pm.months.map((m: any) => (
+      <>
+        <h3>{monthLabel(m.month)}</h3>
+        {m.misses.length === 0 ? <p>None.</p> : (
+          <ul>
+            {m.misses.map((x: any) => (
+              <li>
+                <a href={`/by-elections/local/${x.slug}/`}>{name(x.slug)}</a>, {longDate(x.date)}: we had {x.projected_winner}
+                {x.too_close_to_call ? " narrowly ahead (too close to call)" : " as favourite"}; {x.actual_winner} won.
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    ))}
+  </section>
+
+  <section class="section">
+    <h2>Changes to the model</h2>
+    <ul>
+      {pm.model_changes.map((c: any) => <li><strong>{longDate(c.date)}</strong> ({c.ref}): {c.change}</li>)}
+    </ul>
+  </section>
+
+  {r.available && (
+    <section class="section">
+      <h2>September and October, re-scored on today's model</h2>
+      <p>
+        The independent-slate change of 4 October came after most of these contests, so we ran them again through
+        today's model, projecting each one only from by-elections held before it. This tests whether the change
+        helped. It does not replace what we published.
+      </p>
+      <p>
+        {r.published.contests} contests have a ward history the re-run can use. On those, the published forecasts
+        called {r.published.winners_called} winners; today's model calls {r.rescored.winners_called}, with a mean
+        error of {r.rescored.mean_absolute_error_pp.toFixed(1)} points against {r.published.mean_absolute_error_pp.toFixed(1)}.
+        {r.changed_call.length > 0 && <> The call changes in {r.changed_call.length === 1 ? "one contest" : `${r.changed_call.length} contests`}: {r.changed_call.map((x: any, i: number) => <>{i > 0 ? "; " : ""}<a href={`/by-elections/local/${x.slug}/`}>{name(x.slug)}</a> moves from {x.published} to {x.rescored}{x.now_called ? ", which is right" : ""}</>)}.</>}
+      </p>
+      <p class="caption">
+        The re-run leaves out the other {r.not_scored.length} contests: it finds a ward's previous result by the ward's
+        name alone, and for these it found none, although their pages had one. We leave them out rather than guess. The re-run measures error over every party on
+        the ballot, so its average is not on exactly the same basis as the published one. {r.published.contests} contests is a
+        small sample.
+      </p>
+    </section>
+  )}
+
+  <section class="section">
+    <h2>How this is worked out</h2>
+    <ul>
+      <li>A winner is called when the party the page named as most likely to win came first on votes.</li>
+      <li>The error is the average, over the parties in our projection, of the gap between projected and actual share.</li>
+      <li>Results come from each council's declaration, or Democracy Club where the declaration is not yet checked. Each contest page links its source.</li>
+      <li>{pm.pending_results.length} published forecasts are still waiting for a result and are not counted.</li>
+    </ul>
+    <p>
+      Data: <a href="https://github.com/tompickup23/ukelections/blob/main/data/transparency/byelection-post-mortem.json">byelection-post-mortem.json</a>,
+      built by <code>scripts/build-byelection-post-mortem.mjs</code>. <a href="/by-elections/local/">All council by-elections</a>.
+    </p>
+  </section>
+</BaseLayout>
