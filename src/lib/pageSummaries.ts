@@ -15,7 +15,7 @@
  * points to the step list under "How this forecast was built", which states
  * them exactly.
  */
-import { shortPartyLabel } from "./siteData";
+import { resultWinnerLabel, shortPartyLabel } from "./siteData";
 import { formatPct } from "./predictions";
 
 const pct1 = (x: number) => (x * 100).toFixed(1);
@@ -241,9 +241,13 @@ export function byElectionResultSummary(d: any): string[] {
   const where = `the ${c.ward_name} by-election in ${c.council_name} on ${prettyDate(c.polling_day)}`;
   if (result?.declared && result.winner_party) {
     const s: string[] = [];
-    const share = result.shares?.[result.winner_party];
+    // A winner pooled under "Other" is named by its own label, on its own votes.
+    const named = result.winner_party === "Other" && result.winner_party_name;
+    const share = named
+      ? (result.total_votes ? result.winner_votes / result.total_votes : undefined)
+      : result.shares?.[result.winner_party];
     s.push(
-      `${cap(partyProse(result.winner_party, true))} won ${where}` +
+      `${named ? resultWinnerLabel(result) : cap(partyProse(result.winner_party, true))} won ${where}` +
         (typeof share === "number" ? ` with ${pct1(share)}% of the vote` : "") +
         (result.majority_votes != null && result.runner_up_party
           ? `, ${result.majority_votes.toLocaleString("en-GB")} ${result.majority_votes === 1 ? "vote" : "votes"} ahead of ${partyProse(result.runner_up_party, true)}.`

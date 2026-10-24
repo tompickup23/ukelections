@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-12T20:44:23.683Z",
+  "generated_at": "2026-10-24T03:36:56.017Z",
   "slug": "oldham-failsworth-west-2026-11-12",
   "status": "upcoming",
   "contest": {
@@ -26,18 +26,58 @@
     "postal_vote_deadline": "2026-10-28"
   },
   "field": {
-    "candidate_count": 1,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.oldham.failsworth-west.by.2026-11-12/sopn/2026-10-19T15%3A29%3A35.330622%2B00%3A00/temp.jpeg",
     "parties": [
-      "Labour"
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK",
+      "Restore Britain"
     ],
     "candidates": [
       {
-        "name": "Marzia Babakarkhail",
-        "party_name": "Labour Party",
+        "name": "Chris Baddeley",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Stephen Eric Davenport",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Pete Davis",
+        "party_name": "Labour and Co-operative Party",
         "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Rob Gunn",
+        "party_name": "Restore Britain",
+        "party": "Restore Britain",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Andrew Kevin Jones",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Lynne Christine Thompson",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
         "votes": null,
         "elected": null
       }
@@ -120,11 +160,221 @@
       }
     ]
   },
-  "prior_result": null,
-  "forecast": null,
-  "no_forecast_reason": [
-    "Forecast not generated during a data-only refresh."
-  ],
+  "prior_result": {
+    "election_date": "2026-05-07",
+    "seats_contested": 1,
+    "shares": {
+      "Reform UK": 0.5594280607685433,
+      "Labour": 0.17396484956806674,
+      "Conservative": 0.026213881441763478,
+      "Liberal Democrats": 0.02829907655644921,
+      "Green Party": 0.15102770330652368,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0.06106642835865356,
+      "Other": 0
+    },
+    "candidates": [
+      {
+        "person_id": 129709,
+        "name": "Mark Christopher Ruthven",
+        "party_name": "Reform UK",
+        "party_ec_id": "PP7931",
+        "votes": 1878,
+        "elected": true
+      },
+      {
+        "person_id": 44690,
+        "name": "Peter Davis",
+        "party_name": "Labour and Co-operative Party",
+        "party_ec_id": "joint-party:53-119",
+        "votes": 584,
+        "elected": false
+      },
+      {
+        "person_id": 129707,
+        "name": "Andrew Kevin Jones",
+        "party_name": "Green Party",
+        "party_ec_id": "PP63",
+        "votes": 507,
+        "elected": false
+      },
+      {
+        "person_id": 129708,
+        "name": "Natalie Parren",
+        "party_name": "Failsworth Independent Party",
+        "party_ec_id": "PP10251",
+        "votes": 205,
+        "elected": false
+      },
+      {
+        "person_id": 87419,
+        "name": "Roger Blackmore",
+        "party_name": "Liberal Democrats",
+        "party_ec_id": "PP90",
+        "votes": 95,
+        "elected": false
+      },
+      {
+        "person_id": 43773,
+        "name": "Bernard Akin",
+        "party_name": "Conservative and Unionist Party",
+        "party_ec_id": "PP52",
+        "votes": 88,
+        "elected": false
+      }
+    ],
+    "source_label": "Democracy Club",
+    "source": "https://www.oldham.gov.uk/election_results_may7_2026",
+    "usable_as_baseline": true
+  },
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "seats_contested": 1,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.5594280607685433,
+        "Labour": 0.17396484956806674,
+        "Conservative": 0.026213881441763478,
+        "Liberal Democrats": 0.02829907655644921,
+        "Green Party": 0.15102770330652368,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.06106642835865356,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.oldham.gov.uk/election_results_may7_2026"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 59,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.2425494704815887,
+        "Labour": 0.2383025890301731,
+        "Conservative": -0.2942521094767043,
+        "Liberal Democrats": -0.24783735763989279,
+        "Green Party": -0.29959804969399206,
+        "Independent": -0.11652273000901092
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8292762904461737,
+        "Labour": 1.189098578346305,
+        "Conservative": 0.7958034628208602,
+        "Liberal Democrats": 0.8258056693376834,
+        "Green Party": 0.7924010292287512,
+        "Independent": 0.9151749196392648
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Restore Britain": 0.06471604688201188,
+        "Independent": 0.0888787452835334
+      },
+      "entry_counts": {
+        "Reform UK": 0,
+        "Labour": 1,
+        "Conservative": 2,
+        "Liberal Democrats": 3,
+        "Green Party": 5,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 6,
+        "Independent": 10,
+        "Other": 1
+      },
+      "party_counts": {
+        "Reform UK": 58,
+        "Labour": 52,
+        "Conservative": 52,
+        "Liberal Democrats": 39,
+        "Green Party": 49,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 2
+      }
+    },
+    "central": {
+      "Reform UK": 0.5348746999995899,
+      "Labour": 0.2260341409966478,
+      "Conservative": 0.021073617456525473,
+      "Liberal Democrats": 0.023819473982618036,
+      "Green Party": 0.12483951515130898,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.06935855241330986,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.85425,
+      "Labour": 0.08475,
+      "Conservative": 0,
+      "Liberal Democrats": 0.00025,
+      "Green Party": 0.04625,
+      "Restore Britain": 0.0145
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.338691397693673,
+        "p50": 0.47617214053986195,
+        "p90": 0.6346152247218211
+      },
+      "Labour": {
+        "p10": 0.08293535412632128,
+        "p50": 0.21056862655644343,
+        "p90": 0.3760536496835223
+      },
+      "Conservative": {
+        "p10": 0.006620754374844503,
+        "p50": 0.018972147311914343,
+        "p90": 0.054182316487671175
+      },
+      "Liberal Democrats": {
+        "p10": 0.0052797743982604855,
+        "p50": 0.021768630052934973,
+        "p90": 0.07596362450684802
+      },
+      "Green Party": {
+        "p10": 0.030355392414803933,
+        "p50": 0.11850056054093593,
+        "p90": 0.30762236220001477
+      },
+      "Restore Britain": {
+        "p10": 0.014287269676662237,
+        "p50": 0.0629060857097091,
+        "p90": 0.20835159135819376
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Labour",
+    "margin_pp": 30.884055900294214,
+    "leader_probability": 0.85425,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Restore Britain (median of 6). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [
