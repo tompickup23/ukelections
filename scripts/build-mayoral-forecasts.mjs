@@ -58,13 +58,18 @@ function normalise(shares) {
 }
 
 // ---- national anchors -------------------------------------------------------
-// GE2024 actual UK-wide vote share. Source: HoC Library CBP-10009 (matches
-// UK_WESTMINSTER_2024_GE_RESULT in src/lib/nationalPolling.js). SNP and Plaid
-// folded into Other because every contest here is in England.
+// GE2024 actual Great Britain vote share, the same base as the GB-wide polls
+// it is swung to. Source: HoC Library Election Results, "Results for the UK
+// general election on 4 July 2024: Great Britain, by party"
+// (https://electionresults.parliament.uk/general-elections/6/countries/1).
+// Green = Green Party 6.6 + Scottish Green 0.3; SNP 2.6, Plaid 0.7 and every
+// smaller party fold into Other because every contest here is in England.
+// The UK-wide figures (Labour 33.7, CBP-10009) include Northern Ireland,
+// where none of these parties stand, and overstated every GB party's swing.
 const GE2024_NATIONAL = normalise({
-  "Labour": 0.337, "Conservative": 0.236, "Reform UK": 0.143,
-  "Liberal Democrats": 0.122, "Green Party": 0.069, "Independent": 0,
-  "Other": 0.061 + 0.025 + 0.007,
+  "Labour": 0.346, "Conservative": 0.244, "Reform UK": 0.147,
+  "Liberal Democrats": 0.126, "Green Party": 0.069, "Independent": 0,
+  "Other": 1 - (0.346 + 0.244 + 0.147 + 0.126 + 0.069),
 });
 
 // Approximate GB Westminster voting intention, early May 2023 (Wikipedia
@@ -88,6 +93,22 @@ function latestNational() {
     label: `${uk.polls_used} polls, fieldwork to ${uk.fieldwork_window.latest}`,
     source_url: uk.url,
   };
+}
+
+// Unweighted mean of every GB poll with fieldwork ending inside [from, to],
+// from the committed series. Used to say which national position a set of
+// local votes was cast under, so it can be swung to today's polls.
+function nationalAverageBetween(from, to) {
+  const polls = readJson("data/polling/timeseries.json").polls.filter((x) => x.date >= from && x.date <= to);
+  if (!polls.length) return null;
+  const raw = {};
+  for (const poll of polls) {
+    for (const [party, v] of Object.entries(poll.shares)) {
+      const k = canonParty(party);
+      raw[k] = (raw[k] || 0) + v / polls.length;
+    }
+  }
+  return { shares: normalise(raw), polls_used: polls.length, window: { from, to } };
 }
 
 function applySwing(base, from, to) {
@@ -199,9 +220,16 @@ const TRANSFER_REACH = { mu: 0.52, sd: 0.15, lo: 0.15, hi: 0.85 };
 // signal (independents, minor parties, Restore Britain under "Other").
 const SAME_BLOC_SPLIT = { mu: 0.74, sd: 0.12 };
 
+// Contest overrides (data/contests/mayoral.json sv_overrides) may also set:
+//   other_bloc               bloc for "Other" second preferences (default none)
+//   same_bloc_split_by_bloc  { left: {mu, sd}, right: {mu, sd} }, so left and
+//                            right cohesion can differ; falls back to
+//                            same_bloc_split for a bloc not given.
 function svRunoffDraw(shares, gauss, clamp01, svOverrides = null) {
   const REACH = svOverrides && svOverrides.transfer_reach ? svOverrides.transfer_reach : TRANSFER_REACH;
   const SPLIT = svOverrides && svOverrides.same_bloc_split ? svOverrides.same_bloc_split : SAME_BLOC_SPLIT;
+  const SPLIT_BY_BLOC = (svOverrides && svOverrides.same_bloc_split_by_bloc) || {};
+  const blocOf = (party) => (party === "Other" && svOverrides && svOverrides.other_bloc) || BLOC[party];
   const ranked = PARTIES.map((k) => [k, shares[k] || 0]).sort((a, b) => b[1] - a[1]);
   const [f1, f2] = [ranked[0], ranked[1]];
   let v1 = f1[1], v2 = f2[1];
@@ -209,10 +237,11 @@ function svRunoffDraw(shares, gauss, clamp01, svOverrides = null) {
     if (share <= 0) continue;
     const reach = clamp01(REACH.mu + gauss() * REACH.sd, REACH.lo ?? TRANSFER_REACH.lo, REACH.hi ?? TRANSFER_REACH.hi);
     const pool = share * reach;
-    const b = BLOC[party], b1 = BLOC[f1[0]], b2 = BLOC[f2[0]];
+    const b = blocOf(party), b1 = blocOf(f1[0]), b2 = blocOf(f2[0]);
     let toF1 = 0.5;
     if (b !== "none" && b1 !== b2) {
-      const same = clamp01(SPLIT.mu + gauss() * SPLIT.sd, 0.5, 0.92);
+      const split = SPLIT_BY_BLOC[b] || SPLIT;
+      const same = clamp01(split.mu + gauss() * split.sd, 0.5, 0.92);
       toF1 = b === b1 ? same : 1 - same;
     } else {
       toF1 = clamp01(0.5 + gauss() * 0.1, 0.2, 0.8);
@@ -224,7 +253,12 @@ function svRunoffDraw(shares, gauss, clamp01, svOverrides = null) {
 }
 
 // ---- Monte Carlo per method -------------------------------------------------
+// Default error: an independent additive draw per party, floored at zero.
+// The Lancashire hypothetical may set noise = { type: "logratio", sd } instead:
+// each share is scaled by exp(N(0, sd)) and renormalised, so the error is
+// proportional to a party's size and the draws stay zero-sum.
 function runMethod(contestSlug, methodId, central, sigmaPp, svOverrides = null) {
+  const noise = svOverrides && svOverrides.noise;
   const rand = mulberry32(hashSeed(`${contestSlug}:${methodId}:20270506`));
   const gauss = gaussFactory(rand);
   const clamp01 = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
@@ -235,7 +269,11 @@ function runMethod(contestSlug, methodId, central, sigmaPp, svOverrides = null) 
 
   for (let i = 0; i < DRAWS; i++) {
     const drawn = {};
-    for (const k of PARTIES) drawn[k] = Math.max(0, (central[k] || 0) + gauss() * sigmaPp);
+    for (const k of PARTIES) {
+      drawn[k] = noise && noise.type === "logratio"
+        ? (central[k] || 0) * Math.exp(gauss() * noise.sd)
+        : Math.max(0, (central[k] || 0) + gauss() * sigmaPp);
+    }
     const shares = normalise(drawn);
     for (const k of PARTIES) shareDraws[k].push(shares[k]);
     const { finalists, final, winner } = svRunoffDraw(shares, gauss, clamp01, svOverrides);
@@ -355,13 +393,14 @@ function buildLancashireHypothetical() {
   const ge = buildGeBase(reg, pcons, crosswalkRows);
   const methods = [];
 
+  const overrides = { ...(reg.sv_overrides || {}), noise: reg.noise || null };
   const geCentral = applySwing(ge.shares, GE2024_NATIONAL, national.shares);
   methods.push({
     id: "ge_swing_2024",
     label: "GE2024 base + national swing",
     description: `General election 2024 results across the fourteen Lancashire councils, the twelve districts plus Blackburn with Darwen and Blackpool (${ge.pcon_count} constituencies apportioned by live postcode share), moved by the uniform national swing to the latest Westminster poll average (${national.label}).`,
     base: { shares: ge.shares, source: "GE2024 constituency results (DC), ONS postcode crosswalk", weighted_votes: ge.weighted_votes },
-    ...runMethod(reg.slug, "ge_swing_2024", geCentral, 0.06, reg.sv_overrides || null),
+    ...runMethod(reg.slug, "ge_swing_2024", geCentral, 0.06, overrides),
   });
 
   try {
@@ -377,12 +416,29 @@ function buildLancashireHypothetical() {
     if (totalElectorate > 0) {
       for (const k of Object.keys(acc)) acc[k] = acc[k] / totalElectorate;
       const local = normalise(acc);
+      // The local votes were cast under a national position very different
+      // from today's (Labour 18% in early May 2026, 29% in late October), so
+      // they are swung from the poll average of their own vintage to the
+      // latest one, the same uniform swing the GE method uses. Without this
+      // the method reports the May 2026 national mood as if it were current.
+      const vintageCfg = reg.local_signal_vintage;
+      const vintage = vintageCfg ? nationalAverageBetween(vintageCfg.from, vintageCfg.to) : null;
+      if (vintageCfg && !vintage) throw new Error(`no polls in local_signal_vintage ${vintageCfg.from} to ${vintageCfg.to}`);
+      const localCentral = vintage ? applySwing(local, vintage.shares, national.shares) : local;
+      const pctLine = (sh) => ["Reform UK", "Labour", "Conservative", "Green Party"].map((k) => `${k} ${(sh[k] * 100).toFixed(1)}%`).join(", ");
       methods.push({
         id: "unitaries_local_signal",
-        label: "Lancashire local signal (unitaries model)",
-        description: "The county's own most recent local votes, taken from our Lancashire unitaries forecast: each proposed ward's LCC May 2025 division result nudged by the district's 2025 to 2026 borough and by-election swing, Blackburn's May 2026 wards directly, and a Blackpool proxy; electorate-weighted across the four proposed unitaries. Carries the local Reform organisation and independent vote the GE base misses. Not re-swung to current national polling, so it is a picture of votes actually cast in 2025 and 2026.",
-        base: { shares: local, source: "data/predictions/lancashire-unitaries/forecast.json (four_unitary vote_share, electorate-weighted)" },
-        ...runMethod(reg.slug, "unitaries_local_signal", local, 0.055, reg.sv_overrides || null),
+        label: "Lancashire local signal (unitaries model), rebased to current polls",
+        description: "The county's own most recent local votes, taken from our Lancashire unitaries forecast: each proposed ward's LCC May 2025 division result nudged by the district's 2025 to 2026 borough and by-election swing, Blackburn's May 2026 wards directly, and a Blackpool proxy; electorate-weighted across the fourteen councils. Carries the local Reform organisation and independent vote the GE base misses." +
+          (vintage
+            ? ` Those votes were cast when the national poll average was ${pctLine(vintage.shares)} (${vintage.polls_used} polls, fieldwork ${vintage.window.from} to ${vintage.window.to}); they are moved by uniform swing from that average to the latest one (${national.label}).`
+            : " Not re-swung to current national polling, so it is a picture of votes actually cast in 2025 and 2026."),
+        base: {
+          shares: local,
+          source: "data/predictions/lancashire-unitaries/forecast.json (four_unitary vote_share, electorate-weighted)",
+          ...(vintage ? { vintage_national: { shares: vintage.shares, polls_used: vintage.polls_used, window: vintage.window, source: "data/polling/timeseries.json" } } : {}),
+        },
+        ...runMethod(reg.slug, "unitaries_local_signal", localCentral, 0.055, overrides),
       });
     }
   } catch {
@@ -395,8 +451,10 @@ function buildLancashireHypothetical() {
     label: reg.label,
     status: reg.status,
     status_note: reg.status_note,
+    election_target: reg.election_target || null,
     voting_system: reg.voting_system,
     constituent_councils: reg.constituent_councils,
+    transfer_model: { sv_overrides: reg.sv_overrides || null, noise: reg.noise || null },
     methods_agree_on_leader: leaders.every((x) => x === leaders[0]),
     method_leaders: leaders,
     methods,

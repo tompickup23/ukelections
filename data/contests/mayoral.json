@@ -342,8 +342,16 @@
    "slug": "lancashire",
    "label": "Mayor of Lancashire",
    "status": "not_scheduled",
-   "status_note": "No Lancashire mayoral election is scheduled and nothing is confirmed by order. The Lancashire Combined County Authority remains non mayoral. Reporting at the start of August 2026 puts a possible first election at 2028 at the earliest and stresses it is far from confirmed: the LCC opposition leader has asked for May 2027, the Blackburn and Blackpool leaders support a mayor, and the LCC and LCCA leader opposes. Government policy is not to impose mayors but to reach full strategic authority coverage of England by the end of 2028. The May 2027 Lancashire ballots are elections to the existing councils, because reorganisation is paused for review (MHCLG letter, 7 September 2026).",
+   "status_note": "No Lancashire mayoral election has been ordered. Material published with the 28 October 2026 Budget lists Lancashire among the areas where the government is in the final stages of agreeing a mayoral strategic authority, and local reporting puts the first election in May 2028, conditional on that deal concluding. The Lancashire Combined County Authority remains non mayoral until then. The May 2027 Lancashire ballots are elections to the existing councils, because reorganisation is paused for review (MHCLG letter, 7 September 2026).",
    "sources": [
+    {
+     "label": "Lancashire Telegraph via Yahoo News: Budget detail reveals Lancashire will have an elected mayor (28 October 2026)",
+     "url": "https://uk.news.yahoo.com/budget-detail-reveals-lancashire-elected-160000849.html"
+    },
+    {
+     "label": "Blog Preston (LDRS): Lancashire is on course for a county-wide mayor (28 October 2026)",
+     "url": "https://www.blogpreston.co.uk/2026/10/after-over-20-years-of-debate-lancashire-is-on-course-for-a-county-wide-mayor/"
+    },
     {
      "label": "LDRS via Yahoo News: renewed calls for a 2027 Lancashire mayoral election (31 July 2026)",
      "url": "https://www.yahoo.com/news/politics/articles/renewed-calls-2027-lancashire-mayoral-053402561.html"
@@ -366,7 +374,7 @@
     }
    ],
    "voting_system_if_called": "Supplementary vote, under s.63 and Schedule 30 of the English Devolution and Community Empowerment Act 2026 (applies to combined county authority mayors). A mechanism in waiting, not a scheduled contest.",
-   "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography.",
+   "verified": "Primary-source verified 8 Aug 2026: no statutory instrument, no confirmed date, no confirmed geography. Updated 29 Oct 2026 from reporting of the Budget business statement; the statement text itself was not located, so the 2028 date stays reported, not confirmed.",
    "sv_overrides": {
     "transfer_reach": {
      "mu": 0.61,
@@ -386,7 +394,7 @@
   "slug": "lancashire-hypothetical",
   "label": "Mayor of Lancashire (hypothetical)",
   "status": "hypothetical",
-  "status_note": "NO Lancashire mayoral election is scheduled and nothing is confirmed by order. This models what a county-wide supplementary vote mayoral contest WOULD look like on today's numbers, because the question keeps being asked. It is not a forecast of any scheduled election and will be replaced by a real forecast only if a contest is confirmed.",
+  "status_note": "No Lancashire mayoral election has been ordered. Material published with the 28 October 2026 Budget lists Lancashire among the areas where the government is in the final stages of agreeing a mayoral strategic authority, and a first election is reported for May 2028, conditional on that deal concluding. This models a county-wide supplementary vote contest on today's numbers. It is not a forecast of the 2028 result, which is about 18 months away; it will be replaced by a real forecast once an election is ordered.",
   "voting_system": "supplementary_vote",
   "constituent_councils": [
    {
@@ -447,11 +455,21 @@
    }
   ],
   "caveats": [
-   "Hypothetical: no election exists, no date, no candidates, no confirmed mayoral geography. The Lancashire Combined County Authority is non mayoral.",
-   "The supplementary vote transfer calibration leans on the Greater Manchester by-election, a much more Labour leaning electorate than Lancashire. The transfer split is bloc symmetric (a Reform finalist gains eliminated Conservative second preferences at the same rate a Labour finalist gains Green and Liberal Democrat ones), but Restore Britain sits inside Other and is split 50/50, which likely understates Reform transfers in a Reform strong county. Treat Labour's runoff edge, where it appears, as an upper bound.",
+   "No election has been ordered. The May 2028 date is reported from material published with the 28 October 2026 Budget and is conditional on a mayoral strategic authority being agreed; the Lancashire Combined County Authority is non mayoral until then.",
+   "Eighteen months out. National polling moved by more than ten points in the six months to October 2026 (Labour 18% in early May, 29% in late October), so read these as today's position, not a 2028 forecast.",
+   "The supplementary vote transfer calibration leans on the Greater Manchester by-election, a much more Labour leaning electorate than Lancashire. Same-bloc cohesion is set at 70% on both sides; the Greater Manchester pooled count is only reproducible with left cohesion above right (about 85% against 70% at equal reach), so this may slightly understate Labour's Green and Liberal Democrat transfers. Other, which in current polls is mostly Restore Britain, transfers as right bloc.",
+   "Candidate and turnout effects are not modelled. In the Greater Manchester backtest the GE method called the winner but understated the Labour first round by about ten points.",
    "Turnout for a standalone mayoral contest would be low and uneven; neither base fully captures that."
   ],
   "sources": [
+   {
+    "label": "Lancashire Telegraph via Yahoo News: Budget detail reveals Lancashire will have an elected mayor (28 October 2026)",
+    "url": "https://uk.news.yahoo.com/budget-detail-reveals-lancashire-elected-160000849.html"
+   },
+   {
+    "label": "Blog Preston (LDRS): Lancashire is on course for a county-wide mayor (28 October 2026)",
+    "url": "https://www.blogpreston.co.uk/2026/10/after-over-20-years-of-debate-lancashire-is-on-course-for-a-county-wide-mayor/"
+   },
    {
     "label": "LDRS via Yahoo News: renewed calls for a 2027 Lancashire mayoral election (31 July 2026)",
     "url": "https://www.yahoo.com/news/politics/articles/renewed-calls-2027-lancashire-mayoral-053402561.html"
@@ -472,7 +490,19 @@
     "mu": 0.7,
     "sd": 0.12
    },
-   "rationale": "Lancashire-specific calibration, verified 8 Aug 2026: its own SV contests show higher transfer reach (0.583 in 2016, 0.656 in 2021) than the global anchors, and GM 2026 per-district second preferences show weaker left-bloc cohesion in Lancashire-like boroughs (Reform won transfers in Wigan, Oldham, Rochdale, Tameside, Bury). See sv_calibration entries lancashire_pcc_2016/2021 and gm_2026."
+   "rationale": "Lancashire-specific calibration, verified 8 Aug 2026: its own SV contests show higher transfer reach (0.583 in 2016, 0.656 in 2021) than the global anchors, and GM 2026 per-district second preferences show weaker left-bloc cohesion in Lancashire-like boroughs (Reform won transfers in Wigan, Oldham, Rochdale, Tameside, Bury). See sv_calibration entries lancashire_pcc_2016/2021 and gm_2026. Other transfers as right bloc (29 Oct 2026): in current polls Other is mostly Restore Britain (4% where reported), whose voters are right bloc; splitting it 50/50 understated Reform transfers.",
+   "other_bloc": "right"
+  },
+  "election_target": "May 2028 (reported, subject to the deal concluding; not yet ordered)",
+  "local_signal_vintage": {
+   "from": "2026-04-23",
+   "to": "2026-05-06",
+   "rationale": "The unitaries model's local votes are LCC May 2025 divisions nudged to the 7 May 2026 borough results, so they are rebased from the 14-day poll average before that polling day, the same window the live average uses."
+  },
+  "noise": {
+   "type": "logratio",
+   "sd": 0.25,
+   "rationale": "Proportional, zero-sum error (29 Oct 2026). The additive 6-point error floored at zero gave small parties implausible ranges (Liberal Democrats 0 to 11% from a 3% centre). sd 0.25 keeps the two leading parties' p10 to p90 bands about as wide as the additive error (about 14 to 15 points); it is not yet calibrated on past county results."
   }
  },
  "roster_2028": {

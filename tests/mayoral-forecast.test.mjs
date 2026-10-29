@@ -92,7 +92,8 @@ describe("mayoral forecast output", () => {
     const h = forecast.hypothetical_lancashire;
     expect(h).toBeTruthy();
     expect(h.status).toBe("hypothetical");
-    expect(h.status_note).toMatch(/NO Lancashire mayoral election is scheduled/);
+    expect(h.status_note).toMatch(/No Lancashire mayoral election has been ordered/);
+    expect(h.election_target).toMatch(/2028/);
     // 14 lower-tier areas (12 districts + 2 unitaries); LCC itself is not a LAD
     expect(h.constituent_councils.length).toBe(14);
     expect(h.caveats.length).toBeGreaterThanOrEqual(3);
@@ -101,6 +102,29 @@ describe("mayoral forecast output", () => {
       const central = Object.values(m.parties).reduce((a, x) => a + x.central, 0);
       expect(central).toBeGreaterThan(0.98);
       expect(central).toBeLessThan(1.02);
+    }
+  });
+});
+
+describe("Lancashire hypothetical model corrections (29 Oct 2026)", () => {
+  const h = forecast.hypothetical_lancashire;
+  const local = h.methods.find((m) => m.id === "unitaries_local_signal");
+
+  it("rebases the local signal from the poll average of its own vintage", () => {
+    const v = local.base.vintage_national;
+    expect(v).toBeTruthy();
+    expect(v.polls_used).toBeGreaterThan(5);
+    expect(v.window).toEqual({ from: registry.hypothetical_lancashire.local_signal_vintage.from, to: registry.hypothetical_lancashire.local_signal_vintage.to });
+    // the central forecast is no longer the raw local base
+    expect(local.parties["Labour"].central).not.toBeCloseTo(local.base.shares["Labour"], 3);
+  });
+
+  it("transfers Other (mostly Restore Britain) as right bloc and uses proportional noise", () => {
+    expect(h.transfer_model.sv_overrides.other_bloc).toBe("right");
+    expect(h.transfer_model.noise.type).toBe("logratio");
+    // proportional noise keeps small parties' bands off zero
+    for (const m of h.methods) {
+      for (const [party, v] of Object.entries(m.parties)) if (v.central > 0.02) expect(v.p10, party).toBeGreaterThan(0);
     }
   });
 });
