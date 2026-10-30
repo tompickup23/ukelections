@@ -181,7 +181,7 @@ function statusPill(status: string) {
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">The one everyone asks about</p>
-        <h2>No Mayor of Lancashire on any ballot</h2>
+        <h2>No Mayor of Lancashire ballot yet: a 2028 election is reported</h2>
       </div>
       <div class="lancs-box">
         <p>{lancashire.status_note}</p>
@@ -197,7 +197,7 @@ function statusPill(status: string) {
           <header class="contest-head">
             <div>
               <h3>But if one were held tomorrow…</h3>
-              <p class="contest-sub">All fifteen Lancashire authorities · county-wide supplementary vote · no such contest exists</p>
+              <p class="contest-sub">All fifteen Lancashire authorities · county-wide supplementary vote · no contest ordered yet</p>
             </div>
             <span class="status-pill status-pill--hypothetical">Hypothetical</span>
           </header>
@@ -208,7 +208,7 @@ function statusPill(status: string) {
             <p class="method-split">
               ⚠ <strong>Method split, and it is the whole story here.</strong> Current national polling
               ({lancsHypothetical.method_leaders.map((x: string) => shortPartyLabel(x)).join(" vs ")}) and Lancashire's
-              own recent local votes point at different winners. No blended call is made; read both rows.
+              own recent local votes, rebased to the same polls, lean to different winners. No blended call is made; read both rows.
             </p>
           )}
 

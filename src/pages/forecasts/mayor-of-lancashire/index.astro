@@ -79,7 +79,7 @@ const precedents = [
 
 const gm = svCal.gm_2026 || {};
 const title = "Mayor of Lancashire: the full hypothetical forecast";
-const description = "No Lancashire mayoral election is scheduled. If one were held: two methods, both shown, plus the supplementary-vote transfer evidence and where each party's vote lives, ward by ward.";
+const description = "No Lancashire mayoral election has been ordered; a first one is reported for May 2028. On today's numbers: two methods, both shown, plus the supplementary-vote transfer evidence and where each party's vote lives, ward by ward.";
 ---
 
 <BaseLayout title={title} description={description}>
@@ -88,7 +88,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
       <p class="kicker">LANCASHIRE · HYPOTHETICAL MAYORAL FORECAST · SUPPLEMENTARY VOTE</p>
       <h1>Mayor of Lancashire</h1>
       <div class="callout">
-        <strong>No such election exists.</strong> {h.status_note}
+        <strong>Reported for May 2028, not yet ordered.</strong> {h.status_note}
         {overrides && <span> Voting system if called: supplementary vote (s.63 and Sch.30, English Devolution and Community Empowerment Act 2026).</span>}
       </div>
     </section>
@@ -98,7 +98,7 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
       {!h.methods_agree_on_leader && (
         <p class="method-split">
           ⚠ <strong>The methods disagree, and that disagreement is the finding.</strong> National polling and
-          Lancashire's own recent local votes point at different winners. Read both; we do not average them.
+          Lancashire's own recent local votes, rebased to the same polls, lean to different winners. Read both; we do not average them.
         </p>
       )}
       {h.methods.map((m: any) => (
@@ -173,8 +173,8 @@ const description = "No Lancashire mayoral election is scheduled. If one were he
       <p>
         A mayoral election is one county-wide count, so the rows below are not separate contests: they show where
         each party's first-preference vote would come from, using the same ward-level model as our
-        <a href="/forecasts/lancashire-unitaries/">Lancashire unitaries forecast</a> (votes actually cast in
-        2023-26, not re-swung to national polling).
+        <a href="/forecasts/lancashire-unitaries/">Lancashire unitaries forecast</a> (local votes as cast
+        in 2025 and 2026, before the rebasing to current polls used in the method above).
       </p>
       <div class="table-scroll"><table class="data-table">
         <thead><tr><th>District</th><th>Electorate</th><th>Leads</th>{PARTY_COLS.slice(0, 5).map((p) => <th>{shortPartyLabel(p)}</th>)}</tr></thead>

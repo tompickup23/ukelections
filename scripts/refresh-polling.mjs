@@ -30,6 +30,7 @@ import {
   recentRoadTo326Polls,
 } from "./lib/polling-reconciliation.mjs";
 import { buildVerificationLedger } from "./lib/polling-verification.mjs";
+import { repairYearTypos } from "./lib/poll-date-sequence.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OVERRIDE = path.join(ROOT, "data/polling/override.json");
@@ -235,6 +236,12 @@ function parseRows(tableBody) {
   return rows;
 }
 
+// Fieldwork date per table row, with year typos repaired against the rows
+// around it (scripts/lib/poll-date-sequence.mjs).
+function rowDates(rows) {
+  return repairYearTypos(rows.map((cells) => parseOpdrts(cells[0] || "")));
+}
+
 function averageRecentPolls(rows, spec, windowDays) {
   const { preamble, filter_area, columns: columnLabels } = spec;
   const maxMissing = spec.max_missing ?? 1;
@@ -247,9 +254,10 @@ function averageRecentPolls(rows, spec, windowDays) {
   let earliest = null;
   let latest = null;
 
-  for (const cells of rows) {
+  const dates = rowDates(rows);
+  for (const [rowIdx, cells] of rows.entries()) {
     if (cells.length < preamble + columnLabels.length) continue;
-    const date = parseOpdrts(cells[0]);
+    const date = dates[rowIdx];
     if (!date) continue;
     if (date.getTime() < cutoff) continue;
     if (date.getTime() > Date.now() + 86400 * 1000) continue;
@@ -341,9 +349,10 @@ function extractPollSeries(rows, spec) {
   const { preamble, filter_area, columns: columnLabels } = spec;
   const maxMissing = spec.max_missing ?? 1;
   const polls = [];
-  for (const cells of rows) {
+  const dates = rowDates(rows);
+  for (const [rowIdx, cells] of rows.entries()) {
     if (cells.length < preamble + columnLabels.length) continue;
-    const date = parseOpdrts(cells[0]);
+    const date = dates[rowIdx];
     if (!date) continue;
     if (date.getTime() > Date.now() + 86400 * 1000) continue;
     if (filter_area) {
