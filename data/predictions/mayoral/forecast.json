@@ -1,6 +1,6 @@
 {
   "snapshot": {
-    "generated_at": "2026-10-29T22:36:52.870Z",
+    "generated_at": "2026-10-31T00:31:57.796Z",
     "model_version": "ukelections.mayoral.v1.0.0",
     "election_target": "May 2027 mayoral elections (supplementary vote)",
     "monte_carlo_draws": 2000,
@@ -904,14 +904,31 @@
   "validation": {
     "contest": "Greater Manchester mayoral by-election, 30 July 2026",
     "method": "ge_swing_2024",
+    "national_polling_at_time": {
+      "shares": {
+        "Reform UK": 0.24286815728604472,
+        "Labour": 0.2405551272166538,
+        "Conservative": 0.2012336160370085,
+        "Liberal Democrats": 0.11025443330763299,
+        "Green Party": 0.11565150346954509,
+        "Independent": 0,
+        "Other": 0.08943716268311488
+      },
+      "polls_used": 13,
+      "window": {
+        "from": "2026-07-16",
+        "to": "2026-07-29"
+      },
+      "source": "data/polling/timeseries.json"
+    },
     "projected_first_pref": {
-      "Reform UK": 0.247,
-      "Labour": 0.3712,
-      "Conservative": 0.1363,
-      "Liberal Democrats": 0.0546,
-      "Green Party": 0.1033,
+      "Reform UK": 0.2696,
+      "Labour": 0.3225,
+      "Conservative": 0.1151,
+      "Liberal Democrats": 0.0714,
+      "Green Party": 0.1277,
       "Independent": 0.0237,
-      "Other": 0.064
+      "Other": 0.07
     },
     "actual_first_pref": {
       "Reform UK": 0.2099,
@@ -922,18 +939,97 @@
       "Independent": 0.0056,
       "Other": 0.0868
     },
+    "actual_labour_lead_pp": 26.2,
     "errors_pp": {
-      "Reform UK": 0.0371,
-      "Labour": -0.1003,
-      "Conservative": 0.0594,
-      "Liberal Democrats": 0.0271,
-      "Green Party": -0.0186,
+      "Reform UK": 0.0598,
+      "Labour": -0.149,
+      "Conservative": 0.0382,
+      "Liberal Democrats": 0.0439,
+      "Green Party": 0.0059,
       "Independent": 0.0181,
-      "Other": -0.0228
+      "Other": -0.0168
     },
-    "mae_pp": 4,
+    "mae_pp": 4.7,
     "winner_called": true,
-    "note": "The method called the Labour winner correctly but understated Labour's first round by a wide margin: a well known incumbent-adjacent candidate on a 25% turnout beat her party's national baseline decisively. That gap is exactly the candidate effect these projections cannot see before nominations, and it is why the bands are wide and the prior_swing method exists.",
+    "methods": [
+      {
+        "id": "ge_swing_2024",
+        "label": "GE2024 base + national swing",
+        "projected_first_pref": {
+          "Reform UK": 0.2696,
+          "Labour": 0.3225,
+          "Conservative": 0.1151,
+          "Liberal Democrats": 0.0714,
+          "Green Party": 0.1277,
+          "Independent": 0.0237,
+          "Other": 0.07
+        },
+        "errors_pp": {
+          "Reform UK": 0.0598,
+          "Labour": -0.149,
+          "Conservative": 0.0382,
+          "Liberal Democrats": 0.0439,
+          "Green Party": 0.0059,
+          "Independent": 0.0181,
+          "Other": -0.0168
+        },
+        "mae_pp": 4.7,
+        "labour_lead_pp": 5.3,
+        "winner_called": true
+      },
+      {
+        "id": "local_signal_rebased",
+        "label": "May 2026 borough votes, rebased to the polls of the time",
+        "projected_first_pref": {
+          "Reform UK": 0.2891,
+          "Labour": 0.2927,
+          "Conservative": 0.1198,
+          "Liberal Democrats": 0.0881,
+          "Green Party": 0.1445,
+          "Independent": 0.0346,
+          "Other": 0.0313
+        },
+        "errors_pp": {
+          "Reform UK": 0.0792,
+          "Labour": -0.1788,
+          "Conservative": 0.0429,
+          "Liberal Democrats": 0.0605,
+          "Green Party": 0.0227,
+          "Independent": 0.0291,
+          "Other": -0.0555
+        },
+        "mae_pp": 6.7,
+        "labour_lead_pp": 0.4,
+        "winner_called": true
+      },
+      {
+        "id": "local_signal_as_cast",
+        "label": "May 2026 borough votes as cast",
+        "projected_first_pref": {
+          "Reform UK": 0.307,
+          "Labour": 0.2352,
+          "Conservative": 0.1032,
+          "Liberal Democrats": 0.0948,
+          "Green Party": 0.1904,
+          "Independent": 0.0346,
+          "Other": 0.0349
+        },
+        "errors_pp": {
+          "Reform UK": 0.0971,
+          "Labour": -0.2363,
+          "Conservative": 0.0262,
+          "Liberal Democrats": 0.0672,
+          "Green Party": 0.0686,
+          "Independent": 0.0291,
+          "Other": -0.0519
+        },
+        "mae_pp": 8.2,
+        "labour_lead_pp": -7.2,
+        "winner_called": false
+      }
+    ],
+    "local_signal_contests": 214,
+    "note": "Every method understated Labour's first round by a wide margin: a well known incumbent-adjacent candidate on a 25% turnout beat her party's national baseline decisively. That gap is the candidate effect these projections cannot see before nominations, and it is why the bands are wide. Of the methods, the general election base came closest; the borough votes as cast, with no national rebasing, did worst and put Reform ahead.",
     "source_url": "https://www.gmelects.org.uk/result2026/"
   },
   "hypothetical_lancashire": {
@@ -1505,7 +1601,33 @@
       },
       "exhausted_ballots": 66623,
       "turnout_pct": 0.2514,
-      "source_url": "https://www.gmelects.org.uk/result2026/"
+      "source_url": "https://www.gmelects.org.uk/result2026/",
+      "backtest": {
+        "note": "Inputs for the validation backtest. Every method is run with the national poll average from the fortnight before polling day, not today's polls, so the error is the one the method would have made at the time.",
+        "poll_window": {
+          "from": "2026-07-16",
+          "to": "2026-07-29"
+        },
+        "local_signal": {
+          "results_file": "data/results/may-2026/local-and-mayor.merged.json",
+          "council_slugs": [
+            "bolton",
+            "bury",
+            "manchester",
+            "oldham",
+            "rochdale",
+            "salford",
+            "stockport",
+            "tameside",
+            "trafford",
+            "wigan"
+          ],
+          "vintage": {
+            "from": "2026-04-23",
+            "to": "2026-05-06"
+          }
+        }
+      }
     },
     "london_2021": {
       "date": "2021-05-06",

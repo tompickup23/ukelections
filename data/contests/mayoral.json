@@ -712,7 +712,16 @@
    },
    "exhausted_ballots": 66623,
    "turnout_pct": 0.2514,
-   "source_url": "https://www.gmelects.org.uk/result2026/"
+   "source_url": "https://www.gmelects.org.uk/result2026/",
+   "backtest": {
+    "note": "Inputs for the validation backtest. Every method is run with the national poll average from the fortnight before polling day, not today's polls, so the error is the one the method would have made at the time.",
+    "poll_window": { "from": "2026-07-16", "to": "2026-07-29" },
+    "local_signal": {
+     "results_file": "data/results/may-2026/local-and-mayor.merged.json",
+     "council_slugs": ["bolton", "bury", "manchester", "oldham", "rochdale", "salford", "stockport", "tameside", "trafford", "wigan"],
+     "vintage": { "from": "2026-04-23", "to": "2026-05-06" }
+    }
+   }
   },
   "london_2021": {
    "date": "2021-05-06",

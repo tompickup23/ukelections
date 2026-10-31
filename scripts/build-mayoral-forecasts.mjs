@@ -463,23 +463,16 @@ function buildLancashireHypothetical() {
   };
 }
 
-// ---- validation: ge_swing_2024 backtested on the GM 2026 by-election --------
-// The one supplementary vote contest since the system was restored. We project
-// it exactly as the method would have, and publish the error honestly.
+// ---- validation: backtests on the GM 2026 by-election ------------------------
+// The one supplementary vote contest since the system was restored. Each method
+// is projected exactly as it would have been on the eve of the poll: swung to
+// the national poll average of the fortnight before polling day, not to today's
+// polls (which would leak three months of hindsight into the test). The GE
+// method is the headline; the borough-votes methods mirror the Lancashire local
+// signal, as cast and rebased, so the two Lancashire methods can be compared.
 const GM_LADS = ["E08000001", "E08000002", "E08000003", "E08000004", "E08000005", "E08000006", "E08000007", "E08000008", "E08000009", "E08000010"];
-function gmValidation() {
-  const cal = registry.sv_calibration && registry.sv_calibration.gm_2026_byelection;
-  if (!cal) return null;
-  const fake = { constituent_councils: GM_LADS.map((cd) => ({ name: cd, lad25cd: cd })) };
-  const ge = buildGeBase(fake, pcons, crosswalkRows);
-  const projected = applySwing(ge.shares, GE2024_NATIONAL, national.shares);
-  const actualAcc = {};
-  let totalFp = 0;
-  for (const cand of cal.first_round) {
-    actualAcc[canonParty(cand.party)] = (actualAcc[canonParty(cand.party)] || 0) + cand.votes;
-    totalFp += cand.votes;
-  }
-  const actual = normalise(actualAcc);
+
+function scoreProjection(projected, actual) {
   const errors = {};
   let mae = 0, n = 0;
   for (const k of PARTIES) {
@@ -487,17 +480,94 @@ function gmValidation() {
     errors[k] = Number(e.toFixed(4));
     if ((projected[k] || 0) > 0.01 || (actual[k] || 0) > 0.01) { mae += Math.abs(e); n += 1; }
   }
-  const projWinner = Object.entries(projected).sort((a, b) => b[1] - a[1])[0][0];
-  const actWinner = Object.entries(actual).sort((a, b) => b[1] - a[1])[0][0];
+  const top = (sh) => Object.entries(sh).sort((a, b) => b[1] - a[1])[0][0];
+  return {
+    projected_first_pref: Object.fromEntries(PARTIES.map((k) => [k, Number((projected[k] || 0).toFixed(4))])),
+    errors_pp: errors,
+    mae_pp: Number(((mae / Math.max(1, n)) * 100).toFixed(1)),
+    labour_lead_pp: Number((((projected.Labour || 0) - (projected["Reform UK"] || 0)) * 100).toFixed(1)),
+    winner_called: top(projected) === top(actual),
+  };
+}
+
+// Borough wards at the May 2026 locals, each weighted by valid votes per seat
+// so multi-member wards are not over-counted. By-elections are excluded.
+function boroughVotes(cfg) {
+  const slugs = new Set(cfg.council_slugs);
+  const acc = {};
+  let weight = 0, contests = 0;
+  for (const r of readJson(cfg.results_file).results) {
+    if (r.tier !== "local" || r.is_by_election || !slugs.has(r.council_slug)) continue;
+    const w = (r.total_valid_votes || 0) / Math.max(1, r.winner_count || 1);
+    if (!w) continue;
+    for (const [party, v] of Object.entries(r.vote_shares || {})) {
+      const k = canonParty(party);
+      acc[k] = (acc[k] || 0) + v * w;
+    }
+    weight += w;
+    contests += 1;
+  }
+  if (!contests) return null;
+  for (const k of Object.keys(acc)) acc[k] /= weight;
+  return { shares: normalise(acc), contests };
+}
+
+function gmValidation() {
+  const cal = registry.sv_calibration && registry.sv_calibration.gm_2026_byelection;
+  if (!cal) return null;
+  const bt = cal.backtest || {};
+  const pollsThen = bt.poll_window ? nationalAverageBetween(bt.poll_window.from, bt.poll_window.to) : null;
+  if (bt.poll_window && !pollsThen) throw new Error(`no polls in GM backtest window ${bt.poll_window.from} to ${bt.poll_window.to}`);
+  const nationalThen = pollsThen ? pollsThen.shares : national.shares;
+
+  const actualAcc = {};
+  for (const cand of cal.first_round) {
+    actualAcc[canonParty(cand.party)] = (actualAcc[canonParty(cand.party)] || 0) + cand.votes;
+  }
+  const actual = normalise(actualAcc);
+
+  const fake = { constituent_councils: GM_LADS.map((cd) => ({ name: cd, lad25cd: cd })) };
+  const ge = buildGeBase(fake, pcons, crosswalkRows);
+  const methods = [{
+    id: "ge_swing_2024",
+    label: "GE2024 base + national swing",
+    ...scoreProjection(applySwing(ge.shares, GE2024_NATIONAL, nationalThen), actual),
+  }];
+
+  let local = null;
+  if (bt.local_signal) {
+    local = boroughVotes(bt.local_signal);
+    const vintage = nationalAverageBetween(bt.local_signal.vintage.from, bt.local_signal.vintage.to);
+    if (local && vintage) {
+      methods.push({
+        id: "local_signal_rebased",
+        label: "May 2026 borough votes, rebased to the polls of the time",
+        ...scoreProjection(applySwing(local.shares, vintage.shares, nationalThen), actual),
+      });
+      methods.push({
+        id: "local_signal_as_cast",
+        label: "May 2026 borough votes as cast",
+        ...scoreProjection(local.shares, actual),
+      });
+    }
+  }
+
+  const ge0 = methods[0];
   return {
     contest: "Greater Manchester mayoral by-election, 30 July 2026",
     method: "ge_swing_2024",
-    projected_first_pref: Object.fromEntries(PARTIES.map((k) => [k, Number((projected[k] || 0).toFixed(4))])),
+    national_polling_at_time: pollsThen
+      ? { shares: pollsThen.shares, polls_used: pollsThen.polls_used, window: pollsThen.window, source: "data/polling/timeseries.json" }
+      : null,
+    projected_first_pref: ge0.projected_first_pref,
     actual_first_pref: Object.fromEntries(PARTIES.map((k) => [k, Number((actual[k] || 0).toFixed(4))])),
-    errors_pp: errors,
-    mae_pp: Number(((mae / Math.max(1, n)) * 100).toFixed(1)),
-    winner_called: projWinner === actWinner,
-    note: "The method called the Labour winner correctly but understated Labour's first round by a wide margin: a well known incumbent-adjacent candidate on a 25% turnout beat her party's national baseline decisively. That gap is exactly the candidate effect these projections cannot see before nominations, and it is why the bands are wide and the prior_swing method exists.",
+    actual_labour_lead_pp: Number((((actual.Labour || 0) - (actual["Reform UK"] || 0)) * 100).toFixed(1)),
+    errors_pp: ge0.errors_pp,
+    mae_pp: ge0.mae_pp,
+    winner_called: ge0.winner_called,
+    methods,
+    local_signal_contests: local ? local.contests : null,
+    note: "Every method understated Labour's first round by a wide margin: a well known incumbent-adjacent candidate on a 25% turnout beat her party's national baseline decisively. That gap is the candidate effect these projections cannot see before nominations, and it is why the bands are wide. Of the methods, the general election base came closest; the borough votes as cast, with no national rebasing, did worst and put Reform ahead.",
     source_url: cal.source_url,
   };
 }
