@@ -180,6 +180,8 @@ describe.skipIf(!present)("freshness", () => {
     for (const { file, doc } of contests) {
       if (doc.result?.declared) {
         expect(doc.status, `${file}`).toBe("concluded");
+      } else if (doc.declaration?.declared) {
+        expect(doc.status, `${file}`).toBe("polls_closed");
       } else if (doc.contest.polling_day > meta.generated_at.slice(0, 10)) {
         expect(doc.status, `${file}`).toBe("upcoming");
       }

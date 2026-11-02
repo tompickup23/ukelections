@@ -340,3 +340,17 @@ declaration, never as a gradeable result. Tests fail any contest left
 ## Cross-repo lessons (5 Jul 2026)
 
 Hard-won gotchas for this site live in the clawd repo: `/Users/tompickup/clawd/docs/lessons/sister-sites.md` (deploy flows, CSP/Pagefind/Astro 6 gotchas, OG-card standard, em-dash sweep method) and `/Users/tompickup/clawd/docs/lessons/editorial-method.md` (fact-check protocol, factual anchors). Read the relevant one before major work, and append new lessons there, not here.
+
+## Shared agent rules
+
+AGENTS.md is a symlink to this guide. Preserve that link and edit this file.
+
+Strict neutrality applies throughout. This is a public utility election information site. Use no partisan framing, party watch lists or editorial slant. List parties alphabetically or by vote share, never by ideology, and show every party standing a candidate.
+
+UK Demographics HP v7.0 ethnic projections and Census 2021 composition change form the demographic core of the forecast. Document the demographic adjustment on each prediction page.
+
+Public copy must stand on official or named public sources. Forecasts need uncertainty, model version, input snapshot and publication timestamp. Backtests are public product data and belong on every place page. Boundary changes require explicit mapping or a clear caveat.
+
+Use shared components and design tokens, including spacing tokens rather than literal rem or px spacing. Keep Cloudflare Pages as the production host unless a change is explicitly requested.
+
+Data priorities are Democracy Club candidate records and nomination statements, House of Commons Library general election results, Andrew Teale and OpenCouncilData local archives, ONSPD, OS Boundary Line and LSOA geography joins, and polling records with source, fieldwork dates, sample size and method notes. Borough, county, unitary, Westminster, Senedd and Scottish Parliament contests need separate model families.
