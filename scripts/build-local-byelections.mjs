@@ -360,6 +360,52 @@ export function buildPriorIndex(history) {
   return { find, byelectionRows, ordinaryCount: ordinaryBySlug.size };
 }
 
+/**
+ * The baseline each by-election's own page used, keyed by ballot id, from the
+ * committed contest files. The archives miss whole councils (Windsor and
+ * Maidenhead, Blackpool, Mid Devon and others have no ordinary rows at all), so
+ * the page's prior usually came from Democracy Club directly. Once a contest's
+ * result reaches the sidecar it is no longer "fresh", and looking its prior up
+ * again by ward name alone found nothing: 13 September and October contests
+ * fell out of the swing corpus while their pages showed a baseline.
+ */
+export function loadPagePriors() {
+  const out = new Map();
+  if (!existsSync(OUT_DIR)) return out;
+  for (const file of readdirSync(OUT_DIR).filter((name) => name.endsWith(".json") && !name.startsWith("_"))) {
+    const doc = JSON.parse(readFileSync(path.join(OUT_DIR, file), "utf8"));
+    const id = doc.contest?.ballot_paper_id;
+    if (!id) continue;
+    const prior = doc.prior_result;
+    out.set(id, {
+      gss: doc.contest.ward_gss || null,
+      prior: prior?.candidates?.length ? prior : null,
+      usable: prior ? prior.usable_as_baseline !== false : true,
+    });
+  }
+  return out;
+}
+
+/**
+ * Pairs a by-election with its prior for the swing corpus: the baseline its
+ * page showed when there is one, and never one the page itself rejected for a
+ * boundary change; otherwise the archives, with the ward's GSS code so the LEAP
+ * history (keyed by GSS) is consulted too.
+ */
+export function corpusPriorFinder(priors, pagePriors = new Map()) {
+  return (row) => {
+    if (row._prior) return row._prior;
+    const page = pagePriors.get(row.ballot_paper_id);
+    if (page?.prior) return page.usable ? page.prior : null;
+    return priors.find({
+      council_slug: row.council_slug,
+      ward_slug: row.ward_slug,
+      gss: page?.gss ?? null,
+      before: row.election_date,
+    });
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Baseline of last resort
 // ---------------------------------------------------------------------------
@@ -882,15 +928,12 @@ async function main() {
     });
   }
 
-  const corpus = buildSwingCorpus([...priors.byelectionRows, ...fresh], (row) =>
-    row._prior ??
-      priors.find({
-        council_slug: row.council_slug,
-        ward_slug: row.ward_slug,
-        gss: null,
-        before: row.election_date,
-      }),
-  );
+  // Tonight's gathered priors override the committed files they will replace.
+  const pagePriors = loadPagePriors();
+  for (const ctx of gathered) {
+    pagePriors.set(ctx.ballot.election_id, { gss: ctx.gss || null, prior: ctx.prior, usable: !ctx.boundaryChanged });
+  }
+  const corpus = buildSwingCorpus([...priors.byelectionRows, ...fresh], corpusPriorFinder(priors, pagePriors));
   console.log(
     `  swing corpus: ${corpus.length} by-elections paired with a prior ward result` +
       (fresh.length ? `, including ${fresh.length} declared since the archive was last rebuilt` : ""),

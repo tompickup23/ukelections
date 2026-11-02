@@ -487,6 +487,9 @@ export const DRAWS = 4000;
 // Re-fitted 4 Oct 2026 after the per-label prior baseline, on 213 contests since
 // May 2025: 1.75 still minimises the Brier score (0.559; 1.5 gives 0.562 and
 // 2.0 gives 0.561), so it stands.
+// Re-fitted 2 Nov 2026 after the corpus started pairing each by-election with
+// its own page's prior (310 contests since May 2025, up from 243): 1.75 still
+// minimises the Brier score (0.5545; 1.5 gives 0.5558, 2.0 gives 0.5573).
 export const SIGMA_INFLATION = 1.75;
 
 // Below this the page says the contest is too close to call rather than naming

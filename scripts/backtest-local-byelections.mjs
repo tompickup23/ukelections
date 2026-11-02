@@ -15,12 +15,10 @@
  *   node scripts/backtest-local-byelections.mjs
  */
 import { backtest, buildSwingCorpus, RECENT_SINCE } from "./lib/local-byelection-model.mjs";
-import { loadHistory, buildPriorIndex } from "./build-local-byelections.mjs";
+import { loadHistory, buildPriorIndex, loadPagePriors, corpusPriorFinder } from "./build-local-byelections.mjs";
 
 const priors = buildPriorIndex(loadHistory());
-const corpus = buildSwingCorpus(priors.byelectionRows, (row) =>
-  priors.find({ council_slug: row.council_slug, ward_slug: row.ward_slug, gss: null, before: row.election_date }),
-);
+const corpus = buildSwingCorpus(priors.byelectionRows, corpusPriorFinder(priors, loadPagePriors()));
 const bt = backtest(corpus);
 const summary = (rows) => {
   const n = rows.length;
