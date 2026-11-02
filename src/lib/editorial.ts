@@ -29,3 +29,27 @@ export function validateEditorialRegistry(articles: EditorialArticle[], now = ne
 export function recentNewsArticles(articles: EditorialArticle[], now = new Date()) {
   return validateEditorialRegistry(articles, now).filter(article => +now - Date.parse(article.firstPublishedAt) < 48 * 3600000);
 }
+
+const xmlEscape = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+
+/**
+ * Google News sitemap XML for the reviewed articles first published in the
+ * last 48 hours. Not served at present.
+ *
+ * /sitemap-news.xml used to be generated on every build and declared in
+ * robots.txt, but the register is empty by design (see
+ * data/editorial/README.md), so it served an empty <urlset> that Search
+ * Console reported as an error (SEO audit, 2 November 2026). Generated
+ * by-election result pages were not used to fill it: they are automated
+ * records, not reviewed articles, and their publication dates are stamped by
+ * the publisher after the build, so the build cannot tell which fall inside
+ * the two-day window. To serve it again once there are articles, add a
+ * prerendered route that returns this string and put the Sitemap line back
+ * in src/pages/robots.txt.ts.
+ */
+export function newsSitemapXml(articles: EditorialArticle[], siteUrl: string, now = new Date()): string {
+  const recent = recentNewsArticles(articles, now);
+  if (recent.length > 1000) throw new Error("News sitemap needs pagination above 1,000 articles");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">${recent.map(article => `<url><loc>${siteUrl}${article.path}</loc><news:news><news:publication><news:name>UK Elections</news:name><news:language>en</news:language></news:publication><news:publication_date>${xmlEscape(article.firstPublishedAt)}</news:publication_date><news:title>${xmlEscape(article.title)}</news:title></news:news></url>`).join("")}</urlset>\n`;
+}
