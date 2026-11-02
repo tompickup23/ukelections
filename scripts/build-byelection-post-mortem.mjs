@@ -26,7 +26,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { backtest, buildSwingCorpus, canonParty } from "./lib/local-byelection-model.mjs";
-import { loadHistory, buildPriorIndex } from "./build-local-byelections.mjs";
+import { loadHistory, buildPriorIndex, loadPagePriors, corpusPriorFinder } from "./build-local-byelections.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const p = (rel) => path.join(ROOT, rel);
@@ -118,9 +118,7 @@ export function byMonth(rows) {
 function rescore(graded) {
   if (!existsSync(p("data/history/dc-historic-results.json"))) return { available: false, note: "data/history/dc-historic-results.json is not present, so the re-score was not run." };
   const priors = buildPriorIndex(loadHistory());
-  const corpus = buildSwingCorpus(priors.byelectionRows, (row) =>
-    priors.find({ council_slug: row.council_slug, ward_slug: row.ward_slug, gss: null, before: row.election_date }),
-  );
+  const corpus = buildSwingCorpus(priors.byelectionRows, corpusPriorFinder(priors, loadPagePriors()));
   const rows = backtest(corpus).rows;
   const byId = new Map(rows.map((r) => [r.ballot_paper_id.replace(/^local\./, "").replace(/\.by\./, "."), r]));
   const pairs = [];
@@ -129,9 +127,8 @@ function rescore(graded) {
     if (g.date < RESCORE_FROM || g.date > RESCORE_TO) continue;
     const id = `${g.council_slug}.${g.slug.slice(g.council_slug.length + 1, -11)}.${g.date}`;
     const r = byId.get(id);
-    // Not in the harness corpus: it matches a ward to its previous result by
-    // name only (gss: null), so contests whose name lookup fails drop out even
-    // where the live page had a prior.
+    // Not in the harness corpus: neither the page nor the archives hold a
+    // usable prior for this ward.
     if (!r) { notScored.push(g.slug); continue; }
     pairs.push({
       slug: g.slug,
