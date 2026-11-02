@@ -7,16 +7,16 @@
     "mean_absolute_error_pp": "Mean over the parties in the published projection of |projected share minus actual share|, in percentage points."
   },
   "overall": {
-    "contests": 32,
-    "winners_called": 14,
-    "mean_absolute_error_pp": 9.31,
+    "contests": 41,
+    "winners_called": 18,
+    "mean_absolute_error_pp": 8.85,
     "named_favourite": {
-      "contests": 12,
-      "called": 4
+      "contests": 17,
+      "called": 6
     },
     "too_close_to_call": {
-      "contests": 20,
-      "called": 10
+      "contests": 24,
+      "called": 12
     }
   },
   "months": [
@@ -145,16 +145,16 @@
     },
     {
       "month": "2026-10",
-      "contests": 12,
-      "winners_called": 7,
-      "mean_absolute_error_pp": 7.49,
+      "contests": 21,
+      "winners_called": 11,
+      "mean_absolute_error_pp": 7.36,
       "named_favourite": {
-        "contests": 5,
-        "called": 3
+        "contests": 10,
+        "called": 5
       },
       "too_close_to_call": {
-        "contests": 7,
-        "called": 4
+        "contests": 11,
+        "called": 6
       },
       "misses": [
         {
@@ -191,6 +191,41 @@
           "projected_winner": "Green Party",
           "actual_winner": "Conservative",
           "too_close_to_call": true
+        },
+        {
+          "slug": "leeds-calverley-farsley-2026-10-22",
+          "date": "2026-10-22",
+          "projected_winner": "Labour",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "south-kesteven-grantham-st-wulframs-2026-10-22",
+          "date": "2026-10-22",
+          "projected_winner": "Independent",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "bassetlaw-worksop-east-2026-10-29",
+          "date": "2026-10-29",
+          "projected_winner": "Labour",
+          "actual_winner": "Reform UK",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "dudley-st-jamess-2026-10-29",
+          "date": "2026-10-29",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Labour",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "halton-beechwood-heath-2026-10-29",
+          "date": "2026-10-29",
+          "projected_winner": "Liberal Democrats",
+          "actual_winner": "Reform UK",
+          "too_close_to_call": false
         }
       ]
     }
@@ -465,15 +500,6 @@
     ]
   },
   "pending_results": [
-    "south-kesteven-grantham-st-wulframs-2026-10-22",
-    "carmarthenshire-saron-2026-10-22",
-    "leeds-calverley-farsley-2026-10-22",
-    "bassetlaw-worksop-east-2026-10-29",
-    "halton-beechwood-heath-2026-10-29",
-    "dudley-st-jamess-2026-10-29",
-    "wychavon-hartlebury-2026-10-22",
-    "nottinghamshire-southwell-2026-10-29",
-    "newark-and-sherwood-dover-beck-2026-10-29",
     "bournemouth-christchurch-and-poole-penn-hill-2026-11-05",
     "hyndburn-huncoat-2026-11-12",
     "suffolk-bosmere-2026-11-12",
@@ -980,6 +1006,22 @@
       "result_source": "https://elections.wiltshire.gov.uk/home/Division/9173"
     },
     {
+      "slug": "carmarthenshire-saron-2026-10-22",
+      "council_name": "Carmarthenshire",
+      "ward_name": "Saron",
+      "date": "2026-10-22",
+      "council_slug": "carmarthenshire",
+      "page": "https://ukelections.co.uk/by-elections/local/carmarthenshire-saron-2026-10-22/",
+      "projected_winner": "Plaid Cymru",
+      "leader_probability_pct": 48,
+      "too_close_to_call": true,
+      "actual_winner": "Plaid Cymru",
+      "called": true,
+      "mae_pp": 4.4,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.carmarthenshire.saron.by.2026-10-22/"
+    },
+    {
       "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
       "council_name": "East Hertfordshire",
       "ward_name": "Hertford Kingsmead",
@@ -994,6 +1036,134 @@
       "mae_pp": 9.04,
       "result_status": "hand_verified_declaration",
       "result_source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx"
+    },
+    {
+      "slug": "leeds-calverley-farsley-2026-10-22",
+      "council_name": "Leeds",
+      "ward_name": "Calverley & Farsley",
+      "date": "2026-10-22",
+      "council_slug": "leeds",
+      "page": "https://ukelections.co.uk/by-elections/local/leeds-calverley-farsley-2026-10-22/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 44,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 4.67,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.leeds.gov.uk/elections/leeds-city-council-elections"
+    },
+    {
+      "slug": "south-kesteven-grantham-st-wulframs-2026-10-22",
+      "council_name": "South Kesteven",
+      "ward_name": "Grantham St Wulfram's",
+      "date": "2026-10-22",
+      "council_slug": "south-kesteven",
+      "page": "https://ukelections.co.uk/by-elections/local/south-kesteven-grantham-st-wulframs-2026-10-22/",
+      "projected_winner": "Independent",
+      "leader_probability_pct": 48,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 8.14,
+      "result_status": "auto_ingested_dc",
+      "result_source": "https://candidates.democracyclub.org.uk/elections/local.south-kesteven.grantham-st-wulframs.by.2026-10-22/"
+    },
+    {
+      "slug": "wychavon-hartlebury-2026-10-22",
+      "council_name": "Wychavon",
+      "ward_name": "Hartlebury",
+      "date": "2026-10-22",
+      "council_slug": "wychavon",
+      "page": "https://ukelections.co.uk/by-elections/local/wychavon-hartlebury-2026-10-22/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 68,
+      "too_close_to_call": false,
+      "actual_winner": "Conservative",
+      "called": true,
+      "mae_pp": 6.18,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://www.aldc.org/2026/10/wychavon-dc-hartlebury-22-october-2026-2/"
+    },
+    {
+      "slug": "bassetlaw-worksop-east-2026-10-29",
+      "council_name": "Bassetlaw",
+      "ward_name": "Worksop East",
+      "date": "2026-10-29",
+      "council_slug": "bassetlaw",
+      "page": "https://ukelections.co.uk/by-elections/local/bassetlaw-worksop-east-2026-10-29/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 60,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": false,
+      "mae_pp": 11.04,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.bassetlaw.gov.uk/council-and-democracy/elections-in-bassetlaw/elections-2026/worksop-east-by-election/declaration-of-result-of-poll/"
+    },
+    {
+      "slug": "dudley-st-jamess-2026-10-29",
+      "council_name": "Dudley",
+      "ward_name": "St. James's",
+      "date": "2026-10-29",
+      "council_slug": "dudley",
+      "page": "https://ukelections.co.uk/by-elections/local/dudley-st-jamess-2026-10-29/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 73,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 7.41,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/"
+    },
+    {
+      "slug": "halton-beechwood-heath-2026-10-29",
+      "council_name": "Halton",
+      "ward_name": "Beechwood & Heath",
+      "date": "2026-10-29",
+      "council_slug": "halton",
+      "page": "https://ukelections.co.uk/by-elections/local/halton-beechwood-heath-2026-10-29/",
+      "projected_winner": "Liberal Democrats",
+      "leader_probability_pct": 59,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": false,
+      "mae_pp": 11.38,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://www.aldc.org/2026/10/halton-ua-beechwood-heath-29-october-2026/"
+    },
+    {
+      "slug": "newark-and-sherwood-dover-beck-2026-10-29",
+      "council_name": "Newark and Sherwood",
+      "ward_name": "Dover Beck",
+      "date": "2026-10-29",
+      "council_slug": "newark-and-sherwood",
+      "page": "https://ukelections.co.uk/by-elections/local/newark-and-sherwood-dover-beck-2026-10-29/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 69,
+      "too_close_to_call": false,
+      "actual_winner": "Conservative",
+      "called": true,
+      "mae_pp": 6.17,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.newark-sherwooddc.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result%20-%20Newark%20and%20Sherwood%20District%20Council%20-%20Dover%20Beck%20Ward%20-%2030%20October%202026_0.pdf"
+    },
+    {
+      "slug": "nottinghamshire-southwell-2026-10-29",
+      "council_name": "Nottinghamshire",
+      "ward_name": "Southwell",
+      "date": "2026-10-29",
+      "council_slug": "nottinghamshire",
+      "page": "https://ukelections.co.uk/by-elections/local/nottinghamshire-southwell-2026-10-29/",
+      "projected_winner": "Conservative",
+      "leader_probability_pct": 51,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": true,
+      "mae_pp": 5.22,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.newark-sherwooddc.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result%20-%20Nottinghamshire%20County%20Council%20-%20Southwell%20Division%20-%2030%20October%202026_0.pdf"
     }
   ]
 }

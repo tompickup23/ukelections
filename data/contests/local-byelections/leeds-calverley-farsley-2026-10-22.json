@@ -43,57 +43,69 @@
       {
         "name": "Amanda Lesley Carter",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 2330,
-        "elected": true
+        "elected": true,
+        "party": "Conservative"
       },
       {
         "name": "Kathryn Sara Penny",
         "party_name": "Labour and Co-operative Party",
-        "party": "Labour",
         "votes": 2134,
-        "elected": false
+        "elected": false,
+        "party": "Labour"
       },
       {
         "name": "Craig Gabbitas",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 693,
-        "elected": false
+        "elected": false,
+        "party": "Reform UK"
       },
       {
         "name": "Daisy Nikita Gilpin",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 341,
-        "elected": false
+        "elected": false,
+        "party": "Green Party"
       },
       {
         "name": "Bradley Evan Holmes",
         "party_name": "Restore Britain",
-        "party": "Restore Britain",
         "votes": 151,
-        "elected": false
+        "elected": false,
+        "party": "Restore Britain"
       },
       {
         "name": "Stuart McLeod",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 92,
-        "elected": false
+        "elected": false,
+        "party": "Liberal Democrats"
       },
       {
         "name": "Bob Buxton",
         "party_name": "Yorkshire Party",
-        "party": "Other",
         "votes": 57,
-        "elected": false
+        "elected": false,
+        "party": "Other"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Labour",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 22 October by-election; not inferred from the ward-wide vote. Reviewed 24 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/leeds-city-council-calverley-and-farsley-22-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-10-22/leeds-calverley-farsley/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05011389",
@@ -394,11 +406,13 @@
     },
     "winner_party": "Conservative",
     "winner_candidate": "Amanda Lesley Carter",
+    "winner_party_name": "Conservative and Unionist Party",
+    "winner_votes": 2330,
     "runner_up_party": "Labour",
     "majority_votes": 196,
     "total_votes": 5798,
-    "source": "https://candidates.democracyclub.org.uk/elections/local.leeds.calverley-farsley.by.2026-10-22/",
-    "outcome": null,
+    "source": "https://www.leeds.gov.uk/elections/leeds-city-council-elections",
+    "outcome": "Conservative gain from Labour",
     "grading": {
       "graded_against": "forecast_as_published",
       "published_captured_at": "2026-10-06",
@@ -406,10 +420,17 @@
       "projected_winner": "Labour",
       "call_correct": false,
       "mae_pp": 3.8512886216922086
-    }
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-11-02",
+    "note": "Leeds City Council's declaration of result (Ed Whiting, Returning Officer, 23 October 2026), read on 2 November 2026: seven candidate counts total 5,798 valid votes, identical to Democracy Club's; 6 rejected papers make 5,804 ballot papers. Turnout 32.20% as declared. Leeds does not state the electorate, so it is left blank; Democracy Club's 5,111 ballots and 15,873 electorate do not reconcile with the declaration and are not used."
   },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.leeds.gov.uk/elections/leeds-city-council-elections"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.leeds.calverley-farsley.by.2026-10-22/"
@@ -418,5 +439,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.leeds.calverley-farsley.by.2026-10-22/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-11-02"
 }

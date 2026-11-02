@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "generated_at": "2026-10-24T03:36:55.702Z",
   "slug": "wychavon-hartlebury-2026-10-22",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.wychavon.hartlebury.by.2026-10-22",
     "polling_day": "2026-10-22",
@@ -37,31 +37,43 @@
     ],
     "candidates": [
       {
-        "name": "Susan Anne Evans",
-        "party_name": "Labour Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Tony Miller",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
+        "votes": 315,
+        "elected": true,
+        "party": "Conservative"
       },
       {
         "name": "Jake Richardson",
         "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "votes": 238,
+        "elected": false,
+        "party": "Reform UK"
+      },
+      {
+        "name": "Susan Anne Evans",
+        "party_name": "Labour Party",
+        "votes": 78,
+        "elected": false,
+        "party": "Labour"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Conservative",
+    "member": null,
+    "note": "Former holding party checked against the linked reporting of the 22 October by-election; not inferred from the ward-wide vote. Reviewed 24 October 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/wychavon-dc-hartlebury-22-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-10-22/wychavon-hartlebury/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05015457",
@@ -298,9 +310,47 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.37717908082408874,
+      "Labour": 0.12361331220285261,
+      "Conservative": 0.49920760697305866,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Conservative",
+    "winner_candidate": "Tony Miller",
+    "winner_party_name": "Conservative and Unionist Party",
+    "winner_votes": 315,
+    "runner_up_party": "Reform UK",
+    "majority_votes": 77,
+    "total_votes": 631,
+    "source": "https://www.aldc.org/2026/10/wychavon-dc-hartlebury-22-october-2026-2/",
+    "outcome": "Conservative hold",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-10-21",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Conservative",
+      "call_correct": true,
+      "mae_pp": 8.240887480190173
+    },
+    "review_status": "hand_verified_two_sources",
+    "checked_at": "2026-11-02",
+    "note": "Wychavon's declaration sits behind a JavaScript bot check and was not read. Democracy Club (citing the Wychavon declaration) and ALDC's result report agree on the Conservative 315 and Labour 78 but differ on Reform UK: 248 (Democracy Club) against 238 (ALDC). Only 238 reconciles with the declared turnout: 315 + 238 + 78 = 631 valid votes plus 2 rejected is 633 ballot papers, 25.29% of the 2,503 electorate, and ALDC's 49.9% Conservative share is 315 of 631. So Reform UK is 238 here. Replace this row's source when the declaration can be read."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Report of the declaration (verified against a second source)",
+      "url": "https://www.aldc.org/2026/10/wychavon-dc-hartlebury-22-october-2026-2/"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.wychavon.hartlebury.by.2026-10-22/"
@@ -309,5 +359,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.wychavon.hartlebury.by.2026-10-22/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-11-02"
 }
