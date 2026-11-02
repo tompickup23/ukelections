@@ -41,13 +41,13 @@ const sources = (c: any) =>
   ].filter(([, s]) => s && (s as any).url) as Array<[string, { url: string; label: string }]>;
 ---
 <BaseLayout
-  title="6 May 2027 elections: which councils vote"
-  description="Every council in Great Britain whose next election we have verified for Thursday 6 May 2027, with the seats up, the cycle, who controls it now and when it last voted, each from the council's own page, its electoral change order or the statute. No 2027 council forecasts are published."
-  breadcrumbs={[{ name: "Next elections", href: "/elections/" }, { name: "6 May 2027", href: "/elections/2027/" }]}
+  title="Local elections 2027: which councils vote on 6 May"
+  description="Councils in Great Britain we have verified as voting on Thursday 6 May 2027, with seats up, current control and a source for each. No forecasts yet."
+  breadcrumbs={[{ name: "Next elections", href: "/elections/" }, { name: "Local elections 2027", href: "/elections/2027/" }]}
 >
   <section class="page-hero">
     <p class="eyebrow">Thursday 6 May 2027 · Sources checked {longDate(data.checked_at)}</p>
-    <h1>Who votes on 6 May 2027?</h1>
+    <h1>Local elections 2027: who votes on 6 May?</h1>
     <p class="lede">
       We have verified <strong>{t.councils_verified} councils</strong> voting that day: {t.by_nation.E} in England,
       {t.by_nation.S} in Scotland and {t.by_nation.W} in Wales. <strong>We have not published forecasts for them.</strong>

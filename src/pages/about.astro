@@ -1,0 +1,95 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { publisherNode } from "../lib/seo";
+import { SITE_URL } from "../lib/site";
+
+// Every statement here is already made elsewhere on the site: the footer
+// (who runs it), /sources/ and /methodology/ (inputs and model), /terms/
+// (what the site is not) and /contact/ (corrections). Keep it that way: this
+// page gathers them, it does not add claims of its own.
+const CONTACT_EMAIL = "info@ukelections.co.uk";
+const REPO_URL = "https://github.com/tompickup23/ukelections";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About UK Elections",
+    url: `${SITE_URL}/about/`,
+    publisher: publisherNode(),
+    author: { "@type": "Person", name: "Tom Pickup", url: `${SITE_URL}/about/` },
+  },
+];
+---
+
+<BaseLayout
+  title="About UK Elections: who runs it and how"
+  description="Who runs UK Elections, where its data comes from, how forecasts are made and tested, and how to report an error or get in touch."
+  structuredData={structuredData}
+>
+  <section class="page-hero">
+    <p class="eyebrow">About</p>
+    <h1>About UK Elections</h1>
+    <p class="lede">
+      UK Elections publishes election results, forecasts and boundaries for UK parliamentary constituencies and
+      for the councils, wards and contests in its coverage. It is an independent research project, not an
+      official election authority.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Who runs it</h2>
+    <p>
+      The site is run by Tom Pickup, a Lancashire county councillor and Reform UK member. No party, council,
+      candidate or election authority has any say over what appears here. The same model rules apply to every
+      party, and every forecast is published alongside its record against the actual result.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Where the data comes from</h2>
+    <p>Every input is public data. The main sources are:</p>
+    <ul class="plain-list">
+      <li>candidates, ballots and recent results from <a href="https://democracyclub.org.uk/">Democracy Club</a>;</li>
+      <li>older results from the House of Commons Library and the Andrew Teale archive, and returning officers' declarations where boundaries have changed;</li>
+      <li>Westminster voting intention from named pollsters' published polls;</li>
+      <li>demographics from the Office for National Statistics 2021 Census;</li>
+      <li>British Election Study panel data for the general election prior.</li>
+    </ul>
+    <p>
+      The <a href="/sources/">sources page</a> lists each one and how it is used. The
+      <a href="/transparency/">transparency page</a> publishes a manifest of every file behind the latest
+      forecast, with its sha256 hash.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>How forecasts are made and tested</h2>
+    <p>
+      The <a href="/methodology/">methodology page</a> explains the model step by step, and every ward and
+      constituency page lists the steps that shaped its own forecast. Forecasts are point estimates, not
+      guarantees. Each model is run against past elections before it is published, and the
+      <a href="/data-quality/">accuracy record</a> grades every published forecast against the declared result,
+      including the misses. The code is public on <a href={REPO_URL}>GitHub</a>.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Corrections</h2>
+    <p>
+      If you find an error, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> with the page address
+      and the correct figure with its source. Corrections are applied to the page and noted. Check candidate,
+      result and boundary records against the linked official source before relying on them; see the
+      <a href="/terms/">terms</a>.
+    </p>
+  </section>
+
+  <section class="section prose-block">
+    <h2>Contact</h2>
+    <p>
+      Questions and data queries go to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>, or use the
+      <a href="/contact/">contact page</a>. See the <a href="/privacy/">privacy statement</a> for what the site
+      collects.
+    </p>
+  </section>
+</BaseLayout>
