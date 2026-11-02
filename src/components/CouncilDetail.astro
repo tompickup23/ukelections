@@ -135,13 +135,21 @@ const seatProjectionRows: SeatProjRow[] = Object.entries(seatProjection as Recor
     share: seatTotal > 0 ? (seats as number) / (seatTotal as number) : 0,
   }));
 
+const nextKnown = nextElection.status !== "unknown";
 const title = council === "essex" || council === "colchester"
   ? `${councilName} council seats and results, 2026`
-  : `${councilName}. May 7 2026 result and what's next`;
+  : nextKnown
+    ? `${councilName}. May 7 2026 result and what's next`
+    : `${councilName}. May 7 2026 council election result`;
 // Leads with the council name: the previous form started with the control
 // headline and seat counts, which are identical across small councils and
 // collided on 20 pages.
-const description = `${councilName}, 7 May 2026: ${controlHeadline}. ${seatsUp} seats contested. Next: ${nextElection.label}.`;
+// The next-election clause is stated only when it is known. An unverified
+// council used to carry "Next: Not verified." into its search snippet: a
+// placeholder, not a fact. When the date is unknown the page says nothing
+// about it rather than publishing the gap. The title above follows the same
+// rule: "what's next" is only promised where we can answer it.
+const description = `${councilName}, 7 May 2026: ${controlHeadline}. ${seatsUp} seats contested.${nextKnown ? ` Next: ${nextElection.label}.` : ""}`;
 const breadcrumbs: Crumb[] = [
   { name: "Councils", href: "/councils/" },
   { name: councilName, href: `/seats/${council}/` }
@@ -187,12 +195,12 @@ const breadcrumbs: Crumb[] = [
         <p class="status-value">{seatsUp} <span class="muted">of {totalSeats || "n/a"} seats</span></p>
         <p class="muted">Seats on the 7 May 2026 ballot. Party results are shown below.</p>
       </article>
-      <article class="status-card">
+      {nextKnown && (<article class="status-card">
         <p class="status-label">Next election</p>
         <p class="status-value">{nextElection.label}</p>
         <p class="muted">{nextElection.reason}</p>
         {nextElection.sources.length > 0 && <p class="caption">Checked {nextElection.checked_at}. {nextElection.sources.map((source, i) => <>{i > 0 && "; "}<a href={source.url}>{source.label}</a></>)}</p>}
-      </article>
+      </article>)}
     </div>
   </section>
 
@@ -221,7 +229,7 @@ const breadcrumbs: Crumb[] = [
     </section>
   )}
 
-  {nextElection.is_tbc && (
+  {nextElection.status === "abolished" && (
     <section class="section">
       <h2>When does {councilName} next vote?</h2>
       <p>{nextElection.reason} Boundary reviews, reorganisation and later notices can change a normal cycle.</p>

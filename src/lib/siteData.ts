@@ -166,7 +166,8 @@ export interface May7Headline {
   reform_seats_won: number;
   control_by_party: Record<string, number>;
   noc_count: number;
-  declared_coverage_pct: number;
+  /** Share of the target cohort declared, as a fraction (0.977, not 97.7). */
+  declared_coverage_share: number;
   live_winner_accuracy: number;
   live_major_party_mae: number;
   prereg_winner_accuracy: number;
@@ -187,7 +188,13 @@ export function loadMay7Headline(): May7Headline {
     reform_seats_won: (seats.won && seats.won.ref) || 0,
     control_by_party: sum.by_controlling_party || {},
     noc_count: sum.control_outcomes?.no_overall_control ?? 0,
-    declared_coverage_pct: pa.snapshot?.coverage_pct ?? (totalTargeted ? totalDeclared / totalTargeted : 0),
+    // The post-audit snapshot stores coverage_pct already multiplied by 100
+    // (97.7). Read raw, then multiplied by 100 again on /past-results/, it
+    // published "9770.0% of the target cohort". Convert at the boundary so
+    // every reader gets a fraction, the same unit as the fallback.
+    declared_coverage_share: typeof pa.snapshot?.coverage_pct === "number"
+      ? pa.snapshot.coverage_pct / 100
+      : (totalTargeted ? totalDeclared / totalTargeted : 0),
     live_winner_accuracy: pa.live?.summary?.winner_accuracy ?? 0,
     live_major_party_mae: pa.live?.summary?.major_party_mae_avg ?? 0,
     prereg_winner_accuracy: pa.prereg?.summary?.winner_accuracy ?? 0,
