@@ -538,34 +538,13 @@ async function gather(ballot, priors, resultRows) {
   // lets those durable counts fill that gap. Match every candidate: a partial
   // fill would grade a contest on half a result.
   if (candidates.length && row) {
-    const rowCandidates = row.candidates || [];
-    const byName = new Map(rowCandidates.map((c) => [normaliseName(c.name), c]));
-    const filled = candidates.map((candidate) => {
-      const named = byName.get(normaliseName(candidate.name));
-      if (named) return named;
-      const sameParty = rowCandidates.filter((c) => canonParty(c.party_name) === candidate.party);
-      return sameParty.length === 1 ? sameParty[0] : null;
-    });
-    const countsAgree = filled.every(
-      (source, i) => source && (candidates[i].votes === null || Number(source.votes) === candidates[i].votes),
-    );
-    const mayFill = candidates.every((c) => c.votes === null) || isHandVerified(row);
-    if (filled.every(Boolean) && countsAgree && mayFill) {
-      candidates.forEach((candidate, i) => {
-        const verified = filled[i];
-        candidate.name = verified.name || candidate.name;
-        candidate.party_name = verified.party_name || candidate.party_name;
-        candidate.party = canonParty(candidate.party_name);
-        candidate.votes = Number(verified.votes);
-        candidate.elected = Boolean(verified.elected);
-      });
+    const restored = restoreHistoryCandidates(candidates, row);
+    if (restored) {
+      candidates.splice(0, candidates.length, ...restored);
       resultSource = row.source || null;
-    } else if (candidates.every((c) => c.votes === null)) {
-      console.log(`  sidecar row for ${ballot.election_id} does not cover every candidate; left unfilled`);
-    } else if (isHandVerified(row) && !countsAgree) {
-      console.log(`  hand-verified sidecar row for ${ballot.election_id} disagrees with Democracy Club; kept live counts`);
     }
   }
+
   const field = fieldFromCandidates(candidates);
 
   // Promote to the permanent cache once the result is complete and the poll is
@@ -595,9 +574,34 @@ async function gather(ballot, priors, resultRows) {
   const boundaryChanged = Boolean(prior && setStart && prior.election_date < setStart);
 
   const resultReview = row?.reviewed_at && row.source === resultSource
-    ? { checked_at: row.reviewed_at, review_status: row.review_status, note: row.verification_note }
+    ? { checked_at: row.reviewed_at, accessed_at: row.accessed_at || row.reviewed_at, review_status: row.review_status, note: row.verification_note }
     : null;
   return { ballot, ids, division, gss, setStart, votingSystem, dc, candidates, field, prior, boundaryChanged, fieldUnavailable, resultSource, resultReview };
+}
+
+/** Restore complete council counts while keeping ambiguous candidate matches unresolved. */
+export function restoreHistoryCandidates(candidates, row) {
+  const rowCandidates = candidatesFromHistoryResult(row);
+  if (!rowCandidates.length) return null;
+  const byName = new Map(rowCandidates.map((candidate) => [normaliseName(candidate.name), candidate]));
+  const filled = candidates.map((candidate) => {
+    const named = byName.get(normaliseName(candidate.name));
+    if (named) return named;
+    const party = canonParty(candidate.party_name || candidate.party);
+    const matches = rowCandidates.filter((entry) => canonParty(entry.party_name) === party);
+    return matches.length === 1 ? matches[0] : null;
+  });
+  if (!filled.every(Boolean) || new Set(filled).size !== filled.length || filled.length !== rowCandidates.length) return null;
+  const agrees = filled.every((source, index) => candidates[index].votes === null || source.votes === candidates[index].votes);
+  const council = row.review_status === "hand_verified_declaration";
+  if (!council && (!agrees || !(candidates.every((candidate) => candidate.votes === null) || isHandVerified(row)))) return null;
+  if (council && !agrees) console.warn(`Council declaration replaces conflicting feed counts for ${row.ballot_paper_id}`);
+  return filled.map((candidate) => ({
+    ...candidate,
+    party: canonParty(candidate.party_name),
+    source: row.source,
+    accessed_at: row.accessed_at || row.reviewed_at,
+  }));
 }
 
 /** The pure half: assess, project, grade, and shape the contest file. */
