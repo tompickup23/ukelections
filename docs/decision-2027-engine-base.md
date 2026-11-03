@@ -48,9 +48,14 @@ In London alone it is Reform +6.6, Labour -3.5 and Conservative -5.0.
 
 Undoing the five May-fitted changes is not enough. Every later part of HEAD was designed after the May 2026 results were known. Scoring (b) on May 2026 would mark an engine against the answer key it was built from, however carefully the fitted constants were reset.
 
-An honest score for (b) needs an election it has not seen. Two routes:
-- **A pre-lock backtest.** Run HEAD on the May 2025 county and unitary elections, with inputs as they stood in April 2025. Score (a) the same way, so the two can be compared. This needs the history file as at April 2025, which `scripts/rebuild-history-as-at.mjs` (PR 145) can produce. It also needs switches in HEAD for the Green cap and the Conservative floor, which have none today. About one session.
-- **A forward test.** Lock both engines now and score them on what follows, starting with May 2027 itself. That settles the question, but only after the forecast has to be published.
+An honest score for (b) needs an election it has not seen.
+
+**Correction, 3 November 2026: the May 2025 elections cannot serve.** This note first proposed a May 2025 backtest. Checked before any run, it would not be held out, for either option:
+- **The shared core was built on May 2025.** Both (a) and (b) rest on the 7 May engine. Its Step 9b curve is, in the words of `src/lib/reformRealignmentUplift.js` at `5e85c84`, "empirically derived from Burnley 2026 ward-level forecasts", which had already taken the May 2025 county lift. Its Step 5 proxy also feeds May 2025 county shares into the districts. The step is gated off for the May 2024 backtest because that "predates the realignment signal".
+- **The baselines are missing on this Mac.** 21 of the 24 May 2025 councils have no earlier ordinary election in `data/history/dc-historic-results.json`. Only Gloucestershire, Hertfordshire and West Northamptonshire have 2017 or 2021 results there.
+
+The route that remains:
+- **A forward test.** Lock both engines now and score them on what follows. Council by-elections give an earlier read: about six a week, each forecast through the local engine and hashed before polling day. Weekly by-elections are small and not a random sample of wards, so it would take months to separate the two options. May 2027 itself settles the question, but only after the forecast has to be published.
 
 ## Recommendation
 
