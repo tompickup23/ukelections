@@ -1,6 +1,6 @@
 # Pre-registration: the May 2027 council forecasts (3 November 2026)
 
-Status: protocol, committed before any 2027 forecast exists. Nothing is published by it. Tom chose the 7 May engine with the candidate steps as the 2027 base on 3 November 2026 (`docs/decision-2027-engine-base.md`) and asked for the 2027 forecasts to be pre-registered in more than one form. This note fixes now what will be locked, when, how it will be scored, and what is still blocked.
+Status: protocol, committed before any 2027 forecast exists. Nothing is published by it. The 2027 gate is passed on the London-free basis Tom set on 3 November 2026 (section 1). Tom chose the 7 May engine with the candidate steps as the 2027 base on 3 November 2026 (`docs/decision-2027-engine-base.md`) and asked for the 2027 forecasts to be pre-registered in more than one form. This note fixes now what will be locked, when, how it will be scored, and what is still blocked.
 
 ## 1. Why London does not decide this
 
@@ -21,7 +21,12 @@ Held out on the yardstick, the 2,261 non-London wards of May 2026, on the full r
 
 Source: `data/transparency/may-2026-london-free-2026-11.json` (`scripts/score-london-free-2026-11.mjs`), built from the full-run and second London outputs. The middle row is one further re-run of the 7 May engine's own Final-C without London; no parameter was chosen for it. It brings the arms scored against May 2026 since 24 October to 20.
 
-Whether the gate's London condition applies to a year with no London wards is **Tom's decision**. Until he makes it, nothing for 2027 is published, and the locks below are taken as sealed records only.
+**Decided, 3 November 2026: Tom dropped the London condition for 2027**, a year with no London wards. The 2027 gate is therefore the London-free comparison above: the named forecast's engine must call more than the published forecast's 1,176 of 2,261 non-London wards, held out, on the yardstick. The candidate calls 1,272 and passes, by 96 wards. The London result is not hidden:
+- It stays in the record (399 London wards called, against 447 published, on the full run).
+- It is stated on the 2027 methodology page.
+- The condition returns for any year in which London votes.
+
+Publication of each vintage still needs Tom's yes, and vintage 1 is blocked on the inputs in section 4.
 
 ## 2. What is pre-registered
 
