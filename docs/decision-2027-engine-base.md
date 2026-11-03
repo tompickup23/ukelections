@@ -1,6 +1,6 @@
 # Decision: the base engine for the May 2027 council forecasts (3 November 2026)
 
-Status: for Tom to decide. Nothing is published by this note, and no 2027 forecast is published until the gate below is passed.
+Status: **decided, 3 November 2026: Tom chose (a)**, the 7 May engine with the candidate steps. Nothing is published by this note, and no 2027 forecast is published until the gate below is passed.
 
 **Gate:** a full engine run on 25 April 2026 inputs must beat 1,623 of 2,897 wards (56.0%) on `scripts/score-may-2026-like-for-like.mjs`, with London no worse than the published 447. Neither option passes it today.
 
@@ -72,4 +72,4 @@ It should then score both once on the full run. If that clears 1,623 with London
 - Reform is named first in 1,038 wards, an overcall of 58.
 - Lib Dem recall is 64% and Green recall 38%.
 
-**Tom decides.** Phase 5 (lock, publish, score) does not start before the decision and the gate.
+**Decision.** Tom chose (a) on 3 November 2026. Phase 5 (lock, publish, score) still waits for the gate.
