@@ -292,7 +292,7 @@ export function buildRow(contest, parsed, result, { source, accessedAt }) {
 // Fetching, politely
 // ---------------------------------------------------------------------------
 
-const robotsCache = new Map();
+const FETCH_TIMEOUT_MS = 20_000;
 
 /** True when robots.txt lets us fetch this URL. A robots file we cannot read is not a yes. */
 export function robotsAllows(robotsText, url) {
@@ -346,29 +346,50 @@ export function duringCountNight(now, pollingDay) {
   return (ukDay === pollingDay && hour >= 21) || (ukDay === nextDay.toISOString().slice(0, 10) && hour < 6);
 }
 
-async function politeFetch(url, state) {
+export async function politeFetch(url, state, { persist = saveState } = {}) {
+  state.robotsCache ??= new Map();
+  const robotsCache = state.robotsCache;
   const host = new URL(url).host;
+  const last = state.previous?.[host] ? Date.parse(state.previous[host]) : 0;
+  if (Date.now() - last < MIN_GAP_MS) return { blocked: `${host} was read by a run less than an hour ago` };
+  if (state.stopped?.[host]) return { blocked: state.stopped[host], failed: true };
+  const request = (target) => fetch(target, {
+    headers: { "user-agent": USER_AGENT },
+    redirect: "manual",
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  });
   if (!robotsCache.has(host)) {
-    const res = await fetch(`https://${host}/robots.txt`, { headers: { "user-agent": USER_AGENT } }).catch(() => null);
+    const res = await request(`https://${host}/robots.txt`).catch(() => null);
     // No robots file at all (404) is permission; a robots file we could not read is not.
-    robotsCache.set(host, res?.ok ? await res.text() : res?.status === 404 ? "" : null);
+    robotsCache.set(host, res?.ok ? await res.text().catch(() => null) : res?.status === 404 ? "" : null);
   }
   const robots = robotsCache.get(host);
-  if (robots === null) return { blocked: "robots.txt could not be read, so nothing was fetched" };
+  if (robots === null) return { blocked: "robots.txt could not be read, so nothing was fetched", failed: true };
   if (!robotsAllows(robots, url)) return { blocked: "robots.txt disallows this path: a stop, not a workaround" };
   // The hourly gap is between runs. Inside one run a council gets at most
   // three requests: its elections page, a second listing, the declaration.
   state.thisRun ??= {};
-  const last = state.previous?.[host] ? Date.parse(state.previous[host]) : 0;
-  if (Date.now() - last < MIN_GAP_MS) return { blocked: `${host} was read by a run less than an hour ago` };
   if ((state.thisRun[host] = (state.thisRun[host] || 0) + 1) > 3) return { blocked: `three requests to ${host} already this run` };
   state.hosts[host] = new Date().toISOString();
-  const res = await fetch(url, { headers: { "user-agent": USER_AGENT }, redirect: "follow" });
+  // Persist before the request: an interrupted run must still respect the gap.
+  persist(state);
+  const res = await request(url);
   const type = res.headers.get("content-type") || "";
   const body = Buffer.from(await res.arrayBuffer());
-  if (!res.ok) return { blocked: `HTTP ${res.status}` };
-  if (/text\/html/.test(type) && body.length < 4000 && /redirect|challenge|captcha|verify you are human/i.test(body.toString("utf8"))) {
-    return { blocked: "a bot check answered instead of the page: not retried" };
+  if (!res.ok) {
+    const blocked = res.status >= 300 && res.status < 400
+      ? `HTTP ${res.status} redirect: record the destination URL before fetching it`
+      : `HTTP ${res.status}`;
+    if (res.status === 403 || res.status === 429) {
+      state.stopped ??= {};
+      state.stopped[host] = blocked;
+    }
+    return { blocked, failed: res.status !== 404 };
+  }
+  if (/text\/html/.test(type) && /<title>[^<]*(?:just a moment|access denied)|cf-chl-|verify you are human|captcha/i.test(body.toString("utf8"))) {
+    state.stopped ??= {};
+    state.stopped[host] = "a bot check answered instead of the page: not retried";
+    return { blocked: state.stopped[host], failed: true };
   }
   return { type, body, url: res.url };
 }
@@ -457,7 +478,7 @@ async function readLive(contest, sources, state) {
   const council = sources.councils?.[contest.contest.council_slug];
   let dc = null;
   try {
-    const res = await fetch(`${DC_BALLOTS}${id}/`, { headers: { "user-agent": USER_AGENT } });
+    const res = await fetch(`${DC_BALLOTS}${id}/`, { headers: { "user-agent": USER_AGENT }, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
     if (res.ok) {
       const ballot = await res.json();
       dc = { candidacies: (ballot.candidacies || []).map((c) => ({ name: c.person?.name, num_ballots: c.result?.num_ballots ?? null })) };
@@ -471,6 +492,7 @@ async function readLive(contest, sources, state) {
     const index = await politeFetch(indexUrl, state);
     if (index.blocked) {
       console.log(`      ${indexUrl}: ${index.blocked}`);
+      if (index.failed) return index;
       continue;
     }
     const html = index.body.toString("utf8");
@@ -484,7 +506,7 @@ async function readLive(contest, sources, state) {
   if (!target && indexes.length) return { blocked: "no declaration link on the council's elections pages yet", dc };
   if (!target) return { blocked: "no declaration source recorded for this council", dc };
   const doc = await politeFetch(target, state);
-  if (doc.blocked) return { blocked: `${target}: ${doc.blocked}`, dc };
+  if (doc.blocked) return { blocked: `${target}: ${doc.blocked}`, failed: doc.failed, dc };
   const text = textFrom(doc.type, doc.body, contest.slug);
   return { text, source: target, dc };
 }
@@ -506,6 +528,36 @@ export function mergeRows(sidecar, rows) {
   return { written, kept };
 }
 
+export async function collectResults(contests, readDeclaration, accessedAt, log = console.log) {
+  const rows = [];
+  const pending = [];
+  for (const contest of contests) {
+    const label = `${contest.contest.council_name}, ${contest.contest.ward_name}`;
+    let read;
+    try {
+      read = await readDeclaration(contest);
+    } catch (error) {
+      pending.push({ label, why: `fetch or extraction failed: ${error.message}`, failed: true });
+      continue;
+    }
+    if (read.blocked || !read.text || read.text.unreadable) {
+      pending.push({ label, why: read.blocked || read.text?.unreadable || "no saved declaration", failed: Boolean(read.failed) });
+      continue;
+    }
+    const parsed = parseDeclaration(read.text, contest);
+    const result = reconcile(parsed, contest, read.dc);
+    if (!result.ok) {
+      pending.push({ label, why: result.reasons.join("; ") });
+      continue;
+    }
+    rows.push(buildRow(contest, parsed, result, { source: read.source, accessedAt }));
+    log(`  + ${label}: ${parsed.candidates.map((x) => `${surnameOf(x.name)} ${x.votes}`).join(", ")}`);
+    for (const check of result.checks) log(`      ${check.pass ? "ok" : "NO"} ${check.name}: ${check.detail}`);
+    if (result.dcDiffs?.length) log(`      ! Democracy Club differs: ${result.dcDiffs.join(", ")}`);
+  }
+  return { rows, pending };
+}
+
 async function main() {
   const a = args();
   const now = new Date();
@@ -522,26 +574,14 @@ async function main() {
   }
   const sources = existsSync(p(SOURCES)) ? readJson(SOURCES) : { councils: {}, contests: {} };
   const state = offline ? { previous: {}, hosts: {} } : loadState();
-  const rows = [];
-  const pending = [];
-  for (const contest of contests) {
-    const label = `${contest.contest.council_name}, ${contest.contest.ward_name}`;
-    const read = offline ? { ...fromFixtures(a.fixtures, contest), source: contest.result?.source ?? null } : await readLive(contest, sources, state);
-    if (read.blocked || !read.text || read.text.unreadable) {
-      pending.push({ label, why: read.blocked || read.text?.unreadable || "no saved declaration" });
-      continue;
-    }
-    const parsed = parseDeclaration(read.text, contest);
-    const result = reconcile(parsed, contest, read.dc);
-    if (!result.ok) {
-      pending.push({ label, why: result.reasons.join("; ") });
-      continue;
-    }
-    rows.push(buildRow(contest, parsed, result, { source: read.source, accessedAt }));
-    console.log(`  + ${label}: ${parsed.candidates.map((x) => `${surnameOf(x.name)} ${x.votes}`).join(", ")}`);
-    for (const check of result.checks) console.log(`      ${check.pass ? "ok" : "NO"} ${check.name}: ${check.detail}`);
-    if (result.dcDiffs?.length) console.log(`      ! Democracy Club differs: ${result.dcDiffs.join(", ")}`);
-  }
+  const { rows, pending } = await collectResults(
+    contests,
+    (contest) => offline
+      ? { ...fromFixtures(a.fixtures, contest), source: contest.result?.source ?? null }
+      : readLive(contest, sources, state),
+    accessedAt,
+  );
+  if (pending.some((item) => item.failed)) process.exitCode = 1;
   if (!offline) saveState(state);
   for (const item of pending) console.log(`  . pending ${item.label}: ${item.why}`);
   console.log(`  ${rows.length} reconciled, ${pending.length} pending`);

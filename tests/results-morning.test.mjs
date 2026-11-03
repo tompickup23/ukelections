@@ -1,7 +1,9 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildRow,
+  collectResults,
+  politeFetch,
   declarationLinks,
   duringCountNight,
   fromFixtures,
@@ -151,5 +153,86 @@ describe("results morning, the guards", () => {
       expect(doc.contest.voting_system).toBe("FPTP");
       expect(sources.councils[doc.contest.council_slug]?.index_url).toMatch(/^https:\/\//);
     }
+  });
+});
+
+
+describe("results morning, failed and late fetches", () => {
+  afterEach(() => vi.restoreAllMocks());
+  const state = () => ({ previous: {}, hosts: {} });
+  const options = { persist: () => {} };
+
+  it("continues after a failed fetch and leaves that contest untouched", async () => {
+    const failed = contest("wychavon-hartlebury-2026-10-22");
+    const good = contest("leeds-calverley-farsley-2026-10-22");
+    const saved = structuredClone({ results: sidecar });
+    const before = structuredClone(saved.results.find((r) => r.ballot_paper_id === failed.contest.ballot_paper_id));
+    const report = await collectResults([failed, good], async (c) => {
+      if (c === failed) throw new Error("connection reset");
+      return { ...fromFixtures(FIXTURES, c), source: "fixture" };
+    }, "2026-11-03", () => {});
+    expect(report.rows).toHaveLength(1);
+    expect(report.pending).toEqual([{ label: "Wychavon, Hartlebury", why: "fetch or extraction failed: connection reset", failed: true }]);
+    mergeRows(saved, report.rows);
+    expect(saved.results.find((r) => r.ballot_paper_id === before.ballot_paper_id)).toEqual(before);
+  });
+
+  it("tries a missing declaration again on a later run", async () => {
+    const c = contest("wychavon-hartlebury-2026-10-22");
+    const early = await collectResults([c], async () => ({ blocked: "HTTP 404" }), "2026-11-03", () => {});
+    expect(early.rows).toEqual([]);
+    expect(early.pending[0].failed).toBe(false);
+    const later = await collectResults([c], async () => ({ ...fromFixtures(FIXTURES, c), source: "fixture" }), "2026-11-03", () => {});
+    expect(later.rows).toHaveLength(1);
+  });
+
+  it("bounds requests and persists the fetch time before a connection fails", async () => {
+    const saved = state();
+    const persist = vi.fn();
+    const timeout = vi.spyOn(AbortSignal, "timeout");
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response("User-agent: *\nAllow: /"))
+      .mockImplementationOnce(async (_url, init) => {
+        expect(persist).toHaveBeenCalledWith(saved);
+        expect(saved.hosts["example.gov.uk"]).toBeTruthy();
+        expect(init.signal).toBeInstanceOf(AbortSignal);
+        throw new Error("request timed out");
+      });
+    await expect(politeFetch("https://example.gov.uk/result", saved, { persist })).rejects.toThrow("request timed out");
+    expect(timeout).toHaveBeenCalledWith(20_000);
+  });
+
+  it("does not follow an unchecked redirect", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response(""))
+      .mockResolvedValueOnce(new Response(null, { status: 302, headers: { location: "https://other.gov.uk/private" } }));
+    expect((await politeFetch("https://example.gov.uk/result", state(), options)).blocked).toContain("redirect");
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(fetch.mock.calls.every(([, init]) => init.redirect === "manual")).toBe(true);
+  });
+
+  it("does not retry a council after a 403 or a large bot challenge", async () => {
+    for (const response of [new Response("Forbidden", { status: 403 }), new Response(`<title>Just a moment</title>${" ".repeat(5000)}`, { headers: { "content-type": "text/html" } })]) {
+      const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(new Response("")).mockResolvedValueOnce(response);
+      const saved = state();
+      expect((await politeFetch("https://example.gov.uk/result", saved, options)).failed).toBe(true);
+      expect((await politeFetch("https://example.gov.uk/other", saved, options)).failed).toBe(true);
+      expect(fetch).toHaveBeenCalledTimes(2);
+      fetch.mockRestore();
+    }
+  });
+
+  it("checks the hourly gap before requesting robots", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch");
+    const saved = state();
+    saved.previous["example.gov.uk"] = new Date().toISOString();
+    expect((await politeFetch("https://example.gov.uk/result", saved, options)).blocked).toContain("less than an hour");
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("does not read a declaration if robots cannot be read", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("network error"));
+    expect((await politeFetch("https://example.gov.uk/result", state(), options)).failed).toBe(true);
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 });

@@ -113,3 +113,24 @@ a bot check. These are where each council posted its notices or earlier results,
 | Staffordshire Moorlands (Cheddleton) | article/8764 | PDF, possibly a scan |
 | Suffolk, Bosmere (Mid Suffolk count) | election-results, then election-notices | Liferay document; the May 2026 Bosmere result is excluded |
 | Wigan (Hindley Green) | Council/Voting-and-Elections/Elections.aspx | PDF named by link text, not filename |
+
+
+## Review safeguards added 3 November 2026
+
+Council requests and Democracy Club requests have a 20 second timeout. A failed
+council request is recorded in the report, leaves that contest unchanged and
+allows the other contests to be read. A transport error, unreadable robots file,
+HTTP error other than 404, or bot challenge makes the process exit with status 1.
+An absent declaration remains pending and can be read on a later run for the same
+polling date. Valid rows may still be saved locally when another council fails;
+the proposed cron stops before committing or pushing if the process exits with
+status 1. Read the report before repeating the write.
+
+The hourly gap is checked before requesting robots. The council fetch timestamp
+is saved before requesting the page, so an interruption cannot erase that guard.
+A 403, 429 or recognised bot challenge stops further requests to that host in the
+same run. Redirects are left pending: check and record the destination URL before
+fetching it, so a redirect cannot bypass the destination's robots rules.
+
+Node and pdftotext were confirmed present on vps main during this review. No
+software, schedule or production data was changed there.
