@@ -55,7 +55,7 @@ An honest score for (b) needs an election it has not seen.
 - **The baselines are missing on this Mac.** 21 of the 24 May 2025 councils have no earlier ordinary election in `data/history/dc-historic-results.json`. Only Gloucestershire, Hertfordshire and West Northamptonshire have 2017 or 2021 results there.
 
 The route that remains:
-- **A forward test.** Lock both engines now and score them on what follows. Council by-elections give an earlier read: about six a week, each forecast through the local engine and hashed before polling day. Weekly by-elections are small and not a random sample of wards, so it would take months to separate the two options. May 2027 itself settles the question, but only after the forecast has to be published.
+- **A forward test.** Lock both engines now and score them on what follows. Council by-elections give an earlier read (six are due on 12 November 2026 alone), each forecast through the local engine and hashed before polling day. Weekly by-elections are small and not a random sample of wards, so it would take months to separate the two options. May 2027 itself settles the question, but only after the forecast has to be published.
 
 ## Recommendation
 
