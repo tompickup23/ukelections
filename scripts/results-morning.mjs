@@ -20,7 +20,7 @@
 //   UK time on the night of a poll, when counts are running;
 // - overwrite a hand-verified row, or write a row whose counts do not
 //   reconcile. Those contests are listed as pending with the reason.
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, renameSync, unlinkSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -521,7 +521,21 @@ export function mergeRows(sidecar, rows) {
       kept.push(row.ballot_paper_id);
       continue;
     }
-    if (at >= 0) results[at] = row;
+    if (at >= 0) {
+      const previous = results[at];
+      const merged = { ...previous, ...row };
+      const retained = [];
+      for (const field of ["turnout_votes", "turnout_pct", "spoilt_ballots", "electorate"]) {
+        if (row[field] == null && previous[field] != null) {
+          merged[field] = previous[field];
+          retained.push(field);
+        }
+      }
+      if (retained.length) {
+        merged.verification_note = `${row.verification_note || ""} Retained existing ${retained.join(", ")} from ${previous.source || "the earlier row"}; these fields were not verified by this declaration read.`.trim();
+      }
+      results[at] = merged;
+    }
     else results.push(row);
     written.push(row.ballot_paper_id);
   }
@@ -558,6 +572,18 @@ export async function collectResults(contests, readDeclaration, accessedAt, log 
   return { rows, pending };
 }
 
+/** Replace the complete sidecar only after the temporary file is written. */
+export function writeSidecar(file, sidecar) {
+  const contents = `${JSON.stringify(sidecar, null, 1)}\n`;
+  const temporary = `${file}.${process.pid}.tmp`;
+  try {
+    writeFileSync(temporary, contents);
+    renameSync(temporary, file);
+  } finally {
+    if (existsSync(temporary)) unlinkSync(temporary);
+  }
+}
+
 async function main() {
   const a = args();
   const now = new Date();
@@ -565,6 +591,7 @@ async function main() {
   const date = a.date || yesterday;
   const accessedAt = a["accessed-at"] || now.toISOString().slice(0, 10);
   const offline = Boolean(a.fixtures);
+  if (offline && a.write) throw new Error("Saved fixtures are for dry runs only");
   const contests = contestsPolledOn(date);
   console.log(`Results morning for ${date}: ${contests.length} contest(s)${offline ? `, offline from ${a.fixtures}` : ""}`);
   if (!contests.length) return;
@@ -592,11 +619,13 @@ async function main() {
   }
   const sidecar = readJson(SIDECAR);
   const { written, kept } = mergeRows(sidecar, rows);
-  writeFileSync(p(SIDECAR), `${JSON.stringify(sidecar, null, 1)}\n`);
+  if (written.length) writeSidecar(p(SIDECAR), sidecar);
   for (const id of kept) console.log(`  = kept the existing hand-verified row for ${id}`);
   console.log(`  wrote ${written.length} row(s) to ${SIDECAR}`);
-  if (written.length) {
-    const fin = spawnSync("node", ["scripts/finalise-october-byelection-results.mjs", date], { cwd: ROOT, stdio: "inherit" });
+  // A previous run may have saved the sidecar before its finaliser failed.
+  // Repeating the finaliser for kept rows repairs that interrupted run.
+  if (written.length || kept.length) {
+    const fin = spawnSync(process.execPath, ["scripts/finalise-october-byelection-results.mjs", date], { cwd: ROOT, stdio: "inherit" });
     if (fin.status !== 0) process.exitCode = 1;
   }
 }

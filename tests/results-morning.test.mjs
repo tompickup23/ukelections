@@ -1,9 +1,13 @@
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildRow,
   collectResults,
   politeFetch,
+  writeSidecar,
   declarationLinks,
   duringCountNight,
   fromFixtures,
@@ -235,4 +239,97 @@ describe("results morning, failed and late fetches", () => {
     expect((await politeFetch("https://example.gov.uk/result", state(), options)).failed).toBe(true);
     expect(fetch).toHaveBeenCalledTimes(1);
   });
+});
+
+
+describe("results morning, durable records", () => {
+  it("preserves missing figures and their provenance when replacing a weaker row", () => {
+    const previous = { ballot_paper_id: "a", review_status: "auto_ingested_dc", turnout_votes: 120, electorate: 200, source: "original source", custom_note: "retain me" };
+    const saved = { results: [previous] };
+    mergeRows(saved, [{ ballot_paper_id: "a", review_status: "hand_verified_declaration", turnout_votes: null, electorate: null, spoilt_ballots: 0, verification_note: "New declaration" }]);
+    expect(saved.results[0]).toMatchObject({ turnout_votes: 120, electorate: 200, spoilt_ballots: 0, custom_note: "retain me" });
+    expect(saved.results[0].verification_note).toContain("original source");
+    expect(saved.results[0].verification_note).toContain("not verified by this declaration read");
+  });
+
+  it("preserves every field of both hand verified tiers", () => {
+    for (const review_status of ["hand_verified_declaration", "hand_verified_two_sources"]) {
+      const saved = { results: [{ ballot_paper_id: "a", review_status, verification_note: "checked", turnout_votes: 123, candidates: [{ name: "A", votes: 121 }] }] };
+      const before = JSON.stringify(saved);
+      expect(mergeRows(saved, [{ ballot_paper_id: "a", turnout_votes: 999 }]).written).toEqual([]);
+      expect(JSON.stringify(saved)).toBe(before);
+    }
+  });
+
+  it("replaces the sidecar as a complete file and preserves it if serialisation fails", () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "results-morning-test-"));
+    try {
+      const file = path.join(dir, "sidecar.json");
+      writeFileSync(file, "original");
+      const invalid = {}; invalid.self = invalid;
+      expect(() => writeSidecar(file, invalid)).toThrow();
+      expect(readFileSync(file, "utf8")).toBe("original");
+      writeSidecar(file, { results: [] });
+      expect(JSON.parse(readFileSync(file, "utf8"))).toEqual({ results: [] });
+      expect(readdirSync(dir)).toEqual(["sidecar.json"]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("refuses to write saved fixtures into the real sidecar", () => {
+    const file = "data/history/byelection-appends.json";
+    const before = readFileSync(file);
+    const result = spawnSync(process.execPath, ["scripts/results-morning.mjs", "--date=2026-10-22", `--fixtures=${FIXTURES}`, "--write"], { encoding: "utf8" });
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Saved fixtures are for dry runs only");
+    expect(readFileSync(file)).toEqual(before);
+  });
+});
+
+
+// Exercise the real command in an isolated repository with mocked HTTP only.
+function sandboxRun(run) {
+  const dir = mkdtempSync(path.join(tmpdir(), "results-morning-cli-"));
+  try {
+    for (const child of ["scripts", "data/contests/local-byelections", "data/results", "data/history"]) mkdirSync(path.join(dir, child), { recursive: true });
+    writeFileSync(path.join(dir, "scripts/results-morning.mjs"), readFileSync("scripts/results-morning.mjs"));
+    const c = contest("wychavon-hartlebury-2026-10-22");
+    writeFileSync(path.join(dir, `data/contests/local-byelections/${c.slug}.json`), JSON.stringify(c));
+    writeFileSync(path.join(dir, "data/results/declaration-sources.json"), JSON.stringify({ contests: { [c.contest.ballot_paper_id]: { url: "https://example.gov.uk/result" } } }));
+    const sidecarFile = path.join(dir, "data/history/byelection-appends.json");
+    writeFileSync(sidecarFile, JSON.stringify({ results: [{ ballot_paper_id: c.contest.ballot_paper_id, review_status: "auto_ingested_dc", turnout_votes: 633 }] }));
+    const preload = path.join(dir, "http.mjs");
+    const command = () => spawnSync(process.execPath, ["--import", preload, "scripts/results-morning.mjs", "--date=2026-10-22", "--write", "--report=report.json"], { cwd: dir, encoding: "utf8" });
+    run({ dir, c, sidecarFile, preload, command });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+describe("results morning, command failure recovery", () => {
+  it("leaves the sidecar byte identical and reports a network failure", () => sandboxRun(({ dir, sidecarFile, preload, command }) => {
+    const before = readFileSync(sidecarFile);
+    writeFileSync(preload, 'globalThis.fetch = async () => { throw new Error("offline"); };');
+    const result = command();
+    expect(result.status).toBe(1);
+    expect(readFileSync(sidecarFile)).toEqual(before);
+    expect(JSON.parse(readFileSync(path.join(dir, "report.json"))).pending[0].failed).toBe(true);
+  }));
+
+  it("retries finalisation after saving the sidecar without replacing a verified row", () => sandboxRun(({ dir, c, sidecarFile, preload, command }) => {
+    const text = fromFixtures(FIXTURES, c).text;
+    writeFileSync(preload, `globalThis.fetch = async (url) => new Response(url.endsWith("robots.txt") ? "" : url.includes("example.gov.uk") ? ${JSON.stringify(text)} : "", { status: url.includes("democracyclub") ? 404 : 200, headers: { "content-type": "text/plain" } });`);
+    const finaliser = path.join(dir, "scripts/finalise-october-byelection-results.mjs");
+    writeFileSync(finaliser, 'process.exit(1);');
+    expect(command().status).toBe(1);
+    const saved = readFileSync(sidecarFile);
+    expect(JSON.parse(saved).results[0].review_status).toBe("hand_verified_declaration");
+    // Simulate the later retry, outside the hourly council guard.
+    writeFileSync(path.join(dir, ".cache/results-morning/last-fetch.json"), "{}");
+    writeFileSync(finaliser, 'import { writeFileSync } from "node:fs"; writeFileSync("finalised", "yes");');
+    expect(command().status).toBe(0);
+    expect(readFileSync(sidecarFile)).toEqual(saved);
+    expect(readFileSync(path.join(dir, "finalised"), "utf8")).toBe("yes");
+  }));
 });

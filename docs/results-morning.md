@@ -49,7 +49,7 @@ Everything else is listed as pending with the reason, and a person reads it.
 ## Running it
 
 ```bash
-node scripts/results-morning.mjs --date=2026-11-12              # dry run: prints, writes nothing
+node scripts/results-morning.mjs --date=2026-11-12              # dry run: no election data changes
 node scripts/results-morning.mjs --date=2026-11-12 --write      # merges reconciled rows
 node scripts/results-morning.mjs --date=2026-10-29 --fixtures=tests/fixtures/results-morning
 ```
@@ -75,9 +75,8 @@ Friday daytime counts in the afternoon:
 
 Before it is applied:
 
-1. **pdftotext on vps-main.** Not assessed: nothing here has read the server. If
-   `command -v pdftotext` is empty, `apt install poppler-utils`. Without it every PDF declaration
-   stays pending, which is safe but useless.
+1. **PDF extraction.** Confirmed present during the 3 November review: `/usr/bin/pdftotext`
+   on vps main. Node is also present at `/usr/bin/node`. No installation was needed or performed.
 2. **When it reaches the site.** A push to main ships at the 04:30 UTC nightly, so the Friday
    07:30 rows are live on Saturday morning. To have them live on Friday, the publisher would run
    a second time that day, for example `0 8,14 * * 5` with the nightly's own command. That is a
@@ -134,3 +133,10 @@ fetching it, so a redirect cannot bypass the destination's robots rules.
 
 Node and pdftotext were confirmed present on vps main during this review. No
 software, schedule or production data was changed there.
+
+The durable sidecar is replaced by an atomic rename after a complete temporary
+file has been written. Existing verified rows are left untouched. When replacing
+a weaker row, absent turnout, electorate or rejected paper figures retain the
+previous value and a provenance note. Saved fixtures cannot be used in write
+mode. A later successful read retries finalisation even if the sidecar row was
+already saved by an interrupted run.
