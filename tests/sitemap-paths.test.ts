@@ -45,7 +45,7 @@ describe.skipIf(!hasCorpus)("sitemap paths", () => {
     );
     const councils = new Set(elected.map((ward) => ward.council_slug));
 
-    const seatPaths = getSeatPaths();
+    const seatPaths = getSeatPaths({ includeAllWards: true });
 
     // One page per ward plus one per council. The sitemap regressed to 35 URLs
     // against 3,820 built pages once before, so assert the real shape.
@@ -55,6 +55,17 @@ describe.skipIf(!hasCorpus)("sitemap paths", () => {
       councils.size
     );
     expect(seatPaths.length).toBeGreaterThan(1_000);
+  });
+
+  it("keeps every council page in the sitemap but only the wards the reset re-admits", () => {
+    const all = getSeatPaths({ includeAllWards: true });
+    const indexed = getSeatPaths();
+    const councilsOnly = (paths: string[]) => paths.filter((path) => path.split("/").length === 4);
+    expect(councilsOnly(indexed)).toEqual(councilsOnly(all));
+    const wards = indexed.filter((path) => path.split("/").length === 5);
+    // Quality reset (T13): about 2,977 ward routes, a few dozen indexed.
+    expect(wards.length).toBeLessThan(all.length - councilsOnly(all).length);
+    expect(wards.length).toBeLessThan(150);
   });
 
   it("derives ward slugs exactly as the ward route does", () => {

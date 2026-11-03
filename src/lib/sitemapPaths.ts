@@ -6,6 +6,7 @@ import path from "node:path";
 import { loadIdentity, loadGePredictions } from "./predictions";
 import { getIndexableSitePaths } from "./site";
 import { getParliamentRegionPaths } from "./parliamentRegions";
+import { wardIsIndexable } from "./wardIndexing";
 
 /**
  * Every URL the sitemap should carry.
@@ -46,7 +47,15 @@ function isElectedSeat(ward: Ward): boolean {
   return ward.tier === "local" || ward.tier === "mayor";
 }
 
-export function getSeatPaths(): string[] {
+/**
+ * Council pages, and the ward pages the quality reset (register T13) still
+ * lets search engines index. A ward page is `noindex,follow` unless
+ * wardIsIndexable() admits it, and a noindex page in the sitemap is a
+ * contradiction Search Console reports (and planDiscovery() refuses), so the
+ * same rule decides both. `includeAllWards` lists every built ward route, for
+ * checks that are about the routes rather than the sitemap.
+ */
+export function getSeatPaths({ includeAllWards = false }: { includeAllWards?: boolean } = {}): string[] {
   const identity = loadIdentity();
   const wards: Ward[] = (identity.wards || []).filter(isElectedSeat);
 
@@ -58,6 +67,7 @@ export function getSeatPaths(): string[] {
     councils.add(ward.council_slug);
     const slug = wardSlug(ward);
     if (!slug) continue;
+    if (!includeAllWards && !wardIsIndexable(ward).index) continue;
     paths.add(`/seats/${ward.council_slug}/${slug}/`);
   }
   for (const council of councils) {
@@ -114,4 +124,44 @@ export function getAllSitemapPaths(): string[] {
     ...archiveYears().map(year => `/by-elections/archive/${year}/`),
   ]);
   return [...paths].sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * The sitemap index splits the URLs by page type, so Search Console reports
+ * indexing per type and a fall in one (the ward pages, before the reset) is
+ * visible rather than averaged away. Order matters only for the index file.
+ */
+export const SITEMAP_GROUPS = ["core", "councils", "constituencies", "by-elections"] as const;
+export type SitemapGroup = (typeof SITEMAP_GROUPS)[number];
+
+/** Listing pages that belong with the core hubs, not with what they list. */
+const HUB_PATHS = new Set([
+  "/seats/",
+  "/seats/parliament/",
+  "/councils/",
+  "/by-elections/",
+  "/by-elections/local/",
+  "/by-elections/archive/",
+  "/by-elections/post-mortem/",
+  "/by-elections/this-week/",
+]);
+
+/**
+ * Which child sitemap a path belongs in: hubs and static pages are core;
+ * /seats/parliament/<x>/ (constituencies and the region hubs) are
+ * constituencies; other /seats/<council>/... are councils (with any ward the
+ * reset re-admits); contest pages under /by-elections/ are by-elections.
+ */
+export function sitemapGroupFor(path: string): SitemapGroup {
+  if (HUB_PATHS.has(path)) return "core";
+  if (path.startsWith("/seats/parliament/")) return "constituencies";
+  if (path.startsWith("/seats/")) return "councils";
+  if (path.startsWith("/by-elections/")) return "by-elections";
+  return "core";
+}
+
+export function getSitemapPathsByGroup(): Record<SitemapGroup, string[]> {
+  const out = Object.fromEntries(SITEMAP_GROUPS.map((g) => [g, [] as string[]])) as Record<SitemapGroup, string[]>;
+  for (const path of getAllSitemapPaths()) out[sitemapGroupFor(path)].push(path);
+  return out;
 }

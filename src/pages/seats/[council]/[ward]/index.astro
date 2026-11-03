@@ -8,13 +8,14 @@ import {
   loadLaProj,
   loadLaImd,
   loadMay7BacktestForWard,
-  loadMay7ResultForWard,
   loadMay7CouncilCoverage,
   rankedShares,
   formatPct,
   partyColour,
 } from "../../../../lib/predictions";
-import { summariseWardResult, seatsWonLabel, historyRowAsWardResult } from "../../../../lib/may7WardResult";
+import { summariseWardResult, seatsWonLabel, resultSourceLabel } from "../../../../lib/may7WardResult";
+import { wardResultRowFor } from "../../../../lib/wardResults";
+import { byElectionsSince, wardIndexDecision } from "../../../../lib/wardIndexing";
 import { shortPartyLabel } from "../../../../lib/siteData";
 import { externalHref, type Crumb } from "../../../../lib/seo";
 import { wardSummary } from "../../../../lib/pageSummaries";
@@ -55,12 +56,14 @@ const top = ranked[0];
 // When the scored results file lacks this ward but the contest-history
 // archive holds the same ballot's declaration, render that declaration rather
 // than telling the reader there is none (see historyRowAsWardResult).
-const scoredRow = ward.ballot_paper_id ? loadMay7ResultForWard(ward.ballot_paper_id) : null;
-const historyRow = !scoredRow && ward.ballot_paper_id
-  ? historyRowAsWardResult(historicAll.find((r: any) => r.ballot_paper_id === ward.ballot_paper_id), ward.ballot_paper_id, ward.winner_count ?? null)
-  : null;
-const resultRow = scoredRow || historyRow;
+// The council page's ward table reads the same helper, so the two agree.
+const resultRow = wardResultRowFor(ward);
 const result = summariseWardResult(resultRow, ward.candidate_count ?? null);
+const resultSource = result ? resultSourceLabel(result) : null;
+// Ward pages are noindex,follow unless the ward holds a contest of its own
+// after 7 May 2026 (quality reset, register T13; see src/lib/wardIndexing.ts).
+const laterByElections = byElectionsSince(ward);
+const indexDecision = wardIndexDecision({ byElections: laterByElections });
 // Per-ward 7 May 2026 backtest: did we call the winner correctly here?
 // Row keys are stable Democracy Club ballot IDs (local.<council>.<ward>.<date>).
 const wardBacktest = ward.ballot_paper_id ? loadMay7BacktestForWard(ward.ballot_paper_id) : null;
@@ -109,6 +112,9 @@ const rerunGeneratedAt = (loadPredictions().snapshot as any)?.generated_at as st
 const rerunDate = rerunGeneratedAt
   ? new Date(rerunGeneratedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/London" })
   : null;
+
+const ukDate = (iso: string) =>
+  new Date(iso.length === 10 ? `${iso}T12:00:00Z` : iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/London" });
 
 // Build neighbour Reform-share map for the mini-map delta overlay.
 // Only show the overlay when we have at least 3 mapped neighbours so
@@ -177,7 +183,7 @@ const breadcrumbs: Crumb[] = [
 ];
 ---
 
-<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs}>
+<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs} noIndex={!indexDecision.index}>
   <section class="page-hero ward-hero">
     <div class="ward-hero-text">
       <p class="eyebrow">{tierLabel} · {ward.council_name}</p>
@@ -213,6 +219,30 @@ const breadcrumbs: Crumb[] = [
   {summary.length > 0 && (
     <section class="section seat-summary">
       <p>{summary.join(" ")}</p>
+    </section>
+  )}
+
+  {laterByElections.length > 0 && (
+    <section class="section prose-block" data-ward-byelections>
+      <div class="section-head">
+        <p class="eyebrow">Since 7 May 2026</p>
+        <h2>{laterByElections.length === 1 ? "By-election" : "By-elections"} in {ward.ward_name}</h2>
+      </div>
+      <ul class="plain-list">
+        {laterByElections.map((b) => (
+          <li>
+            <strong>{ukDate(b.pollingDay)}</strong>:{" "}
+            {b.declared
+              ? <>won by {shortPartyLabel(b.winnerParty || "Unknown")}{b.winnerVotes != null && <> with {b.winnerVotes.toLocaleString("en-GB")} votes</>}{b.majorityVotes != null && <>, a majority of {b.majorityVotes.toLocaleString("en-GB")}</>}.{" "}
+                  {b.resultSource && <>Source: <a href={b.resultSource.url} rel="nofollow">{b.resultSource.label}</a>{b.resultUpdatedAt && <>, as held on {ukDate(b.resultUpdatedAt)}</>}.{" "}</>}</>
+              : b.status === "upcoming"
+                ? <>{b.fieldPublished ? `${b.candidateCount} candidates nominated.` : "Candidates not yet published."}{" "}
+                    {b.nominationsUrl && <><a href={b.nominationsUrl}>Statement of persons nominated</a>.{" "}</>}</>
+                : <>polls have closed and we do not yet hold the declared result.{" "}</>}
+            <a href={`/by-elections/local/${b.slug}/`}>The full by-election page</a>
+          </li>
+        ))}
+      </ul>
     </section>
   )}
 
@@ -325,15 +355,9 @@ const breadcrumbs: Crumb[] = [
 
       <p class="caption">
         {result.spoiltBallots != null && <>{result.spoiltBallots.toLocaleString("en-GB")} ballots were rejected. </>}
-        {result.provider === "council-pdf-declaration" && "Source: the returning officer's declaration of result. "}
-        {result.provider === "wikipedia" && "Source: a community-maintained Wikipedia mirror, not the council's own declaration. Treat it as provisional. "}
-        {result.provider === "dc-api" && "Source: Democracy Club's results database. "}
-        {result.provider === "dc-history" && "Source: Democracy Club's results archive. This declaration has not yet been added to our scored 7 May 2026 results, so the forecast is not graded against it here. "}
-        {externalHref(result.sourceUrl)
-          ? <a href={externalHref(result.sourceUrl)} rel="nofollow">View the source</a>
-          : externalHref(result.sourceArticle)
-            ? <a href={externalHref(result.sourceArticle)}>View the source</a>
-            : null}
+        {resultSource!.long}{" "}
+        {resultSource!.captured && <>Captured into our results file on {resultSource!.captured}. </>}
+        {resultSource!.href && <a href={resultSource!.href} rel="nofollow">View the source</a>}
       </p>
     </section>
   )}

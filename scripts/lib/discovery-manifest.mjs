@@ -29,6 +29,15 @@ export function pageFingerprint(html, expectedUrl) {
   if (robots.some(n => /noindex/i.test(attr(n, 'content') || ''))) throw new Error(`Not indexable: ${expectedUrl}`);
   const main = find('main')[0];
   if (!main) throw new Error(`Missing main content: ${expectedUrl}`);
+  // A page that marks its headline with data-discovery-headline is dated only
+  // when that headline changes. Constituency pages do this: a polling refresh
+  // moves every projected share by a tenth of a point most nights, which
+  // re-dated all 650 of them nightly; their headline is the projected winner,
+  // runner-up and whole-point share and margin, and only that re-dates them.
+  const headlines = nodes(main, n => attr(n, 'data-discovery-headline') !== undefined).map(n => attr(n, 'data-discovery-headline'));
+  if (headlines.length) {
+    return createHash('sha256').update([visible(find('title')[0] || {}), ...headlines].join(' ').replace(/\s+/g, ' ').trim()).digest('hex');
+  }
   const description = find('meta').find(n => attr(n, 'name') === 'description');
   const ordered = value => Array.isArray(value) ? value.map(ordered)
     : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, ordered(value[key])])) : value;
@@ -44,6 +53,22 @@ export function pageFingerprint(html, expectedUrl) {
   return createHash('sha256').update(text).digest('hex');
 }
 /**
+ * The URL-list files behind dist/sitemap.xml. Since the quality reset
+ * (November 2026) sitemap.xml is a sitemap index whose children are
+ * sitemap-<group>.xml; a plain urlset is still accepted, so a ledger or a test
+ * fixture from before the split reads the same way.
+ */
+export function sitemapFiles(dist) {
+  const index = join(dist, 'sitemap.xml');
+  const xml = readFileSync(index, 'utf8');
+  if (!/<sitemapindex[\s>]/.test(xml)) return [index];
+  return [...xml.matchAll(/<sitemap>\s*<loc>([^<]+)<\/loc>/g)].map(m => {
+    const child = new URL(m[1].replaceAll('&amp;', '&'));
+    if (child.origin !== ORIGIN || !/^\/sitemap-[a-z-]+\.xml$/.test(child.pathname)) throw new Error(`Invalid child sitemap: ${m[1]}`);
+    return join(dist, child.pathname);
+  });
+}
+/**
  * Fingerprints every sitemap route and dates the changes.
  *
  * `changedAt[url]` is the time of the publication run that first deployed the
@@ -55,8 +80,7 @@ export function pageFingerprint(html, expectedUrl) {
  * is ever a build time for unchanged content, a polling day or a guess.
  */
 export function planDiscovery(dist, previous = null, now = new Date().toISOString()) {
-  const xml = readFileSync(join(dist, 'sitemap.xml'), 'utf8');
-  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].replaceAll('&amp;', '&'));
+  const urls = sitemapFiles(dist).flatMap(file => [...readFileSync(file, 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].replaceAll('&amp;', '&')));
   const pages = {};
   for (const url of urls) {
     const parsed = new URL(url);
@@ -95,14 +119,34 @@ const w3c = (iso) => iso.replace(/\.\d+Z$/, 'Z');
  * the build time.
  */
 export function stampDiscoveryDates(dist, plan) {
-  const sitemapFile = join(dist, 'sitemap.xml');
-  const sitemap = readFileSync(sitemapFile, 'utf8').replace(/<url>([\s\S]*?)<\/url>/g, (entry, inner) => {
-    if (inner.includes('<lastmod>')) return entry;
-    const loc = inner.match(/<loc>([^<]+)<\/loc>/)?.[1];
-    const when = loc && plan.changedAt?.[unescapeXml(loc)];
-    return when ? entry.replace('</loc>', `</loc>\n    <lastmod>${escapeXml(w3c(when))}</lastmod>`) : entry;
-  });
-  writeFileSync(sitemapFile, sitemap);
+  const newestByFile = new Map();
+  for (const sitemapFile of sitemapFiles(dist)) {
+    let newest = null;
+    const sitemap = readFileSync(sitemapFile, 'utf8').replace(/<url>([\s\S]*?)<\/url>/g, (entry, inner) => {
+      const existing = inner.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+      if (existing) { if (!newest || existing > newest) newest = existing; return entry; }
+      const loc = inner.match(/<loc>([^<]+)<\/loc>/)?.[1];
+      const when = loc && plan.changedAt?.[unescapeXml(loc)];
+      if (!when) return entry;
+      const stamp = w3c(when);
+      if (!newest || stamp > newest) newest = stamp;
+      return entry.replace('</loc>', `</loc>\n    <lastmod>${escapeXml(stamp)}</lastmod>`);
+    });
+    writeFileSync(sitemapFile, sitemap);
+    newestByFile.set(sitemapFile, newest);
+  }
+  // Each index entry is dated by the newest route in its child file, and left
+  // undated when none of its routes has a recorded date.
+  const indexFile = join(dist, 'sitemap.xml');
+  if (!newestByFile.has(indexFile)) {
+    const index = readFileSync(indexFile, 'utf8').replace(/<sitemap>([\s\S]*?)<\/sitemap>/g, (entry, inner) => {
+      if (inner.includes('<lastmod>')) return entry;
+      const loc = inner.match(/<loc>([^<]+)<\/loc>/)?.[1];
+      const newest = loc && newestByFile.get(join(dist, new URL(unescapeXml(loc)).pathname));
+      return newest ? entry.replace('</loc>', `</loc>\n    <lastmod>${escapeXml(newest)}</lastmod>`) : entry;
+    });
+    writeFileSync(indexFile, index);
+  }
   for (const [url, when] of Object.entries(plan.changedAt || {})) {
     const route = new URL(url);
     if (!when || route.origin !== ORIGIN || !route.pathname.startsWith('/by-elections/')) continue;
