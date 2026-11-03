@@ -22,7 +22,7 @@ Held out on the yardstick, the 2,261 non-London wards of May 2026, on the full r
 Source: `data/transparency/may-2026-london-free-2026-11.json` (`scripts/score-london-free-2026-11.mjs`), built from the full-run and second London outputs. The middle row is one further re-run of the 7 May engine's own Final-C without London; no parameter was chosen for it. It brings the arms scored against May 2026 since 24 October to 20.
 
 **Decided, 3 November 2026: Tom dropped the London condition for 2027**, a year with no London wards. The 2027 gate is therefore the London-free comparison above: the named forecast's engine must call more than the published forecast's 1,176 of 2,261 non-London wards, held out, on the yardstick. The candidate calls 1,272 and passes, by 96 wards. The London result is not hidden:
-- It stays in the record (399 London wards called, against 447 published, on the full run).
+- It stays in the record (the named form, S3, called 436 London wards against 447 published, on the full run).
 - It is stated on the 2027 methodology page.
 - The condition returns for any year in which London votes.
 
