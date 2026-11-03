@@ -83,7 +83,7 @@ const reformMajorities = (ctl.councils as any[])
 
 <BaseLayout
   title="May 7 2026 results. How the model did, who's in charge now"
-  description={`Post-audit of our May 7 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "n/a"} declared ballots (${((head.declared_coverage_pct || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
+  description={`Post-audit of our May 7 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "n/a"} declared ballots (${((head.declared_coverage_share || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Past results · May 7 2026</p>

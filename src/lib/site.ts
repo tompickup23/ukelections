@@ -33,7 +33,7 @@ export const NAV_ITEMS = [
   { href: "/polling/", label: "Polling" },
   { href: "/past-results/", label: "Past Results" },
   { href: "/your-area/", label: "Find Your Elections" },
-  { href: "/methodology/", label: "About" },
+  { href: "/about/", label: "About" },
 ] as const;
 
 export type NavGroup = {
@@ -69,13 +69,14 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/seats/parliament/", label: "650 Constituencies", desc: "Every UK parliamentary seat, with its projection" },
       { href: "/councils/", label: "Councils", desc: "Browse the councils covered by our results and forecasts" },
       { href: "/seats/", label: "Councils and contests", desc: "Browse councils, mayoralties and the devolved parliaments" },
-      { href: "/elections/2027/", label: "6 May 2027 councils", desc: "Councils whose next election we have verified for 6 May 2027; no forecasts yet" },
+      { href: "/elections/2027/", label: "Local elections 2027", desc: "Councils whose next election we have verified for 6 May 2027; no forecasts yet" },
       { href: "/your-area/", label: "Election Lookup", desc: "Constituency and ward" },
     ],
   },
   {
     label: "About",
     items: [
+      { href: "/about/", label: "About this site", desc: "Who runs it, sources and corrections" },
       { href: "/methodology/", label: "Methodology", desc: "How the model works" },
       { href: "/sources/", label: "Sources", desc: "Data provenance" },
       { href: "/coverage/", label: "Coverage", desc: "What we forecast" },
@@ -169,7 +170,8 @@ const STATIC_PATHS = [
   "/coverage/",
   "/past-results/by-region/",
   "/transparency/",
-  "/contact/"
+  "/contact/",
+  "/about/"
 ] as const;
 
 export const SEARCH_ENTRIES: SearchEntry[] = [
@@ -354,6 +356,13 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Reform UK share by English region on 7 May 2026: actual vote share, council seats won, and the regional spread of the swing.",
     priority: 79
+  },
+  {
+    href: "/about/",
+    title: "About UK Elections",
+    kind: "page",
+    description: "Who runs UK Elections, where its data comes from, how forecasts are made and tested, and how to report an error.",
+    priority: 61
   },
   {
     href: "/contact/",

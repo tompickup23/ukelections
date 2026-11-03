@@ -9,7 +9,12 @@ route, canonical URL and original first-publication timestamp. Keep `NewsArticle
 schema consistent with the visible article and this register. Include the route
 in the main sitemap. Record genuine substantive updates with an explanation;
 never replace the first-publication timestamp with a polling date or build date.
-Only articles first published within 48 hours enter the News sitemap. A nightly
+Only articles first published within 48 hours enter the News sitemap.
+The News sitemap is not served while this register is empty (retired 2 November
+2026, after Search Console reported the empty file as an error). Before the
+first article goes live, add a prerendered `/sitemap-news.xml` route that
+returns `newsSitemapXml()` from `src/lib/editorial.ts`, restore its `Sitemap:`
+line in `src/pages/robots.txt.ts`, and resubmit it in Search Console. A nightly
 rebuild is needed to age old entries out. Registry validation is a technical gate,
 not a substitute for factual editorial review. Publication remains a separate
 approval decision. These steps do not guarantee inclusion in Google News.

@@ -7,3 +7,15 @@
   Cross-Origin-Opener-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com https://api.postcodes.io; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+# Keep the Cloudflare Pages hostnames out of search indexes. The production
+# pages.dev host serves the same build as ukelections.co.uk and was answering
+# 200 with index,follow (SEO audit, 2 Nov 2026), a duplicate host Google can
+# hold. Absolute-URL rules match only the named host, so ukelections.co.uk
+# is unaffected. Preview deployments get noindex from Cloudflare already; the
+# second rule makes that explicit.
+https://ukelections.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.ukelections.pages.dev/*
+  X-Robots-Tag: noindex

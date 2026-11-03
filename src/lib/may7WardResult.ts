@@ -239,3 +239,78 @@ export function seatsWonLabel(
   if (summary.seats === 1) return shortLabel(summary.seatsByParty[0].party);
   return summary.seatsByParty.map((s) => `${s.seats} ${shortLabel(s.party)}`).join(", ");
 }
+
+/**
+ * Ballot labels to the party names the May 2026 results file uses. Mirrors
+ * canonParty() in scripts/ingest-may-2026-results.mjs, so a declaration read
+ * from the history archive labels its parties exactly as the scored results do.
+ */
+export function canonicalResultParty(p: string | null | undefined): string {
+  if (!p) return "Unknown";
+  const s = String(p).trim();
+  if (/^Labour Party$/i.test(s)) return "Labour";
+  if (/^Labour and Co-?operative Party$/i.test(s)) return "Labour";
+  if (/^Conservative and Unionist Party$/i.test(s)) return "Conservative";
+  if (/^Conservative$/i.test(s)) return "Conservative";
+  if (/^Liberal Democrats?$/i.test(s)) return "Liberal Democrats";
+  if (/^Reform UK$/i.test(s)) return "Reform UK";
+  if (/^Green Party$/i.test(s)) return "Green Party";
+  if (/^Plaid Cymru/i.test(s)) return "Plaid Cymru";
+  if (/^Scottish National/i.test(s)) return "SNP";
+  if (/^Independent/i.test(s)) return "Independent";
+  if (/^Local/i.test(s)) return "Local";
+  return s;
+}
+
+/**
+ * A 7 May 2026 declaration that reached the contest-history archive but not
+ * the scored May 2026 results file, in the shape summariseWardResult() reads.
+ *
+ * Without this a ward page could say "No declared result for 7 May 2026" in
+ * one section and list that same declaration under "Recent contests" in the
+ * next (Edgbaston, Birmingham, SEO audit 2 Nov 2026). The page now renders the
+ * declaration it holds, labelled with its source, and does not grade the
+ * forecast against it because the post-audit never scored it.
+ *
+ * Returns null unless the history row is the same ballot and carries votes.
+ */
+export function historyRowAsWardResult(
+  row: any,
+  ballotPaperId: string,
+  winnerCount: number | null
+): RawWardResult | null {
+  if (!row || row.ballot_paper_id !== ballotPaperId) return null;
+  const candidates: RawCandidate[] = (row.candidates || [])
+    .filter((c: any) => typeof c?.votes === "number")
+    .map((c: any) => ({
+      person_id: c.person_id ?? null,
+      name: c.name ?? null,
+      party_name: c.party_name ?? null,
+      party_canonical: canonicalResultParty(c.party_name),
+      votes: c.votes,
+      ...(typeof c.elected === "boolean" ? { elected: c.elected } : {}),
+    }));
+  if (candidates.length === 0) return null;
+  return {
+    ballot_paper_id: row.ballot_paper_id,
+    election_date: row.election_date,
+    tier: row.tier,
+    council_slug: row.council_slug ?? null,
+    ward_slug: row.ward_slug ?? null,
+    is_by_election: !!row.is_by_election,
+    winner_count: winnerCount || 1,
+    electorate: row.electorate ?? null,
+    turnout_votes: row.turnout_votes ?? null,
+    turnout_pct: row.turnout_pct ?? null,
+    spoilt_ballots: row.spoilt_ballots ?? null,
+    // Summed candidate votes are not valid votes in a multi-member ward,
+    // where each voter casts several, so no total is claimed.
+    total_valid_votes: null,
+    candidates,
+    vote_shares: null,
+    winner_party_canonical: null,
+    winners: null,
+    source: row.source ?? null,
+    source_provider: "dc-history",
+  };
+}

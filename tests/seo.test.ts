@@ -10,7 +10,10 @@ import {
   buildNewsArticle,
   publisherNode
 } from "../src/lib/seo";
-import { GET as newsSitemap } from "../src/pages/sitemap-news.xml";
+import { GET as robots } from "../src/pages/robots.txt";
+import { newsSitemapXml, type EditorialArticle } from "../src/lib/editorial";
+import articles from "../data/editorial/articles.json";
+import { existsSync } from "node:fs";
 import { getLastmodByPath } from "../src/lib/sitemapPaths";
 
 describe("breadcrumbs", () => {
@@ -85,13 +88,22 @@ describe("Dataset", () => {
 });
 
 describe("news sitemap editorial boundary", () => {
-  it("does not advertise automated contest records as articles", async () => {
-    const response = await newsSitemap({} as any);
-    const xml = await response.text();
-    expect(response.headers.get("Content-Type")).toContain("application/xml");
+  it("does not advertise automated contest records as articles", () => {
+    const xml = newsSitemapXml(articles as EditorialArticle[], "https://ukelections.co.uk");
     expect(xml).toContain("<urlset");
     expect(xml).not.toContain("<url>");
     expect(xml).not.toContain("<news:news>");
+  });
+
+  // An empty news sitemap was declared in robots.txt and Search Console
+  // reported it as an error (SEO audit, 2 Nov 2026). It is neither served nor
+  // declared until the editorial register holds reviewed articles.
+  it("is neither generated nor declared while the register is empty", async () => {
+    expect(articles).toEqual([]);
+    expect(existsSync(path.join(process.cwd(), "src/pages/sitemap-news.xml.ts"))).toBe(false);
+    const text = await (await robots({} as any)).text();
+    expect(text).toContain("Sitemap: https://ukelections.co.uk/sitemap.xml");
+    expect(text).not.toContain("sitemap-news");
   });
 });
 
