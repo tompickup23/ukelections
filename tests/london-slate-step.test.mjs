@@ -25,3 +25,19 @@ describe("Reform slate step", () => {
     expect(stage.w2).toBe(lifted.w2);
   });
 });
+
+import { mergeDuplicateRows } from "../scripts/score-london-v3-2026-11.mjs";
+
+describe("duplicate poll rows", () => {
+  it("merges one pollster's overlapping rows with the same sample, and keeps others apart", () => {
+    const rows = [
+      { pollster: "S", sample: 1006, fieldwork_start_day: "15", fieldwork_end: "2025-12-21", shares: { Labour: 0.31 } },
+      { pollster: "S", sample: 1006, fieldwork_start_day: "17", fieldwork_end: "2025-12-23", shares: { Labour: 0.3 } },
+      { pollster: "S", sample: 1242, fieldwork_start_day: "30", fieldwork_end: "2025-11-07", shares: { Labour: 0.32 } },
+    ];
+    const m = mergeDuplicateRows(rows);
+    expect(m).toHaveLength(2);
+    expect(m[0].merged_rows).toBe(2);
+    expect(m[0].shares.Labour).toBeCloseTo(0.305, 10);
+  });
+});
