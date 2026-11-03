@@ -55,7 +55,7 @@ C2's national ratio rests on `UK_WESTMINSTER_2025_MAY_AVERAGE`, a hand-set avera
 
 ### Amendment, 3 November 2026, after the ratio fit and before any arm was scored
 
-Running the fit showed a defect in C2's London input, not in its ratio. C2 takes each council's GE2024 share from `ge2024ForArea`, which matches constituency names to council slugs. For London that matches 14 of 33 boroughs, several on one or two seats (Bexley on Bexleyheath and Crayford alone). The other 19 (Barking and Dagenham, Camden, the City, Hammersmith and Fulham, Haringey, Havering, Hillingdon, Hounslow, Kensington and Chelsea, Kingston, Lambeth, Merton, Newham, Redbridge, Richmond, Tower Hamlets, Waltham Forest, Wandsworth) get no match and fall back to the national poll, so their Westminster-implied Labour share is the national 19% rather than their own. The same gap left 5 of the 10 London by-elections out of E4.
+Running the fit showed a defect in C2's London input, not in its ratio. C2 takes each council's GE2024 share from `ge2024ForArea`, which matches constituency names to council slugs. For London that matches 15 of 33 boroughs, several on one or two seats (Bexley on Bexleyheath and Crayford alone). The other 18 (Barking and Dagenham, Camden, the City, Hammersmith and Fulham, Haringey, Havering, Hillingdon, Hounslow, Kensington and Chelsea, Kingston, Lambeth, Merton, Newham, Redbridge, Richmond, Tower Hamlets, Waltham Forest, Wandsworth) get no match and fall back to the national poll, so their Westminster-implied Labour share is the national 19% rather than their own. The same gap left 5 of the 10 London by-elections out of E4.
 
 So, decided on provenance before any score is seen:
 
