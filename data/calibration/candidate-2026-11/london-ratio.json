@@ -1,0 +1,741 @@
+{
+  "snapshot": {
+    "fitted_by": "scripts/fit-c2-london-2026-11.mjs",
+    "protocol": "docs/local-engine-holdout-2026-11.md",
+    "hold_out": "Evidence dated on or before 2026-04-25 only; no May 2026 result is read."
+  },
+  "ratio_2022": {
+    "Reform UK": 1.0026,
+    "Labour": 0.7632,
+    "Conservative": 1.1127,
+    "Liberal Democrats": 1.0635,
+    "Green Party": 1.3389
+  },
+  "ratio_2022_note": "Reform UK keeps the national ratio: Reform polled about 2% in 2022 and stood in few London wards, so no London Reform ratio can be estimated from 2022.",
+  "evidence_2022": {
+    "london_borough_2022": {
+      "shares": {
+        "Labour": 0.457,
+        "Green Party": 0.0826,
+        "Conservative": 0.2777,
+        "Other": 0.0432,
+        "Liberal Democrats": 0.1389,
+        "Reform UK": 0.0007
+      },
+      "boroughs": 32,
+      "contests": 677,
+      "votes": 5530432,
+      "source": "data/history/dc-historic-results.json, election_date 2022-05-05, full-slate votes summed by party"
+    },
+    "london_notional_ge2019": {
+      "shares": {
+        "Labour": 0.4813,
+        "Conservative": 0.32,
+        "Reform UK": 0.0137,
+        "Liberal Democrats": 0.1494,
+        "Green Party": 0.0307,
+        "Other": 0.0049
+      },
+      "constituencies": 75,
+      "source": "https://electionresults.parliament.uk/general-elections/5",
+      "method": "Rallings & Thrasher 2024, ward-level apportionment of 2019 vote counts onto 2024 boundaries.",
+      "london_rule": "most of the constituency's LSOAs in an E09 authority (data/features/lsoa21-to-pcon24.json)"
+    },
+    "polls_2022": {
+      "shares": {
+        "Reform UK": 0.025,
+        "Labour": 0.3993,
+        "Conservative": 0.34,
+        "Liberal Democrats": 0.1014,
+        "Green Party": 0.0543
+      },
+      "pollsters": [
+        "Ipsos",
+        "Opinium",
+        "Redfield & Wilton",
+        "Savanta ComRes",
+        "Survation",
+        "Techne",
+        "YouGov"
+      ],
+      "polls": 11,
+      "source": {
+        "publisher": "Wikipedia",
+        "page": "Opinion polling for the 2024 United Kingdom general election",
+        "revision_id": 1363820081,
+        "url": "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_2024_United_Kingdom_general_election&oldid=1363820081",
+        "licence": "CC BY-SA 4.0; each row names the pollster, whose published tables are the primary source"
+      },
+      "window": {
+        "fieldwork_end_from": "2022-04-21",
+        "fieldwork_end_to": "2022-05-04"
+      }
+    },
+    "ge2019_national": {
+      "shares": {
+        "Reform UK": 0.02,
+        "Labour": 0.321,
+        "Conservative": 0.436,
+        "Liberal Democrats": 0.116,
+        "Green Party": 0.027
+      },
+      "source": "UK_WESTMINSTER_2019_GE_RESULT, src/lib/nationalPolling.js at 5e85c84 (House of Commons Library CBP-8749, UK-wide)"
+    },
+    "westminster_implied_london_2022": {
+      "Labour": 0.5987,
+      "Conservative": 0.2495,
+      "Liberal Democrats": 0.1306,
+      "Green Party": 0.0617
+    }
+  },
+  "ratio_byelections": {
+    "Reform UK": 1.0925,
+    "Labour": 0.644,
+    "Conservative": 1.5186,
+    "Liberal Democrats": 1.3755,
+    "Green Party": 0.7426
+  },
+  "ratio_byelections_note": "Name-matched GE2024 baseline (set N): only the by-elections in boroughs with a constituency match count.",
+  "ratio_byelections_lsoa": {
+    "Reform UK": 1.0241,
+    "Labour": 0.8097,
+    "Conservative": 1.3263,
+    "Liberal Democrats": 1.3832,
+    "Green Party": 0.8228
+  },
+  "evidence_byelections": {
+    "byelections": [
+      {
+        "ballot_paper_id": "local.barnet.whetstone.by.2025-05-15",
+        "votes": 2884,
+        "polls_in_window": 12,
+        "ge2024_via": "own",
+        "shares": {
+          "Reform UK": 0.2053,
+          "Labour": 0.3346,
+          "Conservative": 0.2836,
+          "Liberal Democrats": 0.061,
+          "Green Party": 0.0721
+        }
+      },
+      {
+        "ballot_paper_id": "local.sutton.carshalton-south-clockhouse.by.2025-05-22",
+        "votes": 3205,
+        "polls_in_window": 11,
+        "ge2024_via": "own",
+        "shares": {
+          "Reform UK": 0.1788,
+          "Labour": 0.0278,
+          "Conservative": 0.2393,
+          "Liberal Democrats": 0.5223,
+          "Green Party": 0.0246
+        }
+      },
+      {
+        "ballot_paper_id": "local.greenwich.shooters-hill.by.2025-06-26",
+        "votes": 2509,
+        "polls_in_window": 11,
+        "ge2024_via": "own",
+        "shares": {
+          "Reform UK": 0.1602,
+          "Labour": 0.3013,
+          "Conservative": 0.1148,
+          "Liberal Democrats": 0.051,
+          "Green Party": 0.3464
+        }
+      },
+      {
+        "ballot_paper_id": "local.hammersmith-and-fulham.fulham-town.by.2025-07-03",
+        "votes": 1493,
+        "polls_in_window": 12,
+        "ge2024_via": null,
+        "shares": {
+          "Reform UK": 0.1253,
+          "Labour": 0.1681,
+          "Conservative": 0.4334,
+          "Liberal Democrats": 0.2311,
+          "Green Party": 0.0422
+        }
+      },
+      {
+        "ballot_paper_id": "local.bromley.bromley-common-holwood.by.2025-07-24",
+        "votes": 3948,
+        "polls_in_window": 11,
+        "ge2024_via": "own",
+        "shares": {
+          "Reform UK": 0.3399,
+          "Labour": 0.1824,
+          "Conservative": 0.2941,
+          "Liberal Democrats": 0.1368,
+          "Green Party": 0.0469
+        }
+      },
+      {
+        "ballot_paper_id": "local.barking-and-dagenham.thames-view.by.2025-07-31",
+        "votes": 925,
+        "polls_in_window": 9,
+        "ge2024_via": null,
+        "shares": {
+          "Reform UK": 0.213,
+          "Labour": 0.3611,
+          "Conservative": 0.1265,
+          "Liberal Democrats": 0,
+          "Green Party": 0.2995
+        }
+      },
+      {
+        "ballot_paper_id": "local.hounslow.cranford.by.2025-08-21",
+        "votes": 2336,
+        "polls_in_window": 9,
+        "ge2024_via": null,
+        "shares": {
+          "Reform UK": 0.1734,
+          "Labour": 0.4071,
+          "Conservative": 0.2907,
+          "Liberal Democrats": 0.0621,
+          "Green Party": 0.0668
+        }
+      },
+      {
+        "ballot_paper_id": "local.camden.west-hampstead.by.2025-08-28",
+        "votes": 2163,
+        "polls_in_window": 10,
+        "ge2024_via": null,
+        "shares": {
+          "Reform UK": 0.0717,
+          "Labour": 0.2117,
+          "Conservative": 0.1026,
+          "Liberal Democrats": 0.5437,
+          "Green Party": 0.0703
+        }
+      },
+      {
+        "ballot_paper_id": "local.newham.plaistow-south.by.2025-09-18",
+        "votes": 2043,
+        "polls_in_window": 9,
+        "ge2024_via": null,
+        "shares": {
+          "Reform UK": 0.161,
+          "Labour": 0.2134,
+          "Conservative": 0.0602,
+          "Liberal Democrats": 0.0441,
+          "Green Party": 0.0744
+        }
+      },
+      {
+        "ballot_paper_id": "local.barnet.hendon.by.2025-10-30",
+        "votes": 3537,
+        "polls_in_window": 10,
+        "ge2024_via": "own",
+        "shares": {
+          "Reform UK": 0.3022,
+          "Labour": 0.1196,
+          "Conservative": 0.4682,
+          "Liberal Democrats": 0.0303,
+          "Green Party": 0.0568
+        }
+      }
+    ],
+    "byelections_lsoa": [
+      {
+        "ballot_paper_id": "local.barnet.whetstone.by.2025-05-15",
+        "votes": 2884,
+        "polls_in_window": 12,
+        "ge2024_via": "LSOA-weighted, 4 constituencies",
+        "shares": {
+          "Reform UK": 0.2053,
+          "Labour": 0.3346,
+          "Conservative": 0.2836,
+          "Liberal Democrats": 0.061,
+          "Green Party": 0.0721
+        }
+      },
+      {
+        "ballot_paper_id": "local.sutton.carshalton-south-clockhouse.by.2025-05-22",
+        "votes": 3205,
+        "polls_in_window": 11,
+        "ge2024_via": "LSOA-weighted, 2 constituencies",
+        "shares": {
+          "Reform UK": 0.1788,
+          "Labour": 0.0278,
+          "Conservative": 0.2393,
+          "Liberal Democrats": 0.5223,
+          "Green Party": 0.0246
+        }
+      },
+      {
+        "ballot_paper_id": "local.greenwich.shooters-hill.by.2025-06-26",
+        "votes": 2509,
+        "polls_in_window": 11,
+        "ge2024_via": "LSOA-weighted, 3 constituencies",
+        "shares": {
+          "Reform UK": 0.1602,
+          "Labour": 0.3013,
+          "Conservative": 0.1148,
+          "Liberal Democrats": 0.051,
+          "Green Party": 0.3464
+        }
+      },
+      {
+        "ballot_paper_id": "local.hammersmith-and-fulham.fulham-town.by.2025-07-03",
+        "votes": 1493,
+        "polls_in_window": 12,
+        "ge2024_via": "LSOA-weighted, 3 constituencies",
+        "shares": {
+          "Reform UK": 0.1253,
+          "Labour": 0.1681,
+          "Conservative": 0.4334,
+          "Liberal Democrats": 0.2311,
+          "Green Party": 0.0422
+        }
+      },
+      {
+        "ballot_paper_id": "local.bromley.bromley-common-holwood.by.2025-07-24",
+        "votes": 3948,
+        "polls_in_window": 11,
+        "ge2024_via": "LSOA-weighted, 4 constituencies",
+        "shares": {
+          "Reform UK": 0.3399,
+          "Labour": 0.1824,
+          "Conservative": 0.2941,
+          "Liberal Democrats": 0.1368,
+          "Green Party": 0.0469
+        }
+      },
+      {
+        "ballot_paper_id": "local.barking-and-dagenham.thames-view.by.2025-07-31",
+        "votes": 925,
+        "polls_in_window": 9,
+        "ge2024_via": "LSOA-weighted, 3 constituencies",
+        "shares": {
+          "Reform UK": 0.213,
+          "Labour": 0.3611,
+          "Conservative": 0.1265,
+          "Liberal Democrats": 0,
+          "Green Party": 0.2995
+        }
+      },
+      {
+        "ballot_paper_id": "local.hounslow.cranford.by.2025-08-21",
+        "votes": 2336,
+        "polls_in_window": 9,
+        "ge2024_via": "LSOA-weighted, 3 constituencies",
+        "shares": {
+          "Reform UK": 0.1734,
+          "Labour": 0.4071,
+          "Conservative": 0.2907,
+          "Liberal Democrats": 0.0621,
+          "Green Party": 0.0668
+        }
+      },
+      {
+        "ballot_paper_id": "local.camden.west-hampstead.by.2025-08-28",
+        "votes": 2163,
+        "polls_in_window": 10,
+        "ge2024_via": "LSOA-weighted, 2 constituencies",
+        "shares": {
+          "Reform UK": 0.0717,
+          "Labour": 0.2117,
+          "Conservative": 0.1026,
+          "Liberal Democrats": 0.5437,
+          "Green Party": 0.0703
+        }
+      },
+      {
+        "ballot_paper_id": "local.newham.plaistow-south.by.2025-09-18",
+        "votes": 2043,
+        "polls_in_window": 9,
+        "ge2024_via": "LSOA-weighted, 3 constituencies",
+        "shares": {
+          "Reform UK": 0.161,
+          "Labour": 0.2134,
+          "Conservative": 0.0602,
+          "Liberal Democrats": 0.0441,
+          "Green Party": 0.0744
+        }
+      },
+      {
+        "ballot_paper_id": "local.barnet.hendon.by.2025-10-30",
+        "votes": 3537,
+        "polls_in_window": 10,
+        "ge2024_via": "LSOA-weighted, 4 constituencies",
+        "shares": {
+          "Reform UK": 0.3022,
+          "Labour": 0.1196,
+          "Conservative": 0.4682,
+          "Liberal Democrats": 0.0303,
+          "Green Party": 0.0568
+        }
+      }
+    ],
+    "polls_source": {
+      "publisher": "Wikipedia",
+      "page": "Opinion polling for the next United Kingdom general election",
+      "revision_id": 1383556886,
+      "url": "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_next_United_Kingdom_general_election&oldid=1383556886",
+      "licence": "CC BY-SA 4.0; each row names the pollster, whose published tables are the primary source"
+    },
+    "ge2024_national": {
+      "Labour": 0.337,
+      "Conservative": 0.236,
+      "Reform UK": 0.143,
+      "Liberal Democrats": 0.122,
+      "Green Party": 0.069
+    }
+  },
+  "london_lsoa_baseline": {
+    "barking-and-dagenham": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4363,
+        "Reform UK": 0.1713,
+        "Green Party": 0.1241,
+        "Conservative": 0.1399,
+        "Other": 0.1008,
+        "Liberal Democrats": 0.0276
+      }
+    },
+    "barnet": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Labour": 0.4262,
+        "Conservative": 0.3527,
+        "Reform UK": 0.0666,
+        "Green Party": 0.0691,
+        "Liberal Democrats": 0.0595,
+        "Other": 0.0259
+      }
+    },
+    "bexley": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.3697,
+        "Conservative": 0.3086,
+        "Reform UK": 0.2092,
+        "Liberal Democrats": 0.0457,
+        "Green Party": 0.0574,
+        "Other": 0.0095
+      }
+    },
+    "brent": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Labour": 0.4675,
+        "Conservative": 0.2393,
+        "Green Party": 0.0902,
+        "Liberal Democrats": 0.0721,
+        "Reform UK": 0.052,
+        "Other": 0.0789
+      }
+    },
+    "bromley": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Labour": 0.3754,
+        "Conservative": 0.3142,
+        "Reform UK": 0.1559,
+        "Liberal Democrats": 0.0899,
+        "Green Party": 0.0607,
+        "Other": 0.0039
+      }
+    },
+    "camden": {
+      "via": "LSOA-weighted, 2 constituencies",
+      "shares": {
+        "Labour": 0.4859,
+        "Conservative": 0.1239,
+        "Green Party": 0.1207,
+        "Liberal Democrats": 0.0932,
+        "Reform UK": 0.061,
+        "Other": 0.1154
+      }
+    },
+    "croydon": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Conservative": 0.2513,
+        "Labour": 0.4547,
+        "Liberal Democrats": 0.0922,
+        "Reform UK": 0.0847,
+        "Green Party": 0.0971,
+        "Other": 0.0201
+      }
+    },
+    "ealing": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.479,
+        "Conservative": 0.1727,
+        "Liberal Democrats": 0.0812,
+        "Green Party": 0.1,
+        "Reform UK": 0.0711,
+        "Other": 0.0959
+      }
+    },
+    "enfield": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4993,
+        "Conservative": 0.1908,
+        "Green Party": 0.0957,
+        "Reform UK": 0.0938,
+        "Liberal Democrats": 0.0677,
+        "Other": 0.0528
+      }
+    },
+    "greenwich": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.5224,
+        "Conservative": 0.1632,
+        "Reform UK": 0.1234,
+        "Green Party": 0.0993,
+        "Liberal Democrats": 0.0664,
+        "Other": 0.0254
+      }
+    },
+    "hackney": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Labour": 0.5898,
+        "Green Party": 0.2267,
+        "Conservative": 0.0674,
+        "Liberal Democrats": 0.0454,
+        "Reform UK": 0.037,
+        "Other": 0.0337
+      }
+    },
+    "hammersmith-and-fulham": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4548,
+        "Conservative": 0.2866,
+        "Liberal Democrats": 0.0884,
+        "Reform UK": 0.0653,
+        "Green Party": 0.0803,
+        "Other": 0.0246
+      }
+    },
+    "haringey": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Labour": 0.5611,
+        "Conservative": 0.0958,
+        "Green Party": 0.1586,
+        "Liberal Democrats": 0.0861,
+        "Reform UK": 0.0471,
+        "Other": 0.0512
+      }
+    },
+    "harrow": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Conservative": 0.4119,
+        "Labour": 0.3568,
+        "Reform UK": 0.0596,
+        "Other": 0.0706,
+        "Green Party": 0.0504,
+        "Liberal Democrats": 0.0506
+      }
+    },
+    "havering": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.3185,
+        "Reform UK": 0.2495,
+        "Conservative": 0.3088,
+        "Green Party": 0.0627,
+        "Liberal Democrats": 0.0433,
+        "Other": 0.0171
+      }
+    },
+    "hillingdon": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4136,
+        "Conservative": 0.3209,
+        "Reform UK": 0.1195,
+        "Green Party": 0.0721,
+        "Other": 0.0252,
+        "Liberal Democrats": 0.0487
+      }
+    },
+    "hounslow": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4426,
+        "Conservative": 0.2135,
+        "Green Party": 0.0799,
+        "Reform UK": 0.1032,
+        "Liberal Democrats": 0.0696,
+        "Other": 0.0912
+      }
+    },
+    "islington": {
+      "via": "LSOA-weighted, 2 constituencies",
+      "shares": {
+        "Other": 0.269,
+        "Labour": 0.4374,
+        "Green Party": 0.1128,
+        "Conservative": 0.0611,
+        "Reform UK": 0.0564,
+        "Liberal Democrats": 0.0633
+      }
+    },
+    "kensington-and-chelsea": {
+      "via": "LSOA-weighted, 2 constituencies",
+      "shares": {
+        "Labour": 0.4031,
+        "Conservative": 0.3508,
+        "Liberal Democrats": 0.0713,
+        "Reform UK": 0.0617,
+        "Green Party": 0.0637,
+        "Other": 0.0495
+      }
+    },
+    "kingston-upon-thames": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Liberal Democrats": 0.511,
+        "Conservative": 0.1867,
+        "Labour": 0.1327,
+        "Reform UK": 0.0833,
+        "Green Party": 0.0589,
+        "Other": 0.0274
+      }
+    },
+    "lambeth": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Labour": 0.568,
+        "Liberal Democrats": 0.1167,
+        "Green Party": 0.1633,
+        "Conservative": 0.0947,
+        "Reform UK": 0.0446,
+        "Other": 0.0126
+      }
+    },
+    "lewisham": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.5818,
+        "Green Party": 0.1816,
+        "Liberal Democrats": 0.0696,
+        "Conservative": 0.0826,
+        "Reform UK": 0.0615,
+        "Other": 0.0228
+      }
+    },
+    "merton": {
+      "via": "LSOA-weighted, 2 constituencies",
+      "shares": {
+        "Labour": 0.4028,
+        "Conservative": 0.1761,
+        "Green Party": 0.0766,
+        "Reform UK": 0.0768,
+        "Liberal Democrats": 0.2448,
+        "Other": 0.0229
+      }
+    },
+    "newham": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4724,
+        "Other": 0.2123,
+        "Green Party": 0.124,
+        "Conservative": 0.0959,
+        "Reform UK": 0.0555,
+        "Liberal Democrats": 0.0399
+      }
+    },
+    "redbridge": {
+      "via": "LSOA-weighted, 4 constituencies",
+      "shares": {
+        "Conservative": 0.1953,
+        "Labour": 0.3639,
+        "Other": 0.2754,
+        "Reform UK": 0.0671,
+        "Green Party": 0.0666,
+        "Liberal Democrats": 0.0318
+      }
+    },
+    "richmond-upon-thames": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.1299,
+        "Conservative": 0.1885,
+        "Green Party": 0.0675,
+        "Reform UK": 0.0712,
+        "Liberal Democrats": 0.5312,
+        "Other": 0.0118
+      }
+    },
+    "southwark": {
+      "via": "LSOA-weighted, 5 constituencies",
+      "shares": {
+        "Labour": 0.5373,
+        "Liberal Democrats": 0.1391,
+        "Green Party": 0.1643,
+        "Reform UK": 0.0626,
+        "Conservative": 0.0712,
+        "Other": 0.0254
+      }
+    },
+    "sutton": {
+      "via": "LSOA-weighted, 2 constituencies",
+      "shares": {
+        "Liberal Democrats": 0.4005,
+        "Conservative": 0.2755,
+        "Labour": 0.1538,
+        "Reform UK": 0.1245,
+        "Green Party": 0.0343,
+        "Other": 0.0115
+      }
+    },
+    "tower-hamlets": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.3954,
+        "Other": 0.2343,
+        "Green Party": 0.1431,
+        "Liberal Democrats": 0.0916,
+        "Reform UK": 0.0594,
+        "Conservative": 0.0763
+      }
+    },
+    "waltham-forest": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Conservative": 0.1554,
+        "Labour": 0.4633,
+        "Other": 0.1452,
+        "Reform UK": 0.0551,
+        "Green Party": 0.1382,
+        "Liberal Democrats": 0.0428
+      }
+    },
+    "wandsworth": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.51,
+        "Conservative": 0.2171,
+        "Liberal Democrats": 0.1023,
+        "Green Party": 0.0909,
+        "Reform UK": 0.0567,
+        "Other": 0.023
+      }
+    },
+    "westminster": {
+      "via": "LSOA-weighted, 3 constituencies",
+      "shares": {
+        "Labour": 0.4327,
+        "Conservative": 0.2664,
+        "Liberal Democrats": 0.0991,
+        "Green Party": 0.0907,
+        "Reform UK": 0.0643,
+        "Other": 0.0468
+      }
+    }
+  },
+  "london_lsoa_baseline_source": "data/features/lsoa21-to-pcon24.json (ONS LSOA21 to PCON24) and GE2024 constituency results in data/history/dc-historic-results.json; LSOA counts stand in for population"
+}

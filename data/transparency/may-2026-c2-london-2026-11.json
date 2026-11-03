@@ -1,0 +1,4037 @@
+{
+  "generated_by": "scripts/replay-may-2026-c2-london.mjs",
+  "protocol": "docs/local-engine-holdout-2026-11.md",
+  "yardstick": "scripts/score-may-2026-like-for-like.mjs; bar 1,623 of 2,897 (56.0%); published London figure 447 of 636",
+  "council_type_wards": {
+    "London borough": 636,
+    "Metropolitan borough": 718,
+    "Unitary or county, no 2025 anchor": 1119,
+    "Shire district with 2025 county anchor": 424
+  },
+  "sets": {
+    "N": {
+      "label": "24 October inputs: name-matched GE2024, hand-set May 2025 poll",
+      "arms": {
+        "A0": {
+          "label": "Candidate as it stands: one Final-C run, national ratio",
+          "wards": 2897,
+          "called": 1684,
+          "accuracy_pct": 58.1,
+          "named_first": {
+            "Reform UK": 1329,
+            "Labour": 323,
+            "Conservative": 421,
+            "Liberal Democrats": 343,
+            "Green Party": 363,
+            "Others": 118
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 73.4,
+            "Labour": 38,
+            "Conservative": 52.4,
+            "Liberal Democrats": 57.8,
+            "Green Party": 54.7,
+            "Others": 48.5
+          },
+          "signed_bias_pp": {
+            "Reform UK": 3.29,
+            "Labour": -0.87,
+            "Conservative": 0.76,
+            "Liberal Democrats": -1.47,
+            "Green Party": -0.66,
+            "Others": -3.14
+          },
+          "mae_pp": {
+            "Reform UK": 8.87,
+            "Labour": 6.32,
+            "Conservative": 7.13,
+            "Liberal Democrats": 6.36,
+            "Green Party": 7.71,
+            "Others": 7.94
+          },
+          "largest_misses": [
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 170
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 156
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 154
+            },
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 141
+            },
+            {
+              "predicted": "Green Party",
+              "actual": "Labour",
+              "wards": 110
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 373,
+              "accuracy_pct": 58.6,
+              "named_first": {
+                "Reform UK": 43,
+                "Labour": 162,
+                "Conservative": 116,
+                "Liberal Democrats": 66,
+                "Green Party": 230,
+                "Others": 19
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 21.2,
+                "Labour": 47.7,
+                "Conservative": 63.9,
+                "Liberal Democrats": 71.8,
+                "Green Party": 81.1,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 8.77,
+                "Labour": -5.05,
+                "Conservative": -4.93,
+                "Liberal Democrats": 0.53,
+                "Green Party": 1.97,
+                "Others": -2.79
+              },
+              "mae_pp": {
+                "Reform UK": 11.28,
+                "Labour": 8.79,
+                "Conservative": 7.43,
+                "Liberal Democrats": 5.8,
+                "Green Party": 8.27,
+                "Others": 5.62
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 104
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Conservative",
+                  "wards": 26
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 18
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 18
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 15
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 445,
+              "accuracy_pct": 62,
+              "named_first": {
+                "Reform UK": 483,
+                "Labour": 96,
+                "Conservative": 32,
+                "Liberal Democrats": 32,
+                "Green Party": 42,
+                "Others": 33
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 87.2,
+                "Labour": 33,
+                "Conservative": 44.2,
+                "Liberal Democrats": 41.9,
+                "Green Party": 31.4,
+                "Others": 48.1
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.73,
+                "Labour": -0.26,
+                "Conservative": 2.41,
+                "Liberal Democrats": 0.1,
+                "Green Party": -2.33,
+                "Others": -1.01
+              },
+              "mae_pp": {
+                "Reform UK": 9,
+                "Labour": 6.57,
+                "Conservative": 5.81,
+                "Liberal Democrats": 4.72,
+                "Green Party": 8.15,
+                "Others": 7.47
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 69
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 35
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 30
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 28
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 27
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 577,
+              "accuracy_pct": 51.6,
+              "named_first": {
+                "Reform UK": 644,
+                "Labour": 25,
+                "Conservative": 221,
+                "Liberal Democrats": 120,
+                "Green Party": 61,
+                "Others": 48
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 65.8,
+                "Labour": 14.7,
+                "Conservative": 45.7,
+                "Liberal Democrats": 44.1,
+                "Green Party": 44.7,
+                "Others": 46.3
+              },
+              "signed_bias_pp": {
+                "Reform UK": 2.4,
+                "Labour": 0.37,
+                "Conservative": 3.36,
+                "Liberal Democrats": -3.57,
+                "Green Party": -1.03,
+                "Others": -5.75
+              },
+              "mae_pp": {
+                "Reform UK": 7.52,
+                "Labour": 4.81,
+                "Conservative": 8.18,
+                "Liberal Democrats": 7.43,
+                "Green Party": 8,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 114
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 113
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 89
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 58
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 46
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 289,
+              "accuracy_pct": 68.2,
+              "named_first": {
+                "Reform UK": 159,
+                "Labour": 40,
+                "Conservative": 52,
+                "Liberal Democrats": 125,
+                "Green Party": 30,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 76.3,
+                "Labour": 37.2,
+                "Conservative": 49.2,
+                "Liberal Democrats": 79.7,
+                "Green Party": 71.9,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 1.74,
+                "Labour": 1.41,
+                "Conservative": -0.13,
+                "Liberal Democrats": -1.93,
+                "Green Party": -0.81,
+                "Others": -2.33
+              },
+              "mae_pp": {
+                "Reform UK": 8.58,
+                "Labour": 5.85,
+                "Conservative": 6.02,
+                "Liberal Democrats": 7.14,
+                "Green Party": 5.35,
+                "Others": 8.86
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 18
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 15
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 14
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 11
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "all": {
+              "targets": {
+                "Labour": 0.1582,
+                "Conservative": 0.1589,
+                "Reform UK": 0.2648,
+                "Liberal Democrats": 0.1311,
+                "Green Party": 0.2383,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.6904,
+                "Conservative": 0.9183,
+                "Reform UK": 1.097,
+                "Liberal Democrats": 1.0099,
+                "Green Party": 1.4706,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        },
+        "A1": {
+          "label": "London excluded from C2: no Final-C in London",
+          "wards": 2897,
+          "called": 1711,
+          "accuracy_pct": 59.1,
+          "named_first": {
+            "Reform UK": 1050,
+            "Labour": 615,
+            "Conservative": 388,
+            "Liberal Democrats": 387,
+            "Green Party": 331,
+            "Others": 126
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 62.8,
+            "Labour": 66.2,
+            "Conservative": 51.2,
+            "Liberal Democrats": 63.9,
+            "Green Party": 43,
+            "Others": 52.8
+          },
+          "signed_bias_pp": {
+            "Reform UK": 1.47,
+            "Labour": 1.35,
+            "Conservative": -0.12,
+            "Liberal Democrats": -0.95,
+            "Green Party": -0.58,
+            "Others": -3.15
+          },
+          "mae_pp": {
+            "Reform UK": 8.46,
+            "Labour": 6.02,
+            "Conservative": 6.72,
+            "Liberal Democrats": 6.32,
+            "Green Party": 8.17,
+            "Others": 7.95
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 126
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 123
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Green Party",
+              "wards": 119
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 116
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 107
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 440,
+              "accuracy_pct": 69.2,
+              "named_first": {
+                "Reform UK": 7,
+                "Labour": 402,
+                "Conservative": 126,
+                "Liberal Democrats": 67,
+                "Green Party": 16,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 9.1,
+                "Labour": 97.5,
+                "Conservative": 71,
+                "Liberal Democrats": 76.5,
+                "Green Party": 12.6,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 6.51,
+                "Labour": 4.04,
+                "Conservative": -3.87,
+                "Liberal Democrats": 0.25,
+                "Green Party": -5.76,
+                "Others": -2.98
+              },
+              "mae_pp": {
+                "Reform UK": 10.07,
+                "Labour": 7.2,
+                "Conservative": 6.97,
+                "Liberal Democrats": 5.61,
+                "Green Party": 8.83,
+                "Others": 5.7
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 83
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Conservative",
+                  "wards": 42
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Liberal Democrats",
+                  "wards": 12
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Others",
+                  "wards": 12
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 418,
+              "accuracy_pct": 58.2,
+              "named_first": {
+                "Reform UK": 371,
+                "Labour": 127,
+                "Conservative": 29,
+                "Liberal Democrats": 42,
+                "Green Party": 112,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 69.8,
+                "Labour": 38.3,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 50,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.22,
+                "Labour": -0.09,
+                "Conservative": 1.37,
+                "Liberal Democrats": 0.61,
+                "Green Party": 0.11,
+                "Others": -1.04
+              },
+              "mae_pp": {
+                "Reform UK": 9.11,
+                "Labour": 6.68,
+                "Conservative": 5.39,
+                "Liberal Democrats": 4.81,
+                "Green Party": 8.3,
+                "Others": 7.45
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 53
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 47
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 26
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 566,
+              "accuracy_pct": 50.6,
+              "named_first": {
+                "Reform UK": 522,
+                "Labour": 39,
+                "Conservative": 193,
+                "Liberal Democrats": 148,
+                "Green Party": 164,
+                "Others": 53
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 58.7,
+                "Labour": 21.3,
+                "Conservative": 39.3,
+                "Liberal Democrats": 50.8,
+                "Green Party": 53.4,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.8,
+                "Labour": 0.63,
+                "Conservative": 1.71,
+                "Liberal Democrats": -2.64,
+                "Green Party": 1.24,
+                "Others": -5.61
+              },
+              "mae_pp": {
+                "Reform UK": 7.16,
+                "Labour": 4.88,
+                "Conservative": 7.67,
+                "Liberal Democrats": 7.42,
+                "Green Party": 8.56,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 102
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 77
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 66
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 287,
+              "accuracy_pct": 67.7,
+              "named_first": {
+                "Reform UK": 150,
+                "Labour": 47,
+                "Conservative": 40,
+                "Liberal Democrats": 130,
+                "Green Party": 39,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71.8,
+                "Labour": 41.9,
+                "Conservative": 41,
+                "Liberal Democrats": 82.6,
+                "Green Party": 81.3,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.24,
+                "Labour": 1.54,
+                "Conservative": -1.63,
+                "Liberal Democrats": -0.99,
+                "Green Party": 1.41,
+                "Others": -2.39
+              },
+              "mae_pp": {
+                "Reform UK": 8.37,
+                "Labour": 5.92,
+                "Conservative": 5.96,
+                "Liberal Democrats": 7.08,
+                "Green Party": 5.96,
+                "Others": 8.81
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1416,
+                "Conservative": 0.1571,
+                "Reform UK": 0.303,
+                "Liberal Democrats": 0.1416,
+                "Green Party": 0.2021,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7015,
+                "Conservative": 0.849,
+                "Reform UK": 1.0406,
+                "Liberal Democrats": 1.0737,
+                "Green Party": 1.7288,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": "no Final-C"
+          }
+        },
+        "A2": {
+          "label": "Split, London on the 2022 London ratio",
+          "wards": 2897,
+          "called": 1672,
+          "accuracy_pct": 57.7,
+          "named_first": {
+            "Reform UK": 1062,
+            "Labour": 392,
+            "Conservative": 433,
+            "Liberal Democrats": 377,
+            "Green Party": 506,
+            "Others": 127
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 63,
+            "Labour": 42.9,
+            "Conservative": 56.2,
+            "Liberal Democrats": 62,
+            "Green Party": 61.4,
+            "Others": 52.8
+          },
+          "signed_bias_pp": {
+            "Reform UK": 1.77,
+            "Labour": -0.7,
+            "Conservative": 0.26,
+            "Liberal Democrats": -1.18,
+            "Green Party": 0.98,
+            "Others": -3.11
+          },
+          "mae_pp": {
+            "Reform UK": 8.63,
+            "Labour": 6.35,
+            "Conservative": 6.65,
+            "Liberal Democrats": 6.31,
+            "Green Party": 7.98,
+            "Others": 7.93
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 131
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 124
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 123
+            },
+            {
+              "predicted": "Green Party",
+              "actual": "Labour",
+              "wards": 111
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 109
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 401,
+              "accuracy_pct": 63.1,
+              "named_first": {
+                "Reform UK": 19,
+                "Labour": 179,
+                "Conservative": 171,
+                "Liberal Democrats": 57,
+                "Green Party": 191,
+                "Others": 19
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 15.2,
+                "Labour": 51.9,
+                "Conservative": 85.2,
+                "Liberal Democrats": 64.7,
+                "Green Party": 73.7,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 7.87,
+                "Labour": -5,
+                "Conservative": -2.19,
+                "Liberal Democrats": -0.68,
+                "Green Party": 1.25,
+                "Others": -2.79
+              },
+              "mae_pp": {
+                "Reform UK": 10.86,
+                "Labour": 8.67,
+                "Conservative": 6.68,
+                "Liberal Democrats": 5.57,
+                "Green Party": 7.98,
+                "Others": 5.62
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 89
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 25
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Labour",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Liberal Democrats",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 15
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 418,
+              "accuracy_pct": 58.2,
+              "named_first": {
+                "Reform UK": 371,
+                "Labour": 127,
+                "Conservative": 29,
+                "Liberal Democrats": 42,
+                "Green Party": 112,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 69.8,
+                "Labour": 38.3,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 50,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.22,
+                "Labour": -0.09,
+                "Conservative": 1.37,
+                "Liberal Democrats": 0.61,
+                "Green Party": 0.11,
+                "Others": -1.04
+              },
+              "mae_pp": {
+                "Reform UK": 9.11,
+                "Labour": 6.68,
+                "Conservative": 5.39,
+                "Liberal Democrats": 4.81,
+                "Green Party": 8.3,
+                "Others": 7.45
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 53
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 47
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 26
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 566,
+              "accuracy_pct": 50.6,
+              "named_first": {
+                "Reform UK": 522,
+                "Labour": 39,
+                "Conservative": 193,
+                "Liberal Democrats": 148,
+                "Green Party": 164,
+                "Others": 53
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 58.7,
+                "Labour": 21.3,
+                "Conservative": 39.3,
+                "Liberal Democrats": 50.8,
+                "Green Party": 53.4,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.8,
+                "Labour": 0.63,
+                "Conservative": 1.71,
+                "Liberal Democrats": -2.64,
+                "Green Party": 1.24,
+                "Others": -5.61
+              },
+              "mae_pp": {
+                "Reform UK": 7.16,
+                "Labour": 4.88,
+                "Conservative": 7.67,
+                "Liberal Democrats": 7.42,
+                "Green Party": 8.56,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 102
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 77
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 66
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 287,
+              "accuracy_pct": 67.7,
+              "named_first": {
+                "Reform UK": 150,
+                "Labour": 47,
+                "Conservative": 40,
+                "Liberal Democrats": 130,
+                "Green Party": 39,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71.8,
+                "Labour": 41.9,
+                "Conservative": 41,
+                "Liberal Democrats": 82.6,
+                "Green Party": 81.3,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.24,
+                "Labour": 1.54,
+                "Conservative": -1.63,
+                "Liberal Democrats": -0.99,
+                "Green Party": 1.41,
+                "Others": -2.39
+              },
+              "mae_pp": {
+                "Reform UK": 8.37,
+                "Labour": 5.92,
+                "Conservative": 5.96,
+                "Liberal Democrats": 7.08,
+                "Green Party": 5.96,
+                "Others": 8.81
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1416,
+                "Conservative": 0.1571,
+                "Reform UK": 0.303,
+                "Liberal Democrats": 0.1416,
+                "Green Party": 0.2021,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7015,
+                "Conservative": 0.849,
+                "Reform UK": 1.0406,
+                "Liberal Democrats": 1.0737,
+                "Green Party": 1.7288,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": {
+              "ratio": {
+                "Reform UK": 1.0026,
+                "Labour": 0.7632,
+                "Conservative": 1.1127,
+                "Liberal Democrats": 1.0635,
+                "Green Party": 1.3389
+              },
+              "targets": {
+                "Labour": 0.1699,
+                "Conservative": 0.1893,
+                "Reform UK": 0.212,
+                "Liberal Democrats": 0.1128,
+                "Green Party": 0.2708,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.6902,
+                "Conservative": 1.0772,
+                "Reform UK": 1.0493,
+                "Liberal Democrats": 0.9094,
+                "Green Party": 1.4191,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        },
+        "A3": {
+          "label": "Split, London on the by-election ratio (diagnostic)",
+          "wards": 2897,
+          "called": 1644,
+          "accuracy_pct": 56.7,
+          "named_first": {
+            "Reform UK": 1134,
+            "Labour": 384,
+            "Conservative": 503,
+            "Liberal Democrats": 397,
+            "Green Party": 353,
+            "Others": 126
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 62.6,
+            "Labour": 40.8,
+            "Conservative": 59.9,
+            "Liberal Democrats": 64.3,
+            "Green Party": 47.8,
+            "Others": 53.4
+          },
+          "signed_bias_pp": {
+            "Reform UK": 2.14,
+            "Labour": -1.09,
+            "Conservative": 1.23,
+            "Liberal Democrats": -0.62,
+            "Green Party": -0.51,
+            "Others": -3.1
+          },
+          "mae_pp": {
+            "Reform UK": 8.92,
+            "Labour": 6.5,
+            "Conservative": 6.73,
+            "Liberal Democrats": 6.44,
+            "Green Party": 8.09,
+            "Others": 7.94
+          },
+          "largest_misses": [
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 169
+            },
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 142
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 121
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 114
+            },
+            {
+              "predicted": "Green Party",
+              "actual": "Reform UK",
+              "wards": 92
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 373,
+              "accuracy_pct": 58.6,
+              "named_first": {
+                "Reform UK": 91,
+                "Labour": 171,
+                "Conservative": 241,
+                "Liberal Democrats": 77,
+                "Green Party": 38,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 3,
+                "Labour": 47.7,
+                "Conservative": 95.5,
+                "Liberal Democrats": 78.8,
+                "Green Party": 28.4,
+                "Others": 56
+              },
+              "signed_bias_pp": {
+                "Reform UK": 9.54,
+                "Labour": -6.68,
+                "Conservative": 2.14,
+                "Liberal Democrats": 1.55,
+                "Green Party": -5.45,
+                "Others": -2.78
+              },
+              "mae_pp": {
+                "Reform UK": 12.16,
+                "Labour": 9.33,
+                "Conservative": 7.04,
+                "Liberal Democrats": 6.09,
+                "Green Party": 8.43,
+                "Others": 5.66
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Labour",
+                  "wards": 54
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 53
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 35
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 28
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 26
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 418,
+              "accuracy_pct": 58.2,
+              "named_first": {
+                "Reform UK": 371,
+                "Labour": 127,
+                "Conservative": 29,
+                "Liberal Democrats": 42,
+                "Green Party": 112,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 69.8,
+                "Labour": 38.3,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 50,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.22,
+                "Labour": -0.09,
+                "Conservative": 1.37,
+                "Liberal Democrats": 0.61,
+                "Green Party": 0.11,
+                "Others": -1.04
+              },
+              "mae_pp": {
+                "Reform UK": 9.11,
+                "Labour": 6.68,
+                "Conservative": 5.39,
+                "Liberal Democrats": 4.81,
+                "Green Party": 8.3,
+                "Others": 7.45
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 53
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 47
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 26
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 566,
+              "accuracy_pct": 50.6,
+              "named_first": {
+                "Reform UK": 522,
+                "Labour": 39,
+                "Conservative": 193,
+                "Liberal Democrats": 148,
+                "Green Party": 164,
+                "Others": 53
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 58.7,
+                "Labour": 21.3,
+                "Conservative": 39.3,
+                "Liberal Democrats": 50.8,
+                "Green Party": 53.4,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.8,
+                "Labour": 0.63,
+                "Conservative": 1.71,
+                "Liberal Democrats": -2.64,
+                "Green Party": 1.24,
+                "Others": -5.61
+              },
+              "mae_pp": {
+                "Reform UK": 7.16,
+                "Labour": 4.88,
+                "Conservative": 7.67,
+                "Liberal Democrats": 7.42,
+                "Green Party": 8.56,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 102
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 77
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 66
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 287,
+              "accuracy_pct": 67.7,
+              "named_first": {
+                "Reform UK": 150,
+                "Labour": 47,
+                "Conservative": 40,
+                "Liberal Democrats": 130,
+                "Green Party": 39,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71.8,
+                "Labour": 41.9,
+                "Conservative": 41,
+                "Liberal Democrats": 82.6,
+                "Green Party": 81.3,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.24,
+                "Labour": 1.54,
+                "Conservative": -1.63,
+                "Liberal Democrats": -0.99,
+                "Green Party": 1.41,
+                "Others": -2.39
+              },
+              "mae_pp": {
+                "Reform UK": 8.37,
+                "Labour": 5.92,
+                "Conservative": 5.96,
+                "Liberal Democrats": 7.08,
+                "Green Party": 5.96,
+                "Others": 8.81
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1416,
+                "Conservative": 0.1571,
+                "Reform UK": 0.303,
+                "Liberal Democrats": 0.1416,
+                "Green Party": 0.2021,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7015,
+                "Conservative": 0.849,
+                "Reform UK": 1.0406,
+                "Liberal Democrats": 1.0737,
+                "Green Party": 1.7288,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": {
+              "ratio": {
+                "Reform UK": 1.0925,
+                "Labour": 0.644,
+                "Conservative": 1.5186,
+                "Liberal Democrats": 1.3755,
+                "Green Party": 0.7426
+              },
+              "targets": {
+                "Labour": 0.1474,
+                "Conservative": 0.2656,
+                "Reform UK": 0.2375,
+                "Liberal Democrats": 0.1499,
+                "Green Party": 0.1544,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.6293,
+                "Conservative": 1.3424,
+                "Reform UK": 1.1297,
+                "Liberal Democrats": 1.0944,
+                "Green Party": 0.9849,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        },
+        "A4": {
+          "label": "Split, both groups on the national ratio (diagnostic)",
+          "wards": 2897,
+          "called": 1661,
+          "accuracy_pct": 57.3,
+          "named_first": {
+            "Reform UK": 1110,
+            "Labour": 391,
+            "Conservative": 396,
+            "Liberal Democrats": 382,
+            "Green Party": 490,
+            "Others": 128
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 63.4,
+            "Labour": 42.6,
+            "Conservative": 51.9,
+            "Liberal Democrats": 63,
+            "Green Party": 61.1,
+            "Others": 53.4
+          },
+          "signed_bias_pp": {
+            "Reform UK": 2.17,
+            "Labour": -0.73,
+            "Conservative": -0.17,
+            "Liberal Democrats": -0.99,
+            "Green Party": 0.86,
+            "Others": -3.11
+          },
+          "mae_pp": {
+            "Reform UK": 8.88,
+            "Labour": 6.37,
+            "Conservative": 6.75,
+            "Liberal Democrats": 6.34,
+            "Green Party": 7.99,
+            "Others": 7.93
+          },
+          "largest_misses": [
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 144
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 140
+            },
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 126
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 115
+            },
+            {
+              "predicted": "Green Party",
+              "actual": "Labour",
+              "wards": 102
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 390,
+              "accuracy_pct": 61.3,
+              "named_first": {
+                "Reform UK": 67,
+                "Labour": 178,
+                "Conservative": 134,
+                "Liberal Democrats": 62,
+                "Green Party": 175,
+                "Others": 20
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 27.3,
+                "Labour": 51.4,
+                "Conservative": 72.9,
+                "Liberal Democrats": 70.6,
+                "Green Party": 72.6,
+                "Others": 56
+              },
+              "signed_bias_pp": {
+                "Reform UK": 9.69,
+                "Labour": -5.11,
+                "Conservative": -4.09,
+                "Liberal Democrats": 0.07,
+                "Green Party": 0.69,
+                "Others": -2.79
+              },
+              "mae_pp": {
+                "Reform UK": 11.96,
+                "Labour": 8.77,
+                "Conservative": 7.11,
+                "Liberal Democrats": 5.72,
+                "Green Party": 8.02,
+                "Others": 5.62
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 80
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 28
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 25
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Conservative",
+                  "wards": 12
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 418,
+              "accuracy_pct": 58.2,
+              "named_first": {
+                "Reform UK": 371,
+                "Labour": 127,
+                "Conservative": 29,
+                "Liberal Democrats": 42,
+                "Green Party": 112,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 69.8,
+                "Labour": 38.3,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 50,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.22,
+                "Labour": -0.09,
+                "Conservative": 1.37,
+                "Liberal Democrats": 0.61,
+                "Green Party": 0.11,
+                "Others": -1.04
+              },
+              "mae_pp": {
+                "Reform UK": 9.11,
+                "Labour": 6.68,
+                "Conservative": 5.39,
+                "Liberal Democrats": 4.81,
+                "Green Party": 8.3,
+                "Others": 7.45
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 53
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 47
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 26
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 566,
+              "accuracy_pct": 50.6,
+              "named_first": {
+                "Reform UK": 522,
+                "Labour": 39,
+                "Conservative": 193,
+                "Liberal Democrats": 148,
+                "Green Party": 164,
+                "Others": 53
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 58.7,
+                "Labour": 21.3,
+                "Conservative": 39.3,
+                "Liberal Democrats": 50.8,
+                "Green Party": 53.4,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.8,
+                "Labour": 0.63,
+                "Conservative": 1.71,
+                "Liberal Democrats": -2.64,
+                "Green Party": 1.24,
+                "Others": -5.61
+              },
+              "mae_pp": {
+                "Reform UK": 7.16,
+                "Labour": 4.88,
+                "Conservative": 7.67,
+                "Liberal Democrats": 7.42,
+                "Green Party": 8.56,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 102
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 77
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 66
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 44
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 287,
+              "accuracy_pct": 67.7,
+              "named_first": {
+                "Reform UK": 150,
+                "Labour": 47,
+                "Conservative": 40,
+                "Liberal Democrats": 130,
+                "Green Party": 39,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71.8,
+                "Labour": 41.9,
+                "Conservative": 41,
+                "Liberal Democrats": 82.6,
+                "Green Party": 81.3,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.24,
+                "Labour": 1.54,
+                "Conservative": -1.63,
+                "Liberal Democrats": -0.99,
+                "Green Party": 1.41,
+                "Others": -2.39
+              },
+              "mae_pp": {
+                "Reform UK": 8.37,
+                "Labour": 5.92,
+                "Conservative": 5.96,
+                "Liberal Democrats": 7.08,
+                "Green Party": 5.96,
+                "Others": 8.81
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1416,
+                "Conservative": 0.1571,
+                "Reform UK": 0.303,
+                "Liberal Democrats": 0.1416,
+                "Green Party": 0.2021,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7015,
+                "Conservative": 0.849,
+                "Reform UK": 1.0406,
+                "Liberal Democrats": 1.0737,
+                "Green Party": 1.7288,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": {
+              "ratio": {
+                "Reform UK": 1.0026,
+                "Labour": 0.6654,
+                "Conservative": 0.8275,
+                "Liberal Democrats": 1.034,
+                "Green Party": 1.1338
+              },
+              "targets": {
+                "Labour": 0.1684,
+                "Conservative": 0.1601,
+                "Reform UK": 0.241,
+                "Liberal Democrats": 0.1246,
+                "Green Party": 0.2607,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.6862,
+                "Conservative": 0.9658,
+                "Reform UK": 1.1406,
+                "Liberal Democrats": 0.9706,
+                "Green Party": 1.3844,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "P": {
+      "label": "Corrected inputs: LSOA baseline in London, named May 2025 polls",
+      "arms": {
+        "A0": {
+          "label": "Candidate as it stands: one Final-C run, national ratio",
+          "wards": 2897,
+          "called": 1646,
+          "accuracy_pct": 56.8,
+          "named_first": {
+            "Reform UK": 946,
+            "Labour": 500,
+            "Conservative": 538,
+            "Liberal Democrats": 407,
+            "Green Party": 371,
+            "Others": 135
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 56,
+            "Labour": 50,
+            "Conservative": 59.4,
+            "Liberal Democrats": 65.6,
+            "Green Party": 53.2,
+            "Others": 53.4
+          },
+          "signed_bias_pp": {
+            "Reform UK": 0.72,
+            "Labour": 0.47,
+            "Conservative": 0.99,
+            "Liberal Democrats": -0.73,
+            "Green Party": -0.28,
+            "Others": -3.05
+          },
+          "mae_pp": {
+            "Reform UK": 8.5,
+            "Labour": 6.41,
+            "Conservative": 7.22,
+            "Liberal Democrats": 6.36,
+            "Green Party": 7.78,
+            "Others": 7.95
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 190
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Reform UK",
+              "wards": 137
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 107
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 102
+            },
+            {
+              "predicted": "Green Party",
+              "actual": "Labour",
+              "wards": 102
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 394,
+              "accuracy_pct": 61.9,
+              "named_first": {
+                "Reform UK": 16,
+                "Labour": 200,
+                "Conservative": 115,
+                "Liberal Democrats": 74,
+                "Green Party": 213,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 18.2,
+                "Labour": 57.6,
+                "Conservative": 64.5,
+                "Liberal Democrats": 77.6,
+                "Green Party": 72.6,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 6.61,
+                "Labour": -3.7,
+                "Conservative": -4.94,
+                "Liberal Democrats": 1.09,
+                "Green Party": 2.26,
+                "Others": -2.82
+              },
+              "mae_pp": {
+                "Reform UK": 9.95,
+                "Labour": 8.18,
+                "Conservative": 7.43,
+                "Liberal Democrats": 5.89,
+                "Green Party": 8.35,
+                "Others": 5.63
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 94
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Conservative",
+                  "wards": 31
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 26
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Conservative",
+                  "wards": 14
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Liberal Democrats",
+                  "wards": 12
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 394,
+              "accuracy_pct": 54.9,
+              "named_first": {
+                "Reform UK": 329,
+                "Labour": 187,
+                "Conservative": 49,
+                "Liberal Democrats": 47,
+                "Green Party": 64,
+                "Others": 42
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 60.4,
+                "Labour": 48.7,
+                "Conservative": 57.7,
+                "Liberal Democrats": 61.3,
+                "Green Party": 33.7,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -2.1,
+                "Labour": 1.51,
+                "Conservative": 2.59,
+                "Liberal Democrats": 0.66,
+                "Green Party": -1.9,
+                "Others": -0.93
+              },
+              "mae_pp": {
+                "Reform UK": 9.34,
+                "Labour": 6.93,
+                "Conservative": 5.87,
+                "Liberal Democrats": 4.8,
+                "Green Party": 8.19,
+                "Others": 7.48
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 84
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 49
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 35
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 20
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 566,
+              "accuracy_pct": 50.6,
+              "named_first": {
+                "Reform UK": 465,
+                "Labour": 59,
+                "Conservative": 319,
+                "Liberal Democrats": 155,
+                "Green Party": 64,
+                "Others": 57
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 51.8,
+                "Labour": 29.3,
+                "Conservative": 56.1,
+                "Liberal Democrats": 52.5,
+                "Green Party": 45.6,
+                "Others": 52.2
+              },
+              "signed_bias_pp": {
+                "Reform UK": -0.31,
+                "Labour": 1.48,
+                "Conservative": 3.79,
+                "Liberal Democrats": -2.67,
+                "Green Party": -0.6,
+                "Others": -5.57
+              },
+              "mae_pp": {
+                "Reform UK": 7.17,
+                "Labour": 5.06,
+                "Conservative": 8.41,
+                "Liberal Democrats": 7.38,
+                "Green Party": 8.1,
+                "Others": 9.8
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 150
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 66
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 64
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Liberal Democrats",
+                  "wards": 44
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 43
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 292,
+              "accuracy_pct": 68.9,
+              "named_first": {
+                "Reform UK": 136,
+                "Labour": 54,
+                "Conservative": 55,
+                "Liberal Democrats": 131,
+                "Green Party": 30,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 68.7,
+                "Labour": 46.5,
+                "Conservative": 57.4,
+                "Liberal Democrats": 82.6,
+                "Green Party": 71.9,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": -0.63,
+                "Labour": 2.6,
+                "Conservative": 0.05,
+                "Liberal Democrats": -0.96,
+                "Green Party": -0.52,
+                "Others": -2.28
+              },
+              "mae_pp": {
+                "Reform UK": 8.41,
+                "Labour": 6.16,
+                "Conservative": 5.97,
+                "Liberal Democrats": 7,
+                "Green Party": 5.39,
+                "Others": 8.84
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 23
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 15
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 14
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 12
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 11
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "all": {
+              "targets": {
+                "Labour": 0.1757,
+                "Conservative": 0.1601,
+                "Reform UK": 0.2281,
+                "Liberal Democrats": 0.1416,
+                "Green Party": 0.2459,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7392,
+                "Conservative": 0.9229,
+                "Reform UK": 0.9956,
+                "Liberal Democrats": 1.0614,
+                "Green Party": 1.5007,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        },
+        "A1": {
+          "label": "London excluded from C2: no Final-C in London",
+          "wards": 2897,
+          "called": 1709,
+          "accuracy_pct": 59,
+          "named_first": {
+            "Reform UK": 1028,
+            "Labour": 646,
+            "Conservative": 435,
+            "Liberal Democrats": 385,
+            "Green Party": 276,
+            "Others": 127
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 61.7,
+            "Labour": 67.6,
+            "Conservative": 54.9,
+            "Liberal Democrats": 63.7,
+            "Green Party": 38.6,
+            "Others": 52.8
+          },
+          "signed_bias_pp": {
+            "Reform UK": 1.31,
+            "Labour": 1.72,
+            "Conservative": 0.39,
+            "Liberal Democrats": -1.01,
+            "Green Party": -1.23,
+            "Others": -3.18
+          },
+          "mae_pp": {
+            "Reform UK": 8.48,
+            "Labour": 6.07,
+            "Conservative": 6.84,
+            "Liberal Democrats": 6.3,
+            "Green Party": 8.02,
+            "Others": 7.94
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 147
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Green Party",
+              "wards": 125
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 114
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 112
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Reform UK",
+              "wards": 111
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 440,
+              "accuracy_pct": 69.2,
+              "named_first": {
+                "Reform UK": 7,
+                "Labour": 402,
+                "Conservative": 126,
+                "Liberal Democrats": 67,
+                "Green Party": 16,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 9.1,
+                "Labour": 97.5,
+                "Conservative": 71,
+                "Liberal Democrats": 76.5,
+                "Green Party": 12.6,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 6.51,
+                "Labour": 4.04,
+                "Conservative": -3.87,
+                "Liberal Democrats": 0.25,
+                "Green Party": -5.76,
+                "Others": -2.98
+              },
+              "mae_pp": {
+                "Reform UK": 10.07,
+                "Labour": 7.2,
+                "Conservative": 6.97,
+                "Liberal Democrats": 5.61,
+                "Green Party": 8.83,
+                "Others": 5.7
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 83
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Conservative",
+                  "wards": 42
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Liberal Democrats",
+                  "wards": 12
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Others",
+                  "wards": 12
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 408,
+              "accuracy_pct": 56.8,
+              "named_first": {
+                "Reform UK": 357,
+                "Labour": 150,
+                "Conservative": 32,
+                "Liberal Democrats": 42,
+                "Green Party": 100,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 66.7,
+                "Labour": 42.6,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 45.3,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.39,
+                "Labour": 0.57,
+                "Conservative": 1.82,
+                "Liberal Democrats": 0.56,
+                "Green Party": -0.78,
+                "Others": -1.07
+              },
+              "mae_pp": {
+                "Reform UK": 9.16,
+                "Labour": 6.75,
+                "Conservative": 5.55,
+                "Liberal Democrats": 4.79,
+                "Green Party": 8.21,
+                "Others": 7.44
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 60
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 39
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 29
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 575,
+              "accuracy_pct": 51.4,
+              "named_first": {
+                "Reform UK": 518,
+                "Labour": 43,
+                "Conservative": 231,
+                "Liberal Democrats": 148,
+                "Green Party": 125,
+                "Others": 54
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 59.1,
+                "Labour": 24,
+                "Conservative": 46.2,
+                "Liberal Democrats": 50.8,
+                "Green Party": 46.6,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.55,
+                "Labour": 0.99,
+                "Conservative": 2.49,
+                "Liberal Democrats": -2.74,
+                "Green Party": 0.43,
+                "Others": -5.66
+              },
+              "mae_pp": {
+                "Reform UK": 7.17,
+                "Labour": 4.94,
+                "Conservative": 7.91,
+                "Liberal Democrats": 7.4,
+                "Green Party": 8.34,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 120
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 69
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 63
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 49
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 40
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 286,
+              "accuracy_pct": 67.5,
+              "named_first": {
+                "Reform UK": 146,
+                "Labour": 51,
+                "Conservative": 46,
+                "Liberal Democrats": 128,
+                "Green Party": 35,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71,
+                "Labour": 41.9,
+                "Conservative": 47.5,
+                "Liberal Democrats": 81.9,
+                "Green Party": 71.9,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.05,
+                "Labour": 2,
+                "Conservative": -1,
+                "Liberal Democrats": -1.08,
+                "Green Party": 0.58,
+                "Others": -2.41
+              },
+              "mae_pp": {
+                "Reform UK": 8.38,
+                "Labour": 6.02,
+                "Conservative": 5.92,
+                "Liberal Democrats": 7.05,
+                "Green Party": 5.66,
+                "Others": 8.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 19
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 15
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1487,
+                "Conservative": 0.1672,
+                "Reform UK": 0.3017,
+                "Liberal Democrats": 0.141,
+                "Green Party": 0.1868,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.724,
+                "Conservative": 0.8841,
+                "Reform UK": 1.0376,
+                "Liberal Democrats": 1.0712,
+                "Green Party": 1.6425,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": "no Final-C"
+          }
+        },
+        "A2": {
+          "label": "Split, London on the 2022 London ratio",
+          "wards": 2897,
+          "called": 1654,
+          "accuracy_pct": 57.1,
+          "named_first": {
+            "Reform UK": 1022,
+            "Labour": 410,
+            "Conservative": 451,
+            "Liberal Democrats": 379,
+            "Green Party": 506,
+            "Others": 129
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 61.4,
+            "Labour": 43.3,
+            "Conservative": 55.8,
+            "Liberal Democrats": 62.4,
+            "Green Party": 59.8,
+            "Others": 52.8
+          },
+          "signed_bias_pp": {
+            "Reform UK": 0.81,
+            "Labour": -0.06,
+            "Conservative": 0.55,
+            "Liberal Democrats": -0.98,
+            "Green Party": 0.87,
+            "Others": -3.12
+          },
+          "mae_pp": {
+            "Reform UK": 8.19,
+            "Labour": 6.3,
+            "Conservative": 6.82,
+            "Liberal Democrats": 6.32,
+            "Green Party": 7.98,
+            "Others": 7.92
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 153
+            },
+            {
+              "predicted": "Green Party",
+              "actual": "Labour",
+              "wards": 130
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 112
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 112
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 102
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 385,
+              "accuracy_pct": 60.5,
+              "named_first": {
+                "Reform UK": 1,
+                "Labour": 166,
+                "Conservative": 142,
+                "Liberal Democrats": 61,
+                "Green Party": 246,
+                "Others": 20
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 0,
+                "Labour": 49.8,
+                "Conservative": 73.5,
+                "Liberal Democrats": 68.2,
+                "Green Party": 83.2,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 4.23,
+                "Labour": -3.79,
+                "Conservative": -3.17,
+                "Liberal Democrats": 0.38,
+                "Green Party": 3.66,
+                "Others": -2.73
+              },
+              "mae_pp": {
+                "Reform UK": 8.78,
+                "Labour": 8.19,
+                "Conservative": 6.86,
+                "Liberal Democrats": 5.7,
+                "Green Party": 8.66,
+                "Others": 5.62
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 112
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Conservative",
+                  "wards": 28
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Liberal Democrats",
+                  "wards": 18
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 16
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 16
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 408,
+              "accuracy_pct": 56.8,
+              "named_first": {
+                "Reform UK": 357,
+                "Labour": 150,
+                "Conservative": 32,
+                "Liberal Democrats": 42,
+                "Green Party": 100,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 66.7,
+                "Labour": 42.6,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 45.3,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.39,
+                "Labour": 0.57,
+                "Conservative": 1.82,
+                "Liberal Democrats": 0.56,
+                "Green Party": -0.78,
+                "Others": -1.07
+              },
+              "mae_pp": {
+                "Reform UK": 9.16,
+                "Labour": 6.75,
+                "Conservative": 5.55,
+                "Liberal Democrats": 4.79,
+                "Green Party": 8.21,
+                "Others": 7.44
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 60
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 39
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 29
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 575,
+              "accuracy_pct": 51.4,
+              "named_first": {
+                "Reform UK": 518,
+                "Labour": 43,
+                "Conservative": 231,
+                "Liberal Democrats": 148,
+                "Green Party": 125,
+                "Others": 54
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 59.1,
+                "Labour": 24,
+                "Conservative": 46.2,
+                "Liberal Democrats": 50.8,
+                "Green Party": 46.6,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.55,
+                "Labour": 0.99,
+                "Conservative": 2.49,
+                "Liberal Democrats": -2.74,
+                "Green Party": 0.43,
+                "Others": -5.66
+              },
+              "mae_pp": {
+                "Reform UK": 7.17,
+                "Labour": 4.94,
+                "Conservative": 7.91,
+                "Liberal Democrats": 7.4,
+                "Green Party": 8.34,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 120
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 69
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 63
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 49
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 40
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 286,
+              "accuracy_pct": 67.5,
+              "named_first": {
+                "Reform UK": 146,
+                "Labour": 51,
+                "Conservative": 46,
+                "Liberal Democrats": 128,
+                "Green Party": 35,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71,
+                "Labour": 41.9,
+                "Conservative": 47.5,
+                "Liberal Democrats": 81.9,
+                "Green Party": 71.9,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.05,
+                "Labour": 2,
+                "Conservative": -1,
+                "Liberal Democrats": -1.08,
+                "Green Party": 0.58,
+                "Others": -2.41
+              },
+              "mae_pp": {
+                "Reform UK": 8.38,
+                "Labour": 6.02,
+                "Conservative": 5.92,
+                "Liberal Democrats": 7.05,
+                "Green Party": 5.66,
+                "Others": 8.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 19
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 15
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1487,
+                "Conservative": 0.1672,
+                "Reform UK": 0.3017,
+                "Liberal Democrats": 0.141,
+                "Green Party": 0.1868,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.724,
+                "Conservative": 0.8841,
+                "Reform UK": 1.0376,
+                "Liberal Democrats": 1.0712,
+                "Green Party": 1.6425,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": {
+              "ratio": {
+                "Reform UK": 0.9872,
+                "Labour": 0.7632,
+                "Conservative": 1.1127,
+                "Liberal Democrats": 1.0635,
+                "Green Party": 1.3389
+              },
+              "targets": {
+                "Labour": 0.1835,
+                "Conservative": 0.1716,
+                "Reform UK": 0.1568,
+                "Liberal Democrats": 0.1277,
+                "Green Party": 0.3152,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7256,
+                "Conservative": 1.0104,
+                "Reform UK": 0.8626,
+                "Liberal Democrats": 0.986,
+                "Green Party": 1.5663,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        },
+        "A3": {
+          "label": "Split, London on the by-election ratio (diagnostic)",
+          "wards": 2897,
+          "called": 1705,
+          "accuracy_pct": 58.9,
+          "named_first": {
+            "Reform UK": 1022,
+            "Labour": 537,
+            "Conservative": 492,
+            "Liberal Democrats": 399,
+            "Green Party": 319,
+            "Others": 128
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 61.4,
+            "Labour": 57.4,
+            "Conservative": 60.3,
+            "Liberal Democrats": 64.7,
+            "Green Party": 44.6,
+            "Others": 52.8
+          },
+          "signed_bias_pp": {
+            "Reform UK": 0.93,
+            "Labour": 0.23,
+            "Conservative": 1.03,
+            "Liberal Democrats": -0.39,
+            "Green Party": -0.57,
+            "Others": -3.14
+          },
+          "mae_pp": {
+            "Reform UK": 8.29,
+            "Labour": 6.11,
+            "Conservative": 6.77,
+            "Liberal Democrats": 6.49,
+            "Green Party": 7.82,
+            "Others": 7.93
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 157
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 112
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 112
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Reform UK",
+              "wards": 104
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Green Party",
+              "wards": 104
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 436,
+              "accuracy_pct": 68.6,
+              "named_first": {
+                "Reform UK": 1,
+                "Labour": 293,
+                "Conservative": 183,
+                "Liberal Democrats": 81,
+                "Green Party": 59,
+                "Others": 19
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 0,
+                "Labour": 77.4,
+                "Conservative": 86.5,
+                "Liberal Democrats": 82.4,
+                "Green Party": 32.6,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 4.82,
+                "Labour": -2.52,
+                "Conservative": -1.01,
+                "Liberal Democrats": 2.71,
+                "Green Party": -2.79,
+                "Others": -2.81
+              },
+              "mae_pp": {
+                "Reform UK": 9.2,
+                "Labour": 7.35,
+                "Conservative": 6.63,
+                "Liberal Democrats": 6.34,
+                "Green Party": 7.91,
+                "Others": 5.67
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 62
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Labour",
+                  "wards": 23
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 23
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 20
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Conservative",
+                  "wards": 17
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 408,
+              "accuracy_pct": 56.8,
+              "named_first": {
+                "Reform UK": 357,
+                "Labour": 150,
+                "Conservative": 32,
+                "Liberal Democrats": 42,
+                "Green Party": 100,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 66.7,
+                "Labour": 42.6,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 45.3,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.39,
+                "Labour": 0.57,
+                "Conservative": 1.82,
+                "Liberal Democrats": 0.56,
+                "Green Party": -0.78,
+                "Others": -1.07
+              },
+              "mae_pp": {
+                "Reform UK": 9.16,
+                "Labour": 6.75,
+                "Conservative": 5.55,
+                "Liberal Democrats": 4.79,
+                "Green Party": 8.21,
+                "Others": 7.44
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 60
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 39
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 29
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 575,
+              "accuracy_pct": 51.4,
+              "named_first": {
+                "Reform UK": 518,
+                "Labour": 43,
+                "Conservative": 231,
+                "Liberal Democrats": 148,
+                "Green Party": 125,
+                "Others": 54
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 59.1,
+                "Labour": 24,
+                "Conservative": 46.2,
+                "Liberal Democrats": 50.8,
+                "Green Party": 46.6,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.55,
+                "Labour": 0.99,
+                "Conservative": 2.49,
+                "Liberal Democrats": -2.74,
+                "Green Party": 0.43,
+                "Others": -5.66
+              },
+              "mae_pp": {
+                "Reform UK": 7.17,
+                "Labour": 4.94,
+                "Conservative": 7.91,
+                "Liberal Democrats": 7.4,
+                "Green Party": 8.34,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 120
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 69
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 63
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 49
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 40
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 286,
+              "accuracy_pct": 67.5,
+              "named_first": {
+                "Reform UK": 146,
+                "Labour": 51,
+                "Conservative": 46,
+                "Liberal Democrats": 128,
+                "Green Party": 35,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71,
+                "Labour": 41.9,
+                "Conservative": 47.5,
+                "Liberal Democrats": 81.9,
+                "Green Party": 71.9,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.05,
+                "Labour": 2,
+                "Conservative": -1,
+                "Liberal Democrats": -1.08,
+                "Green Party": 0.58,
+                "Others": -2.41
+              },
+              "mae_pp": {
+                "Reform UK": 8.38,
+                "Labour": 6.02,
+                "Conservative": 5.92,
+                "Liberal Democrats": 7.05,
+                "Green Party": 5.66,
+                "Others": 8.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 19
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 15
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1487,
+                "Conservative": 0.1672,
+                "Reform UK": 0.3017,
+                "Liberal Democrats": 0.141,
+                "Green Party": 0.1868,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.724,
+                "Conservative": 0.8841,
+                "Reform UK": 1.0376,
+                "Liberal Democrats": 1.0712,
+                "Green Party": 1.6425,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": {
+              "ratio": {
+                "Reform UK": 1.0241,
+                "Labour": 0.8097,
+                "Conservative": 1.3263,
+                "Liberal Democrats": 1.3832,
+                "Green Party": 0.8228
+              },
+              "targets": {
+                "Labour": 0.2017,
+                "Conservative": 0.2119,
+                "Reform UK": 0.1686,
+                "Liberal Democrats": 0.1721,
+                "Green Party": 0.2007,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7716,
+                "Conservative": 1.1589,
+                "Reform UK": 0.9039,
+                "Liberal Democrats": 1.1969,
+                "Green Party": 1.1679,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        },
+        "A4": {
+          "label": "Split, both groups on the national ratio (diagnostic)",
+          "wards": 2897,
+          "called": 1674,
+          "accuracy_pct": 57.8,
+          "named_first": {
+            "Reform UK": 1032,
+            "Labour": 465,
+            "Conservative": 436,
+            "Liberal Democrats": 391,
+            "Green Party": 446,
+            "Others": 127
+          },
+          "won": {
+            "Reform UK": 980,
+            "Labour": 476,
+            "Conservative": 441,
+            "Liberal Democrats": 521,
+            "Green Party": 316,
+            "Others": 163
+          },
+          "recall_pct": {
+            "Reform UK": 61.9,
+            "Labour": 49.6,
+            "Conservative": 54.2,
+            "Liberal Democrats": 63.7,
+            "Green Party": 55.1,
+            "Others": 52.8
+          },
+          "signed_bias_pp": {
+            "Reform UK": 1.16,
+            "Labour": 0.08,
+            "Conservative": 0.28,
+            "Liberal Democrats": -0.78,
+            "Green Party": 0.46,
+            "Others": -3.13
+          },
+          "mae_pp": {
+            "Reform UK": 8.37,
+            "Labour": 6.24,
+            "Conservative": 6.89,
+            "Liberal Democrats": 6.37,
+            "Green Party": 7.89,
+            "Others": 7.92
+          },
+          "largest_misses": [
+            {
+              "predicted": "Conservative",
+              "actual": "Reform UK",
+              "wards": 149
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Labour",
+              "wards": 114
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Conservative",
+              "wards": 114
+            },
+            {
+              "predicted": "Labour",
+              "actual": "Reform UK",
+              "wards": 104
+            },
+            {
+              "predicted": "Reform UK",
+              "actual": "Liberal Democrats",
+              "wards": 103
+            }
+          ],
+          "by_council_type": {
+            "london": {
+              "wards": 636,
+              "called": 405,
+              "accuracy_pct": 63.7,
+              "named_first": {
+                "Reform UK": 11,
+                "Labour": 221,
+                "Conservative": 127,
+                "Liberal Democrats": 73,
+                "Green Party": 186,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 33,
+                "Labour": 243,
+                "Conservative": 155,
+                "Liberal Democrats": 85,
+                "Green Party": 95,
+                "Others": 25
+              },
+              "recall_pct": {
+                "Reform UK": 15.2,
+                "Labour": 62.1,
+                "Conservative": 69,
+                "Liberal Democrats": 76.5,
+                "Green Party": 67.4,
+                "Others": 52
+              },
+              "signed_bias_pp": {
+                "Reform UK": 5.86,
+                "Labour": -3.19,
+                "Conservative": -4.36,
+                "Liberal Democrats": 1.14,
+                "Green Party": 1.84,
+                "Others": -2.77
+              },
+              "mae_pp": {
+                "Reform UK": 9.57,
+                "Labour": 7.93,
+                "Conservative": 7.2,
+                "Liberal Democrats": 5.89,
+                "Green Party": 8.22,
+                "Others": 5.63
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Green Party",
+                  "actual": "Labour",
+                  "wards": 82
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 31
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Conservative",
+                  "wards": 24
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Conservative",
+                  "wards": 17
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 12
+                }
+              ]
+            },
+            "metropolitan": {
+              "wards": 718,
+              "called": 408,
+              "accuracy_pct": 56.8,
+              "named_first": {
+                "Reform UK": 357,
+                "Labour": 150,
+                "Conservative": 32,
+                "Liberal Democrats": 42,
+                "Green Party": 100,
+                "Others": 37
+              },
+              "won": {
+                "Reform UK": 351,
+                "Labour": 115,
+                "Conservative": 52,
+                "Liberal Democrats": 62,
+                "Green Party": 86,
+                "Others": 52
+              },
+              "recall_pct": {
+                "Reform UK": 66.7,
+                "Labour": 42.6,
+                "Conservative": 44.2,
+                "Liberal Democrats": 54.8,
+                "Green Party": 45.3,
+                "Others": 55.8
+              },
+              "signed_bias_pp": {
+                "Reform UK": -1.39,
+                "Labour": 0.57,
+                "Conservative": 1.82,
+                "Liberal Democrats": 0.56,
+                "Green Party": -0.78,
+                "Others": -1.07
+              },
+              "mae_pp": {
+                "Reform UK": 9.16,
+                "Labour": 6.75,
+                "Conservative": 5.55,
+                "Liberal Democrats": 4.79,
+                "Green Party": 8.21,
+                "Others": 7.44
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 60
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 50
+                },
+                {
+                  "predicted": "Green Party",
+                  "actual": "Reform UK",
+                  "wards": 39
+                },
+                {
+                  "predicted": "Labour",
+                  "actual": "Green Party",
+                  "wards": 29
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 24
+                }
+              ]
+            },
+            "no_anchor": {
+              "wards": 1119,
+              "called": 575,
+              "accuracy_pct": 51.4,
+              "named_first": {
+                "Reform UK": 518,
+                "Labour": 43,
+                "Conservative": 231,
+                "Liberal Democrats": 148,
+                "Green Party": 125,
+                "Others": 54
+              },
+              "won": {
+                "Reform UK": 465,
+                "Labour": 75,
+                "Conservative": 173,
+                "Liberal Democrats": 236,
+                "Green Party": 103,
+                "Others": 67
+              },
+              "recall_pct": {
+                "Reform UK": 59.1,
+                "Labour": 24,
+                "Conservative": 46.2,
+                "Liberal Democrats": 50.8,
+                "Green Party": 46.6,
+                "Others": 50.7
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.55,
+                "Labour": 0.99,
+                "Conservative": 2.49,
+                "Liberal Democrats": -2.74,
+                "Green Party": 0.43,
+                "Others": -5.66
+              },
+              "mae_pp": {
+                "Reform UK": 7.17,
+                "Labour": 4.94,
+                "Conservative": 7.91,
+                "Liberal Democrats": 7.4,
+                "Green Party": 8.34,
+                "Others": 9.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 120
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 69
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 63
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 49
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Green Party",
+                  "wards": 40
+                }
+              ]
+            },
+            "anchored": {
+              "wards": 424,
+              "called": 286,
+              "accuracy_pct": 67.5,
+              "named_first": {
+                "Reform UK": 146,
+                "Labour": 51,
+                "Conservative": 46,
+                "Liberal Democrats": 128,
+                "Green Party": 35,
+                "Others": 18
+              },
+              "won": {
+                "Reform UK": 131,
+                "Labour": 43,
+                "Conservative": 61,
+                "Liberal Democrats": 138,
+                "Green Party": 32,
+                "Others": 19
+              },
+              "recall_pct": {
+                "Reform UK": 71,
+                "Labour": 41.9,
+                "Conservative": 47.5,
+                "Liberal Democrats": 81.9,
+                "Green Party": 71.9,
+                "Others": 52.6
+              },
+              "signed_bias_pp": {
+                "Reform UK": 0.05,
+                "Labour": 2,
+                "Conservative": -1,
+                "Liberal Democrats": -1.08,
+                "Green Party": 0.58,
+                "Others": -2.41
+              },
+              "mae_pp": {
+                "Reform UK": 8.38,
+                "Labour": 6.02,
+                "Conservative": 5.92,
+                "Liberal Democrats": 7.05,
+                "Green Party": 5.66,
+                "Others": 8.79
+              },
+              "largest_misses": [
+                {
+                  "predicted": "Labour",
+                  "actual": "Reform UK",
+                  "wards": 21
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Conservative",
+                  "wards": 19
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Liberal Democrats",
+                  "wards": 15
+                },
+                {
+                  "predicted": "Reform UK",
+                  "actual": "Labour",
+                  "wards": 13
+                },
+                {
+                  "predicted": "Conservative",
+                  "actual": "Reform UK",
+                  "wards": 9
+                }
+              ]
+            }
+          },
+          "final_c": {
+            "rest": {
+              "targets": {
+                "Labour": 0.1487,
+                "Conservative": 0.1672,
+                "Reform UK": 0.3017,
+                "Liberal Democrats": 0.141,
+                "Green Party": 0.1868,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.724,
+                "Conservative": 0.8841,
+                "Reform UK": 1.0376,
+                "Liberal Democrats": 1.0712,
+                "Green Party": 1.6425,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            },
+            "london": {
+              "ratio": {
+                "Reform UK": 0.9872,
+                "Labour": 0.6908,
+                "Conservative": 0.871,
+                "Liberal Democrats": 1.0189,
+                "Green Party": 1.0363
+              },
+              "targets": {
+                "Labour": 0.1926,
+                "Conservative": 0.1557,
+                "Reform UK": 0.1818,
+                "Liberal Democrats": 0.1418,
+                "Green Party": 0.2829,
+                "SNP": 0.0276,
+                "Plaid Cymru": 0.0084
+              },
+              "multipliers": {
+                "Labour": 0.7487,
+                "Conservative": 0.9487,
+                "Reform UK": 0.9496,
+                "Liberal Democrats": 1.0557,
+                "Green Party": 1.4599,
+                "SNP": 1,
+                "Plaid Cymru": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
