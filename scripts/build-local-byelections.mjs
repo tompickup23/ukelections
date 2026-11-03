@@ -593,9 +593,21 @@ export function restoreHistoryCandidates(candidates, row) {
   });
   if (!filled.every(Boolean) || new Set(filled).size !== filled.length || filled.length !== rowCandidates.length) return null;
   const agrees = filled.every((source, index) => candidates[index].votes === null || source.votes === candidates[index].votes);
-  const council = row.review_status === "hand_verified_declaration";
-  if (!council && (!agrees || !(candidates.every((candidate) => candidate.votes === null) || isHandVerified(row)))) return null;
-  if (council && !agrees) console.warn(`Council declaration replaces conflicting feed counts for ${row.ballot_paper_id}`);
+  // Both hand-verified tiers outrank the feed, as they do in the sidecar sweep
+  // (scripts/refresh-byelections.mjs). Until 3 November 2026 only the council
+  // declaration tier did here, so a hand_verified_two_sources row lost to any
+  // feed count it disagreed with: Wychavon Hartlebury's Reform UK 238, the only
+  // figure that reconciles with the declared 633 ballot papers, went back to
+  // Democracy Club's 248 on the next nightly. Keep ours and print the conflict.
+  const verified = isHandVerified(row);
+  if (!verified && (!agrees || !candidates.every((candidate) => candidate.votes === null))) return null;
+  if (verified && !agrees) {
+    const diffs = filled
+      .map((source, index) => ({ name: source.name, ours: source.votes, feed: candidates[index].votes }))
+      .filter((entry) => entry.feed !== null && entry.feed !== entry.ours)
+      .map((entry) => `${entry.name} ${entry.ours} (feed ${entry.feed})`);
+    console.warn(`  ! ${row.ballot_paper_id} (kept ${row.review_status}; feed disagrees on ${diffs.join(", ")})`);
+  }
   return filled.map((candidate) => ({
     ...candidate,
     party: canonParty(candidate.party_name),

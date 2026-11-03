@@ -300,6 +300,16 @@ to apply.** Supersedes of the lower tiers are also non-lossy now: a null in the
 incoming row is absence, not a correction, so any figure DC does not publish is
 carried forward.
 
+**The contest generator applies the same rule (3 Nov 2026).** The nightly
+rebuilds every contest file from DC through `build-local-byelections.mjs`, and
+`restoreHistoryCandidates` decides whether the sidecar's counts replace DC's.
+It used to let only `hand_verified_declaration` win a disagreement, so a
+`hand_verified_two_sources` row lost to DC every night: Wychavon Hartlebury's
+Reform UK 238 was committed, and production showed DC's 248. Both hand-verified
+tiers now win, and the conflict is printed as `! <ballot> (kept ...; feed
+disagrees on ...)`. A fix committed to a contest file alone does not survive
+the nightly; it has to be in `byelection-appends.json` with a hand-verified tier.
+
 **The local-contest ingest's live cache is keyed by day.** It previously had no
 expiry at all, replayed a 26 April snapshot nightly for four months, and froze
 the models' history at 23 April 2026 while looking perfectly healthy. Fully
