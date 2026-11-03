@@ -83,6 +83,26 @@ describe("mayoral forecast output", () => {
     expect(typeof forecast.validation.winner_called).toBe("boolean");
   });
 
+  it("GM backtest uses the polls of the time, not today's", () => {
+    const v = forecast.validation;
+    const cfg = registry.sv_calibration.gm_2026_byelection.backtest;
+    expect(v.national_polling_at_time.polls_used).toBeGreaterThan(0);
+    expect(v.national_polling_at_time.window).toEqual(cfg.poll_window);
+    expect(cfg.poll_window.to < registry.sv_calibration.gm_2026_byelection.date).toBe(true);
+    expect(v.national_polling_at_time.shares).not.toEqual(forecast.snapshot.national_polling.shares);
+  });
+
+  it("GM backtest compares the GE base with the borough-votes methods", () => {
+    const v = forecast.validation;
+    expect(v.methods.map((m) => m.id)).toEqual(["ge_swing_2024", "local_signal_rebased", "local_signal_as_cast"]);
+    expect(v.methods[0].mae_pp).toBe(v.mae_pp);
+    expect(v.local_signal_contests).toBeGreaterThan(100);
+    for (const m of v.methods) {
+      const sum = Object.values(m.projected_first_pref).reduce((a, b) => a + b, 0);
+      expect(sum).toBeCloseTo(1, 2);
+    }
+  });
+
   it("no em-dashes anywhere in the published bundle", () => {
     const raw = JSON.stringify(forecast) + JSON.stringify(registry);
     expect(raw.includes("—")).toBe(false);

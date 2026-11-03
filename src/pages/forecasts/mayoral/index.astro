@@ -333,11 +333,39 @@ function statusPill(status: string) {
       <div class="validation-box">
         <h3>Does the method work? The one live test so far</h3>
         <p>
-          The GE-base method, run on the {validation.contest} exactly as we run it above, gives a per-party
+          The GE-base method, run on the {validation.contest} exactly as we run it above
+          {validation.national_polling_at_time && (
+            <> but with the national polls of the time ({validation.national_polling_at_time.polls_used} polls,
+            fieldwork {validation.national_polling_at_time.window.from} to {validation.national_polling_at_time.window.to})</>
+          )}, gives a per-party
           error of <strong>{validation.mae_pp}pp MAE</strong> and
           {validation.winner_called ? " called the winner correctly" : " called the wrong winner"}.
           {" "}{validation.note}
         </p>
+        {validation.methods && validation.methods.length > 1 && (
+          <table class="compare-table">
+            <thead><tr><th>Method</th><th>Labour</th><th>Reform</th><th>Labour lead</th><th>MAE</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Actual result</td>
+                <td>{(validation.actual_first_pref["Labour"] * 100).toFixed(1)}%</td>
+                <td>{(validation.actual_first_pref["Reform UK"] * 100).toFixed(1)}%</td>
+                <td>{validation.actual_labour_lead_pp}pp</td>
+                <td></td>
+              </tr>
+              {validation.methods.map((m: any) => (
+                <tr>
+                  <td>{m.label}</td>
+                  <td>{(m.projected_first_pref["Labour"] * 100).toFixed(1)}%</td>
+                  <td>{(m.projected_first_pref["Reform UK"] * 100).toFixed(1)}%</td>
+                  <td>{m.labour_lead_pp}pp</td>
+                  <td>{m.mae_pp}pp</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <p class="micro">Party-level detail for the GE-base method:</p>
         <table class="compare-table">
           <thead><tr><th>Party</th><th>Projected 1st pref</th><th>Actual</th><th>Error</th></tr></thead>
           <tbody>
