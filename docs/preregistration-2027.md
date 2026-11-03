@@ -19,7 +19,7 @@ Held out on the yardstick, the 2,261 non-London wards of May 2026, on the full r
 | 7 May engine (polls to 24 April) | 1,152 | 319 | 539 | 294 | 677 |
 | **Candidate: C1, slate step, C2** (S3 of the second London note) | **1,272** | 409 | 576 | 287 | 1,031 |
 
-Sources: `data/transparency/may-2026-full-run-2026-04-25.json` and `may-2026-london-v2-2026-11.json`. The middle row is one further re-run of the 7 May engine's own Final-C without London; no parameter was chosen for it. It brings the arms scored against May 2026 since 24 October to 20.
+Source: `data/transparency/may-2026-london-free-2026-11.json` (`scripts/score-london-free-2026-11.mjs`), built from the full-run and second London outputs. The middle row is one further re-run of the 7 May engine's own Final-C without London; no parameter was chosen for it. It brings the arms scored against May 2026 since 24 October to 20.
 
 Whether the gate's London condition applies to a year with no London wards is **Tom's decision**. Until he makes it, nothing for 2027 is published, and the locks below are taken as sealed records only.
 
