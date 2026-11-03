@@ -52,3 +52,14 @@ Final-C stays in its 7 May form at strength 0.65. "Split" means Final-C is run s
 ### The May 2025 poll behind C2
 
 C2's national ratio rests on `UK_WESTMINSTER_2025_MAY_AVERAGE`, a hand-set average with no named source. It is replaced, whatever the effect on the score, by the per-pollster mean of polls listed on Wikipedia's "Opinion polling for the next United Kingdom general election" with fieldwork ending 17 to 30 April 2025 (the 14 days before 1 May 2025), with the revision id saved. The national ratio is refitted on it and the chosen arm re-scored once with it (arm A5). The decision to adopt it rests on provenance, not on the score: from A5 on, the named-poll ratio is the candidate's.
+
+### Amendment, 3 November 2026, after the ratio fit and before any arm was scored
+
+Running the fit showed a defect in C2's London input, not in its ratio. C2 takes each council's GE2024 share from `ge2024ForArea`, which matches constituency names to council slugs. For London that matches 14 of 33 boroughs, several on one or two seats (Bexley on Bexleyheath and Crayford alone). The other 19 (Barking and Dagenham, Camden, the City, Hammersmith and Fulham, Haringey, Havering, Hillingdon, Hounslow, Kensington and Chelsea, Kingston, Lambeth, Merton, Newham, Redbridge, Richmond, Tower Hamlets, Waltham Forest, Wandsworth) get no match and fall back to the national poll, so their Westminster-implied Labour share is the national 19% rather than their own. The same gap left 5 of the 10 London by-elections out of E4.
+
+So, decided on provenance before any score is seen:
+
+- **The London baseline is replaced.** For every London borough the GE2024 share is the constituency shares weighted by the number of the borough's LSOAs in each constituency (`data/features/lsoa21-to-pcon24.json`; LSOA counts stand in for population). This is called the LSOA baseline. Outside London the name matching stays for now; it is flagged for Phase 2.
+- **The named May 2025 polls replace the hand-set average** in every arm of the new set, as the section above already decided.
+- **Two sets of arms are scored.** Set N is A0 to A4 on the 24 October inputs (name matching, hand-set May 2025 poll), so the change from each fix can be seen. Set P is A0 to A4 on the corrected inputs (LSOA baseline in London, E4 refitted on it, named May 2025 polls and the national ratio refitted on them). A5 is dropped as a separate arm: it is set P.
+- **The choice rule applies within set P.** Of A0P, A1P and A2P, keep the arm with most wards called that also calls at least 447 London wards. If neither A1P nor A2P meets both, keep A0P, the candidate on corrected inputs, and say the London loss stands.
