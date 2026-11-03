@@ -1,0 +1,34 @@
+{
+  "note": "Where scripts/results-morning.mjs looks for each council's own declaration of result. `contests` pins a known declaration URL for one ballot; `councils` gives the page the declaration is expected to join, scanned for a link naming the ward with 'declaration' or 'result'. `exclude` drops a link that matches (an older declaration for the same ward). Locations for the 12 November 2026 contests were read on 3 November 2026 with an honest user agent; none of these pages is disallowed by robots.txt and none showed a bot check. They are where each council posted its previous by-election notices or results, not a promise that the declaration will appear there.",
+  "checked_at": "2026-11-03",
+  "councils": {
+    "hyndburn": {
+      "index_url": "https://www.hyndburnbc.gov.uk/download/election-results/",
+      "notes": "WordPress Download Manager. The title sits beside a bare 'Download' link and the href carries the filename, so the text before the link is part of the match. Baxenden 2025 was published here as a PDF."
+    },
+    "north-east-lincolnshire": {
+      "index_url": "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/croft-baker-ward-by-election/",
+      "notes": "robots.txt asks for a 30 second crawl delay; one request per run. No earlier by-election declaration was found to confirm the format."
+    },
+    "oldham": {
+      "index_url": "https://www.oldham.gov.uk/info/200732/election_notices",
+      "also_check": ["https://committees.oldham.gov.uk/mgManageElectionResults.aspx?bcr=1"],
+      "notes": "The notices page also lists Royton North (3 December), so the ward name decides. Older by-election results are on the ModernGov results list."
+    },
+    "staffordshire-moorlands": {
+      "index_url": "https://www.staffsmoorlands.gov.uk/article/8764/Cheddleton-District-Ward-By-election-2026",
+      "notes": "Cheadle South East (2022) was a 647 KB PDF that may be a scan; a scan has no text and stays pending for a hand read."
+    },
+    "suffolk": {
+      "index_url": "https://www.midsuffolk.gov.uk/election-results",
+      "also_check": ["https://www.midsuffolk.gov.uk/election-notices"],
+      "exclude": "may 2026",
+      "notes": "Mid Suffolk runs the Bosmere division count. The results page already lists 'Suffolk County Council (Bosmere Division May 2026)', the scheduled election, which must not be read as the by-election."
+    },
+    "wigan": {
+      "index_url": "https://www.wigan.gov.uk/Council/Voting-and-Elections/Elections.aspx",
+      "notes": "Wigan Central (2025) was 'Declaration of Result of Poll - Wigan Central' with a filename that names no ward, so the link text decides."
+    }
+  },
+  "contests": {}
+}

@@ -111,6 +111,7 @@ export function getAllSitemapPaths(): string[] {
     ...getParliamentRegionPaths(),
     ...getLocalByElectionPaths(),
     "/by-elections/archive/",
+    "/by-elections/this-week/",
     ...archiveYears().map(year => `/by-elections/archive/${year}/`),
   ]);
   return [...paths].sort((a, b) => a.localeCompare(b));

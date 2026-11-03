@@ -1,0 +1,157 @@
+---
+/**
+ * Council by-election results this week: the contests that polled in the last
+ * seven days with our pre-poll call beside each, and the ones polling next.
+ * Built nightly, so "this week" is the seven days to the build.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { councilByElectionWeek, isDeclared, loadLocalContests } from "../../lib/byElections";
+import { partyColour } from "../../lib/predictions";
+import { shortPartyLabel } from "../../lib/siteData";
+
+const week = councilByElectionWeek(loadLocalContests());
+const dayMonth = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+const fullDate = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const pct0 = (x: number | null | undefined) => (typeof x === "number" ? `${Math.round(x * 100)}%` : "");
+const councilSource = (url: string | undefined) => {
+  try {
+    return url ? new URL(url).hostname.endsWith(".gov.uk") : false;
+  } catch {
+    return false;
+  }
+};
+const declared = week.held.filter(isDeclared).length;
+// A "too close to call" forecast named nobody, so it is not counted as a call either way.
+const graded = week.held.filter((c) => c.forecast && !c.forecast.too_close_to_call && typeof c.result?.grading?.call_correct === "boolean" && c.result.grading.graded_against === "forecast_as_published");
+const right = graded.filter((c) => c.result.grading.call_correct).length;
+---
+
+<BaseLayout
+  title="Council by-election results this week"
+  description={`Council by-election results for the week to ${fullDate(week.today)}, with each pre-poll forecast beside the result and the contests polling next week.`}
+  breadcrumbs={[{ name: "By-elections", href: "/by-elections/" }, { name: "Council by-elections", href: "/by-elections/local/" }, { name: "This week", href: "/by-elections/this-week/" }]}
+>
+  <section class="page-hero compact-hero">
+    <h1>Council by-election results this week</h1>
+    <p class="lede">
+      Contests that polled from {fullDate(week.from)} to {fullDate(week.today)}, read from each council's own
+      declaration where we have it, with the forecast we published before the poll beside the result.
+    </p>
+    <p class="note">
+      {week.held.length === 0
+        ? "No council by-elections polled in the last seven days."
+        : `${week.held.length} contest${week.held.length === 1 ? "" : "s"}, ${declared} declared.`}
+      {graded.length > 0 && ` Our pre-poll forecasts named the winner in ${right} of ${graded.length}.`}
+    </p>
+  </section>
+
+  {week.held.length > 0 && (
+    <section class="card" id="results">
+      <h2>Results</h2>
+      <table>
+        <thead>
+          <tr><th>Ward</th><th>Polled</th><th>Result</th><th>Our pre-poll call</th><th>Source</th></tr>
+        </thead>
+        <tbody>
+          {week.held.map((c) => {
+            const r = c.result || c.declaration;
+            const f = c.forecast;
+            const g = c.result?.grading;
+            return (
+              <tr>
+                <td>
+                  <a href={`/by-elections/local/${c.slug}/`}>{c.contest.ward_name}</a>
+                  <span class="council">{c.contest.council_name}</span>
+                </td>
+                <td>{dayMonth(c.contest.polling_day)}</td>
+                <td>
+                  {isDeclared(c) && r ? (
+                    <>
+                      <span class="party-chip" style={`--chip:${partyColour(r.winner_party)}`}>
+                        {r.winner_party === "Other" && r.winner_party_name ? r.winner_party_name : shortPartyLabel(r.winner_party)}
+                      </span>
+                      {c.result?.outcome && <span class="sub">{c.result.outcome}</span>}
+                      {Number.isFinite(c.result?.majority_votes) && <span class="sub">Majority {c.result.majority_votes.toLocaleString("en-GB")}</span>}
+                    </>
+                  ) : (
+                    <span class="muted">Result awaited</span>
+                  )}
+                </td>
+                <td>
+                  {f ? (
+                    f.too_close_to_call ? "Too close to call" : `${shortPartyLabel(f.winner)} ${pct0(f.leader_probability)}`
+                  ) : (
+                    <span class="muted">No projection</span>
+                  )}
+                  {f && !f.too_close_to_call && typeof g?.call_correct === "boolean" && g.graded_against === "forecast_as_published" && (
+                    <span class={`sub ${g.call_correct ? "right" : "wrong"}`}>{g.call_correct ? "Winner called" : "Winner missed"}</span>
+                  )}
+                </td>
+                <td>
+                  {r?.source ? <a href={r.source} rel="nofollow">{councilSource(r.source) ? "Council declaration" : "Source"}</a> : <span class="muted">None yet</span>}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <p class="note">
+        The source column says where each result comes from: the council's own declaration where we have read
+        it, Democracy Club otherwise. A contest reads "Result awaited" until one of them publishes every count.
+      </p>
+    </section>
+  )}
+
+  <section class="card" id="next-week">
+    <h2>Polling in the next seven days</h2>
+    {week.next.length === 0 ? (
+      <p class="note">No council by-elections are scheduled between {fullDate(week.today)} and {fullDate(week.until)}.</p>
+    ) : (
+      <ul class="contest-list">
+        {week.next.map((c) => (
+          <li>
+            <a href={`/by-elections/local/${c.slug}/`}>
+              <span class="ward">{c.contest.ward_name}</span>
+              <span class="council">{c.contest.council_name}</span>
+            </a>
+            <span>{dayMonth(c.contest.polling_day)}</span>
+            <span class="muted">{c.field.candidate_count} candidate{c.field.candidate_count === 1 ? "" : "s"}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    <p><a href="/by-elections/local/">Every council by-election we track</a> · <a href="/by-elections/archive/">Results archive</a> · <a href="/by-elections/post-mortem/">How our forecasts did</a></p>
+    <p class="note">Contest data from Democracy Club, used under their open licence; results from each council's declaration where linked.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .compact-hero { max-width: none; padding-block: var(--space-xl) var(--space-lg); }
+  .compact-hero h1 { font-size: var(--text-h1); }
+  .compact-hero .lede { font-size: var(--text-body); max-width: none; margin-top: var(--space-md); }
+  .card { margin-block: var(--space-2xl); }
+  .note, .muted { color: var(--muted); }
+  .note { font-size: var(--text-small); }
+  .council, .sub { display: block; color: var(--muted); font-size: var(--text-small); }
+  .party-chip { border-left: 4px solid var(--chip, var(--border)); padding-left: var(--space-xs); font-weight: 600; }
+  .right { color: var(--status-good-text, inherit); }
+  .wrong { color: var(--status-bad-text, inherit); }
+  table { width: 100%; border-collapse: collapse; margin-block: var(--space-md); }
+  th, td { text-align: left; padding: var(--space-xs); border-bottom: 1px solid var(--border); vertical-align: top; }
+  .contest-list { list-style: none; padding: 0; }
+  .contest-list li {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-sm);
+    align-items: baseline;
+    padding-block: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+  }
+  .contest-list .ward { font-weight: 600; display: block; }
+  @media (max-width: 40rem) {
+    table { display: block; overflow-x: auto; }
+    .contest-list li { grid-template-columns: 1fr; }
+  }
+</style>

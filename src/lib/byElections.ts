@@ -54,3 +54,25 @@ export function archiveYears(today = new Date().toISOString().slice(0, 10)) {
   return [...new Set([...loadParliamentContests(), ...loadLocalContests()].map(d => d.contest.polling_day)
     .concat(roundup.dates.map((d: any) => d.date)).filter((d: string) => d && d < today).map((d: string) => d.slice(0,4)))].sort().reverse() as string[];
 }
+const shiftDay = (iso: string, days: number) => {
+  const d = new Date(`${iso}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+/**
+ * The week a reader means by "council by-election results this week": contests
+ * that polled in the seven days to today, and those polling in the seven after.
+ */
+export function councilByElectionWeek(contests: any[], today = new Date().toISOString().slice(0, 10)) {
+  const from = shiftDay(today, -6);
+  const until = shiftDay(today, 7);
+  const byDay = (a: any, b: any) => a.contest.polling_day.localeCompare(b.contest.polling_day)
+    || a.contest.council_name.localeCompare(b.contest.council_name, "en-GB");
+  return {
+    from,
+    today,
+    until,
+    held: contests.filter(d => d.contest.polling_day >= from && d.contest.polling_day <= today).sort(byDay),
+    next: contests.filter(d => d.contest.polling_day > today && d.contest.polling_day <= until).sort(byDay),
+  };
+}
