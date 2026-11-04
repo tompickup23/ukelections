@@ -64,7 +64,7 @@ const description =
       {rows.map((row) => (
         <li class="timeline-row" id={row.id}>
           <div class="timeline-date">
-            {row.date_iso ? <time datetime={row.date_iso}>{row.date_label}</time> : <span>{row.date_label}</span>}
+            {row.date_iso ? <time datetime={row.date_iso}>{row.id === "general-election" ? `No later than ${longDate(row.date_iso)}` : row.date_label}</time> : <span>{row.date_label}</span>}
           </div>
           <div class="timeline-body">
             <h2 class="timeline-title">
