@@ -116,10 +116,13 @@ const leaderName = leaderSlug ? partySlugToName(leaderSlug) : null;
     <div class="cc-strip">
       <svg
         viewBox={`0 ${-TOP} ${PAD + W} ${stripH + TOP + 6}`}
+        width={PAD + W}
+        height={stripH + TOP + 6}
         preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label={`${councilName} seats by party before and after 7 May 2026, against the ${threshold} needed for a majority.`}
       >
+        <title>{`${councilName} seats by party before and after 7 May 2026, against the ${threshold} needed for a majority.`}</title>
         {rows.map((row, i) => {
           const y = i * (CH + ROWGAP);
           return (

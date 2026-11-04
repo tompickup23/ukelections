@@ -83,8 +83,11 @@ const legend = [
 ---
 
 <figure class="council-control-map">
+  <div class="council-control-map-stage" style={`aspect-ratio:${width} / ${height}`}>
   <svg
     viewBox={`0 0 ${width} ${height}`}
+    width={width}
+    height={height}
     role="img"
     aria-labelledby="council-map-title council-map-desc"
     preserveAspectRatio="xMidYMid meet"
@@ -103,6 +106,7 @@ const legend = [
       <path d={row.d} fill={row.fill} stroke="var(--bg)" stroke-width="0.45" aria-hidden="true" />
     ))}
   </svg>
+  </div>
   <figcaption>
     <span class="map-key">
       {legend.map((item) => (
@@ -121,11 +125,14 @@ const legend = [
 
 <style>
   .council-control-map { margin: 0; }
+  .council-control-map-stage {
+    width: min(100%, 48rem);
+    margin: 0 auto;
+  }
   .council-control-map svg {
     display: block;
-    width: min(100%, 48rem);
+    width: 100%;
     height: auto;
-    margin: 0 auto;
   }
   .council-control-map path { transition: opacity 120ms ease, stroke-width 120ms ease; }
   .council-control-map a:hover path,

@@ -52,7 +52,7 @@ const {
   total = 650,
   majority = 326,
   labelMinSeats = 15,
-  ariaLabel = "Projected House of Commons composition shown as a horseshoe of seats coloured by party.",
+  ariaLabel,
   showEmptySeats = false,
   emptySeatsLabel = "Vacant",
   showHeadline = true,
@@ -186,17 +186,31 @@ const leadingParty = legend[0]?.seats > 0
   ? [...legend].sort((a, b) => b.seats - a.seats)[0]
   : null;
 const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats >= majority : false;
+
+// Enrich the default label with the seat picture the dots actually show, so
+// the accessible name names the chart from its data rather than a generic
+// placeholder. Callers that pass ariaLabel keep full control.
+const tallyPhrase = legend
+  .filter((l) => l.seats > 0)
+  .slice(0, 6)
+  .map((l) => `${l.short} ${l.seats}`)
+  .join(", ");
+const resolvedAriaLabel = ariaLabel
+  ?? `Projected chamber of ${chamberSize} seats coloured by party${tallyPhrase ? `: ${tallyPhrase}` : ""}.`;
 ---
 
-<figure class="commons-horseshoe" aria-label={ariaLabel}>
+<figure class="commons-horseshoe" aria-label={resolvedAriaLabel}>
+  <div class="commons-horseshoe-stage" style={`aspect-ratio:${VIEW_W} / ${VIEW_H}`}>
   <svg
     role="img"
+    aria-label={resolvedAriaLabel}
     viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-    width="100%"
+    width={VIEW_W}
+    height={VIEW_H}
     preserveAspectRatio="xMidYMid meet"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <title>{ariaLabel}</title>
+    <title>{resolvedAriaLabel}</title>
 
     {/* Majority line, a faint vertical hash mark at the centre of the
         baseline. Indicates the 326-seat threshold. */}
@@ -261,6 +275,7 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
       })}
     </g>
   </svg>
+  </div>
 
   <figcaption class="commons-horseshoe-legend">
     {legend.filter((l) => l.seats >= labelMinSeats).map((l) => (
