@@ -35,10 +35,10 @@ import { ACTUALS_PATH, POSTAUDIT_PATH, scoreCandidateForecast, readJson as readR
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const COMMIT = "5e85c84";
 const CAND_DIR = "data/calibration/candidate-2026-10-24";
-const CALIBRATION_PARTIES = ["Labour", "Conservative", "Reform UK", "Liberal Democrats", "Green Party", "SNP", "Plaid Cymru"];
+export const CALIBRATION_PARTIES = ["Labour", "Conservative", "Reform UK", "Liberal Democrats", "Green Party", "SNP", "Plaid Cymru"];
 const CALIBRATION_STRENGTH = 0.65;
 
-const atCommit = (rel) => JSON.parse(execFileSync("git", ["show", `${COMMIT}:${rel}`], { cwd: ROOT, maxBuffer: 256 * 1024 * 1024 }).toString("utf8"));
+export const atCommit = (rel) => JSON.parse(execFileSync("git", ["show", `${COMMIT}:${rel}`], { cwd: ROOT, maxBuffer: 256 * 1024 * 1024 }).toString("utf8"));
 const norm = (o) => { const s = Object.values(o).reduce((a, b) => a + b, 0); return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, s ? v / s : 0])); };
 
 // Step 9b base target, as reformRealignmentUplift.js computed it at 5e85c84.
@@ -56,7 +56,7 @@ function baseTarget(a) {
 }
 
 // Demographic lookup as run-bulk-predictions.mjs did it at 5e85c84, including its county overrides.
-function baseTargets() {
+export function baseTargets() {
   const identity = atCommit("data/identity/wards-may-2026.json");
   const demo = atCommit("data/features/ward-demographics-2021.json").wards || {};
   const slugMap = atCommit("data/identity/council-slug-to-lad24.json");
@@ -75,14 +75,14 @@ function baseTargets() {
   return out;
 }
 
-function sharesOf(entry) {
+export function sharesOf(entry) {
   const out = {};
   for (const [p, d] of Object.entries(entry.prediction || {})) out[p] = d.pct || 0;
   return out;
 }
 
 // The forecast before Step 9b, recovered from the published file.
-function pre9bStage(predictions) {
+export function pre9bStage(predictions) {
   const stage = {};
   for (const [id, e] of Object.entries(predictions)) {
     if (!e.prediction) continue;
@@ -103,7 +103,7 @@ function pre9bStage(predictions) {
   return stage;
 }
 
-function step9b(stage, base, multipliers) {
+export function step9b(stage, base, multipliers) {
   const out = {};
   for (const [id, s] of Object.entries(stage)) {
     let shares = s.shares;
@@ -120,7 +120,7 @@ function step9b(stage, base, multipliers) {
   return out;
 }
 
-function finalC(stage, targets) {
+export function finalC(stage, targets) {
   const agg = {};
   let total = 0;
   for (const s of Object.values(stage)) for (const [p, v] of Object.entries(s.shares)) { agg[p] = (agg[p] || 0) + v * s.votes; total += v * s.votes; }
@@ -142,11 +142,11 @@ function c2Targets(stage, history, ratioDoc) {
   return localElectionTargets(wards, { poll: ratioDoc.polls_to_cutoff.shares, ge24National: ratioDoc.snapshot.ge2024_national, ratio: ratioDoc.ratio, areaShares });
 }
 
-function asPredictions(shares) {
+export function asPredictions(shares) {
   return Object.fromEntries(Object.entries(shares).map(([id, sh]) => [id, { prediction: Object.fromEntries(Object.entries(sh).map(([p, v]) => [p, { pct: v }])) }]));
 }
 
-function summarise(label, result, extra = {}) {
+export function summarise(label, result, extra = {}) {
   const pp = (x) => (x == null ? null : Number((100 * x).toFixed(1)));
   return {
     label,
@@ -222,4 +222,4 @@ function main() {
   for (const [k, a] of Object.entries(out.arms)) console.log(`${k.padEnd(10)} ${a.vote_leader.correct} of ${a.vote_leader.wards} = ${(100 * a.vote_leader.accuracy).toFixed(1)}%  Reform named first ${a.named_first["Reform UK"]} (won ${a.won["Reform UK"]})`);
 }
 
-main();
+if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) main();

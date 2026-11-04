@@ -74,6 +74,39 @@ export function ge2024ForArea(history, councilSlug) {
 }
 
 /**
+ * GE2024 shares for a local authority from the LSOA crosswalk: each
+ * constituency's shares weighted by the number of the authority's LSOAs that
+ * fall in it (LSOA counts stand in for population). Used for London, where
+ * name matching finds 15 of 33 boroughs (docs/local-engine-holdout-2026-11.md).
+ *
+ * lsoaLookup: data/features/lsoa21-to-pcon24.json `lookup`
+ * pconCodes:  data/identity/parliament-lookup-codes.json `entries` (slug to code)
+ * Returns null when the authority has no LSOAs in the lookup.
+ */
+export function ge2024ForLadByLsoa(history, ladCode, { lsoaLookup, pconCodes }) {
+  const weights = {};
+  for (const v of Object.values(lsoaLookup)) if (v.lad21cd === ladCode) weights[v.pcon24cd] = (weights[v.pcon24cd] || 0) + 1;
+  const codes = Object.keys(weights);
+  if (!codes.length) return null;
+  const slugByCode = {};
+  for (const [slug, e] of Object.entries(pconCodes)) if (e.code) slugByCode[e.code] = slug;
+  const acc = {};
+  let w = 0;
+  for (const code of codes) {
+    const r = history.by_ballot?.[`parl.${slugByCode[code]}.2024-07-04`];
+    const total = (r?.candidates || []).reduce((a, c) => a + (c.votes || 0), 0);
+    if (!total) continue;
+    for (const c of r.candidates) {
+      const k = canonicalMajor(c.party_name);
+      acc[k] = (acc[k] || 0) + weights[code] * (c.votes || 0) / total;
+    }
+    w += weights[code];
+  }
+  if (!w) return null;
+  return { shares: Object.fromEntries(Object.entries(acc).map(([p, v]) => [p, v / w])), via: `LSOA-weighted, ${codes.length} constituencies` };
+}
+
+/**
  * r_p: each party's share in the May 2025 county and unitary elections over its
  * Westminster-implied share in the same areas (GE2024 area share carried by the
  * May 2025 poll over GE2024 nationally), vote-weighted across councils.
