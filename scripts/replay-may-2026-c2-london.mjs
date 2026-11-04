@@ -29,12 +29,12 @@ import { londonLsoaBaseline } from "./fit-c2-london-2026-11.mjs";
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OCT = "data/calibration/candidate-2026-10-24";
 const NOV = "data/calibration/candidate-2026-11";
-const TYPES = ["london", "metropolitan", "no_anchor", "anchored"];
+export const TYPES = ["london", "metropolitan", "no_anchor", "anchored"];
 const TYPE_LABEL = { london: "London borough", metropolitan: "Metropolitan borough", no_anchor: "Unitary or county, no 2025 anchor", anchored: "Shire district with 2025 county anchor" };
 
 const isLondon = (id) => LONDON.has(id.split(".")[1]);
 
-function councilType(id, stage) {
+export function councilType(id, stage) {
   const slug = id.split(".")[1];
   if (LONDON.has(slug)) return "london";
   if (METROPOLITAN.has(slug)) return "metropolitan";
@@ -58,7 +58,7 @@ function normalised(stage) {
 }
 
 // One arm: Final-C over all wards, or split into London and the rest.
-function runArm(stage, inputs, { mode, londonRatio }) {
+export function runArm(stage, inputs, { mode, londonRatio }) {
   const common = { poll: inputs.poll, ge24National: inputs.ge24National, areaShares: inputs.areaShares };
   if (mode === "single") {
     const t = targetsFor(stage, { ...common, ratio: inputs.nationalRatio });
@@ -75,7 +75,7 @@ function runArm(stage, inputs, { mode, londonRatio }) {
   return { shares: { ...rRest.shares, ...rLon.shares }, detail: { rest: { targets: tRest, multipliers: rRest.multipliers }, london: { ratio: londonRatio, targets: tLon, multipliers: rLon.multipliers } } };
 }
 
-function score(shares, ids, actuals, types) {
+export function score(shares, ids, actuals, types) {
   const wards = [];
   let missing = 0;
   for (const id of ids) {
@@ -163,4 +163,4 @@ function main() {
   console.log("wards by type:", JSON.stringify(out.council_type_wards));
 }
 
-main();
+if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) main();
