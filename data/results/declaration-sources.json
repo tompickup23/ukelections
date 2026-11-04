@@ -4,16 +4,18 @@
   "councils": {
     "hyndburn": {
       "index_url": "https://www.hyndburnbc.gov.uk/download/election-results/",
-      "notes": "WordPress Download Manager. The title sits beside a bare 'Download' link and the href carries the filename, so the text before the link is part of the match. Baxenden 2025 was published here as a PDF."
+      "also_check": ["https://www.hyndburnbc.gov.uk/electoral-vacancies-and-notices/"],
+      "notes": "WordPress Download Manager. The title sits beside a bare 'Download' link and the href carries the filename, so the text before the link is part of the match. Baxenden 2025 was published here as a PDF. By-election notices also land under electoral-vacancies-and-notices."
     },
     "north-east-lincolnshire": {
       "index_url": "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/croft-baker-ward-by-election/",
-      "notes": "robots.txt asks for a 30 second crawl delay; one request per run. No earlier by-election declaration was found to confirm the format."
+      "also_check": ["https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/local-elections/"],
+      "notes": "robots.txt asks for a 30 second crawl delay; the script waits that long between requests to this host. The ward page says results go on the local elections page, where May 2026 sits as page text."
     },
     "oldham": {
       "index_url": "https://www.oldham.gov.uk/info/200732/election_notices",
       "also_check": ["https://committees.oldham.gov.uk/mgManageElectionResults.aspx?bcr=1"],
-      "notes": "The notices page also lists Royton North (3 December), so the ward name decides. Older by-election results are on the ModernGov results list."
+      "notes": "The notices page also lists Royton North (3 December), so the ward name decides. Older by-election results are on the ModernGov results list. committees.oldham.gov.uk has no robots.txt (HTTP 404), which the script treats as permission."
     },
     "staffordshire-moorlands": {
       "index_url": "https://www.staffsmoorlands.gov.uk/article/8764/Cheddleton-District-Ward-By-election-2026",
@@ -27,7 +29,8 @@
     },
     "wigan": {
       "index_url": "https://www.wigan.gov.uk/Council/Voting-and-Elections/Elections.aspx",
-      "notes": "Wigan Central (2025) was 'Declaration of Result of Poll - Wigan Central' with a filename that names no ward, so the link text decides."
+      "also_check": ["https://electionresults.wigan.gov.uk/"],
+      "notes": "Wigan Central (2025) was 'Declaration of Result of Poll - Wigan Central' with a filename that names no ward, so the link text decides. May 2026 ward results sit on electionresults.wigan.gov.uk (no robots.txt; HTTP 404 is permission)."
     }
   },
   "contests": {}
