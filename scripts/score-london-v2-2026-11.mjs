@@ -56,7 +56,7 @@ export function slateStep(pre, lifted, fractions) {
   return { stage: out, changed };
 }
 
-function rostersAt(commit) {
+export function rostersAt(commit) {
   const files = execFileSync("git", ["ls-tree", "--name-only", `${commit}:${ROSTER_DIR}`], { cwd: ROOT }).toString("utf8").split("\n").filter((f) => f.endsWith(".json"));
   const ballots = [];
   for (const f of files) {

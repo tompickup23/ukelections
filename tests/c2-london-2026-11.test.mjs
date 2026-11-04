@@ -94,3 +94,40 @@ describe("LSOA-weighted GE2024 baseline", () => {
     expect(ge2024ForLadByLsoa(history, "Z", { lsoaLookup, pconCodes })).toBeNull();
   });
 });
+
+describe("sub-national poll tables", () => {
+  const london = `==== London ====
+{| class="wikitable"
+! rowspan="2" | Date(s)<br />conducted
+! rowspan="2"| Pollster
+! rowspan="2"| Client
+! rowspan="2"| Sample <br />size
+! class="unsortable"| [[Labour Party (UK)|Lab]]
+! class="unsortable"| [[Conservative Party (UK)|Con]]
+! class="unsortable"| [[Green Party of England and Wales|Grn]]
+! rowspan="2"|Others
+! rowspan="2"| Lead
+|-
+|{{opdrts|17|23|Dec|2025|year}}
+|Savanta
+|QMUL
+|1,006
+|30%
+|17%
+|17%
+|2%
+|9
+|}
+==== Greater Manchester ====
+{| class="wikitable"
+! rowspan="2"| Pollster
+|}
+`;
+
+  it("reads a section with no Area column and a trailing year flag", () => {
+    const polls = extractPolls(london, { from: "2025-01-01", to: "2026-12-31", section: "London" });
+    expect(polls).toHaveLength(1);
+    expect(polls[0]).toMatchObject({ fieldwork_end: "2025-12-23", area: "London", sample: 1006, pollster: "Savanta" });
+    expect(polls[0].shares).toEqual({ Labour: 0.3, Conservative: 0.17, "Green Party": 0.17 });
+  });
+});
