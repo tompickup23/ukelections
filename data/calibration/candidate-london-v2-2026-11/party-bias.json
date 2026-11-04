@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "fitted_on": "local.2026-05-07",
+  "fitted_on_date": "2026-05-07",
+  "fitted_at": "2026-11-03T11:44:41.638Z",
+  "method": "Mean signed error per party (predicted minus actual share), fitted across every scoreable ward, validated by k-fold hold-out grouped by council.",
+  "inputs": {
+    "predictions": "arm S2 of scripts/score-london-v2-2026-11.mjs (--write-predictions=<path> --arm=S2)",
+    "actuals": "data/results/may-2026/local-and-mayor.merged.json",
+    "wards_scored": 2903,
+    "councils": 156
+  },
+  "parties": {
+    "Labour": 0.003388,
+    "Conservative": 0.008065,
+    "Liberal Democrats": -0.008277,
+    "Reform UK": 0.013647,
+    "Green Party": -0.005005
+  },
+  "parties_pp": {
+    "Labour": 0.34,
+    "Conservative": 0.81,
+    "Liberal Democrats": -0.83,
+    "Reform UK": 1.36,
+    "Green Party": -0.5
+  },
+  "baseline": {
+    "winner_accuracy_pct": 57.46,
+    "major_party_mae_pp": 7.172
+  },
+  "validation": {
+    "design": "k-fold by council, fitted on the other folds, scored on the held-out fold",
+    "folds": 5,
+    "mean_winner_delta_pp": -0.993,
+    "mean_mae_delta_pp": 0.0246,
+    "per_fold": [
+      {
+        "councils": 32,
+        "wards": 515,
+        "winner_delta_pp": 0,
+        "mae_delta_pp": 0.0516
+      },
+      {
+        "councils": 31,
+        "wards": 629,
+        "winner_delta_pp": -1.272,
+        "mae_delta_pp": 0.059
+      },
+      {
+        "councils": 31,
+        "wards": 582,
+        "winner_delta_pp": -2.405,
+        "mae_delta_pp": -0.0235
+      },
+      {
+        "councils": 31,
+        "wards": 504,
+        "winner_delta_pp": 0.794,
+        "mae_delta_pp": 0.0074
+      },
+      {
+        "councils": 31,
+        "wards": 673,
+        "winner_delta_pp": -2.08,
+        "mae_delta_pp": 0.0287
+      }
+    ],
+    "stability": {
+      "Labour": {
+        "per_fold_pp": [
+          0.87,
+          0.19,
+          0.26,
+          0.27,
+          0.08
+        ],
+        "sd_pp": 0.277
+      },
+      "Conservative": {
+        "per_fold_pp": [
+          1.21,
+          0.64,
+          0.65,
+          0.95,
+          0.55
+        ],
+        "sd_pp": 0.243
+      },
+      "Liberal Democrats": {
+        "per_fold_pp": [
+          -1.09,
+          -1.03,
+          -0.59,
+          -0.77,
+          -0.65
+        ],
+        "sd_pp": 0.199
+      },
+      "Reform UK": {
+        "per_fold_pp": [
+          0.7,
+          1.72,
+          1.19,
+          1.48,
+          1.78
+        ],
+        "sd_pp": 0.397
+      },
+      "Green Party": {
+        "per_fold_pp": [
+          -0.39,
+          -0.14,
+          -0.65,
+          -0.6,
+          -0.72
+        ],
+        "sd_pp": 0.21
+      }
+    },
+    "caveat": "Geographic hold-out, not temporal. It shows the offset is a real constant rather than fitted noise. It does not prove the offset survives to the next election, so refit after every real election and treat a party moving by more than its fold standard deviation as a signal that the model changed, not as a number to paste in."
+  },
+  "do_not_apply_to": [
+    "local.2026-05-07"
+  ]
+}
