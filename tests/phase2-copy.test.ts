@@ -3,8 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { localContestGroups, loadLocalHub } from "../src/lib/byElections";
 import { loadDownloads, downloadDistributions, recordedDataDate } from "../src/lib/downloads";
 import { PUBLISHED_DATA } from "../src/lib/publishedData";
-import { getAllSitemapPaths } from "../src/lib/sitemapPaths";
-import { NAV_GROUPS } from "../src/lib/site";
+import { NAV_GROUPS, getIndexableSitePaths } from "../src/lib/site";
 import { buildDataset } from "../src/lib/seo";
 import { CALENDAR, longDate } from "../src/lib/nextElections";
 
@@ -62,9 +61,9 @@ describe("downloads and discovery", () => {
     expect(distributions.map(d => d.contentUrl)).toEqual(PUBLISHED_DATA.map(f => `https://ukelections.co.uk/data/${f.path}`));
   });
   it("keeps one council hub in navigation and the sitemap with exact redirects", () => {
-    expect(getAllSitemapPaths()).toContain("/councils/");
-    expect(getAllSitemapPaths()).toContain("/downloads/");
-    expect(getAllSitemapPaths()).not.toContain("/seats/");
+    expect(getIndexableSitePaths()).toContain("/councils/");
+    expect(getIndexableSitePaths()).toContain("/downloads/");
+    expect(getIndexableSitePaths()).not.toContain("/seats/");
     expect(NAV_GROUPS.flatMap(g => g.items).filter(i => i.href === "/councils/")).toHaveLength(1);
     expect(NAV_GROUPS.flatMap(g => g.items).some(i => i.href === "/seats/")).toBe(false);
     const redirects = readFileSync("public/_redirects", "utf8");
