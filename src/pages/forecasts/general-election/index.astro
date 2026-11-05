@@ -1,4 +1,6 @@
 ---
+import { downloadDistributions } from "../../../lib/downloads";
+import { CALENDAR, longDate } from "../../../lib/nextElections";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { buildDataset, type Crumb } from "../../../lib/seo";
 import { SITE_URL } from "../../../lib/site";
@@ -10,6 +12,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PARLIAMENT_REGIONS } from "../../../lib/parliamentRegions";
 
+const generalElection = CALENDAR.find(row => row.id === "general-election")!;
 const ge = loadGePredictions();
 const geSummary = loadGeSummary();
 const headline = loadGeHeadline();
@@ -54,7 +57,7 @@ const structuredData = [
       "Projected majority",
       "Forecast confidence band"
     ],
-    distributionUrl: `${SITE_URL}/data/predictions/ge-next/constituencies.json`,
+    distributions: downloadDistributions(),
     keywords: ["UK general election", "constituency forecast", "opinion polling", "seat projection"]
   })
 ];
@@ -75,7 +78,7 @@ const structuredData = [
       A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
     </p>
     <p class="meta-row">
-      The table below ranks the closest seats. <a href="/seats/parliament/">Browse all {headline.total_seats} constituencies</a>.
+      The table below ranks the closest seats. <a href="/seats/parliament/">Browse all {headline.total_seats} constituencies</a>. <a href="/downloads/">Download the forecast and supporting data</a>.
     </p>
   </section>
 
@@ -237,7 +240,7 @@ const structuredData = [
       <h2>What this forecast does and doesn't try to do</h2>
     </div>
     <ul class="plain-list">
-      <li><strong>It assumes a notional election held this week</strong>, using current Westminster polling. The next general election may be months or years away; the forecast will move with the polls.</li>
+      <li><strong>It assumes a notional election held this week</strong>, using current Westminster polling. The next general election must take place <strong>no later than {longDate(generalElection.date_iso!)}</strong>, unless called earlier. The forecast will move with the polls. <a href="/elections/#general-election">Election calendar and legal sources</a>.</li>
       <li><strong>It does not predict turnout swings</strong> or campaign effects beyond what's already reflected in the polls. Late-campaign movement can be substantial.</li>
       <li><strong>It does not assume tactical voting beyond the pattern observed in 2024.</strong> A formal pact between Labour and the Liberal Democrats, for example, is not modelled.</li>
       <li><strong>Confidence intervals are not yet shown per seat.</strong> A future release will publish a high/low band on each constituency.</li>

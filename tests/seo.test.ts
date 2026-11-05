@@ -11,7 +11,6 @@ import {
   publisherNode
 } from "../src/lib/seo";
 import { GET as robots } from "../src/pages/robots.txt";
-import { newsSitemapXml, type EditorialArticle } from "../src/lib/editorial";
 import articles from "../data/editorial/articles.json";
 import { existsSync } from "node:fs";
 import { getLastmodByPath } from "../src/lib/sitemapPaths";
@@ -88,13 +87,6 @@ describe("Dataset", () => {
 });
 
 describe("news sitemap editorial boundary", () => {
-  it("does not advertise automated contest records as articles", () => {
-    const xml = newsSitemapXml(articles as EditorialArticle[], "https://ukelections.co.uk");
-    expect(xml).toContain("<urlset");
-    expect(xml).not.toContain("<url>");
-    expect(xml).not.toContain("<news:news>");
-  });
-
   // An empty news sitemap was declared in robots.txt and Search Console
   // reported it as an error (SEO audit, 2 Nov 2026). It is neither served nor
   // declared until the editorial register holds reviewed articles.

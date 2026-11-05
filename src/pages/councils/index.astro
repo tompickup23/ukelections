@@ -5,6 +5,7 @@ import StatCard from "../../components/StatCard.astro";
 import CouncilControlMap from "../../components/CouncilControlMap.astro";
 import type { Crumb } from "../../lib/seo";
 import {
+  loadIdentity,
   loadCouncilCycles,
   loadMay7Control,
 } from "../../lib/predictions";
@@ -23,6 +24,12 @@ function partyOrNocColour(name: string): string {
   return partyColour(name);
 }
 
+const browsePlaces = [...new Map(loadIdentity().wards
+  .filter((w: any) => w.tier === "local" || w.tier === "mayor")
+  .map((w: any) => [w.council_slug, { slug: w.council_slug, name: w.council_name, tier: w.tier }] as const))
+  .values()].sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+const councilCount = browsePlaces.filter(c => c.tier === "local").length;
+const mayorCount = browsePlaces.filter(c => c.tier === "mayor").length;
 const cycles = loadCouncilCycles();
 const ctl = loadMay7Control();
 const head = loadMay7Headline();
@@ -149,22 +156,31 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
 
 <BaseLayout
   breadcrumbs={breadcrumbs}
-  title="UK council control map and seats after May 2026"
-  description={`Council control map and seat totals after 7 May 2026. Reform UK has ${counts.ref_majority} overall majorities; browse every council's result and next election.`}
+  title="Councils: election results, control and next elections"
+  description={`Browse ${councilCount} councils and ${mayorCount} mayoralties in our coverage, with ward results, council control after 7 May 2026 and verified next elections.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Council elections</p>
-    <h1>UK council control and seats after 7 May 2026</h1>
+    <h1>Councils: results, control and next elections</h1>
     <p class="lede">
-      <strong>Reform UK holds {counts.ref_majority} overall council majorities</strong> in this reconciled snapshot
-      of all {counts.total} English and Welsh councils that contested the 7 May 2026 ballot. The map and table show
+      Browse <strong>{councilCount} councils and {mayorCount} mayoralties</strong> in our coverage.
+      The control snapshot covers {counts.total} English and Welsh councils with contests on 7 May 2026. The map and table show
       who has enough councillors to control each authority, every party's seats, and the next known election date.
     </p>
     {controlUpdated && <p class="meta-row">Control record updated {controlUpdated}. Election date: 7 May 2026.</p>}
     <div class="action-row">
       <a class="button primary" href="/your-area/">Find my council</a>
-      <a class="button" href="/past-results/">May 7 results in detail</a>
+      <a class="button" href="/past-results/">7 May 2026 results in detail</a>
     </div>
+  </section>
+
+  <section class="section" id="browse">
+    <h2>Browse councils and mayoralties alphabetically</h2>
+    <p><a href="/your-area/">Find your ward by postcode</a> or <a href="/seats/parliament/">browse parliamentary constituencies</a>.</p>
+    <div class="council-grid">
+      {browsePlaces.map(c => <a class="council-card" href={`/seats/${c.slug}/`}><strong>{c.name}</strong><span class="tier">{c.tier === "mayor" ? "Mayoralty" : "Local council"}</span></a>)}
+    </div>
+    <p><a href="/elections/2027/">Councils voting in 2027</a> · <a href="/forecasts/general-election/">General election forecast</a></p>
   </section>
 
   <section class="section" id="control-map">
@@ -194,13 +210,13 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
       <StatCard
         icon="crown"
         value={String(head.reform_majorities)}
-        label="Reform UK overall majorities won on May 7"
+        label="Reform UK overall majorities won on 7 May 2026"
         accent={partyColour("Reform UK")}
       />
       <StatCard
         icon="vote"
         value={head.reform_seats_won.toLocaleString()}
-        label="Reform UK seats won on May 7 (across all contesting councils)"
+        label="Reform UK seats won on 7 May 2026 (across all contesting councils)"
         accent={partyColour("Reform UK")}
       />
       <StatCard
@@ -269,7 +285,7 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
             <button type="button" class="th-sort-btn">Type<span class="th-sort-caret" aria-hidden="true"></span></button>
           </th>
           <th scope="col" class="th-sort" data-sort-key="control" data-sort-type="text" aria-sort="none">
-            <button type="button" class="th-sort-btn">Control after May 7<span class="th-sort-caret" aria-hidden="true"></span></button>
+            <button type="button" class="th-sort-btn">Control after 7 May 2026<span class="th-sort-caret" aria-hidden="true"></span></button>
           </th>
           <th scope="col" class="th-sort num-col" data-sort-key="reform" data-sort-type="number" aria-sort="none">
             <button type="button" class="th-sort-btn">Reform seats<span class="th-sort-caret" aria-hidden="true"></span></button>
@@ -328,12 +344,12 @@ const controlUpdated = forecastStamp(ctl.snapshot?.generated_at || "");
     <div class="feature-list">
       <article>
         <h3>Senedd Cymru</h3>
-        <p>Next election 7 May 2026 (96 seats, closed-list PR). Forecast below.</p>
+        <p>7 May 2026 forecast archive. See the election calendar for the next poll.</p>
         <p><a href="/forecasts/senedd-2026/">See Senedd forecast →</a></p>
       </article>
       <article>
         <h3>Scottish Parliament</h3>
-        <p>Next election 7 May 2026 (129 seats, AMS). Forecast below.</p>
+        <p>7 May 2026 forecast archive. See the election calendar for the next poll.</p>
         <p><a href="/forecasts/holyrood-2026/">See Holyrood forecast →</a></p>
       </article>
     </div>
