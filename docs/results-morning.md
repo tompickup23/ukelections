@@ -35,7 +35,8 @@ Everything else is listed as pending with the reason, and a person reads it.
 ## What it will not do
 
 - Fetch a path robots.txt disallows, or anything on a host whose robots.txt it could not read.
-  A disallow is a stop, not a workaround.
+  A disallow is a stop, not a workaround. Crawl-delay is honoured between requests to the same
+  host (North East Lincolnshire asks for 30 seconds).
 - Retry past a bot check or a 403. Wychavon puts a JavaScript check in front of its declarations
   and Halton has done so before; those contests stay pending for a hand read.
 - Read a council more than three times in one run, or at all if a run read it less than an hour
@@ -106,12 +107,13 @@ a bot check. These are where each council posted its notices or earlier results,
 
 | Council | Page | Earlier format |
 |---|---|---|
-| Hyndburn (Huncoat) | download/election-results/ | PDF; the title sits beside a bare "Download" link |
-| North East Lincolnshire (Croft Baker) | the ward's by-election page | not confirmed; crawl delay 30 seconds |
+| Hyndburn (Huncoat) | download/election-results/, then electoral-vacancies-and-notices | PDF; the title sits beside a bare "Download" link |
+| North East Lincolnshire (Croft Baker) | the ward's by-election page, then local-elections | not confirmed; crawl delay 30 seconds |
 | Oldham (Failsworth West) | info/200732/election_notices, then the ModernGov results list | not confirmed |
 | Staffordshire Moorlands (Cheddleton) | article/8764 | PDF, possibly a scan |
 | Suffolk, Bosmere (Mid Suffolk count) | election-results, then election-notices | Liferay document; the May 2026 Bosmere result is excluded |
-| Wigan (Hindley Green) | Council/Voting-and-Elections/Elections.aspx | PDF named by link text, not filename |
+| Wigan (Hindley Green) | Elections.aspx, then electionresults.wigan.gov.uk | PDF named by link text, not filename |
+
 
 
 ## Review safeguards added 3 November 2026

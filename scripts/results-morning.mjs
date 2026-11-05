@@ -16,6 +16,7 @@
 // What it will not do, by design (docs/results-morning.md):
 // - fetch a path that robots.txt disallows, or retry past a bot check (Halton
 //   and Wychavon have both put one in front of declarations);
+// - ignore Crawl-delay (North East Lincolnshire asks for 30 seconds);
 // - fetch from a council more than once an hour, or between 21:00 and 06:00
 //   UK time on the night of a poll, when counts are running;
 // - overwrite a hand-verified row, or write a row whose counts do not
@@ -294,10 +295,8 @@ export function buildRow(contest, parsed, result, { source, accessedAt }) {
 
 const FETCH_TIMEOUT_MS = 20_000;
 
-/** True when robots.txt lets us fetch this URL. A robots file we cannot read is not a yes. */
-export function robotsAllows(robotsText, url) {
-  const { pathname, search } = new URL(url);
-  const target = pathname + search;
+/** Parse robots.txt into agent groups with allow/disallow rules and optional crawl delay. */
+function robotsGroups(robotsText) {
   const groups = [];
   let current = null;
   for (const raw of String(robotsText).split(/\r?\n/)) {
@@ -306,14 +305,29 @@ export function robotsAllows(robotsText, url) {
     if (!m) continue;
     const key = m[1].toLowerCase();
     if (key === "user-agent") {
-      if (!current || current.rules.length) groups.push((current = { agents: [], rules: [] }));
+      if (!current || current.rules.length || current.crawlDelay != null) groups.push((current = { agents: [], rules: [], crawlDelay: null }));
       current.agents.push(m[2].toLowerCase());
     } else if (current && (key === "disallow" || key === "allow")) {
       current.rules.push({ allow: key === "allow", path: m[2] });
+    } else if (current && key === "crawl-delay") {
+      const seconds = Number(m[2]);
+      if (Number.isFinite(seconds) && seconds >= 0) current.crawlDelay = seconds;
     }
   }
+  return groups;
+}
+
+function robotsGroupsForUs(robotsText) {
+  const groups = robotsGroups(robotsText);
   const ours = groups.filter((g) => g.agents.some((a) => a !== "*" && "ukelections-results-morning".startsWith(a)));
-  const rules = (ours.length ? ours : groups.filter((g) => g.agents.includes("*"))).flatMap((g) => g.rules);
+  return ours.length ? ours : groups.filter((g) => g.agents.includes("*"));
+}
+
+/** True when robots.txt lets us fetch this URL. A robots file we cannot read is not a yes. */
+export function robotsAllows(robotsText, url) {
+  const { pathname, search } = new URL(url);
+  const target = pathname + search;
+  const rules = robotsGroupsForUs(robotsText).flatMap((g) => g.rules);
   let best = null;
   for (const rule of rules) {
     if (!rule.path) continue;
@@ -321,6 +335,15 @@ export function robotsAllows(robotsText, url) {
     if (pattern.test(target) && (!best || rule.path.length > best.path.length || (rule.path.length === best.path.length && rule.allow))) best = rule;
   }
   return !best || best.allow;
+}
+
+/**
+ * Crawl-delay in seconds from robots.txt for our agent (or *). Zero when none is set.
+ * North East Lincolnshire asks for 30 seconds; ignoring that would break the estate rule.
+ */
+export function crawlDelaySeconds(robotsText) {
+  const delays = robotsGroupsForUs(robotsText).map((g) => g.crawlDelay).filter((n) => n != null);
+  return delays.length ? Math.max(...delays) : 0;
 }
 
 function loadState() {
@@ -370,10 +393,18 @@ export async function politeFetch(url, state, { persist = saveState } = {}) {
   // three requests: its elections page, a second listing, the declaration.
   state.thisRun ??= {};
   if ((state.thisRun[host] = (state.thisRun[host] || 0) + 1) > 3) return { blocked: `three requests to ${host} already this run` };
+  // Honour Crawl-delay between requests to the same host in this process.
+  state.lastRequestAt ??= {};
+  const delayMs = crawlDelaySeconds(robots) * 1000;
+  const since = state.lastRequestAt[host] ? Date.now() - state.lastRequestAt[host] : delayMs;
+  if (delayMs > 0 && since < delayMs) {
+    await new Promise((resolve) => setTimeout(resolve, delayMs - since));
+  }
   state.hosts[host] = new Date().toISOString();
   // Persist before the request: an interrupted run must still respect the gap.
   persist(state);
   const res = await request(url);
+  state.lastRequestAt[host] = Date.now();
   const type = res.headers.get("content-type") || "";
   const body = Buffer.from(await res.arrayBuffer());
   if (!res.ok) {
