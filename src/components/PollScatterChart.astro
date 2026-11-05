@@ -113,6 +113,13 @@ function renderPlotSvg(): string {
     ],
   });
   chart.removeAttribute?.("style");
+  chart.setAttribute("role", "img");
+  chart.setAttribute("aria-label", ariaLabel);
+  if (!chart.querySelector("title")) {
+    const title = doc.createElementNS("http://www.w3.org/2000/svg", "title");
+    title.textContent = ariaLabel;
+    chart.insertBefore(title, chart.firstChild);
+  }
   return chart.outerHTML;
 }
 
@@ -120,7 +127,7 @@ const plotSvg = renderPlotSvg();
 ---
 
 <figure class="poll-scatter-chart" role="figure" aria-label={ariaLabel}>
-  <div class="psc-plot-wrap" set:html={plotSvg} />
+  <div class="psc-plot-wrap" style={`aspect-ratio:${width} / ${height}`} set:html={plotSvg} />
   <figcaption class="psc-legend">
     {parties.map((p) => (
       <span class="psc-legend-item">

@@ -156,9 +156,12 @@ const aspectRatio = (height / width) * 100;
   <div class="choropleth-stage" style={`padding-bottom:${aspectRatio.toFixed(2)}%`}>
     <svg
       viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
       preserveAspectRatio="xMidYMid meet"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
+      aria-label="Map of 650 UK parliamentary constituencies coloured by predicted winner"
     >
       <title>Forecast winner by constituency</title>
       <g class="choropleth-paths">
