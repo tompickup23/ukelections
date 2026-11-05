@@ -43,6 +43,11 @@ describe("downloads and discovery", () => {
     expect(new Set(downloads.map(f => f.href)).size).toBe(downloads.length);
     for (const file of downloads) {
       expect(existsSync(`data/${file.path}`)).toBe(true);
+      expect(file.source.publisher).toBe("UK Elections");
+      expect(file.source.document).toBe(file.label);
+      expect(file.source.edition).not.toBe("");
+      expect(file.source.section).not.toBe("");
+      expect(file.source.upstream).not.toBe("");
       expect(file.format).toBe(file.path.endsWith(".json") ? "application/json" : file.path.endsWith(".csv") ? "text/csv" : "text/markdown");
     }
   });
@@ -53,6 +58,8 @@ describe("downloads and discovery", () => {
     const files = loadDownloads();
     const json = files.find(f => f.path.endsWith("controlled-councils.json"))!;
     for (const suffix of ["csv", "md"]) expect(files.find(f => f.path.endsWith(`controlled-councils.${suffix}`))!.date).toBe(json.date);
+    expect(files.find(f => f.path.endsWith("source-registry.json"))!.source.edition).toBe("Schema 1");
+    expect(json.source.upstream).toContain("approximated");
   });
   it("includes every catalogue download in the Dataset distributions", () => {
     const distributions = downloadDistributions();
