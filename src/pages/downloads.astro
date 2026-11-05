@@ -16,11 +16,14 @@ const files = loadDownloads();
     <p>For CSV and Markdown exports, the date comes from the companion JSON. If a file has no recorded timestamp, its date is left blank with a note. A forecast's generation date is separate from the date of any later result recorded in it.</p>
     <div class="table-scroll" role="region" aria-label="Published data downloads" tabindex="0">
       <table class="seat-table">
-        <thead><tr><th>File</th><th>Format</th><th>Recorded date</th><th>Licence for original output</th></tr></thead>
+        <thead><tr><th>File</th><th>Format</th><th>Recorded date</th><th>Source, document and edition</th><th>Licence for original output</th></tr></thead>
         <tbody>{files.map(file => <tr>
           <td><a href={file.href}>{file.label}</a><br /><small>{file.path}</small></td>
           <td>{file.format}</td>
           <td>{file.date ? <><time datetime={file.date}>{prettyElectionDate(file.date.slice(0, 10))}</time><br /><small>{file.dateBasis}</small></> : <span>Date not recorded in file</span>}</td>
+          <td><strong>{file.source.publisher}</strong>: {file.source.document}.<br />
+            <small>Edition: {file.source.edition}. Location: {file.source.section}.</small><br />
+            <small>{file.source.upstream}</small></td>
           <td><a href={file.licence}>CC BY 4.0</a><br /><small>Upstream rights retained</small></td>
         </tr>)}</tbody>
       </table>
