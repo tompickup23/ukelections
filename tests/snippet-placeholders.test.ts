@@ -23,7 +23,9 @@ describe("council page next-election clause", () => {
   const src = read("src/components/CouncilDetail.astro");
   it("never writes the unverified label into the description or a status card", () => {
     expect(src).not.toMatch(/Next: \$\{nextElection\.label\}\.`;/);
-    expect(src).toMatch(/nextKnown \? ` Next: \$\{nextElection\.label\}\.` : ""/);
+    // The description moved into councilDescription() with the quality reset;
+    // tests/ward-quality-reset.test.ts covers its clause rules.
+    expect(src).toMatch(/nextLabel: nextKnown \? nextElection\.label : null/);
     expect(src).toMatch(/\{nextKnown && \(<article class="status-card">/);
   });
 });
