@@ -1,10 +1,12 @@
 import { expect, it } from "vitest";
+import { existsSync } from "node:fs";
 import { GET } from "../src/pages/search-index.json";
 import { loadAreaLookup } from "../src/lib/areaLookupData";
 import { getPublicSearchEntries } from "../src/lib/site";
 import { resolvePostcodeDestinations, type LookupIndex } from "../src/lib/electionLookup";
 
-it("serves the complete postcode lookup while retaining existing public search entries", async () => {
+// The real lookup uses the gitignored historical corpus, available in local builds.
+it.skipIf(!existsSync("data/history/dc-historic-results.json"))("serves the complete postcode lookup while retaining existing public search entries", async () => {
   const response = await GET({} as Parameters<typeof GET>[0]);
   const entries = await response.json();
   for (const existing of getPublicSearchEntries()) expect(entries.find((entry: any) => entry.href === existing.href)).toMatchObject(existing);
