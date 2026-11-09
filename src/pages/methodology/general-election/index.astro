@@ -1,9 +1,14 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { loadGeAssumptions, loadGeBacktest } from "../../../lib/predictions";
+import { loadGeAssumptions, loadGeBacktest, loadGeSummary } from "../../../lib/predictions";
+import { loadGeWinProbability } from "../../../lib/geWinProbability.js";
 
 const a = loadGeAssumptions();
 const b = loadGeBacktest();
+const geSummary = loadGeSummary();
+const wp = loadGeWinProbability();
+const params = a?.parameters || {};
+const pct0 = (x: number | undefined) => (typeof x === "number" ? `${Math.round(x * 100)}%` : "n/a");
 
 // Defensive accessors: if the GE backtest file is missing or schema-shifted,
 // we drop the headline numbers and show a pointer to the full backtest page.
@@ -19,7 +24,7 @@ const hasBacktestFigures =
 
 <BaseLayout
   title="General election forecast, methodology"
-  description="How the ukelections.co.uk general election constituency forecast is built. Strong Transition Model swing, BES priors, sitting-MP layer, tactical voting, by-election overlay. Audit-grade pre-registration."
+  description="How the ukelections.co.uk general election constituency forecast is built: Strong Transition Model swing, BES priors, sitting-MP layer, tactical voting, by-election overlay, win probabilities and seat ranges."
 >
   <section class="page-hero">
     <p class="eyebrow">Methodology</p>
@@ -27,7 +32,7 @@ const hasBacktestFigures =
     <p class="lede">
       Strong Transition Model swing, BES Wave 1-30 demographic priors,
       sitting-MP layer, Curtice/Fisher tactical voting overlay, recent by-election
-      overlay. Pre-registered, sha256-committed before each forecast run.
+      overlay, then a win probability and a seat range fitted on the 2024 rerun.
     </p>
   </section>
 
@@ -39,17 +44,49 @@ const hasBacktestFigures =
     <ol>
       <li><strong>GE2024 baseline.</strong> Each constituency's actual result on 4 July 2024, taken from Democracy Club CC0 data + Returning Officer declarations. 650/650 constituencies.</li>
       <li><strong>National swing. Strong Transition Model (STM).</strong> Replaces additive Uniform National Swing. Losers shed share locally in proportion to their local vote; gainers absorb the freed share pro-rata to national gain. Bounded in [0,1] by construction. Reference: <a href="https://www.electoralcalculus.co.uk/blogs/ec_mrpinfo_20240604.html">Electoral Calculus / Baxter STM</a>. <strong>+1.0pp MAE lift over UNS</strong> on the GE2024 backtest.</li>
-      <li><strong>BES regional/demographic prior.</strong> 36,416 post-GE2024 respondents from the British Election Study Wave 1-30 panel, post-stratified into (region × age × ethnicity × tenure) cells with Dirichlet pooling κ=15, then projected to LAD-level priors. Each constituency inherits the prior of its primary intersecting LAD, blended at 5% weight.</li>
+      <li><strong>BES regional/demographic prior.</strong> 36,416 post-GE2024 respondents from the British Election Study Wave 1-30 panel, post-stratified into (region × age × ethnicity × tenure) cells with Dirichlet pooling κ=15, then projected to LAD-level priors. Each constituency takes its own constituency-level prior where one exists, otherwise the average of the priors for the local authorities it overlaps, otherwise its region's; the prior is blended in at {pct0(params.bes_prior_weight)} weight.</li>
       <li><strong>Sitting-MP layer.</strong> Personal-vote bonus for incumbents standing again (+1pp at &lt;5yr → +4pp at ≥20yr tenure); retirement drag for standing-down MPs (-2pp to -3pp); open-seat treatment for defectors / suspended MPs.</li>
-      <li><strong>Tactical voting overlay.</strong> Curtice/Fisher Lab/LD/Green progressive squeeze. When 1st = Conservative or Reform with ≤10pp lead over a progressive 2nd, transfer 15% of a 3rd-placed progressive's share to the 2nd-placed.</li>
+      <li><strong>Tactical voting overlay.</strong> Curtice/Fisher Lab/LD/Green progressive squeeze. When 1st = Conservative or Reform with ≤10pp lead over a progressive 2nd, transfer {pct0(params.tactical_voting_transfer_rate)} of a 3rd-placed progressive's share to the 2nd-placed.</li>
       <li><strong>English-identity floor (Census 2021 TS027).</strong> Reform UK gets a small lift in constituencies where the share of residents giving an "English only" or "English and British" national identity is high. +1pp at 22%+, +2pp at 30%+, +3pp at 40%+. Frontiers (2025) "drivers of Reform UK support" finds English national identity is the single strongest demographic predictor of Reform vote (standardised β ≈ 0.45).</li>
       <li><strong>Age-structure adjustment (Census 2021 TS007A).</strong> Reform and Conservative get a small lift in constituencies with a high 65+ share. Dampened to 40% strength when a BES prior is already in play, since BES respondents implicitly carry the age signal.</li>
       <li><strong>Reform Muslim-share ceiling.</strong> Reform's predicted share is capped at the demographically-plausible ceiling (12% if the constituency is &gt;50% Muslim, 22% if 30-50%, 30% if 15-30%). Excess is redistributed pro-rata. Calibrated against Sobolewska &amp; Ford (Brexitland, 2020).</li>
       <li><strong>Independent ceiling.</strong> Independent vote capped at 8% in regular contests. The cap is bypassed for known high-profile independents (Galloway, Corbyn, Lloyd etc.).</li>
-      <li><strong>By-election overlay.</strong> Where a post-GE2024 by-election has been held in this constituency, blend 30% of the by-election's shares into the prediction.</li>
+      <li><strong>By-election overlay.</strong> Where a post-GE2024 by-election has been held in this constituency, blend {pct0(params.by_election_overlay_weight)} of the by-election's shares into the prediction.</li>
       <li><strong>Normalise.</strong> Re-scale shares to sum to 1.0.</li>
+      <li><strong>Win probability, share range and seat range.</strong> See below.</li>
     </ol>
   </section>
+
+  {wp && (
+    <section class="section" id="uncertainty">
+      <div class="section-head">
+        <p class="eyebrow">Uncertainty</p>
+        <h2>Win probability, share ranges and seat ranges</h2>
+      </div>
+      <p>
+        <strong>Win probability.</strong> Each seat's figure is the share of seats in our 2024 rerun with a similar
+        predicted margin between first and second place that the projected leader went on to win. The rerun swings
+        the 2019 result to the May 2024 polling average and scores it against 4 July 2024, {wp.n} seats. Fitted
+        {" "}{wp.fitted_at?.slice(0, 10)} by <code>scripts/calibrate-ge-win-probability.mjs</code> into
+        {" "}<code>data/calibration/ge-win-probability.json</code>. On regions it never saw it scores a Brier of
+        {" "}{wp.validation.brier.toFixed(3)} against {wp.validation.flat_baseline_brier.toFixed(3)} for quoting one
+        flat rate everywhere. The <a href="/data-quality/ge-backtest/#reliability">reliability table</a> is on the backtest page.
+      </p>
+      <p>
+        <strong>Share range.</strong> The low and high figure for each party (p10 and p90) are drawn from the same
+        rerun's errors, party by party. On held-out regions the actual 2024 share fell inside that range
+        {" "}{Math.round(wp.interval_coverage.overall * 100)} times in 100, against the 80 the range claims.
+      </p>
+      <p>
+        <strong>Seat range.</strong> {geSummary.seat_ranges?.method} The published range is the
+        {" "}{geSummary.seat_ranges?.interval}, from {geSummary.seat_ranges?.draws?.toLocaleString()} draws, with
+        {" "}rho {geSummary.seat_ranges?.rho}. {geSummary.seat_ranges?.limits}
+      </p>
+      <p>
+        <strong>What these do not include.</strong> {wp.limits?.join(" ")}
+      </p>
+    </section>
+  )}
 
   <section class="section">
     <div class="section-head">
@@ -59,8 +96,10 @@ const hasBacktestFigures =
     {hasBacktestFigures ? (
       <>
         <p>
-          Predicting GE2024 from the GE2019 baseline + actual GE2024 national polling, evaluated on
-          <strong>{backtestRows!.toLocaleString()}</strong> boundary-stable PCONs:
+          Predicting GE2024 from the GE2019 result (notional 2019 results where boundaries changed), fed the actual
+          2024 national vote shares, evaluated on <strong>{backtestRows!.toLocaleString()}</strong> constituencies.
+          This tests how the model spreads a known national result across seats; the run fed the May 2024 polling
+          average instead is on the <a href="/data-quality/ge-backtest/">backtest page</a>.
         </p>
         <ul>
           <li>Uniform National Swing baseline: <strong>{(unsAcc! * 100).toFixed(1)}%</strong> winner accuracy, <strong>{(unsMae! * 100).toFixed(2)}pp</strong> major-party MAE.</li>
@@ -76,10 +115,11 @@ const hasBacktestFigures =
         <a href="/data-quality/ge-backtest/">/data-quality/ge-backtest/</a>.
       </p>
     )}
-    <p style="color: var(--muted)">
-      For comparison: Survation's published 2024 MRP RMSE was 5.55pp; YouGov's 2024 fared paper reported 92% winner accuracy. Our 78% on the boundary-stable 439-PCON subset is the floor, adding the new-boundary 211 PCONs once notional 2019 results are ingested, plus campaign-period polling, should close the gap.
+    <p class="muted-row">
+      The file's own targets are {Math.round((b?.snapshot?.target_metrics?.winner_accuracy_target ?? 0) * 100)}% of winners
+      and {b?.snapshot?.target_metrics?.major_party_mae_target_pp}pp major-party error; neither run meets them.
     </p>
-    <p style="color: var(--muted)">
+    <p class="muted-row">
       <a href="/data-quality/ge-backtest/">Full backtest tables</a>
     </p>
   </section>
@@ -90,11 +130,13 @@ const hasBacktestFigures =
       <h2>Every parameter, version-controlled</h2>
     </div>
     <p>
-      Every weight, ceiling, and dampening factor is recorded in
-      <code>data/predictions/ge-next/assumptions.json</code> and pre-registered with
-      its sha256 before the forecast is run. Current values:
+      The weights the run passes to the model are written to
+      <code>data/predictions/ge-next/assumptions.json</code> from the same options object, and a test fails the
+      build if the two ever differ. The nightly refresh does not pre-register each run; the forecast files were last
+      hashed in the 26 April 2026 pre-registration (<code>data/transparency/preregistration-2026-04-26.json</code>).
+      Current values:
     </p>
-    <pre style="white-space: pre-wrap; background: var(--card); padding: 1rem;">{JSON.stringify(a.parameters, null, 2)}</pre>
+    <pre class="assumptions-json">{JSON.stringify(a.parameters, null, 2)}</pre>
   </section>
 
   <section class="section">
@@ -114,10 +156,18 @@ const hasBacktestFigures =
   </section>
 
   <section class="section">
-    <p style="color: var(--muted)">
+    <p class="muted-row">
       <a href="/forecasts/general-election/">National forecast</a> ·
       <a href="/transparency/">Transparency &amp; pre-registration</a> ·
       <a href="/data-quality/ge-backtest/">Backtest details</a>
     </p>
   </section>
 </BaseLayout>
+
+<style>
+  .assumptions-json {
+    white-space: pre-wrap;
+    background: var(--surface-muted);
+    padding: var(--space-md);
+  }
+</style>

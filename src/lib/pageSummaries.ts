@@ -168,8 +168,8 @@ export function constituencySummary(record: any, backtest: SeatBacktestSummary |
   if (backtest?.predictedWinner && backtest.actualWinner) {
     sentences.push(
       backtest.winnerCorrect
-        ? `Rerun on the data available in May 2024, the model called this seat correctly for ${partyProse(backtest.actualWinner)} at the 2024 election, with a mean error of ${(backtest.mae * 100).toFixed(2)} points across the major parties.`
-        : `Rerun on the data available in May 2024, the model named ${partyProse(backtest.predictedWinner, true)} here, but ${partyProse(backtest.actualWinner, true)} won in 2024; its mean error across the major parties was ${(backtest.mae * 100).toFixed(2)} points.`,
+        ? `Replayed from the 2019 result with the actual 2024 national shares, the model called this seat correctly for ${partyProse(backtest.actualWinner)} at the 2024 election, with a mean error of ${(backtest.mae * 100).toFixed(2)} points across the major parties.`
+        : `Replayed from the 2019 result with the actual 2024 national shares, the model named ${partyProse(backtest.predictedWinner, true)} here, but ${partyProse(backtest.actualWinner, true)} won in 2024; its mean error across the major parties was ${(backtest.mae * 100).toFixed(2)} points.`,
     );
   }
   return sentences;

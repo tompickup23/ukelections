@@ -4,11 +4,12 @@ import { buildDataset, type Crumb } from "../../../lib/seo";
 import { SITE_URL } from "../../../lib/site";
 import CommonsHorseshoe from "../../../components/CommonsHorseshoe.astro";
 import ConstituencyChoropleth from "../../../components/ConstituencyChoropleth.astro";
-import { loadGePredictions, loadGeSummary, partyColour } from "../../../lib/predictions";
+import { loadGePredictions, loadGeSummary, loadGeBacktest, partyColour } from "../../../lib/predictions";
 import { loadGeHeadline, shortPartyLabel, forecastStamp } from "../../../lib/siteData";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PARLIAMENT_REGIONS } from "../../../lib/parliamentRegions";
+import { inHundred, loadGeWinProbability } from "../../../lib/geWinProbability.js";
 
 const ge = loadGePredictions();
 const geSummary = loadGeSummary();
@@ -31,6 +32,16 @@ const marginals = evaluated
 const top = headline.seat_tallies[0];
 const second = headline.seat_tallies[1];
 const HALFWAY = 326;
+const seatRanges = (geSummary.seat_ranges || null) as null | { by_party: Record<string, { p05: number; p50: number; p95: number }>; draws: number; interval: string; method: string; rho: number };
+const rangeOf = (party: string) => seatRanges?.by_party?.[party] ?? null;
+const rangeText = (party: string) => {
+  const r = rangeOf(party);
+  return r ? `${r.p05} to ${r.p95}` : null;
+};
+const wp = loadGeWinProbability();
+const backtest = loadGeBacktest();
+const realPolling = backtest?.summary?.stm_real_polling;
+const topRange = top ? rangeOf(top.party) : null;
 
 // CommonsHorseshoe wants a flat {party: seats} map. Feed it the raw
 // summary tallies (includes every party, even those below the top-6
@@ -52,7 +63,8 @@ const structuredData = [
       "Projected winning party",
       "Projected vote share by party",
       "Projected majority",
-      "Forecast confidence band"
+      "Win probability per constituency",
+      "Seat range per party"
     ],
     distributionUrl: `${SITE_URL}/data/predictions/ge-next/constituencies.json`,
     keywords: ["UK general election", "constituency forecast", "opinion polling", "seat projection"]
@@ -72,7 +84,7 @@ const structuredData = [
       This is a modelled seat projection, not an election result or a poll. It covers all
       {" "}{headline.total_seats.toLocaleString()} UK parliamentary constituencies and was generated
       {" "}<strong data-discovery-ignore>{forecastStamp(headline.generated_at)}</strong>{pollingWindow ? ` from polling fieldwork ${pollingWindow}` : ""}.
-      A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
+      {topRange && <>Across {seatRanges!.draws.toLocaleString()} simulated elections {shortPartyLabel(top!.party)} wins between {topRange.p05} and {topRange.p95} seats in 90 of every 100. </>}A majority needs <strong>{HALFWAY}</strong> seats. {top && top.seats >= HALFWAY ? `${shortPartyLabel(top.party)} clears the line; ${(top.seats - HALFWAY).toLocaleString()} seats above the majority threshold.` : `${top ? shortPartyLabel(top.party) : "The leading party"} is ${top ? Math.abs(HALFWAY - top.seats).toLocaleString() : "n/a"} short of an overall majority.`}
     </p>
     <p class="meta-row">
       The table below ranks the closest seats. <a href="/seats/parliament/">Browse all {headline.total_seats} constituencies</a>.
@@ -95,7 +107,7 @@ const structuredData = [
       </div>
       <div>
         <dt>Seat projection</dt>
-        <dd>{headline.seat_tallies.slice(0, 4).map((row) => `${shortPartyLabel(row.party)} ${row.seats}`).join(" · ")}. Seats are allocated constituency by constituency.</dd>
+        <dd>{headline.seat_tallies.slice(0, 4).map((row) => `${shortPartyLabel(row.party)} ${row.seats}${rangeText(row.party) ? ` (${rangeText(row.party)})` : ""}`).join(" · ")}. Seats are allocated constituency by constituency; the bracket is the 90 in 100 range.</dd>
       </div>
       <div>
         <dt>Constituency forecasts</dt>
@@ -157,13 +169,23 @@ const structuredData = [
           <div class="bar-track">
             <div class="bar-fill" style={`width:${(t.share * 100).toFixed(1)}%; background:${partyColour(t.party)}`}></div>
           </div>
-          <span class="bar-value">{t.seats.toLocaleString()} <span class="bar-share">({(t.share * 100).toFixed(1)}%)</span></span>
+          <span class="bar-value">{t.seats.toLocaleString()} <span class="bar-share">({(t.share * 100).toFixed(1)}%)</span>{rangeText(t.party) && <span class="bar-range">range {rangeText(t.party)}</span>}</span>
         </div>
       ))}
     </div>
     {top && second && (
       <p class="caption">
         That's a {(top.seats - second.seats).toLocaleString()}-seat lead for {shortPartyLabel(top.party)} over {shortPartyLabel(second.party)}.
+      </p>
+    )}
+    {seatRanges && (
+      <p class="caption">
+        The central figure gives each seat to the party projected to lead it. The range is the {seatRanges.interval}:
+        each seat's winner is drawn {seatRanges.draws.toLocaleString()} times from its win probability, with seats
+        sharing a national swing so they move together as they did in 2024 (rho {seatRanges.rho}). The central
+        figure counts every lead as a win, so it sits near the top of the range for a party that leads most close seats
+        and near the bottom for one that trails in many of them.
+        {" "}<a href="/methodology/general-election/#uncertainty">Method and limits</a>.
       </p>
     )}
   </section>
@@ -196,13 +218,14 @@ const structuredData = [
     </p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="Top 50 marginal constituencies">
       <table class="seat-table">
-        <thead><tr><th>Constituency</th><th>Predicted winner</th><th>Margin</th><th>Country</th></tr></thead>
+        <thead><tr><th>Constituency</th><th>Ahead</th><th>Margin</th><th>Chance</th><th>Country</th></tr></thead>
         <tbody>
           {marginals.map((m: any) => (
             <tr>
               <td><a href={`/seats/parliament/${m.slug}/`}>{m.name}</a></td>
               <td><span class="party-swatch" style={`background:${partyColour(m.winner)}`}></span> {shortPartyLabel(m.winner)}</td>
               <td class="num">{((m.majority_pct ?? 0) * 100).toFixed(1)}pp</td>
+              <td class="num">{typeof m.win_probability === "number" ? inHundred(m.win_probability) : "n/a"}</td>
               <td>{m.country?.replace(/_/g, " ")}</td>
             </tr>
           ))}
@@ -221,11 +244,20 @@ const structuredData = [
       <h2>Tested against the actual 2024 general election</h2>
     </div>
     <p>
-      We replayed the same model against the real 2024 general election using only what a forecaster running the model
-      in May 2024 would have known. The model called the winner correctly in
-      <strong>{(headline.backtest_winner_accuracy * 100).toFixed(1)}%</strong> of constituencies, with an average gap of
-      <strong>{(headline.backtest_major_party_mae * 100).toFixed(2)}pp</strong> between predicted and actual party share.
+      We replayed the model on the 2024 general election from the 2019 result. Fed the actual 2024 national vote
+      shares, it called the winner in <strong>{(headline.backtest_winner_accuracy * 100).toFixed(1)}%</strong> of
+      constituencies with an average gap of <strong>{(headline.backtest_major_party_mae * 100).toFixed(2)}pp</strong>
+      between predicted and actual party share.{realPolling && <> Fed the May 2024 polling average instead, which is what a
+      forecaster would have had, it called <strong>{(realPolling.winner_accuracy * 100).toFixed(1)}%</strong> with a
+      {" "}<strong>{(realPolling.major_party_mae_avg * 100).toFixed(2)}pp</strong> gap.</>} The model's own target was
+      {" "}{Math.round((backtest?.snapshot?.target_metrics?.winner_accuracy_target ?? 0) * 100)}% (<code>data/backtests/ge-2024.json</code>).
     </p>
+    {wp && (
+      <p>
+        The win probabilities on each seat page come from that May 2024 polling run: the share of seats with a similar
+        predicted margin that the leader went on to win, fitted on {wp.n} seats.
+      </p>
+    )}
     <p>
       <a href="/data-quality/ge-backtest/">Full accuracy record →</a>
     </p>
@@ -240,7 +272,7 @@ const structuredData = [
       <li><strong>It assumes a notional election held this week</strong>, using current Westminster polling. The next general election may be months or years away; the forecast will move with the polls.</li>
       <li><strong>It does not predict turnout swings</strong> or campaign effects beyond what's already reflected in the polls. Late-campaign movement can be substantial.</li>
       <li><strong>It does not assume tactical voting beyond the pattern observed in 2024.</strong> A formal pact between Labour and the Liberal Democrats, for example, is not modelled.</li>
-      <li><strong>Confidence intervals are not yet shown per seat.</strong> A future release will publish a high/low band on each constituency.</li>
+      <li><strong>The probabilities and ranges come from one election.</strong> They measure how far the model missed in 2024 using polls taken about nine weeks out. They do not include how much opinion may move before the next general election, so they are narrower than the true uncertainty today.</li>
     </ul>
     <p class="caption">
       Read the <a href="/methodology/general-election/">general election methodology</a>, see <a href="/polling/">the exact polling numbers feeding the forecast</a>, or <a href="/your-area/">find your parliamentary constituency</a>.
@@ -306,6 +338,13 @@ const structuredData = [
   .forecast-summary dl div { padding: var(--space-md); border: 1px solid var(--border); border-radius: 10px; }
   .forecast-summary dt { font-weight: 700; }
   .forecast-summary dd { margin: var(--space-xs) 0 0; color: var(--ink-soft); }
+
+  .bar-range {
+    display: block;
+    color: var(--ink-soft);
+    font-size: var(--text-eyebrow);
+    font-weight: 400;
+  }
 
   .table-scroll {
     max-width: 100%;
