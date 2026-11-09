@@ -1,81 +1,7 @@
 ---
-import lookupCodes from "../../data/identity/parliament-lookup-codes.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { loadGePredictions, loadIdentity } from "../lib/predictions";
-import type { DistrictEntry, LookupEntry } from "../lib/electionLookup";
-import { allCouncilRecords, councilNextElection } from "../lib/nextElections";
-
-const identity = loadIdentity();
-const ge = loadGePredictions();
-type CouncilEntry = LookupEntry & { council_slug: string; tier: string };
-const wardIndex: LookupEntry[] = [];
-const councils = new Map<string, CouncilEntry>();
-for (const w of identity.wards) {
-  if (w.tier !== "local" && w.tier !== "mayor") continue;
-  if (!w.ward_slug) continue;
-  wardIndex.push({
-    kind: "ward",
-    name: w.ward_name || w.ward_slug,
-    secondary: `${w.council_name} ward`,
-    href: `/seats/${w.council_slug}/${w.ward_slug}/`,
-    code: w.gss_code,
-  });
-  if (!councils.has(w.council_slug)) {
-    councils.set(w.council_slug, {
-      kind: "council",
-      name: w.council_name,
-      secondary: w.tier === "mayor" ? "Mayoralty" : "Local council",
-      council_slug: w.council_slug,
-      tier: w.tier,
-      href: `/seats/${w.council_slug}/`,
-    });
-  }
-}
-// Councils with no 7 May 2026 contest have a placeholder page; list them so a
-// name search or a postcode in (say) Ribble Valley says what happens next.
-const districtIndex: DistrictEntry[] = [];
-for (const record of allCouncilRecords()) {
-  const next = councilNextElection(record.slug);
-  const covered = councils.has(record.slug);
-  if (record.lad24cd) {
-    districtIndex.push({
-      code: record.lad24cd,
-      name: record.name,
-      href: `/seats/${record.slug}/`,
-      covered,
-      status: next.status,
-      next_label: next.label,
-    });
-  }
-  if (!covered && record.lad24cd) {
-    councils.set(record.slug, {
-      kind: "council",
-      name: record.name,
-      secondary: "Council · no forecast yet",
-      council_slug: record.slug,
-      tier: "none",
-      href: `/seats/${record.slug}/`,
-    });
-  }
-}
-const councilIndex = [...councils.values()].sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
-// Missing boundary codes prevent postcode resolution, not discovery by name.
-const constituencyIndex: LookupEntry[] = Object.values(ge.predictions || {})
-  .filter((record: any) => Boolean(record?.prediction && record?.slug))
-  .map((record: any) => ({
-    kind: "constituency" as const,
-    name: record.name,
-    secondary: "Parliamentary constituency",
-    href: `/seats/parliament/${record.slug}/`,
-    code: lookupCodes.entries[record.slug as keyof typeof lookupCodes.entries]?.code ?? record.pcon24cd,
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
-const indexJson = JSON.stringify({
-  constituencies: constituencyIndex,
-  wards: wardIndex,
-  councils: councilIndex,
-  districts: districtIndex,
-});
+import { loadAreaLookup } from "../lib/areaLookupData";
+const { constituencies: constituencyIndex, councils: councilIndex } = loadAreaLookup();
 ---
 
 <BaseLayout title="What is my ward and constituency? UK postcode lookup" description="Enter a UK postcode to find your official council ward and Westminster constituency, or browse all 650 parliamentary seats and the councils we cover without JavaScript.">
@@ -92,7 +18,7 @@ const indexJson = JSON.stringify({
     <form id="lookup-form" autocomplete="off">
       <label for="lookup-input"><strong>Postcode, constituency, council or ward</strong></label>
       <div class="lookup-row">
-        <input id="lookup-input" name="lookup" type="search" placeholder="e.g. BB12 6PG, Burnley, or Holborn" autofocus />
+        <input id="lookup-input" name="lookup" type="search" placeholder="e.g. BB12 6PG, Burnley, or Holborn" />
         <button type="submit">Find my elections</button>
       </div>
       <p id="lookup-status" class="lookup-status" aria-live="polite"></p>
@@ -181,14 +107,12 @@ const indexJson = JSON.stringify({
   .area-definitions dd { margin: var(--space-xs) 0 0; color: var(--ink-soft); }
 </style>
 
-<script type="application/json" id="search-index" set:html={indexJson} />
 
 <script>
   import { councilNoticeForPostcode, resolvePostcodeDestinations, searchElectionLookup } from "../lib/electionLookup";
   import type { LookupEntry, LookupIndex } from "../lib/electionLookup";
 
   (function () {
-    const indexElement = document.getElementById("search-index")!;
     const form = document.getElementById("lookup-form") as HTMLFormElement;
     const input = document.getElementById("lookup-input") as HTMLInputElement;
     const status = document.getElementById("lookup-status")!;
@@ -196,7 +120,35 @@ const indexJson = JSON.stringify({
     const resultsList = document.getElementById("lookup-results-list") as HTMLUListElement;
     const resultsOverflow = document.getElementById("lookup-results-overflow") as HTMLParagraphElement;
     const resultsHeading = document.getElementById("lookup-results-heading")!;
-    const data = JSON.parse(indexElement.textContent || "{}") as LookupIndex;
+    let indexPromise: Promise<LookupIndex> | null = null;
+    function loadIndex(): Promise<LookupIndex> {
+      if (!indexPromise) {
+        setStatus("Loading election pages…");
+        indexPromise = fetch("/search-index.json")
+          .then(response => {
+            if (!response.ok) throw new Error("Search index unavailable");
+            return response.json();
+          })
+          .then((entries) => {
+            const data: LookupIndex = { constituencies: [], wards: [], councils: [], districts: [] };
+            for (const entry of entries) {
+              if (entry.lookup?.kind === "constituency") data.constituencies.push(entry.lookup);
+              if (entry.lookup?.kind === "ward") data.wards.push(entry.lookup);
+              if (entry.lookup?.kind === "council") data.councils.push(entry.lookup);
+              if (entry.district) data.districts!.push(entry.district);
+            }
+            setStatus("");
+            return data;
+          })
+          .catch(error => {
+            indexPromise = null;
+            setStatus("Election pages could not be loaded. Try again or browse the lists below.", true);
+            throw error;
+          });
+      }
+      return indexPromise;
+    }
+    input.addEventListener("focus", () => { void loadIndex().catch(() => {}); });
 
     const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 
@@ -235,6 +187,7 @@ const indexJson = JSON.stringify({
     async function postcodeLookup(postcode: string) {
       setStatus("Looking up postcode " + postcode + "...");
       try {
+        const data = await loadIndex();
         const r = await fetch("https://api.postcodes.io/postcodes/" + encodeURIComponent(postcode.replace(/\s+/g, "")));
         if (!r.ok) {
           setStatus("Postcode not found.", true);
@@ -263,13 +216,16 @@ const indexJson = JSON.stringify({
       }
     }
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
       const value = (input.value || "").trim();
       if (!value) return;
       if (POSTCODE_RE.test(value)) {
         postcodeLookup(value);
       } else {
+        let data: LookupIndex;
+        try { data = await loadIndex(); } catch { return; }
+        if (input.value.trim() !== value) return;
         const hits = searchElectionLookup(value, data);
         if (hits.length === 1) {
           renderResults(hits, "Match");
@@ -286,11 +242,15 @@ const indexJson = JSON.stringify({
 
     let inputDebounce: ReturnType<typeof setTimeout> | undefined;
     input.addEventListener("input", function () {
+      void loadIndex().catch(() => {});
       if (inputDebounce) clearTimeout(inputDebounce);
       const value = (input.value || "").trim();
       if (POSTCODE_RE.test(value)) return;
-      inputDebounce = setTimeout(function () {
+      inputDebounce = setTimeout(async function () {
         if (value.length >= 2) {
+          let data: LookupIndex;
+          try { data = await loadIndex(); } catch { return; }
+          if (input.value.trim() !== value) return;
           const hits = searchElectionLookup(value, data);
           renderResults(hits, "Matches");
           if (hits.length > 0) setStatus(hits.length + " match" + (hits.length === 1 ? "" : "es"));

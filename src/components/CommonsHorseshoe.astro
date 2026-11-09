@@ -189,14 +189,13 @@ const leadingClearsMajority = leadingParty && majority > 0 ? leadingParty.seats 
 
 // Enrich the default label with the seat picture the dots actually show, so
 // the accessible name names the chart from its data rather than a generic
-// placeholder. Callers that pass ariaLabel keep full control.
+// placeholder. Caller descriptions are followed by the complete seat tally.
 const tallyPhrase = legend
   .filter((l) => l.seats > 0)
-  .slice(0, 6)
+  .sort((a, b) => a.party.localeCompare(b.party, "en-GB"))
   .map((l) => `${l.short} ${l.seats}`)
   .join(", ");
-const resolvedAriaLabel = ariaLabel
-  ?? `Projected chamber of ${chamberSize} seats coloured by party${tallyPhrase ? `: ${tallyPhrase}` : ""}.`;
+const resolvedAriaLabel = `${ariaLabel ?? `Projected chamber of ${chamberSize} seats coloured by party`}${tallyPhrase ? `: ${tallyPhrase}` : ""}${emptyPositions.length ? `, ${emptySeatsLabel} ${emptyPositions.length}` : ""}.`;
 ---
 
 <figure class="commons-horseshoe" aria-label={resolvedAriaLabel}>
@@ -215,7 +214,7 @@ const resolvedAriaLabel = ariaLabel
     {/* Majority line, a faint vertical hash mark at the centre of the
         baseline. Indicates the 326-seat threshold. */}
     {majority > 0 && (
-      <g class="ch-majority">
+      <g class="ch-majority" aria-hidden="true">
         <line
           x1={CX}
           x2={CX}
@@ -242,14 +241,13 @@ const resolvedAriaLabel = ariaLabel
 
     {/* Seats nobody holds, drawn first so party dots sit above them. */}
     {emptyPositions.length > 0 && (
-      <g class="ch-empty">
+      <g class="ch-empty" aria-hidden="true">
         {emptyPositions.map((pos) => {
           const { x, y } = dotXY(pos);
           return (
             <circle cx={x} cy={y} r={DOT_R} fill="none"
               stroke="currentColor" stroke-opacity="0.28" stroke-width="1.2"
               stroke-dasharray="2 2">
-              <title>{emptySeatsLabel}</title>
             </circle>
           );
         })}
@@ -257,7 +255,7 @@ const resolvedAriaLabel = ariaLabel
     )}
 
     {/* The dots */}
-    <g class="ch-dots">
+    <g class="ch-dots" aria-hidden="true">
       {seatAssignments.map(({ party, pos }) => {
         const { x, y } = dotXY(pos);
         return (
@@ -269,7 +267,6 @@ const resolvedAriaLabel = ariaLabel
             stroke="rgba(255,255,255,0.55)"
             stroke-width="0.5"
           >
-            <title>{shortPartyLabel(party)}</title>
           </circle>
         );
       })}
