@@ -8,7 +8,7 @@ const page = (relative: string) =>
 describe("search-demand destinations", () => {
   it("answers what a ward is in static HTML and keeps crawlable browse fallbacks", () => {
     const source = page("your-area.astro");
-    const script = source.indexOf("<script type=\"application/json\"");
+    const script = source.indexOf("<script>");
     expect(source.indexOf("Council ward")).toBeGreaterThan(-1);
     expect(source.indexOf("Council ward")).toBeLessThan(script);
     expect(source).toContain('href="/seats/parliament/"');
