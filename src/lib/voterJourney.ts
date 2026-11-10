@@ -230,19 +230,6 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
 
   // ---- Polling day -------------------------------------------------------
   add({
-    id: "emergency-proxy",
-    lanes: ["person", "proxy"],
-    phase: "day",
-    title: "Emergency proxy",
-    action: "If you cannot get there: emergency proxy",
-    certainty: "law",
-    date: input.pollingDay,
-    time: "17:00",
-    body: `If something happens after the proxy deadline and you cannot get to the polling station, you can still ask for a proxy: for a medical emergency or disability, or because of work${idNeeded ? ", or because your photo ID is lost, stolen, damaged or has not arrived" : ""}.`,
-    basis: absentVoteBasis(t),
-    official: { label: "Emergency proxy votes on GOV.UK", url: "https://www.gov.uk/how-to-vote/voting-by-proxy" },
-  });
-  add({
     id: "poll",
     lanes: ["person", "proxy"],
     phase: "day",
@@ -257,6 +244,19 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
       : "No photo ID is needed at this election. You do not need your poll card.",
     basis: timetableBasis(t),
     official: { label: "Voting in person on GOV.UK", url: "https://www.gov.uk/how-to-vote/voting-in-person" },
+  });
+  add({
+    id: "emergency-proxy",
+    lanes: ["person", "proxy"],
+    phase: "day",
+    title: "Emergency proxy",
+    action: "If you cannot get there: emergency proxy",
+    certainty: "law",
+    date: input.pollingDay,
+    time: "17:00",
+    body: `If something happens after the proxy deadline and you cannot get to the polling station, you can still ask for a proxy: for a medical emergency or disability, or because of work${idNeeded ? ", or because your photo ID is lost, stolen, damaged or has not arrived" : ""}.`,
+    basis: absentVoteBasis(t),
+    official: { label: "Emergency proxy votes on GOV.UK", url: "https://www.gov.uk/how-to-vote/voting-by-proxy" },
   });
   add({
     id: "postal-return",
