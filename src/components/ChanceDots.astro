@@ -1,0 +1,53 @@
+---
+/**
+ * ChanceDots.astro. A chance drawn as 20 countable dots. PROTOTYPE.
+ *
+ * One denominator everywhere (20). Dots are grouped, never scattered, and the
+ * unfilled ones are outlined so the split survives greyscale. Pass `segments`
+ * to colour the 20 by outcome (who comes first in each), or `chance` for a
+ * single yes or no split. The sentence beside it is the accessible name.
+ * Evidence: Kay et al. 2016 and Fernandes et al. 2018 (quantile dotplots),
+ * Garcia-Retamero and Galesic 2009 (icon arrays and low numeracy).
+ */
+interface Segment { colour: string; count: number }
+interface Props {
+  /** Probability between 0 and 1, for a single split. */
+  chance?: number;
+  colour?: string | null;
+  /** Counts out of 20 by outcome, in display order. */
+  segments?: Segment[];
+  /** The sentence the dots illustrate. */
+  label: string;
+}
+const { chance, colour = null, segments, label } = Astro.props;
+const TOTAL = 20;
+let fills: Array<string | null>;
+if (segments) {
+  fills = segments.flatMap((s) => Array.from({ length: s.count }, () => s.colour)).slice(0, TOTAL);
+  while (fills.length < TOTAL) fills.push(null);
+} else {
+  const p = chance ?? 0;
+  const raw = Math.round(p * TOTAL);
+  // Never show a contested chance as 0 or 20 of 20.
+  const filled = p > 0 && p < 1 ? Math.min(TOTAL - 1, Math.max(1, raw)) : raw;
+  fills = Array.from({ length: TOTAL }, (_, i) => (i < filled ? colour ?? "var(--accent)" : null));
+}
+const R = 9, GAP = 6, STEP = R * 2 + GAP, PER_ROW = 10;
+const W = PER_ROW * STEP - GAP + 2, H = 2 * STEP - GAP + 2;
+---
+<svg class="chance-dots" viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label={label}>
+  {fills.map((fill, i) => (
+    <circle
+      cx={1 + R + (i % PER_ROW) * STEP}
+      cy={1 + R + Math.floor(i / PER_ROW) * STEP}
+      r={fill ? R : R - 1}
+      class={fill ? "on" : "off"}
+      style={fill ? `fill:${fill}` : undefined}
+    />
+  ))}
+</svg>
+
+<style>
+  .chance-dots { display: block; max-width: 100%; height: auto; }
+  .off { fill: none; stroke: var(--muted); stroke-width: 2; }
+</style>

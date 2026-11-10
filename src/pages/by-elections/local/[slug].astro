@@ -13,6 +13,8 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
 import ExploreNext from "../../../components/ExploreNext.astro";
+import VoteTracker from "../../../components/VoteTracker.astro";
+import ChanceDots from "../../../components/ChanceDots.astro";
 import { partyColour } from "../../../lib/predictions";
 import { resultWinnerLabel, shortPartyLabel } from "../../../lib/siteData";
 import { buildLocalContestJourneyLinks } from "../../../lib/electionJourneys";
@@ -72,6 +74,12 @@ const metaPath = path.join(process.cwd(), DIR, "_meta.json");
 const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, "utf8")) : null;
 const bt = meta?.backtest ?? null;
 
+// Prototype: the full statutory timetable, fetched by
+// scripts/fetch-contest-timetables.mjs. Absent for contests it has not seen.
+const timetablePath = path.join(process.cwd(), "data/contests/local-byelection-timetables.json");
+const timetables = existsSync(timetablePath) ? JSON.parse(readFileSync(timetablePath, "utf8")) : null;
+const timetableEntry = timetables?.timetables?.[c.ballot_paper_id] ?? null;
+
 const pct1 = (x: number | null | undefined) => (typeof x === "number" ? (x * 100).toFixed(1) : null);
 const pp1 = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed(1) : null);
 const prettyDate = (iso: string) =>
@@ -86,12 +94,33 @@ const rows = (shares: Record<string, number>) =>
     .sort((a, b) => b[1] - a[1])
     .map(([party, pct]) => ({ party, pct }));
 
+// One denominator for every chance on the page: so many in 20.
+function chanceIn20(p: number): string {
+  if (p < 0.025) return "under 1 in 20";
+  if (p > 0.975) return "over 19 in 20";
+  return `${Math.round(p * 20)} in 20`;
+}
+// Twenty simulated contests shared out by who comes first, by largest
+// remainder, so the dots add to 20. A contested race never shows 20 of 20.
+function shareOutTwenty(probs: Record<string, number>): Array<{ party: string; count: number }> {
+  const entries = Object.entries(probs || {}).sort((a, b) => b[1] - a[1]);
+  const out = entries.map(([party, p]) => ({ party, count: Math.floor(p * 20), rem: p * 20 - Math.floor(p * 20) }));
+  let left = 20 - out.reduce((n, x) => n + x.count, 0);
+  for (const x of [...out].sort((a, b) => b.rem - a.rem)) { if (left <= 0) break; x.count += 1; left -= 1; }
+  if (out.length > 1 && out[0].count === 20) { out[0].count = 19; out[1].count = 1; }
+  return out.map(({ party, count }) => ({ party, count }));
+}
+const twenty = forecast?.win_probability ? shareOutTwenty(forecast.win_probability) : [];
+const twentyShown = twenty.filter((x) => x.count > 0);
+const twentyRest = twenty.filter((x) => x.count === 0);
+const twentySentence = twentyShown.map((x) => `${shortPartyLabel(x.party)} ${x.count}`).join(", ");
+
 const forecastRows = forecast
   ? rows(forecast.central).map((r) => ({
       ...r,
       annotation:
         forecast.win_probability?.[r.party] !== undefined
-          ? `${Math.round(forecast.win_probability[r.party] * 100)}% to win`
+          ? chanceIn20(forecast.win_probability[r.party])
           : null,
     }))
   : [];
@@ -145,6 +174,14 @@ const resultSummary = byElectionResultSummary(d);
 // Status alone is not enough: a contest file can still read "upcoming" after
 // polling day if the overnight refresh missed it.
 const pollStillToCome = new Date().toISOString().slice(0, 10) <= c.polling_day;
+// The chance as a count out of 20, and the record of what happened when the
+// method gave a chance in the same range before.
+const in20 = (p: number) => Math.min(19, Math.max(1, Math.round(p * 20)));
+const recordBin = leaderProb != null
+  ? (meta?.calibration_table ?? []).find((b: any) => leaderProb >= b.from && leaderProb < b.to) ?? null
+  : null;
+const recordWon = recordBin ? Math.round(recordBin.observed * recordBin.n) : null;
+
 const structuredData = d.status === "upcoming" && pollStillToCome
   ? [buildElectionEvent({
       name: `${c.ward_name} by-election, ${c.council_name}`,
@@ -193,6 +230,7 @@ const breadcrumbs: Crumb[] = [
 
   <nav class="detail-nav" aria-label="On this page">
     {declared && <a href="#result">Result</a>}
+    {!declared && pollStillToCome && timetableEntry?.timetable && <a href="#your-vote">Your vote</a>}
     <a href="#candidates">Candidates{result?.declared ? " and votes" : ""}</a>
     {!declared && forecast && <a href="#projection">Projection</a>}
     {prior && <a href="#previous-result">Previous result</a>}
@@ -232,6 +270,22 @@ const breadcrumbs: Crumb[] = [
         </p>
       )}
     </section>
+  )}
+
+  {!declared && pollStillToCome && timetableEntry?.timetable && (
+    <VoteTracker
+      input={{
+        pollingDay: c.polling_day,
+        territory: c.territory,
+        councilName: c.council_name,
+        wardName: c.ward_name,
+        requiresVoterId: timetableEntry.requires_voter_id,
+        timetable: timetableEntry.timetable,
+      }}
+      fetchedAt={timetables.fetched_at}
+      sourceUrl={timetableEntry.source}
+      calendarBase={`/by-elections/local/${d.slug}/`}
+    />
   )}
 
   <section class="card" id="candidates">
@@ -296,8 +350,34 @@ const breadcrumbs: Crumb[] = [
       <p class="lede">
         {tooClose
           ? `No party is clearly ahead. The strongest lane is ${shortPartyLabel(leader)} on ${Math.round((leaderProb ?? 0) * 100)}%, which is not enough to name a favourite in a contest this volatile.`
-          : `${shortPartyLabel(leader)} wins in ${Math.round((leaderProb ?? 0) * 100)}% of runs, on a projected ${pct1(forecast.central[leader])}%.`}
+          : `${shortPartyLabel(leader)} comes first in about ${in20(leaderProb ?? 0)} of every 20 simulated contests, on a projected ${pct1(forecast.central[leader])}% of the vote.`}
       </p>
+      {leaderProb != null && (
+        <div class="chance-rows">
+          <div class="chance-row">
+            <ChanceDots
+              segments={twentyShown.map((x) => ({ colour: partyColour(x.party), count: x.count }))}
+              label={`Who comes first in 20 simulated contests: ${twentySentence}.`}
+            />
+            <p>
+              <strong>Twenty simulated contests.</strong> Who comes first: {twentySentence}.
+              {twentyRest.length > 0 && ` Fewer than 1 in 20: ${twentyRest.map((x) => shortPartyLabel(x.party)).join(", ")}.`}
+            </p>
+          </div>
+          {recordBin && recordWon != null && (
+            <div class="chance-row">
+              <ChanceDots
+                chance={recordBin.observed}
+                label={`In the retrospective backtest, where the method gave a chance in this range, the leader won ${recordWon} of ${recordBin.n} contests, about ${in20(recordBin.observed)} in 20.`}
+              />
+              <p>
+                <strong>The backtest.</strong> Re-running this method on past council by-elections, where it gave the leader between {Math.round(recordBin.from * 100)} and {Math.round(recordBin.to * 100)} in 100,
+                that leader won {recordWon} of {recordBin.n}: about <strong>{in20(recordBin.observed)} in 20</strong>. These are reconstructed, not forecasts published at the time.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
       <PartyBars rows={forecastRows} large={true} />
 
       <div class="band-detail">
