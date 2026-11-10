@@ -15,6 +15,9 @@ import PartyBars from "../../../components/PartyBars.astro";
 import ExploreNext from "../../../components/ExploreNext.astro";
 import VoteTracker from "../../../components/VoteTracker.astro";
 import ChanceDots from "../../../components/ChanceDots.astro";
+import HistoryStrip from "../../../components/HistoryStrip.astro";
+import { contestFromCandidates, orderContests } from "../../../lib/wardHistory";
+import { loadHistory, loadMay7ResultForWard } from "../../../lib/predictions";
 import { partyColour } from "../../../lib/predictions";
 import { resultWinnerLabel, shortPartyLabel } from "../../../lib/siteData";
 import { buildLocalContestJourneyLinks } from "../../../lib/electionJourneys";
@@ -79,6 +82,24 @@ const bt = meta?.backtest ?? null;
 const timetablePath = path.join(process.cwd(), "data/contests/local-byelection-timetables.json");
 const timetables = existsSync(timetablePath) ? JSON.parse(readFileSync(timetablePath, "utf8")) : null;
 const timetableEntry = timetables?.timetables?.[c.ballot_paper_id] ?? null;
+
+// Who has won here: every result held for this ward, plus this contest.
+const wardHistory = (() => {
+  const archive = loadHistory();
+  const ids = (archive.by_ward_slug || {})[`local::${c.council_slug}::${c.ward_slug}`] || [];
+  const fromArchive = ids.map((id: string) => archive.by_ballot[id]).filter(Boolean).map((r: any) =>
+    contestFromCandidates({ date: r.election_date, byElection: Boolean(r.is_by_election), candidates: r.candidates, turnoutPct: r.turnout_pct, source: r.source }));
+  const may7 = loadMay7ResultForWard(`local.${c.council_slug}.${c.ward_slug}.2026-05-07`);
+  const fromMay7 = may7 ? contestFromCandidates({ date: may7.election_date, byElection: false, candidates: may7.candidates, seats: may7.winner_count, turnoutPct: may7.turnout_pct, source: may7.source }) : null;
+  // The contest file's own previous result fills in where the archive has nothing.
+  const fromPrior = prior?.candidates?.length
+    ? contestFromCandidates({ date: prior.election_date, byElection: false, candidates: prior.candidates, seats: prior.seats_contested, source: prior.source })
+    : null;
+  const thisOne = result?.declared && f?.candidates
+    ? contestFromCandidates({ date: c.polling_day, byElection: true, candidates: f.candidates, seats: c.seats_contested, source: d.sources?.[0]?.url })
+    : null;
+  return orderContests([...fromArchive, fromMay7, fromPrior, thisOne], c.boundary_set_start);
+})();
 
 const pct1 = (x: number | null | undefined) => (typeof x === "number" ? (x * 100).toFixed(1) : null);
 const pp1 = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed(1) : null);
@@ -233,6 +254,7 @@ const breadcrumbs: Crumb[] = [
     {!declared && pollStillToCome && timetableEntry?.timetable && <a href="#your-vote">Your vote</a>}
     <a href="#candidates">Candidates{result?.declared ? " and votes" : ""}</a>
     {!declared && forecast && <a href="#projection">Projection</a>}
+    {wardHistory.length > 0 && <a href="#history">History</a>}
     {prior && <a href="#previous-result">Previous result</a>}
     <a href="#sources">Sources</a>
   </nav>
@@ -431,6 +453,18 @@ const breadcrumbs: Crumb[] = [
         The candidates, the vacancy and the ward's history are all below. A missing forecast is a
         statement about the evidence, not about the contest.
       </p>
+    </section>
+  )}
+
+  {wardHistory.length > 0 && (
+    <section class="card" id="history">
+      <h2>Who has won here</h2>
+      <HistoryStrip
+        contests={wardHistory}
+        placeName={`${c.ward_name} ward`}
+        upcoming={!declared ? { date: c.polling_day, label: "This by-election" } : null}
+        breakLabel={c.boundary_set_start ? `New boundaries ${c.boundary_set_start.slice(0, 4)}` : null}
+      />
     </section>
   )}
 

@@ -18,6 +18,8 @@ import { summariseWardResult, seatsWonLabel, historyRowAsWardResult } from "../.
 import { shortPartyLabel } from "../../../../lib/siteData";
 import { externalHref, type Crumb } from "../../../../lib/seo";
 import { wardSummary } from "../../../../lib/pageSummaries";
+import HistoryStrip from "../../../../components/HistoryStrip.astro";
+import { contestFromCandidates, orderContests } from "../../../../lib/wardHistory";
 
 export async function getStaticPaths() {
   const identity = loadIdentity();
@@ -445,33 +447,15 @@ const breadcrumbs: Crumb[] = [
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Recent contests</p>
-        <h2>{result ? "How this ward voted before 2026" : "What happened last time"}</h2>
+        <h2>Who has won here</h2>
       </div>
-      <table class="seat-table">
-        <thead>
-          <tr><th>Date</th><th>Type</th><th>Winner</th><th>Top share</th><th>Source</th></tr>
-        </thead>
-        <tbody>
-          {historicResults.map((r: any) => {
-            const total = (r.candidates || []).reduce((s: number, c: any) => s + (c.votes || 0), 0);
-            const top = [...(r.candidates || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0))[0];
-            const share = top && total > 0 ? top.votes / total : null;
-            return (
-              <tr>
-                <td>{r.election_date}</td>
-                <td class="muted">{r.is_by_election ? "By-election" : "Cycle"}</td>
-                <td>{shortPartyLabel(top?.party_name) || "n/a"}</td>
-                <td class="num">{share != null ? formatPct(share) : "n/a"}</td>
-                <td>{externalHref(r.source)
-                  ? <a href={externalHref(r.source)} rel="nofollow">declaration</a>
-                  : r.source
-                    ? <span class="muted">{r.source}</span>
-                    : "n/a"}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <HistoryStrip
+        contests={orderContests([
+          ...historicAll.map((r: any) => contestFromCandidates({ date: r.election_date, byElection: Boolean(r.is_by_election), candidates: r.candidates, turnoutPct: r.turnout_pct, source: r.source })),
+          resultRow ? contestFromCandidates({ date: resultRow.election_date, byElection: false, candidates: resultRow.candidates, seats: resultRow.winner_count, turnoutPct: resultRow.turnout_pct, source: resultRow.source }) : null,
+        ])}
+        placeName={`${ward.ward_name} ward`}
+      />
     </section>
   )}
 
