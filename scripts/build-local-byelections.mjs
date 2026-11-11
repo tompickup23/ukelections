@@ -801,6 +801,11 @@ export function assemble(ctx, corpus, demo, holders, published = {}, turnoutFact
       nominations_close: ballot.timetable?.close_of_nominations || null,
       registration_deadline: ballot.timetable?.registration_deadline || null,
       postal_vote_deadline: ballot.timetable?.postal_vote_application_deadline || null,
+      // The whole statutory timetable as Democracy Club publishes it (notice,
+      // nominations, candidate list, registration, postal, proxy, voter ID
+      // certificate, replacement pack). The vote tracker shows these dates
+      // and computes none of its own.
+      timetable: ballot.timetable || null,
     },
     field: {
       candidate_count: candidates.length,

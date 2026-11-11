@@ -80,7 +80,7 @@ const fetchedLabel = fetchedAt ? dayLabel(fetchedAt.slice(0, 10)) : null;
           </ol>
           {lane.id !== "post" && anyOpen && (
             <p class="vt-bring">
-              <strong>On the day:</strong>{" "}{input.requiresVoterId ? "bring photo ID. Out of date ID is accepted." : "no photo ID is needed at this election."} You do not need your poll card.
+              <strong>On the day:</strong>{" "}{input.requiresVoterId ? "bring photo ID. Expired ID counts if the photo still looks like you." : "no photo ID is needed at this election."} You do not have to take your poll card.
             </p>
           )}
           {lane.id === "post" && anyOpen && (
@@ -135,7 +135,7 @@ const fetchedLabel = fetchedAt ? dayLabel(fetchedAt.slice(0, 10)) : null;
 
     <div class="vt-foot">
       <p>
-        <strong>What this cannot do.</strong> There is no system in the UK for tracking an individual postal vote, so nothing here is about
+        <strong>What this cannot do.</strong> There is no national service for tracking an individual postal vote, so nothing here is about
         your own ballot. It shows where every vote in this contest stands, and which dates are certain.
       </p>
       {calendarBase && (

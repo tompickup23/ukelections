@@ -15,7 +15,8 @@ function load() {
   const contests = readdirSync(DIR)
     .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
     .map((f) => JSON.parse(readFileSync(path.join(DIR, f), "utf8")))
-    .filter((d) => d.contest?.polling_day >= today && sidecar.timetables[d.contest.ballot_paper_id]?.timetable);
+    .filter((d) => d.contest?.polling_day >= today && !d.result?.declared
+      && (d.contest.timetable || sidecar.timetables[d.contest.ballot_paper_id]?.timetable));
   return { sidecar, contests };
 }
 
@@ -24,7 +25,12 @@ export function getStaticPaths() {
   return contests.flatMap((d) =>
     LANES.map((lane) => ({
       params: { slug: d.slug, lane: lane.id },
-      props: { contest: d, entry: sidecar.timetables[d.contest.ballot_paper_id], fetchedAt: sidecar.fetched_at },
+      props: {
+        contest: d,
+        timetable: d.contest.timetable ?? sidecar.timetables[d.contest.ballot_paper_id]?.timetable,
+        requiresVoterId: d.contest.requires_voter_id ?? sidecar.timetables[d.contest.ballot_paper_id]?.requires_voter_id ?? null,
+        fetchedAt: d.contest.timetable ? d.generated_at : sidecar.fetched_at,
+      },
     })),
   );
 }
@@ -47,8 +53,8 @@ export const GET: APIRoute = ({ params, props }) => {
     territory: c.territory,
     councilName: c.council_name,
     wardName: c.ward_name,
-    requiresVoterId: props.entry.requires_voter_id,
-    timetable: props.entry.timetable,
+    requiresVoterId: props.requiresVoterId,
+    timetable: props.timetable,
   }).filter((s) => s.action && s.lanes.includes(lane) && stepDeadline(s) !== null);
 
   const dtstamp = stamp(Date.parse(props.fetchedAt));
@@ -62,8 +68,10 @@ export const GET: APIRoute = ({ params, props }) => {
       "BEGIN:VEVENT",
       `UID:${c.ballot_paper_id}.${s.id}.${lane}@ukelections.co.uk`,
       `DTSTAMP:${dtstamp}`,
-      `DTSTART:${stamp(start)}`,
-      `DTEND:${stamp(end)}`,
+      // A deadline whose hour is not printed on the page is an all-day event.
+      ...(s.hideTime
+        ? [`DTSTART;VALUE=DATE:${s.date!.replace(/-/g, "")}`]
+        : [`DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`]),
       `SUMMARY:${esc(summary)}`,
       `DESCRIPTION:${esc(`${s.body} ${s.official ? s.official.url + " " : ""}Dates from Democracy Club. Check ${url} in case a date has changed.`)}`,
       `URL:${url}`,

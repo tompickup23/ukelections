@@ -37,6 +37,9 @@ export interface JourneyStep {
   date?: string;
   /** Clock time of the deadline on `date`, 24 hour, London. */
   time?: string;
+  /** Use `time` to close the step but do not print it: the hour was not
+   *  confirmed at a primary source, so the page shows the date alone. */
+  hideTime?: boolean;
   /** ISO date a window opens, from the feed. */
   opensDate?: string;
   /** Used when there is no dated value to show. */
@@ -132,6 +135,7 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     certainty: "law",
     date: tt.registration_deadline,
     time: "23:59",
+    hideTime: true,
     body: "You can only vote if you are on the register. It takes about five minutes online. If you have moved, you need to register again.",
     missed: "If you are not on the register you cannot vote in this contest. Registering now puts you on it for the next one.",
     basis: { label: "Representation of the People Act 1983, section 13B", url: `${LEG}/ukpga/1983/2/section/13B` },
@@ -181,7 +185,7 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     title: "Your pack arrives",
     certainty: "unknown",
     whenText: "Depends on the post",
-    body: "Nobody can track a postal ballot in the UK: not this site, not your council. If yours has not come, the replacement step below is the route.",
+    body: "There is no national service for tracking a postal ballot, so this site cannot tell you where yours is. If it has not come, the replacement step below is the route.",
   });
   add(tt.proxy_vote_application_deadline && {
     id: "proxy-apply",
@@ -206,8 +210,9 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     certainty: "law",
     date: tt.vac_application_deadline,
     time: "17:00",
-    body: "You need photo ID to vote in person at this election. If you have none of the accepted kinds, a Voter Authority Certificate is free. Out of date photo ID is accepted.",
-    missed: "Missed it? Check whether you hold another accepted photo ID. Out of date ID counts.",
+    hideTime: true,
+    body: "You need photo ID to vote in person at this election. If you have none of the accepted kinds, a Voter Authority Certificate is free. You can still use photo ID that has expired, as long as the photo looks like you.",
+    missed: "Missed it? Check whether you hold another accepted photo ID. Expired ID counts if the photo still looks like you.",
     basis: { label: "Voter Identification Regulations 2022", url: `${LEG}/uksi/2022/1382/made` },
     official: { label: "Check which photo ID is accepted on GOV.UK", url: "https://www.gov.uk/how-to-vote/photo-id-youll-need" },
   });
@@ -221,7 +226,7 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     opensDate: tt.replacement_pack_start_date,
     date: input.pollingDay,
     time: "17:00",
-    body: `If your pack is lost, spoilt or has not arrived, ${council} can issue another.${engWales ? " After 5pm on the day before polling day you have to collect it in person." : ""}`,
+    body: `If your pack is lost or has not arrived by this date, ${council} can issue another. A spoilt ballot paper can be replaced before then too.${engWales ? " After 5pm on the day before polling day you must apply in person." : ""}`,
     basis: engWales
       ? { label: "Representation of the People (England and Wales) Regulations 2001, regulation 78", url: `${LEG}/uksi/2001/341/regulation/78` }
       : undefined,
@@ -239,9 +244,7 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     date: input.pollingDay,
     time: "22:00",
     whenText: "7am to 10pm",
-    body: idNeeded
-      ? `Bring photo ID. You do not need your poll card.${eng ? " If you are in the queue at 10pm you can still vote." : ""}`
-      : "No photo ID is needed at this election. You do not need your poll card.",
+    body: `${idNeeded ? "Bring photo ID." : "No photo ID is needed at this election."} You do not have to take your poll card. If you are in the queue at 10pm you can still vote.`,
     basis: timetableBasis(t),
     official: { label: "Voting in person on GOV.UK", url: "https://www.gov.uk/how-to-vote/voting-in-person" },
   });
@@ -254,7 +257,7 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     certainty: "law",
     date: input.pollingDay,
     time: "17:00",
-    body: `If something happens after the proxy deadline and you cannot get to the polling station, you can still ask for a proxy: for a medical emergency or disability, or because of work${idNeeded ? ", or because your photo ID is lost, stolen, damaged or has not arrived" : ""}.`,
+    body: `If the proxy deadline has passed and you cannot vote in person, you may still be able to get a proxy: because of a medical emergency or disability, or because of your employment${idNeeded ? ", or because your photo ID has been lost, stolen, damaged or destroyed, or a replacement has not arrived" : ""}.`,
     basis: absentVoteBasis(t),
     official: { label: "Emergency proxy votes on GOV.UK", url: "https://www.gov.uk/how-to-vote/voting-by-proxy" },
   });
@@ -269,7 +272,7 @@ export function buildJourney(input: JourneyInput): JourneyStep[] {
     time: "22:00",
     whenText: "By 10pm",
     body: eng
-      ? `Post it early enough to arrive, or hand it in. To hand it in, give it to staff at a polling station in ${council} or at the council office and fill in the form: a postal vote left without the form is rejected. You can hand in your own and up to five others.`
+      ? "Post it early enough to arrive, or hand it in: at your polling station by 10pm, or at the electoral registration office before it closes. Give it to a member of staff and fill in the form, or your vote is rejected. You can hand in your own and up to five other people's."
       : "Post it early enough to arrive, or hand it in. The rules for handing in a postal vote differ between nations, so check the official page.",
     basis: eng
       ? { label: "Representation of the People (England and Wales) Regulations 2001, regulation 82B", url: `${LEG}/uksi/2001/341/regulation/82B` }
@@ -383,7 +386,7 @@ export function timeLabel(hhmm: string | undefined): string {
 export function whenLabel(step: JourneyStep): string {
   if (step.id === "poll") return `7am to 10pm on ${dayLabel(step.date!)}`;
   if (step.opensDate && step.date) return `${dayLabel(step.opensDate)} to ${timeLabel(step.time)} on ${dayLabel(step.date)}`;
-  if (step.date && step.time) return `By ${timeLabel(step.time)} on ${dayLabel(step.date)}`;
+  if (step.date && step.time && !step.hideTime) return `By ${timeLabel(step.time)} on ${dayLabel(step.date)}`;
   if (step.date) return `By ${dayLabel(step.date)}`;
   return step.whenText ?? "";
 }

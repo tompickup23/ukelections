@@ -82,6 +82,13 @@ const bt = meta?.backtest ?? null;
 const timetablePath = path.join(process.cwd(), "data/contests/local-byelection-timetables.json");
 const timetables = existsSync(timetablePath) ? JSON.parse(readFileSync(timetablePath, "utf8")) : null;
 const timetableEntry = timetables?.timetables?.[c.ballot_paper_id] ?? null;
+// The nightly generator carries the timetable on the contest itself; the
+// sidecar only covers contest files generated before it did.
+const voteTimetable: Record<string, string | null> | null = c.timetable ?? timetableEntry?.timetable ?? null;
+const voteTimetableSource: string | null = c.timetable
+  ? `https://elections.democracyclub.org.uk/api/elections/${c.ballot_paper_id}/`
+  : timetableEntry?.source ?? null;
+const voteTimetableRead: string | null = c.timetable ? d.generated_at : timetables?.fetched_at ?? null;
 
 // Who has won here: every result held for this ward, plus this contest.
 const wardHistory = (() => {
@@ -251,7 +258,7 @@ const breadcrumbs: Crumb[] = [
 
   <nav class="detail-nav" aria-label="On this page">
     {declared && <a href="#result">Result</a>}
-    {!declared && pollStillToCome && timetableEntry?.timetable && <a href="#your-vote">Your vote</a>}
+    {!declared && pollStillToCome && voteTimetable && <a href="#your-vote">Your vote</a>}
     <a href="#candidates">Candidates{result?.declared ? " and votes" : ""}</a>
     {!declared && forecast && <a href="#projection">Projection</a>}
     {wardHistory.length > 0 && <a href="#history">History</a>}
@@ -294,18 +301,18 @@ const breadcrumbs: Crumb[] = [
     </section>
   )}
 
-  {!declared && pollStillToCome && timetableEntry?.timetable && (
+  {!declared && pollStillToCome && voteTimetable && (
     <VoteTracker
       input={{
         pollingDay: c.polling_day,
         territory: c.territory,
         councilName: c.council_name,
         wardName: c.ward_name,
-        requiresVoterId: timetableEntry.requires_voter_id,
-        timetable: timetableEntry.timetable,
+        requiresVoterId: c.requires_voter_id ?? timetableEntry?.requires_voter_id ?? null,
+        timetable: voteTimetable,
       }}
-      fetchedAt={timetables.fetched_at}
-      sourceUrl={timetableEntry.source}
+      fetchedAt={voteTimetableRead}
+      sourceUrl={voteTimetableSource}
       calendarBase={`/by-elections/local/${d.slug}/`}
     />
   )}
