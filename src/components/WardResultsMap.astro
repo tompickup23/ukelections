@@ -1,0 +1,184 @@
+---
+/**
+ * WardResultsMap.astro. A council's wards coloured by who topped the poll, with
+ * opacity showing how close each result was. PROTOTYPE.
+ *
+ * - True shapes kept. More commanding is more opaque; never the reverse
+ *   (MacEachren et al. 2012; Kinkeldey et al. 2014).
+ * - Three classes only, with a floor well above zero so no ward vanishes.
+ * - The closest class carries a hatch as well, so it does not rely on colour.
+ * - These are declared results, so the party colour is never suppressed: a
+ *   close result still has a winner.
+ * - Drawn at build time; every ward is an ordinary link. No script.
+ * - Drawn only where the ward boundaries on file match the wards that voted.
+ */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { geoMercator, geoPath } from "d3-geo";
+import { rewindFeatures } from "../lib/geoRewind";
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+import { CLEAR_UNDER, CLOSE_UNDER, wardLead, type Closeness, type WardLead } from "../lib/wardMargins";
+
+interface Props {
+  councilName: string;
+  councilSlug: string;
+  wards: any[];
+  resultsBy: Record<string, any>;
+}
+const { councilName, councilSlug, wards, resultsBy } = Astro.props;
+
+// The raw boundary, not the simplified one: this is drawn at build time and
+// ships no script, so the extra detail costs one parse per build and nothing
+// in the browser. The simplified file takes small wards down to a few corners.
+let boundaryCache: any[] | null = (globalThis as any).__uke_wd25_raw ?? null;
+if (!boundaryCache) {
+  const raw = JSON.parse(readFileSync(resolve(process.cwd(), "data/geography/wd25-bsc-raw.geojson"), "utf8"));
+  boundaryCache = rewindFeatures(raw.features);
+  (globalThis as any).__uke_wd25_raw = boundaryCache;
+}
+
+interface Row { ward: any; lead: WardLead }
+const rows: Row[] = wards
+  .map((ward) => ({ ward, lead: wardLead(resultsBy[ward.ballot_paper_id]?.candidates) }))
+  .filter((r): r is Row => r.lead !== null);
+const byCode = new Map(rows.filter((r) => r.ward.gss_code).map((r) => [r.ward.gss_code as string, r]));
+
+const matched = boundaryCache.filter((f) => byCode.has(f.properties.WD25CD));
+// A map with wards missing would mislead, so it needs nearly all of them.
+const drawable = rows.length >= 3 && matched.length >= Math.ceil(rows.length * 0.9);
+const ladCode = matched[0]?.properties?.LAD25CD;
+const features = drawable ? boundaryCache.filter((f) => f.properties.LAD25CD === ladCode) : [];
+
+// Fit to the width, then let the height follow the council's own shape, so a
+// tall borough is not shrunk to leave empty margins on a phone.
+const W = 640, PAD = 4, MAX_H = 760;
+const collection = { type: "FeatureCollection", features } as any;
+let projection = drawable ? geoMercator().fitWidth(W - PAD * 2, collection) : null;
+let H = 480;
+if (projection) {
+  const b = geoPath(projection).bounds(collection);
+  const h = b[1][1] - b[0][1];
+  if (h > MAX_H - PAD * 2) {
+    projection = geoMercator().fitExtent([[PAD, PAD], [W - PAD, MAX_H - PAD]], collection);
+    H = MAX_H;
+  } else {
+    projection = geoMercator().fitExtent([[PAD, PAD], [W - PAD, h + PAD]], collection);
+    H = Math.ceil(h + PAD * 2);
+  }
+}
+const path = projection ? geoPath(projection).digits(1) : null;
+
+const OPACITY: Record<Closeness, number> = { close: 0.4, clear: 0.7, commanding: 1 };
+const LABEL: Record<Closeness, string> = {
+  close: `Under ${CLOSE_UNDER} points`,
+  clear: `${CLOSE_UNDER} to ${CLEAR_UNDER} points`,
+  commanding: `${CLEAR_UNDER} points or more`,
+};
+const pts = (x: number | null) => (x === null ? "" : `${x.toFixed(1)} points`);
+const wardHref = (ward: any) => `/seats/${councilSlug}/${ward.ward_slug}/`;
+
+const closeCount = rows.filter((r) => r.lead.closeness === "close").length;
+const closest = [...rows].filter((r) => r.lead.leadPts !== null).sort((a, b) => a.lead.leadPts! - b.lead.leadPts!).slice(0, 5);
+const notVoting = features.length - matched.length;
+const sentence = closeCount === 0
+  ? `No ward in ${councilName} was won by under ${CLOSE_UNDER} points on 7 May 2026.`
+  : `${closeCount} of the ${rows.length} wards that voted in ${councilName} on 7 May 2026 ${closeCount === 1 ? "was" : "were"} won by under ${CLOSE_UNDER} points.`;
+const hatchId = `wrm-hatch-${councilSlug}`;
+---
+{rows.length >= 3 && (
+  <div class="wrm">
+    <p class="wrm-sentence">{sentence}</p>
+
+    {drawable && path && (
+      <>
+        <ul class="wrm-legend" aria-label="How to read the map">
+          {(["commanding", "clear", "close"] as Closeness[]).map((c) => (
+            <li>
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                <rect width="18" height="18" rx="3" class="wrm-key" fill-opacity={OPACITY[c]} />
+                {c === "close" && <rect width="18" height="18" rx="3" fill={`url(#${hatchId})`} />}
+              </svg>
+              {LABEL[c]}
+            </li>
+          ))}
+          {notVoting > 0 && (
+            <li>
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="1" width="16" height="16" rx="3" class="wrm-none" /></svg>
+              No election this time
+            </li>
+          )}
+        </ul>
+        <p class="wrm-key-note">Colour is the party that topped the poll. Fainter means closer.</p>
+
+        <svg class="wrm-map" viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`Map of ${councilName} wards. ${sentence}`}>
+          <defs>
+            <pattern id={hatchId} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" class="wrm-hatch" />
+            </pattern>
+          </defs>
+          {features.map((f) => {
+            const row = byCode.get(f.properties.WD25CD);
+            const d = path(f as any) || "";
+            if (!row) {
+              return <path d={d} class="wrm-none"><title>{f.properties.WD25NM}: no election on 7 May 2026</title></path>;
+            }
+            const { lead, ward } = row;
+            const text = `${ward.ward_name}: ${shortPartyLabel(lead.topParty)} topped the poll${lead.leadPts !== null ? `, ${pts(lead.leadPts)} ahead of ${shortPartyLabel(lead.secondParty!)}` : ""}`;
+            return (
+              <a href={wardHref(ward)} aria-label={text}>
+                <title>{text}</title>
+                <path d={d} class="wrm-ward" fill={partyColour(lead.topParty)} fill-opacity={OPACITY[lead.closeness]} />
+                {lead.closeness === "close" && <path d={d} class="wrm-over" fill={`url(#${hatchId})`} />}
+              </a>
+            );
+          })}
+        </svg>
+      </>
+    )}
+    {!drawable && (
+      <p class="wrm-key-note">No map is drawn: the ward boundaries on file do not match the wards that voted here, usually because the wards were redrawn for this election.</p>
+    )}
+
+    {closest.length > 0 && (
+      <>
+        <h3 class="wrm-sub">The closest results</h3>
+        <ol class="wrm-list">
+          {closest.map(({ ward, lead }) => (
+            <li>
+              <a href={wardHref(ward)}>{ward.ward_name}</a>
+              <span class="wrm-party"><span class="wrm-dot" style={`--party:${partyColour(lead.topParty)}`} aria-hidden="true"></span>{shortPartyLabel(lead.topParty)}</span>
+              <span class="wrm-lead">{pts(lead.leadPts)} ahead of {shortPartyLabel(lead.secondParty!)}</span>
+            </li>
+          ))}
+        </ol>
+      </>
+    )}
+    <p class="wrm-key-note">
+      The lead is the gap between each party's best-placed candidate, as a share of those candidates' votes, so wards with one seat and with several sit on one scale.
+      Results: the declared 7 May 2026 counts on each ward page.
+    </p>
+  </div>
+)}
+
+<style>
+  .wrm-sentence { font-size: var(--text-h3); line-height: 1.35; margin: var(--space-sm) 0 var(--space-md); }
+  .wrm-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); font-size: var(--text-small); }
+  .wrm-legend li { display: inline-flex; align-items: center; gap: var(--space-xs); }
+  .wrm-key { fill: var(--ink); }
+  .wrm-hatch { stroke: var(--ink); stroke-width: 1.5; }
+  .wrm-none { fill: var(--surface-muted); stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+  .wrm-key-note { font-size: var(--text-small); color: var(--ink-soft); margin: var(--space-xs) 0 var(--space-sm); }
+  .wrm-map { display: block; width: 100%; height: auto; max-height: 70vh; margin: var(--space-sm) 0; }
+  .wrm-ward { stroke: var(--bg); stroke-width: 1.5; stroke-linejoin: round; }
+  .wrm-over { pointer-events: none; }
+  .wrm-map a:hover .wrm-ward, .wrm-map a:focus-visible .wrm-ward { stroke: var(--ink); stroke-width: 2.5; }
+  .wrm-map a:focus-visible { outline: none; }
+  .wrm-sub { font-size: var(--text-eyebrow); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin: var(--space-lg) 0 var(--space-xs); }
+  .wrm-list { list-style: none; margin: 0 0 var(--space-sm); padding: 0; border-top: 1px solid var(--border); }
+  .wrm-list li { display: grid; grid-template-columns: 1fr auto; column-gap: var(--space-sm); padding: var(--space-sm) 0; border-bottom: 1px solid var(--border); }
+  .wrm-list a { font-weight: 700; }
+  .wrm-party { display: inline-flex; align-items: center; gap: var(--space-2xs); font-size: var(--text-small); }
+  .wrm-dot { width: 0.75em; height: 0.75em; border-radius: 50%; background: var(--party); }
+  .wrm-lead { grid-column: 1 / -1; font-size: var(--text-small); color: var(--ink-soft); }
+</style>
