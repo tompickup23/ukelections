@@ -2,7 +2,7 @@
  "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not. Rows polled on 27 August 2026 were entered by hand from the returning officers' declarations and press reports of them, because Democracy Club had recorded winners but no vote counts by 28 August. Each carries its own verification note. DC rows still win on conflict.",
  "source": "https://candidates.democracyclub.org.uk/api/next/ballots/",
  "review_status": "mixed: auto_ingested_dc plus hand verified rows, see each row",
- "generated_at": "2026-10-30T09:02:12.162Z",
+ "generated_at": "2026-11-13T09:01:14.452Z",
  "results": [
   {
    "ballot_paper_id": "local.cornwall.newquay-porth-tretherras.by.2026-04-23",
@@ -7854,6 +7854,66 @@
    "accessed_at": "2026-11-02"
   },
   {
+   "ballot_paper_id": "local.dudley.st-jamess.by.2026-10-29",
+   "election_date": "2026-10-29",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "dudley",
+   "ward_slug": "st-jamess",
+   "is_by_election": true,
+   "turnout_votes": 2304,
+   "turnout_pct": 0.2245,
+   "spoilt_ballots": 3,
+   "electorate": null,
+   "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Caroline Ann Reid",
+     "party_name": "Labour Party",
+     "votes": 874,
+     "elected": true,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Chris Chivers",
+     "party_name": "Reform UK",
+     "votes": 872,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Sam Firmstone",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 317,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Tristian Owens",
+     "party_name": "Restore Britain",
+     "votes": 159,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Katherine Alice Poole",
+     "party_name": "Green Party",
+     "votes": 79,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    }
+   ],
+   "reviewed_at": "2026-11-02",
+   "verification_note": "Dudley Council declared result, accessed 2 November 2026. Candidate counts sum to 2,301 valid votes; three spoiled papers give 2,304 counted papers. The council reports 22.45% turnout. It does not publish an electorate on this page, so that field is null.",
+   "accessed_at": "2026-11-02"
+  },
+  {
    "ballot_paper_id": "local.halton.beechwood-heath.by.2026-10-29",
    "election_date": "2026-10-29",
    "year": 2026,
@@ -8042,64 +8102,381 @@
    "accessed_at": "2026-11-02"
   },
   {
-   "ballot_paper_id": "local.dudley.st-jamess.by.2026-10-29",
-   "election_date": "2026-10-29",
+   "ballot_paper_id": "local.bournemouth-christchurch-and-poole.penn-hill.by.2026-11-05",
+   "election_date": "2026-11-05",
    "year": 2026,
    "tier": "local",
-   "council_slug": "dudley",
-   "ward_slug": "st-jamess",
+   "council_slug": "bournemouth-christchurch-and-poole",
+   "ward_slug": "penn-hill",
    "is_by_election": true,
-   "turnout_votes": 2304,
-   "turnout_pct": 0.2245,
-   "spoilt_ballots": 3,
-   "electorate": null,
-   "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-   "review_status": "hand_verified_declaration",
+   "turnout_votes": 2937,
+   "turnout_pct": 0.3381,
+   "spoilt_ballots": 6,
+   "electorate": 8686,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.bournemouth-christchurch-and-poole.penn-hill.by.2026-11-05/",
+   "review_status": "auto_ingested_dc",
    "candidates": [
     {
-     "name": "Caroline Ann Reid",
-     "party_name": "Labour Party",
-     "votes": 874,
-     "elected": true,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "name": "Amanda Jellicoe",
+     "party_name": "Liberal Democrats",
+     "votes": 1278,
+     "elected": true
     },
     {
-     "name": "Chris Chivers",
-     "party_name": "Reform UK",
-     "votes": 872,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
-    },
-    {
-     "name": "Sam Firmstone",
+     "name": "Ashley Fraser",
      "party_name": "Conservative and Unionist Party",
-     "votes": 317,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "votes": 764,
+     "elected": false
     },
     {
-     "name": "Tristian Owens",
+     "name": "Xena Mary Anne Dion",
+     "party_name": "Reform UK",
+     "votes": 521,
+     "elected": false
+    },
+    {
+     "name": "Ralph Lynch",
+     "party_name": "Labour Party",
+     "votes": 135,
+     "elected": false
+    },
+    {
+     "name": "Max Walker",
      "party_name": "Restore Britain",
-     "votes": 159,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "votes": 106,
+     "elected": false
     },
     {
-     "name": "Katherine Alice Poole",
+     "name": "Ace Cruz",
      "party_name": "Green Party",
-     "votes": 79,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "votes": 65,
+     "elected": false
+    },
+    {
+     "name": "Susan Jane Stockwell",
+     "party_name": "Independent",
+     "votes": 55,
+     "elected": false
+    },
+    {
+     "name": "Louise Christine Fielden",
+     "party_name": "Independent",
+     "votes": 7,
+     "elected": false
     }
-   ],
-   "reviewed_at": "2026-11-02",
-   "verification_note": "Dudley Council declared result, accessed 2 November 2026. Candidate counts sum to 2,301 valid votes; three spoiled papers give 2,304 counted papers. The council reports 22.45% turnout. It does not publish an electorate on this page, so that field is null.",
-   "accessed_at": "2026-11-02"
+   ]
+  },
+  {
+   "ballot_paper_id": "local.hyndburn.huncoat.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "hyndburn",
+   "ward_slug": "huncoat",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": null,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.hyndburn.huncoat.by.2026-11-12/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Jackie Rawstron",
+     "party_name": "Labour Party",
+     "votes": 318,
+     "elected": true
+    },
+    {
+     "name": "Anna Stanislawska",
+     "party_name": "Reform UK",
+     "votes": 275,
+     "elected": false
+    },
+    {
+     "name": "Mark Conlon",
+     "party_name": "Restore Britain",
+     "votes": 257,
+     "elected": false
+    },
+    {
+     "name": "Shahed Mahmood",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 74,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.north-east-lincolnshire.croft-baker.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "north-east-lincolnshire",
+   "ward_slug": "croft-baker",
+   "is_by_election": true,
+   "turnout_votes": 1904,
+   "turnout_pct": 0.2279,
+   "spoilt_ballots": 2,
+   "electorate": 8355,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.north-east-lincolnshire.croft-baker.by.2026-11-12/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Melissa Jade Grice",
+     "party_name": "Reform UK",
+     "votes": 797,
+     "elected": true
+    },
+    {
+     "name": "Janet Elizabeth Mager",
+     "party_name": "Labour Party",
+     "votes": 690,
+     "elected": false
+    },
+    {
+     "name": "Matthew Branson",
+     "party_name": "Restore Britain",
+     "votes": 150,
+     "elected": false
+    },
+    {
+     "name": "Stephen William Harness",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 139,
+     "elected": false
+    },
+    {
+     "name": "Leon Brown",
+     "party_name": "Green Party",
+     "votes": 91,
+     "elected": false
+    },
+    {
+     "name": "George Georgiou",
+     "party_name": "Independent",
+     "votes": 35,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.oldham.failsworth-west.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "oldham",
+   "ward_slug": "failsworth-west",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": 0.19699999999999998,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.oldham.failsworth-west.by.2026-11-12/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Chris Baddeley",
+     "party_name": "Reform UK",
+     "votes": 642,
+     "elected": true
+    },
+    {
+     "name": "Pete Davis",
+     "party_name": "Labour and Co-operative Party",
+     "votes": 600,
+     "elected": false
+    },
+    {
+     "name": "Rob Gunn",
+     "party_name": "Restore Britain",
+     "votes": 175,
+     "elected": false
+    },
+    {
+     "name": "Andrew Kevin Jones",
+     "party_name": "Green Party",
+     "votes": 60,
+     "elected": false
+    },
+    {
+     "name": "Stephen Eric Davenport",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 51,
+     "elected": false
+    },
+    {
+     "name": "Lynne Christine Thompson",
+     "party_name": "Liberal Democrats",
+     "votes": 19,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.staffordshire-moorlands.cheddleton.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "staffordshire-moorlands",
+   "ward_slug": "cheddleton",
+   "is_by_election": true,
+   "turnout_votes": 1246,
+   "turnout_pct": 0.2918,
+   "spoilt_ballots": 1,
+   "electorate": 4270,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.staffordshire-moorlands.cheddleton.by.2026-11-12/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Su Beardmore",
+     "party_name": "Reform UK",
+     "votes": 471,
+     "elected": true
+    },
+    {
+     "name": "Rob Bateman",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 327,
+     "elected": false
+    },
+    {
+     "name": "Martin David Sadler",
+     "party_name": "Labour Party",
+     "votes": 213,
+     "elected": false
+    },
+    {
+     "name": "Sue Rogers",
+     "party_name": "Independent",
+     "votes": 156,
+     "elected": false
+    },
+    {
+     "name": "Karen Pickering",
+     "party_name": "Restore Britain",
+     "votes": 55,
+     "elected": false
+    },
+    {
+     "name": "Matthew Frith",
+     "party_name": "Green Party",
+     "votes": 23,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.suffolk.bosmere.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "suffolk",
+   "ward_slug": "bosmere",
+   "is_by_election": true,
+   "turnout_votes": 2301,
+   "turnout_pct": 0.2733,
+   "spoilt_ballots": 2,
+   "electorate": 8418,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.suffolk.bosmere.by.2026-11-12/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "Kay Maxine Nadjina Oakes",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 762,
+     "elected": true
+    },
+    {
+     "name": "Adria Lee Pittock",
+     "party_name": "Green Party",
+     "votes": 739,
+     "elected": false
+    },
+    {
+     "name": "Patrick Alexander Wegener",
+     "party_name": "Reform UK",
+     "votes": 400,
+     "elected": false
+    },
+    {
+     "name": "Nigel Lindsay Mills",
+     "party_name": "Restore Britain",
+     "votes": 182,
+     "elected": false
+    },
+    {
+     "name": "Attila William Borzak",
+     "party_name": "Liberal Democrats",
+     "votes": 109,
+     "elected": false
+    },
+    {
+     "name": "Saffeen Yamulki",
+     "party_name": "Labour Party",
+     "votes": 106,
+     "elected": false
+    }
+   ]
+  },
+  {
+   "ballot_paper_id": "local.wigan.hindley-green.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "wigan",
+   "ward_slug": "hindley-green",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": 0.2611,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://candidates.democracyclub.org.uk/elections/local.wigan.hindley-green.by.2026-11-12/",
+   "review_status": "auto_ingested_dc",
+   "candidates": [
+    {
+     "name": "John Melville Vickers",
+     "party_name": "Labour Party",
+     "votes": 1201,
+     "elected": true
+    },
+    {
+     "name": "Bonnie Clarke",
+     "party_name": "Reform UK",
+     "votes": 887,
+     "elected": false
+    },
+    {
+     "name": "Mark Prescott",
+     "party_name": "Independent",
+     "votes": 124,
+     "elected": false
+    },
+    {
+     "name": "Rebecca Lee Shepherd",
+     "party_name": "Restore Britain",
+     "votes": 107,
+     "elected": false
+    },
+    {
+     "name": "Daniel James Jackson",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 56,
+     "elected": false
+    },
+    {
+     "name": "Nat Smith",
+     "party_name": "Green Party",
+     "votes": 42,
+     "elected": false
+    },
+    {
+     "name": "David John Burley",
+     "party_name": "Liberal Democrats",
+     "votes": 9,
+     "elected": false
+    }
+   ]
   }
  ],
  "reviewed_at": "2026-09-28"
