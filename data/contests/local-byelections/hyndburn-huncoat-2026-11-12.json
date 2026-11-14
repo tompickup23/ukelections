@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.914Z",
+  "generated_at": "2026-11-14T03:52:16.236Z",
   "slug": "hyndburn-huncoat-2026-11-12",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.hyndburn.huncoat.by.2026-11-12",
     "polling_day": "2026-11-12",
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-16",
     "registration_deadline": "2026-10-27",
-    "postal_vote_deadline": "2026-10-28"
+    "postal_vote_deadline": "2026-10-28",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-08",
+      "close_of_nominations": "2026-10-16",
+      "sopn_publish_deadline": "2026-10-19",
+      "registration_deadline": "2026-10-27",
+      "postal_vote_application_deadline": "2026-10-28",
+      "proxy_vote_application_deadline": "2026-11-04",
+      "vac_application_deadline": "2026-11-04",
+      "replacement_pack_start_date": "2026-11-06"
+    }
   },
   "field": {
     "candidate_count": 4,
@@ -38,38 +48,58 @@
     ],
     "candidates": [
       {
-        "name": "Mark Conlon",
-        "party_name": "Restore Britain",
-        "party": "Restore Britain",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Shahed Mahmood",
-        "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
-      },
-      {
         "name": "Jackie Rawstron",
         "party_name": "Labour Party",
+        "votes": 318,
+        "elected": true,
         "party": "Labour",
-        "votes": null,
-        "elected": null
+        "source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+        "accessed_at": "2026-11-14"
       },
       {
         "name": "Anna Stanislawska",
         "party_name": "Reform UK",
+        "votes": 275,
+        "elected": false,
         "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+        "accessed_at": "2026-11-14"
+      },
+      {
+        "name": "Mark Conlon",
+        "party_name": "Restore Britain",
+        "votes": 257,
+        "elected": false,
+        "party": "Restore Britain",
+        "source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+        "accessed_at": "2026-11-14"
+      },
+      {
+        "name": "Shahed Mahmood",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 74,
+        "elected": false,
+        "party": "Conservative",
+        "source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+        "accessed_at": "2026-11-14"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Labour",
+    "member": "Dave Parkins",
+    "note": "Labour councillor whose death caused the vacancy. Reviewed 14 November 2026.",
+    "sources": [
+      {
+        "label": "ALDC, Hyndburn, Huncoat, 12 November 2026",
+        "url": "https://www.aldc.org/2026/11/hyndburn-huncoat-12-november-2026/"
+      },
+      {
+        "label": "PollCheck, Hyndburn Huncoat by-election",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-11-12/hyndburn-huncoat/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05005212",
@@ -146,7 +176,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 1,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.4915373765867419,
       "Labour": 0.2390691114245416,
@@ -161,40 +191,28 @@
     },
     "candidates": [
       {
-        "person_id": 125628,
         "name": "Anthony David Mitchell",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 697,
-        "elected": true
+        "votes": 697
       },
       {
-        "person_id": 131920,
         "name": "Nick King",
         "party_name": "Labour Party",
-        "party_ec_id": "PP53",
-        "votes": 339,
-        "elected": false
+        "votes": 339
       },
       {
-        "person_id": 131919,
         "name": "Jodie Green",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 234,
-        "elected": false
+        "votes": 234
       },
       {
-        "person_id": 131929,
         "name": "Andrew Libberton",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 148,
-        "elected": false
+        "votes": 148
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://www.hyndburnbc.gov.uk/download/election-results/",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.hyndburn.huncoat.2026-05-07/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -203,7 +221,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": 1,
+      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.4915373765867419,
@@ -218,52 +236,52 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://www.hyndburnbc.gov.uk/download/election-results/"
+      "source": "https://candidates.democracyclub.org.uk/elections/local.hyndburn.huncoat.2026-05-07/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 59,
+      "contests_used": 62,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.2425494704815887,
+        "Reform UK": -0.23943130007725344,
         "Labour": 0.2383025890301731,
-        "Conservative": -0.2942521094767043,
-        "Liberal Democrats": -0.24783735763989279,
-        "Green Party": -0.29959804969399206,
+        "Conservative": -0.27674599290089935,
+        "Liberal Democrats": -0.262090201515061,
+        "Green Party": -0.3395933676841483,
         "Independent": -0.11652273000901092
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.8292762904461737,
+        "Reform UK": 0.8313278951271439,
         "Labour": 1.189098578346305,
-        "Conservative": 0.7958034628208602,
-        "Liberal Democrats": 0.8258056693376834,
-        "Green Party": 0.7924010292287512,
+        "Conservative": 0.8070220590664164,
+        "Liberal Democrats": 0.8165046117781702,
+        "Green Party": 0.76729346701792,
         "Independent": 0.9151749196392648
       },
       "entry_shares": {
         "Green Party": 0.13442113442113443,
-        "Restore Britain": 0.06471604688201188,
+        "Restore Britain": 0.06521137844723901,
         "Independent": 0.0888787452835334
       },
       "entry_counts": {
         "Reform UK": 0,
-        "Labour": 1,
-        "Conservative": 2,
+        "Labour": 2,
+        "Conservative": 3,
         "Liberal Democrats": 3,
         "Green Party": 5,
         "SNP": 0,
         "Plaid Cymru": 0,
-        "Restore Britain": 6,
+        "Restore Britain": 8,
         "Independent": 10,
         "Other": 1
       },
       "party_counts": {
-        "Reform UK": 58,
-        "Labour": 52,
-        "Conservative": 52,
-        "Liberal Democrats": 39,
-        "Green Party": 49,
+        "Reform UK": 61,
+        "Labour": 54,
+        "Conservative": 54,
+        "Liberal Democrats": 41,
+        "Green Party": 50,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
@@ -272,53 +290,53 @@
       }
     },
     "central": {
-      "Reform UK": 0.500966967707561,
-      "Labour": 0.33108041415522355,
-      "Conservative": 0.09278936534251385,
+      "Reform UK": 0.5003696529106286,
+      "Labour": 0.3301002032500484,
+      "Conservative": 0.09401583217795284,
       "Liberal Democrats": 0,
       "Green Party": 0,
       "SNP": 0,
       "Plaid Cymru": 0,
-      "Restore Britain": 0.07516325279470165,
+      "Restore Britain": 0.07551431166137017,
       "Independent": 0,
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.726,
-      "Labour": 0.24825,
-      "Conservative": 0.006,
-      "Restore Britain": 0.01975
+      "Reform UK": 0.72475,
+      "Labour": 0.247,
+      "Conservative": 0.00775,
+      "Restore Britain": 0.0205
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.3303517350014133,
-        "p50": 0.4655587516446672,
-        "p90": 0.6301752498145606
+        "p10": 0.3273632019979962,
+        "p50": 0.464088711619421,
+        "p90": 0.6281436347232658
       },
       "Labour": {
-        "p10": 0.14404192132304688,
-        "p50": 0.31775133550961276,
-        "p90": 0.48191115769588144
+        "p10": 0.1422395505347039,
+        "p50": 0.31617045561210233,
+        "p90": 0.48069337161324005
       },
       "Conservative": {
-        "p10": 0.03195853171814785,
-        "p50": 0.08797019081022646,
-        "p90": 0.2077573777599749
+        "p10": 0.03077881991727996,
+        "p50": 0.08900045396896161,
+        "p90": 0.2166107415126577
       },
       "Restore Britain": {
-        "p10": 0.016362506814072735,
-        "p50": 0.07531726048250588,
-        "p90": 0.23359602693384393
+        "p10": 0.016390606091925757,
+        "p50": 0.07541439340447434,
+        "p90": 0.2340151299533803
       }
     },
     "winner": "Reform UK",
     "runner_up": "Labour",
-    "margin_pp": 16.988655355233746,
-    "leader_probability": 0.726,
+    "margin_pp": 17.02694496605802,
+    "leader_probability": 0.72475,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
-      "Priced from an entry prior, not from this ward: Restore Britain (median of 6). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Restore Britain (median of 8). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [],
     "entry_priced_parties": [
@@ -327,13 +345,53 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.2976190476190476,
+      "Labour": 0.34415584415584416,
+      "Conservative": 0.08008658008658008,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.27813852813852813,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Labour",
+    "winner_candidate": "Jackie Rawstron",
+    "winner_party_name": "Labour Party",
+    "winner_votes": 318,
+    "runner_up_party": "Reform UK",
+    "majority_votes": 43,
+    "total_votes": 924,
+    "source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+    "outcome": "Labour hold",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-10-21",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Reform UK",
+      "call_correct": false,
+      "mae_pp": 10.814718614718615
+    },
+    "checked_at": "2026-11-14",
+    "accessed_at": "2026-11-14",
+    "review_status": "hand_verified_declaration",
+    "note": "Hyndburn Borough Council declaration of result, accessed 14 November 2026. Candidate counts sum to 924 valid votes; three rejected papers give 927 ballot papers issued. Electorate 3,538 and turnout 26.20% are printed on the declaration."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+      "accessed_at": "2026-11-14"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.hyndburn.huncoat.by.2026-11-12/"
@@ -342,5 +400,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.hyndburn.huncoat.by.2026-11-12/"
     }
-  ]
+  ],
+  "results_updated_at": "2026-11-14"
 }

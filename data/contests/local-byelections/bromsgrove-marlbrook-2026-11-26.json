@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.090Z",
+  "generated_at": "2026-11-14T03:52:16.403Z",
   "slug": "bromsgrove-marlbrook-2026-11-26",
   "status": "upcoming",
   "contest": {
@@ -18,20 +18,72 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2015-05-22",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "RESIGNATION",
+    "vacancy_reason": "the sitting councillor resigned",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-30",
     "registration_deadline": "2026-11-10",
-    "postal_vote_deadline": "2026-11-11"
+    "postal_vote_deadline": "2026-11-11",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-22",
+      "close_of_nominations": "2026-10-30",
+      "sopn_publish_deadline": "2026-11-02",
+      "registration_deadline": "2026-11-10",
+      "postal_vote_application_deadline": "2026-11-11",
+      "proxy_vote_application_deadline": "2026-11-18",
+      "vac_application_deadline": "2026-11-18",
+      "replacement_pack_start_date": "2026-11-20"
+    }
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 5,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.bromsgrove.marlbrook.by.2026-11-26/sopn/2026-10-30T16%3A52%3A25.415495%2B00%3A00/Marlbrook.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Lockie Carbery",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Geraint Wynn Lewis",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Cathy Perruzza",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Nik Price",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Kim Angela Routley",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -151,10 +203,152 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.bromsgrove.marlbrook.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.07291666666666667,
+        "Labour": 0.25462962962962965,
+        "Conservative": 0.5081018518518519,
+        "Liberal Democrats": 0,
+        "Green Party": 0.16435185185185186,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.bromsgrove.marlbrook.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment",
+      "stratum_used": true,
+      "contests_used": 91,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9723130728025009,
+        "Conservative": -0.601595798820019,
+        "Liberal Democrats": -0.4654881092459946,
+        "Green Party": -0.18319837470854572,
+        "Plaid Cymru": 0.1054966908378934,
+        "Independent": -1.1741993075013362
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4478200203097242,
+        "Conservative": 0.6177523584630683,
+        "Liberal Democrats": 0.692236214976241,
+        "Green Party": 0.8689686649709051,
+        "Plaid Cymru": 1.0811885126334744,
+        "Independent": 0.37359945708973985
+      },
+      "entry_shares": {
+        "Reform UK": 0.27249755929477976,
+        "Labour": 0.04702627939142462,
+        "Conservative": 0.04861878453038674,
+        "Liberal Democrats": 0.07448979591836735,
+        "Green Party": 0.05570669320902737,
+        "Plaid Cymru": 0.15343627194875406,
+        "Restore Britain": 0.06962509563886764,
+        "Independent": 0.04951511016968317
+      },
+      "entry_counts": {
+        "Reform UK": 88,
+        "Labour": 5,
+        "Conservative": 7,
+        "Liberal Democrats": 13,
+        "Green Party": 40,
+        "SNP": 0,
+        "Plaid Cymru": 6,
+        "Restore Britain": 7,
+        "Independent": 8,
+        "Other": 3
+      },
+      "party_counts": {
+        "Reform UK": 3,
+        "Labour": 68,
+        "Conservative": 80,
+        "Liberal Democrats": 46,
+        "Green Party": 30,
+        "SNP": 0,
+        "Plaid Cymru": 16,
+        "Restore Britain": 0,
+        "Independent": 14,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.09544558967035308,
+      "Labour": 0.14976982811901346,
+      "Conservative": 0.4730934964127329,
+      "Liberal Democrats": 0.09750476565741026,
+      "Green Party": 0.18418632014049022,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.06,
+      "Labour": 0.07425,
+      "Conservative": 0.66625,
+      "Liberal Democrats": 0.04725,
+      "Green Party": 0.15225
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.020195193359487367,
+        "p50": 0.08975740769300658,
+        "p90": 0.2698778467668749
+      },
+      "Labour": {
+        "p10": 0.04699017569963774,
+        "p50": 0.13478088524386872,
+        "p90": 0.3070783898009364
+      },
+      "Conservative": {
+        "p10": 0.18911227686666507,
+        "p50": 0.40704923165196716,
+        "p90": 0.6127864376271484
+      },
+      "Liberal Democrats": {
+        "p10": 0.02384405056922566,
+        "p50": 0.0899361738778083,
+        "p90": 0.2543309823100902
+      },
+      "Green Party": {
+        "p10": 0.048238053334207255,
+        "p50": 0.16960125796841322,
+        "p90": 0.38326462752749885
+      }
+    },
+    "winner": "Conservative",
+    "runner_up": "Green Party",
+    "margin_pp": 28.890717627224273,
+    "leader_probability": 0.66625,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Reform UK carried unswung: fewer than 5 comparable contests in the window.",
+      "Priced from an entry prior, not from this ward: Liberal Democrats (median of 13). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Liberal Democrats"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

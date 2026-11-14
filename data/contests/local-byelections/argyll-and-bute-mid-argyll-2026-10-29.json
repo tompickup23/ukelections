@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.819Z",
+  "generated_at": "2026-11-14T03:52:16.202Z",
   "slug": "argyll-and-bute-mid-argyll-2026-10-29",
   "status": "polls_closed",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": null,
     "nominations_close": "2026-09-28",
     "registration_deadline": "2026-10-13",
-    "postal_vote_deadline": "2026-10-14"
+    "postal_vote_deadline": "2026-10-14",
+    "timetable": {
+      "notice_of_election_deadline": "2026-09-21",
+      "close_of_nominations": "2026-09-28",
+      "sopn_publish_deadline": "2026-09-29",
+      "registration_deadline": "2026-10-13",
+      "postal_vote_application_deadline": "2026-10-14",
+      "proxy_vote_application_deadline": "2026-10-21",
+      "vac_application_deadline": null,
+      "replacement_pack_start_date": "2026-10-23"
+    }
   },
   "field": {
     "candidate_count": 7,
@@ -40,16 +50,6 @@
       "SNP"
     ],
     "candidates": [
-      {
-        "name": "Andy Buntin",
-        "party_name": "Scottish National Party (SNP)",
-        "party": "SNP",
-        "votes": null,
-        "elected": true,
-        "first_preference_votes": 820,
-        "source": "https://www.argyll-bute.gov.uk/sites/default/files/2026-11/DeclarationOfResultsReport_V0001_Ward-3---Mid-Argyll_29102026_235400.pdf",
-        "accessed_at": "2026-11-02"
-      },
       {
         "name": "George Love",
         "party_name": "Restore Britain",
@@ -109,12 +109,34 @@
         "first_preference_votes": 230,
         "source": "https://www.argyll-bute.gov.uk/sites/default/files/2026-11/DeclarationOfResultsReport_V0001_Ward-3---Mid-Argyll_29102026_235400.pdf",
         "accessed_at": "2026-11-02"
+      },
+      {
+        "name": "Andy Buntin",
+        "party_name": "Scottish National Party (SNP)",
+        "party": "SNP",
+        "votes": null,
+        "elected": true,
+        "first_preference_votes": 820,
+        "source": "https://www.argyll-bute.gov.uk/sites/default/files/2026-11/DeclarationOfResultsReport_V0001_Ward-3---Mid-Argyll_29102026_235400.pdf",
+        "accessed_at": "2026-11-02"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Independent",
+    "member": null,
+    "note": "Former holding party checked against two independent reports of the 29 October 2026 by-election (ALDC: SNP gain from Independent; Wikipedia's election box agrees); not inferred from the ward-wide vote. Reviewed 2 November 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/argyll-bute-ua-mid-argyll/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://en.wikipedia.org/wiki/Mid_Argyll_(ward)"
+      }
+    ],
+    "established": true
   },
   "ward_profile": null,
   "prior_result": {

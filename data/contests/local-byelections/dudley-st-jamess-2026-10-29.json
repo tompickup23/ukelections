@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.839Z",
+  "generated_at": "2026-11-14T03:52:16.210Z",
   "slug": "dudley-st-jamess-2026-10-29",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-02",
     "registration_deadline": "2026-10-13",
-    "postal_vote_deadline": "2026-10-14"
+    "postal_vote_deadline": "2026-10-14",
+    "timetable": {
+      "notice_of_election_deadline": "2026-09-24",
+      "close_of_nominations": "2026-10-02",
+      "sopn_publish_deadline": "2026-10-05",
+      "registration_deadline": "2026-10-13",
+      "postal_vote_application_deadline": "2026-10-14",
+      "proxy_vote_application_deadline": "2026-10-21",
+      "vac_application_deadline": "2026-10-21",
+      "replacement_pack_start_date": "2026-10-23"
+    }
   },
   "field": {
     "candidate_count": 5,
@@ -38,6 +48,15 @@
       "Restore Britain"
     ],
     "candidates": [
+      {
+        "name": "Caroline Ann Reid",
+        "party_name": "Labour Party",
+        "votes": 874,
+        "elected": true,
+        "party": "Labour",
+        "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+        "accessed_at": "2026-11-02"
+      },
       {
         "name": "Chris Chivers",
         "party_name": "Reform UK",
@@ -73,21 +92,24 @@
         "party": "Green Party",
         "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
         "accessed_at": "2026-11-02"
-      },
-      {
-        "name": "Caroline Ann Reid",
-        "party_name": "Labour Party",
-        "votes": 874,
-        "elected": true,
-        "party": "Labour",
-        "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-        "accessed_at": "2026-11-02"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Reform UK",
+    "member": null,
+    "note": "Former holding party checked against two independent reports of the 29 October 2026 by-election (ALDC: Labour gain from Reform UK; Wikipedia's election box agrees); not inferred from the ward-wide vote. Reviewed 2 November 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/dudley-mbc-st-james-29-october-2026-2/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://en.wikipedia.org/wiki/2026_Dudley_Metropolitan_Borough_Council_election"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05015922",
@@ -164,7 +186,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 1,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.48890221955608876,
       "Labour": 0.21805638872225555,
@@ -179,56 +201,38 @@
     },
     "candidates": [
       {
-        "person_id": 132371,
         "name": "Ivor John Lawrence Robinson",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 1630,
-        "elected": true
+        "votes": 1630
       },
       {
-        "person_id": 108839,
-        "name": "Caroline Reid",
+        "name": "Caroline Ann Reid",
         "party_name": "Labour Party",
-        "party_ec_id": "PP53",
-        "votes": 727,
-        "elected": false
+        "votes": 727
       },
       {
-        "person_id": 112499,
         "name": "Carole Blackmore",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 462,
-        "elected": false
+        "votes": 462
       },
       {
-        "person_id": 132370,
         "name": "Katherine Alice Poole",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 355,
-        "elected": false
+        "votes": 355
       },
       {
-        "person_id": 82157,
         "name": "Mollie Jo Priest",
         "party_name": "Liberal Democrats",
-        "party_ec_id": "PP90",
-        "votes": 130,
-        "elected": false
+        "votes": 130
       },
       {
-        "person_id": 112502,
         "name": "David Reynolds",
         "party_name": "Trade Unionist and Socialist Coalition",
-        "party_ec_id": "PP804",
-        "votes": 30,
-        "elected": false
+        "votes": 30
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://online.dudley.gov.uk/elections/local2026-live.asp",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.dudley.st-jamess.2026-05-07/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -237,7 +241,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": 1,
+      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.48890221955608876,
@@ -252,7 +256,7 @@
         "Other": 0.008998200359928014
       },
       "source_label": "Democracy Club",
-      "source": "https://online.dudley.gov.uk/elections/local2026-live.asp"
+      "source": "https://candidates.democracyclub.org.uk/elections/local.dudley.st-jamess.2026-05-07/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
@@ -367,7 +371,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,

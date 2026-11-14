@@ -7,16 +7,16 @@
     "mean_absolute_error_pp": "Mean over the parties in the published projection of |projected share minus actual share|, in percentage points."
   },
   "overall": {
-    "contests": 41,
-    "winners_called": 18,
-    "mean_absolute_error_pp": 8.85,
+    "contests": 48,
+    "winners_called": 22,
+    "mean_absolute_error_pp": 8.56,
     "named_favourite": {
-      "contests": 17,
-      "called": 6
+      "contests": 21,
+      "called": 8
     },
     "too_close_to_call": {
-      "contests": 24,
-      "called": 12
+      "contests": 27,
+      "called": 14
     }
   },
   "months": [
@@ -147,7 +147,7 @@
       "month": "2026-10",
       "contests": 21,
       "winners_called": 11,
-      "mean_absolute_error_pp": 7.36,
+      "mean_absolute_error_pp": 7.38,
       "named_favourite": {
         "contests": 10,
         "called": 5
@@ -225,6 +225,43 @@
           "date": "2026-10-29",
           "projected_winner": "Liberal Democrats",
           "actual_winner": "Reform UK",
+          "too_close_to_call": false
+        }
+      ]
+    },
+    {
+      "month": "2026-11",
+      "contests": 7,
+      "winners_called": 4,
+      "mean_absolute_error_pp": 6.86,
+      "named_favourite": {
+        "contests": 4,
+        "called": 2
+      },
+      "too_close_to_call": {
+        "contests": 3,
+        "called": 2
+      },
+      "misses": [
+        {
+          "slug": "hyndburn-huncoat-2026-11-12",
+          "date": "2026-11-12",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Labour",
+          "too_close_to_call": false
+        },
+        {
+          "slug": "suffolk-bosmere-2026-11-12",
+          "date": "2026-11-12",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "wigan-hindley-green-2026-11-12",
+          "date": "2026-11-12",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Labour",
           "too_close_to_call": false
         }
       ]
@@ -499,15 +536,7 @@
       }
     ]
   },
-  "pending_results": [
-    "bournemouth-christchurch-and-poole-penn-hill-2026-11-05",
-    "hyndburn-huncoat-2026-11-12",
-    "suffolk-bosmere-2026-11-12",
-    "north-east-lincolnshire-croft-baker-2026-11-12",
-    "oldham-failsworth-west-2026-11-12",
-    "wigan-hindley-green-2026-11-12",
-    "staffordshire-moorlands-cheddleton-2026-11-12"
-  ],
+  "pending_results": [],
   "contests": [
     {
       "slug": "dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27",
@@ -1018,8 +1047,8 @@
       "actual_winner": "Plaid Cymru",
       "called": true,
       "mae_pp": 4.4,
-      "result_status": "auto_ingested_dc",
-      "result_source": "https://candidates.democracyclub.org.uk/elections/local.carmarthenshire.saron.by.2026-10-22/"
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.carmarthenshire.gov.wales/media/uh0pdmch/decresult_saron_elecward_221026.pdf"
     },
     {
       "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
@@ -1066,8 +1095,8 @@
       "actual_winner": "Conservative",
       "called": false,
       "mae_pp": 8.14,
-      "result_status": "auto_ingested_dc",
-      "result_source": "https://candidates.democracyclub.org.uk/elections/local.south-kesteven.grantham-st-wulframs.by.2026-10-22/"
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.southkesteven.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result_Grantham%20St%20Wulfram%27s%20Ward.pdf"
     },
     {
       "slug": "wychavon-hartlebury-2026-10-22",
@@ -1082,8 +1111,8 @@
       "actual_winner": "Conservative",
       "called": true,
       "mae_pp": 6.18,
-      "result_status": "hand_verified_two_sources",
-      "result_source": "https://www.aldc.org/2026/10/wychavon-dc-hartlebury-22-october-2026-2/"
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.wychavon.gov.uk/component/fileman/?view=file&routed=1&itemless=1&name=Declaration%20of%20results%20Hartlebury%20ward.pdf&folder=Documents/Elections/elections/2026/current%20elections&container=fileman-files"
     },
     {
       "slug": "bassetlaw-worksop-east-2026-10-29",
@@ -1129,9 +1158,9 @@
       "too_close_to_call": false,
       "actual_winner": "Reform UK",
       "called": false,
-      "mae_pp": 11.38,
-      "result_status": "hand_verified_two_sources",
-      "result_source": "https://www.aldc.org/2026/10/halton-ua-beechwood-heath-29-october-2026/"
+      "mae_pp": 11.77,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.halton.gov.uk/sites/default/files/2026-10/Beechwood%20%26%20Heath%20Declaration%20of%20Result%20of%20Poll.pdf"
     },
     {
       "slug": "newark-and-sherwood-dover-beck-2026-10-29",
@@ -1164,6 +1193,118 @@
       "mae_pp": 5.22,
       "result_status": "hand_verified_declaration",
       "result_source": "https://www.newark-sherwooddc.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result%20-%20Nottinghamshire%20County%20Council%20-%20Southwell%20Division%20-%2030%20October%202026_0.pdf"
+    },
+    {
+      "slug": "bournemouth-christchurch-and-poole-penn-hill-2026-11-05",
+      "council_name": "Bournemouth, Christchurch and Poole",
+      "ward_name": "Penn Hill",
+      "date": "2026-11-05",
+      "council_slug": "bournemouth-christchurch-and-poole",
+      "page": "https://ukelections.co.uk/by-elections/local/bournemouth-christchurch-and-poole-penn-hill-2026-11-05/",
+      "projected_winner": "Liberal Democrats",
+      "leader_probability_pct": 51,
+      "too_close_to_call": true,
+      "actual_winner": "Liberal Democrats",
+      "called": true,
+      "mae_pp": 6.31,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.bcpcouncil.gov.uk/Assets/Elections-and-voting/2026-Penn-Hill-ward-by-election/Penn-Hill-By-Election-Result-5.11.2026.pdf"
+    },
+    {
+      "slug": "hyndburn-huncoat-2026-11-12",
+      "council_name": "Hyndburn",
+      "ward_name": "Huncoat",
+      "date": "2026-11-12",
+      "council_slug": "hyndburn",
+      "page": "https://ukelections.co.uk/by-elections/local/hyndburn-huncoat-2026-11-12/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 72,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 10.81,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/"
+    },
+    {
+      "slug": "north-east-lincolnshire-croft-baker-2026-11-12",
+      "council_name": "North East Lincolnshire",
+      "ward_name": "Croft Baker",
+      "date": "2026-11-12",
+      "council_slug": "north-east-lincolnshire",
+      "page": "https://ukelections.co.uk/by-elections/local/north-east-lincolnshire-croft-baker-2026-11-12/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 75,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 4.37,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/local-elections/"
+    },
+    {
+      "slug": "oldham-failsworth-west-2026-11-12",
+      "council_name": "Oldham",
+      "ward_name": "Failsworth West",
+      "date": "2026-11-12",
+      "council_slug": "oldham",
+      "page": "https://ukelections.co.uk/by-elections/local/oldham-failsworth-west-2026-11-12/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 84,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 7.28,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.oldham.gov.uk/info/200732/election_notices/3435/failsworth_by-election_results_12_november_2026"
+    },
+    {
+      "slug": "staffordshire-moorlands-cheddleton-2026-11-12",
+      "council_name": "Staffordshire Moorlands",
+      "ward_name": "Cheddleton",
+      "date": "2026-11-12",
+      "council_slug": "staffordshire-moorlands",
+      "page": "https://ukelections.co.uk/by-elections/local/staffordshire-moorlands-cheddleton-2026-11-12/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 35,
+      "too_close_to_call": true,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 7.29,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.staffsmoorlands.gov.uk/media/11538/Results---Cheddleton-District-Ward-By-Election-2026/pdf/lhResults_-_Cheddleton_District_Ward_By-Election_2026.pdf"
+    },
+    {
+      "slug": "suffolk-bosmere-2026-11-12",
+      "council_name": "Suffolk",
+      "ward_name": "Bosmere",
+      "date": "2026-11-12",
+      "council_slug": "suffolk",
+      "page": "https://ukelections.co.uk/by-elections/local/suffolk-bosmere-2026-11-12/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 40,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 7.55,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.suffolk.gov.uk/asset-library/councillor-assets/SCC-2026-Elections/2026-11-13-Bosmere-Declaration-of-Result-of-Poll.pdf"
+    },
+    {
+      "slug": "wigan-hindley-green-2026-11-12",
+      "council_name": "Wigan",
+      "ward_name": "Hindley Green",
+      "date": "2026-11-12",
+      "council_slug": "wigan",
+      "page": "https://ukelections.co.uk/by-elections/local/wigan-hindley-green-2026-11-12/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 60,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 4.39,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.069Z",
+  "generated_at": "2026-11-14T03:52:16.294Z",
   "slug": "south-staffordshire-huntington-hatherton-2026-11-19",
   "status": "upcoming",
   "contest": {
@@ -23,15 +23,51 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-23",
     "registration_deadline": "2026-11-03",
-    "postal_vote_deadline": "2026-11-04"
+    "postal_vote_deadline": "2026-11-04",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-15",
+      "close_of_nominations": "2026-10-23",
+      "sopn_publish_deadline": "2026-10-26",
+      "registration_deadline": "2026-11-03",
+      "postal_vote_application_deadline": "2026-11-04",
+      "proxy_vote_application_deadline": "2026-11-11",
+      "vac_application_deadline": "2026-11-11",
+      "replacement_pack_start_date": "2026-11-13"
+    }
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 3,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.south-staffordshire.huntington-hatherton.by.2026-11-19/sopn/2026-10-23T15%3A37%3A06.708497%2B00%3A00/Huntington_and_Hatherington.pdf",
+    "parties": [
+      "Conservative",
+      "Labour",
+      "Reform UK"
+    ],
+    "candidates": [
+      {
+        "name": "Daniel Michael Costigan",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Craig Humphreyson",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Nathaniel Robert Williams",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -156,10 +192,139 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.south-staffordshire.huntington-hatherton.2023-05-04/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2023-05-04 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2023-05-04",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.4022099447513812,
+        "Conservative": 0.3756906077348066,
+        "Liberal Democrats": 0,
+        "Green Party": 0.22209944751381216,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.south-staffordshire.huntington-hatherton.2023-05-04/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 91,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9723130728025009,
+        "Conservative": -0.627902220808357,
+        "Liberal Democrats": -0.4192421802506563,
+        "Green Party": -0.21020702076524378,
+        "Plaid Cymru": 0.1054966908378934,
+        "Independent": -1.1741993075013362
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4478200203097242,
+        "Conservative": 0.6041358214559436,
+        "Liberal Democrats": 0.7191107082877933,
+        "Green Party": 0.8507379337854007,
+        "Plaid Cymru": 1.0811885126334744,
+        "Independent": 0.37359945708973985
+      },
+      "entry_shares": {
+        "Reform UK": 0.2738328756375049,
+        "Labour": 0.04702627939142462,
+        "Conservative": 0.04861878453038674,
+        "Liberal Democrats": 0.07448979591836735,
+        "Green Party": 0.05570669320902737,
+        "Plaid Cymru": 0.15343627194875406,
+        "Restore Britain": 0.061305804081476206,
+        "Independent": 0.04714342788653616
+      },
+      "entry_counts": {
+        "Reform UK": 91,
+        "Labour": 5,
+        "Conservative": 7,
+        "Liberal Democrats": 13,
+        "Green Party": 40,
+        "SNP": 0,
+        "Plaid Cymru": 6,
+        "Restore Britain": 6,
+        "Independent": 9,
+        "Other": 3
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 68,
+        "Conservative": 80,
+        "Liberal Democrats": 47,
+        "Green Party": 31,
+        "SNP": 0,
+        "Plaid Cymru": 16,
+        "Restore Britain": 0,
+        "Independent": 14,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.3804407106648119,
+      "Labour": 0.2818224434032462,
+      "Conservative": 0.3377368459319419,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.425,
+      "Labour": 0.223,
+      "Conservative": 0.352
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.13966579839369228,
+        "p50": 0.3711793540533846,
+        "p90": 0.6036937028409445
+      },
+      "Labour": {
+        "p10": 0.10913324647190821,
+        "p50": 0.2728936062149353,
+        "p90": 0.5006622108743501
+      },
+      "Conservative": {
+        "p10": 0.11181842040304986,
+        "p50": 0.3291347749762159,
+        "p90": 0.5667447584410445
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Conservative",
+    "margin_pp": 4.2703864732869965,
+    "leader_probability": 0.425,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Reform UK (median of 91). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Reform UK"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [
