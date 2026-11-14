@@ -8,6 +8,8 @@ const covered = new Set<string>(
   loadIdentity().wards.filter((w: any) => w.tier === "local" || w.tier === "mayor").map((w: any) => w.council_slug),
 );
 const england = CALENDAR.find((r) => r.id === "local-council-2027")!;
+const niAssembly = CALENDAR.find(r => r.id === "ni-assembly")!;
+const unverifiedCount = data.not_verified.length;
 const mayors = CALENDAR.find((r) => r.id === "mayors-2027")!;
 const mhclg = england.sources[1];
 const councils: any[] = data.councils;
@@ -49,9 +51,17 @@ const sources = (c: any) =>
     <p class="eyebrow">Thursday 6 May 2027 · Sources checked {longDate(data.checked_at)}</p>
     <h1>Local elections 2027: who votes on 6 May?</h1>
     <p class="lede">
-      We have verified <strong>{t.councils_verified} councils</strong> voting that day: {t.by_nation.E} in England,
-      {t.by_nation.S} in Scotland and {t.by_nation.W} in Wales. <strong>We have not published forecasts for them.</strong>
+      We have verified <strong>{councils.length} councils</strong> voting that day: {councils.filter(c => c.nation === "E").length} in England,
+      {councils.filter(c => c.nation === "S").length} in Scotland and {councils.filter(c => c.nation === "W").length} in Wales.
+      <strong>{unverifiedCount} English councils remain unverified</strong> in this Great Britain list. <strong>We have not published forecasts for them.</strong>
     </p>
+  </section>
+
+  <section class="section" id="northern-ireland">
+    <h2>Northern Ireland councils and Assembly</h2>
+    <p>The <a href="https://www.eoni.org.uk/elections-2027">Electoral Office for Northern Ireland</a> schedules combined local council and Assembly elections for <strong>{niAssembly.date_label}</strong>.</p>
+    <p>The Assembly date is set by <a href={niAssembly.sources[0].url}>{niAssembly.sources[0].label}</a>. The Act allows an earlier Assembly poll in some circumstances. Council polling dates follow <a href="https://www.legislation.gov.uk/apni/1962/14/section/11">the Electoral Law Act (Northern Ireland) 1962, section 11</a>.</p>
+    <p>Northern Ireland is separate from the Great Britain council count above. We have no Northern Ireland council roster, seat counts or forecasts here. <a href="/elections/#ni-assembly">See the election calendar and statutory source</a>.</p>
   </section>
 
   <section class="section">
@@ -73,11 +83,11 @@ const sources = (c: any) =>
     <h2>Checking the count</h2>
     <ul>
       <li>
-        <strong>Our list:</strong> {t.councils_verified} councils verified. Seats up are sourced for {t.councils_with_seats_up} of
+        <strong>Our list:</strong> {councils.length} councils verified. Seats up are sourced for {t.councils_with_seats_up} of
         them, {n(t.seats_up_sourced)} seats in all. {t.councils_seats_up_blank} councils have no sourced seat count yet.
       </li>
       <li>
-        <strong>Not yet verified:</strong> {t.english_councils_not_verified} English councils, listed below. Most are likely to vote
+        <strong>Not yet verified:</strong> {unverifiedCount} English councils, listed below. Most are likely to vote
         on 6 May 2027, but no order or council page we have read says so.
       </li>
       {ocd && (
@@ -123,7 +133,7 @@ const sources = (c: any) =>
   })}
 
   <section class="section">
-    <h2>Four councils whose own pages disagree</h2>
+    <h2>{conflicts.length} councils whose own pages disagree</h2>
     <p>
       These councils' own pages say something different from the government letter of 7 September 2026, which says
       "{mhclg.quote}". We have not found an order that settles it, so they stay "Not verified". We quote each council's page where its site lets us read it automatically.

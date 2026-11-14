@@ -1,6 +1,7 @@
 ---
+import CouncilResultsTable from "../../components/CouncilResultsTable.astro";
 import CouncilRoundup from "../../components/CouncilRoundup.astro";
-import { loadLocalContests, partyScorecard } from "../../lib/byElections";
+import { loadLocalHub, partyScorecard } from "../../lib/byElections";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { partyColour } from "../../lib/predictions";
 import { shortPartyLabel } from "../../lib/siteData";
@@ -82,7 +83,7 @@ type LocalContest = { ward: string; council: string; winner: string; previous: s
 const localDates: Array<{ date: string; sources: Array<{ label: string; url: string }>; contests: LocalContest[] }> =
   localData.dates || [];
 const localAll: LocalContest[] = localDates.flatMap((d) => d.contests);
-const councilContests = loadLocalContests();
+const { contests: councilContests, latest, nextDay, updatedAt } = loadLocalHub();
 const partyRows = partyScorecard(localAll);
 function prettyDate(iso: string): string {
   return iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
@@ -130,7 +131,7 @@ const leaderboard: Lead[] = [
 
 <BaseLayout
   title="UK by-election results, candidates and upcoming polls"
-  description={`UK parliamentary and council by-election results, candidates and upcoming polls. Council results through ${prettyDate(localData.window.to)}, with sources and the forecast record.`}
+  description={`UK parliamentary and council by-election results, candidates and upcoming polls. Browse the latest council results, with sources and the forecast record.`}
 >
   <section class="hero compact-hero">
     <p class="eyebrow">By-elections</p>
@@ -141,7 +142,14 @@ const leaderboard: Lead[] = [
     </p>
   </section>
 
-  <nav aria-label="By-election sections" class="journey-shortcuts"><a href="/by-elections/local/">Council results and upcoming polls</a> · <a href="#parliamentary">Parliamentary results</a> · <a href="#council-results">Weekly council results</a> · <a href="/by-elections/archive/">Results by year</a></nav>
+  <nav aria-label="By-election sections" class="journey-shortcuts"><a href="/by-elections/local/">Council results and upcoming polls</a> · <a href="#parliamentary">Parliamentary results</a> · <a href="#latest-results">Latest council results</a> · <a href="/by-elections/archive/">Results by year</a></nav>
+  <section class="section" id="latest-results">
+    <h2>Latest council by-election results</h2>
+    <p class="caption" data-discovery-ignore>{updatedAt ? `Council data last updated ${prettyDate(updatedAt)}.` : "Council data update date not supplied."}</p>
+    <p>{nextDay ? <>Next council by-election date: <strong>{prettyDate(nextDay)}</strong>. <a href="/by-elections/local/#upcoming">See the upcoming polls</a>.</> : "No future council by-election date is recorded in the current data."}</p>
+    {latest.length > 0 ? <CouncilResultsTable contests={latest} /> : <p>No recent council results are recorded.</p>}
+    <p><a href="/by-elections/local/">All council results and upcoming polls</a></p>
+  </section>
   <section class="section" id="parliamentary">
     <h2>Parliamentary by-elections</h2>
     <div class="byelection-grid">
@@ -192,7 +200,7 @@ const leaderboard: Lead[] = [
   </section>
 
   <section class="section" id="council-results">
-    <div class="section-head"><p class="eyebrow">Council by-elections · {prettyDate(localData.window.from)} to {prettyDate(localData.window.to)}</p><h2>Latest weekly council results</h2></div>
+    <div class="section-head"><p class="eyebrow">Council by-elections · {prettyDate(localData.window.from)} to {prettyDate(localData.window.to)}</p><h2>Historical weekly council roundup</h2></div>
     <p><a href="/by-elections/local/">Browse council by-elections by council or polling date</a>, including candidates, results and saved forecasts. <a href="/by-elections/archive/">Explore the results archive</a>.</p>
     <CouncilRoundup dates={localDates} contests={councilContests} />
     <h2>Gains, holds and losses by party</h2>
@@ -208,7 +216,7 @@ const leaderboard: Lead[] = [
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">Leaderboard · who called it best</p>
-      <h2>Forecaster comparisons: June–August 2026</h2>
+      <h2>Forecaster comparisons: June to August 2026</h2>
     </div>
     <div class="table-scroll" role="region" aria-label="Forecaster comparison" tabindex="0">
     <table class="seat-table">
