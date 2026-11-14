@@ -1,0 +1,421 @@
+{
+  "schema_version": "1.0.0",
+  "fitted_on": "parl.2024-07-04",
+  "fitted_on_date": "2024-07-04",
+  "fitted_at": "2026-11-09T02:08:58.620Z",
+  "fitted_by": "scripts/calibrate-ge-win-probability.mjs",
+  "method": "Realised share of seats the projected leader won, binned by the predicted margin between first and second place, on the 2024 rerun of the GE model. Adjacent bins are pooled where a wider margin would otherwise quote a lower probability.",
+  "rows_source": "STM, May 2024 polling average (UK_WESTMINSTER_2024_MAY_AVERAGE); rebuilt with runBacktest() from scripts/run-ge-backtest.mjs (2019 result, notional where boundaries changed, scored against 4 July 2024). Same engine and inputs as data/backtests/ge-2024.json summary.stm_real_polling.",
+  "predictor": "margin_first_minus_second",
+  "n": 649,
+  "leader_won": 503,
+  "bins": [
+    {
+      "margin_from_pp": 0,
+      "margin_to_pp": 2,
+      "n": 87,
+      "winner_probability": 0.4023
+    },
+    {
+      "margin_from_pp": 2,
+      "margin_to_pp": 5,
+      "n": 104,
+      "winner_probability": 0.5769
+    },
+    {
+      "margin_from_pp": 5,
+      "margin_to_pp": 10,
+      "n": 85,
+      "winner_probability": 0.7529
+    },
+    {
+      "margin_from_pp": 10,
+      "margin_to_pp": 15,
+      "n": 60,
+      "winner_probability": 0.8
+    },
+    {
+      "margin_from_pp": 15,
+      "margin_to_pp": 20,
+      "n": 57,
+      "winner_probability": 0.9123
+    },
+    {
+      "margin_from_pp": 20,
+      "margin_to_pp": 101,
+      "n": 256,
+      "winner_probability": 0.9531,
+      "pooled": true
+    }
+  ],
+  "reliability": [
+    {
+      "margin_from_pp": 0,
+      "margin_to_pp": 2,
+      "seats": 87,
+      "mean_quoted_probability": 0.4017,
+      "leader_won_share": 0.4023
+    },
+    {
+      "margin_from_pp": 2,
+      "margin_to_pp": 5,
+      "seats": 104,
+      "mean_quoted_probability": 0.5709,
+      "leader_won_share": 0.5769
+    },
+    {
+      "margin_from_pp": 5,
+      "margin_to_pp": 10,
+      "seats": 85,
+      "mean_quoted_probability": 0.7518,
+      "leader_won_share": 0.7529
+    },
+    {
+      "margin_from_pp": 10,
+      "margin_to_pp": 15,
+      "seats": 60,
+      "mean_quoted_probability": 0.8015,
+      "leader_won_share": 0.8
+    },
+    {
+      "margin_from_pp": 15,
+      "margin_to_pp": 20,
+      "seats": 57,
+      "mean_quoted_probability": 0.9118,
+      "leader_won_share": 0.9123
+    },
+    {
+      "margin_from_pp": 20,
+      "margin_to_pp": 30,
+      "seats": 75,
+      "mean_quoted_probability": 0.9521,
+      "leader_won_share": 0.96
+    },
+    {
+      "margin_from_pp": 30,
+      "margin_to_pp": 101,
+      "seats": 181,
+      "mean_quoted_probability": 0.9511,
+      "leader_won_share": 0.9503
+    }
+  ],
+  "validation": {
+    "method": "leave one region out: each region's seats quoted from bins fitted on the other regions",
+    "folds": 13,
+    "brier": 0.1398,
+    "flat_baseline_brier": 0.1776,
+    "per_fold": [
+      {
+        "region": "east_midlands",
+        "seats": 47,
+        "brier": 0.1552,
+        "flat_baseline_brier": 0.1561
+      },
+      {
+        "region": "east_of_england",
+        "seats": 61,
+        "brier": 0.1599,
+        "flat_baseline_brier": 0.2236
+      },
+      {
+        "region": "london",
+        "seats": 75,
+        "brier": 0.0904,
+        "flat_baseline_brier": 0.133
+      },
+      {
+        "region": "north_east",
+        "seats": 27,
+        "brier": 0.039,
+        "flat_baseline_brier": 0.0741
+      },
+      {
+        "region": "north_west",
+        "seats": 68,
+        "brier": 0.0376,
+        "flat_baseline_brier": 0.0967
+      },
+      {
+        "region": "northern_ireland",
+        "seats": 18,
+        "brier": 0.2399,
+        "flat_baseline_brier": 0.2036
+      },
+      {
+        "region": null,
+        "seats": 14,
+        "brier": 0.1784,
+        "flat_baseline_brier": 0.1685
+      },
+      {
+        "region": "scotland",
+        "seats": 57,
+        "brier": 0.284,
+        "flat_baseline_brier": 0.3351
+      },
+      {
+        "region": "south_east",
+        "seats": 91,
+        "brier": 0.1636,
+        "flat_baseline_brier": 0.2026
+      },
+      {
+        "region": "south_west",
+        "seats": 54,
+        "brier": 0.2114,
+        "flat_baseline_brier": 0.2696
+      },
+      {
+        "region": "wales",
+        "seats": 31,
+        "brier": 0.0501,
+        "flat_baseline_brier": 0.1055
+      },
+      {
+        "region": "west_midlands",
+        "seats": 57,
+        "brier": 0.1441,
+        "flat_baseline_brier": 0.1665
+      },
+      {
+        "region": "yorkshire",
+        "seats": 49,
+        "brier": 0.0867,
+        "flat_baseline_brier": 0.099
+      }
+    ]
+  },
+  "residual_sd": {
+    "by_party": {
+      "Labour": 0.1252,
+      "Reform UK": 0.0586,
+      "Conservative": 0.0462,
+      "Plaid Cymru": 0.0575,
+      "Green Party": 0.0501,
+      "Liberal Democrats": 0.0832,
+      "SNP": 0.0549
+    },
+    "seats": {
+      "Labour": 646,
+      "Reform UK": 647,
+      "Conservative": 634,
+      "Plaid Cymru": 31,
+      "Green Party": 648,
+      "Liberal Democrats": 630,
+      "SNP": 57
+    },
+    "other_parties": 0.0799,
+    "other_party_rows": 695,
+    "measure": "root mean square of predicted minus actual share, over seats where the party's predicted or actual share was at least 1 per cent; other_parties pools every remaining party"
+  },
+  "interval_coverage": {
+    "nominal": 0.8,
+    "overall": 0.8233,
+    "by_party": {
+      "Labour": {
+        "seats": 646,
+        "inside_p10_p90": 0.7384
+      },
+      "Conservative": {
+        "seats": 634,
+        "inside_p10_p90": 0.8817
+      },
+      "Liberal Democrats": {
+        "seats": 630,
+        "inside_p10_p90": 0.8222
+      },
+      "Reform UK": {
+        "seats": 647,
+        "inside_p10_p90": 0.7836
+      },
+      "Green Party": {
+        "seats": 648,
+        "inside_p10_p90": 0.875
+      },
+      "SNP": {
+        "seats": 57,
+        "inside_p10_p90": 0.9825
+      },
+      "Plaid Cymru": {
+        "seats": 31,
+        "inside_p10_p90": 0.871
+      }
+    },
+    "method": "out of fold: each region's p10 and p90 drawn with residual SDs fitted on the other regions; a party is scored in a seat where its predicted or actual share was at least 1 per cent"
+  },
+  "correlation": {
+    "rho": 0.2864,
+    "national_bias_pp": {
+      "Labour": 8.04,
+      "Conservative": 0.33,
+      "Liberal Democrats": -3.28,
+      "Reform UK": -1.52,
+      "Green Party": -0.24,
+      "SNP": 4.37,
+      "Plaid Cymru": -0.04
+    },
+    "measure": "share of the squared leader-minus-runner-up error explained by each party's national mean error; one election, so one realisation"
+  },
+  "seat_range_check_2024": [
+    {
+      "party": "Labour",
+      "actual_seats": 408,
+      "range_90": [
+        308,
+        530
+      ],
+      "inside": true,
+      "independent_range_90": [
+        417,
+        446
+      ]
+    },
+    {
+      "party": "Conservative",
+      "actual_seats": 121,
+      "range_90": [
+        46,
+        255
+      ],
+      "inside": true,
+      "independent_range_90": [
+        124,
+        151
+      ]
+    },
+    {
+      "party": "Liberal Democrats",
+      "actual_seats": 72,
+      "range_90": [
+        11,
+        35
+      ],
+      "inside": false,
+      "independent_range_90": [
+        18,
+        28
+      ]
+    },
+    {
+      "party": "Reform UK",
+      "actual_seats": 5,
+      "range_90": [
+        0,
+        10
+      ],
+      "inside": true,
+      "independent_range_90": [
+        1,
+        6
+      ]
+    },
+    {
+      "party": "SNP",
+      "actual_seats": 9,
+      "range_90": [
+        18,
+        47
+      ],
+      "inside": false,
+      "independent_range_90": [
+        28,
+        38
+      ]
+    }
+  ],
+  "sensitivity_perfect_polling": {
+    "label": "STM, actual 2024 national shares (perfect polling); not applied",
+    "bins": [
+      {
+        "margin_from_pp": 0,
+        "margin_to_pp": 5,
+        "n": 147,
+        "winner_probability": 0.5102,
+        "pooled": true
+      },
+      {
+        "margin_from_pp": 5,
+        "margin_to_pp": 10,
+        "n": 100,
+        "winner_probability": 0.66
+      },
+      {
+        "margin_from_pp": 10,
+        "margin_to_pp": 20,
+        "n": 201,
+        "winner_probability": 0.8657,
+        "pooled": true
+      },
+      {
+        "margin_from_pp": 20,
+        "margin_to_pp": 101,
+        "n": 201,
+        "winner_probability": 0.9502,
+        "pooled": true
+      }
+    ],
+    "reliability": [
+      {
+        "margin_from_pp": 0,
+        "margin_to_pp": 2,
+        "seats": 63,
+        "mean_quoted_probability": 0.506,
+        "leader_won_share": 0.5238
+      },
+      {
+        "margin_from_pp": 2,
+        "margin_to_pp": 5,
+        "seats": 84,
+        "mean_quoted_probability": 0.5146,
+        "leader_won_share": 0.5
+      },
+      {
+        "margin_from_pp": 5,
+        "margin_to_pp": 10,
+        "seats": 100,
+        "mean_quoted_probability": 0.6659,
+        "leader_won_share": 0.66
+      },
+      {
+        "margin_from_pp": 10,
+        "margin_to_pp": 15,
+        "seats": 140,
+        "mean_quoted_probability": 0.864,
+        "leader_won_share": 0.8714
+      },
+      {
+        "margin_from_pp": 15,
+        "margin_to_pp": 20,
+        "seats": 61,
+        "mean_quoted_probability": 0.8666,
+        "leader_won_share": 0.8525
+      },
+      {
+        "margin_from_pp": 20,
+        "margin_to_pp": 30,
+        "seats": 65,
+        "mean_quoted_probability": 0.9479,
+        "leader_won_share": 0.9846
+      },
+      {
+        "margin_from_pp": 30,
+        "margin_to_pp": 101,
+        "seats": 136,
+        "mean_quoted_probability": 0.9456,
+        "leader_won_share": 0.9338
+      }
+    ],
+    "validation": {
+      "brier": 0.1455,
+      "flat_baseline_brier": 0.1754
+    }
+  },
+  "limits": [
+    "The rerun quotes polls taken about nine weeks before polling day. A forecast published years before an election carries more uncertainty than this, so these probabilities understate how far opinion can move before the next general election.",
+    "The rerun uses the Strong Transition Model with demographics and tactical voting. The live forecast adds a BES prior, incumbency and by-election overlays that the rerun cannot use without look-ahead, so the fit describes the core model.",
+    "One election. The bins and the correlation are a single realisation and should be refitted after the next general election."
+  ],
+  "do_not_apply_to": [
+    "parl.2024-07-04"
+  ]
+}

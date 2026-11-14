@@ -3,6 +3,9 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { buildDataset, type Crumb } from "../../../lib/seo";
 import { SITE_URL } from "../../../lib/site";
 import { loadGeBacktest, partyColour } from "../../../lib/predictions";
+import { loadGeWinProbability } from "../../../lib/geWinProbability.js";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 const b = loadGeBacktest();
 const rows = b.rows || [];
@@ -23,6 +26,18 @@ const top10Worst = [...rows]
 
 const partyMae = b.summary?.stm?.per_party_mae || {};
 const sortedParty = Object.entries(partyMae).sort((a: any, b: any) => b[1] - a[1]).slice(0, 12);
+const targets = b.snapshot?.target_metrics || {};
+const wp = loadGeWinProbability();
+const postaudit = JSON.parse(readFileSync(resolve(process.cwd(), "data/transparency/ge-postaudit-2024-07-04.json"), "utf8"));
+const pct = (x: number | undefined) => (typeof x === "number" ? `${(x * 100).toFixed(1)}%` : "n/a");
+const pp = (x: number | undefined) => (typeof x === "number" ? `${(x * 100).toFixed(2)}pp` : "n/a");
+const runs = [
+  { label: "Uniform National Swing", input: "Actual 2024 national shares", m: b.summary?.uns },
+  { label: "Strong Transition Model", input: "Actual 2024 national shares", m: b.summary?.stm, tile: true },
+  { label: "Strong Transition Model with anti-attenuation", input: "Actual 2024 national shares", m: b.summary?.stm_unwound },
+  { label: "Uniform National Swing", input: "May 2024 polling average", m: b.summary?.uns_real_polling },
+  { label: "Strong Transition Model", input: "May 2024 polling average", m: b.summary?.stm_real_polling, live: true },
+];
 const breadcrumbs: Crumb[] = [
   { name: "Data quality", href: "/data-quality/" },
   { name: "General election backtest", href: "/data-quality/ge-backtest/" }
@@ -30,11 +45,11 @@ const breadcrumbs: Crumb[] = [
 const structuredData = [
   buildDataset({
     name: "UK general election model backtest against the 2024 result",
-    description: `Forecast-versus-actual for ${rows.length} boundary-stable constituencies, replaying the constituency model on the 2024 general election from the 2019 result and the polling of the day.`,
+    description: `Forecast-versus-actual for ${rows.length} constituencies, replaying the constituency model on the 2024 general election from the 2019 result, with the actual national result and with the May 2024 polling average.`,
     url: `${SITE_URL}/data-quality/ge-backtest/`,
     temporalCoverage: "2019-12-12/2024-07-04",
     spatialCoverage: "United Kingdom",
-    variableMeasured: ["Predicted vote share by party", "Actual vote share by party", "Mean absolute error", "Winner called correctly"],
+    variableMeasured: ["Predicted vote share by party", "Actual vote share by party", "Mean absolute error", "Winner called correctly", "Win probability reliability"],
     keywords: ["election model", "backtest", "forecast accuracy", "general election 2024"]
   })
 ];
@@ -42,97 +57,148 @@ const structuredData = [
 <BaseLayout
   breadcrumbs={breadcrumbs}
   structuredData={structuredData}
-  title="GE backtest, data quality"
-  description={`Validation of the GE constituency model: predict GE2024 from GE2019 + national polling. ${rows.length} boundary-stable constituencies evaluated.`}
+  title="General election backtest: the 2019 to 2024 replay"
+  description={`How the Westminster model scores replayed on the 2024 general election from the 2019 result: ${rows.length} constituencies, winner accuracy, vote-share error and win probability reliability.`}
 >
   <section class="page-hero">
     <p class="eyebrow">Data quality, backtest</p>
-    <h1>GE2024 backtest</h1>
+    <h1>General election backtest</h1>
     <p class="lede">
-      Predicting GE2024 from the GE2019 baseline and the actual GE2024 polling, measuring whether our swing model adds value over Uniform National Swing.
+      We replay the Westminster model on the 2024 general election, starting from the 2019 result, and score it against
+      what happened on 4 July 2024. Two figures for this test are in circulation, 78 per cent and 50.2 per cent; this page carries both and says what each one is.
     </p>
-    <p style="color: var(--muted)">
-      Generated {b.snapshot?.generated_at?.slice(0, 10)} · {rows.length} boundary-stable constituencies evaluated
+    <p class="muted-row">
+      Replay generated {b.snapshot?.generated_at?.slice(0, 10)} · {rows.length} constituencies · <code>data/backtests/ge-2024.json</code>
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Headline</p>
-      <h2>Strong Transition Model vs Uniform National Swing</h2>
+      <p class="eyebrow">Test 1</p>
+      <h2>The 2019 to 2024 replay</h2>
     </div>
-    <h3 style="margin-top: 1.5rem">Real-polling forecast test (genuine pre-election simulation)</h3>
-    <p style="color: var(--muted); margin-bottom: 0.5rem">
-      Uses ACTUAL May 2024 polling averages (Lab 44%, Con 24%, Reform 12%), what a forecaster running this model in May 2024 would have produced. The most honest forecaster comparison.
+    <p>
+      Each constituency starts from its 2019 result (the notional 2019 result where boundaries changed) and is swung to
+      a national picture. With the actual 2024 national shares the test isolates the seat model; with the May 2024 polling
+      average it shows what a forecaster running the model nine weeks out would have published.
     </p>
-    <table class="seat-table">
-      <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Uniform National Swing (May 2024 polling)</td>
-          <td>{((b.summary?.uns_real_polling?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((b.summary?.uns_real_polling?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{b.summary?.uns_real_polling?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-        <tr style="background: rgba(0, 100, 200, 0.05)">
-          <td><strong>Strong Transition Model (May 2024 polling)</strong></td>
-          <td><strong>{((b.summary?.stm_real_polling?.winner_accuracy ?? 0) * 100).toFixed(1)}%</strong></td>
-          <td><strong>{((b.summary?.stm_real_polling?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</strong></td>
-          <td>{b.summary?.stm_real_polling?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="color: var(--muted)">
-      <strong>STM lift over UNS (real polling): {b.summary?.stm_real_lift_over_uns_real_pp?.toFixed(2)}pp</strong>.
-      For comparison: Survation 2024 final MRP scored 83.8% / 5.55pp RMSE; YouGov 92% (in-campaign panel of 150k); UNS counterfactual 7.61pp RMSE.
-    </p>
-
-    <h3 style="margin-top: 2rem">Perfect-polling structural test (model only)</h3>
-    <p style="color: var(--muted); margin-bottom: 0.5rem">
-      Feeds the model GE2024 actual national shares as if it had perfect foresight. Isolates the structural model quality from polling-error noise.
-    </p>
-    <table class="seat-table">
-      <thead><tr><th>Mode</th><th>Winner accuracy</th><th>Major-party MAE</th><th>Brier</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Uniform National Swing</td>
-          <td>{((b.summary?.uns?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((b.summary?.uns?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{b.summary?.uns?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-        <tr>
-          <td>Strong Transition Model</td>
-          <td>{((b.summary?.stm?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((b.summary?.stm?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{b.summary?.stm?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-        <tr>
-          <td>STM + anti-attenuation</td>
-          <td>{((b.summary?.stm_unwound?.winner_accuracy ?? 0) * 100).toFixed(1)}%</td>
-          <td>{((b.summary?.stm_unwound?.major_party_mae_avg ?? 0) * 100).toFixed(2)}pp</td>
-          <td>{b.summary?.stm_unwound?.brier_top_winner?.toFixed(4)}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="color: var(--muted)">
-      <strong>STM lift over UNS (perfect polling): {b.summary?.stm_lift_over_uns_pp?.toFixed(2)}pp</strong> ·
-      <strong>Polling-error penalty: {b.summary?.perfect_polling_advantage_pp?.toFixed(2)}pp</strong> (extra MAE we paid for using May 2024 polling vs perfect foresight) ·
-      Anti-attenuation under-shoots even with out-of-sample calibration on GE2010+2015+2017 because pre-2017 distributions had wider between-PCON variance than 2024's fragmented 4-way race.
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Backtest runs">
+      <table class="seat-table">
+        <thead><tr><th>Model</th><th>National input</th><th class="num">Winners called</th><th class="num">Major-party error</th><th class="num">Share Brier</th></tr></thead>
+        <tbody>
+          {runs.map((r) => (
+            <tr class={r.tile || r.live ? "row-key" : undefined}>
+              <td>{r.label}{r.tile && <> (homepage tile)</>}{r.live && <> (win probabilities fitted on this)</>}</td>
+              <td>{r.input}</td>
+              <td class="num">{pct(r.m?.winner_accuracy)}</td>
+              <td class="num">{pp(r.m?.major_party_mae_avg)}</td>
+              <td class="num">{r.m?.brier_top_winner?.toFixed(3) ?? "n/a"}</td>
+            </tr>
+          ))}
+          <tr>
+            <td>The model's own target</td>
+            <td>Set in the backtest file</td>
+            <td class="num">{pct(targets.winner_accuracy_target)}</td>
+            <td class="num">{targets.major_party_mae_target_pp}pp</td>
+            <td class="num">{targets.brier_target}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">
+      No run meets the targets. Major-party error is the mean absolute gap between predicted and actual share for
+      Labour, Conservative, Liberal Democrats, Reform UK and Green, per seat. Share Brier treats the predicted share of
+      the eventual winner as a probability; it is not the Brier of the win probabilities below. The homepage's
+      general election tile quotes the Strong Transition Model fed the actual 2024 national shares
+      ({pct(b.summary?.stm?.winner_accuracy)}).
     </p>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Per-party performance (STM)</p>
+      <p class="eyebrow">Test 2</p>
+      <h2>Where 50.2 per cent comes from</h2>
+    </div>
+    <p>
+      The 50.2 per cent figure is <code>data/transparency/ge-postaudit-2024-07-04.json</code>, generated
+      {" "}{postaudit.snapshot?.generated_at?.slice(0, 10)}: a dry run of the post-election scoring script
+      (<code>scripts/run-ge-postaudit.mjs</code>) that compared the forecast for the next election, built on April 2026
+      polling, with the July 2024 result ({Math.round((postaudit.summary?.winner_accuracy ?? 0) * postaudit.summary?.pcons_evaluated)} of
+      {" "}{postaudit.summary?.pcons_evaluated} seats). It tests the scoring script, and the share it reports is how many
+      seats the 2026 forecast leaves with their 2024 winner; it says nothing about the model's accuracy and is not a backtest.
+    </p>
+  </section>
+
+  {wp && (
+    <section class="section" id="reliability">
+      <div class="section-head">
+        <p class="eyebrow">Win probability</p>
+        <h2>How often the leader won, by predicted margin</h2>
+      </div>
+      <p>
+        The win probability on each constituency page is read from this table: the share of seats in the May 2024 polling
+        run whose projected leader went on to win, by the predicted margin over second place. The quoted figure for each
+        region was fitted on the other regions only. Fitted {wp.fitted_at?.slice(0, 10)} on {wp.n} seats
+        ({wp.leader_won} leaders won); <code>data/calibration/ge-win-probability.json</code>.
+      </p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Win probability reliability">
+        <table class="seat-table">
+          <thead><tr><th>Predicted margin</th><th class="num">Seats</th><th class="num">Probability quoted</th><th class="num">Leader won</th></tr></thead>
+          <tbody>
+            {wp.reliability.map((r: any) => (
+              <tr>
+                <td>{r.margin_from_pp} to {r.margin_to_pp > 100 ? 100 : r.margin_to_pp} points</td>
+                <td class="num">{r.seats}</td>
+                <td class="num">{Math.round(r.mean_quoted_probability * 100)} in 100</td>
+                <td class="num">{Math.round(r.leader_won_share * 100)} in 100</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        On held-out regions the curve scores a Brier of {wp.validation.brier.toFixed(3)}, against
+        {" "}{wp.validation.flat_baseline_brier.toFixed(3)} for quoting one flat rate in every seat (lower is better).
+        The p10 to p90 share ranges caught the actual 2024 share {Math.round(wp.interval_coverage.overall * 100)} times in 100
+        against the 80 they claim.
+      </p>
+      <h3 class="subhead">Seat ranges replayed on 2024</h3>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Seat range check on 2024">
+        <table class="seat-table">
+          <thead><tr><th>Party</th><th class="num">Actual seats</th><th class="num">90 in 100 range</th><th>Inside</th></tr></thead>
+          <tbody>
+            {wp.seat_range_check_2024.map((r: any) => (
+              <tr>
+                <td><span class="party-pill" style={`background:${partyColour(r.party)}`}></span> {r.party}</td>
+                <td class="num">{r.actual_seats}</td>
+                <td class="num">{r.range_90[0]} to {r.range_90[1]}</td>
+                <td>{r.inside ? "Yes" : "No"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        Ranges drawn the way the live forecast draws them, from the out-of-fold probabilities, on the {wp.n} replayed seats.
+        A seat can only go to its projected leader or runner-up, which is one reason the Liberal Democrat range missed.
+      </p>
+      <p class="caption">{wp.limits?.join(" ")}</p>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Per-party performance</p>
       <h2>Mean absolute error by party</h2>
     </div>
+    <p class="caption">Strong Transition Model fed the actual 2024 national shares, as recorded in the backtest file.</p>
     <table class="seat-table">
-      <thead><tr><th>Party</th><th>MAE</th></tr></thead>
+      <thead><tr><th>Party</th><th class="num">Error</th></tr></thead>
       <tbody>
         {sortedParty.map(([party, mae]: any) => (
           <tr>
             <td><span class="party-pill" style={`background:${partyColour(party)}`}></span> {party}</td>
-            <td>{((mae as number) * 100).toFixed(2)}pp</td>
+            <td class="num">{((mae as number) * 100).toFixed(2)}pp</td>
           </tr>
         ))}
       </tbody>
@@ -144,14 +210,15 @@ const structuredData = [
       <p class="eyebrow">Worst residuals</p>
       <h2>Where we missed</h2>
     </div>
+    <p class="caption">Strong Transition Model with anti-attenuation, fed the actual 2024 national shares (the rows stored in the backtest file).</p>
     <table class="seat-table">
-      <thead><tr><th>Constituency</th><th>Country</th><th>Major-party MAE</th></tr></thead>
+      <thead><tr><th>Constituency</th><th>Country</th><th class="num">Major-party error</th></tr></thead>
       <tbody>
         {top10Worst.map((r: any) => (
           <tr>
             <td><a href={`/seats/parliament/${r.slug}/`}>{r.name}</a></td>
             <td>{r.country?.replace(/_/g, " ")}</td>
-            <td>{(r._mae * 100).toFixed(2)}pp</td>
+            <td class="num">{(r._mae * 100).toFixed(2)}pp</td>
           </tr>
         ))}
       </tbody>
@@ -159,7 +226,7 @@ const structuredData = [
   </section>
 
   <section class="section">
-    <p style="color: var(--muted)">
+    <p class="muted-row">
       <a href="/methodology/general-election/">Methodology</a> ·
       <a href="/forecasts/general-election/">Forecast</a> ·
       <a href="/transparency/">Transparency</a>
@@ -168,5 +235,8 @@ const structuredData = [
 </BaseLayout>
 
 <style>
-.party-pill { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: 0.4em; vertical-align: middle; }
+.party-pill { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: var(--space-2xs); vertical-align: middle; }
+.row-key td { font-weight: 600; }
+.subhead { margin-top: var(--space-xl); }
+.table-scroll { max-width: 100%; overflow-x: auto; }
 </style>

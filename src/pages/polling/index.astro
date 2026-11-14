@@ -87,6 +87,17 @@ const overlay = ukMeta.restore_britain_overlay || null;
 const ukSourceSummary = overlay
   ? `${ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average"} · plus Restore Britain overlay (${pct(overlay.share)}, ${overlay.source?.split(".")[0]?.trim()})`
   : ukMeta.source || ukMeta.label || "Wikipedia 14-day rolling average";
+// Source line: the pollsters' own tables for rows checked against them, the
+// Wikipedia table for the rest. Built from the verification ledger, which
+// scripts/verify-polling-sources.mjs writes after joining the first-party checks.
+const verifiedRows = verificationRecords.filter((r) => r.status === "primary_verified");
+const excludedRows = verificationRecords.filter((r) => r.status === "not_comparable");
+// Figures matched the pollster's own table, but the sample (e.g. UK adults)
+// is outside the GB target series, so the policy keeps them out of it.
+const checkedOutside = verificationRecords.filter((r) => r.status !== "primary_verified" && r.discovered_via);
+const fromWikipedia = verificationRecords.length - verifiedRows.length - checkedOutside.length;
+const disagreements: any[] = verificationLedger?.primary_disagreements || [];
+const wikipediaUrl = ukMeta.source_url || "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election";
 const breadcrumbs: Crumb[] = [{ name: "Polling", href: "/polling/" }];
 const structuredData = [
   buildDataset({
@@ -138,12 +149,27 @@ const structuredData = [
     />
     <p class="caption">
       Coloured number is the change from the 4 July 2024 general-election result.
-      Source: <strong>{ukSourceSummary}</strong>{ukMeta.fieldwork ? <>, fieldwork {ukMeta.fieldwork}</> : null}.
-      {ukMeta.source_url && (
-        <>{" "}· <a href={ukMeta.source_url} rel="external">discovery source</a>.</>
-      )}
-      {verificationLedger && <>{" "}· <a href="/data/polling/verification-ledger.json">source-check ledger</a>.</>}
+      Average: <strong>{ukSourceSummary}</strong>{ukMeta.fieldwork ? <>, fieldwork {ukMeta.fieldwork}</> : null}.
     </p>
+    {verificationLedger && (
+      <p class="caption">
+        Sources: {verifiedRows.length > 0 ? (
+          <>
+            {verifiedRows.length} of {verificationRecords.length} polls checked against the pollster's own published tables
+            {" "}({verifiedRows.map((r, i) => (
+              <>{i > 0 && ", "}<a href={r.evidence?.primary_url || r.source_url} rel="external">{r.pollster}, fieldwork to {r.fieldwork_end}</a></>
+            ))}){checkedOutside.length > 0 && <>; {checkedOutside.length} more match the pollster's own tables but sample {checkedOutside[0].geography} adults, outside the GB series
+            {" "}({checkedOutside.map((r, i) => (
+              <>{i > 0 && ", "}<a href={r.source_url} rel="external">{r.pollster}, fieldwork to {r.fieldwork_end}</a></>
+            ))})</>}; the other {fromWikipedia} use the
+            {" "}<a href={wikipediaUrl} rel="external">Wikipedia polling table</a> row{disagreements.length > 0 ? `, ${disagreements.length} of them because the pollster's table differs from it (below)` : ""}.
+          </>
+        ) : (
+          <>all {verificationRecords.length} polls from the <a href={wikipediaUrl} rel="external">Wikipedia polling table</a>; none yet checked against the pollster's own tables.</>
+        )}
+        {" "}The average uses the Wikipedia figures for every poll · <a href="/data/polling/verification-ledger.json">source-check ledger</a>.
+      </p>
+    )}
     <p class="muted-row">
       Download the <a href="/data/polling/current-polls.json">individual polls JSON</a> or
       {" "}<a href="/data/polling/override.json">the rolling-average input JSON</a>. See the
@@ -158,27 +184,38 @@ const structuredData = [
         <h2>Which current polls have primary evidence</h2>
       </div>
       <div class="backtest-callout">
-        <strong>{verificationCounts.primary_verified || 0} of {verificationRecords.length} current candidates have independently checked first-party evidence.</strong>
+        <strong>{verificationCounts.primary_verified || 0} of {verificationRecords.length} current polls have been checked against the pollster's own published tables.</strong>
         <span class="backtest-detail">
           A discovery link is not proof. A poll can enter the verified-only series only when its original pollster release,
           fieldwork, geography, question and published shares have been checked and recorded. Differently measured series are excluded.
         </span>
       </div>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Current polling evidence">
-        <table class="seat-table" style="margin-top:var(--space-md)">
+        <table class="seat-table evidence-table">
           <thead><tr><th>Pollster</th><th>Fieldwork</th><th>Status</th><th>Evidence</th></tr></thead>
           <tbody>
             {verificationRecords.map((record) => (
               <tr>
                 <td>{record.pollster}</td>
-                <td class="muted">{record.fieldwork_start && record.fieldwork_end ? `${record.fieldwork_start} to ${record.fieldwork_end}` : record.fieldwork_end || "Not recorded"}</td>
-                <td>{record.status.replaceAll("_", " ")}</td>
-                <td>{record.evidence?.primary_url || record.source_url ? <a href={record.evidence?.primary_url || record.source_url} rel="external">{record.evidence ? "Checked release" : "Discovery link"}</a> : "No link"}</td>
+                <td class="muted">{record.fieldwork_start && record.fieldwork_end && record.fieldwork_start !== record.fieldwork_end ? `${record.fieldwork_start} to ${record.fieldwork_end}` : record.fieldwork_end || "Not recorded"}</td>
+                <td>{record.status === "primary_verified" ? "checked against pollster's tables" : record.primary_disagreement ? "pollster's table differs from Wikipedia" : record.status === "not_comparable" ? "not comparable" : record.discovered_via && record.checks?.geography === false ? `figures checked; ${record.geography} sample, outside the GB series` : "not yet checked"}{record.sample_size ? <span class="muted">{` · n=${record.sample_size.toLocaleString()}`}</span> : null}</td>
+                <td>{record.evidence?.primary_url || record.discovered_via ? <a href={record.evidence?.primary_url || record.source_url} rel="external">Pollster's tables</a> : record.primary_disagreement?.primary_url ? <a href={record.primary_disagreement.primary_url} rel="external">Pollster's tables</a> : record.source_url ? <a href={record.source_url} rel="external">Wikipedia row</a> : "No link"}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {disagreements.length > 0 && (
+        <p class="caption">
+          Where a pollster's table and the Wikipedia row differ, the average keeps the Wikipedia figure and the poll stays unchecked:
+          {" "}{disagreements.map((d, i) => (
+            <>{i > 0 && "; "}{d.pollster} (fieldwork to {d.fieldwork_end}): {d.differences.map((x: any) => `${shortPartyLabel(x.party)} ${x.pollster_table == null ? "absent" : `${Math.round(x.pollster_table * 100)}%`} in the table, ${x.wikipedia_row == null ? "absent" : `${Math.round(x.wikipedia_row * 100)}%`} on Wikipedia`).join(", ")}</>
+          ))}.
+        </p>
+      )}
+      {excludedRows.length > 0 && (
+        <p class="caption">{excludedRows.map((r) => r.pollster).join(", ")}: {excludedRows[0].reason}</p>
+      )}
       <p class="caption">
         <a href="/data/polling/source-registry.json">Source and comparability policy</a>
         {" "}· <a href="/data/polling/verification-ledger.json">machine-readable ledger</a>.
@@ -356,8 +393,9 @@ const structuredData = [
         separate column and subtracted from "Other", so the total still sums to 100%.
       </li>
       <li>
-        <strong>Swing.</strong> The seat forecast computes (current share − 2024 share) per party
-        and applies a dampened version of that swing on top of each constituency's 2024 result.
+        <strong>Swing.</strong> The seat forecast moves each constituency's 2024 result toward the
+        current national shares with the Strong Transition Model, in which parties losing ground shed
+        votes in proportion to their local share.
       </li>
       <li>
         <strong>Allocate.</strong> The party with the most predicted votes in each constituency
@@ -373,3 +411,7 @@ const structuredData = [
     </p>
   </section>
 </BaseLayout>
+
+<style>
+  .evidence-table { margin-top: var(--space-md); }
+</style>

@@ -3,10 +3,16 @@
  * run-ge-predictions.mjs — bulk-predict the next UK general election for all
  * 650 PCONs using the current Westminster polling snapshot.
  *
- * Default mode: forecast "next-GE-as-if-held-this-week" — uses
- * UK_WESTMINSTER_2026_APRIL_AVERAGE as the current national share and
- * UK_WESTMINSTER_2024_GE_RESULT as the baseline. This is the standard
- * MRP polling-snapshot use case.
+ * Default mode: forecast "next-GE-as-if-held-this-week" — uses the current
+ * Westminster polling snapshot (exported as UK_WESTMINSTER_2026_APRIL_AVERAGE,
+ * which nationalPolling.js overrides from data/polling/override.json) as the
+ * current national share and UK_WESTMINSTER_2024_GE_RESULT as the baseline.
+ *
+ * assumptions.json is built from GE_MODEL_OPTIONS, the object every seat's
+ * predictConstituencyGE call spreads, so the published parameters cannot drift
+ * from the run (tests/ge-assumptions.test.ts). Each record also carries a win
+ * probability and p10/p90 shares from data/calibration/ge-win-probability.json,
+ * and summary.json a seat range per party (src/lib/geWinProbability.js).
  *
  * Output:
  *   data/predictions/ge-next/constituencies.json
@@ -16,19 +22,83 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { predictConstituencyGE } from "../src/lib/electionModel.js";
 import { buildMpRosterFromGe2024 } from "../src/lib/incumbencyTracker.js";
 import {
   UK_WESTMINSTER_2024_GE_RESULT,
   UK_WESTMINSTER_2026_APRIL_AVERAGE,
 } from "../src/lib/nationalPolling.js";
+import {
+  loadGeWinProbability,
+  geWinProbabilityApplies,
+  leaderWinProbability,
+  shareIntervals,
+  simulateSeatRanges,
+} from "../src/lib/geWinProbability.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(__dirname, "..");
 const FORECAST_KEY = "ge-next";
 
 function readJson(p) { return JSON.parse(readFileSync(join(REPO, p), "utf8")); }
+
+/**
+ * The options every seat shares. Per-seat inputs (BES prior, MP, by-election
+ * shares, demographics, LAD) are added in main(). tacticalOpts states the
+ * values tacticalVoting.js would otherwise take as defaults, so the published
+ * assumptions are read from what the model receives, not from a comment.
+ */
+export const GE_MODEL_OPTIONS = Object.freeze({
+  useSTM: true,
+  geDampening: 1.0,
+  besPriorWeight: 0.05,
+  applyTacticalVoting: true,
+  tacticalOpts: Object.freeze({ competitivenessGap: 0.10, tacticalFloor: 0.05, transferRate: 0.15 }),
+  byElectionWeight: 0.30,
+});
+
+/**
+ * Incumbency constants are not options: they live in incumbencyTracker.js.
+ * They are restated here for the published file and the test checks them
+ * against applyIncumbencyAdjustment's behaviour.
+ */
+export const INCUMBENCY_CONSTANTS = Object.freeze({
+  incumbency_personal_vote_pp: { ">=20yr": 4.0, ">=10yr": 3.0, ">=5yr": 2.0, "<5yr": 1.0 },
+  retirement_drag_pp: { ">=20yr": 3.0, ">=10yr": 2.5, "<10yr": 2.0 },
+  defection_open_seat_drag_pp: 1.5,
+});
+
+export function buildGeAssumptions(options = GE_MODEL_OPTIONS, generatedAt = new Date().toISOString()) {
+  return {
+    snapshot: {
+      snapshot_id: `${FORECAST_KEY}-assumptions-${generatedAt.slice(0, 10)}`,
+      generated_at: generatedAt,
+      built_from: "GE_MODEL_OPTIONS in scripts/run-ge-predictions.mjs, the object passed to predictConstituencyGE for every seat",
+    },
+    parameters: {
+      use_strong_transition_model: options.useSTM === true,
+      ge_dampening: options.geDampening,
+      bes_prior_weight: options.besPriorWeight,
+      tactical_voting_applied: options.applyTacticalVoting !== false,
+      tactical_voting_competitiveness_gap: options.tacticalOpts.competitivenessGap,
+      tactical_voting_floor: options.tacticalOpts.tacticalFloor,
+      tactical_voting_transfer_rate: options.tacticalOpts.transferRate,
+      by_election_overlay_weight: options.byElectionWeight,
+      ...INCUMBENCY_CONSTANTS,
+    },
+  };
+}
+
+/** "Wikipedia table, unweighted trailing 14-day mean, 9 polls, fieldwork 2026-10-19 to 2026-10-26" */
+export function describePollingSource(snapshot) {
+  const meta = snapshot?._meta || {};
+  if (meta.review_status === "draft_placeholder") {
+    return `${meta.label || "Static placeholder"} (not refreshed from polling)`;
+  }
+  const parts = [meta.source, meta.fieldwork ? `fieldwork ${meta.fieldwork}` : null].filter(Boolean);
+  return parts.length ? parts.join(", ") : "unknown";
+}
 
 function canonParty(p) {
   if (!p) return "Unknown";
@@ -118,6 +188,58 @@ function buildBesPriorMap(pcons, pconPriors, ladPriors) {
   return out;
 }
 
+/** Latest fieldwork date of a polling snapshot ("2026-10-19 to 2026-10-26" → "2026-10-26"). */
+export function pollingFieldworkLatest(snapshot) {
+  const f = String(snapshot?._meta?.fieldwork || "");
+  const dates = f.match(/\d{4}-\d{2}-\d{2}/g);
+  return dates ? dates[dates.length - 1] : null;
+}
+
+export const SEAT_RANGE_DRAWS = 10000;
+export const SEAT_RANGE_SEED = 20261109;
+
+/**
+ * Adds win_probability and share_intervals to every predicted seat and returns
+ * the summary blocks. Exported so the Restore Britain overlay can re-run it
+ * after it changes Great Yarmouth.
+ */
+export function annotateUncertainty(predictions, calibration) {
+  let annotated = 0;
+  const seats = [];
+  Object.values(predictions).forEach((p, i) => {
+    if (!p?.prediction) return;
+    const wp = leaderWinProbability(p.prediction, calibration);
+    p.win_probability = wp ? wp.win_probability : null;
+    p.win_probability_bin = wp ? wp.bin : null;
+    p.share_intervals = shareIntervals(p.prediction, calibration, { seed: 1 + i });
+    if (wp) annotated += 1;
+    seats.push({ winner: p.winner, runner_up: p.runner_up, win_probability: p.win_probability });
+  });
+  const rho = calibration.correlation?.rho ?? 0;
+  const sim = simulateSeatRanges(seats, { draws: SEAT_RANGE_DRAWS, seed: SEAT_RANGE_SEED, rho });
+  return {
+    annotated,
+    win_probability: {
+      calibration: "data/calibration/ge-win-probability.json",
+      fitted_on: calibration.fitted_on,
+      fitted_at: calibration.fitted_at,
+      fitted_n: calibration.n,
+      meaning: "Share of 2024 rerun seats with a similar predicted margin that the projected leader went on to win",
+      share_intervals: "p10 and p90 per party on at least 1 per cent, drawn from the 2024 rerun residual SDs (src/lib/intervals.js)",
+    },
+    seat_ranges: {
+      method:
+        "Each seat's winner drawn from its win probability: the leader holds it, otherwise the runner-up takes it. Seats share a national shock per party (Gaussian copula) with correlation rho from the 2024 rerun, so seats with the same pairing move together.",
+      interval: "5th to 95th percentile of simulated seat totals (a 90 in 100 range)",
+      draws: sim.draws,
+      seed: sim.seed,
+      rho: sim.rho,
+      by_party: sim.by_party,
+      limits: "A seat can only go to its projected leader or runner-up, so a party projected third everywhere gets no range. Replayed on 2024, the actual Labour, Conservative and Reform UK totals fell inside this range and the Liberal Democrat and SNP totals did not (data/calibration/ge-win-probability.json, seat_range_check_2024).",
+    },
+  };
+}
+
 function main() {
   console.log("Loading inputs ...");
   const pcons = readJson("data/identity/pcons-ge-next.json").pcons;
@@ -199,14 +321,10 @@ function main() {
       mp: mpRoster[pcon.slug] || null,
     };
     const opts = {
-      useSTM: true,
-      geDampening: 1.0,
+      ...GE_MODEL_OPTIONS,
       besPrior: besPriorMap[pcon.slug] || null,
-      besPriorWeight: 0.05,
       mp: mpRoster[pcon.slug] || null,
-      applyTacticalVoting: true,
       byElectionShares: byElectionShareMap[pcon.slug] || null,
-      byElectionWeight: 0.30,
       demographics: pcon.pcon24cd ? pconDemographics?.by_pcon?.[pcon.pcon24cd] || null : null,
       allowHighIndependent: standingDownMap[pcon.slug]?.allow_high_independent === true,
       // PCON's primary LAD (first of lad24cds); register lookup is per-LAD.
@@ -241,6 +359,16 @@ function main() {
   }
   console.log("\nTally:", JSON.stringify(tally, null, 2));
 
+  // Uncertainty: win probability, p10/p90 shares, seat ranges.
+  const calibration = loadGeWinProbability(REPO);
+  if (!calibration) throw new Error("data/calibration/ge-win-probability.json missing; run scripts/calibrate-ge-win-probability.mjs");
+  const pollingLatest = pollingFieldworkLatest(UK_WESTMINSTER_2026_APRIL_AVERAGE);
+  if (!geWinProbabilityApplies(calibration, { pollingLatest })) {
+    throw new Error(`ge-win-probability.json was fitted on ${calibration.fitted_on}; refusing to apply it to polling dated ${pollingLatest}`);
+  }
+  const uncertainty = annotateUncertainty(predictions, calibration);
+  console.log(`  win probability on ${uncertainty.annotated} seats; seat range ${uncertainty.seat_ranges.draws} draws, rho ${uncertainty.seat_ranges.rho}`);
+
   // Compute national vote share + seat tallies
   const nationalVoteShare = {};
   let totalVotes = 0;
@@ -259,7 +387,9 @@ function main() {
     snapshot: {
       snapshot_id: `${FORECAST_KEY}-${new Date().toISOString().slice(0, 10)}`,
       generated_at: new Date().toISOString(),
-      polling_source: "UK_WESTMINSTER_2026_APRIL_AVERAGE",
+      polling_source: describePollingSource(UK_WESTMINSTER_2026_APRIL_AVERAGE),
+      polling_fieldwork_latest: pollingLatest,
+      polling_constant: "UK_WESTMINSTER_2026_APRIL_AVERAGE",
       baseline_source: "UK_WESTMINSTER_2024_GE_RESULT",
       methodology_version: "1.0.0-GE",
       sources: [
@@ -267,8 +397,12 @@ function main() {
         { path: "data/history/dc-historic-results.json", role: "Historic + by-election data" },
         { path: "data/features/ward-mrp-priors.json", role: "BES Wave 1-30 LAD priors" },
         { path: "src/lib/nationalPolling.js", role: "Current Westminster polling" },
+        { path: "data/polling/override.json", role: "Westminster polling snapshot read by nationalPolling.js" },
+        { path: "data/calibration/ge-win-probability.json", role: "Win probability, share intervals and seat-range correlation" },
       ],
     },
+    win_probability: uncertainty.win_probability,
+    seat_ranges: uncertainty.seat_ranges,
     seat_tallies_by_party: tally.by_winner,
     seat_tallies_by_country: tally.by_country,
     national_vote_share: nationalVoteShare,
@@ -276,21 +410,7 @@ function main() {
     pcons_skipped: tally.no_baseline,
   };
 
-  const assumptions = {
-    snapshot: { snapshot_id: `${FORECAST_KEY}-assumptions-${new Date().toISOString().slice(0, 10)}`, generated_at: new Date().toISOString() },
-    parameters: {
-      use_strong_transition_model: true,
-      ge_dampening: 1.0,
-      bes_prior_weight: 0.15,
-      tactical_voting_competitiveness_gap: 0.10,
-      tactical_voting_floor: 0.05,
-      tactical_voting_transfer_rate: 0.30,
-      by_election_overlay_weight: 0.30,
-      incumbency_personal_vote_pp: { ">=20yr": 4.0, ">=10yr": 3.0, ">=5yr": 2.0, "<5yr": 1.0 },
-      retirement_drag_pp: { ">=20yr": 3.0, ">=10yr": 2.5, "<10yr": 2.0 },
-      defection_open_seat_drag_pp: 1.5,
-    },
-  };
+  const assumptions = buildGeAssumptions(GE_MODEL_OPTIONS, summary.snapshot.generated_at);
 
   const outDir = `data/predictions/${FORECAST_KEY}`;
   mkdirSync(join(REPO, outDir), { recursive: true });
@@ -301,4 +421,4 @@ function main() {
   console.log(`Seat winners: ${Object.entries(tally.by_winner).sort((a, b) => b[1] - a[1]).map(([p, n]) => `${p}: ${n}`).join(", ")}`);
 }
 
-main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
