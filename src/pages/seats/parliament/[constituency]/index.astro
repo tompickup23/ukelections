@@ -165,7 +165,7 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
     )}
     <p class="eyebrow">General election forecast</p>
     <h1>{record.name} constituency map and forecast</h1>
-    <p class="lede">
+    <p class="lede" data-discovery-headline={`${record.winner}|${record.runner_up}|${Math.round(Number(winnerShare))}|${Math.round(Number(margin))}`}>
       Predicted winner: <strong><span class="party-pill" style={`background:${partyColour(record.winner)}`}></span> {shortPartyLabel(record.winner)}</strong>
       with <strong>{winnerShare}%</strong> of the vote, a {margin}pp margin over {shortPartyLabel(record.runner_up)}.
     </p>

@@ -1,7 +1,7 @@
 import { pageFingerprint } from "./lib/discovery-manifest.mjs";
 import process from "node:process";
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const SITE_URL = "https://ukelections.co.uk";
@@ -20,6 +20,14 @@ export function urlsFromSitemapXml(xml, cutoff) {
   return [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>(?:\s*<lastmod>([^<]+)<\/lastmod>)?\s*<\/url>/g)]
     .filter(([, , lastmod]) => lastmod && lastmod >= cutoff)
     .map(([, url]) => url.replaceAll("&amp;", "&"));
+}
+
+/** Child sitemap URLs when the XML is a sitemap index on this host; otherwise none. */
+export function childSitemapUrls(xml, siteUrl = SITE_URL) {
+  if (!/<sitemapindex[\s>]/.test(xml)) return [];
+  return [...xml.matchAll(/<sitemap>\s*<loc>([^<]+)<\/loc>/g)]
+    .map(([, url]) => url.replaceAll("&amp;", "&"))
+    .filter((url) => new URL(url).origin === siteUrl);
 }
 
 export function validateUrls(urls, siteUrl = SITE_URL) {
@@ -61,13 +69,25 @@ async function urlsForArgs({ args, siteUrl, cutoff, fetchImpl }) {
 
   const localSitemap = option(args, "--sitemap-file");
   if (localSitemap) {
-    return urlsFromSitemapXml(readFileSync(resolve(process.cwd(), localSitemap), "utf8"), cutoff);
+    const file = resolve(process.cwd(), localSitemap);
+    const xml = readFileSync(file, "utf8");
+    // A local sitemap index: its children sit beside it, as in dist/.
+    return childSitemapUrls(xml, siteUrl).length
+      ? childSitemapUrls(xml, siteUrl).flatMap((u) => urlsFromSitemapXml(readFileSync(resolve(dirname(file), `.${new URL(u).pathname}`), "utf8"), cutoff))
+      : urlsFromSitemapXml(xml, cutoff);
   }
   if (args.includes("--sitemap")) {
-    const sitemapUrl = `${siteUrl}/sitemap.xml`;
-    const response = await fetchImpl(sitemapUrl);
-    if (!response.ok) throw new Error(`Could not read ${sitemapUrl}: HTTP ${response.status}`);
-    return urlsFromSitemapXml(await response.text(), cutoff);
+    const read = async (url) => {
+      const response = await fetchImpl(url);
+      if (!response.ok) throw new Error(`Could not read ${url}: HTTP ${response.status}`);
+      return response.text();
+    };
+    const xml = await read(`${siteUrl}/sitemap.xml`);
+    const children = childSitemapUrls(xml, siteUrl);
+    if (!children.length) return urlsFromSitemapXml(xml, cutoff);
+    const out = [];
+    for (const child of children) out.push(...urlsFromSitemapXml(await read(child), cutoff));
+    return out;
   }
   return values(args, "--url");
 }
