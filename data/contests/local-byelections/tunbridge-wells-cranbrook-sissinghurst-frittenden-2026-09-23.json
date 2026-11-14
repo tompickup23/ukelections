@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.239Z",
+  "generated_at": "2026-11-14T03:52:16.005Z",
   "slug": "tunbridge-wells-cranbrook-sissinghurst-frittenden-2026-09-23",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-08-26",
     "registration_deadline": "2026-09-07",
-    "postal_vote_deadline": "2026-09-08"
+    "postal_vote_deadline": "2026-09-08",
+    "timetable": {
+      "notice_of_election_deadline": "2026-08-18",
+      "close_of_nominations": "2026-08-26",
+      "sopn_publish_deadline": "2026-08-27",
+      "registration_deadline": "2026-09-07",
+      "postal_vote_application_deadline": "2026-09-08",
+      "proxy_vote_application_deadline": "2026-09-15",
+      "vac_application_deadline": "2026-09-15",
+      "replacement_pack_start_date": "2026-09-17"
+    }
   },
   "field": {
     "candidate_count": 4,
@@ -40,30 +50,38 @@
       {
         "name": "Harry James Wormington",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 697,
-        "elected": true
+        "elected": true,
+        "party": "Liberal Democrats",
+        "source": "https://tunbridgewells.gov.uk/council/voting-and-elections/elections/wednesday-23-september-2026/declaration-of-result-of-poll",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "Nicholas Lees",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 590,
-        "elected": false
+        "elected": false,
+        "party": "Conservative",
+        "source": "https://tunbridgewells.gov.uk/council/voting-and-elections/elections/wednesday-23-september-2026/declaration-of-result-of-poll",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "David Somers",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 392,
-        "elected": false
+        "elected": false,
+        "party": "Reform UK",
+        "source": "https://tunbridgewells.gov.uk/council/voting-and-elections/elections/wednesday-23-september-2026/declaration-of-result-of-poll",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "Max Lawson Chesters",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 186,
-        "elected": false
+        "elected": false,
+        "party": "Green Party",
+        "source": "https://tunbridgewells.gov.uk/council/voting-and-elections/elections/wednesday-23-september-2026/declaration-of-result-of-poll",
+        "accessed_at": "2026-09-28"
       }
     ]
   },
@@ -146,7 +164,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 1,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.2538606403013183,
       "Labour": 0,
@@ -161,40 +179,28 @@
     },
     "candidates": [
       {
-        "person_id": 125476,
         "name": "Alexander Ellison",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 1227,
-        "elected": true
+        "votes": 1227
       },
       {
-        "person_id": 128249,
         "name": "Matthew Beattie",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 674,
-        "elected": false
+        "votes": 674
       },
       {
-        "person_id": 112975,
         "name": "Vivian Widgery",
         "party_name": "Liberal Democrats",
-        "party_ec_id": "PP90",
-        "votes": 384,
-        "elected": false
+        "votes": 384
       },
       {
-        "person_id": 99980,
         "name": "Paul Jeremy Keith Froome",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 370,
-        "elected": false
+        "votes": 370
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://democracy.tunbridgewells.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=31",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.2026-05-07/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -203,7 +209,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": 1,
+      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.2538606403013183,
@@ -218,7 +224,7 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://democracy.tunbridgewells.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=31"
+      "source": "https://candidates.democracyclub.org.uk/elections/local.tunbridge-wells.cranbrook-sissinghurst-frittenden.2026-05-07/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
@@ -322,7 +328,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -342,6 +348,8 @@
     },
     "winner_party": "Liberal Democrats",
     "winner_candidate": "Harry James Wormington",
+    "winner_party_name": "Liberal Democrats",
+    "winner_votes": 697,
     "runner_up_party": "Conservative",
     "majority_votes": 107,
     "total_votes": 1865,
@@ -356,6 +364,7 @@
       "mae_pp": 11.81132707774799
     },
     "checked_at": "2026-09-28",
+    "accessed_at": "2026-09-28",
     "review_status": "hand_verified_declaration",
     "note": "Official candidate counts total 1,865; the declaration reports 1,869 papers issued and 3 rejected. The one-paper difference is unresolved; no totals have been inferred or changed. Official turnout is displayed as 32.2%."
   },

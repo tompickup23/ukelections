@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.082Z",
+  "generated_at": "2026-11-14T03:52:16.330Z",
   "slug": "caerphilly-risca-east-2026-11-19",
   "status": "upcoming",
   "contest": {
@@ -18,24 +18,44 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2022-05-05",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "DEATH",
+    "vacancy_reason": "the sitting councillor died",
     "requires_voter_id": null,
     "nominations_close": "2026-10-23",
     "registration_deadline": "2026-11-03",
-    "postal_vote_deadline": "2026-11-04"
+    "postal_vote_deadline": "2026-11-04",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-15",
+      "close_of_nominations": "2026-10-23",
+      "sopn_publish_deadline": "2026-10-26",
+      "registration_deadline": "2026-11-03",
+      "postal_vote_application_deadline": "2026-11-04",
+      "proxy_vote_application_deadline": "2026-11-11",
+      "vac_application_deadline": null,
+      "replacement_pack_start_date": "2026-11-13"
+    }
   },
   "field": {
-    "candidate_count": 3,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.caerphilly.risca-east.by.2026-11-19/sopn/2026-10-26T13%3A17%3A43.548269%2B00%3A00/temp.jpeg",
     "parties": [
+      "Conservative",
+      "Green Party",
       "Independent",
       "Labour",
+      "Plaid Cymru",
       "Reform UK"
     ],
     "candidates": [
+      {
+        "name": "Tracy Barrington",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
       {
         "name": "Darren Crandon",
         "party_name": "Reform UK",
@@ -44,14 +64,28 @@
         "elected": null
       },
       {
-        "name": "Peter Heathcote",
+        "name": "Ceithin Llewellyn Dennes",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Brandon Ham",
+        "party_name": "Plaid Cymru - The Party of Wales",
+        "party": "Plaid Cymru",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Peter John Heathcote",
         "party_name": "Independent",
         "party": "Independent",
         "votes": null,
         "elected": null
       },
       {
-        "name": "Marcus Leonard",
+        "name": "Marcus Kyle Leonard",
         "party_name": "Labour Party",
         "party": "Labour",
         "votes": null,
@@ -115,10 +149,160 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.caerphilly.risca-east.2022-05-05/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.6333938294010889,
+        "Conservative": 0,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0.3666061705989111,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.caerphilly.risca-east.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 91,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9723130728025009,
+        "Conservative": -0.627902220808357,
+        "Liberal Democrats": -0.4192421802506563,
+        "Green Party": -0.21020702076524378,
+        "Plaid Cymru": 0.1054966908378934,
+        "Independent": -1.1741993075013362
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4478200203097242,
+        "Conservative": 0.6041358214559436,
+        "Liberal Democrats": 0.7191107082877933,
+        "Green Party": 0.8507379337854007,
+        "Plaid Cymru": 1.0811885126334744,
+        "Independent": 0.37359945708973985
+      },
+      "entry_shares": {
+        "Reform UK": 0.2738328756375049,
+        "Labour": 0.04702627939142462,
+        "Conservative": 0.04861878453038674,
+        "Liberal Democrats": 0.07448979591836735,
+        "Green Party": 0.05570669320902737,
+        "Plaid Cymru": 0.15343627194875406,
+        "Restore Britain": 0.061305804081476206,
+        "Independent": 0.04714342788653616
+      },
+      "entry_counts": {
+        "Reform UK": 91,
+        "Labour": 5,
+        "Conservative": 7,
+        "Liberal Democrats": 13,
+        "Green Party": 40,
+        "SNP": 0,
+        "Plaid Cymru": 6,
+        "Restore Britain": 6,
+        "Independent": 9,
+        "Other": 3
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 68,
+        "Conservative": 80,
+        "Liberal Democrats": 47,
+        "Green Party": 31,
+        "SNP": 0,
+        "Plaid Cymru": 16,
+        "Restore Britain": 0,
+        "Independent": 14,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.22594766851583026,
+      "Labour": 0.32609071123101696,
+      "Conservative": 0.04011680841878367,
+      "Liberal Democrats": 0,
+      "Green Party": 0.04596525315670478,
+      "SNP": 0,
+      "Plaid Cymru": 0.3229801110053992,
+      "Restore Britain": 0,
+      "Independent": 0.03889944767226518,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.2055,
+      "Labour": 0.3475,
+      "Conservative": 0.0125,
+      "Green Party": 0.0275,
+      "Plaid Cymru": 0.34375,
+      "Independent": 0.06325
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.05609382109894241,
+        "p50": 0.1940499007816454,
+        "p90": 0.4043000165788736
+      },
+      "Labour": {
+        "p10": 0.12194103317465427,
+        "p50": 0.273223704028804,
+        "p90": 0.47573991155494355
+      },
+      "Conservative": {
+        "p10": 0.006917892561146059,
+        "p50": 0.035018193413879975,
+        "p90": 0.1390389900961167
+      },
+      "Green Party": {
+        "p10": 0.006678134462007669,
+        "p50": 0.041168126167564295,
+        "p90": 0.1761809199839152
+      },
+      "Plaid Cymru": {
+        "p10": 0.1233685908481654,
+        "p50": 0.2759992668347144,
+        "p90": 0.468274995496758
+      },
+      "Independent": {
+        "p10": 0.0029501638822632733,
+        "p50": 0.03442005926489437,
+        "p90": 0.23965719619308065
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Plaid Cymru",
+    "margin_pp": 0.31106002256177656,
+    "leader_probability": 0.3475,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Reform UK (median of 91), Conservative (median of 7), Green Party (median of 40), Independent (median of 9). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Reform UK",
+      "Conservative",
+      "Green Party",
+      "Independent"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:54.908Z",
+  "generated_at": "2026-11-14T03:52:15.890Z",
   "slug": "sheffield-southey-2026-08-27",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-07-31",
     "registration_deadline": "2026-08-11",
-    "postal_vote_deadline": "2026-08-12"
+    "postal_vote_deadline": "2026-08-12",
+    "timetable": {
+      "notice_of_election_deadline": "2026-07-23",
+      "close_of_nominations": "2026-07-31",
+      "sopn_publish_deadline": "2026-08-03",
+      "registration_deadline": "2026-08-11",
+      "postal_vote_application_deadline": "2026-08-12",
+      "proxy_vote_application_deadline": "2026-08-19",
+      "vac_application_deadline": "2026-08-19",
+      "replacement_pack_start_date": "2026-08-21"
+    }
   },
   "field": {
     "candidate_count": 5,
@@ -41,37 +51,42 @@
       {
         "name": "Paul Jakeman",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 1133,
-        "elected": true
+        "elected": true,
+        "party": "Reform UK",
+        "source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714"
       },
       {
         "name": "Jayne Dunn",
         "party_name": "Labour Party",
-        "party": "Labour",
         "votes": 836,
-        "elected": false
+        "elected": false,
+        "party": "Labour",
+        "source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714"
       },
       {
         "name": "Daniel John Moy",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 146,
-        "elected": false
+        "elected": false,
+        "party": "Green Party",
+        "source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714"
       },
       {
         "name": "Daniel Gage",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 69,
-        "elected": false
+        "elected": false,
+        "party": "Conservative",
+        "source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714"
       },
       {
         "name": "Oliver Edward George",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 56,
-        "elected": false
+        "elected": false,
+        "party": "Liberal Democrats",
+        "source": "https://www.thestar.co.uk/news/politics/reform-win-by-election-in-southey-ward-in-sheffield-as-labour-come-second-8946714"
       }
     ]
   },
@@ -169,7 +184,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 1,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.49930555555555556,
       "Labour": 0.24513888888888888,
@@ -184,64 +199,43 @@
     },
     "candidates": [
       {
-        "person_id": 135900,
         "name": "Yvonne Sykes",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 2157,
-        "elected": true
+        "votes": 2157
       },
       {
-        "person_id": 12491,
         "name": "Jayne Dunn",
         "party_name": "Labour and Co-operative Party",
-        "party_ec_id": "joint-party:53-119",
-        "votes": 1059,
-        "elected": false
+        "votes": 1059
       },
       {
-        "person_id": 135899,
         "name": "Tuss Ramzan",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 557,
-        "elected": false
+        "votes": 557
       },
       {
-        "person_id": 90309,
         "name": "Andrew Mark Smith",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 206,
-        "elected": false
+        "votes": 206
       },
       {
-        "person_id": 105273,
         "name": "Kevin Grum",
         "party_name": "Liberal Democrats",
-        "party_ec_id": "PP90",
-        "votes": 204,
-        "elected": false
+        "votes": 204
       },
       {
-        "person_id": 135897,
         "name": "Joseph Clark",
         "party_name": "Independent",
-        "party_ec_id": "ynmp-party:2",
-        "votes": 111,
-        "elected": false
+        "votes": 111
       },
       {
-        "person_id": 96487,
         "name": "Harry John Lomas",
         "party_name": "Trade Unionist and Socialist Coalition",
-        "party_ec_id": "PP804",
-        "votes": 26,
-        "elected": false
+        "votes": 26
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://www.sheffield.gov.uk/your-city-council/elections/local-elections-results-2026#southey",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.sheffield.southey.2026-05-07/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -250,7 +244,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": 1,
+      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.49930555555555556,
@@ -265,7 +259,7 @@
         "Other": 0.0060185185185185185
       },
       "source_label": "Democracy Club",
-      "source": "https://www.sheffield.gov.uk/your-city-council/elections/local-elections-results-2026#southey"
+      "source": "https://candidates.democracyclub.org.uk/elections/local.sheffield.southey.2026-05-07/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
@@ -339,7 +333,7 @@
     "bands": {
       "Reform UK": {
         "p10": 0.2968840196903495,
-        "p50": 0.44834873752658877,
+        "p50": 0.4483487375265888,
         "p90": 0.651949245126862
       },
       "Labour": {
@@ -375,7 +369,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -395,6 +389,8 @@
     },
     "winner_party": "Reform UK",
     "winner_candidate": "Paul Jakeman",
+    "winner_party_name": "Reform UK",
+    "winner_votes": 1133,
     "runner_up_party": "Labour",
     "majority_votes": 297,
     "total_votes": 2240,
