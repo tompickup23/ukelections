@@ -1,15 +1,17 @@
 {
   "snapshot": {
-    "snapshot_id": "ge-next-assumptions-2026-10-21",
-    "generated_at": "2026-10-21T03:30:07.169Z"
+    "snapshot_id": "ge-next-assumptions-2026-11-09",
+    "generated_at": "2026-11-09T02:22:07.987Z",
+    "built_from": "GE_MODEL_OPTIONS in scripts/run-ge-predictions.mjs, the object passed to predictConstituencyGE for every seat"
   },
   "parameters": {
     "use_strong_transition_model": true,
     "ge_dampening": 1,
-    "bes_prior_weight": 0.15,
+    "bes_prior_weight": 0.05,
+    "tactical_voting_applied": true,
     "tactical_voting_competitiveness_gap": 0.1,
     "tactical_voting_floor": 0.05,
-    "tactical_voting_transfer_rate": 0.3,
+    "tactical_voting_transfer_rate": 0.15,
     "by_election_overlay_weight": 0.3,
     "incumbency_personal_vote_pp": {
       ">=20yr": 4,

@@ -1,14 +1,14 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
-import { externalHref, buildDataset, type Crumb } from "../../../../lib/seo";
+import { externalHref, type Crumb } from "../../../../lib/seo";
 import MiniMap from "../../../../components/MiniMap.astro";
 import PartyBars from "../../../../components/PartyBars.astro";
 import ExploreNext from "../../../../components/ExploreNext.astro";
 import { loadGePredictions, loadGeBacktestForSeat, partyColour } from "../../../../lib/predictions";
-import { shortPartyLabel, forecastStamp, loadPollingFieldworkLatest } from "../../../../lib/siteData";
+import { shortPartyLabel, forecastStamp } from "../../../../lib/siteData";
 import { constituencySummary, seatSwings } from "../../../../lib/pageSummaries";
 import { regionForSeat, seatsByRegion } from "../../../../lib/parliamentRegions";
-import { SITE_URL } from "../../../../lib/site";
+import { inHundred, loadGeWinProbability } from "../../../../lib/geWinProbability.js";
 import { buildParliamentaryJourneyLinks } from "../../../../lib/electionJourneys";
 
 export async function getStaticPaths() {
@@ -87,6 +87,14 @@ const sisterLinks = [
 
 const winnerShare = ((record.prediction[record.winner]?.pct || 0) * 100).toFixed(1);
 const margin = ((record.majority_pct || 0) * 100).toFixed(1);
+const winProb: number | null = typeof record.win_probability === "number" ? record.win_probability : null;
+const winProbText = winProb !== null ? inHundred(winProb) : null;
+const bin = record.win_probability_bin;
+const intervals = (record.share_intervals || {}) as Record<string, { p10: number; p90: number }>;
+const leaderRange = intervals[record.winner];
+const runnerRange = intervals[record.runner_up];
+const pct1 = (x: number) => (x * 100).toFixed(1);
+const coverageInHundred = Math.round((loadGeWinProbability()?.interval_coverage?.overall ?? 0) * 100);
 // The slug is unslugged but was never cased, so the page printed
 // "england · north west" under the headline.
 const titleCase = (s?: string | null) =>
@@ -126,49 +134,86 @@ const breadcrumbs: Crumb[] = [
   ...(region ? [{ name: region.name, href: `/seats/parliament/${region.slug}/` }] : []),
   { name: record.name, href: `/seats/parliament/${Astro.params.constituency}/` }
 ];
-const pollingLatest = loadPollingFieldworkLatest();
-const structuredData = [
-  buildDataset({
-    name: `${record.name} general election projection`,
-    description: `Projected vote share by party for the ${record.name} parliamentary constituency, with the 2024 general election result it is projected from and the model's 2024 backtest for the seat.`,
-    url: `${SITE_URL}/seats/parliament/${slug}/`,
-    temporalCoverage: pollingLatest ? `2024-07-04/${pollingLatest}` : undefined,
-    dateModified: pollingLatest ?? undefined,
-    spatialCoverage: `${record.name} UK parliamentary constituency`,
-    variableMeasured: ["Projected vote share by party", "2024 general election vote share by party", "Projected winner and margin"],
-    keywords: [record.name, "general election forecast", "constituency projection"],
-  }),
-];
+// No Dataset structured data here: it stays on the forecast hub, which is the
+// page that offers the download. 650 near-identical Dataset nodes describe one
+// file 650 times.
+// Answer first, plain name first, under 60 characters. BaseLayout owns the
+// brand (normalisePageTitle strips a " | UK Elections" suffix).
 const pageTitle = slug === "makerfield" || slug === "colchester"
   ? `${record.name} constituency map and forecast`
-  : `${record.name}. General election forecast`;
+  : [`${record.name} general election forecast`, `${record.name} election forecast`, `${record.name} forecast`]
+      .find((t) => t.length <= 60) ?? record.name;
+const answer = `${shortPartyLabel(record.winner)} ahead${winProbText ? `, ${winProbText}` : ""}, ${margin}pp over ${shortPartyLabel(record.runner_up)}`;
+const pageDescription = [
+  `${record.name} general election forecast: ${answer}. Map, sitting MP and 2024 result.`,
+  `${record.name} general election forecast: ${answer}.`,
+  `${record.name} forecast: ${answer}.`,
+].find((d) => d.length <= 155) ?? `${record.name} forecast: ${answer}.`.slice(0, 155);
+const ge2024Top = ge2024Ranked.slice(0, 3);
+const ge2024Majority = record.ge2024?.majority;
 ---
 
 <BaseLayout
   breadcrumbs={breadcrumbs}
-  structuredData={structuredData}
   title={pageTitle}
-  description={`${record.name} constituency map, 2024 result and current model projection: ${shortPartyLabel(record.winner)} ahead by ${margin}pp over ${shortPartyLabel(record.runner_up)}.`}
+  description={pageDescription}
 >
-  <section class="page-hero">
-    {record.pcon24cd && (
-      <div class="mini-map-side">
-        <MiniMap
-          focalCode={record.pcon24cd}
-          focalKind="pcon"
-          focalColour={partyColour(record.winner)}
-          width={240}
-          height={170}
-          ariaLabel={`Location map of ${record.name} on the UK map`}
-        />
-      </div>
-    )}
+  <section class="page-hero seat-hero">
     <p class="eyebrow">General election forecast</p>
     <h1>{record.name} constituency map and forecast</h1>
     <p class="lede">
-      Predicted winner: <strong><span class="party-pill" style={`background:${partyColour(record.winner)}`}></span> {shortPartyLabel(record.winner)}</strong>
-      with <strong>{winnerShare}%</strong> of the vote, a {margin}pp margin over {shortPartyLabel(record.runner_up)}.
+      <strong><span class="party-pill" style={`background:${partyColour(record.winner)}`}></span> {shortPartyLabel(record.winner)} ahead{winProbText ? <>, {winProbText}</> : null}</strong>,
+      on <strong>{winnerShare}%</strong>, {margin}pp over {shortPartyLabel(record.runner_up)}.
     </p>
+    {winProb !== null && (
+      <p class="probability-note">
+        {winProbText} is how often the projected leader went on to win in our 2024 rerun, across
+        {" "}{bin?.n ?? "the"} seats where the predicted margin was between {bin?.from_pp} and {bin && bin.to_pp > 100 ? "100" : bin?.to_pp} points.
+        {leaderRange && runnerRange && <>{" "}{`Likely share range: ${shortPartyLabel(record.winner)} ${pct1(leaderRange.p10)} to ${pct1(leaderRange.p90)}%, ${shortPartyLabel(record.runner_up)} ${pct1(runnerRange.p10)} to ${pct1(runnerRange.p90)}%.`}</>}
+        {" "}It measures how far the model missed in 2024 using polls taken about nine weeks out, not how much opinion may change before the next election.
+        {" "}<a href="/methodology/general-election/#uncertainty">How this is calculated</a>.
+      </p>
+    )}
+    <div class="seat-glance">
+      {record.pcon24cd && (
+        <div class="seat-glance-map">
+          <MiniMap
+            focalCode={record.pcon24cd}
+            focalKind="pcon"
+            detail="full"
+            focalColour={partyColour(record.winner)}
+            width={320}
+            height={240}
+            ariaLabel={`Map of ${record.name} constituency and its neighbours`}
+          />
+        </div>
+      )}
+      <div class="seat-glance-card">
+        <p class="card-eyebrow">Sitting MP</p>
+        {mp ? (
+          <p class="card-lead"><strong>{mp.name}</strong>, {shortPartyLabel(mp.party)}{mp.since ? <>, since {mp.since}</> : null}{mp.status && mp.status !== "standing_again" ? <> ({mp.status.replace(/_/g, " ")})</> : null}</p>
+        ) : (
+          <p class="card-lead">No sitting MP record on file.</p>
+        )}
+        <p class="card-eyebrow">2024 result</p>
+        <ol class="card-result">
+          {ge2024Top.map((c: any) => (
+            <li>
+              <span class="party-pill" style={`background:${partyColour(c.party_name)}`}></span>
+              {shortPartyLabel(c.party_name)} <span class="card-num">{((c.pct || 0) * 100).toFixed(1)}%</span>
+            </li>
+          ))}
+        </ol>
+        {typeof ge2024Majority === "number" && <p class="card-foot">Majority {ge2024Majority.toLocaleString()} votes. <a href="#ge2024-result">Full result</a>.</p>}
+        {sisterLinks.length > 0 && (
+          <p class="card-foot">
+            {sisterLinks.map((l, i) => (
+              <span>{i > 0 && " · "}<a href={l.href}>{l.label}</a></span>
+            ))}
+          </p>
+        )}
+      </div>
+    </div>
     <p class="meta-row">
       {countryLabel}{regionLabel ? ` · ${regionLabel}` : ""}{record.pcon24cd ? ` · official code ${record.pcon24cd}` : ""}
       <span data-discovery-ignore>{geBundle.snapshot?.generated_at ? ` · forecast generated ${forecastStamp(geBundle.snapshot.generated_at)}` : ""}</span>
@@ -208,38 +253,15 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
             <div class="bar-track">
               <div class="bar-fill" style={`width:${(pct * 100).toFixed(1)}%; background:${partyColour(party)}`}></div>
             </div>
-            <span class="bar-value">{(pct * 100).toFixed(1)}% <span class={swing > 0 ? "swing-up" : (swing < 0 ? "swing-down" : "swing-flat")}>{swing > 0 ? "+" : ""}{(swing * 100).toFixed(1)}pp</span></span>
+            <span class="bar-value">{(pct * 100).toFixed(1)}% <span class={swing > 0 ? "swing-up" : (swing < 0 ? "swing-down" : "swing-flat")}>{swing > 0 ? "+" : ""}{(swing * 100).toFixed(1)}pp</span>{intervals[party] && <span class="bar-range">{pct1(intervals[party].p10)} to {pct1(intervals[party].p90)}%</span>}</span>
           </div>
         );
       })}
     </div>
-    <p class="caption">Coloured number is the swing from the 2024 general election result.</p>
+    <p class="caption">Coloured number is the swing from the 2024 general election result. The grey range is the low (p10) and high (p90) share from the 2024 rerun's errors; {coverageInHundred > 0 && <>on held-out regions the actual share fell inside it {coverageInHundred} times in 100.</>}</p>
   </section>
 
-  <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">Sitting MP</p>
-      <h2>{mp?.name || "No MP record on file"}</h2>
-    </div>
-    {mp ? (
-      <ul class="plain-list">
-        <li><strong>Party:</strong> {shortPartyLabel(mp.party)}</li>
-        <li><strong>Tenure:</strong> {mp.tenure_years?.toFixed(1)} years (since {mp.since})</li>
-        <li><strong>Status:</strong> {mp.status?.replace(/_/g, " ")}</li>
-      </ul>
-    ) : (
-      <p>The constituency was created for the 2024 boundary review or the sitting MP record isn't yet ingested.</p>
-    )}
-    {sisterLinks.length > 0 && (
-      <p class="muted-row">
-        See also: {sisterLinks.map((l, i) => (
-          <span>{i > 0 && " · "}<a href={l.href}>{l.label}</a></span>
-        ))}
-      </p>
-    )}
-  </section>
-
-  <section class="section">
+  <section class="section" id="ge2024-result">
     <div class="section-head">
       <p class="eyebrow">2024 general election result</p>
       <h2>What happened on 4 July 2024</h2>
@@ -271,8 +293,9 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
         <h2>Our 2024 backtest for this constituency</h2>
       </div>
       <p>
-        We replayed the same model architecture against the 4 July 2024 general election using only the data a
-        forecaster running the model in May 2024 would have known. Here's what it would have predicted for
+        We replayed the model on the 4 July 2024 general election from the 2019 result, feeding it the actual 2024
+        national vote shares and the anti-attenuation step, so this tests how the model spreads a known national
+        result across seats rather than how good the polls were. Here's what it predicted for
         {" "}<strong>{record.name}</strong>, and what actually happened.
       </p>
       <div class="backtest-callout">
@@ -325,3 +348,49 @@ const pageTitle = slug === "makerfield" || slug === "colchester"
     </p>
   </details>
 </BaseLayout>
+
+<style>
+  .seat-hero .lede { margin-bottom: var(--space-sm); }
+  .probability-note {
+    margin: 0 0 var(--space-md);
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+  .seat-glance {
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: var(--space-md);
+    align-items: start;
+  }
+  .seat-glance-card {
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-muted);
+  }
+  .card-eyebrow {
+    margin: 0 0 var(--space-2xs);
+    color: var(--ink-soft);
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .card-lead { margin: 0 0 var(--space-md); }
+  .card-result {
+    margin: 0 0 var(--space-sm);
+    padding: 0;
+    list-style: none;
+  }
+  .card-result li { display: flex; align-items: center; gap: var(--space-xs); }
+  .card-num { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .card-foot { margin: 0; color: var(--ink-soft); font-size: var(--text-small); }
+  .bar-range {
+    display: block;
+    color: var(--ink-soft);
+    font-size: var(--text-eyebrow);
+    font-weight: 400;
+  }
+  @media (max-width: 40rem) {
+    .seat-glance { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

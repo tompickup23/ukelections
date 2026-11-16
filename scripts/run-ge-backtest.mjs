@@ -16,7 +16,7 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { predictConstituencyGE } from "../src/lib/electionModel.js";
 import { applyAntiAttenuation, computeHistoricSigmas } from "../src/lib/antiAttenuation.js";
 import { UK_WESTMINSTER_2019_GE_RESULT, UK_WESTMINSTER_2024_MAY_AVERAGE } from "../src/lib/nationalPolling.js";
@@ -24,7 +24,7 @@ import { UK_WESTMINSTER_2019_GE_RESULT, UK_WESTMINSTER_2024_MAY_AVERAGE } from "
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(__dirname, "..");
 
-function readJson(p) { return JSON.parse(readFileSync(join(REPO, p), "utf8")); }
+export function readJson(p) { return JSON.parse(readFileSync(join(REPO, p), "utf8")); }
 
 // Canonicalise party names — DC results carry varied spellings.
 function canonParty(p) {
@@ -129,7 +129,7 @@ function metrics(rows, parties) {
   };
 }
 
-function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019, useRealPolling, pconDemographics }) {
+export function runBacktest({ pcons, dcResults, baseYear, targetYear, mode, polling, notional2019, useRealPolling, pconDemographics }) {
   const baseIdx = buildIndex(dcResults, baseYear);
   const targetIdx = buildIndex(dcResults, targetYear);
   const baseNational = nationalShares(baseYear, dcResults);
@@ -371,4 +371,6 @@ function main() {
   console.log(`Total lift:            ${out.summary.total_lift_pp.toFixed(2)}pp`);
 }
 
-main();
+// Importable by scripts/calibrate-ge-win-probability.mjs, which needs the
+// per-seat STM rows this file only summarises; run main only when invoked.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

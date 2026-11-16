@@ -42,7 +42,7 @@ const DEFAULT_SIGMA_BY_PARTY = {
 };
 const DEFAULT_FALLBACK_SIGMA = 0.06;
 
-export function bootstrapWardIntervals({ prediction, residualSd = {}, samples = 1000, seed = 1 }) {
+export function bootstrapWardIntervals({ prediction, residualSd = {}, samples = 1000, seed = 1, fallbackSigma = null }) {
   if (!prediction) return null;
   const parties = Object.keys(prediction);
   if (parties.length === 0) return prediction;
@@ -50,6 +50,9 @@ export function bootstrapWardIntervals({ prediction, residualSd = {}, samples = 
   const sigmaFor = (p) => {
     const fromBacktest = residualSd[p];
     if (typeof fromBacktest === "number" && fromBacktest > 0) return fromBacktest;
+    // A caller with fitted residuals for the minor parties passes their pooled
+    // SD; the hand-set table below is only for callers that have none.
+    if (typeof fallbackSigma === "number" && fallbackSigma > 0) return fallbackSigma;
     return DEFAULT_SIGMA_BY_PARTY[p] ?? DEFAULT_FALLBACK_SIGMA;
   };
 
