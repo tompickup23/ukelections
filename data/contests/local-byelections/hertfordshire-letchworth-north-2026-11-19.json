@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.078Z",
+  "generated_at": "2026-11-14T03:52:16.341Z",
   "slug": "hertfordshire-letchworth-north-2026-11-19",
   "status": "upcoming",
   "contest": {
@@ -18,16 +18,26 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2021-05-06",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "RESIGNATION",
+    "vacancy_reason": "the sitting councillor resigned",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-23",
     "registration_deadline": "2026-11-03",
-    "postal_vote_deadline": "2026-11-04"
+    "postal_vote_deadline": "2026-11-04",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-15",
+      "close_of_nominations": "2026-10-23",
+      "sopn_publish_deadline": "2026-10-26",
+      "registration_deadline": "2026-11-03",
+      "postal_vote_application_deadline": "2026-11-04",
+      "proxy_vote_application_deadline": "2026-11-11",
+      "vac_application_deadline": "2026-11-11",
+      "replacement_pack_start_date": "2026-11-13"
+    }
   },
   "field": {
     "candidate_count": 6,
-    "locked": false,
+    "locked": true,
     "sopn_published": true,
     "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.hertfordshire.letchworth-north.by.2026-11-19/sopn/2026-10-23T17%3A41%3A55.985162%2B00%3A00/Letchworth_North.pdf",
     "parties": [
@@ -68,7 +78,7 @@
         "elected": null
       },
       {
-        "name": "Laura Jane Williams",
+        "name": "Laura Williams",
         "party_name": "Labour Party",
         "party": "Labour",
         "votes": null,
@@ -149,10 +159,152 @@
     "source": "https://democracy.hertfordshire.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=16",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2025-05-01 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2025-05-01",
+      "seats_contested": 1,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.25651720542231493,
+        "Labour": 0.29744525547445255,
+        "Conservative": 0.22314911366006257,
+        "Liberal Democrats": 0.11913451511991657,
+        "Green Party": 0.10375391032325339,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://democracy.hertfordshire.gov.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=16"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 67,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.27002793175888107,
+        "Labour": 0.2811409520544227,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": -0.26960275498555786,
+        "Green Party": -0.3795886856743045,
+        "Independent": -0.11652273000901092
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8113585124704337,
+        "Labour": 1.2252027536945638,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 0.8116335442620766,
+        "Green Party": 0.7427972211298991,
+        "Independent": 0.9151749196392648
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Restore Britain": 0.0671971706454465,
+        "Independent": 0.051112943116240726
+      },
+      "entry_counts": {
+        "Reform UK": 0,
+        "Labour": 2,
+        "Conservative": 3,
+        "Liberal Democrats": 3,
+        "Green Party": 5,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 13,
+        "Independent": 11,
+        "Other": 1
+      },
+      "party_counts": {
+        "Reform UK": 66,
+        "Labour": 59,
+        "Conservative": 59,
+        "Liberal Democrats": 42,
+        "Green Party": 53,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 2
+      }
+    },
+    "central": {
+      "Reform UK": 0.2121597347359167,
+      "Labour": 0.36567284639818876,
+      "Conservative": 0.1838199974722658,
+      "Liberal Democrats": 0.09527394132283677,
+      "Green Party": 0.07468669845613718,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.06838678161465478,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.1035,
+      "Labour": 0.57875,
+      "Conservative": 0.1475,
+      "Liberal Democrats": 0.06975,
+      "Green Party": 0.05825,
+      "Restore Britain": 0.04225
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.1052262383247536,
+        "p50": 0.18203546033140208,
+        "p90": 0.2998544497987391
+      },
+      "Labour": {
+        "p10": 0.1536363424597629,
+        "p50": 0.3174829480679624,
+        "p90": 0.4978118266629267
+      },
+      "Conservative": {
+        "p10": 0.06045027464814875,
+        "p50": 0.1621789681541418,
+        "p90": 0.33023453208171394
+      },
+      "Liberal Democrats": {
+        "p10": 0.020569602774934914,
+        "p50": 0.08733823159038256,
+        "p90": 0.2517726221040247
+      },
+      "Green Party": {
+        "p10": 0.011939958564420578,
+        "p50": 0.06419610157408383,
+        "p90": 0.2345384497598728
+      },
+      "Restore Britain": {
+        "p10": 0.013101220726238741,
+        "p50": 0.06046218609653883,
+        "p90": 0.20704339279263906
+      }
+    },
+    "winner": "Labour",
+    "runner_up": "Conservative",
+    "margin_pp": 15.351311166227205,
+    "leader_probability": 0.57875,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Restore Britain (median of 13). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

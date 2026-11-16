@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.741Z",
+  "generated_at": "2026-11-14T03:52:16.169Z",
   "slug": "east-hertfordshire-hertford-kingsmead-2026-10-22",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-09-25",
     "registration_deadline": "2026-10-06",
-    "postal_vote_deadline": "2026-10-07"
+    "postal_vote_deadline": "2026-10-07",
+    "timetable": {
+      "notice_of_election_deadline": "2026-09-17",
+      "close_of_nominations": "2026-09-25",
+      "sopn_publish_deadline": "2026-09-28",
+      "registration_deadline": "2026-10-06",
+      "postal_vote_application_deadline": "2026-10-07",
+      "proxy_vote_application_deadline": "2026-10-14",
+      "vac_application_deadline": "2026-10-14",
+      "replacement_pack_start_date": "2026-10-16"
+    }
   },
   "field": {
     "candidate_count": 5,
@@ -43,35 +53,45 @@
         "party_name": "Conservative and Unionist Party",
         "votes": 575,
         "elected": true,
-        "party": "Conservative"
+        "party": "Conservative",
+        "source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx",
+        "accessed_at": "2026-10-24"
       },
       {
         "name": "Drew Antony Waller-Downes",
         "party_name": "Green Party",
         "votes": 529,
         "elected": false,
-        "party": "Green Party"
+        "party": "Green Party",
+        "source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx",
+        "accessed_at": "2026-10-24"
       },
       {
         "name": "Christopher Edmund Valentine Bush",
         "party_name": "Reform UK",
         "votes": 253,
         "elected": false,
-        "party": "Reform UK"
+        "party": "Reform UK",
+        "source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx",
+        "accessed_at": "2026-10-24"
       },
       {
         "name": "Dawn Kathleen Anne Newell",
         "party_name": "Labour Party",
         "votes": 164,
         "elected": false,
-        "party": "Labour"
+        "party": "Labour",
+        "source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx",
+        "accessed_at": "2026-10-24"
       },
       {
         "name": "Elif Nergis Lewis",
         "party_name": "Liberal Democrats",
         "votes": 110,
         "elected": false,
-        "party": "Liberal Democrats"
+        "party": "Liberal Democrats",
+        "source": "https://eastherts.fra1.digitaloceanspaces.com/s3fs-public/2026-10/Declaration%20of%20results%20-%20Hertford%20Kingsmead%2022-10-2026.docx",
+        "accessed_at": "2026-10-24"
       }
     ]
   },
@@ -307,56 +327,63 @@
     "swing": {
       "stratum": "pre_realignment|reform_entering",
       "stratum_used": true,
-      "contests_used": 32,
+      "contests_used": 87,
       "window_days": 365,
       "logodds_shifts": {
         "Labour": -0.9841723561133158,
         "Conservative": -0.6321805126945335,
-        "Liberal Democrats": -0.2630224416145051,
-        "Green Party": -0.11550912045192274
+        "Liberal Democrats": -0.4192421802506563,
+        "Green Party": -0.22423117104647133,
+        "Plaid Cymru": 0.07650247048720554,
+        "Independent": -1.4365986058999027
       },
       "ratio_at_25pct": {
         "Labour": 0.443125428430391,
         "Conservative": 0.601944799404123,
-        "Liberal Democrats": 0.8158989769374096,
-        "Green Party": 0.9158905103989347
+        "Liberal Democrats": 0.7191107082877933,
+        "Green Party": 0.8413824195171374,
+        "Plaid Cymru": 1.058466549264506,
+        "Independent": 0.2937053395002529
       },
       "entry_shares": {
-        "Reform UK": 0.2653173399148628,
-        "Liberal Democrats": 0.03556185162163855,
-        "Green Party": 0.07177717188591722
+        "Reform UK": 0.2727272727272727,
+        "Conservative": 0.04427152907649835,
+        "Liberal Democrats": 0.09703721092743434,
+        "Green Party": 0.05610043154178109,
+        "Plaid Cymru": 0.15343627194875406,
+        "Independent": 0.05188679245283019
       },
       "entry_counts": {
-        "Reform UK": 32,
-        "Labour": 1,
-        "Conservative": 1,
-        "Liberal Democrats": 6,
-        "Green Party": 12,
+        "Reform UK": 87,
+        "Labour": 4,
+        "Conservative": 6,
+        "Liberal Democrats": 12,
+        "Green Party": 37,
         "SNP": 0,
-        "Plaid Cymru": 3,
-        "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 2
+        "Plaid Cymru": 6,
+        "Restore Britain": 3,
+        "Independent": 9,
+        "Other": 4
       },
       "party_counts": {
         "Reform UK": 0,
-        "Labour": 19,
-        "Conservative": 31,
-        "Liberal Democrats": 26,
-        "Green Party": 18,
+        "Labour": 63,
+        "Conservative": 77,
+        "Liberal Democrats": 49,
+        "Green Party": 32,
         "SNP": 0,
-        "Plaid Cymru": 1,
+        "Plaid Cymru": 15,
         "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 0
+        "Independent": 11,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.2647508340561385,
-      "Labour": 0.06550550720017535,
-      "Conservative": 0.159572532778582,
-      "Liberal Democrats": 0.169409450240564,
-      "Green Party": 0.34076167572454,
+      "Reform UK": 0.2827244634292617,
+      "Labour": 0.06805200575415113,
+      "Conservative": 0.16577584668825313,
+      "Liberal Democrats": 0.15433062226585229,
+      "Green Party": 0.32911706186248174,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -364,47 +391,47 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.3225,
-      "Labour": 0.01525,
-      "Conservative": 0.17225,
-      "Liberal Democrats": 0.07775,
-      "Green Party": 0.41225
+      "Reform UK": 0.34625,
+      "Labour": 0.01775,
+      "Conservative": 0.13425,
+      "Liberal Democrats": 0.101,
+      "Green Party": 0.40075
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.07783247625154904,
-        "p50": 0.2481528684845271,
-        "p90": 0.46669888041714
+        "p10": 0.08176311797367415,
+        "p50": 0.2612551767609816,
+        "p90": 0.48615478436250725
       },
       "Labour": {
-        "p10": 0.017020864544022837,
-        "p50": 0.05996291654902357,
-        "p90": 0.1699210500783492
+        "p10": 0.017421999565725276,
+        "p50": 0.06240814854621417,
+        "p90": 0.1778000533061808
       },
       "Conservative": {
-        "p10": 0.0321533094144394,
-        "p50": 0.15111222437948885,
-        "p90": 0.37889317808594597
+        "p10": 0.041963307007694906,
+        "p50": 0.1542366802482953,
+        "p90": 0.35801730172980845
       },
       "Liberal Democrats": {
-        "p10": 0.06405656940338468,
-        "p50": 0.1507727166297273,
-        "p90": 0.29860089002388207
+        "p10": 0.0432639680168294,
+        "p50": 0.13762795595978472,
+        "p90": 0.3209284681047649
       },
       "Green Party": {
-        "p10": 0.1570148282815912,
-        "p50": 0.2996331488836045,
-        "p90": 0.47446179533539234
+        "p10": 0.09967297311006208,
+        "p50": 0.28685011573276226,
+        "p90": 0.5025938895015315
       }
     },
     "winner": "Green Party",
     "runner_up": "Reform UK",
-    "margin_pp": 7.601084166840155,
-    "leader_probability": 0.41225,
+    "margin_pp": 4.6392598433220025,
+    "leader_probability": 0.40075,
     "too_close_to_call": true,
     "sigma_inflation": 1.75,
     "caveats": [
-      "Priced from an entry prior, not from this ward: Reform UK (median of 32). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Reform UK (median of 87). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [],
     "entry_priced_parties": [
@@ -413,7 +440,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -448,8 +475,8 @@
       "call_correct": false,
       "mae_pp": 9.043850398528512
     },
-    "review_status": "hand_verified_declaration",
     "checked_at": "2026-10-24",
+    "review_status": "hand_verified_declaration",
     "note": "Five candidate counts sum to 1,631 valid votes; one rejected paper reconciles to 1,632 ballot papers issued. Electorate 6,781; council turnout 24.07%. Shares agree with the Election Maps UK report of the declaration (Con 35.3, Grn 32.4, Ref 15.5, Lab 10.1, LD 6.7). Democracy Club had no result at 15:00 BST on 24 October."
   },
   "declaration": null,
@@ -466,6 +493,5 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.east-hertfordshire.hertford-kingsmead.by.2026-10-22/"
     }
-  ],
-  "result_updated_at": "2026-10-24"
+  ]
 }

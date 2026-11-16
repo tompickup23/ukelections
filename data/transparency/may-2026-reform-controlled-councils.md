@@ -1,4 +1,4 @@
-# May 7 2026 Reform UK council control
+# 7 May 2026 Reform UK council control
 
 Generated: 2026-05-10T12:17:12.171Z
 Source: 2026-05-07 actuals (sha256 0c9fb4a44439…)
@@ -16,7 +16,7 @@ Method: pre = OCD 2025 snapshot; up_held approximated as pre[party] * seats_up/t
 | Reform breakthrough (won seats, not largest) | 78 |
 | Councils with no Reform seats post-May-7 | 43 |
 | Reform seats pre-May-7 (across contesting councils) | 110 |
-| Reform seats won May 7 | **1439** |
+| Reform seats won 7 May 2026 | **1439** |
 | Reform seats post-May-7 (across contesting councils) | **1527** |
 
 ## Control by party (majorities only)
@@ -147,7 +147,7 @@ Councils where Reform won at least one seat but isn't the largest group. The "on
 
 ## Method notes & caveats
 
-1. **Pre-May-7 composition** is the OpenCouncilData 2025 snapshot for each council. Defections and by-elections between January 2025 and May 7 2026 are not folded in.
+1. **Pre-May-7 composition** is the OpenCouncilData 2025 snapshot for each council. Defections and by-elections between January 2025 and 7 May 2026 are not folded in.
 2. **Carry-over seats** (for thirds / halves councils where only some seats were up) are approximated by pre[party] × seats_up/total. Exact derivation requires per-ward incumbent verification.
 3. **Pending ballots**: 0 ballots had no DC-elected flag at ingest time, so they are treated as pending and excluded from the wins count. As more declarations process, re-run the pipeline to refresh.
 4. **Group affiliation vs elected party**: a candidate elected as Reform may not whip with the Reform group in practice; vice-versa for independents who join. This view counts elected-party labels only.

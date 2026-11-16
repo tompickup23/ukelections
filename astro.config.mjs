@@ -1,11 +1,21 @@
 import { defineConfig } from "astro/config";
 import pagefind from "astro-pagefind";
+import { fileURLToPath } from "node:url";
+import { assertNonEmptySitemaps } from "./scripts/lib/sitemap-build-check.mjs";
 
 const FONT_FILE = /\.(woff2?|ttf|otf|eot)(\?.*)?$/i;
 
 export default defineConfig({
   site: "https://ukelections.co.uk",
-  integrations: [pagefind()],
+  integrations: [pagefind(), {
+    name: "validate-built-sitemaps",
+    hooks: {
+      "astro:build:done": ({ dir }) => {
+        const maps = assertNonEmptySitemaps(fileURLToPath(dir));
+        console.log(`Validated ${maps.length} non-empty built sitemap(s).`);
+      },
+    },
+  }],
   vite: {
     build: {
       // Never inline a font as a data: URI. Vite's 4KB default swallowed the one

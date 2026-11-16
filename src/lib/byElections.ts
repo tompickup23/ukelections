@@ -76,3 +76,23 @@ export function councilByElectionWeek(contests: any[], today = new Date().toISOS
     next: contests.filter(d => d.contest.polling_day > today && d.contest.polling_day <= until).sort(byDay),
   };
 }
+
+/** Both council hubs use the same refresh stamp, result window and next poll. */
+export function localContestGroups(contests: any[], today = new Date().toISOString().slice(0, 10)) {
+  const ordered = [...contests].sort((a, b) => a.contest.polling_day.localeCompare(b.contest.polling_day)
+    || a.slug.localeCompare(b.slug));
+  const upcoming = ordered.filter(c => !isDeclared(c) && c.contest.polling_day >= today);
+  const held = ordered.filter(c => isDeclared(c) || c.contest.polling_day < today).reverse();
+  const recentDates = [...new Set(held.map(c => c.contest.polling_day))].slice(0, 2);
+  return {
+    contests: ordered, upcoming, held,
+    latest: held.filter(c => recentDates.includes(c.contest.polling_day)),
+    earlier: held.filter(c => !recentDates.includes(c.contest.polling_day)),
+    nextDay: upcoming[0]?.contest.polling_day ?? null,
+  };
+}
+export function loadLocalHub() {
+  const metaPath = path.join(process.cwd(), "data/contests/local-byelections/_meta.json");
+  const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, "utf8")) : null;
+  return { ...localContestGroups(loadLocalContests()), meta, updatedAt: meta?.generated_at?.slice(0, 10) ?? null };
+}

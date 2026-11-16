@@ -47,7 +47,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     items: [
       { href: "/elections/", label: "Next elections", desc: "Every body's next election date, with its legal source and what we publish for it" },
       { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
-      { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "Hypothetical council scenarios; reorganisation is paused for review" },
+      { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "Hypothetical council scenarios; reorganisation is under review" },
       { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
       { href: "/by-elections/", label: "By-elections", desc: "Declared results, upcoming contests and the forecast record" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },
@@ -68,7 +68,6 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     items: [
       { href: "/seats/parliament/", label: "650 Constituencies", desc: "Every UK parliamentary seat, with its projection" },
       { href: "/councils/", label: "Councils", desc: "Browse the councils covered by our results and forecasts" },
-      { href: "/seats/", label: "Councils and contests", desc: "Browse councils, mayoralties and the devolved parliaments" },
       { href: "/elections/2027/", label: "Local elections 2027", desc: "Councils whose next election we have verified for 6 May 2027; no forecasts yet" },
       { href: "/your-area/", label: "Election Lookup", desc: "Constituency and ward" },
     ],
@@ -79,6 +78,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/about/", label: "About this site", desc: "Who runs it, sources and corrections" },
       { href: "/methodology/", label: "Methodology", desc: "How the model works" },
       { href: "/sources/", label: "Sources", desc: "Data provenance" },
+      { href: "/downloads/", label: "Downloads", desc: "Published data files, dates and reuse terms" },
       { href: "/coverage/", label: "Coverage", desc: "What we forecast" },
       { href: "/transparency/", label: "Transparency", desc: "Funding & affiliations" },
       { href: "/releases/", label: "Releases", desc: "Version history" },
@@ -129,7 +129,7 @@ const STATIC_PATHS = [
   "/",
   "/councils/",
   "/past-results/",
-  "/seats/",
+  "/downloads/",
   "/seats/parliament/",
   "/your-area/",
   "/elections/",
@@ -249,22 +249,15 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     href: "/councils/",
     title: "Councils",
     kind: "page",
-    description: "Every English and Welsh council that contested May 7 2026: result, control, Reform seats, and next-election date (or TBC where Local Government Reorganisation is in play).",
+    description: "Browse the councils and mayoralties in our coverage, with results, ward pages and verified next-election dates.",
     priority: 102
   },
   {
     href: "/past-results/",
-    title: "Past Results. May 7 2026",
+    title: "Past Results. 7 May 2026",
     kind: "page",
-    description: "Locked May 7 2026 forecast scored against actual count. Per-party MAE, Step 9b isolation audit, and the 15 Reform UK majorities.",
+    description: "Locked 7 May 2026 forecast scored against actual count. Per-party MAE, Step 9b isolation audit, and the 15 Reform UK majorities.",
     priority: 101
-  },
-  {
-    href: "/seats/",
-    title: "Seats",
-    kind: "page",
-    description: "Per-council and per-ward pages with predicted vs actual winner, candidates, history, and local signals.",
-    priority: 100
   },
   {
     href: "/your-area/",

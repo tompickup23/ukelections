@@ -1,0 +1,276 @@
+---
+/**
+ * VoteTracker.astro. "Your vote, step by step": the statutory timetable of one
+ * contest as a parcel-style tracker, with a lane each for voting in person, by
+ * post and by proxy. PROTOTYPE.
+ *
+ * - Every date is from the Democracy Club timetable. Nothing is computed.
+ * - Every step carries a certainty tag: fixed by law, set by your council, or
+ *   cannot be known. The UK has no postal ballot tracking and this must not
+ *   look like it.
+ * - The lane chooser is three radio inputs and CSS :has(), so it needs no
+ *   script and nothing about the reader is stored or sent.
+ * - States are rendered at build time, then a small script recomputes them in
+ *   the browser so a 5pm cut-off does not wait for the nightly rebuild.
+ */
+import {
+  buildJourney, CERTAINTY_LABEL, LANES, dayLabel, stepDeadline, stepOpens, stepState, whenLabel,
+  type JourneyInput, type JourneyStep, type Lane, type Phase,
+} from "../lib/voterJourney";
+
+interface Props {
+  input: JourneyInput;
+  fetchedAt: string | null;
+  sourceUrl: string | null;
+  calendarBase?: string | null;
+}
+const { input, fetchedAt, sourceUrl, calendarBase = null } = Astro.props;
+
+const steps = buildJourney(input);
+const now = Date.now();
+const PHASES: Array<{ id: Phase; label: string }> = [
+  { id: "before", label: "Before polling day" },
+  { id: "day", label: "Polling day" },
+  { id: "after", label: "After the polls close" },
+];
+const STATE_WORD = { done: "Closed", open: "Open now", later: "Not open yet", info: "" } as const;
+
+// What a voter can still act on, per lane, soonest deadline first.
+function openActions(lane: Lane): JourneyStep[] {
+  return steps
+    .filter((s) => s.action && s.lanes.includes(lane) && stepDeadline(s) !== null)
+    // Soonest first, but a fallback route never leads: the emergency proxy
+    // sits under polling day, not above it.
+    .sort((a, b) => Number(a.id === "emergency-proxy") - Number(b.id === "emergency-proxy") || stepDeadline(a)! - stepDeadline(b)!);
+}
+const fetchedLabel = fetchedAt ? dayLabel(fetchedAt.slice(0, 10)) : null;
+---
+{steps.length > 0 && (
+  <section class="card vt" id="your-vote" data-vt>
+    <h2>Your vote, step by step</h2>
+    <p class="vt-lede">
+      Every deadline for the {input.wardName} by-election, and what you can still do today.
+      Choose how you plan to vote.
+    </p>
+
+    <fieldset class="vt-lanes">
+      <legend class="visually-hidden">How will you vote?</legend>
+      {LANES.map((lane, i) => (
+        <label class="vt-lane">
+          <input type="radio" name="vt-lane" id={`vt-lane-${lane.id}`} value={lane.id} checked={i === 0} />
+          <span>{lane.short}</span>
+        </label>
+      ))}
+    </fieldset>
+
+    {LANES.map((lane) => {
+      const actions = openActions(lane.id);
+      const anyOpen = actions.some((s) => stepState(s, now) !== "done");
+      return (
+        <div class="vt-now" data-now-lane={lane.id}>
+          <p class="vt-now-label">What you can still do</p>
+          <ol class="vt-open">
+            {actions.map((s) => (
+              <li data-deadline={stepDeadline(s)} data-opens={stepOpens(s) ?? undefined} data-date={s.date} data-state={stepState(s, now)}>
+                <a href={`#vt-step-${s.id}`}>{s.action}</a>
+                <span class="vt-open-when">{whenLabel(s)}</span>
+                <span class="vt-left" data-left></span>
+              </li>
+            ))}
+          </ol>
+          {lane.id !== "post" && anyOpen && (
+            <p class="vt-bring">
+              <strong>On the day:</strong>{" "}{input.requiresVoterId ? "bring photo ID. Expired ID counts if the photo still looks like you." : "no photo ID is needed at this election."} You do not have to take your poll card.
+            </p>
+          )}
+          {lane.id === "post" && anyOpen && (
+            <p class="vt-bring">
+              <strong>Before you seal it:</strong> sign the postal voting statement and give your date of birth. Both must match your application or the vote is rejected.
+            </p>
+          )}
+          <p class="vt-none" hidden={anyOpen}>The polls have closed. Nothing more can be done for this contest.</p>
+        </div>
+      );
+    })}
+
+    {PHASES.map((phase) => {
+      const inPhase = steps.filter((s) => s.phase === phase.id);
+      if (!inPhase.length) return null;
+      return (
+        <div class="vt-phase">
+          <h3>{phase.label}</h3>
+          <ol class="vt-steps">
+            {inPhase.map((s) => {
+              const state = stepState(s, now);
+              return (
+                <li
+                  id={`vt-step-${s.id}`}
+                  class="vt-step"
+                  data-lanes={s.lanes.join(" ")}
+                  data-deadline={stepDeadline(s) ?? undefined}
+                  data-opens={stepOpens(s) ?? undefined}
+                  data-state={state}
+                >
+                  <p class="vt-when">
+                    <span class="vt-date">{whenLabel(s)}</span>
+                    <span class="vt-state" data-state-word data-done-word={s.action ? "Closed" : "Done"}>{state === "done" && !s.action ? "Done" : STATE_WORD[state]}</span>
+                  </p>
+                  <h4>{s.title}</h4>
+                  <p class={`vt-tag vt-tag-${s.certainty}`}>{CERTAINTY_LABEL[s.certainty]}</p>
+                  <p class="vt-body">{s.body}</p>
+                  {s.missed && <p class="vt-missed">{s.missed}</p>}
+                  {(s.official || s.basis) && (
+                    <p class="vt-links">
+                      {s.official && <a href={s.official.url} rel="noopener">{s.official.label}</a>}
+                      {s.basis && <a class="vt-basis" href={s.basis.url} rel="noopener">The rule: {s.basis.label}</a>}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      );
+    })}
+
+    <div class="vt-foot">
+      <p>
+        <strong>What this cannot do.</strong> There is no national service for tracking an individual postal vote, so nothing here is about
+        your own ballot. It shows where every vote in this contest stands, and which dates are certain.
+      </p>
+      {calendarBase && (
+        <p class="vt-cal">
+          Add the dates to your calendar:
+          {LANES.map((lane) => (
+            <a href={`${calendarBase}${lane.id}.ics`} data-cal-lane={lane.id}>{lane.short} (ICS)</a>
+          ))}
+          <span class="vt-cal-note">A downloaded file does not update if a date changes.</span>
+        </p>
+      )}
+      <p class="vt-source">
+        Dates: {sourceUrl ? <a href={sourceUrl} rel="noopener">Democracy Club, EveryElection</a> : "Democracy Club, EveryElection"}
+        {fetchedLabel && <>, read on {fetchedLabel}</>}. Rules differ in Northern Ireland, which this page does not cover.
+        Your choice of lane stays on this page and is not stored or sent.
+      </p>
+    </div>
+  </section>
+)}
+
+<script is:inline>
+  // Recompute step states in the browser so a cut-off takes effect at the
+  // minute it falls, not at the next nightly build. Reads only data attributes.
+  (function () {
+    var root = document.querySelector("[data-vt]");
+    if (!root) return;
+    var WORD = { done: "Closed", open: "Open now", later: "Not open yet" };
+    function londonDay(ms) {
+      var p = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(ms));
+      return Date.UTC(+p.slice(0, 4), +p.slice(5, 7) - 1, +p.slice(8, 10));
+    }
+    function refresh() {
+      var now = Date.now();
+      root.querySelectorAll("[data-deadline]").forEach(function (el) {
+        var deadline = +el.dataset.deadline;
+        var opens = el.dataset.opens ? +el.dataset.opens : null;
+        var state = now > deadline ? "done" : opens !== null && now < opens ? "later" : "open";
+        el.dataset.state = state;
+        var word = el.querySelector("[data-state-word]");
+        if (word) word.textContent = state === "done" ? word.dataset.doneWord : WORD[state];
+        var left = el.querySelector("[data-left]");
+        if (left) {
+          var target = state === "later" ? opens : deadline;
+          var days = Math.round((londonDay(target) - londonDay(now)) / 86400000);
+          left.textContent = state === "done" ? ""
+            : state === "later" ? (days <= 1 ? "opens tomorrow" : "opens in " + days + " days")
+            : days <= 0 ? "ends today" : days === 1 ? "ends tomorrow" : days + " days left";
+        }
+      });
+      root.querySelectorAll("[data-now-lane]").forEach(function (box) {
+        var open = box.querySelector('li:not([data-state="done"])');
+        box.querySelector(".vt-none").hidden = Boolean(open);
+      });
+    }
+    refresh();
+    setInterval(refresh, 60000);
+  })();
+</script>
+
+<style>
+  .vt-lede { color: var(--ink-soft); margin: 0 0 var(--space-md); }
+
+  /* Lane chooser: a segmented control built from radios. */
+  .vt-lanes { border: 0; padding: 0; margin: 0 0 var(--space-md); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xs); background: var(--surface-muted); border-radius: 10px; padding: var(--space-2xs); }
+  .vt-lane { position: relative; display: block; text-align: center; cursor: pointer; }
+  .vt-lane input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .vt-lane span { display: block; padding: var(--space-xs) var(--space-2xs); border-radius: 8px; font-weight: 600; font-size: var(--text-small); color: var(--ink-soft); min-height: 44px; display: grid; place-items: center; }
+  .vt-lane input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px var(--shadow); }
+  .vt-lane input:focus-visible + span { outline: 3px solid var(--focus-ring, currentColor); outline-offset: 2px; }
+
+  /* Only the chosen lane's steps and summary show. */
+  .vt-now { display: none; }
+  .vt:has(#vt-lane-person:checked) .vt-now[data-now-lane="person"],
+  .vt:has(#vt-lane-post:checked) .vt-now[data-now-lane="post"],
+  .vt:has(#vt-lane-proxy:checked) .vt-now[data-now-lane="proxy"] { display: block; }
+  .vt:has(#vt-lane-person:checked) .vt-step:not([data-lanes~="person"]),
+  .vt:has(#vt-lane-post:checked) .vt-step:not([data-lanes~="post"]),
+  .vt:has(#vt-lane-proxy:checked) .vt-step:not([data-lanes~="proxy"]) { display: none; }
+  .vt-cal a { display: none; margin-inline-end: var(--space-xs); }
+  .vt:has(#vt-lane-person:checked) .vt-cal a[data-cal-lane="person"],
+  .vt:has(#vt-lane-post:checked) .vt-cal a[data-cal-lane="post"],
+  .vt:has(#vt-lane-proxy:checked) .vt-cal a[data-cal-lane="proxy"] { display: inline; }
+
+  /* What you can still do. */
+  .vt-now { border: 1px solid var(--border); border-radius: 12px; padding: var(--space-md); margin-bottom: var(--space-lg); background: var(--accent-wash); }
+  .vt-now-label { margin: 0 0 var(--space-xs); font-size: var(--text-eyebrow); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
+  .vt-open { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-sm); }
+  .vt-open li { display: grid; grid-template-columns: 1fr auto; column-gap: var(--space-sm); align-items: baseline; }
+  .vt-open li[data-state="done"] { display: none; }
+  .vt-open a { font-weight: 700; color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .vt-open-when { grid-column: 1; color: var(--ink-soft); font-size: var(--text-small); }
+  .vt-left { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-weight: 700; font-size: var(--text-small); white-space: nowrap; padding: var(--space-2xs) var(--space-xs); border-radius: 999px; border: 1px solid var(--muted); background: var(--surface); }
+  .vt-left:empty { display: none; }
+  .vt-open li[data-state="later"] a { font-weight: 600; }
+  /* The soonest open action is the headline. */
+  .vt-open li:nth-child(1 of [data-state="open"]) a { font-size: var(--text-h3); }
+  .vt-none { margin: 0; font-weight: 600; }
+  .vt-bring { margin: var(--space-sm) 0 0; padding-top: var(--space-sm); border-top: 1px solid var(--border); font-size: var(--text-small); }
+
+  /* The timeline. */
+  .vt-phase h3 { font-size: var(--text-eyebrow); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin: var(--space-lg) 0 var(--space-sm); }
+  .vt-steps { list-style: none; margin: 0; padding: 0; }
+  .vt-step { position: relative; padding: 0 0 var(--space-lg) var(--space-xl); }
+  .vt-step::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 0; width: 2px; background: var(--border); }
+  .vt-step::after { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 2px solid var(--muted); box-sizing: border-box; }
+  .vt-step[data-state="done"]::after { background: var(--muted); }
+  .vt-step[data-state="open"]::after { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-wash); }
+  .vt-step[data-state="done"]::before { background: var(--muted); }
+  .vt-when { margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); align-items: baseline; font-size: var(--text-small); }
+  .vt-date { font-weight: 700; color: var(--ink); }
+  .vt-state { color: var(--ink-soft); }
+  .vt-state:empty { display: none; }
+  .vt-step[data-state="open"] .vt-state { color: var(--status-good-text); font-weight: 700; }
+  .vt-step h4 { margin: var(--space-2xs) 0; font-size: var(--text-h3); line-height: 1.25; }
+  .vt-step[data-state="done"] h4, .vt-step[data-state="done"] .vt-date { color: var(--ink-soft); }
+  /* Passed steps shrink to a line, so what is still open leads. */
+  .vt-step[data-state="done"] .vt-body,
+  .vt-step[data-state="done"] .vt-tag,
+  .vt-step[data-state="done"] .vt-links { display: none; }
+  .vt-step[data-state="done"] { padding-bottom: var(--space-md); }
+  .vt-step[data-state="done"] h4 { font-size: var(--text-body); font-weight: 600; margin: 0; }
+  .vt-body { margin: var(--space-xs) 0 0; }
+  .vt-missed { display: none; margin: var(--space-xs) 0 0; padding: var(--space-xs) var(--space-sm); border-inline-start: 3px solid var(--status-warn-border); background: var(--status-warn-tint); color: var(--status-warn-text); }
+  .vt-step[data-state="done"] .vt-missed { display: block; }
+
+  /* Certainty tags: border style differs as well as wording, never colour alone. */
+  .vt-tag { display: inline-block; margin: 0; padding: 0 var(--space-xs); font-size: var(--text-eyebrow); font-weight: 700; border-radius: 4px; border: 1.5px solid var(--muted); color: var(--ink-soft); line-height: 1.7; }
+  .vt-tag-law { border-style: solid; color: var(--ink); }
+  .vt-tag-council { border-style: dashed; }
+  .vt-tag-unknown { border-style: dotted; }
+
+  .vt-links { margin: var(--space-xs) 0 0; display: flex; flex-direction: column; gap: var(--space-2xs); font-size: var(--text-small); }
+  .vt-links a { width: fit-content; }
+  .vt-basis { color: var(--ink-soft); }
+  .vt-foot { border-top: 1px solid var(--border); margin-top: var(--space-sm); padding-top: var(--space-md); font-size: var(--text-small); color: var(--ink-soft); }
+  .vt-foot p { margin: 0 0 var(--space-xs); }
+  .vt-cal-note { display: block; }
+</style>

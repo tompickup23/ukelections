@@ -11,3 +11,11 @@
 .by-election-scroll th,.by-election-scroll td { padding:var(--space-xs); vertical-align:top; }
 .by-election-scroll:focus-visible { outline:2px solid var(--focus-ring); outline-offset:2px; }
 .by-election-scroll .num { white-space:nowrap; }
+
+/* Prototype: chance as countable dots. */
+.chance-rows { display: grid; gap: var(--space-md); margin: var(--space-md) 0 var(--space-lg); }
+.chance-row { display: grid; grid-template-columns: auto 1fr; gap: var(--space-md); align-items: center; }
+.chance-row p { margin: 0; }
+@media (max-width: 560px) {
+  .chance-row { grid-template-columns: 1fr; gap: var(--space-xs); }
+}

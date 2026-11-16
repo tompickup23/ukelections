@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.066Z",
+  "generated_at": "2026-11-14T03:52:15.944Z",
   "slug": "west-suffolk-haverhill-west-2026-09-10",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-08-13",
     "registration_deadline": "2026-08-24",
-    "postal_vote_deadline": "2026-08-25"
+    "postal_vote_deadline": "2026-08-25",
+    "timetable": {
+      "notice_of_election_deadline": "2026-08-05",
+      "close_of_nominations": "2026-08-13",
+      "sopn_publish_deadline": "2026-08-14",
+      "registration_deadline": "2026-08-24",
+      "postal_vote_application_deadline": "2026-08-25",
+      "proxy_vote_application_deadline": "2026-09-02",
+      "vac_application_deadline": "2026-09-02",
+      "replacement_pack_start_date": "2026-09-04"
+    }
   },
   "field": {
     "candidate_count": 5,
@@ -41,37 +51,42 @@
       {
         "name": "Graham David Cone",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 530,
-        "elected": true
+        "elected": true,
+        "party": "Conservative",
+        "source": "https://haverhill-tc.gov.uk/wp-content/uploads/Declaration-of-results-Haverhill-West-10-September-2026.pdf"
       },
       {
         "name": "Heike Sowa",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 267,
-        "elected": false
+        "elected": false,
+        "party": "Reform UK",
+        "source": "https://haverhill-tc.gov.uk/wp-content/uploads/Declaration-of-results-Haverhill-West-10-September-2026.pdf"
       },
       {
         "name": "Quinn Ryan Cox",
         "party_name": "Labour Party",
-        "party": "Labour",
         "votes": 146,
-        "elected": false
+        "elected": false,
+        "party": "Labour",
+        "source": "https://haverhill-tc.gov.uk/wp-content/uploads/Declaration-of-results-Haverhill-West-10-September-2026.pdf"
       },
       {
         "name": "Clare Carlyon Higson",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 60,
-        "elected": false
+        "elected": false,
+        "party": "Green Party",
+        "source": "https://haverhill-tc.gov.uk/wp-content/uploads/Declaration-of-results-Haverhill-West-10-September-2026.pdf"
       },
       {
         "name": "James William Porter",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 30,
-        "elected": false
+        "elected": false,
+        "party": "Liberal Democrats",
+        "source": "https://haverhill-tc.gov.uk/wp-content/uploads/Declaration-of-results-Haverhill-West-10-September-2026.pdf"
       }
     ]
   },
@@ -253,57 +268,64 @@
     "swing": {
       "stratum": "pre_realignment|reform_entering",
       "stratum_used": true,
-      "contests_used": 37,
+      "contests_used": 81,
       "window_days": 365,
       "logodds_shifts": {
-        "Labour": -1.0308333909577114,
-        "Conservative": -0.7004568853438919,
-        "Liberal Democrats": -0.26018021796800594,
-        "Green Party": -0.11550912045192274
+        "Labour": -1.0041729641290174,
+        "Conservative": -0.6745247995793489,
+        "Liberal Democrats": -0.29781605875221695,
+        "Green Party": -0.19192936203206212,
+        "Plaid Cymru": 0.07650247048720554,
+        "Independent": -1.2911081916684655
       },
       "ratio_at_25pct": {
-        "Labour": 0.4250705066511692,
-        "Conservative": 0.5678576460503861,
-        "Liberal Democrats": 0.817746486723126,
-        "Green Party": 0.9158905103989347
+        "Labour": 0.43530561587042754,
+        "Conservative": 0.5806105401711132,
+        "Liberal Democrats": 0.7935339621266506,
+        "Green Party": 0.8630445797294043,
+        "Plaid Cymru": 1.058466549264506,
+        "Independent": 0.3358397097556657
       },
       "entry_shares": {
-        "Reform UK": 0.2593232044198895,
-        "Liberal Democrats": 0.03862254091396444,
-        "Green Party": 0.07177717188591722,
-        "Independent": 0.12979989183342347
+        "Reform UK": 0.2722678458622868,
+        "Conservative": 0.04427152907649835,
+        "Liberal Democrats": 0.12292817679558012,
+        "Green Party": 0.06525679758308157,
+        "Plaid Cymru": 0.15343627194875406,
+        "Independent": 0.09454061251664447,
+        "Other": 0.053295362082994305
       },
       "entry_counts": {
-        "Reform UK": 37,
-        "Labour": 1,
-        "Conservative": 1,
-        "Liberal Democrats": 6,
-        "Green Party": 14,
+        "Reform UK": 81,
+        "Labour": 4,
+        "Conservative": 6,
+        "Liberal Democrats": 11,
+        "Green Party": 33,
         "SNP": 0,
-        "Plaid Cymru": 3,
-        "Restore Britain": 0,
-        "Independent": 5,
-        "Other": 3
+        "Plaid Cymru": 6,
+        "Restore Britain": 1,
+        "Independent": 9,
+        "Other": 5
       },
       "party_counts": {
         "Reform UK": 0,
-        "Labour": 24,
-        "Conservative": 36,
-        "Liberal Democrats": 31,
-        "Green Party": 20,
+        "Labour": 59,
+        "Conservative": 71,
+        "Liberal Democrats": 49,
+        "Green Party": 30,
         "SNP": 0,
-        "Plaid Cymru": 1,
+        "Plaid Cymru": 15,
         "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 1
+        "Independent": 10,
+        "Other": 2
       }
     },
     "central": {
-      "Reform UK": 0.3431798448911459,
-      "Labour": 0.23389482104134174,
-      "Conservative": 0.2768259659085994,
-      "Liberal Democrats": 0.05111180709727365,
-      "Green Party": 0.09498756106163916,
+      "Reform UK": 0.31858616389633543,
+      "Labour": 0.2113879616775262,
+      "Conservative": 0.24982679472815494,
+      "Liberal Democrats": 0.1438407688430574,
+      "Green Party": 0.07635831085492613,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -311,47 +333,47 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.44625,
-      "Labour": 0.21775,
-      "Conservative": 0.3125,
-      "Liberal Democrats": 0.00325,
-      "Green Party": 0.02025
+      "Reform UK": 0.4195,
+      "Labour": 0.19075,
+      "Conservative": 0.25825,
+      "Liberal Democrats": 0.10075,
+      "Green Party": 0.03075
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.1142020456990247,
-        "p50": 0.3189764984095268,
-        "p90": 0.5421433049264599
+        "p10": 0.0975696777680308,
+        "p50": 0.2854815215460035,
+        "p90": 0.5055637696564832
       },
       "Labour": {
-        "p10": 0.07131259608302618,
-        "p50": 0.21265681775120054,
-        "p90": 0.4284924230533269
+        "p10": 0.05932763707884893,
+        "p50": 0.18566894952340243,
+        "p90": 0.39049610704265575
       },
       "Conservative": {
-        "p10": 0.0775489529560042,
-        "p50": 0.2570170077695421,
-        "p90": 0.4936591013370022
+        "p10": 0.07563846339711994,
+        "p50": 0.22150915799809373,
+        "p90": 0.4389876480084154
       },
       "Liberal Democrats": {
-        "p10": 0.017646277314263437,
-        "p50": 0.048176519842570036,
-        "p90": 0.12201889358645998
+        "p10": 0.0400670451702876,
+        "p50": 0.13263152401065179,
+        "p90": 0.31831297791500257
       },
       "Green Party": {
-        "p10": 0.034867471340686705,
-        "p50": 0.08820481971889771,
-        "p90": 0.20304553369714864
+        "p10": 0.019506307062163355,
+        "p50": 0.06913718327345687,
+        "p90": 0.21065052726024164
       }
     },
     "winner": "Reform UK",
     "runner_up": "Conservative",
-    "margin_pp": 6.635387898254646,
-    "leader_probability": 0.44625,
+    "margin_pp": 6.875936916818048,
+    "leader_probability": 0.4195,
     "too_close_to_call": true,
     "sigma_inflation": 1.75,
     "caveats": [
-      "Priced from an entry prior, not from this ward: Reform UK (median of 37), Liberal Democrats (median of 6), Green Party (median of 14). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Reform UK (median of 81), Liberal Democrats (median of 11), Green Party (median of 33). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [],
     "entry_priced_parties": [
@@ -362,7 +384,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -382,6 +404,8 @@
     },
     "winner_party": "Conservative",
     "winner_candidate": "Graham David Cone",
+    "winner_party_name": "Conservative and Unionist Party",
+    "winner_votes": 530,
     "runner_up_party": "Reform UK",
     "majority_votes": 263,
     "total_votes": 1033,

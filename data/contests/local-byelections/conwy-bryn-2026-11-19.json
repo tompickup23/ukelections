@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.080Z",
+  "generated_at": "2026-11-14T03:52:16.357Z",
   "slug": "conwy-bryn-2026-11-19",
   "status": "upcoming",
   "contest": {
@@ -18,16 +18,26 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2022-05-05",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "RESIGNATION",
+    "vacancy_reason": "the sitting councillor resigned",
     "requires_voter_id": null,
     "nominations_close": "2026-10-23",
     "registration_deadline": "2026-11-03",
-    "postal_vote_deadline": "2026-11-04"
+    "postal_vote_deadline": "2026-11-04",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-15",
+      "close_of_nominations": "2026-10-23",
+      "sopn_publish_deadline": "2026-10-26",
+      "registration_deadline": "2026-11-03",
+      "postal_vote_application_deadline": "2026-11-04",
+      "proxy_vote_application_deadline": "2026-11-11",
+      "vac_application_deadline": null,
+      "replacement_pack_start_date": "2026-11-13"
+    }
   },
   "field": {
     "candidate_count": 6,
-    "locked": false,
+    "locked": true,
     "sopn_published": true,
     "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.conwy.bryn.by.2026-11-19/sopn/2026-10-23T15%3A22%3A17.052071%2B00%3A00/temp.jpeg",
     "parties": [
@@ -133,10 +143,152 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.conwy.bryn.2022-05-05/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.3274596182085169,
+        "Conservative": 0.3377386196769457,
+        "Liberal Democrats": 0.07342143906020558,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0.09251101321585903,
+        "Restore Britain": 0,
+        "Independent": 0.16886930983847284,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.conwy.bryn.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 91,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9723130728025009,
+        "Conservative": -0.627902220808357,
+        "Liberal Democrats": -0.4192421802506563,
+        "Green Party": -0.21020702076524378,
+        "Plaid Cymru": 0.1054966908378934,
+        "Independent": -1.1741993075013362
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4478200203097242,
+        "Conservative": 0.6041358214559436,
+        "Liberal Democrats": 0.7191107082877933,
+        "Green Party": 0.8507379337854007,
+        "Plaid Cymru": 1.0811885126334744,
+        "Independent": 0.37359945708973985
+      },
+      "entry_shares": {
+        "Reform UK": 0.2738328756375049,
+        "Labour": 0.04702627939142462,
+        "Conservative": 0.04861878453038674,
+        "Liberal Democrats": 0.07448979591836735,
+        "Green Party": 0.05570669320902737,
+        "Plaid Cymru": 0.15343627194875406,
+        "Restore Britain": 0.061305804081476206,
+        "Independent": 0.04714342788653616
+      },
+      "entry_counts": {
+        "Reform UK": 91,
+        "Labour": 5,
+        "Conservative": 7,
+        "Liberal Democrats": 13,
+        "Green Party": 40,
+        "SNP": 0,
+        "Plaid Cymru": 6,
+        "Restore Britain": 6,
+        "Independent": 9,
+        "Other": 3
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 68,
+        "Conservative": 80,
+        "Liberal Democrats": 47,
+        "Green Party": 31,
+        "SNP": 0,
+        "Plaid Cymru": 16,
+        "Restore Britain": 0,
+        "Independent": 14,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.4163520498189978,
+      "Labour": 0,
+      "Conservative": 0.32529939024139637,
+      "Liberal Democrats": 0.07529788449021393,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.09321304878276841,
+      "Independent": 0.08983762666662348,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.48025,
+      "Conservative": 0.32625,
+      "Liberal Democrats": 0.025,
+      "Restore Britain": 0.04025,
+      "Independent": 0.12825
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.1365729868688413,
+        "p50": 0.35108490246566015,
+        "p90": 0.580476644485843
+      },
+      "Conservative": {
+        "p10": 0.08339819065875649,
+        "p50": 0.28039312663485316,
+        "p90": 0.5157784352208643
+      },
+      "Liberal Democrats": {
+        "p10": 0.01570148478413295,
+        "p50": 0.0664477379721436,
+        "p90": 0.21550340757712952
+      },
+      "Restore Britain": {
+        "p10": 0.018299488757328168,
+        "p50": 0.07962418669011663,
+        "p90": 0.25774295426842486
+      },
+      "Independent": {
+        "p10": 0.008185767489139033,
+        "p50": 0.0856095998243919,
+        "p90": 0.37385714946376275
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Conservative",
+    "margin_pp": 9.105265957760144,
+    "leader_probability": 0.48025,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Reform UK (median of 91), Restore Britain (median of 6). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Reform UK",
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [
