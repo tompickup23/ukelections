@@ -1,0 +1,1317 @@
+{
+  "built_at": "2026-11-16",
+  "purpose": "Evidence on the 2027 cycle of the English councils left not verified in councils-2027.json. Does not change that file or the public page.",
+  "reorganisation_source": {
+    "label": "UK Parliament, Written statement HCWS432, Local Government Reorganisation, made 29 October 2026 (Jim McMahon), section Elections",
+    "url": "https://questions-statements.parliament.uk/written-statements/detail/2026-10-29/hcws432",
+    "quote": "elections scheduled to take place in May 2027 would go ahead to existing councils. This remains the position for all 20 areas covered above.",
+    "scope_note": "The 20 areas are every reorganisation invitation area except Surrey, whose new councils go live in April 2027."
+  },
+  "method": "due_by_cycle means Democracy Club's ordinary results since 2016 put a poll in 2027 by the council's own cycle (whole council last elected 2023, or seats filled in 2023 by a council electing in parts) AND Open Council Data lists the council for May 2027. not_due_by_cycle means both say no. Anything else is sources_disagree.",
+  "sources": [
+    "Democracy Club Candidates API, results endpoint (CC0), via data/identity/councils-2027-baselines.json",
+    "Open Council Data UK, May 2027 elections table, http://opencouncildata.co.uk/elections.php, retrieved 2026-10-24 (listing only, CC BY-SA 4.0)"
+  ],
+  "totals": {
+    "councils": 65,
+    "due_by_cycle": 59,
+    "not_due_by_cycle": 6,
+    "sources_disagree": 0
+  },
+  "councils": [
+    {
+      "slug": "adur",
+      "name": "Adur",
+      "stored_cycle": "Halves",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2021,
+          2022,
+          2024,
+          2026
+        ],
+        "due_2027": false,
+        "basis": "Elects in parts with no 2023 poll, so no seats fall due in 2027. Polls: 2016, 2018, 2021, 2022, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": false,
+      "status_2027": "not_due_by_cycle",
+      "dc_elected_2023_contested": null,
+      "earlier_note": "Only a councillor term-of-office record was found; that is not an election notice.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "basingstoke-and-deane",
+      "name": "Basingstoke and Deane",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2021,
+        "partial_polls_since": [
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021 (whole), 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 18,
+      "earlier_note": "Thirds; 2023 cohort due 2027. Council pages still describe May 2027 as North Hampshire shadow elections and modern.gov shows terms to 01/04/2028 (decision since withdrawn per MHCLG 7 Sep 2026). No page states a 2027 borough poll.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "blackburn-with-darwen",
+      "name": "Blackburn with Darwen",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2018,
+        "partial_polls_since": [
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018 (whole), 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 17,
+      "earlier_note": "Thirds confirmed and 2026 poll held. SI 2017/1270 art.4(3) set retirements in 2019, 2020 and 2022, so the fallow year is 2025/2029 and 2027 follows by arithmetic; no source states 2027 directly. Stored 2030 whole council is wrong.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "blackpool",
+      "name": "Blackpool",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 42,
+      "earlier_note": "No page found stating the next year. Blackpool site (browser) lists council elections 2015, 2019, 2023 only; Blackpool (Electoral Changes) Order 2022, SI 2022/1373, sets no later years. Four-yearly whole-council pattern points to 2027.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "bolsover",
+      "name": "Bolsover",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 37,
+      "earlier_note": "No primary text found stating the next year. Tried bolsover.gov.uk elections-and-voting section (24 pages, in a browser; curl blocked), modern.gov councillor pages (term of office from 09/05/2023 with no end), Bolsover (Electoral Changes) Order 2017 (no retirement years). Whole council last elected 2023; 2027 likely.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "braintree",
+      "name": "Braintree",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 49,
+      "earlier_note": "No page found stating the next year. Crawled 35 pages of braintree.gov.uk voting-elections and democracy sections in a browser; Braintree (Electoral Changes) Order 2019 sets no later years. Whole council last elected 2023; Essex reorganisation withdrawn 7 Sep 2026; 2027 likely.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "broxbourne",
+      "name": "Broxbourne",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 10,
+      "earlier_note": "Only a councillor term-of-office record was found; that is not an election notice.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "bury",
+      "name": "Bury",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2022,
+        "partial_polls_since": [
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022 (whole), 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 17,
+      "earlier_note": "2027 is inferred, not stated: the order runs to 2026 and the council's election types page says thirds with no fourth-year election; its 'your next election' page still shows 2026. No primary text naming 2027 found.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "colchester",
+      "name": "Colchester",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 17,
+      "earlier_note": "Thirds; held 2026 thirds poll alongside postponed county poll, 2023 cohort due 2027. Same page says county next due 2017 (stale). No page states 2027; Essex LGR withdrawn.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "crawley",
+      "name": "Crawley",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2019,
+        "partial_polls_since": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019 (whole), 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 12,
+      "earlier_note": "Only a councillor term-of-office record was found; that is not an election notice.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "dartford",
+      "name": "Dartford",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 42,
+      "earlier_note": "No page found stating the next year. Checked dartford.gov.uk elections section (14 pages incl. elections home, elected representatives) in a browser; Dartford (Electoral Changes) Order 2023, SI 2023/152, sets no later years. Whole council last elected 2023; 2027 likely.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "derbyshire-dales",
+      "name": "Derbyshire Dales",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 34,
+      "earlier_note": "Conflict: council page (seemingly not updated since the 7 Sep 2026 MHCLG letter saying May 2027 elections go ahead on existing boundaries) says no 2027 district poll; SI 2024/484 art.1(3)(b) commences on the ordinary day in 2027. Check with the council.",
+      "earlier_conflict": {
+        "slug": "derbyshire-dales",
+        "council_page": {
+          "source_label": "Derbyshire Dales District Council: Scheduled elections",
+          "source_url": "https://www.derbyshiredales.gov.uk/your-council/elections-and-voting/scheduled-elections",
+          "quote": null,
+          "withheld": "The council's site refuses automated reading, so we do not quote it here; open the page to read the council's statement.",
+          "page_date": null
+        },
+        "statutory": {
+          "source_label": "The Derbyshire Dales (Electoral Changes) Order 2024 (SI 2024/484), art.1(3)(b)",
+          "source_url": "https://www.legislation.gov.uk/uksi/2024/484/made/data.html",
+          "quote": "for all other purposes, on the ordinary day of election of councillors in England in 2027."
+        }
+      }
+    },
+    {
+      "slug": "east-hampshire",
+      "name": "East Hampshire",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 43,
+      "earlier_note": "No page found stating the next year. East Hampshire Types of elections page says only 'There are currently no district council elections planned in 2026'; 19 pages crawled in a browser; East Hampshire (Electoral Changes) Order 2018 sets no later years. Whole council last elected 2023; Hampshire reorganisation withdrawn 7 Sep 2026; 2027 likely.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "east-lindsey",
+      "name": "East Lindsey",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 42,
+      "earlier_note": "Quote concerns town and parish vacancies, not the district council. Elections and Referendums page returned no body text in a browser fetch. District last elected whole in 2023; 2027 likely but not established by the quote.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "east-staffordshire",
+      "name": "East Staffordshire",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 37,
+      "earlier_note": "No page found stating the next year. East Staffordshire Upcoming Elections page says only that information will be made available; 47 pages crawled in a browser; East Staffordshire (Electoral Changes) Order 2021 sets no later years. Whole council last elected 2023; 2027 likely.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "erewash",
+      "name": "Erewash",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 47,
+      "earlier_note": "Quote is the term-end date on a 2023 councillor's Terms of Office record; no council page states the next election year (pages still describe pre September 2026 shadow-authority plans).",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "exeter",
+      "name": "Exeter",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 13,
+      "earlier_note": "Only a councillor term-of-office record was found; that is not an election notice.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "fylde",
+      "name": "Fylde",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 37,
+      "earlier_note": "Whole council last elected May 2023; could not find a council page stating the next year (by-elections page only says 'next ordinary day of election'). Search budget exhausted.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "great-yarmouth",
+      "name": "Great Yarmouth",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2016, 2018, 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 39,
+      "earlier_note": "Whole council 2019, 2023, so 2027 by cycle; no council page states 2027 (upcoming elections page lists only a PCC by-election). Norfolk LGR withdrawn.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "halton",
+      "name": "Halton",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2021,
+        "partial_polls_since": [
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021 (whole), 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 18,
+      "earlier_note": "2027 is inferred: order retirements end 2024 and the council page says 'The Council votes by thirds' without naming a year. A search lead (Farnworth by-election 'until May 2027') could not be confirmed in raw text; that page now shows a 2028 by-election term.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "harborough",
+      "name": "Harborough",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 34,
+      "earlier_note": "Cycle stated but no year; last whole-council poll 2023 implies 2027. Page also carries an outdated seat count.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "hart",
+      "name": "Hart",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 11,
+      "earlier_note": "Thirds. Only one member record shows a 2027 end; others show stale LGR end dates (30/31 March 2028) or none. North Hampshire decision withdrawn; no council page states a 2027 district poll.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "hartlepool",
+      "name": "Hartlepool",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2021,
+        "partial_polls_since": [
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021 (whole), 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 12,
+      "earlier_note": "Council news confirms 2026 was a thirds poll (twelve seats, one per ward). 2027 follows from the 2022/2023/2024 cycle by arithmetic; council page states no next date. Stored 2030 whole council is wrong.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "hastings",
+      "name": "Hastings",
+      "stored_cycle": "Halves",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2018,
+        "partial_polls_since": [
+          2021,
+          2022,
+          2024,
+          2026
+        ],
+        "due_2027": false,
+        "basis": "Elects in parts with no 2023 poll, so no seats fall due in 2027. Polls: 2016, 2018 (whole), 2021, 2022, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": false,
+      "status_2027": "not_due_by_cycle",
+      "dc_elected_2023_contested": null,
+      "earlier_note": "Halves cycle implies 2028, but East Sussex decision (modified One East Sussex) expects shadow elections May 2027 and abolition April 2028. No structural changes order found on legislation.gov.uk.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "huntingdonshire",
+      "name": "Huntingdonshire",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2026,
+        "due_2027": false,
+        "basis": "Whole council last elected 2026; four-year term puts the next whole-council poll in 2030. Polls: 2016, 2018 (whole), 2022 (whole), 2026 (whole)."
+      },
+      "listed_by_ocd_for_2027": false,
+      "status_2027": "not_due_by_cycle",
+      "dc_elected_2023_contested": null,
+      "earlier_note": "Whole-council election held 7 May 2026, so 2030 is inferred from the four-year cycle only; Upcoming Elections page and the 2017 order (SI 2017/480) state no later year; Cambridgeshire LGR decision paused.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "knowsley",
+      "name": "Knowsley",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 16,
+      "earlier_note": "2027 inferred from thirds cycle; the page's '6 May 2027' refers to parish councils only. Council's review page says boundary changes expected by May 2028 with an all-out election in 2028. Latest order SI 2015/2036 runs only to 2020.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "lewes",
+      "name": "Lewes",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 41,
+      "earlier_note": "Council site (lewes-eastbourne.gov.uk) blocks scripted access (HTTP 403); whole council elected 2023, so 2027 is inferred; neighbouring Rother confirms East Sussex May 2027 polls proceed.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "lichfield",
+      "name": "Lichfield",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 46,
+      "earlier_note": "CONFLICT: council's April 2026 notice assumes LGR extension to 2028; no order found and MHCLG says May 2027 elections go ahead. Likely 2027 but council page contradicts it.",
+      "earlier_conflict": {
+        "slug": "lichfield",
+        "council_page": {
+          "source_label": "Lichfield District Council news: No election on 7 May 2026",
+          "source_url": "https://www.lichfielddc.gov.uk/news/article/1182/no-election-on-7-may-2026",
+          "quote": "Councillors elected in May 2023 (or since via by-elections) will remain in post until April 2028. This extended term is intended to provide stability during the transition.",
+          "page_date": "Published: 9 April 2026"
+        },
+        "statutory": null
+      }
+    },
+    {
+      "slug": "malvern-hills",
+      "name": "Malvern Hills",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 31,
+      "earlier_note": "Search lead says council page gives Thursday 6 May 2027, but the page rendered without that text in curl and browser; could not quote it.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "mid-devon",
+      "name": "Mid Devon",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 42,
+      "earlier_note": "The council lists 6 May 2027 but says the district poll is to be confirmed.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "mid-sussex",
+      "name": "Mid Sussex",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 48,
+      "earlier_note": "Page (last updated 26 May 2026) lists only parish polls for May 2027, not district; whole council elected 2023 so 2027 is inferred; West Sussex LGR status after 7 Sep 2026 not confirmed on site.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "newark-and-sherwood",
+      "name": "Newark and Sherwood",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 39,
+      "earlier_note": "Cycle only; last poll 4 May 2023. Lead page stating 6 May 2027 now returns 404.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "north-devon",
+      "name": "North Devon",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 41,
+      "earlier_note": "Not checked against a primary page (search budget exhausted). Leads say whole council, last 2023, next 6 May 2027.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "north-lincolnshire",
+      "name": "North Lincolnshire",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 43,
+      "earlier_note": "Council page sits behind bot verification; not bypassed. Lead text says last full elections May 2023, next May 2027.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "norwich",
+      "name": "Norwich",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2019,
+        "partial_polls_since": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019 (whole), 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 13,
+      "earlier_note": "2027 is derived from the 2019 order's cycle (2023 retirees re-elected 2027) and the council's stated thirds pattern with no poll in the county year; no page states 2027 directly.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "oadby-and-wigston",
+      "name": "Oadby and Wigston",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 26,
+      "earlier_note": "Cycle only; last poll 4 May 2023 implies 2027.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "pendle",
+      "name": "Pendle",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2021,
+        "partial_polls_since": [
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021 (whole), 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 12,
+      "earlier_note": "Council pages still show 'Elections 2026' and give no next date; 2027 inferred from thirds cycle; electoral change orders 2020/215 and 2023/202 do not set a 2027 retirement.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "peterborough",
+      "name": "Peterborough",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 21,
+      "earlier_note": "Thirds council; 2026 poll held. Council pages returned no text. Leader's Feb 2026 column expected all-out 2027 polls for a new authority; reorganisation now under review and no structural order made. Likely 2027 under current law but not verified. Stored 2030 is likely wrong.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "portsmouth",
+      "name": "Portsmouth",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 14,
+      "earlier_note": "Thirds confirmed; no council page found naming 2027. No electoral change order since 2001; 2027 is a thirds year by the usual cycle (county year fallow). Hampshire LGR decision withdrawn 7 Sep 2026. Stored 2030 whole council is wrong.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "reading",
+      "name": "Reading",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2022,
+        "partial_polls_since": [
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022 (whole), 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 17,
+      "earlier_note": "Seats filled in 2023 fall due in 2027 by arithmetic. Council website returned a blocked page, so no direct statement of 2027. Stored 2030 whole council is wrong.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "rugby",
+      "name": "Rugby",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 14,
+      "earlier_note": "Statement does not say Rugby itself has a scheduled 2027 poll; 2027 inferred from thirds cycle; elections page gave no next date.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "rushmoor",
+      "name": "Rushmoor",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 13,
+      "earlier_note": "2027 inferred from thirds cycle; council elections pages give no next date; Hampshire LGR withdrawn 7 Sep 2026.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "sheffield",
+      "name": "Sheffield",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 29,
+      "earlier_note": "2027 inferred from thirds cycle; no council page or order text names 2027 (order runs only to 2019). An LGBCE review of Sheffield is in progress, which may bring a later all-out election.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "slough",
+      "name": "Slough",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 42,
+      "earlier_note": "Whole council since 2023. Council pages fetched by curl showed no next-election text; browser access to slough.gov.uk was refused. Search leads only (council page reportedly says 4 May 2027).",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "south-cambridgeshire",
+      "name": "South Cambridgeshire",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2026,
+        "due_2027": false,
+        "basis": "Whole council last elected 2026; four-year term puts the next whole-council poll in 2030. Polls: 2016, 2018 (whole), 2022 (whole), 2026 (whole)."
+      },
+      "listed_by_ocd_for_2027": false,
+      "status_2027": "not_due_by_cycle",
+      "dc_elected_2023_contested": null,
+      "earlier_note": "Whole council elected 7 May 2026; 2030 inferred from four-year cycle; no source states 2030; Cambridgeshire LGR paused.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "south-gloucestershire",
+      "name": "South Gloucestershire",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 61,
+      "earlier_note": "Last whole council 2023. southglos.gov.uk returned an empty shell to curl and browser access was refused; no primary text read.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "south-hams",
+      "name": "South Hams",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 31,
+      "earlier_note": "Last whole council 2023. Council elections pages (2026, archive) give no next-year statement; no primary text found.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "south-norfolk",
+      "name": "South Norfolk",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 46,
+      "earlier_note": "Last whole council 2023; Norfolk LGR withdrawn per MHCLG 7 Sep 2026. Upcoming elections page lists only a parish by-election; no next-year text found.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "southend-on-sea",
+      "name": "Southend-on-Sea",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 17,
+      "earlier_note": "Thirds council; 2026 poll held. Council news (pre-September) expected 2027 shadow elections for South East Essex, but MHCLG withdrew the Essex decision on 7 Sep 2026. No council page found stating its own 2027 poll; likely 2027. Stored 2030 is likely wrong.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "stoke-on-trent",
+      "name": "Stoke-on-Trent",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 44,
+      "earlier_note": "Last whole council 2023. stoke.gov.uk elections pages read by curl and browser carry no next-year text (search snippet suggests a May 2027 statement once existed).",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "stratford-on-avon",
+      "name": "Stratford-on-Avon",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 41,
+      "earlier_note": "Whole council elected 2023 (SI 2022/1137) so 2027 inferred; a council news item refers to May 2027 shadow authority elections, now overtaken by the paused Warwickshire LGR.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "stroud",
+      "name": "Stroud",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2024,
+        "due_2027": false,
+        "basis": "Whole council last elected 2024; four-year term puts the next whole-council poll in 2028. Polls: 2016 (whole), 2021 (whole), 2024 (whole)."
+      },
+      "listed_by_ocd_for_2027": false,
+      "status_2027": "not_due_by_cycle",
+      "dc_elected_2023_contested": null,
+      "earlier_note": "Whole council last 2024, so 2028 if no reorganisation; Gloucestershire shadow unitary elections in 2027 were planned. No council statement of the next year found (no-elections-2026 page now 404).",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "swale",
+      "name": "Swale",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 47,
+      "earlier_note": "The council page gives 4 May 2027, which is not the statutory day; not relied on.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "tendring",
+      "name": "Tendring",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 48,
+      "earlier_note": "Last whole council 2023. Only council text found predates the 7 Sep 2026 Essex LGR withdrawal and refers to shadow unitary elections in May 2027; council elections page not found.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "tewkesbury",
+      "name": "Tewkesbury",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 38,
+      "earlier_note": "Conflicts with the council's elected representatives page (next 6 May 2027) and with MHCLG 7 Sep 2026 review; left blank.",
+      "earlier_conflict": {
+        "slug": "tewkesbury",
+        "council_page": {
+          "source_label": "Tewkesbury Borough Council: Current and future elections",
+          "source_url": "https://tewkesbury.gov.uk/about-the-council/voting-and-elections/current-and-future-elections/",
+          "quote": "Due to local government reorganisation the previously scheduled Borough Council elections will not take place on Thursday 6 May 2027. Instead, on that date, elections will be held for the shadow Gloucestershire Unitary Council.",
+          "page_date": null
+        },
+        "statutory": null
+      }
+    },
+    {
+      "slug": "thanet",
+      "name": "Thanet",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 56,
+      "earlier_note": "Last whole council 2023. Upcoming Elections page and elections tag feed give no next-year text.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "three-rivers",
+      "name": "Three Rivers",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": null,
+        "partial_polls_since": [
+          2016,
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 14,
+      "earlier_note": "Text refers to parish and unitary polls, written before the 7 Sep 2026 Hertfordshire LGR pause; local elections page gives no district date.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "watford",
+      "name": "Watford Borough Council",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 12,
+      "earlier_note": "Hedged and pre-dates the 7 Sep 2026 Hertfordshire LGR pause; borough thirds poll in 2027 not confirmed.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "welwyn-hatfield",
+      "name": "Welwyn Hatfield",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 16,
+      "earlier_note": "Does not name the body being elected (may have meant shadow unitary); 2016 order (SI 2016/116) sets thirds.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "west-devon",
+      "name": "West Devon",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 30,
+      "earlier_note": "Last whole council 2023. Council elections pages (2026, archive) give no next-year statement.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "winchester",
+      "name": "Winchester",
+      "stored_cycle": "Thirds",
+      "dc_cycle": {
+        "pattern": "partial",
+        "last_whole_council_poll": 2016,
+        "partial_polls_since": [
+          2018,
+          2019,
+          2021,
+          2022,
+          2023,
+          2024,
+          2026
+        ],
+        "due_2027": true,
+        "basis": "Elects in parts; seats filled in 2023 fall due in 2027. Polls: 2016 (whole), 2018, 2019, 2021, 2022, 2023, 2024, 2026."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 16,
+      "earlier_note": "Schedule (updated 23 Feb 2026) still says next city election May 2026; parish cycle PDF lists 2027 parishes, implying city wards in 2027; Hampshire LGR withdrawn.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "windsor-and-maidenhead",
+      "name": "Windsor and Maidenhead",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 41,
+      "earlier_note": "Last whole council 2023. rbwm.gov.uk returned empty shells to curl and browser access was refused; search lead only (site banner reportedly says 6 May 2027).",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "worcester",
+      "name": "Worcester",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2024,
+        "due_2027": false,
+        "basis": "Whole council last elected 2024; four-year term puts the next whole-council poll in 2028. Polls: 2016, 2018, 2019, 2021, 2022, 2023, 2024 (whole)."
+      },
+      "listed_by_ocd_for_2027": false,
+      "status_2027": "not_due_by_cycle",
+      "dc_elected_2023_contested": 11,
+      "earlier_note": "Implies 2028, but no text states it, and Worcestershire LGR (shadow South Worcestershire election May 2027) is under review; left blank.",
+      "earlier_conflict": null
+    },
+    {
+      "slug": "wychavon",
+      "name": "Wychavon",
+      "stored_cycle": null,
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 43,
+      "earlier_note": "Page predates or ignores MHCLG 7 Sep 2026 review; no cancellation order found. Either a district or shadow election falls in May 2027.",
+      "earlier_conflict": {
+        "slug": "wychavon",
+        "council_page": {
+          "source_label": "Wychavon District Council: Future Elections",
+          "source_url": "https://www.wychavon.gov.uk/elections/future-elections",
+          "quote": null,
+          "withheld": "The council's site refuses automated reading, so we do not quote it here; open the page to read the council's statement.",
+          "page_date": null
+        },
+        "statutory": null
+      }
+    },
+    {
+      "slug": "wyre",
+      "name": "Wyre",
+      "stored_cycle": "All out",
+      "dc_cycle": {
+        "pattern": "whole_council",
+        "last_whole_council_poll": 2023,
+        "due_2027": true,
+        "basis": "Whole council last elected 2023; four-year term puts the next whole-council poll in 2027. Polls: 2019 (whole), 2023 (whole)."
+      },
+      "listed_by_ocd_for_2027": true,
+      "status_2027": "due_by_cycle",
+      "dc_elected_2023_contested": 50,
+      "earlier_note": "Last whole council 2023. Scheduled-elections page now 404; current elections page empty.",
+      "earlier_conflict": null
+    }
+  ]
+}
