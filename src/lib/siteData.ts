@@ -3,7 +3,7 @@ import { councilNextElection, type NextElectionLabel } from "./nextElections";
  * siteData.ts. shared headline data shown across the public surface.
  *
  * One canonical source for every page so headline numbers can never disagree
- * between, say, the homepage and the May 7 forecast page. Every page that
+ * between, say, the homepage and the 7 May 2026 forecast page. Every page that
  * shows a top-line stat reads from here.
  */
 import {
@@ -20,7 +20,7 @@ import {
 } from "./predictions";
 
 // Reference election dates. Tom updates ELECTION_DATE_MAY when the next
-// election cycle rolls over (e.g. after May 7 2026 → May 2027).
+// election cycle rolls over (e.g. after 7 May 2026 → May 2027).
 export const ELECTION_DATE_MAY = "2026-05-07";
 
 export interface MayHeadline {
@@ -157,7 +157,7 @@ export function countdownToMay(now: Date = new Date()): Countdown {
   };
 }
 
-// ---------- Council cycles + May 7 actuals ----------
+// ---------- Council cycles + 7 May 2026 actuals ----------
 
 export interface May7Headline {
   contesting_councils: number;

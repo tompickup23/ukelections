@@ -1,7 +1,10 @@
 import lookupCodes from "../../data/identity/parliament-lookup-codes.json";
 import { loadGePredictions, loadIdentity } from "./predictions";
-import type { DistrictEntry, LookupEntry } from "./electionLookup";
-import { allCouncilRecords, councilNextElection } from "./nextElections";
+import type { DistrictEntry, LookupEntry, NationalRow, UpcomingContest } from "./electionLookup";
+import { allCouncilRecords, CALENDAR, councilNextElection } from "./nextElections";
+import { dayLabel } from "./voterJourney";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 
 export function loadAreaLookup() {
   const identity = loadIdentity();
@@ -71,4 +74,35 @@ export function loadAreaLookup() {
     .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
 
   return { constituencies: constituencyIndex, wards: wardIndex, councils: councilIndex, districts: districtIndex };
+}
+
+// "Is there an election where I live?": upcoming council by-elections by ward
+// code, each council's next dated election, and the sourced national calendar.
+export function loadAreaAnswerData(buildDay = new Date().toISOString().slice(0, 10)) {
+  const contestDir = path.join(process.cwd(), "data/contests/local-byelections");
+  const byElections: UpcomingContest[] = existsSync(contestDir)
+    ? readdirSync(contestDir)
+        .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
+        .map((f) => JSON.parse(readFileSync(path.join(contestDir, f), "utf8")))
+        .filter((d) => d.contest?.ward_gss && d.contest?.polling_day >= buildDay && !d.result?.declared)
+        .map((d) => ({
+          ward_code: d.contest.ward_gss,
+          ward: d.contest.ward_name,
+          council: d.contest.council_name,
+          date_iso: d.contest.polling_day,
+          date_label: dayLabel(d.contest.polling_day),
+          href: `/by-elections/local/${d.slug}/`,
+        }))
+    : [];
+  const districtDates: Record<string, string | null> = {};
+  for (const record of allCouncilRecords()) {
+    if (record.lad24cd) districtDates[record.lad24cd] = councilNextElection(record.slug).date_iso;
+  }
+  const national: Record<string, NationalRow> = {};
+  for (const row of CALENDAR) {
+    if (["general-election", "senedd", "holyrood", "ni-assembly", "london-2028"].includes(row.id)) {
+      national[row.id] = { body: row.body, date_iso: row.date_iso, date_label: row.date_label, date_kind: row.date_kind, href: row.href };
+    }
+  }
+  return { byElections, districtDates, national };
 }

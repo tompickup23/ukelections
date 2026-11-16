@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.702Z",
+  "generated_at": "2026-11-14T03:52:16.151Z",
   "slug": "wychavon-hartlebury-2026-10-22",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-09-25",
     "registration_deadline": "2026-10-06",
-    "postal_vote_deadline": "2026-10-07"
+    "postal_vote_deadline": "2026-10-07",
+    "timetable": {
+      "notice_of_election_deadline": "2026-09-17",
+      "close_of_nominations": "2026-09-25",
+      "sopn_publish_deadline": "2026-09-28",
+      "registration_deadline": "2026-10-06",
+      "postal_vote_application_deadline": "2026-10-07",
+      "proxy_vote_application_deadline": "2026-10-14",
+      "vac_application_deadline": "2026-10-14",
+      "replacement_pack_start_date": "2026-10-16"
+    }
   },
   "field": {
     "candidate_count": 3,
@@ -41,27 +51,27 @@
         "party_name": "Conservative and Unionist Party",
         "votes": 315,
         "elected": true,
+        "party": "Conservative",
         "source": "https://www.wychavon.gov.uk/component/fileman/?view=file&routed=1&itemless=1&name=Declaration%20of%20results%20Hartlebury%20ward.pdf&folder=Documents/Elections/elections/2026/current%20elections&container=fileman-files",
-        "accessed_at": "2026-11-03",
-        "party": "Conservative"
+        "accessed_at": "2026-11-03"
       },
       {
         "name": "Jake Richardson",
         "party_name": "Reform UK",
         "votes": 238,
         "elected": false,
+        "party": "Reform UK",
         "source": "https://www.wychavon.gov.uk/component/fileman/?view=file&routed=1&itemless=1&name=Declaration%20of%20results%20Hartlebury%20ward.pdf&folder=Documents/Elections/elections/2026/current%20elections&container=fileman-files",
-        "accessed_at": "2026-11-03",
-        "party": "Reform UK"
+        "accessed_at": "2026-11-03"
       },
       {
         "name": "Susan Anne Evans",
         "party_name": "Labour Party",
         "votes": 78,
         "elected": false,
+        "party": "Labour",
         "source": "https://www.wychavon.gov.uk/component/fileman/?view=file&routed=1&itemless=1&name=Declaration%20of%20results%20Hartlebury%20ward.pdf&folder=Documents/Elections/elections/2026/current%20elections&container=fileman-files",
-        "accessed_at": "2026-11-03",
-        "party": "Labour"
+        "accessed_at": "2026-11-03"
       }
     ]
   },
@@ -221,54 +231,61 @@
     "swing": {
       "stratum": "pre_realignment|reform_entering",
       "stratum_used": true,
-      "contests_used": 32,
+      "contests_used": 87,
       "window_days": 365,
       "logodds_shifts": {
         "Labour": -0.9841723561133158,
         "Conservative": -0.6321805126945335,
-        "Liberal Democrats": -0.2630224416145051,
-        "Green Party": -0.11550912045192274
+        "Liberal Democrats": -0.4192421802506563,
+        "Green Party": -0.22423117104647133,
+        "Plaid Cymru": 0.07650247048720554,
+        "Independent": -1.4365986058999027
       },
       "ratio_at_25pct": {
         "Labour": 0.443125428430391,
         "Conservative": 0.601944799404123,
-        "Liberal Democrats": 0.8158989769374096,
-        "Green Party": 0.9158905103989347
+        "Liberal Democrats": 0.7191107082877933,
+        "Green Party": 0.8413824195171374,
+        "Plaid Cymru": 1.058466549264506,
+        "Independent": 0.2937053395002529
       },
       "entry_shares": {
-        "Reform UK": 0.2653173399148628,
-        "Liberal Democrats": 0.03556185162163855,
-        "Green Party": 0.07177717188591722
+        "Reform UK": 0.2727272727272727,
+        "Conservative": 0.04427152907649835,
+        "Liberal Democrats": 0.09703721092743434,
+        "Green Party": 0.05610043154178109,
+        "Plaid Cymru": 0.15343627194875406,
+        "Independent": 0.05188679245283019
       },
       "entry_counts": {
-        "Reform UK": 32,
-        "Labour": 1,
-        "Conservative": 1,
-        "Liberal Democrats": 6,
-        "Green Party": 12,
+        "Reform UK": 87,
+        "Labour": 4,
+        "Conservative": 6,
+        "Liberal Democrats": 12,
+        "Green Party": 37,
         "SNP": 0,
-        "Plaid Cymru": 3,
-        "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 2
+        "Plaid Cymru": 6,
+        "Restore Britain": 3,
+        "Independent": 9,
+        "Other": 4
       },
       "party_counts": {
         "Reform UK": 0,
-        "Labour": 19,
-        "Conservative": 31,
-        "Liberal Democrats": 26,
-        "Green Party": 18,
+        "Labour": 63,
+        "Conservative": 77,
+        "Liberal Democrats": 49,
+        "Green Party": 32,
         "SNP": 0,
-        "Plaid Cymru": 1,
+        "Plaid Cymru": 15,
         "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 0
+        "Independent": 11,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.3880545983207462,
+      "Reform UK": 0.3946156380573188,
       "Labour": 0,
-      "Conservative": 0.6119454016792537,
+      "Conservative": 0.6053843619426811,
       "Liberal Democrats": 0,
       "Green Party": 0,
       "SNP": 0,
@@ -278,30 +295,30 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.31675,
-      "Conservative": 0.68325
+      "Reform UK": 0.314,
+      "Conservative": 0.686
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.15744946103186497,
-        "p50": 0.4103257144888173,
-        "p90": 0.6785934361250562
+        "p10": 0.16140401162304185,
+        "p50": 0.4130841543446768,
+        "p90": 0.6477098601631636
       },
       "Conservative": {
-        "p10": 0.3214065638749438,
-        "p50": 0.5896742855111827,
-        "p90": 0.8425505389681351
+        "p10": 0.35229013983683655,
+        "p50": 0.5869158456553232,
+        "p90": 0.8385959883769583
       }
     },
     "winner": "Conservative",
     "runner_up": "Reform UK",
-    "margin_pp": 22.389080335850753,
-    "leader_probability": 0.68325,
+    "margin_pp": 21.076872388536227,
+    "leader_probability": 0.686,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
       "Labour is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
-      "Priced from an entry prior, not from this ward: Reform UK (median of 32). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Reform UK (median of 87). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [
       "Labour"
@@ -312,7 +329,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -347,19 +364,17 @@
       "call_correct": true,
       "mae_pp": 8.240887480190173
     },
-    "review_status": "hand_verified_declaration",
     "checked_at": "2026-11-03",
+    "accessed_at": "2026-11-03",
+    "review_status": "hand_verified_declaration",
     "note": "Wychavon District Council's declaration of result of poll (Meesha Patel, Deputy Returning Officer; dated 23 October 2026), read on 3 November 2026 (PDF SHA-256 9a07a0ac8e45c68fec9595774a7fa362d2eb9f6d2b024480dcbbbf536914df87): Conservative 315, Reform UK 238, Labour 78; 2 rejected papers; 633 ballot papers issued; electorate 2,503; turnout printed as 25.3%. 315 + 238 + 78 = 631 valid votes plus 2 rejected is 633. ALDC's result report agrees on all three counts. Democracy Club's higher Reform UK figure does not reconcile with the declaration and is not used."
   },
   "declaration": null,
   "sources": [
     {
       "label": "Returning officer declaration (verified)",
-      "url": "https://www.wychavon.gov.uk/component/fileman/?view=file&routed=1&itemless=1&name=Declaration%20of%20results%20Hartlebury%20ward.pdf&folder=Documents/Elections/elections/2026/current%20elections&container=fileman-files"
-    },
-    {
-      "label": "Report of the declaration (verified against a second source)",
-      "url": "https://www.aldc.org/2026/10/wychavon-dc-hartlebury-22-october-2026-2/"
+      "url": "https://www.wychavon.gov.uk/component/fileman/?view=file&routed=1&itemless=1&name=Declaration%20of%20results%20Hartlebury%20ward.pdf&folder=Documents/Elections/elections/2026/current%20elections&container=fileman-files",
+      "accessed_at": "2026-11-03"
     },
     {
       "label": "Democracy Club, EveryElection",
@@ -370,5 +385,5 @@
       "url": "https://candidates.democracyclub.org.uk/elections/local.wychavon.hartlebury.by.2026-10-22/"
     }
   ],
-  "result_updated_at": "2026-11-03"
+  "results_updated_at": "2026-11-03"
 }

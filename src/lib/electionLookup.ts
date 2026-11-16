@@ -148,3 +148,179 @@ export function voterIntentLinks(query: string): Array<{ name: string; secondary
   }
   return [];
 }
+
+// ---- "Is there an election where I live?" (prototype) ---------------------
+//
+// One answer for a postcode: whether anything is under way, and every body the
+// address votes for with the next date we can stand behind. Dates come from
+// the contest files and the sourced calendar; an unverified council gets no
+// date. Nothing about the reader leaves the browser beyond the existing
+// Postcodes.io lookup.
+
+export interface UpcomingContest {
+  ward_code: string;
+  ward: string;
+  council: string;
+  date_iso: string;
+  date_label: string;
+  href: string;
+}
+
+export interface NationalRow {
+  body: string;
+  date_iso: string | null;
+  date_label: string;
+  /** "fixed", "latest" or "month", as in the calendar file. */
+  date_kind: string;
+  href: string | null;
+}
+
+export interface AreaIndex extends Pick<LookupIndex, "constituencies" | "wards" | "districts"> {
+  byElections?: UpcomingContest[];
+  national?: Record<string, NationalRow>;
+  districtDates?: Record<string, string | null>;
+}
+
+export type DateCertainty = "fixed" | "latest" | "unverified" | "none";
+
+export interface BallotRow {
+  body: string;
+  when: string;
+  date_iso: string | null;
+  certainty: DateCertainty;
+  href: string | null;
+  note?: string;
+}
+
+export interface AreaAnswer {
+  /** "now": a contest is under way. "later": nothing under way, a date is known. "unknown": no date we can give. */
+  tone: "now" | "later" | "unknown";
+  headline: string;
+  detail: string;
+  action: { label: string; href: string } | null;
+  rows: BallotRow[];
+}
+
+export const CERTAINTY_WORD: Record<DateCertainty, string> = {
+  fixed: "Date set",
+  latest: "Latest possible date",
+  unverified: "Date not verified",
+  none: "No further elections",
+};
+
+/** Whole days from one ISO date to another. */
+export function daysBetween(fromIso: string, toIso: string): number {
+  const ms = (iso: string) => Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10));
+  return Math.round((ms(toIso) - ms(fromIso)) / 86400000);
+}
+
+export function inDays(n: number): string {
+  if (n <= 0) return "today";
+  if (n === 1) return "tomorrow";
+  return `in ${n} days`;
+}
+
+export function areaAnswer(
+  result: PostcodeResult & { country?: string | null; region?: string | null },
+  index: AreaIndex,
+  todayIso: string,
+): AreaAnswer {
+  const wardCode = cleanCode(result.codes?.admin_ward);
+  const districtCode = cleanCode(result.codes?.admin_district);
+  const pconCode = cleanCode(result.codes?.parliamentary_constituency);
+  const country = String(result.country || "");
+  const national = index.national || {};
+  const rows: BallotRow[] = [];
+
+  // 1. A by-election in this ward that has not polled yet.
+  const contest = (index.byElections || [])
+    .filter((b) => cleanCode(b.ward_code) === wardCode && b.date_iso >= todayIso)
+    .sort((a, b) => a.date_iso.localeCompare(b.date_iso))[0] ?? null;
+  if (contest) {
+    rows.push({
+      body: `${contest.ward} by-election, ${contest.council}`,
+      when: contest.date_label,
+      date_iso: contest.date_iso,
+      certainty: "fixed",
+      href: contest.href,
+    });
+  }
+
+  // 2. The council's next ordinary election.
+  const northernIreland = districtCode.startsWith("N") || country === "Northern Ireland";
+  const district = (index.districts || []).find((d) => cleanCode(d.code) === districtCode) ?? null;
+  if (district) {
+    const iso = index.districtDates?.[district.code] ?? null;
+    rows.push(
+      district.status === "abolished"
+        ? { body: `${district.name} council`, when: "Being abolished", date_iso: null, certainty: "none", href: district.href, note: "A successor council will hold its own elections." }
+        : district.status === "scheduled"
+          ? { body: `${district.name} council`, when: district.next_label, date_iso: iso, certainty: "fixed", href: district.href }
+          : { body: `${district.name} council`, when: "We have not confirmed the date", date_iso: null, certainty: "unverified", href: district.href, note: "Check the council's own election pages." },
+    );
+  }
+
+  // 3. The devolved parliament, by nation.
+  const devolved = country === "Scotland" ? national.holyrood : country === "Wales" ? national.senedd : northernIreland ? national["ni-assembly"] : null;
+  if (devolved) {
+    rows.push({ body: devolved.body, when: devolved.date_label, date_iso: devolved.date_iso, certainty: "fixed", href: devolved.href });
+  }
+
+  // 3b. London votes for a mayor and assembly as well as its borough.
+  const london = result.region === "London" ? national["london-2028"] : null;
+  if (london) {
+    rows.push({ body: london.body, when: london.date_label, date_iso: london.date_iso, certainty: "fixed", href: london.href });
+  }
+
+  // 4. Westminster.
+  const seat = pconCode ? index.constituencies.find((e) => cleanCode(e.code) === pconCode) ?? null : null;
+  const ge = national["general-election"];
+  if (ge) {
+    rows.push({
+      body: seat ? `UK Parliament, ${seat.name}` : "UK Parliament",
+      when: ge.date_label,
+      date_iso: ge.date_iso,
+      certainty: "latest",
+      href: seat?.href ?? ge.href,
+      note: "No date is set. An election can be called earlier.",
+    });
+  }
+
+  rows.sort((a, b) => (a.date_iso ?? "9999").localeCompare(b.date_iso ?? "9999"));
+
+  if (contest) {
+    return {
+      tone: "now",
+      headline: `Yes. ${contest.ward} has a council by-election on ${contest.date_label}.`,
+      detail: `That is ${inDays(daysBetween(todayIso, contest.date_iso))}.`,
+      action: { label: "See every deadline and what you can still do", href: `${contest.href}#your-vote` },
+      rows,
+    };
+  }
+  // The next date we can stand behind. A latest-possible date is not one.
+  const next = rows.find((r) => r.date_iso && r.certainty === "fixed" && r.date_iso >= todayIso) ?? null;
+  if (next) {
+    // A general election has no date, but it has a last possible one. Where
+    // that falls first, say so: "the next is 2030" would be untrue.
+    const geFirst = ge?.date_iso && next.date_iso && ge.date_iso < next.date_iso;
+    return {
+      tone: "later",
+      headline: "No election is under way where you live.",
+      detail: (geFirst
+        ? `A general election has no date yet but must be held ${ge!.date_label.replace(/^No later than/, "by")}. The next one with a date is ${next.body}, on ${next.when}.`
+        : `The next one with a date is ${next.body}, on ${next.when}.`)
+        + (northernIreland ? " This site does not cover council elections in Northern Ireland." : ""),
+      action: null,
+      rows,
+    };
+  }
+  return {
+    tone: "unknown",
+    headline: "No election is under way that we know of.",
+    detail: northernIreland
+      ? "This site does not cover council elections in Northern Ireland. The Electoral Office for Northern Ireland has them."
+      : "We have not confirmed when this area next votes, so we give no date.",
+    action: northernIreland ? { label: "Electoral Office for Northern Ireland", href: "https://www.eoni.org.uk/" } : null,
+    rows,
+  };
+}

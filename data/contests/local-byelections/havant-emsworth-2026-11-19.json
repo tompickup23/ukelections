@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.075Z",
+  "generated_at": "2026-11-14T03:52:16.363Z",
   "slug": "havant-emsworth-2026-11-19",
   "status": "upcoming",
   "contest": {
@@ -23,11 +23,21 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-23",
     "registration_deadline": "2026-11-03",
-    "postal_vote_deadline": "2026-11-04"
+    "postal_vote_deadline": "2026-11-04",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-15",
+      "close_of_nominations": "2026-10-23",
+      "sopn_publish_deadline": "2026-10-26",
+      "registration_deadline": "2026-11-03",
+      "postal_vote_application_deadline": "2026-11-04",
+      "proxy_vote_application_deadline": "2026-11-11",
+      "vac_application_deadline": "2026-11-11",
+      "replacement_pack_start_date": "2026-11-13"
+    }
   },
   "field": {
     "candidate_count": 5,
-    "locked": false,
+    "locked": true,
     "sopn_published": true,
     "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.havant.emsworth.by.2026-11-19/sopn/2026-10-23T15%3A47%3A11.989108%2B00%3A00/Emsworth.pdf",
     "parties": [
@@ -154,7 +164,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 1,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.2235241099594412,
       "Labour": 0,
@@ -169,38 +179,155 @@
     },
     "candidates": [
       {
-        "person_id": 112059,
         "name": "Chas Robert",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 2185,
-        "elected": true
+        "votes": 2185
       },
       {
-        "person_id": 126359,
         "name": "Andrew James Proctor",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 1261,
-        "elected": false
+        "votes": 1261
       },
       {
-        "person_id": 60940,
         "name": "Allan David Darby",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 992,
-        "elected": false
+        "votes": 992
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://www.havant.gov.uk/elections/election-results",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.havant.emsworth.2026-05-07/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2026-05-07 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2026-05-07",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.2235241099594412,
+        "Labour": 0,
+        "Conservative": 0.28413699864803965,
+        "Liberal Democrats": 0,
+        "Green Party": 0.49233889139251913,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.havant.emsworth.2026-05-07/"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 67,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.27002793175888107,
+        "Labour": 0.2811409520544227,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": -0.26960275498555786,
+        "Green Party": -0.3795886856743045,
+        "Independent": -0.11652273000901092
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8113585124704337,
+        "Labour": 1.2252027536945638,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 0.8116335442620766,
+        "Green Party": 0.7427972211298991,
+        "Independent": 0.9151749196392648
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Restore Britain": 0.0671971706454465,
+        "Independent": 0.051112943116240726
+      },
+      "entry_counts": {
+        "Reform UK": 0,
+        "Labour": 2,
+        "Conservative": 3,
+        "Liberal Democrats": 3,
+        "Green Party": 5,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 13,
+        "Independent": 11,
+        "Other": 1
+      },
+      "party_counts": {
+        "Reform UK": 66,
+        "Labour": 59,
+        "Conservative": 59,
+        "Liberal Democrats": 42,
+        "Green Party": 53,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 2
+      }
+    },
+    "central": {
+      "Reform UK": 0.2217349155077368,
+      "Labour": 0,
+      "Conservative": 0.287362681600018,
+      "Liberal Democrats": 0,
+      "Green Party": 0.49090240289224524,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.09125,
+      "Conservative": 0.25675,
+      "Green Party": 0.652
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.1275904027004939,
+        "p50": 0.2218413236285383,
+        "p90": 0.3835859925250695
+      },
+      "Conservative": {
+        "p10": 0.12715739979079635,
+        "p50": 0.2935015527099786,
+        "p90": 0.5109886281140812
+      },
+      "Green Party": {
+        "p10": 0.19984669475292421,
+        "p50": 0.4709527459236995,
+        "p90": 0.6608557127020055
+      }
+    },
+    "winner": "Green Party",
+    "runner_up": "Conservative",
+    "margin_pp": 20.353972129222726,
+    "leader_probability": 0.652,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Labour is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Liberal Democrats is standing where it has no prior ward result and the corpus holds too few comparable entries to price one."
+    ],
+    "unpriced_parties": [
+      "Labour",
+      "Liberal Democrats"
+    ],
+    "entry_priced_parties": [],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [
