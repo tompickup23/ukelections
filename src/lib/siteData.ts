@@ -431,6 +431,60 @@ export function loadUpcomingElections(now: Date = new Date()): UpcomingContest[]
   return out.sort((a, b) => a.days_until - b.days_until);
 }
 
+export interface LocalHeroContest {
+  status: string;
+  contest: { polling_day: string; ballot_paper_id: string };
+}
+
+export interface LocalPollingDay {
+  kind: "local_by_elections";
+  polling_day_iso: string;
+  headline: string;
+  count: number;
+  href: string;
+}
+
+/** Select the next polling day inside the fortnight, retaining the parliamentary hero. */
+export function selectHomepageContest(
+  parliamentary: UpcomingContest[],
+  local: LocalHeroContest[],
+  now: Date = new Date(),
+): UpcomingContest | LocalPollingDay | null {
+  const withinFortnight = (iso: string) => {
+    const days = daysUntil(iso, now);
+    return days >= 0 && days <= 14;
+  };
+  const parliament = parliamentary
+    .filter(c => withinFortnight(c.polling_day_iso))
+    .sort((a, b) => a.polling_day_iso.localeCompare(b.polling_day_iso))[0];
+  const eligible = local.filter(c => c.status === "upcoming" && withinFortnight(c.contest.polling_day));
+  const date = eligible.map(c => c.contest.polling_day).sort()[0];
+  // The existing parliamentary presentation wins when both types poll together.
+  if (parliament && (!date || parliament.polling_day_iso <= date)) return parliament;
+  if (!date) return null;
+  const count = new Set(eligible.filter(c => c.contest.polling_day === date).map(c => c.contest.ballot_paper_id)).size;
+  const words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+  const label = new Date(`${date}T00:00:00Z`).toLocaleDateString("en-GB", {
+    weekday: "long", day: "numeric", month: "long", timeZone: "UTC",
+  });
+  return {
+    kind: "local_by_elections", polling_day_iso: date, count,
+    headline: `${words[count] ?? count} council by-election${count === 1 ? "" : "s"} on ${label}`,
+    href: "/by-elections/this-week/",
+  };
+}
+
+export function loadHomepageContest(now: Date = new Date()) {
+  const directory = "data/contests/local-byelections";
+  const absolute = resolve(process.cwd(), directory);
+  const local: LocalHeroContest[] = existsSync(absolute)
+    ? readdirSync(absolute).filter(name => name.endsWith(".json"))
+      .map(name => readJsonIfExists(`${directory}/${name}`))
+      .filter((record): record is LocalHeroContest => Boolean(record?.contest?.polling_day && record?.contest?.ballot_paper_id))
+    : [];
+  return selectHomepageContest(loadUpcomingElections(now), local, now);
+}
+
 function shortDate(iso: string): string {
   const d = new Date(`${iso}T00:00:00Z`);
   return d.toLocaleDateString("en-GB", {

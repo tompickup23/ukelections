@@ -46,7 +46,6 @@
   </div>
 </dialog>
 
-<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
 
 <style>
   .search-intents, .search-entities { margin: var(--space-md); }
@@ -69,7 +68,7 @@
       const item = document.createElement("li");
       const link = document.createElement("a");
       link.href = match.href;
-      link.textContent = `${match.name} — ${match.secondary}`;
+      link.textContent = `${match.name} · ${match.secondary}`;
       item.append(link); list.append(item);
     }
   }
@@ -79,6 +78,13 @@
   let pagefindUI: any = null;
 
   function loadPagefindScript(): Promise<any> {
+    if (!document.getElementById("pagefind-ui-style")) {
+      const style = document.createElement("link");
+      style.id = "pagefind-ui-style";
+      style.rel = "stylesheet";
+      style.href = "/pagefind/pagefind-ui.css";
+      document.head.appendChild(style);
+    }
     return new Promise((resolveScript, rejectScript) => {
       // Load Pagefind through a script element to avoid static bundling.
       const existing = document.getElementById("pagefind-ui-script");

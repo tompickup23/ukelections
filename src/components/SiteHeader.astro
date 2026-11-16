@@ -41,19 +41,18 @@ function isActiveGroup(group: NavGroup): boolean {
             </svg>
           </span>
         </summary>
-        <div class="mega-panel" role="menu">
+        <ul class="mega-panel">
           {group.items.map((item) => (
-            <a
+            <li><a
               href={item.href}
               class="mega-item"
-              role="menuitem"
               aria-current={isActiveItem(item.href) ? "page" : undefined}
             >
               <span class="mega-item-label">{item.label}</span>
               <span class="mega-item-desc">{item.desc}</span>
-            </a>
+            </a></li>
           ))}
-        </div>
+        </ul>
       </details>
     ))}
   </nav>
@@ -283,6 +282,8 @@ function isActiveGroup(group: NavGroup): boolean {
   .mega-group[open] .mega-caret { transform: rotate(180deg); }
 
   .mega-panel {
+    list-style: none;
+    margin: 0;
     position: absolute;
     top: calc(100% + 10px);
     left: 0;
