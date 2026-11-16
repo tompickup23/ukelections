@@ -8,6 +8,7 @@ import {
   collectResults,
   politeFetch,
   writeSidecar,
+  crawlDelaySeconds,
   declarationLinks,
   duringCountNight,
   fromFixtures,
@@ -127,6 +128,33 @@ describe("results morning, the guards", () => {
     expect(robotsAllows("", "https://x.gov.uk/anything")).toBe(true);
   });
 
+  it("reads Crawl-delay for our agent", () => {
+    expect(crawlDelaySeconds("User-agent: *\nCrawl-delay: 30\n")).toBe(30);
+    expect(crawlDelaySeconds("User-agent: *\nCrawl-Delay: 1\nAllow: /\n")).toBe(1);
+    expect(crawlDelaySeconds("User-agent: *\nDisallow:\n")).toBe(0);
+    expect(crawlDelaySeconds("")).toBe(0);
+  });
+
+  it("waits Crawl-delay between two requests to the same host", async () => {
+    vi.useFakeTimers();
+    const fetch = vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response("User-agent: *\nCrawl-delay: 2\nAllow: /\n"))
+      .mockResolvedValueOnce(new Response("one", { headers: { "content-type": "text/html" } }))
+      .mockResolvedValueOnce(new Response("two", { headers: { "content-type": "text/html" } }));
+    const saved = { previous: {}, hosts: {} };
+    const first = politeFetch("https://example.gov.uk/a", saved, { persist: () => {} });
+    await vi.advanceTimersByTimeAsync(0);
+    await expect(first).resolves.toMatchObject({ body: expect.any(Buffer) });
+    const second = politeFetch("https://example.gov.uk/b", saved, { persist: () => {} });
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    await vi.advanceTimersByTimeAsync(1);
+    await expect(second).resolves.toMatchObject({ body: expect.any(Buffer) });
+    expect(fetch).toHaveBeenCalledTimes(3);
+    vi.useRealTimers();
+    fetch.mockRestore();
+  });
+
   it("does not run on count night", () => {
     expect(duringCountNight(new Date("2026-11-12T21:30:00Z"), "2026-11-12")).toBe(true);
     expect(duringCountNight(new Date("2026-11-13T05:59:00Z"), "2026-11-12")).toBe(true);
@@ -157,6 +185,13 @@ describe("results morning, the guards", () => {
       expect(doc.contest.voting_system).toBe("FPTP");
       expect(sources.councils[doc.contest.council_slug]?.index_url).toMatch(/^https:\/\//);
     }
+    expect(sources.councils["north-east-lincolnshire"].also_check).toContain(
+      "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/local-elections/",
+    );
+    expect(sources.councils.wigan.also_check).toContain("https://electionresults.wigan.gov.uk/");
+    expect(sources.councils.hyndburn.also_check).toContain(
+      "https://www.hyndburnbc.gov.uk/electoral-vacancies-and-notices/",
+    );
   });
 });
 

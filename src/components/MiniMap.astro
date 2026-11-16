@@ -324,9 +324,12 @@ const a11y = ariaLabel || `Location map showing ${resolvedName} highlighted rela
   <figure class="mini-map" aria-label={a11y}>
     <svg
       viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
       preserveAspectRatio="xMidYMid meet"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
+      aria-label={a11y}
     >
       <title>{a11y}</title>
       {useDeltaOverlay

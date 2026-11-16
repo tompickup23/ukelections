@@ -120,6 +120,13 @@ function renderPlotSvg(): string {
   });
   // Strip any default white background Plot bakes in so the chart inherits the page surface.
   chart.removeAttribute?.("style");
+  chart.setAttribute("role", "img");
+  chart.setAttribute("aria-label", ariaLabel);
+  if (!chart.querySelector("title")) {
+    const title = doc.createElementNS("http://www.w3.org/2000/svg", "title");
+    title.textContent = ariaLabel;
+    chart.insertBefore(title, chart.firstChild);
+  }
   return chart.outerHTML;
 }
 
@@ -127,7 +134,7 @@ const plotSvg = renderPlotSvg();
 ---
 
 <figure class="party-trend-chart" role="figure" aria-label={ariaLabel}>
-  <div class="ptc-plot-wrap" set:html={plotSvg} />
+  <div class="ptc-plot-wrap" style={`aspect-ratio:${width} / ${height}`} set:html={plotSvg} />
 
   {showLegend && (
     <figcaption class="party-trend-legend">

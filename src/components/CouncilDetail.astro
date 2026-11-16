@@ -2,6 +2,7 @@
 import reviewedLinks from "../../data/identity/contextual-link-reviews.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CouncilChamber from "./CouncilChamber.astro";
+import WardResultsMap from "./WardResultsMap.astro";
 import StatCard from "./StatCard.astro";
 import type { Crumb } from "../lib/seo";
 import {
@@ -203,6 +204,16 @@ const breadcrumbs: Crumb[] = [
       </article>)}
     </div>
   </section>
+
+  {tier === "local" && (
+    <section class="section" id="how-close">
+      <div class="section-head">
+        <p class="eyebrow">Ward by ward</p>
+        <h2>Where it was close</h2>
+      </div>
+      <WardResultsMap councilName={councilName} councilSlug={council!} wards={wards} resultsBy={resultsBy} />
+    </section>
+  )}
 
   {postMay7Rows.length > 0 && (
     <section class="section">

@@ -28,7 +28,11 @@ const {
   icon = null,
 } = Astro.props;
 
-const iconSvg = icon ? ICONS[icon] : null;
+// Lucide SVGs are decorative beside the labelled value; mark them so axe
+// does not ask for an accessible name on the inline graphic itself.
+const iconSvg = icon
+  ? ICONS[icon].replace(/<svg\b/, '<svg aria-hidden="true"')
+  : null;
 
 // Compute sparkline path if data given. Use a fixed viewBox so the
 // SVG always sits in a 80×24 box; map data linearly into that range.

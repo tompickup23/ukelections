@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.340Z",
+  "generated_at": "2026-11-14T03:52:16.029Z",
   "slug": "cotswold-blockley-2026-09-24",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-08-27",
     "registration_deadline": "2026-09-08",
-    "postal_vote_deadline": "2026-09-09"
+    "postal_vote_deadline": "2026-09-09",
+    "timetable": {
+      "notice_of_election_deadline": "2026-08-19",
+      "close_of_nominations": "2026-08-27",
+      "sopn_publish_deadline": "2026-08-28",
+      "registration_deadline": "2026-09-08",
+      "postal_vote_application_deadline": "2026-09-09",
+      "proxy_vote_application_deadline": "2026-09-16",
+      "vac_application_deadline": "2026-09-16",
+      "replacement_pack_start_date": "2026-09-18"
+    }
   },
   "field": {
     "candidate_count": 5,
@@ -41,37 +51,47 @@
       {
         "name": "Tom Bradley",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
         "votes": 431,
-        "elected": true
+        "elected": true,
+        "party": "Conservative",
+        "source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "Danny Loveridge",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
         "votes": 230,
-        "elected": false
+        "elected": false,
+        "party": "Liberal Democrats",
+        "source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "Matt Fincham",
         "party_name": "Reform UK",
-        "party": "Reform UK",
         "votes": 59,
-        "elected": false
+        "elected": false,
+        "party": "Reform UK",
+        "source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "Bob Eastoe",
         "party_name": "Green Party",
-        "party": "Green Party",
         "votes": 54,
-        "elected": false
+        "elected": false,
+        "party": "Green Party",
+        "source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf",
+        "accessed_at": "2026-09-28"
       },
       {
         "name": "Josh Littler-Jennings",
         "party_name": "Labour Party",
-        "party": "Labour",
         "votes": 14,
-        "elected": false
+        "elected": false,
+        "party": "Labour",
+        "source": "https://www.cotswold.gov.uk/media/lzhfymkn/blockley-ward-by-election-results.pdf",
+        "accessed_at": "2026-09-28"
       }
     ]
   },
@@ -209,56 +229,64 @@
     "swing": {
       "stratum": "pre_realignment|reform_entering",
       "stratum_used": true,
-      "contests_used": 36,
+      "contests_used": 84,
       "window_days": 365,
       "logodds_shifts": {
-        "Labour": -1.0723151025275448,
-        "Conservative": -0.6321805126945335,
-        "Liberal Democrats": -0.26018021796800594,
-        "Green Party": -0.05736653760496502
+        "Labour": -1.0099841282181967,
+        "Conservative": -0.663381038697584,
+        "Liberal Democrats": -0.2813393051254025,
+        "Green Party": -0.19192936203206212,
+        "Plaid Cymru": 0.07650247048720554,
+        "Independent": -1.2911081916684655
       },
       "ratio_at_25pct": {
-        "Labour": 0.409567070494482,
-        "Conservative": 0.601944799404123,
-        "Liberal Democrats": 0.817746486723126,
-        "Green Party": 0.957594884145835
+        "Labour": 0.43305639350437536,
+        "Conservative": 0.5861634614320338,
+        "Liberal Democrats": 0.8040670964476525,
+        "Green Party": 0.8630445797294043,
+        "Plaid Cymru": 1.058466549264506,
+        "Independent": 0.3358397097556657
       },
       "entry_shares": {
-        "Reform UK": 0.2589455679382189,
-        "Liberal Democrats": 0.03668261562998405,
-        "Green Party": 0.06533867916537256
+        "Reform UK": 0.2732800741823888,
+        "Conservative": 0.04427152907649835,
+        "Liberal Democrats": 0.09703721092743434,
+        "Green Party": 0.05637265585803651,
+        "Plaid Cymru": 0.15343627194875406,
+        "Independent": 0.05188679245283019,
+        "Other": 0.053295362082994305
       },
       "entry_counts": {
-        "Reform UK": 36,
-        "Labour": 1,
-        "Conservative": 1,
-        "Liberal Democrats": 7,
-        "Green Party": 14,
+        "Reform UK": 84,
+        "Labour": 4,
+        "Conservative": 6,
+        "Liberal Democrats": 12,
+        "Green Party": 36,
         "SNP": 0,
-        "Plaid Cymru": 3,
-        "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 3
+        "Plaid Cymru": 6,
+        "Restore Britain": 1,
+        "Independent": 9,
+        "Other": 5
       },
       "party_counts": {
         "Reform UK": 0,
-        "Labour": 23,
-        "Conservative": 35,
-        "Liberal Democrats": 29,
-        "Green Party": 19,
+        "Labour": 62,
+        "Conservative": 74,
+        "Liberal Democrats": 48,
+        "Green Party": 30,
         "SNP": 0,
-        "Plaid Cymru": 1,
+        "Plaid Cymru": 15,
         "Restore Britain": 0,
-        "Independent": 4,
-        "Other": 1
+        "Independent": 10,
+        "Other": 2
       }
     },
     "central": {
-      "Reform UK": 0.2278431679190983,
+      "Reform UK": 0.23331348119795936,
       "Labour": 0,
-      "Conservative": 0.2569249420267586,
-      "Liberal Democrats": 0.03227660322299195,
-      "Green Party": 0.4829552868311512,
+      "Conservative": 0.2438223450792402,
+      "Liberal Democrats": 0.08284573822279567,
+      "Green Party": 0.4400184355000047,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -266,42 +294,42 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.15775,
-      "Conservative": 0.224,
-      "Liberal Democrats": 0.00025,
-      "Green Party": 0.618
+      "Reform UK": 0.193,
+      "Conservative": 0.19875,
+      "Liberal Democrats": 0.02825,
+      "Green Party": 0.58
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.06608476605368305,
-        "p50": 0.2152570681206094,
-        "p90": 0.44271752998219804
+        "p10": 0.06638063110686969,
+        "p50": 0.21762845233493266,
+        "p90": 0.45092851076325446
       },
       "Conservative": {
-        "p10": 0.06212477827545791,
-        "p50": 0.24746080169157775,
-        "p90": 0.48167617254206613
+        "p10": 0.07399098107019679,
+        "p50": 0.22686283847323035,
+        "p90": 0.44945111050878056
       },
       "Liberal Democrats": {
-        "p10": 0.01128191331849411,
-        "p50": 0.030477713453907533,
-        "p90": 0.0784995012643022
+        "p10": 0.020127924168684343,
+        "p50": 0.07854648068246364,
+        "p90": 0.23447116315931857
       },
       "Green Party": {
-        "p10": 0.28047398345265395,
-        "p50": 0.4479960025708599,
-        "p90": 0.663020192761236
+        "p10": 0.18982892114074257,
+        "p50": 0.39969770251087894,
+        "p90": 0.6117529452802786
       }
     },
     "winner": "Green Party",
     "runner_up": "Conservative",
-    "margin_pp": 22.60303448043926,
-    "leader_probability": 0.618,
+    "margin_pp": 19.61960904207645,
+    "leader_probability": 0.58,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
       "Labour is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
-      "Priced from an entry prior, not from this ward: Reform UK (median of 36), Liberal Democrats (median of 7). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Reform UK (median of 84), Liberal Democrats (median of 12). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [
       "Labour"
@@ -313,7 +341,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -333,6 +361,8 @@
     },
     "winner_party": "Conservative",
     "winner_candidate": "Tom Bradley",
+    "winner_party_name": "Conservative and Unionist Party",
+    "winner_votes": 431,
     "runner_up_party": "Liberal Democrats",
     "majority_votes": 201,
     "total_votes": 788,
@@ -347,6 +377,7 @@
       "mae_pp": 23.023959390862945
     },
     "checked_at": "2026-09-28",
+    "accessed_at": "2026-09-28",
     "review_status": "hand_verified_declaration",
     "note": "Official candidate counts total 788; the scanned declaration reports 790 papers issued and 1 rejected. The one-paper difference is unresolved. Candidate names in the feed use shorter forms than the declaration."
   },

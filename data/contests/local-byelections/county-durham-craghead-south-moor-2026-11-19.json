@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.087Z",
+  "generated_at": "2026-11-14T03:52:16.311Z",
   "slug": "county-durham-craghead-south-moor-2026-11-19",
   "status": "upcoming",
   "contest": {
@@ -18,27 +18,69 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2025-05-01",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "RESIGNATION",
+    "vacancy_reason": "the sitting councillor resigned",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-23",
     "registration_deadline": "2026-11-03",
-    "postal_vote_deadline": "2026-11-04"
+    "postal_vote_deadline": "2026-11-04",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-15",
+      "close_of_nominations": "2026-10-23",
+      "sopn_publish_deadline": "2026-10-26",
+      "registration_deadline": "2026-11-03",
+      "postal_vote_application_deadline": "2026-11-04",
+      "proxy_vote_application_deadline": "2026-11-11",
+      "vac_application_deadline": "2026-11-11",
+      "replacement_pack_start_date": "2026-11-13"
+    }
   },
   "field": {
-    "candidate_count": 2,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
+    "candidate_count": 6,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.county-durham.craghead-south-moor.by.2026-11-19/sopn/2026-10-26T13%3A22%3A48.646051%2B00%3A00/Craghead_and_South_Moor.pdf",
     "parties": [
+      "Conservative",
+      "Green Party",
       "Labour",
-      "Reform UK"
+      "Liberal Democrats",
+      "Reform UK",
+      "Restore Britain"
     ],
     "candidates": [
       {
-        "name": "Mark Taylor",
+        "name": "Victoria Aymard",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Callum Hutchinson",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Dorothy Ann Luckhurst",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Mark Lee Taylor",
         "party_name": "Reform UK",
         "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Jean Thomson",
+        "party_name": "Restore Britain",
+        "party": "Restore Britain",
         "votes": null,
         "elected": null
       },
@@ -197,10 +239,153 @@
     "source": "https://www.durham.gov.uk/article/32689/Durham-County-election-results-1-May-2025",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2025-05-01 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2025-05-01",
+      "seats_contested": 2,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0.5804319083296606,
+        "Labour": 0.26487439400617013,
+        "Conservative": 0.05376817981489643,
+        "Liberal Democrats": 0.10092551784927281,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://www.durham.gov.uk/article/32689/Durham-County-election-results-1-May-2025"
+    },
+    "swing": {
+      "stratum": "post_may_2025|reform_already_stood",
+      "stratum_used": true,
+      "contests_used": 67,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Reform UK": -0.27002793175888107,
+        "Labour": 0.2811409520544227,
+        "Conservative": -0.2647282474792766,
+        "Liberal Democrats": -0.26960275498555786,
+        "Green Party": -0.3795886856743045,
+        "Independent": -0.11652273000901092
+      },
+      "ratio_at_25pct": {
+        "Reform UK": 0.8113585124704337,
+        "Labour": 1.2252027536945638,
+        "Conservative": 0.8147916560634592,
+        "Liberal Democrats": 0.8116335442620766,
+        "Green Party": 0.7427972211298991,
+        "Independent": 0.9151749196392648
+      },
+      "entry_shares": {
+        "Green Party": 0.13442113442113443,
+        "Restore Britain": 0.0671971706454465,
+        "Independent": 0.051112943116240726
+      },
+      "entry_counts": {
+        "Reform UK": 0,
+        "Labour": 2,
+        "Conservative": 3,
+        "Liberal Democrats": 3,
+        "Green Party": 5,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 13,
+        "Independent": 11,
+        "Other": 1
+      },
+      "party_counts": {
+        "Reform UK": 66,
+        "Labour": 59,
+        "Conservative": 59,
+        "Liberal Democrats": 42,
+        "Green Party": 53,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 6,
+        "Other": 2
+      }
+    },
+    "central": {
+      "Reform UK": 0.4431366659845002,
+      "Labour": 0.2787423631236573,
+      "Conservative": 0.036050487791954945,
+      "Liberal Democrats": 0.06812210473790757,
+      "Green Party": 0.11597329092917656,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.05797508743280342,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.65025,
+      "Labour": 0.225,
+      "Conservative": 0.00125,
+      "Liberal Democrats": 0.017,
+      "Green Party": 0.0885,
+      "Restore Britain": 0.018
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.256134926321568,
+        "p50": 0.3855960151186467,
+        "p90": 0.5418926001478327
+      },
+      "Labour": {
+        "p10": 0.10753454235170103,
+        "p50": 0.2517434901092704,
+        "p90": 0.4252984641681968
+      },
+      "Conservative": {
+        "p10": 0.009748074518379609,
+        "p50": 0.03249646308668789,
+        "p90": 0.09566076891331933
+      },
+      "Liberal Democrats": {
+        "p10": 0.015120478404325613,
+        "p50": 0.06134008370188722,
+        "p90": 0.18867382522920445
+      },
+      "Green Party": {
+        "p10": 0.02206432655419085,
+        "p50": 0.10401835701094941,
+        "p90": 0.31458955587999093
+      },
+      "Restore Britain": {
+        "p10": 0.011373049279302029,
+        "p50": 0.05186027118015997,
+        "p90": 0.18414028484601708
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Labour",
+    "margin_pp": 16.43943028608429,
+    "leader_probability": 0.65025,
+    "too_close_to_call": false,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Priced from an entry prior, not from this ward: Green Party (median of 5), Restore Britain (median of 13). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [],
+    "entry_priced_parties": [
+      "Green Party",
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [

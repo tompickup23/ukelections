@@ -47,7 +47,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     items: [
       { href: "/elections/", label: "Next elections", desc: "Every body's next election date, with its legal source and what we publish for it" },
       { href: "/forecasts/general-election/", label: "General Election", desc: "Full 650-seat projection from the latest Westminster polling" },
-      { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "Hypothetical council scenarios; reorganisation is paused for review" },
+      { href: "/forecasts/lancashire-unitaries/", label: "Lancashire reorganisation", desc: "Hypothetical council scenarios; reorganisation is under review" },
       { href: "/forecasts/mayoral/", label: "Mayoral projections", desc: "The May 2027 mayoral races under the restored supplementary vote, plus the 2028 roster" },
       { href: "/by-elections/", label: "By-elections", desc: "Declared results, upcoming contests and the forecast record" },
       { href: "/polling/", label: "Polling", desc: "Westminster vote intention from named pollsters" },

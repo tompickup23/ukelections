@@ -2,7 +2,7 @@
  "note": "Local by-election results swept from the Democracy Club ballots API by scripts/refresh-byelections.mjs. Merged into data/history/dc-historic-results.json on every rebuild. Tracked in git because that file is not. Rows polled on 27 August 2026 were entered by hand from the returning officers' declarations and press reports of them, because Democracy Club had recorded winners but no vote counts by 28 August. Each carries its own verification note. DC rows still win on conflict.",
  "source": "https://candidates.democracyclub.org.uk/api/next/ballots/",
  "review_status": "mixed: auto_ingested_dc plus hand verified rows, see each row",
- "generated_at": "2026-10-30T09:02:12.162Z",
+ "generated_at": "2026-11-13T09:01:14.452Z",
  "results": [
   {
    "ballot_paper_id": "local.cornwall.newquay-porth-tretherras.by.2026-04-23",
@@ -7545,8 +7545,8 @@
    "turnout_pct": 0.2658,
    "spoilt_ballots": 1,
    "electorate": 3409,
-   "source": "https://candidates.democracyclub.org.uk/elections/local.carmarthenshire.saron.by.2026-10-22/",
-   "review_status": "auto_ingested_dc",
+   "source": "https://www.carmarthenshire.gov.wales/media/uh0pdmch/decresult_saron_elecward_221026.pdf",
+   "review_status": "hand_verified_declaration",
    "candidates": [
     {
      "name": "Nicholas Craig Davies",
@@ -7584,7 +7584,10 @@
      "votes": 11,
      "elected": false
     }
-   ]
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "Carmarthenshire County Council declaration of result, accessed 14 November 2026. Candidate counts sum to 905 valid votes; one rejected paper gives 906 ballot papers. The declaration reports 26.58% turnout. It prints no electorate; the 3,409 is Democracy Club's and reconciles with the declared turnout. The declaration names Owen Jenkins as David Owen (Owen) Jenkins, with no description.",
+   "accessed_at": "2026-11-14"
   },
   {
    "ballot_paper_id": "local.east-hertfordshire.hertford-kingsmead.by.2026-10-22",
@@ -7708,8 +7711,8 @@
    "turnout_pct": 0.2847,
    "spoilt_ballots": 2,
    "electorate": 4015,
-   "source": "https://candidates.democracyclub.org.uk/elections/local.south-kesteven.grantham-st-wulframs.by.2026-10-22/",
-   "review_status": "auto_ingested_dc",
+   "source": "https://www.southkesteven.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result_Grantham%20St%20Wulfram%27s%20Ward.pdf",
+   "review_status": "hand_verified_declaration",
    "candidates": [
     {
      "name": "Ben Lavender",
@@ -7747,7 +7750,10 @@
      "votes": 54,
      "elected": false
     }
-   ]
+   ],
+   "reviewed_at": "2026-11-14",
+   "accessed_at": "2026-11-14",
+   "verification_note": "South Kesteven District Council declaration of result, accessed 14 November 2026. Candidate counts sum to 1,141 valid votes; two rejected papers give 1,143 ballot papers issued. Electorate 4,015 and turnout 28.47% are printed on the declaration."
   },
   {
    "ballot_paper_id": "local.wychavon.hartlebury.by.2026-10-22",
@@ -7851,6 +7857,66 @@
    ],
    "reviewed_at": "2026-11-02",
    "verification_note": "Bassetlaw District Council declaration of result, accessed 2 November 2026. Candidate counts sum to 1,307 valid votes; one rejected paper gives 1,308 counted papers. The declaration reports 1,304 issued papers and 27.82% turnout, which do not reconcile, so turnout is withheld. Electorate 4,687 is printed on the declaration.",
+   "accessed_at": "2026-11-02"
+  },
+  {
+   "ballot_paper_id": "local.dudley.st-jamess.by.2026-10-29",
+   "election_date": "2026-10-29",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "dudley",
+   "ward_slug": "st-jamess",
+   "is_by_election": true,
+   "turnout_votes": 2304,
+   "turnout_pct": 0.2245,
+   "spoilt_ballots": 3,
+   "electorate": null,
+   "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Caroline Ann Reid",
+     "party_name": "Labour Party",
+     "votes": 874,
+     "elected": true,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Chris Chivers",
+     "party_name": "Reform UK",
+     "votes": 872,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Sam Firmstone",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 317,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Tristian Owens",
+     "party_name": "Restore Britain",
+     "votes": 159,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    },
+    {
+     "name": "Katherine Alice Poole",
+     "party_name": "Green Party",
+     "votes": 79,
+     "elected": false,
+     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+     "accessed_at": "2026-11-02"
+    }
+   ],
+   "reviewed_at": "2026-11-02",
+   "verification_note": "Dudley Council declared result, accessed 2 November 2026. Candidate counts sum to 2,301 valid votes; three spoiled papers give 2,304 counted papers. The council reports 22.45% turnout. It does not publish an electorate on this page, so that field is null.",
    "accessed_at": "2026-11-02"
   },
   {
@@ -8042,64 +8108,402 @@
    "accessed_at": "2026-11-02"
   },
   {
-   "ballot_paper_id": "local.dudley.st-jamess.by.2026-10-29",
-   "election_date": "2026-10-29",
+   "ballot_paper_id": "local.bournemouth-christchurch-and-poole.penn-hill.by.2026-11-05",
+   "election_date": "2026-11-05",
    "year": 2026,
    "tier": "local",
-   "council_slug": "dudley",
-   "ward_slug": "st-jamess",
+   "council_slug": "bournemouth-christchurch-and-poole",
+   "ward_slug": "penn-hill",
    "is_by_election": true,
-   "turnout_votes": 2304,
-   "turnout_pct": 0.2245,
-   "spoilt_ballots": 3,
-   "electorate": null,
-   "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
+   "turnout_votes": 2937,
+   "turnout_pct": 0.3381,
+   "spoilt_ballots": 6,
+   "electorate": 8686,
+   "source": "https://www.bcpcouncil.gov.uk/Assets/Elections-and-voting/2026-Penn-Hill-ward-by-election/Penn-Hill-By-Election-Result-5.11.2026.pdf",
    "review_status": "hand_verified_declaration",
    "candidates": [
     {
-     "name": "Caroline Ann Reid",
-     "party_name": "Labour Party",
-     "votes": 874,
-     "elected": true,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "name": "Amanda Jellicoe",
+     "party_name": "Liberal Democrats",
+     "votes": 1278,
+     "elected": true
     },
     {
-     "name": "Chris Chivers",
-     "party_name": "Reform UK",
-     "votes": 872,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
-    },
-    {
-     "name": "Sam Firmstone",
+     "name": "Ashley Fraser",
      "party_name": "Conservative and Unionist Party",
-     "votes": 317,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "votes": 764,
+     "elected": false
     },
     {
-     "name": "Tristian Owens",
+     "name": "Xena Mary Anne Dion",
+     "party_name": "Reform UK",
+     "votes": 521,
+     "elected": false
+    },
+    {
+     "name": "Ralph Lynch",
+     "party_name": "Labour Party",
+     "votes": 135,
+     "elected": false
+    },
+    {
+     "name": "Max Walker",
      "party_name": "Restore Britain",
-     "votes": 159,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "votes": 106,
+     "elected": false
     },
     {
-     "name": "Katherine Alice Poole",
+     "name": "Ace Cruz",
      "party_name": "Green Party",
-     "votes": 79,
-     "elected": false,
-     "source": "https://www.dudley.gov.uk/council-community/elections/results-of-elections/st-jamess-ward-by-election-2026/",
-     "accessed_at": "2026-11-02"
+     "votes": 65,
+     "elected": false
+    },
+    {
+     "name": "Susan Jane Stockwell",
+     "party_name": "Independent",
+     "votes": 55,
+     "elected": false
+    },
+    {
+     "name": "Louise Christine Fielden",
+     "party_name": "Independent",
+     "votes": 7,
+     "elected": false
     }
    ],
-   "reviewed_at": "2026-11-02",
-   "verification_note": "Dudley Council declared result, accessed 2 November 2026. Candidate counts sum to 2,301 valid votes; three spoiled papers give 2,304 counted papers. The council reports 22.45% turnout. It does not publish an electorate on this page, so that field is null.",
-   "accessed_at": "2026-11-02"
+   "reviewed_at": "2026-11-14",
+   "verification_note": "BCP Council declaration of result, dated 6 November 2026, accessed 14 November 2026. Candidate counts sum to 2,931 valid votes; six rejected papers give 2,937 ballot papers issued. Electorate 8,686 and turnout 33.81% are printed on the declaration.",
+   "accessed_at": "2026-11-14"
+  },
+  {
+   "ballot_paper_id": "local.hyndburn.huncoat.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "hyndburn",
+   "ward_slug": "huncoat",
+   "is_by_election": true,
+   "turnout_votes": 927,
+   "turnout_pct": 0.262,
+   "spoilt_ballots": 3,
+   "electorate": 3538,
+   "source": "https://www.hyndburnbc.gov.uk/download/hyndburn-borough-council-huncoat-election-results-2026/",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Jackie Rawstron",
+     "party_name": "Labour Party",
+     "votes": 318,
+     "elected": true
+    },
+    {
+     "name": "Anna Stanislawska",
+     "party_name": "Reform UK",
+     "votes": 275,
+     "elected": false
+    },
+    {
+     "name": "Mark Conlon",
+     "party_name": "Restore Britain",
+     "votes": 257,
+     "elected": false
+    },
+    {
+     "name": "Shahed Mahmood",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 74,
+     "elected": false
+    }
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "Hyndburn Borough Council declaration of result, accessed 14 November 2026. Candidate counts sum to 924 valid votes; three rejected papers give 927 ballot papers issued. Electorate 3,538 and turnout 26.20% are printed on the declaration.",
+   "accessed_at": "2026-11-14"
+  },
+  {
+   "ballot_paper_id": "local.north-east-lincolnshire.croft-baker.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "north-east-lincolnshire",
+   "ward_slug": "croft-baker",
+   "is_by_election": true,
+   "turnout_votes": 1904,
+   "turnout_pct": 0.2279,
+   "spoilt_ballots": 2,
+   "electorate": null,
+   "source": "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/local-elections/",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Melissa Jade Grice",
+     "party_name": "Reform UK",
+     "votes": 797,
+     "elected": true
+    },
+    {
+     "name": "Janet Elizabeth Mager",
+     "party_name": "Labour Party",
+     "votes": 690,
+     "elected": false
+    },
+    {
+     "name": "Matthew Branson",
+     "party_name": "Restore Britain",
+     "votes": 150,
+     "elected": false
+    },
+    {
+     "name": "Stephen William Harness",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 139,
+     "elected": false
+    },
+    {
+     "name": "Leon Brown",
+     "party_name": "Green Party",
+     "votes": 91,
+     "elected": false
+    },
+    {
+     "name": "George Georgiou",
+     "party_name": "Independent",
+     "votes": 35,
+     "elected": false
+    }
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "North East Lincolnshire Council results page, accessed 14 November 2026. Candidate counts sum to 1,902 valid votes; the council reports two rejected votes (1,904 papers) and 22.79% turnout. It does not publish an electorate, so that field is null; Democracy Club's 8,355 reconciles with the turnout.",
+   "accessed_at": "2026-11-14"
+  },
+  {
+   "ballot_paper_id": "local.oldham.failsworth-west.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "oldham",
+   "ward_slug": "failsworth-west",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": 0.197,
+   "spoilt_ballots": null,
+   "electorate": null,
+   "source": "https://www.oldham.gov.uk/info/200732/election_notices/3435/failsworth_by-election_results_12_november_2026",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Chris Baddeley",
+     "party_name": "Reform UK",
+     "votes": 642,
+     "elected": true
+    },
+    {
+     "name": "Pete Davis",
+     "party_name": "Labour and Co-operative Party",
+     "votes": 600,
+     "elected": false
+    },
+    {
+     "name": "Rob Gunn",
+     "party_name": "Restore Britain",
+     "votes": 175,
+     "elected": false
+    },
+    {
+     "name": "Andrew Kevin Jones",
+     "party_name": "Green Party",
+     "votes": 60,
+     "elected": false
+    },
+    {
+     "name": "Stephen Eric Davenport",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 51,
+     "elected": false
+    },
+    {
+     "name": "Lynne Christine Thompson",
+     "party_name": "Liberal Democrats",
+     "votes": 19,
+     "elected": false
+    }
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "Oldham Council results page, accessed 14 November 2026. Candidate counts sum to 1,547 valid votes. The council reports turnout of 19.7% and publishes no rejected papers, ballot papers or electorate, so those fields are null.",
+   "accessed_at": "2026-11-14"
+  },
+  {
+   "ballot_paper_id": "local.staffordshire-moorlands.cheddleton.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "staffordshire-moorlands",
+   "ward_slug": "cheddleton",
+   "is_by_election": true,
+   "turnout_votes": 1246,
+   "turnout_pct": 0.2918,
+   "spoilt_ballots": 1,
+   "electorate": 4270,
+   "source": "https://www.staffsmoorlands.gov.uk/media/11538/Results---Cheddleton-District-Ward-By-Election-2026/pdf/lhResults_-_Cheddleton_District_Ward_By-Election_2026.pdf",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Su Beardmore",
+     "party_name": "Reform UK",
+     "votes": 471,
+     "elected": true
+    },
+    {
+     "name": "Rob Bateman",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 327,
+     "elected": false
+    },
+    {
+     "name": "Martin David Sadler",
+     "party_name": "Labour Party",
+     "votes": 213,
+     "elected": false
+    },
+    {
+     "name": "Sue Rogers",
+     "party_name": "Independent",
+     "votes": 156,
+     "elected": false
+    },
+    {
+     "name": "Karen Pickering",
+     "party_name": "Restore Britain",
+     "votes": 55,
+     "elected": false
+    },
+    {
+     "name": "Matthew Frith",
+     "party_name": "Green Party",
+     "votes": 23,
+     "elected": false
+    }
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "Staffordshire Moorlands District Council declaration of result (a scanned, handwritten form), accessed 14 November 2026. Candidate counts sum to 1,245 valid votes; one rejected paper gives 1,246 ballot papers issued. Electorate 4,270 and turnout 29.18% are printed on the declaration. Sue Rogers stood with no description.",
+   "accessed_at": "2026-11-14"
+  },
+  {
+   "ballot_paper_id": "local.suffolk.bosmere.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "suffolk",
+   "ward_slug": "bosmere",
+   "is_by_election": true,
+   "turnout_votes": null,
+   "turnout_pct": null,
+   "spoilt_ballots": 2,
+   "electorate": 8418,
+   "source": "https://www.suffolk.gov.uk/asset-library/councillor-assets/SCC-2026-Elections/2026-11-13-Bosmere-Declaration-of-Result-of-Poll.pdf",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "Kay Maxine Nadjina Oakes",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 762,
+     "elected": true
+    },
+    {
+     "name": "Adria Lee Pittock",
+     "party_name": "Green Party",
+     "votes": 739,
+     "elected": false
+    },
+    {
+     "name": "Patrick Alexander Wegener",
+     "party_name": "Reform UK",
+     "votes": 400,
+     "elected": false
+    },
+    {
+     "name": "Nigel Lindsay Mills",
+     "party_name": "Restore Britain",
+     "votes": 182,
+     "elected": false
+    },
+    {
+     "name": "Attila William Borzak",
+     "party_name": "Liberal Democrats",
+     "votes": 109,
+     "elected": false
+    },
+    {
+     "name": "Saffeen Yamulki",
+     "party_name": "Labour Party",
+     "votes": 106,
+     "elected": false
+    }
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "Suffolk County Council declaration of result, accessed 14 November 2026. Candidate counts sum to 2,298 valid votes; two rejected papers give 2,300. The declaration reports 2,301 ballot papers issued and 27.33% turnout, one more than the papers counted, so turnout is withheld. Electorate 8,418 is printed on the declaration.",
+   "accessed_at": "2026-11-14"
+  },
+  {
+   "ballot_paper_id": "local.wigan.hindley-green.by.2026-11-12",
+   "election_date": "2026-11-12",
+   "year": 2026,
+   "tier": "local",
+   "council_slug": "wigan",
+   "ward_slug": "hindley-green",
+   "is_by_election": true,
+   "turnout_votes": 2428,
+   "turnout_pct": 0.2611,
+   "spoilt_ballots": 2,
+   "electorate": 9298,
+   "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+   "review_status": "hand_verified_declaration",
+   "candidates": [
+    {
+     "name": "John Melville Vickers",
+     "party_name": "Labour Party",
+     "votes": 1201,
+     "elected": true
+    },
+    {
+     "name": "Bonnie Clarke",
+     "party_name": "Reform UK",
+     "votes": 887,
+     "elected": false
+    },
+    {
+     "name": "Mark Prescott",
+     "party_name": "Independent",
+     "votes": 124,
+     "elected": false
+    },
+    {
+     "name": "Rebecca Lee Shepherd",
+     "party_name": "Restore Britain",
+     "votes": 107,
+     "elected": false
+    },
+    {
+     "name": "Daniel James Jackson",
+     "party_name": "Conservative and Unionist Party",
+     "votes": 56,
+     "elected": false
+    },
+    {
+     "name": "Nat Smith",
+     "party_name": "Green Party",
+     "votes": 42,
+     "elected": false
+    },
+    {
+     "name": "David John Burley",
+     "party_name": "Liberal Democrats",
+     "votes": 9,
+     "elected": false
+    }
+   ],
+   "reviewed_at": "2026-11-14",
+   "verification_note": "Wigan Council election results page, accessed 14 November 2026. Candidate counts sum to 2,426 valid votes; two spoilt papers give 2,428 papers. Electorate 9,298 and turnout 26.11% are published by the council and reconcile.",
+   "accessed_at": "2026-11-14"
   }
  ],
  "reviewed_at": "2026-09-28"

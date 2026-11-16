@@ -3,7 +3,11 @@ import lookupCodes from "../../data/identity/parliament-lookup-codes.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadGePredictions, loadIdentity } from "../lib/predictions";
 import type { DistrictEntry, LookupEntry } from "../lib/electionLookup";
-import { allCouncilRecords, councilNextElection } from "../lib/nextElections";
+import { allCouncilRecords, councilNextElection, CALENDAR, NEXT_ELECTIONS_CHECKED_AT, longDate } from "../lib/nextElections";
+import { dayLabel } from "../lib/voterJourney";
+import type { NationalRow, UpcomingContest } from "../lib/electionLookup";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 
 const identity = loadIdentity();
 const ge = loadGePredictions();
@@ -70,7 +74,38 @@ const constituencyIndex: LookupEntry[] = Object.values(ge.predictions || {})
     code: lookupCodes.entries[record.slug as keyof typeof lookupCodes.entries]?.code ?? record.pcon24cd,
   }))
   .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+// "Is there an election where I live?": upcoming council by-elections by ward
+// code, each council's next dated election, and the sourced national calendar.
+const contestDir = path.join(process.cwd(), "data/contests/local-byelections");
+const buildDay = new Date().toISOString().slice(0, 10);
+const byElections: UpcomingContest[] = existsSync(contestDir)
+  ? readdirSync(contestDir)
+      .filter((f) => f.endsWith(".json") && !f.startsWith("_"))
+      .map((f) => JSON.parse(readFileSync(path.join(contestDir, f), "utf8")))
+      .filter((d) => d.contest?.ward_gss && d.contest?.polling_day >= buildDay && !d.result?.declared)
+      .map((d) => ({
+        ward_code: d.contest.ward_gss,
+        ward: d.contest.ward_name,
+        council: d.contest.council_name,
+        date_iso: d.contest.polling_day,
+        date_label: dayLabel(d.contest.polling_day),
+        href: `/by-elections/local/${d.slug}/`,
+      }))
+  : [];
+const districtDates: Record<string, string | null> = {};
+for (const record of allCouncilRecords()) {
+  if (record.lad24cd) districtDates[record.lad24cd] = councilNextElection(record.slug).date_iso;
+}
+const national: Record<string, NationalRow> = {};
+for (const row of CALENDAR) {
+  if (["general-election", "senedd", "holyrood", "ni-assembly", "london-2028"].includes(row.id)) {
+    national[row.id] = { body: row.body, date_iso: row.date_iso, date_label: row.date_label, date_kind: row.date_kind, href: row.href };
+  }
+}
 const indexJson = JSON.stringify({
+  byElections,
+  districtDates,
+  national,
   constituencies: constituencyIndex,
   wards: wardIndex,
   councils: councilIndex,
@@ -83,7 +118,8 @@ const indexJson = JSON.stringify({
     <p class="eyebrow">Your Area</p>
     <h1>Find your council ward and constituency</h1>
     <p class="lede">
-      Enter a UK postcode to find both your Westminster parliamentary constituency and your local council ward.
+      Enter a UK postcode to find both your Westminster parliamentary constituency and your local council ward,
+      and to see whether there is an election where you live.
       The lookup uses the official area codes returned for that postcode, rather than guessing from a place name.
     </p>
   </section>
@@ -100,6 +136,20 @@ const indexJson = JSON.stringify({
         Your postcode is sent directly from your browser to <a href="https://postcodes.io/">Postcodes.io</a> to identify the official constituency and ward codes. UK Elections does not store it. <a href="/privacy/">Privacy details</a>.
       </p>
     </form>
+
+    <div id="area-answer" class="area-answer" tabindex="-1" hidden>
+      <p class="area-eyebrow">Is there an election where you live?</p>
+      <p id="area-headline" class="area-headline"></p>
+      <p id="area-detail" class="area-detail"></p>
+      <p id="area-action" class="area-action" hidden><a id="area-action-link" href="#"></a></p>
+      <h2 class="area-sub">What you vote in here, and when</h2>
+      <ol id="area-rows" class="area-rows"></ol>
+      <p class="area-foot">
+        Dates checked {longDate(NEXT_ELECTIONS_CHECKED_AT)}; each has its source on the <a href="/elections/">election calendar</a>.
+        Mayoral, police commissioner and parish elections are not matched to postcodes here yet.
+        By-elections are added as they are announced, so this answer can change.
+      </p>
+    </div>
 
     <div id="lookup-results" class="lookup-results" hidden>
       <h2 id="lookup-results-heading">Matches</h2>
@@ -184,8 +234,8 @@ const indexJson = JSON.stringify({
 <script type="application/json" id="search-index" set:html={indexJson} />
 
 <script>
-  import { councilNoticeForPostcode, resolvePostcodeDestinations, searchElectionLookup } from "../lib/electionLookup";
-  import type { LookupEntry, LookupIndex } from "../lib/electionLookup";
+  import { areaAnswer, CERTAINTY_WORD, councilNoticeForPostcode, daysBetween, inDays, resolvePostcodeDestinations, searchElectionLookup } from "../lib/electionLookup";
+  import type { AreaAnswer, AreaIndex, LookupEntry, LookupIndex } from "../lib/electionLookup";
 
   (function () {
     const indexElement = document.getElementById("search-index")!;
@@ -197,6 +247,62 @@ const indexJson = JSON.stringify({
     const resultsOverflow = document.getElementById("lookup-results-overflow") as HTMLParagraphElement;
     const resultsHeading = document.getElementById("lookup-results-heading")!;
     const data = JSON.parse(indexElement.textContent || "{}") as LookupIndex;
+
+    const answerRoot = document.getElementById("area-answer")!;
+    const answerRows = document.getElementById("area-rows") as HTMLOListElement;
+
+    // Today in London, as an ISO date, for "has this polled yet".
+    function londonToday(): string {
+      return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    }
+
+    function renderAnswer(answer: AreaAnswer | null) {
+      answerRoot.hidden = !answer;
+      if (!answer) return;
+      const today = londonToday();
+      answerRoot.dataset.tone = answer.tone;
+      document.getElementById("area-headline")!.textContent = answer.headline;
+      document.getElementById("area-detail")!.textContent = answer.detail;
+      const action = document.getElementById("area-action")!;
+      const link = document.getElementById("area-action-link") as HTMLAnchorElement;
+      action.hidden = !answer.action;
+      if (answer.action) {
+        link.href = answer.action.href;
+        link.textContent = answer.action.label;
+      }
+      while (answerRows.firstChild) answerRows.removeChild(answerRows.firstChild);
+      answer.rows.forEach(function (row) {
+        const li = document.createElement("li");
+        li.dataset.certainty = row.certainty;
+        const when = document.createElement("span");
+        when.className = "area-when";
+        when.textContent = row.when;
+        const body = document.createElement(row.href ? "a" : "span");
+        body.className = "area-body";
+        body.textContent = row.body;
+        if (row.href) (body as HTMLAnchorElement).href = row.href;
+        const tag = document.createElement("span");
+        tag.className = "area-tag";
+        tag.textContent = CERTAINTY_WORD[row.certainty];
+        li.appendChild(when);
+        li.appendChild(body);
+        li.appendChild(tag);
+        // A day count only helps when the date is close.
+        if (row.certainty === "fixed" && row.date_iso && row.date_iso >= today && daysBetween(today, row.date_iso) <= 60) {
+          const left = document.createElement("span");
+          left.className = "area-left";
+          left.textContent = inDays(daysBetween(today, row.date_iso));
+          li.appendChild(left);
+        }
+        if (row.note) {
+          const note = document.createElement("span");
+          note.className = "area-note";
+          note.textContent = row.note;
+          li.appendChild(note);
+        }
+        answerRows.appendChild(li);
+      });
+    }
 
     const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 
@@ -248,12 +354,18 @@ const indexJson = JSON.stringify({
         }
         const ward = result.admin_ward || "";
         const district = result.admin_district || "";
+        renderAnswer(areaAnswer(result, data as unknown as AreaIndex, londonToday()));
+        // On a phone the answer lands below the form, so bring it into view
+        // and move focus to it for screen reader users.
+        answerRoot.focus({ preventScroll: true });
+        answerRoot.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
         const matches = resolvePostcodeDestinations(result, data);
         const notice = councilNoticeForPostcode(result, data.districts);
         if (notice && !matches.some((m) => m.href.startsWith(notice.entry.href))) matches.push(notice.entry);
         if (matches.length > 0) {
           renderResults(matches, "Your election pages");
-          setStatus("Official postcode match: " + [ward, district].filter(Boolean).join(", ") + "." + (notice ? " " + notice.message : ""));
+          // The answer card above carries the dates; the status line only confirms the match.
+          setStatus("Official postcode match: " + [ward, district].filter(Boolean).join(", ") + ".");
         } else {
           renderResults([], "Your election pages");
           setStatus("We found the postcode, but its official constituency and ward codes do not match a page in the current project data.", true);
@@ -270,6 +382,7 @@ const indexJson = JSON.stringify({
       if (POSTCODE_RE.test(value)) {
         postcodeLookup(value);
       } else {
+        renderAnswer(null);
         const hits = searchElectionLookup(value, data);
         if (hits.length === 1) {
           renderResults(hits, "Match");
@@ -313,6 +426,27 @@ const indexJson = JSON.stringify({
 .lookup-status { color: var(--muted); margin-top: 0.5rem; min-height: 1.4em; font-size: 0.95rem; }
 .lookup-status.err { color: var(--status-bad-text); }
 .lookup-results { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+/* "Is there an election where I live?" */
+.area-answer { margin-top: var(--space-md); padding: var(--space-md); border: 1px solid var(--border); border-radius: 12px; background: var(--accent-wash); }
+.area-answer { scroll-margin-top: var(--space-3xl); }
+.area-answer:focus { outline: none; }
+.area-eyebrow { margin: 0 0 var(--space-xs); font-size: var(--text-eyebrow); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
+.area-headline { margin: 0; font-size: var(--text-h2); line-height: 1.2; font-weight: 700; }
+.area-detail { margin: var(--space-xs) 0 0; font-size: var(--text-h3); line-height: 1.35; }
+.area-action { margin: var(--space-sm) 0 0; }
+.area-action :global(a) { display: inline-block; padding: var(--space-xs) var(--space-md); border-radius: 8px; background: var(--ink); color: var(--bg); font-weight: 700; text-decoration: none; }
+.area-sub { margin: var(--space-lg) 0 var(--space-xs); font-size: var(--text-eyebrow); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.area-rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+.area-rows :global(li) { display: grid; grid-template-columns: 1fr auto; column-gap: var(--space-sm); row-gap: var(--space-2xs); padding: var(--space-sm) 0; border-bottom: 1px solid var(--border); align-items: baseline; }
+.area-rows :global(.area-when) { grid-column: 1; font-weight: 700; }
+.area-rows :global(.area-left) { grid-column: 2; grid-row: 1; font-size: var(--text-small); font-weight: 700; white-space: nowrap; padding: 0 var(--space-xs); border: 1px solid var(--muted); border-radius: 999px; background: var(--surface); }
+.area-rows :global(.area-body) { grid-column: 1 / -1; color: var(--ink); }
+.area-rows :global(.area-tag) { grid-column: 1 / -1; width: fit-content; font-size: var(--text-eyebrow); font-weight: 700; padding: 0 var(--space-xs); border: 1.5px solid var(--muted); border-radius: 4px; color: var(--ink-soft); line-height: 1.7; }
+.area-rows :global(li[data-certainty="latest"] .area-tag) { border-style: dashed; }
+.area-rows :global(li[data-certainty="unverified"] .area-tag),
+.area-rows :global(li[data-certainty="none"] .area-tag) { border-style: dotted; }
+.area-rows :global(.area-note) { grid-column: 1 / -1; font-size: var(--text-small); color: var(--ink-soft); }
+.area-foot { margin: var(--space-sm) 0 0; font-size: var(--text-small); color: var(--ink-soft); }
 .lookup-results h2 { font-size: var(--text-h3); }
 .lookup-results ul { list-style: none; padding: 0; margin: 0.5rem 0 0; display: grid; gap: 0.4rem; }
 .lookup-results :global(a) { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; background: var(--surface-muted); text-decoration: none; color: var(--ink); }

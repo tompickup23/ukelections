@@ -18,7 +18,7 @@ function isActiveGroup(group: NavGroup): boolean {
     <span class="brand-mark" aria-hidden="true">
       <!-- The estate mark: a marked ballot. A UK ballot is marked with an X,
            not a tick. Parchment on the dark ground, matching the favicon. -->
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <rect width="64" height="64" rx="12" fill="#0f1317" />
         <rect x="14" y="10" width="36" height="44" rx="5" fill="#e3d9c3" />
         <path d="M24 25l16 16M40 25L24 41" stroke="#0f1317" stroke-width="6.5" stroke-linecap="round" fill="none" />
@@ -36,7 +36,7 @@ function isActiveGroup(group: NavGroup): boolean {
         <summary class="mega-trigger">
           <span>{group.label}</span>
           <span class="mega-caret" aria-hidden="true">
-            <svg viewBox="0 0 10 6" width="10" height="6" fill="none">
+            <svg viewBox="0 0 10 6" width="10" height="6" fill="none" aria-hidden="true">
               <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
@@ -110,7 +110,7 @@ function isActiveGroup(group: NavGroup): boolean {
           <summary class="mobile-group-trigger">
             <span>{group.label}</span>
             <span class="mobile-group-caret" aria-hidden="true">
-              <svg viewBox="0 0 10 6" width="10" height="6" fill="none">
+              <svg viewBox="0 0 10 6" width="10" height="6" fill="none" aria-hidden="true">
                 <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </span>
@@ -347,8 +347,9 @@ function isActiveGroup(group: NavGroup): boolean {
   .header-extras {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.45rem;
     flex-wrap: nowrap;
+    flex-shrink: 0;
   }
   .theme-toggle {
     display: inline-flex;
