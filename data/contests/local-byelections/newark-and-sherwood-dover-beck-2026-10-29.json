@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:55.862Z",
+  "generated_at": "2026-11-14T03:52:16.219Z",
   "slug": "newark-and-sherwood-dover-beck-2026-10-29",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-02",
     "registration_deadline": "2026-10-13",
-    "postal_vote_deadline": "2026-10-14"
+    "postal_vote_deadline": "2026-10-14",
+    "timetable": {
+      "notice_of_election_deadline": "2026-09-24",
+      "close_of_nominations": "2026-10-02",
+      "sopn_publish_deadline": "2026-10-05",
+      "registration_deadline": "2026-10-13",
+      "postal_vote_application_deadline": "2026-10-14",
+      "proxy_vote_application_deadline": "2026-10-21",
+      "vac_application_deadline": "2026-10-21",
+      "replacement_pack_start_date": "2026-10-23"
+    }
   },
   "field": {
     "candidate_count": 5,
@@ -38,15 +48,6 @@
       "Reform UK"
     ],
     "candidates": [
-      {
-        "name": "Stephen Andersen",
-        "party_name": "Liberal Democrats",
-        "votes": 73,
-        "elected": false,
-        "party": "Liberal Democrats",
-        "source": "https://www.newark-sherwooddc.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result%20-%20Newark%20and%20Sherwood%20District%20Council%20-%20Dover%20Beck%20Ward%20-%2030%20October%202026_0.pdf",
-        "accessed_at": "2026-11-02"
-      },
       {
         "name": "Scott Carlton",
         "party_name": "Conservative and Unionist Party",
@@ -75,6 +76,15 @@
         "accessed_at": "2026-11-02"
       },
       {
+        "name": "Stephen Andersen",
+        "party_name": "Liberal Democrats",
+        "votes": 73,
+        "elected": false,
+        "party": "Liberal Democrats",
+        "source": "https://www.newark-sherwooddc.gov.uk/sites/default/files/2026-10/Declaration%20of%20Result%20-%20Newark%20and%20Sherwood%20District%20Council%20-%20Dover%20Beck%20Ward%20-%2030%20October%202026_0.pdf",
+        "accessed_at": "2026-11-02"
+      },
+      {
         "name": "Lucy Olivia Spoors",
         "party_name": "Green Party",
         "votes": 22,
@@ -86,8 +96,20 @@
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Conservative",
+    "member": null,
+    "note": "Former holding party checked against two independent reports of the 29 October 2026 by-election (ALDC: Conservative hold; Wikipedia's election box agrees); not inferred from the ward-wide vote. Reviewed 2 November 2026.",
+    "sources": [
+      {
+        "label": "Previous holder corroboration 1",
+        "url": "https://www.aldc.org/2026/10/newark-sherwood-dc-dover-beck-29-october-2026/"
+      },
+      {
+        "label": "Previous holder corroboration 2",
+        "url": "https://en.wikipedia.org/wiki/2023_Newark_and_Sherwood_District_Council_election"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05010072",
@@ -219,58 +241,64 @@
     "swing": {
       "stratum": "pre_realignment|reform_entering",
       "stratum_used": true,
-      "contests_used": 30,
+      "contests_used": 88,
       "window_days": 365,
       "logodds_shifts": {
         "Labour": -0.9841723561133158,
-        "Conservative": -0.6292945243482393,
-        "Liberal Democrats": -0.26486255149858806,
-        "Green Party": -0.11550912045192274,
-        "Independent": -1.1691184232671072
+        "Conservative": -0.6265099172684747,
+        "Liberal Democrats": -0.43510937318522636,
+        "Green Party": -0.21020702076524378,
+        "Plaid Cymru": 0.1054966908378934,
+        "Independent": -1.1792801917355649
       },
       "ratio_at_25pct": {
         "Labour": 0.443125428430391,
-        "Conservative": 0.6034220686852264,
-        "Liberal Democrats": 0.8147045203576389,
-        "Green Party": 0.9158905103989347,
-        "Independent": 0.37532393847852424
+        "Conservative": 0.6048502681410469,
+        "Liberal Democrats": 0.7097992585857174,
+        "Green Party": 0.8507379337854007,
+        "Plaid Cymru": 1.0811885126334744,
+        "Independent": 0.3718820861678003
       },
       "entry_shares": {
-        "Reform UK": 0.2653173399148628,
-        "Liberal Democrats": 0.03556185162163855,
-        "Green Party": 0.06542056074766354
+        "Reform UK": 0.2732800741823888,
+        "Labour": 0.04702627939142462,
+        "Conservative": 0.04861878453038674,
+        "Liberal Democrats": 0.09703721092743434,
+        "Green Party": 0.05637265585803651,
+        "Plaid Cymru": 0.15343627194875406,
+        "Independent": 0.04951511016968317
       },
       "entry_counts": {
-        "Reform UK": 30,
-        "Labour": 1,
-        "Conservative": 1,
-        "Liberal Democrats": 6,
-        "Green Party": 13,
+        "Reform UK": 88,
+        "Labour": 5,
+        "Conservative": 7,
+        "Liberal Democrats": 12,
+        "Green Party": 38,
         "SNP": 0,
-        "Plaid Cymru": 3,
-        "Restore Britain": 0,
-        "Independent": 3,
-        "Other": 2
+        "Plaid Cymru": 6,
+        "Restore Britain": 3,
+        "Independent": 8,
+        "Other": 4
       },
       "party_counts": {
         "Reform UK": 0,
-        "Labour": 19,
-        "Conservative": 29,
-        "Liberal Democrats": 23,
-        "Green Party": 16,
+        "Labour": 65,
+        "Conservative": 77,
+        "Liberal Democrats": 47,
+        "Green Party": 31,
         "SNP": 0,
-        "Plaid Cymru": 1,
+        "Plaid Cymru": 16,
         "Restore Britain": 0,
-        "Independent": 5,
-        "Other": 0
+        "Independent": 13,
+        "Other": 1
       }
     },
     "central": {
-      "Reform UK": 0.24883329085377273,
-      "Labour": 0.1230861840522904,
-      "Conservative": 0.5333721053718437,
-      "Liberal Democrats": 0.033352409498397004,
-      "Green Party": 0.06135601022369647,
+      "Reform UK": 0.2424160467897576,
+      "Labour": 0.11641792566520263,
+      "Conservative": 0.5050821452644129,
+      "Liberal Democrats": 0.08607790792984361,
+      "Green Party": 0.05000597435078326,
       "SNP": 0,
       "Plaid Cymru": 0,
       "Restore Britain": 0,
@@ -278,47 +306,47 @@
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.23,
-      "Labour": 0.063,
-      "Conservative": 0.70325,
-      "Liberal Democrats": 0.0005,
-      "Green Party": 0.00325
+      "Reform UK": 0.21525,
+      "Labour": 0.052,
+      "Conservative": 0.68825,
+      "Liberal Democrats": 0.02975,
+      "Green Party": 0.01475
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.07100732566815139,
-        "p50": 0.23907702274281545,
-        "p90": 0.491206435132339
+        "p10": 0.06437016801203548,
+        "p50": 0.22198702643723178,
+        "p90": 0.4542626695275302
       },
       "Labour": {
-        "p10": 0.03780420571199254,
-        "p50": 0.12621134872546758,
-        "p90": 0.3102101724211486
+        "p10": 0.03328120588575219,
+        "p50": 0.11219806244431421,
+        "p90": 0.2839894102924668
       },
       "Conservative": {
-        "p10": 0.19595725400997002,
-        "p50": 0.48414154151113575,
-        "p90": 0.6951329815811721
+        "p10": 0.20652386649012883,
+        "p50": 0.44373494492624094,
+        "p90": 0.6548623934659783
       },
       "Liberal Democrats": {
-        "p10": 0.01184508941569492,
-        "p50": 0.0324054949900051,
-        "p90": 0.08851245043550834
+        "p10": 0.022313315268433494,
+        "p50": 0.08067771419178979,
+        "p90": 0.2361206288229802
       },
       "Green Party": {
-        "p10": 0.024846414581682276,
-        "p50": 0.057699449339316644,
-        "p90": 0.13822124405464165
+        "p10": 0.01058106451669976,
+        "p50": 0.04621784552671575,
+        "p90": 0.17072066980287415
       }
     },
     "winner": "Conservative",
     "runner_up": "Reform UK",
-    "margin_pp": 28.453881451807096,
-    "leader_probability": 0.70325,
+    "margin_pp": 26.266609847465528,
+    "leader_probability": 0.68825,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
-      "Priced from an entry prior, not from this ward: Reform UK (median of 30), Liberal Democrats (median of 6), Green Party (median of 13). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Reform UK (median of 88), Liberal Democrats (median of 12), Green Party (median of 38). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [],
     "entry_priced_parties": [
@@ -329,7 +357,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,

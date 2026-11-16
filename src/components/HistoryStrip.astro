@@ -1,0 +1,147 @@
+---
+/**
+ * HistoryStrip.astro. "Who has won here": one cell per past contest in a ward,
+ * oldest to newest, with a dated list beneath. PROTOTYPE.
+ *
+ * - Elections are irregular events, so they are discrete cells, never a line.
+ * - A boundary change is a visible gap with a label; nothing joins across it
+ *   (Government Analysis Function, Data visualisation: charts).
+ * - No legend: every cell and row carries the party name in text.
+ * - By-elections are marked in the cell and in the row.
+ * - The list is reverse chronological with a fixed date format, after the
+ *   Companies House filing history.
+ */
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+import { externalHref } from "../lib/seo";
+import { fixedDate, historySentence, type HistoryContest } from "../lib/wardHistory";
+
+interface Props {
+  contests: HistoryContest[];
+  placeName: string;
+  /** A contest still to come, drawn as an empty cell at the end. */
+  upcoming?: { date: string; label: string } | null;
+  /** Shown at the break, e.g. "New boundaries 2022". */
+  breakLabel?: string | null;
+  sourceLabel?: string;
+}
+const { contests, placeName, upcoming = null, breakLabel = null, sourceLabel = "Democracy Club results archive" } = Astro.props;
+
+const MAX_CELLS = 10;
+const shown = contests.slice(-MAX_CELLS);
+const hidden = contests.length - shown.length;
+const sentence = historySentence(contests, shortPartyLabel);
+const yr = (iso: string) => `’${iso.slice(2, 4)}`;
+const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
+const newestFirst = [...contests].reverse();
+
+function electedText(c: HistoryContest): string {
+  if (c.seats === 1) return shortPartyLabel(c.topParty);
+  const tally = new Map<string, number>();
+  for (const p of c.elected) tally.set(p, (tally.get(p) ?? 0) + 1);
+  return [...tally.entries()].map(([p, n]) => `${shortPartyLabel(p)} ${n}`).join(", ");
+}
+const stripAlt = `${placeName}, oldest to newest: ` + shown
+  .map((c) => `${c.breakBefore ? "boundary change, then " : ""}${c.date.slice(0, 4)}${c.byElection ? " by-election" : ""} ${shortPartyLabel(c.topParty)}`)
+  .join("; ") + (upcoming ? `; ${upcoming.label} still to come` : "") + ".";
+---
+{contests.length > 0 && (
+  <div class="hs">
+    {sentence && <p class="hs-sentence">{sentence}</p>}
+
+    <div class="hs-strip" role="img" aria-label={stripAlt}>
+      {shown.map((c) => (
+        <>
+          {c.breakBefore && (
+            <div class="hs-break" aria-hidden="true"><span>{breakLabel ?? "New boundaries"}</span></div>
+          )}
+          <div class:list={["hs-cell", { "hs-by": c.byElection }]} aria-hidden="true">
+            <span class="hs-swatch" style={`--party:${partyColour(c.topParty)};--fill:${c.topShare != null ? Math.max(25, Math.round(c.topShare * 100)) : 100}%`}>
+              {c.seats > 1 && new Set(c.elected).size > 1 && <span class="hs-split" style={`--party2:${partyColour(c.elected.find((p) => p !== c.topParty)!)}`}></span>}
+            </span>
+            <span class="hs-year">{yr(c.date)}</span>
+            {c.byElection && <span class="hs-kind">by</span>}
+          </div>
+        </>
+      ))}
+      {upcoming && (
+        <div class="hs-cell hs-next" aria-hidden="true">
+          <span class="hs-swatch"></span>
+          <span class="hs-year">{yr(upcoming.date)}</span>
+          <span class="hs-kind">next</span>
+        </div>
+      )}
+    </div>
+    {hidden > 0 && <p class="hs-note">The strip shows the latest {MAX_CELLS}. All {contests.length} are listed below.</p>}
+
+    <ol class="hs-list" reversed>
+      {upcoming && (
+        <li class="hs-row hs-row-next">
+          <span class="hs-date">{fixedDate(upcoming.date)}</span>
+          <span class="hs-main"><strong>{upcoming.label}</strong></span>
+          <span class="hs-detail">Still to come</span>
+        </li>
+      )}
+      {newestFirst.map((c, i) => (
+        <>
+          <li class="hs-row">
+            <span class="hs-date">{fixedDate(c.date)}</span>
+            <span class="hs-main">
+              <span class="hs-dot" style={`--party:${partyColour(c.topParty)}`} aria-hidden="true"></span>
+              <strong>{electedText(c)}</strong>
+              {c.byElection && <span class="hs-tag">By-election</span>}
+            </span>
+            <span class="hs-detail">
+              {c.seats > 1
+                ? `${c.seats} seats filled`
+                : [c.topShare != null ? `${pct(c.topShare)} of the vote` : null, c.majorityVotes != null ? `majority ${c.majorityVotes.toLocaleString("en-GB")}` : null].filter(Boolean).join(", ")}
+              {c.turnoutPct != null && `, turnout ${Math.round(c.turnoutPct * 100)}%`}
+              {externalHref(c.source) && <>{" "}<a href={externalHref(c.source)} rel="nofollow noopener">source</a></>}
+            </span>
+          </li>
+          {c.breakBefore && i < newestFirst.length - 1 && (
+            <li class="hs-row hs-row-break">
+              <span class="hs-main">{breakLabel ?? "New boundaries"}. Results below were on the old ward and are not comparable.</span>
+            </li>
+          )}
+        </>
+      ))}
+    </ol>
+
+    <p class="hs-note">
+      Dates are polling days. These are the results held in the {sourceLabel}, not a complete record: a contest with no published count is missing.
+      The colour is the party whose candidate took most votes, and the fill rises with that candidate's share of the vote.
+    </p>
+  </div>
+)}
+
+<style>
+  .hs-sentence { font-size: var(--text-h3); line-height: 1.35; margin: var(--space-sm) 0 var(--space-md); }
+
+  .hs-strip { display: flex; align-items: flex-start; gap: var(--space-2xs); margin-bottom: var(--space-sm); }
+  .hs-cell { flex: 1 1 0; min-width: 24px; max-width: 56px; display: grid; justify-items: center; gap: var(--space-2xs); }
+  /* The fill rises with the winner's share of the vote, so a narrow win and a
+     landslide do not look the same. Multi-seat contests fill the cell. */
+  .hs-swatch { position: relative; display: block; width: 100%; aspect-ratio: 1; border-radius: 6px; background: var(--surface-muted); overflow: hidden; }
+  .hs-swatch::before { content: ""; position: absolute; inset: auto 0 0 0; height: var(--fill, 100%); background: var(--party, transparent); }
+  /* A multi-seat contest that returned two parties: second party as a corner. */
+  .hs-split { position: absolute; inset: 0; background: var(--party2); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .hs-year { font-size: var(--text-eyebrow); font-weight: 700; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .hs-kind { font-size: var(--text-eyebrow); color: var(--ink-soft); line-height: 1; }
+  /* By-elections: smaller and ringed, so they read as a different kind of contest. */
+  .hs-by .hs-swatch { width: 70%; margin-top: 15%; border-radius: 50%; outline: 2px solid var(--muted); outline-offset: 2px; }
+  .hs-next .hs-swatch { border: 2px dashed var(--muted); box-sizing: border-box; background: transparent; }
+  .hs-break { flex: 0 0 auto; align-self: stretch; display: grid; align-items: center; padding: 0 var(--space-2xs); border-inline: 1px dashed var(--muted); margin: 0 var(--space-2xs); }
+  .hs-break span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: var(--text-eyebrow); color: var(--ink-soft); white-space: nowrap; }
+
+  .hs-list { list-style: none; margin: var(--space-md) 0; padding: 0; border-top: 1px solid var(--border); }
+  .hs-row { display: grid; grid-template-columns: 7.5em 1fr; column-gap: var(--space-sm); padding: var(--space-sm) 0; border-bottom: 1px solid var(--border); }
+  .hs-date { font-variant-numeric: tabular-nums; color: var(--ink-soft); font-size: var(--text-small); white-space: nowrap; padding-top: 0.15em; }
+  .hs-main { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); }
+  .hs-dot { width: 0.75em; height: 0.75em; border-radius: 50%; background: var(--party); flex: none; }
+  .hs-tag { font-size: var(--text-eyebrow); font-weight: 700; padding: 0 var(--space-xs); border: 1.5px solid var(--muted); border-radius: 4px; color: var(--ink-soft); line-height: 1.7; }
+  .hs-detail { grid-column: 2; color: var(--ink-soft); font-size: var(--text-small); }
+  .hs-row-break { grid-template-columns: 1fr; background: var(--surface-muted); padding-inline: var(--space-sm); font-size: var(--text-small); color: var(--ink-soft); }
+  .hs-row-next strong { font-weight: 600; }
+  .hs-note { font-size: var(--text-small); color: var(--ink-soft); margin: 0 0 var(--space-xs); }
+</style>

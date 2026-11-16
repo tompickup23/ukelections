@@ -117,6 +117,7 @@ export interface DatasetInput {
   /** Absolute URL of a machine-readable distribution, where one exists. */
   distributionUrl?: string;
   distributionFormat?: string;
+  distributions?: Record<string, unknown>[];
   keywords?: string[];
 }
 
@@ -150,7 +151,9 @@ export function buildDataset(input: DatasetInput): Record<string, unknown> {
       : {}),
     ...(input.variableMeasured?.length ? { variableMeasured: input.variableMeasured } : {}),
     ...(input.keywords?.length ? { keywords: input.keywords } : {}),
-    ...(input.distributionUrl
+    ...(input.distributions?.length
+      ? { distribution: input.distributions }
+      : input.distributionUrl
       ? {
           distribution: [
             {

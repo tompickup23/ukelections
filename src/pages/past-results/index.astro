@@ -82,11 +82,11 @@ const reformMajorities = (ctl.councils as any[])
 ---
 
 <BaseLayout
-  title="May 7 2026 results. How the model did, who's in charge now"
-  description={`Post-audit of our May 7 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "n/a"} declared ballots (${((head.declared_coverage_share || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
+  title="7 May 2026 results. How the model did, who's in charge now"
+  description={`Post-audit of our 7 May 2026 forecast scored against ${pa.snapshot?.declared_ballots?.toLocaleString() || "n/a"} declared ballots (${((head.declared_coverage_share || 0) * 100).toFixed(1)}% of the target cohort). Live model winner accuracy ${(head.live_winner_accuracy * 100).toFixed(1)}%, major-party MAE ${(head.live_major_party_mae * 100).toFixed(2)}pp.`}
 >
   <section class="page-hero">
-    <p class="eyebrow">Past results · May 7 2026</p>
+    <p class="eyebrow">Past results · 7 May 2026</p>
     <h1>Results, and how we did</h1>
     <p class="lede">
       Our locked pre-election forecast, scored against the actual count.
@@ -127,7 +127,7 @@ const reformMajorities = (ctl.councils as any[])
       />
     </div>
 
-    <h3 style="margin-top:1.5rem">All seats won on May 7</h3>
+    <h3 style="margin-top:1.5rem">All seats won on 7 May 2026</h3>
     <div class="party-bars party-bars-large">
       {rankedSeatsWon.map(([slug, n]) => {
         const name = partySlugToName(slug);
@@ -151,7 +151,7 @@ const reformMajorities = (ctl.councils as any[])
       <h2>How accurate were we?</h2>
     </div>
     <p>
-      Two forecasts were live for May 7. The pre-registration (sha256-witnessed 11 days before polling day) and
+      Two forecasts were live for 7 May 2026. The pre-registration (sha256-witnessed 11 days before polling day) and
       the as-served forecast, which added one extra step (a Reform realignment uplift) calibrated on the morning
       of polling day after we spotted a structural undershoot in northern unitaries.
     </p>

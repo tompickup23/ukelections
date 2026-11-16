@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:54.972Z",
+  "generated_at": "2026-11-14T03:52:15.898Z",
   "slug": "st-helens-billinge-seneley-green-2026-08-27",
   "status": "concluded",
   "contest": {
@@ -23,7 +23,17 @@
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-07-31",
     "registration_deadline": "2026-08-11",
-    "postal_vote_deadline": "2026-08-12"
+    "postal_vote_deadline": "2026-08-12",
+    "timetable": {
+      "notice_of_election_deadline": "2026-07-23",
+      "close_of_nominations": "2026-07-31",
+      "sopn_publish_deadline": "2026-08-03",
+      "registration_deadline": "2026-08-11",
+      "postal_vote_application_deadline": "2026-08-12",
+      "proxy_vote_application_deadline": "2026-08-19",
+      "vac_application_deadline": "2026-08-19",
+      "replacement_pack_start_date": "2026-08-21"
+    }
   },
   "field": {
     "candidate_count": 6,
@@ -175,7 +185,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 3,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.34543739684036784,
       "Labour": 0.22589012025465693,
@@ -190,96 +200,63 @@
     },
     "candidates": [
       {
-        "person_id": 131718,
         "name": "Jennifer Anne Gerrard",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 1465,
-        "elected": true
+        "votes": 1465
       },
       {
-        "person_id": 131744,
         "name": "John Terence Porter",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 1421,
-        "elected": true
+        "votes": 1421
       },
       {
-        "person_id": 131736,
         "name": "Matthew Kent",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 1370,
-        "elected": true
+        "votes": 1370
       },
       {
-        "person_id": 125407,
         "name": "Steve Owen",
         "party_name": "Labour Party",
-        "party_ec_id": "PP53",
-        "votes": 958,
-        "elected": false
+        "votes": 958
       },
       {
-        "person_id": 15877,
         "name": "Peter Peers",
         "party_name": "Independent",
-        "party_ec_id": "ynmp-party:2",
-        "votes": 947,
-        "elected": false
+        "votes": 947
       },
       {
-        "person_id": 90437,
         "name": "Colin Richard Betts",
         "party_name": "Independent",
-        "party_ec_id": "ynmp-party:2",
-        "votes": 816,
-        "elected": false
+        "votes": 816
       },
       {
-        "person_id": 131712,
         "name": "Rod Bell",
         "party_name": "Labour Party",
-        "party_ec_id": "PP53",
-        "votes": 777,
-        "elected": false
+        "votes": 777
       },
       {
-        "person_id": 131722,
         "name": "Phil Gwilliam",
         "party_name": "Labour Party",
-        "party_ec_id": "PP53",
-        "votes": 727,
-        "elected": false
+        "votes": 727
       },
       {
-        "person_id": 131726,
         "name": "Sarah Isabel Jennings",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 552,
-        "elected": false
+        "votes": 552
       },
       {
-        "person_id": 131717,
         "name": "Stephen William Gaskell",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 546,
-        "elected": false
+        "votes": 546
       },
       {
-        "person_id": 90439,
         "name": "Denise Anne Gibney",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 319,
-        "elected": false
+        "votes": 319
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://sthelens.moderngov.co.uk/mgElectionAreaResults.aspx?XXR=0&ID=319&RPID=41549111",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.st-helens.billinge-seneley-green.2026-05-07/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -288,7 +265,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": 3,
+      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.34543739684036784,
@@ -303,7 +280,7 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://sthelens.moderngov.co.uk/mgElectionAreaResults.aspx?XXR=0&ID=319&RPID=41549111"
+      "source": "https://candidates.democracyclub.org.uk/elections/local.st-helens.billinge-seneley-green.2026-05-07/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
@@ -413,7 +390,7 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
@@ -433,6 +410,8 @@
     },
     "winner_party": "Labour",
     "winner_candidate": "Steve Owen",
+    "winner_party_name": "Labour Party",
+    "winner_votes": 1158,
     "runner_up_party": "Reform UK",
     "majority_votes": 266,
     "total_votes": 2806,

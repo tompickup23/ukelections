@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.043Z",
+  "generated_at": "2026-11-14T03:52:16.277Z",
   "slug": "wigan-hindley-green-2026-11-12",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.wigan.hindley-green.by.2026-11-12",
     "polling_day": "2026-11-12",
@@ -18,12 +18,22 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2023-05-04",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "DEATH",
+    "vacancy_reason": "the sitting councillor died",
     "requires_voter_id": "EA-2022",
     "nominations_close": "2026-10-16",
     "registration_deadline": "2026-10-27",
-    "postal_vote_deadline": "2026-10-28"
+    "postal_vote_deadline": "2026-10-28",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-08",
+      "close_of_nominations": "2026-10-16",
+      "sopn_publish_deadline": "2026-10-19",
+      "registration_deadline": "2026-10-27",
+      "postal_vote_application_deadline": "2026-10-28",
+      "proxy_vote_application_deadline": "2026-11-04",
+      "vac_application_deadline": "2026-11-04",
+      "replacement_pack_start_date": "2026-11-06"
+    }
   },
   "field": {
     "candidate_count": 7,
@@ -41,59 +51,85 @@
     ],
     "candidates": [
       {
-        "name": "David John Burley",
-        "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
+        "name": "John Melville Vickers",
+        "party_name": "Labour Party",
+        "votes": 1201,
+        "elected": true,
+        "party": "Labour",
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
       },
       {
         "name": "Bonnie Clarke",
         "party_name": "Reform UK",
+        "votes": 887,
+        "elected": false,
         "party": "Reform UK",
-        "votes": null,
-        "elected": null
-      },
-      {
-        "name": "Daniel James Jackson",
-        "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
       },
       {
         "name": "Mark Prescott",
         "party_name": "Independent",
+        "votes": 124,
+        "elected": false,
         "party": "Independent",
-        "votes": null,
-        "elected": null
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
       },
       {
         "name": "Rebecca Lee Shepherd",
         "party_name": "Restore Britain",
+        "votes": 107,
+        "elected": false,
         "party": "Restore Britain",
-        "votes": null,
-        "elected": null
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
+      },
+      {
+        "name": "Daniel James Jackson",
+        "party_name": "Conservative and Unionist Party",
+        "votes": 56,
+        "elected": false,
+        "party": "Conservative",
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
       },
       {
         "name": "Nat Smith",
         "party_name": "Green Party",
+        "votes": 42,
+        "elected": false,
         "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
       },
       {
-        "name": "John Melville Vickers",
-        "party_name": "Labour Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
+        "name": "David John Burley",
+        "party_name": "Liberal Democrats",
+        "votes": 9,
+        "elected": false,
+        "party": "Liberal Democrats",
+        "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+        "accessed_at": "2026-11-14"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Independent",
+    "member": "Robert Brierley",
+    "note": "Elected as an Independent in the all-out election of May 2023, term to 2027; his death caused the vacancy. This is not the seat Reform UK won in May 2026, so a Labour win here is a gain from Independent. Reviewed 14 November 2026.",
+    "sources": [
+      {
+        "label": "Wigan Council, 2023 Hindley Green result",
+        "url": "https://www.wigan.gov.uk/Council/Voting-and-Elections/Results/Local-election-4-May-2023/Hindley-Green.aspx"
+      },
+      {
+        "label": "ALDC, Wigan, Hindley Green, 12 November 2026",
+        "url": "https://www.aldc.org/2026/11/wigan-hindley-green-12-november-2026/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05014999",
@@ -170,7 +206,7 @@
   },
   "prior_result": {
     "election_date": "2026-05-07",
-    "seats_contested": 1,
+    "seats_contested": null,
     "shares": {
       "Reform UK": 0.5234113712374582,
       "Labour": 0.326644370122631,
@@ -185,48 +221,33 @@
     },
     "candidates": [
       {
-        "person_id": 126341,
         "name": "Liam Clarke",
         "party_name": "Reform UK",
-        "party_ec_id": "PP7931",
-        "votes": 1878,
-        "elected": true
+        "votes": 1878
       },
       {
-        "person_id": 7094,
         "name": "John Melville Vickers",
         "party_name": "Labour Party",
-        "party_ec_id": "PP53",
-        "votes": 1172,
-        "elected": false
+        "votes": 1172
       },
       {
-        "person_id": 129872,
-        "name": "Nathanael Smith",
+        "name": "Nat Smith",
         "party_name": "Green Party",
-        "party_ec_id": "PP63",
-        "votes": 258,
-        "elected": false
+        "votes": 258
       },
       {
-        "person_id": 15301,
         "name": "Marie Winstanley",
         "party_name": "Conservative and Unionist Party",
-        "party_ec_id": "PP52",
-        "votes": 174,
-        "elected": false
+        "votes": 174
       },
       {
-        "person_id": 89080,
         "name": "Gary John Skipworth",
         "party_name": "Liberal Democrats",
-        "party_ec_id": "PP90",
-        "votes": 106,
-        "elected": false
+        "votes": 106
       }
     ],
     "source_label": "Democracy Club",
-    "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/465",
+    "source": "https://candidates.democracyclub.org.uk/elections/local.wigan.hindley-green.2026-05-07/",
     "usable_as_baseline": true
   },
   "forecast": {
@@ -235,7 +256,7 @@
     "never_blended": true,
     "baseline": {
       "election_date": "2026-05-07",
-      "seats_contested": 1,
+      "seats_contested": null,
       "notional_single_seat": false,
       "shares": {
         "Reform UK": 0.5234113712374582,
@@ -250,52 +271,52 @@
         "Other": 0
       },
       "source_label": "Democracy Club",
-      "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/465"
+      "source": "https://candidates.democracyclub.org.uk/elections/local.wigan.hindley-green.2026-05-07/"
     },
     "swing": {
       "stratum": "post_may_2025|reform_already_stood",
       "stratum_used": true,
-      "contests_used": 59,
+      "contests_used": 62,
       "window_days": 365,
       "logodds_shifts": {
-        "Reform UK": -0.2425494704815887,
+        "Reform UK": -0.23943130007725344,
         "Labour": 0.2383025890301731,
-        "Conservative": -0.2942521094767043,
-        "Liberal Democrats": -0.24783735763989279,
-        "Green Party": -0.29959804969399206,
+        "Conservative": -0.27674599290089935,
+        "Liberal Democrats": -0.262090201515061,
+        "Green Party": -0.3395933676841483,
         "Independent": -0.11652273000901092
       },
       "ratio_at_25pct": {
-        "Reform UK": 0.8292762904461737,
+        "Reform UK": 0.8313278951271439,
         "Labour": 1.189098578346305,
-        "Conservative": 0.7958034628208602,
-        "Liberal Democrats": 0.8258056693376834,
-        "Green Party": 0.7924010292287512,
+        "Conservative": 0.8070220590664164,
+        "Liberal Democrats": 0.8165046117781702,
+        "Green Party": 0.76729346701792,
         "Independent": 0.9151749196392648
       },
       "entry_shares": {
         "Green Party": 0.13442113442113443,
-        "Restore Britain": 0.06471604688201188,
+        "Restore Britain": 0.06521137844723901,
         "Independent": 0.0888787452835334
       },
       "entry_counts": {
         "Reform UK": 0,
-        "Labour": 1,
-        "Conservative": 2,
+        "Labour": 2,
+        "Conservative": 3,
         "Liberal Democrats": 3,
         "Green Party": 5,
         "SNP": 0,
         "Plaid Cymru": 0,
-        "Restore Britain": 6,
+        "Restore Britain": 8,
         "Independent": 10,
         "Other": 1
       },
       "party_counts": {
-        "Reform UK": 58,
-        "Labour": 52,
-        "Conservative": 52,
-        "Liberal Democrats": 39,
-        "Green Party": 49,
+        "Reform UK": 61,
+        "Labour": 54,
+        "Conservative": 54,
+        "Liberal Democrats": 41,
+        "Green Party": 50,
         "SNP": 0,
         "Plaid Cymru": 0,
         "Restore Britain": 0,
@@ -304,71 +325,71 @@
       }
     },
     "central": {
-      "Reform UK": 0.4163909574314977,
-      "Labour": 0.3427934705441318,
-      "Conservative": 0.032912348181469854,
-      "Liberal Democrats": 0.020878369480307954,
-      "Green Party": 0.04885018368410404,
+      "Reform UK": 0.41725580285655384,
+      "Labour": 0.3429310142122446,
+      "Conservative": 0.0334853923483362,
+      "Liberal Democrats": 0.0205979278761002,
+      "Green Party": 0.047053968696023754,
       "SNP": 0,
       "Plaid Cymru": 0,
-      "Restore Britain": 0.058218891014857874,
-      "Independent": 0.07995577966363082,
+      "Restore Britain": 0.058688032606451175,
+      "Independent": 0.07998786140429029,
       "Other": 0
     },
     "win_probability": {
-      "Reform UK": 0.59675,
-      "Labour": 0.3695,
-      "Conservative": 0.00025,
+      "Reform UK": 0.596,
+      "Labour": 0.3685,
+      "Conservative": 0.0005,
       "Liberal Democrats": 0.00025,
-      "Green Party": 0.012,
-      "Restore Britain": 0.02025,
+      "Green Party": 0.01325,
+      "Restore Britain": 0.0205,
       "Independent": 0.001
     },
     "bands": {
       "Reform UK": {
-        "p10": 0.2611480457543024,
-        "p50": 0.37679709192203936,
-        "p90": 0.5148485332303104
+        "p10": 0.2599920759590597,
+        "p50": 0.3758540020735835,
+        "p90": 0.5150198484275157
       },
       "Labour": {
-        "p10": 0.14693803361876195,
-        "p50": 0.31347546963305783,
-        "p90": 0.47767445353808674
+        "p10": 0.1463203257191383,
+        "p50": 0.31204267771842964,
+        "p90": 0.47719042415957147
       },
       "Conservative": {
-        "p10": 0.010197825741307117,
-        "p50": 0.030549871014214608,
-        "p90": 0.08333545492272201
+        "p10": 0.009751046301677065,
+        "p50": 0.03092349793437748,
+        "p90": 0.08825112113029049
       },
       "Liberal Democrats": {
-        "p10": 0.004930455414715885,
-        "p50": 0.019225509656499412,
-        "p90": 0.06883093605621546
+        "p10": 0.004944738352152809,
+        "p50": 0.018936889671160313,
+        "p90": 0.06645460213894991
       },
       "Green Party": {
-        "p10": 0.010638683955960494,
-        "p50": 0.04468119860441949,
-        "p90": 0.16144005280653442
+        "p10": 0.009305494795381295,
+        "p50": 0.04306937743811368,
+        "p90": 0.1676202411382987
       },
       "Restore Britain": {
-        "p10": 0.012619680759186847,
-        "p50": 0.05398271620215857,
-        "p90": 0.19224230691506447
+        "p10": 0.01267498329141492,
+        "p50": 0.05406429311175827,
+        "p90": 0.1928736355932398
       },
       "Independent": {
-        "p10": 0.034829456187501294,
-        "p50": 0.07389877279550838,
-        "p90": 0.14126383043888707
+        "p10": 0.03462458086185919,
+        "p50": 0.0737077907438092,
+        "p90": 0.1405680974789139
       }
     },
     "winner": "Reform UK",
     "runner_up": "Labour",
-    "margin_pp": 7.359748688736589,
-    "leader_probability": 0.59675,
+    "margin_pp": 7.432478864430925,
+    "leader_probability": 0.596,
     "too_close_to_call": false,
     "sigma_inflation": 1.75,
     "caveats": [
-      "Priced from an entry prior, not from this ward: Restore Britain (median of 6), Independent (median of 10). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+      "Priced from an entry prior, not from this ward: Restore Britain (median of 8), Independent (median of 10). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
     ],
     "unpriced_parties": [],
     "entry_priced_parties": [
@@ -378,13 +399,53 @@
     "cannot_see": [
       "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
       "Any ward-level campaign, and which parties actually knocked on doors.",
-      "Turnout, which across the 1106 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.3656224237427865,
+      "Labour": 0.49505358615004125,
+      "Conservative": 0.023083264633140973,
+      "Liberal Democrats": 0.003709810387469085,
+      "Green Party": 0.01731244847485573,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.04410552349546579,
+      "Independent": 0.051112943116240726,
+      "Other": 0
+    },
+    "winner_party": "Labour",
+    "winner_candidate": "John Melville Vickers",
+    "winner_party_name": "Labour Party",
+    "winner_votes": 1201,
+    "runner_up_party": "Reform UK",
+    "majority_votes": 314,
+    "total_votes": 2426,
+    "source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+    "outcome": "Labour gain from Independent",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-10-21",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Reform UK",
+      "call_correct": false,
+      "mae_pp": 4.3872453185726075
+    },
+    "checked_at": "2026-11-14",
+    "accessed_at": "2026-11-14",
+    "review_status": "hand_verified_declaration",
+    "note": "Wigan Council election results page, accessed 14 November 2026. Candidate counts sum to 2,426 valid votes; two spoilt papers give 2,428 papers. Electorate 9,298 and turnout 26.11% are published by the council and reconcile."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480",
+      "accessed_at": "2026-11-14"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.wigan.hindley-green.by.2026-11-12/"
@@ -393,5 +454,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.wigan.hindley-green.by.2026-11-12/"
     }
-  ]
+  ],
+  "results_updated_at": "2026-11-14"
 }

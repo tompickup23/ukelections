@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-10-24T03:36:56.092Z",
+  "generated_at": "2026-11-14T03:52:16.413Z",
   "slug": "flintshire-mold-broncoed-2026-11-26",
   "status": "upcoming",
   "contest": {
@@ -18,20 +18,88 @@
     "voting_system": "FPTP",
     "boundary_set_start": "2022-05-05",
     "boundary_changed_since_prior": false,
-    "vacancy_reason_code": null,
-    "vacancy_reason": null,
+    "vacancy_reason_code": "DEATH",
+    "vacancy_reason": "the sitting councillor died",
     "requires_voter_id": null,
     "nominations_close": "2026-10-30",
     "registration_deadline": "2026-11-10",
-    "postal_vote_deadline": "2026-11-11"
+    "postal_vote_deadline": "2026-11-11",
+    "timetable": {
+      "notice_of_election_deadline": "2026-10-22",
+      "close_of_nominations": "2026-10-30",
+      "sopn_publish_deadline": "2026-11-02",
+      "registration_deadline": "2026-11-10",
+      "postal_vote_application_deadline": "2026-11-11",
+      "proxy_vote_application_deadline": "2026-11-18",
+      "vac_application_deadline": null,
+      "replacement_pack_start_date": "2026-11-20"
+    }
   },
   "field": {
-    "candidate_count": 0,
-    "locked": false,
-    "sopn_published": false,
-    "sopn_url": null,
-    "parties": [],
-    "candidates": []
+    "candidate_count": 7,
+    "locked": true,
+    "sopn_published": true,
+    "sopn_url": "https://candidates.democracyclub.org.uk/media/official_documents/local.flintshire.mold-broncoed.by.2026-11-26/sopn/2026-11-02T16%3A10%3A44.711479%2B00%3A00/Mold_Broncoed.pdf",
+    "parties": [
+      "Conservative",
+      "Green Party",
+      "Labour",
+      "Liberal Democrats",
+      "Other",
+      "Reform UK",
+      "Restore Britain"
+    ],
+    "candidates": [
+      {
+        "name": "Richard Clarke",
+        "party_name": "Reform UK",
+        "party": "Reform UK",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Kathy Cracknell",
+        "party_name": "Conservative and Unionist Party",
+        "party": "Conservative",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Nanette Yvonne Davies",
+        "party_name": "Liberal Democrats",
+        "party": "Liberal Democrats",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Emily Luise Hart",
+        "party_name": "Green Party",
+        "party": "Green Party",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Ted Jenkins",
+        "party_name": "Restore Britain",
+        "party": "Restore Britain",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Laura Murton",
+        "party_name": "Labour Party",
+        "party": "Labour",
+        "votes": null,
+        "elected": null
+      },
+      {
+        "name": "Kristina Renshaw",
+        "party_name": "Heritage Party",
+        "party": "Other",
+        "votes": null,
+        "elected": null
+      }
+    ]
   },
   "previous_holder": {
     "established": false,
@@ -79,10 +147,163 @@
     "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.mold-broncoed.2022-05-05/",
     "usable_as_baseline": true
   },
-  "forecast": null,
-  "no_forecast_reason": [
-    "Nominations have not closed, so the ballot paper is not final. A projection would have to assume nobody else stands, and we publish one once the statement of persons nominated is out."
-  ],
+  "forecast": {
+    "method": "ward_prior_plus_byelection_swing",
+    "method_label": "2022-05-05 ward result plus measured by-election swing",
+    "never_blended": true,
+    "baseline": {
+      "election_date": "2022-05-05",
+      "seats_contested": null,
+      "notional_single_seat": false,
+      "shares": {
+        "Reform UK": 0,
+        "Labour": 0.47520661157024796,
+        "Conservative": 0.10055096418732783,
+        "Liberal Democrats": 0,
+        "Green Party": 0,
+        "SNP": 0,
+        "Plaid Cymru": 0,
+        "Restore Britain": 0,
+        "Independent": 0.42424242424242425,
+        "Other": 0
+      },
+      "source_label": "Democracy Club",
+      "source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.mold-broncoed.2022-05-05/"
+    },
+    "swing": {
+      "stratum": "pre_realignment|reform_entering",
+      "stratum_used": true,
+      "contests_used": 88,
+      "window_days": 365,
+      "logodds_shifts": {
+        "Labour": -0.9723130728025009,
+        "Conservative": -0.6137213799825194,
+        "Liberal Democrats": -0.4271757767179413,
+        "Green Party": -0.20147603344172738,
+        "Plaid Cymru": 0.1054966908378934,
+        "Independent": -1.1741993075013362
+      },
+      "ratio_at_25pct": {
+        "Labour": 0.4478200203097242,
+        "Conservative": 0.6114450926385301,
+        "Liberal Democrats": 0.7144431124603148,
+        "Green Party": 0.856600611464991,
+        "Plaid Cymru": 1.0811885126334744,
+        "Independent": 0.37359945708973985
+      },
+      "entry_shares": {
+        "Reform UK": 0.27249755929477976,
+        "Labour": 0.04702627939142462,
+        "Conservative": 0.04861878453038674,
+        "Liberal Democrats": 0.07448979591836735,
+        "Green Party": 0.05570669320902737,
+        "Plaid Cymru": 0.15343627194875406,
+        "Restore Britain": 0.061305804081476206,
+        "Independent": 0.04951511016968317
+      },
+      "entry_counts": {
+        "Reform UK": 88,
+        "Labour": 5,
+        "Conservative": 7,
+        "Liberal Democrats": 13,
+        "Green Party": 40,
+        "SNP": 0,
+        "Plaid Cymru": 6,
+        "Restore Britain": 6,
+        "Independent": 8,
+        "Other": 3
+      },
+      "party_counts": {
+        "Reform UK": 0,
+        "Labour": 66,
+        "Conservative": 77,
+        "Liberal Democrats": 44,
+        "Green Party": 28,
+        "SNP": 0,
+        "Plaid Cymru": 16,
+        "Restore Britain": 0,
+        "Independent": 14,
+        "Other": 1
+      }
+    },
+    "central": {
+      "Reform UK": 0.35108059791659735,
+      "Labour": 0.32867236323087995,
+      "Conservative": 0.07351917906483346,
+      "Liberal Democrats": 0.0959712158794617,
+      "Green Party": 0.07177142874378929,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.07898521516443821,
+      "Independent": 0,
+      "Other": 0
+    },
+    "win_probability": {
+      "Reform UK": 0.45575,
+      "Labour": 0.37775,
+      "Conservative": 0.028,
+      "Liberal Democrats": 0.052,
+      "Green Party": 0.034,
+      "Restore Britain": 0.0525
+    },
+    "bands": {
+      "Reform UK": {
+        "p10": 0.10976738065684151,
+        "p50": 0.30714349672128416,
+        "p90": 0.5151595920763377
+      },
+      "Labour": {
+        "p10": 0.11592219451536452,
+        "p50": 0.28092811077585533,
+        "p90": 0.47672536841852603
+      },
+      "Conservative": {
+        "p10": 0.016975192948308137,
+        "p50": 0.0654826916716803,
+        "p90": 0.19621715548252608
+      },
+      "Liberal Democrats": {
+        "p10": 0.020985019230040293,
+        "p50": 0.08456360474970324,
+        "p90": 0.24632548843771346
+      },
+      "Green Party": {
+        "p10": 0.014846587631139321,
+        "p50": 0.06447522470709144,
+        "p90": 0.2131563411599413
+      },
+      "Restore Britain": {
+        "p10": 0.01587769023484025,
+        "p50": 0.07402400089230171,
+        "p90": 0.24462825497727952
+      }
+    },
+    "winner": "Reform UK",
+    "runner_up": "Labour",
+    "margin_pp": 2.24082346857174,
+    "leader_probability": 0.45575,
+    "too_close_to_call": true,
+    "sigma_inflation": 1.75,
+    "caveats": [
+      "Other is standing where it has no prior ward result and the corpus holds too few comparable entries to price one.",
+      "Priced from an entry prior, not from this ward: Reform UK (median of 88), Liberal Democrats (median of 13), Green Party (median of 40), Restore Britain (median of 6). A party with no prior result here is given the median share it took where it first entered a comparable contest. That median carries the era and the entry pattern and nothing about this ward, so it is the weakest number on this page."
+    ],
+    "unpriced_parties": [
+      "Other"
+    ],
+    "entry_priced_parties": [
+      "Reform UK",
+      "Liberal Democrats",
+      "Green Party",
+      "Restore Britain"
+    ],
+    "cannot_see": [
+      "Candidate quality and local name recognition, which decide more local by-elections than national swing does.",
+      "Any ward-level campaign, and which parties actually knocked on doors.",
+      "Turnout, which across the 1113 council by-elections we hold a figure for has run from 5% to 78%, median 28%. A small electorate moves fast and nothing here has a view on who turns out."
+    ]
+  },
+  "no_forecast_reason": null,
   "result": null,
   "declaration": null,
   "sources": [
