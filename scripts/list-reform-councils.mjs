@@ -77,7 +77,7 @@ function main() {
 
   // ======== Build markdown ========
   const md = [];
-  md.push(`# May 7 2026 Reform UK council control\n`);
+  md.push(`# 7 May 2026 Reform UK council control\n`);
   md.push(`Generated: ${data.snapshot.generated_at}`);
   md.push(`Source: ${data.snapshot.election_date} actuals (sha256 ${data.snapshot.actuals_sha256.slice(0, 12)}…)`);
   md.push(`Method: ${data.snapshot.method}\n`);
@@ -95,7 +95,7 @@ function main() {
   md.push(`| Reform breakthrough (won seats, not largest) | ${breakthrough.length} |`);
   md.push(`| Councils with no Reform seats post-May-7 | ${summary.reform_outcomes.no_seats} |`);
   md.push(`| Reform seats pre-May-7 (across contesting councils) | ${summary.aggregate_seats.pre.ref} |`);
-  md.push(`| Reform seats won May 7 | **${summary.aggregate_seats.won.ref}** |`);
+  md.push(`| Reform seats won 7 May 2026 | **${summary.aggregate_seats.won.ref}** |`);
   md.push(`| Reform seats post-May-7 (across contesting councils) | **${summary.aggregate_seats.post.ref}** |\n`);
 
   md.push(`## Control by party (majorities only)\n`);
@@ -179,7 +179,7 @@ function main() {
   }
 
   md.push(`## Method notes & caveats\n`);
-  md.push(`1. **Pre-May-7 composition** is the OpenCouncilData 2025 snapshot for each council. Defections and by-elections between January 2025 and May 7 2026 are not folded in.`);
+  md.push(`1. **Pre-May-7 composition** is the OpenCouncilData 2025 snapshot for each council. Defections and by-elections between January 2025 and 7 May 2026 are not folded in.`);
   md.push(`2. **Carry-over seats** (for thirds / halves councils where only some seats were up) are approximated by pre[party] × seats_up/total. Exact derivation requires per-ward incumbent verification.`);
   md.push(`3. **Pending ballots**: ${data.councils.reduce((s, c) => s + (c.may7_wins.pending_ballots || 0), 0)} ballots had no DC-elected flag at ingest time, so they are treated as pending and excluded from the wins count. As more declarations process, re-run the pipeline to refresh.`);
   md.push(`4. **Group affiliation vs elected party**: a candidate elected as Reform may not whip with the Reform group in practice; vice-versa for independents who join. This view counts elected-party labels only.`);

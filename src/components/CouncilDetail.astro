@@ -162,7 +162,7 @@ const breadcrumbs: Crumb[] = [
     <p class="eyebrow">{tier === "mayor" ? "Mayoralty" : "Council"} · {councilTypeLabel(cycle?.type)}</p>
     <h1>{councilName} council seats and election results</h1>
     <p class="lede">
-      <strong>{controlHeadline}</strong> after May 7 2026.{" "}
+      <strong>{controlHeadline}</strong> after 7 May 2026.{" "}
       {changeLabel && <span class="muted">({changeLabel}{previousLabel})</span>}
     </p>
     <p class="meta-row">
@@ -180,15 +180,15 @@ const breadcrumbs: Crumb[] = [
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">What happened on May 7</p>
+      <p class="eyebrow">What happened on 7 May 2026</p>
       <h2>Seats won and overall control</h2>
     </div>
     <div class="status-grid">
       <article class="status-card">
-        <p class="status-label">After May 7</p>
+        <p class="status-label">After 7 May 2026</p>
         <p class="status-value">{controlHeadline}</p>
         {totalSeats > 0 && (
-          <p class="muted">Council size: {totalSeats} seats · {seatsUp} up on May 7</p>
+          <p class="muted">Council size: {totalSeats} seats · {seatsUp} up on 7 May 2026</p>
         )}
       </article>
       <article class="status-card">
@@ -218,7 +218,7 @@ const breadcrumbs: Crumb[] = [
   {postMay7Rows.length > 0 && (
     <section class="section">
       <div class="section-head">
-        <p class="eyebrow">Post-May 7 composition</p>
+        <p class="eyebrow">Post-7 May 2026 composition</p>
         <h2>Every party's seat count on the new council</h2>
       </div>
       <div class="party-bars party-bars-large">
@@ -288,7 +288,7 @@ const breadcrumbs: Crumb[] = [
   {seatProjectionRows.length > 0 && (
     <section class="section">
       <div class="section-head">
-        <p class="eyebrow">Our locked May 7 forecast</p>
+        <p class="eyebrow">Our locked 7 May 2026 forecast</p>
         <h2>The pre-election prediction</h2>
       </div>
       <div class="party-bars party-bars-large">

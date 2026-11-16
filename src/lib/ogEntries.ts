@@ -227,17 +227,17 @@ function buildEntries(): OgEntry[] {
 
   out.push({
     slug: "past-results",
-    eyebrow: "May 7 2026 · accuracy audit",
+    eyebrow: "7 May 2026 · accuracy audit",
     headline: `${(may7.live_winner_accuracy * 100).toFixed(1)}% winners correct`,
     shares: councilShares,
-    sharesCaption: "Council control after May 7",
+    sharesCaption: "Council control after 7 May 2026",
     accentColour: partyColour("Reform UK"),
   });
 
   out.push({
     slug: "councils",
     eyebrow: "Council elections",
-    headline: "Every council, before and after May 7",
+    headline: "Every council, before and after 7 May 2026",
     shares: councilShares,
     sharesCaption: `${may7.contesting_councils} contested · current control breakdown`,
     accentColour: "#e3d9c3",
@@ -267,7 +267,7 @@ function buildEntries(): OgEntry[] {
     });
   }
 
-  // 8. Council pages (~360). show seats won by each party on May 7
+  // 8. Council pages (~360). show seats won by each party on 7 May 2026
   const identity = loadIdentity();
   const ctl = loadMay7Control();
   const ctlBySlug = new Map<string, any>();
@@ -300,12 +300,12 @@ function buildEntries(): OgEntry[] {
 
     out.push({
       slug: `seats/${w.council_slug}`,
-      eyebrow: "Council · May 7 2026",
+      eyebrow: "Council · 7 May 2026",
       headline: w.council_name || w.council_slug,
       shares: councilSeatShares.length > 0 ? councilSeatShares : undefined,
       sharesCaption: controllingSlug
-        ? `Seats won on May 7 · ${controllingName} majority`
-        : `Seats won on May 7 · No overall control`,
+        ? `Seats won on 7 May 2026 · ${controllingName} majority`
+        : `Seats won on 7 May 2026 · No overall control`,
       subline: councilSeatShares.length > 0
         ? undefined
         : `No seat data yet · ${ctlRow?.reform?.won_seats || 0} Reform seats won`,
