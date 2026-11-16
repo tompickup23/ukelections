@@ -28,7 +28,16 @@ const CACHE_TTL_MS = (ttlArg ? Number(ttlArg.split("=")[1]) : 20) * 3600 * 1000;
 const IGNORE_CACHE = process.argv.includes("--fresh");
 const SCOPE_PATH = path.join(ROOT, "data/identity/wards-may-2026.json");
 const APPENDS_PATH = path.join(ROOT, "data/history/byelection-appends.json");
-const OUT = path.join(ROOT, "data/history/dc-historic-results.json");
+// --scope=2027 keeps every local result, any year, for the councils voting on
+// 6 May 2027 (verified and not yet verified, England and Wales), and writes it
+// to its own file. The default scope is the May 2026 councils, and its output
+// feeds the nightly models, so the 2027 run must never write over it: adding
+// another 130 councils' 2016-23 rows would quietly change the by-election
+// corpus and every fit that reads the whole file.
+const SCOPE_2027 = process.argv.includes("--scope=2027");
+const COUNCILS_2027_PATH = path.join(ROOT, "data/identity/councils-2027.json");
+const BASELINES_2027_PATH = path.join(ROOT, "data/identity/councils-2027-baselines.json");
+const OUT = path.join(ROOT, SCOPE_2027 ? "data/history/dc-historic-results-2027.json" : "data/history/dc-historic-results.json");
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -124,7 +133,129 @@ function compactResult(r) {
   };
 }
 
+// Our council slug → Democracy Club's, where they differ.
+const DC_SLUG_2027 = { "folkestone-and-hythe": "folkestone-hythe", "vale-of-glamorgan": "the-vale-of-glamorgan" };
+
+function load2027Councils() {
+  const c = JSON.parse(readFileSync(COUNCILS_2027_PATH, "utf8"));
+  const rows = [
+    ...c.councils.filter((x) => x.nation !== "S").map((x) => ({ ...x, verified: true })),
+    ...c.not_verified.map((x) => ({ ...x, nation: "E", verified: false })),
+  ];
+  return rows.map((x) => ({ ...x, dc_slug: DC_SLUG_2027[x.slug] || x.slug }));
+}
+
+// Per council: the most recent ordinary (non-by-election) local poll in the
+// DC results, and how complete it is. This is what a 2027 baseline needs: the
+// 2023 cohort's ward results for all-out councils, and the year each ward's
+// seat was last filled for thirds and halves councils.
+function summarise2027(councils, results) {
+  const byCouncil = new Map();
+  for (const r of results) {
+    if (r.tier !== "local" || !r.council_slug) continue;
+    if (!byCouncil.has(r.council_slug)) byCouncil.set(r.council_slug, []);
+    byCouncil.get(r.council_slug).push(r);
+  }
+  return councils.map((c) => {
+    const rows = byCouncil.get(c.dc_slug) || [];
+    const ordinary = rows.filter((r) => !r.is_by_election);
+    const dates = [...new Set(ordinary.map((r) => r.election_date))].sort();
+    const polls = dates.map((d) => {
+      const ballots = ordinary.filter((r) => r.election_date === d);
+      return {
+        date: d,
+        ballots: ballots.length,
+        elected: ballots.reduce((s, r) => s + r.candidates.filter((x) => x.elected).length, 0),
+        ballots_with_votes: ballots.filter((r) => r.candidates.some((x) => x.votes != null)).length,
+      };
+    });
+    // Welsh councils and the unitaries first elected in 2022 are on a
+    // five-year first term, so their baseline is the 2022 poll.
+    const baselineFrom = c.nation === "W" || polls.at(-1)?.date?.startsWith("2022") ? "2022-01-01" : "2023-01-01";
+    const sinceBaseline = polls.filter((p) => p.date >= baselineFrom);
+    // The poll a 2027 forecast starts from: the last whole-council poll for an
+    // all-out council, the 2023 poll for one electing by thirds or halves (the
+    // seats won then are the seats up in 2027).
+    const allOut = /all/i.test(c.cycle || "");
+    const baseline = allOut ? sinceBaseline.at(-1) : polls.find((p) => p.date.startsWith("2023"));
+    const expected = allOut ? c.total_seats?.value : c.seats_up?.value;
+    // DC's results endpoint lists contested ballots only, so a shortfall here
+    // may be uncontested wards, unfilled seats or a missing result. Not
+    // resolved in this file; it is a thing to check, not a figure to publish.
+    const shortfall = baseline && expected != null ? expected - baseline.elected : null;
+    return {
+      slug: c.slug,
+      dc_slug: c.dc_slug,
+      name: c.name,
+      nation: c.nation,
+      verified_2027: c.verified,
+      cycle: c.cycle || null,
+      total_seats: c.total_seats?.value ?? null,
+      seats_up_2027: c.seats_up?.value ?? null,
+      dc_ordinary_polls: polls,
+      latest_ordinary_poll: polls.at(-1)?.date || null,
+      has_ordinary_poll_since_2022: sinceBaseline.length > 0,
+      baseline_poll: baseline?.date || null,
+      baseline_elected: baseline?.elected ?? null,
+      baseline_seats_expected: expected ?? null,
+      baseline_seat_shortfall: shortfall,
+      by_elections: rows.length - ordinary.length,
+    };
+  });
+}
+
+async function main2027() {
+  const councils = load2027Councils();
+  const target = new Set(councils.map((c) => c.dc_slug));
+  process.stderr.write(`2027 scope: ${target.size} councils (England and Wales, verified and not).\n`);
+  const raw = await fetchAll();
+  process.stderr.write(`Fetched ${raw.length} raw results.\n`);
+  const inScope = raw
+    .map(compactResult)
+    .filter((r) => r.ballot_paper_id && r.election_date && r.tier === "local" && target.has(r.council_slug));
+  const sha = createHash("sha256").update(JSON.stringify(inScope)).digest("hex");
+  const byYear = {};
+  for (const r of inScope) byYear[r.year] = (byYear[r.year] || 0) + 1;
+  const retrievedAt = new Date().toISOString();
+  const snapshot = {
+    snapshot_id: `dc-historic-results-2027-${sha.slice(0, 12)}`,
+    source_name: "Democracy Club Candidates API, results endpoint",
+    source_url: API,
+    retrieved_at: retrievedAt,
+    sha256: sha,
+    licence: "Democracy Club election data is published under CC0 1.0 for raw fields; party metadata sourced from Electoral Commission (OGL).",
+    quality_status: "imported_quarantined",
+    review_notes: "Every local result, any year, for the councils in data/identity/councils-2027.json (councils and not_verified, Scotland excluded). Not read by the nightly models.",
+  };
+  mkdirSync(path.dirname(OUT), { recursive: true });
+  writeFileSync(OUT, JSON.stringify({ snapshot, election_date_target: "2027-05-06", raw_results_fetched: raw.length, by_year: byYear, results: inScope }));
+
+  const summary = summarise2027(councils, inScope);
+  const missing = summary.filter((s) => !s.has_ordinary_poll_since_2022);
+  writeFileSync(
+    BASELINES_2027_PATH,
+    JSON.stringify(
+      {
+        snapshot: { ...snapshot, note: "Summary of the 2027-scope results file, which is gitignored. One row per council." },
+        totals: {
+          councils: summary.length,
+          with_ordinary_poll_since_2022: summary.length - missing.length,
+          without: missing.length,
+        },
+        councils: summary,
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+  process.stdout.write(`\nWrote ${OUT} (${inScope.length} results) and ${BASELINES_2027_PATH}\n`);
+  process.stdout.write(`Councils with an ordinary poll since 2022 in DC: ${summary.length - missing.length} of ${summary.length}\n`);
+  if (missing.length) process.stdout.write(`Without: ${missing.map((s) => s.slug).join(", ")}\n`);
+  for (const [y, n] of Object.entries(byYear).sort()) process.stdout.write(`  ${y}: ${n}\n`);
+}
+
 async function main() {
+  if (SCOPE_2027) return main2027();
   process.stderr.write(`Loading scope identity ...\n`);
   const identity = JSON.parse(readFileSync(SCOPE_PATH, "utf8"));
   const targetCouncils = new Set(identity.wards.map((w) => w.council_slug).filter(Boolean));
