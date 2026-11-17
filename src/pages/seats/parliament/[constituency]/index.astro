@@ -10,6 +10,7 @@ import { constituencySummary, seatSwings } from "../../../../lib/pageSummaries";
 import { regionForSeat, seatsByRegion } from "../../../../lib/parliamentRegions";
 import { inHundred, loadGeWinProbability } from "../../../../lib/geWinProbability.js";
 import { buildParliamentaryJourneyLinks } from "../../../../lib/electionJourneys";
+import lookupCodes from "../../../../../data/identity/parliament-lookup-codes.json";
 
 export async function getStaticPaths() {
   const ge = loadGePredictions();
@@ -25,6 +26,11 @@ export async function getStaticPaths() {
 }
 
 const { record, backtest } = Astro.props as { record: any; backtest: any };
+// 77 model records carry no ONS code, so their pages drew no map. The lookup
+// file matches every seat to its PCON24 code by name and checks agreement
+// with the codes the model does carry; it is the same fallback /your-area/ uses.
+const pconCode: string | null =
+  record.pcon24cd ?? lookupCodes.entries[Astro.params.constituency as keyof typeof lookupCodes.entries]?.code ?? null;
 
 // Compute per-seat backtest stats (model's predicted shares vs actual on
 // 4 July 2024). Falls back to null where no backtest row exists. e.g.
@@ -175,10 +181,10 @@ const ge2024Majority = record.ge2024?.majority;
       </p>
     )}
     <div class="seat-glance">
-      {record.pcon24cd && (
+      {pconCode && (
         <div class="seat-glance-map">
           <MiniMap
-            focalCode={record.pcon24cd}
+            focalCode={pconCode}
             focalKind="pcon"
             detail="full"
             focalColour={partyColour(record.winner)}
@@ -215,7 +221,7 @@ const ge2024Majority = record.ge2024?.majority;
       </div>
     </div>
     <p class="meta-row">
-      {countryLabel}{regionLabel ? ` · ${regionLabel}` : ""}{record.pcon24cd ? ` · official code ${record.pcon24cd}` : ""}
+      {countryLabel}{regionLabel ? ` · ${regionLabel}` : ""}{pconCode ? ` · official code ${pconCode}` : ""}
       <span data-discovery-ignore>{geBundle.snapshot?.generated_at ? ` · forecast generated ${forecastStamp(geBundle.snapshot.generated_at)}` : ""}</span>
     </p>
     {slug === "makerfield" && (
