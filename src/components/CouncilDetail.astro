@@ -7,17 +7,19 @@ import StatCard from "./StatCard.astro";
 import type { Crumb } from "../lib/seo";
 import {
   loadIdentity,
-  loadPredictions,
   loadSummary,
   loadMay7Control,
   loadMay7Results,
   loadCouncilCycles,
   loadMay7BacktestForCouncil,
+  loadMay7BacktestForWard,
   loadGePredictions,
-  rankedShares,
   formatPct,
   partyColour,
 } from "../lib/predictions";
+import { wardResultFor } from "../lib/wardResults";
+import { seatsWonLabel, resultSourceLabel } from "../lib/may7WardResult";
+import { councilTitle, councilDescription, wardTableRow } from "../lib/councilPage";
 import {
   shortPartyLabel,
   formatNextElection,
@@ -30,7 +32,6 @@ import {
 interface Props { council: string }
 const { council } = Astro.props;
 const identity = loadIdentity();
-const predictions = loadPredictions().predictions;
 const summary = loadSummary();
 const control = loadMay7Control();
 const results = loadMay7Results();
@@ -137,20 +138,39 @@ const seatProjectionRows: SeatProjRow[] = Object.entries(seatProjection as Recor
   }));
 
 const nextKnown = nextElection.status !== "unknown";
-const title = council === "essex" || council === "colchester"
-  ? `${councilName} council seats and results, 2026`
-  : nextKnown
-    ? `${councilName}. 7 May 2026 result and what's next`
-    : `${councilName}. 7 May 2026 council election result`;
+// "[Council] election results 2026 and next election" since the quality reset
+// (register T13); the "next election" half only where the date is verified.
+// The one-off Essex and Colchester titles of 24 October are folded into it.
+const title = councilTitle(councilName, nextKnown);
 // Leads with the council name: the previous form started with the control
 // headline and seat counts, which are identical across small councils and
-// collided on 20 pages.
-// The next-election clause is stated only when it is known. An unverified
-// council used to carry "Next: Not verified." into its search snippet: a
-// placeholder, not a fact. When the date is unknown the page says nothing
-// about it rather than publishing the gap. The title above follows the same
-// rule: "what's next" is only promised where we can answer it.
-const description = `${councilName}, 7 May 2026: ${controlHeadline}. ${seatsUp} seats contested.${nextKnown ? ` Next: ${nextElection.label}.` : ""}`;
+// collided on 20 pages. The next-election clause is stated only when it is
+// known, and the whole stays under 160 characters (councilDescription).
+const description = councilDescription({
+  councilName,
+  controlHeadline,
+  seatsUp,
+  nextLabel: nextKnown ? nextElection.label : null,
+});
+
+// One row per ward, from the same result helper the ward pages use, so the
+// table and the ward page cannot disagree. The forecast column is the scored
+// pre-poll call from the post-audit ledger, not the predictions file, which
+// was rerun after polling day.
+const wardRows = wards.map((w: any) => {
+  const result = wardResultFor(w);
+  const source = result ? resultSourceLabel(result) : null;
+  const backtest = w.ballot_paper_id ? loadMay7BacktestForWard(w.ballot_paper_id) : null;
+  return {
+    ward: w,
+    result,
+    source,
+    backtest,
+    row: wardTableRow(result, (r) => seatsWonLabel(r, shortPartyLabel)),
+  };
+});
+const capturedDates = [...new Set(wardRows.map((r) => r.source?.captured).filter(Boolean))];
+const declaredCount = wardRows.filter((r) => r.result).length;
 const breadcrumbs: Crumb[] = [
   { name: "Councils", href: "/councils/" },
   { name: councilName, href: `/seats/${council}/` }
@@ -311,50 +331,59 @@ const breadcrumbs: Crumb[] = [
   <section class="section">
     <div class="section-head">
       <p class="eyebrow">All wards</p>
-      <h2>Per-ward forecast vs actual</h2>
+      <h2>{councilName} ward by ward results, 7 May 2026</h2>
     </div>
-    <div class="table-scroll" tabindex="0" role="region" aria-label={`${councilName} ward forecasts and results`}>
-    <table class="ward-grid">
+    <p class="muted">
+      {declaredCount} of {wardRows.length} wards have a declared result in our data. Each ward links to its own page with
+      every candidate's votes.
+    </p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label={`${councilName} ward results, 7 May 2026`}>
+    <table class="ward-grid" data-ward-results>
       <thead>
         <tr>
           <th scope="col">Ward</th>
-          <th scope="col">Our top pick</th>
-          <th scope="col">Actual winner</th>
-          <th scope="col">Predicted share</th>
-          <th scope="col">Confidence</th>
+          <th scope="col">Won by</th>
+          <th scope="col" class="num">Votes</th>
+          <th scope="col" class="num">Share</th>
+          <th scope="col" class="num">Turnout</th>
+          <th scope="col">Pre-poll forecast</th>
+          <th scope="col">Source</th>
         </tr>
       </thead>
       <tbody>
-        {wards.map((w: any) => {
-          const wp = predictions[w.ballot_paper_id];
-          const top = wp?.prediction ? rankedShares(wp.prediction)[0] : null;
-          const actual = resultsBy[w.ballot_paper_id];
-          const actualWinner = actual?.winner_party_canonical;
-          const isHit = top && actualWinner && top[0] === actualWinner;
-          return (
-            <tr>
-              <td><a href={`/seats/${w.council_slug}/${w.ward_slug}/`}>{w.ward_name}</a></td>
-              <td>
-                {top
-                  ? <><span class="party-swatch" style={`background:${partyColour(top[0])}`}></span>{shortPartyLabel(top[0])}</>
-                  : <span class="muted">n/a</span>}
-              </td>
-              <td>
-                {actualWinner
-                  ? <span class={isHit ? "winner-hit" : "winner-miss"}>
-                      <span class="party-swatch" style={`background:${partyColour(actualWinner)}`}></span>
-                      {shortPartyLabel(actualWinner)}
-                    </span>
-                  : <span class="muted">Not yet declared</span>}
-              </td>
-              <td class="num">{top ? formatPct(top[1].pct) : "n/a"}</td>
-              <td class="muted">{wp?.confidence || "n/a"}</td>
-            </tr>
-          );
-        })}
+        {wardRows.map(({ ward: w, result, source, backtest, row }) => (
+          <tr data-ballot={w.ballot_paper_id}>
+            <td><a href={`/seats/${w.council_slug}/${w.ward_slug}/`}>{w.ward_name}</a></td>
+            <td>
+              {row.wonBy
+                ? <>{result!.seatsByParty.length === 1 && <span class="party-swatch" style={`background:${partyColour(result!.seatsByParty[0].party)}`}></span>}{row.wonBy}</>
+                : <span class="muted">{w.cancelled ? "Poll cancelled" : "No declared result held"}</span>}
+            </td>
+            <td class="num">{row.votes != null ? row.votes.toLocaleString("en-GB") : "n/a"}</td>
+            <td class="num">{row.share != null ? formatPct(row.share) : result?.incomplete ? "withheld" : "n/a"}</td>
+            <td class="num">{row.turnoutPct != null ? formatPct(row.turnoutPct) : "n/a"}</td>
+            <td>
+              {backtest?.predicted_winner
+                ? <span class={backtest.winner_match ? "winner-hit" : "winner-miss"}>{shortPartyLabel(backtest.predicted_winner)}{backtest.winner_match ? ", called" : ", missed"}</span>
+                : <span class="muted">Not scored</span>}
+            </td>
+            <td>
+              {source
+                ? source.href ? <a href={source.href} rel="nofollow">{source.short}</a> : source.short
+                : <span class="muted">n/a</span>}
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
     </div>
+    <p class="caption">
+      Votes and share are the winning candidate's; in a ward with more than one seat, the last candidate elected.
+      Shares are withheld where we hold fewer candidates than were nominated.
+      Turnout is as the source states it.
+      {capturedDates.length > 0 && <> Results as captured into our results file on {capturedDates.join(" and ")}, from the source named on each row; Wikipedia rows are provisional until checked against the council's declaration.</>}
+      {" "}The pre-poll forecast is the locked forecast scored in the <a href="/past-results/">post-audit</a> (10 May 2026).
+    </p>
   </section>
 
   {aidogeLink && (

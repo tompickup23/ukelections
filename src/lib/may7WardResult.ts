@@ -49,6 +49,7 @@ export interface RawWardResult {
   source_article?: string | null;
   source_provider?: string | null;
   quality_caveat?: string | null;
+  ingested_at?: string | null;
 }
 
 export interface ResultCandidate {
@@ -88,6 +89,8 @@ export interface WardResultSummary {
   sourceUrl: string | null;
   sourceArticle: string | null;
   qualityCaveat: string | null;
+  /** When the row was captured into the results file: the edition the figures come from. */
+  ingestedAt: string | null;
 }
 
 function normaliseName(s: string | null | undefined): string {
@@ -223,7 +226,33 @@ export function summariseWardResult(
     sourceUrl: row.source || null,
     sourceArticle: row.source_article || null,
     qualityCaveat: row.quality_caveat || null,
+    ingestedAt: row.ingested_at || null,
   };
+}
+
+/**
+ * Where a ward's 7 May 2026 figures come from, worded once so the ward page
+ * and the council page's ward table cannot describe the same row differently.
+ * `short` fits a table cell; `long` is the ward page caption.
+ */
+export function resultSourceLabel(summary: Pick<WardResultSummary, "provider" | "sourceUrl" | "sourceArticle" | "ingestedAt">): {
+  short: string;
+  long: string;
+  href: string | null;
+  captured: string | null;
+} {
+  const labels: Record<string, [string, string]> = {
+    "council-pdf-declaration": ["Council declaration", "Source: the returning officer's declaration of result."],
+    wikipedia: ["Wikipedia (provisional)", "Source: a community-maintained Wikipedia mirror, not the council's own declaration. Treat it as provisional."],
+    "dc-api": ["Democracy Club", "Source: Democracy Club's results database."],
+    "dc-history": ["Democracy Club archive", "Source: Democracy Club's results archive. This declaration has not yet been added to our scored 7 May 2026 results, so the forecast is not graded against it here."],
+  };
+  const [short, long] = labels[summary.provider || ""] || ["Source not recorded", "Source: not recorded for this row."];
+  const href = [summary.sourceUrl, summary.sourceArticle].find((v) => typeof v === "string" && /^https?:\/\/\S+$/.test(v.trim()))?.trim() || null;
+  const captured = summary.ingestedAt
+    ? new Date(summary.ingestedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/London" })
+    : null;
+  return { short, long, href, captured };
 }
 
 /**
