@@ -161,7 +161,29 @@ function loadGe() {
     backtest: JSON.parse(readFileSync(path.join(ROOT, "data/backtests/ge-2024.json"), "utf8")),
     identity: JSON.parse(readFileSync(path.join(ROOT, "data/identity/pcons-ge-next.json"), "utf8")),
   };
+  applyOfficialSeatNames(_ge);
   return _ge;
+}
+
+/**
+ * Seats whose model record has no ONS code were named by title-casing the
+ * slug, which drops commas, hyphens and accents ("Na H Eileanan An Iar",
+ * "Ynys Mon"). The generated prediction and backtest files keep those names
+ * until their scripts are rerun, so every page reading them through this
+ * loader gets the official name from the lookup file instead. Name only:
+ * nothing here changes a code, a region or a figure.
+ */
+function applyOfficialSeatNames(ge: { predictions: any; backtest: any; identity: any }) {
+  const entries = JSON.parse(
+    readFileSync(path.join(ROOT, "data/identity/parliament-lookup-codes.json"), "utf8"),
+  ).entries as Record<string, { official_name?: string }>;
+  const fix = (slug: string | undefined, row: any) => {
+    const official = slug ? entries[slug]?.official_name : undefined;
+    if (official && row && row.name !== official) row.name = official;
+  };
+  for (const [slug, row] of Object.entries(ge.predictions?.predictions ?? {})) fix(slug, row);
+  for (const row of (ge.backtest?.rows ?? []) as any[]) fix(row?.slug, row);
+  for (const row of (ge.identity?.pcons ?? []) as any[]) fix(row?.slug, row);
 }
 export function loadGePredictions() { return loadGe().predictions; }
 export function loadGeSummary() { return loadGe().summary; }

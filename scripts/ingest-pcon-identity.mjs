@@ -34,6 +34,10 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(__dirname, "..");
+const officialNames = Object.fromEntries(
+  Object.entries(JSON.parse(readFileSync(join(REPO, "data/identity/parliament-lookup-codes.json"), "utf8")).entries)
+    .map(([slug, e]) => [slug, e.official_name]),
+);
 
 function readJson(p) { return JSON.parse(readFileSync(join(REPO, p), "utf8")); }
 function sha256(buf) { return createHash("sha256").update(buf).digest("hex"); }
@@ -161,7 +165,12 @@ function main() {
     if (parts.length < 3) continue;
     const slug = parts.slice(1, -1).join(".");
     const pcon24cd = slugToCode.get(slug) || null;
-    const name = pcon24cd ? codeToName.get(pcon24cd) : titleCase(slug);
+    // Without a code, prefer the official name from the lookup file (matched
+    // by name and checked against the codes we do hold) over a title-cased
+    // slug, which drops commas, hyphens and accents ("Na H Eileanan An Iar",
+    // "Ynys Mon"). Only the name is taken: adding a code here would change
+    // the model's geography joins and is a separate decision.
+    const name = pcon24cd ? codeToName.get(pcon24cd) : (officialNames[slug] ?? titleCase(slug));
     const country = inferCountry(pcon24cd, slug);
     const lads = pcon24cd ? [...(slugToLads.get(slug) || [])] : [];
     // Region: pick majority LAD region for English seats, else country slug
