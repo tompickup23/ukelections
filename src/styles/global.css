@@ -38,6 +38,7 @@
        deep   #6b5334  links, headings, rules on white (7.81:1 on white)
        bright #e3d9c3  the mark and text on the dark ground (13.31:1 on ground)
        wash   #f6f2ea  stat tiles and card hovers */
+  --eyebrow-ink: var(--ink-soft);
   --accent: #6b5334;
   --accent-bright: #e3d9c3;
   --accent-wash: #f6f2ea;
@@ -115,6 +116,7 @@
   --muted: #98a3ac;
   --border: #2b333b;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --eyebrow-ink: var(--accent);
   --accent: #e3d9c3;
   --accent-wash: #221d14;
   --accent-2: #7fc9a8;
@@ -150,6 +152,7 @@
     --muted: #98a3ac;
     --border: #2b333b;
     --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    --eyebrow-ink: var(--accent);
     --accent: #e3d9c3;
     --accent-wash: #221d14;
     --accent-2: #7fc9a8;
@@ -329,24 +332,23 @@ input:focus-visible,
   margin: 0 auto;
 }
 
-.hero,
-.page-hero {
+.hero {
   padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(2rem, 5vw, 4rem);
 }
 
 .hero,
-.page-hero,
 .section-head {
   max-width: 56rem;
 }
 
 .page-hero {
+  padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(2rem, 5vw, 4rem);
   max-width: 48rem;
 }
 
 .eyebrow {
   margin: 0 0 0.8rem;
-  color: var(--accent);
+  color: var(--eyebrow-ink);
   font-size: 0.86rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -357,9 +359,7 @@ input:focus-visible,
 .page-hero h1,
 .section h2,
 .feature-list h2,
-.feature-list h3,
-.workflow h2,
-.release-list h2 {
+.feature-list h3 {
   margin: 0;
   color: var(--ink);
   font-family: var(--font-display);
@@ -378,9 +378,17 @@ input:focus-visible,
 
 .section h2,
 .feature-list h2,
-.feature-list h3,
-.workflow h2,
+.feature-list h3 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
 .release-list h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.05;
   font-size: clamp(1.35rem, 3vw, 2rem);
 }
 
@@ -430,8 +438,7 @@ input:focus-visible,
 }
 
 .status-grid,
-.feature-list,
-.workflow {
+.feature-list {
   display: grid;
   gap: 1rem;
   margin: 2rem 0;
@@ -442,15 +449,9 @@ input:focus-visible,
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 }
 
-.workflow {
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-}
-
 .status-grid article,
 .feature-list article,
-.workflow article,
-.lookup-shell,
-.release-list article {
+.lookup-shell {
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
@@ -458,14 +459,19 @@ input:focus-visible,
 }
 
 .status-grid article,
-.feature-list article,
-.workflow article,
+.feature-list article {
+  padding: 1.2rem;
+}
+
 .release-list article {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
   padding: 1.2rem;
 }
 
 .status-label,
-.workflow span,
 .release-list time {
   color: var(--accent-3);
   font-size: 0.84rem;
@@ -481,11 +487,9 @@ input:focus-visible,
 
 .status-grid p,
 .feature-list p,
-.workflow p,
 .prose-block p,
 .release-list p,
-.lookup-form p,
-.source-table span {
+.lookup-form p {
   color: var(--ink-soft);
   line-height: 1.65;
 }
@@ -532,28 +536,10 @@ input:focus-visible,
   font-size: 1.4rem;
 }
 
-.source-table,
 .release-list {
   display: grid;
   gap: 0.75rem;
   margin: 0 0 4rem;
-}
-
-.source-table div {
-  display: grid;
-  grid-template-columns: minmax(12rem, 0.8fr) 1.5fr auto;
-  gap: 1rem;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-}
-
-.source-table em {
-  color: var(--accent-2);
-  font-style: normal;
-  font-weight: 600;
 }
 
 .site-footer {
@@ -592,70 +578,6 @@ input:focus-visible,
 }
 
 /* === Aesthetic upgrade, headline cards, party bars, big numbers === */
-
-.hero-v2 .eyebrow {
-  display: inline-block;
-  padding: 0.35rem 0.7rem;
-  background: var(--accent-wash);
-  border-radius: 999px;
-  letter-spacing: 0.01em;
-}
-
-.headline-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  gap: 1.25rem;
-  margin: 2rem 0 3rem;
-}
-
-.headline-card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.headline-card header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.headline-card .kicker {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--accent-3);
-  letter-spacing: 0.04em;
-}
-
-.headline-card h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 3vw, 1.7rem);
-  line-height: 1.15;
-  margin: 0;
-}
-
-.headline-card .card-lede {
-  color: var(--ink-soft);
-  line-height: 1.55;
-  margin: 0;
-}
-
-.headline-card .card-cta {
-  margin-top: auto;
-  font-weight: 600;
-  color: var(--accent-3);
-  text-decoration: none;
-}
-
-.headline-card .card-cta:hover {
-  color: var(--accent);
-}
 
 /* Party-share bars */
 
@@ -701,12 +623,6 @@ input:focus-visible,
 
 .party-bars-large .bar-track {
   height: 1rem;
-}
-
-.bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.3s ease;
 }
 
 .bar-value {
@@ -991,9 +907,6 @@ input:focus-visible,
 
   .status-grid,
   .feature-list,
-  .workflow,
-  .source-table div,
-  .headline-grid,
   .accuracy-grid {
     grid-template-columns: 1fr;
   }
@@ -1136,7 +1049,7 @@ input:focus-visible,
   font-weight: 600;
   font-size: 0.82rem;
   letter-spacing: 0.02em;
-  color: var(--accent-3);
+  color: var(--eyebrow-ink);
 }
 
 .hero-byelection h1 {
@@ -1154,141 +1067,7 @@ input:focus-visible,
   margin: 0 0 1.25rem;
 }
 
-.hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
-}
-
-.hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.85rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.hero-chip .party-pill {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.hero-chip.days strong {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--accent-3);
-}
-
-.hero-chip.class {
-  background: var(--status-warn-bg);
-  border-color: var(--status-warn-border);
-  color: var(--status-warn-text);
-}
-
 /* === Upcoming elections grid (homepage section) === */
-
-.upcoming-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: 1.25rem;
-  margin: 1.25rem 0 1rem;
-}
-
-.upcoming-card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
-  padding: 1.25rem 1.4rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.upcoming-card h3 {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  margin: 0;
-  line-height: 1.25;
-}
-
-.upcoming-card h3 a {
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.upcoming-card h3 a:hover {
-  color: var(--accent-3);
-}
-
-.upcoming-card .upcoming-date {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--accent-3);
-  margin: 0;
-}
-
-.upcoming-card .upcoming-region {
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  margin: 0;
-}
-
-.upcoming-card .upcoming-headline {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin: 0;
-  color: var(--ink);
-}
-
-.upcoming-card .upcoming-foot {
-  margin-top: auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.upcoming-card .days-pill {
-  display: inline-block;
-  padding: 0.25rem 0.65rem;
-  background: color-mix(in oklab, var(--accent-teal) 12%, transparent);
-  border: 1px solid color-mix(in oklab, var(--accent-teal) 40%, transparent);
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--accent-teal-deep);
-}
-
-.upcoming-card .class-pill {
-  display: inline-block;
-  padding: 0.25rem 0.65rem;
-  background: var(--status-warn-bg);
-  border: 1px solid var(--status-warn-border);
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--status-warn-text);
-}
-
-.upcoming-aside {
-  background: var(--surface-muted);
-  border-style: dashed;
-}
-
-.upcoming-aside h3 {
-  color: var(--ink-soft);
-}
 
 /* Backtest pull-quote on per-place pages */
 
@@ -1343,9 +1122,9 @@ table.council-table th {
 }
 
 .bar-fill {
-  /* The width prop is the FINAL width. We scale the bar from 0 → 1
-     so the visual fills in. transform-origin is left so it grows
-     rightward, matching reading direction. */
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
   transform-origin: left center;
   animation: uke-bar-grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
@@ -1515,32 +1294,6 @@ table.council-table th {
   cursor: pointer;
 }
 
-.choropleth-stage svg path:hover {
-  filter: brightness(0.92) saturate(1.2);
-  stroke: rgba(0, 0, 0, 0.65);
-  stroke-width: 1;
-  /* lift via z-index by raising the parent group, paths can't reorder
-     mid-render so we use a strong stroke to "outline" the hovered region */
-}
-
-.choropleth-tooltip {
-  position: absolute;
-  z-index: 5;
-  pointer-events: none;
-  background: var(--tooltip-bg);
-  color: var(--tooltip-fg);
-  padding: 0.55rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  line-height: 1.35;
-  min-width: 9rem;
-  max-width: 16rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-}
-
 .choropleth-tooltip[hidden] {
   display: none;
 }
@@ -1601,13 +1354,6 @@ table.council-table th {
 }
 
 /* Mobile, collapse tooltip to a smaller card and pin to top of stage */
-@media (max-width: 540px) {
-  .choropleth-tooltip {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.6rem;
-    min-width: 7rem;
-  }
-}
 
 /* === Hero by-election v2, data-first redesign === */
 
@@ -1634,7 +1380,7 @@ table.council-table th {
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent-3);
+  color: var(--eyebrow-ink);
   margin-bottom: 0.9rem;
 }
 
@@ -1861,12 +1607,29 @@ table.council-table th {
 /* === Choropleth polish v2, clickable legend, party-strip tooltip === */
 
 .choropleth-tooltip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  min-width: 9rem;
+  max-width: 16rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: row;
   align-items: stretch;
   padding: 0;
   overflow: hidden;
   gap: 0;
+}
+@media (max-width: 540px) {
+  .choropleth-tooltip {
+    font-size: 0.8rem;
+    min-width: 7rem;
+  }
 }
 
 .choropleth-tooltip-strip {
@@ -2226,7 +1989,7 @@ table.council-table th {
   width: min(700px, calc(100vw - 2 * var(--space-md)));
   max-height: 86vh;
   padding: 0;
-  border: 1px solid var(--border-strong, var(--border));
+  border: 1px solid var(--border);
   border-radius: 20px;
   background:
     radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 60%),
@@ -2527,7 +2290,7 @@ table.council-table th {
 
 /* Homepage masthead. Carries the site's only h1, which used to live inside the
    upcoming-contest hero and therefore vanished entirely whenever no contest was
-   scheduled. Compact when a hero follows it, full-size when it leads the page. */
+   scheduled. */
 .home-masthead {
   margin: 0 0 2rem;
 }
@@ -2548,16 +2311,30 @@ table.council-table th {
   margin: 0;
 }
 
-.home-masthead--compact {
-  margin: 0 0 1.25rem;
+/* Keep the chart beside the opening copy on wide screens. */
+.home-hero {
+  padding-top: var(--space-lg);
+  display: grid;
+  gap: var(--space-xl);
 }
-
-.home-masthead--compact h1 {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: 1.4;
-  color: var(--muted);
+.home-hero > * { min-width: 0; }
+.home-hero .home-masthead { margin: 0; }
+.home-local-contests {
+  border-left: 3px solid var(--border);
+  padding-left: var(--space-lg);
+}
+.home-local-contests h2, .home-projection-copy h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  line-height: 1.2;
   margin: 0;
+}
+.home-local-contests p { margin: var(--space-sm) 0 0; }
+.home-hero .hero-byelection-v2 { margin: 0; }
+.home-hero-chart .commons-horseshoe { margin: 0; }
+@media (min-width: 1100px) {
+  .home-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-2xl); }
+  .home-masthead, .home-local-contests, .home-hero .hero-byelection-v2, .home-projection-copy { grid-column: 1; }
+  .home-hero-chart { grid-column: 2; grid-row: 1 / span 4; align-self: start; }
+  .home-hero .home-masthead h1 { font-size: var(--text-h1); }
 }

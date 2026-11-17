@@ -340,8 +340,8 @@ function controlClass(prob: number) {
 .control-pill { font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.55rem; border-radius: 999px; text-align: center; line-height: 1.25; max-width: 8.5rem; flex-shrink: 0; }
 /* Achromatic on purpose: a status pill must not borrow a party's colour, and
    the old turquoise here read as a Reform claim on a "majority likely" state. */
-.control-pill--majority { background: var(--accent-wash); color: var(--text); border: 1px solid var(--accent); }
-.control-pill--knife { background: rgba(245,158,11,0.14); color: var(--text); border: 1px solid #f59e0b; }
+.control-pill--majority { background: var(--accent-wash); color: var(--ink); border: 1px solid var(--accent); }
+.control-pill--knife { background: rgba(245,158,11,0.14); color: var(--ink); border: 1px solid #f59e0b; }
 .control-pill--noc { background: rgba(128,138,153,0.14); color: var(--muted); border: 1px solid var(--border); }
 
 .seatbar-wrap { margin: 1.4rem 0 1rem; }
@@ -349,7 +349,7 @@ function controlClass(prob: number) {
 .seatbar-seg { height: 100%; }
 .seatbar-seg:first-child { border-radius: 6px 0 0 6px; }
 .seatbar-seg:last-child { border-radius: 0 6px 6px 0; }
-.seatbar-majority { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--text); opacity: 0.85; z-index: 2; }
+.seatbar-majority { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); opacity: 0.85; z-index: 2; }
 .seatbar-majority::after { content: "majority"; position: absolute; top: -1.1rem; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: var(--muted); white-space: nowrap; }
 .seatbar-caption { margin: 0.8rem 0 0; font-size: 0.82rem; color: var(--muted); }
 

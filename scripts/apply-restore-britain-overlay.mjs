@@ -30,6 +30,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { annotateUncertainty } from "./run-ge-predictions.mjs";
+import { loadGeWinProbability } from "../src/lib/geWinProbability.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(__dirname, "..");
@@ -116,6 +118,16 @@ summary.snapshot.restore_britain_overlay = {
     "Restore Britain in November 2025, and he stands again under his own party).",
   applied_at: new Date().toISOString(),
 };
+
+// The flip changes Great Yarmouth's leader and margin, so its win probability,
+// share intervals and every party's seat range are re-drawn from the flipped
+// record. Same seeds as run-ge-predictions.mjs, so only the flip moves them.
+const calibration = loadGeWinProbability(REPO);
+if (calibration) {
+  const uncertainty = annotateUncertainty(pcons.predictions, calibration);
+  summary.win_probability = uncertainty.win_probability;
+  summary.seat_ranges = uncertainty.seat_ranges;
+}
 
 writeFileSync(SUMMARY_PATH, JSON.stringify(summary, null, 2) + "\n");
 writeFileSync(PCONS_PATH, JSON.stringify(pcons, null, 2) + "\n");

@@ -4,16 +4,16 @@ import CommonsHorseshoe from "../components/CommonsHorseshoe.astro";
 import HeroClock from "../components/HeroClock.astro";
 import PartyBars from "../components/PartyBars.astro";
 import RaceBar from "../components/RaceBar.astro";
-import { partyColour, loadGeSummary } from "../lib/predictions";
+import { loadGeSummary } from "../lib/predictions";
 import {
   loadGeHeadline,
   loadMay7Headline,
-  loadUpcomingElections,
+  loadHomepageContest,
   shortPartyLabel,
 } from "../lib/siteData";
 import { PARLIAMENT_REGIONS } from "../lib/parliamentRegions";
 
-const upcoming = loadUpcomingElections();
+const nextContest = loadHomepageContest();
 const ge = loadGeHeadline();
 const geSummary = loadGeSummary();
 const may7 = loadMay7Headline();
@@ -23,10 +23,8 @@ const HALFWAY = 326;
 const leader = ge.seat_tallies[0];
 const seatTallies = (geSummary.seat_tallies_by_party || {}) as Record<string, number>;
 
-const heroContest = upcoming[0] ?? null;
-const heroWinner = heroContest?.headline_winner ?? null;
-const heroRunnerUp = heroContest?.headline_runner_up ?? null;
-const heroMargin = heroContest?.margin_pp ?? null;
+const localPollingDay = nextContest?.kind === "local_by_elections" ? nextContest : null;
+const heroContest = nextContest && nextContest.kind !== "local_by_elections" ? nextContest : null;
 const heroClassification = heroContest?.classification ?? null;
 
 function classificationLabel(c: string | null | undefined): string {
@@ -43,7 +41,9 @@ function classificationLabel(c: string | null | undefined): string {
 // "the Makerfield parliamentary by-election" in the branch that fires for ANY
 // upcoming contest, so it would have described the wrong election the moment
 // one appeared.
-const description = heroContest
+const description = localPollingDay
+  ? `${localPollingDay.headline}. Forecasts, results and backtests for UK elections.`
+  : heroContest
   ? `${heroContest.short_name} on ${heroContest.polling_day_label}, the rolling general-election forecast for every one of the 650 UK constituencies, and an honest backtest of every prediction we've ever published.`
   : "The rolling general-election forecast for every one of the 650 UK constituencies, plus an honest backtest of every prediction we've ever published.";
 ---
@@ -52,66 +52,80 @@ const description = heroContest
   title="UK Elections. Every constituency, every forecast, every backtest"
   description={description}
 >
-  <section class:list={["home-masthead", heroContest && "home-masthead--compact"]}>
-    <h1>UK election forecasts, results and backtests</h1>
-    {!heroContest && (
+  <div class="home-hero">
+    <section class="home-masthead">
+      <h1>UK election forecasts, results and backtests</h1>
       <p class="lede">
         Every constituency, every council and every by-election, each with the model's
         record for that place published alongside the forecast.
       </p>
-    )}
-  </section>
-
-  {heroContest && (
-    <section class="hero hero-byelection-v2">
-      <div class="hero-byelection-grid">
-        <header class="hero-byelection-head">
-          <p class="eyebrow">Polling day · {heroContest.polling_day_label}</p>
-          <h2 class="hero-byelection-title">{heroContest.short_name}</h2>
-          <p class="lede">
-            {heroClassification === "toss-up" && heroContest.headline_winner && heroContest.headline_runner_up && heroContest.margin_pp != null
-              ? <><strong>{heroContest.margin_pp.toFixed(1)}pp {classificationLabel(heroClassification).toLowerCase()}</strong> between {shortPartyLabel(heroContest.headline_winner)} and {shortPartyLabel(heroContest.headline_runner_up)}. Well inside the model's confidence interval.</>
-              : heroContest.headline_summary}
-          </p>
-        </header>
-
-        <HeroClock
-          value={heroContest.days_until}
-          label={heroContest.days_until === 1 ? "day to polling" : "days to polling"}
-          ariaLabel="Days until polling"
-        />
-      </div>
-
-      {heroContest.central_shares.length > 0 && (
-        <RaceBar
-          shares={heroContest.central_shares}
-          candidates={heroContest.key_candidates}
-        />
-      )}
-
-      <div class="action-row" aria-label="Primary actions">
-        <a class="button primary" href={heroContest.href}>Read the full {heroContest.short_name}</a>
-        <a class="button" href="/forecasts/general-election/">UK general election forecast</a>
-        <a class="button" href="/polling/">Track the polls</a>
-      </div>
     </section>
-  )}
+
+    {localPollingDay && (
+      <section class="home-local-contests" aria-label="Next polling day">
+        <p class="eyebrow">Next polling day</p>
+        <h2>{localPollingDay.headline}</h2>
+        <p><a href={localPollingDay.href}>See this week's council by-elections →</a></p>
+        <p class="caption">Source: Democracy Club contest records and linked council notices.</p>
+      </section>
+    )}
+
+    {heroContest && (
+      <section class="hero hero-byelection-v2">
+        <div class="hero-byelection-grid">
+          <header class="hero-byelection-head">
+            <p class="eyebrow">Polling day · {heroContest.polling_day_label}</p>
+            <h2 class="hero-byelection-title">{heroContest.short_name}</h2>
+            <p class="lede">
+              {heroClassification === "toss-up" && heroContest.headline_winner && heroContest.headline_runner_up && heroContest.margin_pp != null
+                ? <><strong>{heroContest.margin_pp.toFixed(1)}pp {classificationLabel(heroClassification).toLowerCase()}</strong> between {shortPartyLabel(heroContest.headline_winner)} and {shortPartyLabel(heroContest.headline_runner_up)}. Well inside the model's confidence interval.</>
+                : heroContest.headline_summary}
+            </p>
+          </header>
+
+          <HeroClock
+            value={heroContest.days_until}
+            label={heroContest.days_until === 1 ? "day to polling" : "days to polling"}
+            ariaLabel="Days until polling"
+          />
+        </div>
+
+        {heroContest.central_shares.length > 0 && (
+          <RaceBar
+            shares={heroContest.central_shares}
+            candidates={heroContest.key_candidates}
+          />
+        )}
+
+        <div class="action-row" aria-label="Primary actions">
+          <a class="button primary" href={heroContest.href}>Read the full {heroContest.short_name}</a>
+          <a class="button" href="/forecasts/general-election/">UK general election forecast</a>
+          <a class="button" href="/polling/">Track the polls</a>
+        </div>
+      </section>
+    )}
+
+    <section class="home-projection-copy">
+      <div class="section-head">
+        <p class="eyebrow">If a UK general election were held today</p>
+        <h2>{leader ? `${shortPartyLabel(leader.party)} projected to win ${leader.seats} of ${ge.total_seats} seats` : "Seat-by-seat forecast for every UK constituency"}</h2>
+      </div>
+      <p class="lede">
+        All <strong>{ge.total_seats.toLocaleString()}</strong> UK parliamentary constituencies, refreshed from the latest
+        named-pollster Westminster polling average. A majority needs <strong>{HALFWAY}</strong> seats.
+        {leader && leader.seats >= HALFWAY
+          ? ` ${shortPartyLabel(leader.party)} clears the line with ${(leader.seats - HALFWAY).toLocaleString()} seats to spare.`
+          : leader ? ` ${shortPartyLabel(leader.party)} is ${Math.abs(HALFWAY - leader.seats).toLocaleString()} seats short of an overall majority.` : ""}
+      </p>
+    </section>
+    <div class="home-hero-chart">
+      <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
+    </div>
+  </div>
 
   <section class="section">
-    <div class="section-head">
-      <p class="eyebrow">If a UK general election were held today</p>
-      <h2>{leader ? `${shortPartyLabel(leader.party)} projected to win ${leader.seats} of ${ge.total_seats} seats` : "Seat-by-seat forecast for every UK constituency"}</h2>
-    </div>
-    <p class="lede">
-      All <strong>{ge.total_seats.toLocaleString()}</strong> UK parliamentary constituencies, refreshed from the latest
-      named-pollster Westminster polling average. A majority needs <strong>{HALFWAY}</strong> seats.
-      {leader && leader.seats >= HALFWAY
-        ? ` ${shortPartyLabel(leader.party)} clears the line with ${(leader.seats - HALFWAY).toLocaleString()} seats to spare.`
-        : leader ? ` ${shortPartyLabel(leader.party)} is ${Math.abs(HALFWAY - leader.seats).toLocaleString()} seats short of an overall majority.` : ""}
-    </p>
-    <CommonsHorseshoe seats={seatTallies} total={650} majority={HALFWAY} />
 
-    <h3 style="margin-top:1.5rem">Projected national vote share</h3>
+    <h3 style="margin-top:var(--space-lg)">Projected national vote share</h3>
     <PartyBars rows={topNationalShares.map(s => ({ party: s.party, pct: s.share }))} />
 
     <p class="caption">
@@ -149,7 +163,7 @@ const description = heroContest
       </article>
       <article>
         <span class="big-number">{(ge.backtest_winner_accuracy * 100).toFixed(0)}%</span>
-        <p class="big-number-label">winners called correctly when we replayed the same general-election model on the 2024 result</p>
+        <p class="big-number-label">winners called when the model was run from the 2019 result to the 2024 general election (target 92 per cent)</p>
       </article>
     </div>
     <p class="muted-row">

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-29T22:35:33.976Z",
+  "generated_at": "2026-11-09T02:34:36.665Z",
   "target_series": {
     "id": "gb-westminster-voting-intention",
     "label": "Great Britain Westminster voting intention",
@@ -12,37 +12,93 @@
     "minimum_verified_polls": 2,
     "policy": "Only records verified against a pollster's original release may update this series. A source directory, search result, Wikipedia row or social post may discover a poll but cannot verify it."
   },
-  "candidate_manifest_generated_at": "2026-10-29T22:35:33.976Z",
+  "candidate_manifest_generated_at": "2026-11-09T02:18:13.891Z",
   "counts": {
-    "pending_primary_verification": 9
+    "primary_verified": 5,
+    "pending_primary_verification": 4,
+    "not_comparable": 1
   },
-  "publication_ready": false,
+  "publication_ready": true,
   "records": [
     {
-      "poll_id": "wikipedia:2026-10-19:YouGov:0",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-19",
+      "poll_id": "wikipedia:2026-10-29:Find Out Now:0",
+      "fieldwork_start": "2026-10-28",
+      "fieldwork_end": "2026-10-29",
       "publication_date": null,
-      "pollster": "YouGov",
+      "pollster": "Find Out Now",
+      "client": null,
+      "sample_size": 2514,
+      "mode": null,
+      "geography": "GB",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.28,
+        "Conservative": 0.21,
+        "Reform UK": 0.2,
+        "Liberal Democrats": 0.1,
+        "Green Party": 0.11,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.01,
+        "Other": 0.06
+      },
+      "source_name": "Find Out Now published tables",
+      "source_url": "https://cms.findoutnow.co.uk/app/uploads/2026/10/28th-October-VI-Find-Out-Now.xlsx",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "primary_verified",
+      "included": true,
+      "evidence": {
+        "primary_url": "https://cms.findoutnow.co.uk/app/uploads/2026/10/28th-October-VI-Find-Out-Now.xlsx",
+        "checked_at": "2026-11-09",
+        "document_sha256": "781fa41971e4c0575646144afbc8d0e689b52b1c08e7dff90a584b8e4e10b0a3",
+        "extract_locator": "Sheet 'Headline VI' ('Turnout adjusted, 'Don't know' respondents squeezed'), cells B6:B13, column All, number format 0%; 'Cover page' C5 '28-29th October 2026', C6 2514, C7 'GB adults (excludes Northern Ireland)'"
+      },
+      "checks": {
+        "fieldwork_start": true,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": true,
+        "shares": true,
+        "geography": true,
+        "question_type": true,
+        "measure_type": true
+      }
+    },
+    {
+      "poll_id": "wikipedia:2026-10-29:BMG Research:1",
+      "fieldwork_start": null,
+      "fieldwork_end": "2026-10-29",
+      "publication_date": null,
+      "pollster": "BMG Research",
       "client": null,
       "sample_size": null,
       "mode": null,
       "geography": "GB_or_UK_as_listed",
       "question_type": "general_election_voting_intention",
       "shares": {
-        "Labour": 0.27,
-        "Conservative": 0.23,
+        "Labour": 0.31,
+        "Conservative": 0.21,
         "Reform UK": 0.22,
-        "Liberal Democrats": 0.11,
-        "Green Party": 0.1,
+        "Liberal Democrats": 0.08,
+        "Green Party": 0.08,
         "SNP": 0.02,
         "Plaid Cymru": 0.01,
-        "Other": 0.04
+        "Other": 0.07
       },
-      "restore_britain_reported": 0.03,
+      "restore_britain_reported": 0.05,
       "source_name": "Wikipedia polling table",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
       "source_status": "wikipedia_fallback_pending_primary_verification",
+      "primary_disagreement": {
+        "primary_url": "https://bmgresearch.com/wp-content/uploads/2026/11/october-2026-omnibus-tables-for-the-i.xlsx",
+        "differences": [
+          {
+            "party": "Other",
+            "pollster_table": 0.06,
+            "wikipedia_row": 0.07
+          }
+        ]
+      },
       "status": "pending_primary_verification",
       "included": false,
       "reason": "Record does not yet meet the target-series comparability and provenance policy.",
@@ -58,11 +114,95 @@
       }
     },
     {
-      "poll_id": "wikipedia:2026-10-19:Deltapoll:1",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-19",
+      "poll_id": "wikipedia:2026-10-30:Opinium:2",
+      "fieldwork_start": "2026-10-28",
+      "fieldwork_end": "2026-10-30",
       "publication_date": null,
-      "pollster": "Deltapoll",
+      "pollster": "Opinium",
+      "client": "The Observer",
+      "sample_size": 2050,
+      "mode": null,
+      "geography": "UK",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.3,
+        "Conservative": 0.2,
+        "Reform UK": 0.22,
+        "Liberal Democrats": 0.1,
+        "Green Party": 0.08,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.01,
+        "Other": 0.05
+      },
+      "source_name": "Opinium published tables",
+      "source_url": "https://www.opinium.com/wp-content/uploads/2026/10/VI-2026-10-28-Opinium-Observer-Tables-Web-Tables-1403.xlsx",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "pending_primary_verification",
+      "included": false,
+      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
+      "checks": {
+        "fieldwork_start": true,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": true,
+        "shares": true,
+        "geography": false,
+        "question_type": true,
+        "measure_type": true
+      }
+    },
+    {
+      "poll_id": "wikipedia:2026-11-01:More in Common:3",
+      "fieldwork_start": "2026-10-31",
+      "fieldwork_end": "2026-11-01",
+      "publication_date": null,
+      "pollster": "More in Common",
+      "client": null,
+      "sample_size": 2602,
+      "mode": null,
+      "geography": "GB",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.29,
+        "Conservative": 0.23,
+        "Reform UK": 0.22,
+        "Liberal Democrats": 0.09,
+        "Green Party": 0.08,
+        "SNP": 0.02,
+        "Plaid Cymru": 0.01,
+        "Other": 0.060000000000000005
+      },
+      "restore_britain_reported": 0.05,
+      "source_name": "More in Common published tables",
+      "source_url": "https://www.moreincommon.org.uk/wp-content/uploads/2026/11/31-10-to-01-11-Voting-Intention.xlsx",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "primary_verified",
+      "included": true,
+      "evidence": {
+        "primary_url": "https://www.moreincommon.org.uk/wp-content/uploads/2026/11/31-10-to-01-11-Voting-Intention.xlsx",
+        "checked_at": "2026-11-09",
+        "document_sha256": "8880e8184a023f871f37d007ae2f0cd402b140f8c16e9b41f6aad0c36ebb7a45",
+        "extract_locator": "Sheet 'votingintention (headline)', column B All, cells B6:B14, number format 0%; 'Cover page' C5 '31 October - 1 November 2026', C6 2602, C7 'GB adults (excludes Northern Ireland)'"
+      },
+      "checks": {
+        "fieldwork_start": true,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": true,
+        "shares": true,
+        "geography": true,
+        "question_type": true,
+        "measure_type": true
+      }
+    },
+    {
+      "poll_id": "wikipedia:2026-11-01:Freshwater Strategy:4",
+      "fieldwork_start": null,
+      "fieldwork_end": "2026-11-01",
+      "publication_date": null,
+      "pollster": "Freshwater Strategy",
       "client": null,
       "sample_size": null,
       "mode": null,
@@ -71,162 +211,145 @@
       "shares": {
         "Labour": 0.3,
         "Conservative": 0.22,
-        "Reform UK": 0.24,
+        "Reform UK": 0.22,
+        "Liberal Democrats": 0.1,
+        "Green Party": 0.1,
+        "SNP": 0.02,
+        "Plaid Cymru": 0,
+        "Other": 0.03
+      },
+      "source_name": "Wikipedia polling table",
+      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "source_status": "wikipedia_fallback_pending_primary_verification",
+      "primary_disagreement": {
+        "primary_url": "https://freshwaterstrategy.com/wp-content/uploads/Data-Tables-City-AM-Freshwater-Strategy-UK-Polling-021126.xlsx",
+        "differences": [
+          {
+            "party": "Plaid Cymru",
+            "pollster_table": null,
+            "wikipedia_row": 0
+          }
+        ]
+      },
+      "status": "pending_primary_verification",
+      "included": false,
+      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
+      "checks": {
+        "fieldwork_start": false,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": false,
+        "shares": true,
+        "geography": false,
+        "question_type": true,
+        "measure_type": true
+      }
+    },
+    {
+      "poll_id": "wikipedia:2026-11-02:YouGov:5",
+      "fieldwork_start": "2026-11-01",
+      "fieldwork_end": "2026-11-02",
+      "publication_date": null,
+      "pollster": "YouGov",
+      "client": "The Times and Sky News",
+      "sample_size": 2355,
+      "mode": null,
+      "geography": "GB",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.26,
+        "Conservative": 0.24,
+        "Reform UK": 0.21,
+        "Liberal Democrats": 0.11,
+        "Green Party": 0.1,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.02,
+        "Other": 0.04
+      },
+      "restore_britain_reported": 0.03,
+      "source_name": "YouGov published tables",
+      "source_url": "https://ygo-assets-websites-editorial-emea.yougov.net/documents/VotingIntention_Results_261102_w.pdf",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "primary_verified",
+      "included": true,
+      "evidence": {
+        "primary_url": "https://ygo-assets-websites-editorial-emea.yougov.net/documents/VotingIntention_Results_261102_w.pdf",
+        "checked_at": "2026-11-09",
+        "document_sha256": "49f32375edf7b89e00af01c1d78e96e5c072c514f0dd93f1def79044dee61d52",
+        "extract_locator": "PDF page 1, 'HEADLINE VOTING INTENTION / Westminster Voting Intention [Headline voting intention from constituency vote projected by YouGov MRP model]', column '1-2 Nov'; 'Sample size: 2355 adults in GB', 'Fieldwork: 1st - 2nd November 2026'"
+      },
+      "checks": {
+        "fieldwork_start": true,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": true,
+        "shares": true,
+        "geography": true,
+        "question_type": true,
+        "measure_type": true
+      }
+    },
+    {
+      "poll_id": "wikipedia:2026-11-02:Deltapoll:6",
+      "fieldwork_start": "2026-10-30",
+      "fieldwork_end": "2026-11-02",
+      "publication_date": null,
+      "pollster": "Deltapoll",
+      "client": null,
+      "sample_size": 2215,
+      "mode": null,
+      "geography": "GB",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.3,
+        "Conservative": 0.23,
+        "Reform UK": 0.25,
         "Liberal Democrats": 0.07,
         "Green Party": 0.08,
         "SNP": 0.03,
         "Plaid Cymru": 0.01,
-        "Other": 0.03
+        "Other": 0.04
       },
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
+      "source_name": "Deltapoll published tables",
+      "source_url": "https://deltapoll.co.uk/wp-content/uploads/2026/11/261102_Deltapoll-VI.pdf",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "primary_verified",
+      "included": true,
+      "evidence": {
+        "primary_url": "https://deltapoll.co.uk/wp-content/uploads/2026/11/261102_Deltapoll-VI.pdf",
+        "checked_at": "2026-11-09",
+        "document_sha256": "f271ec872d423f5c572523c518bacbf3449bc6f9e9205debe90727c62db5497a",
+        "extract_locator": "PDF page 1, 'General Election Voting Intention [Excluding 'Don't know' and 'Would not vote']', column Total; 'Sample Size: 2,215 Adults in Great Britain', 'Fieldwork: 30th October - 2nd November 2026'"
+      },
       "checks": {
-        "fieldwork_start": false,
+        "fieldwork_start": true,
         "fieldwork_end": true,
         "source_url": true,
-        "primary_host": false,
-        "shares": false,
-        "geography": false,
-        "question_type": true,
-        "measure_type": false
-      }
-    },
-    {
-      "poll_id": "wikipedia:2026-10-19:More in Common:2",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-19",
-      "publication_date": null,
-      "pollster": "More in Common",
-      "client": null,
-      "sample_size": null,
-      "mode": null,
-      "geography": "GB_or_UK_as_listed",
-      "question_type": "general_election_voting_intention",
-      "shares": {
-        "Labour": 0.28,
-        "Conservative": 0.23,
-        "Reform UK": 0.22,
-        "Liberal Democrats": 0.1,
-        "Green Party": 0.08,
-        "SNP": 0.03,
-        "Plaid Cymru": 0.01,
-        "Other": 0.060000000000000005
-      },
-      "restore_britain_reported": 0.05,
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
-      "checks": {
-        "fieldwork_start": false,
-        "fieldwork_end": true,
-        "source_url": true,
-        "primary_host": false,
+        "primary_host": true,
         "shares": true,
-        "geography": false,
+        "geography": true,
         "question_type": true,
         "measure_type": true
       }
     },
     {
-      "poll_id": "wikipedia:2026-10-22:Find Out Now:3",
+      "poll_id": "wikipedia:2026-11-02:Lord Ashcroft Polls:7",
       "fieldwork_start": null,
-      "fieldwork_end": "2026-10-22",
+      "fieldwork_end": "2026-11-02",
       "publication_date": null,
-      "pollster": "Find Out Now",
+      "pollster": "Lord Ashcroft Polls",
       "client": null,
       "sample_size": null,
       "mode": null,
       "geography": "GB_or_UK_as_listed",
       "question_type": "general_election_voting_intention",
       "shares": {
-        "Labour": 0.26,
-        "Conservative": 0.21,
-        "Reform UK": 0.2,
-        "Liberal Democrats": 0.09,
-        "Green Party": 0.13,
-        "SNP": 0.03,
-        "Plaid Cymru": 0.01,
-        "Other": 0.06
-      },
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
-      "checks": {
-        "fieldwork_start": false,
-        "fieldwork_end": true,
-        "source_url": true,
-        "primary_host": false,
-        "shares": true,
-        "geography": false,
-        "question_type": true,
-        "measure_type": true
-      }
-    },
-    {
-      "poll_id": "wikipedia:2026-10-22:Ipsos:4",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-22",
-      "publication_date": null,
-      "pollster": "Ipsos",
-      "client": null,
-      "sample_size": null,
-      "mode": null,
-      "geography": "GB_or_UK_as_listed",
-      "question_type": "general_election_voting_intention",
-      "shares": {
-        "Labour": 0.32,
-        "Conservative": 0.24,
-        "Reform UK": 0.2,
-        "Liberal Democrats": 0.09,
-        "Green Party": 0.08,
-        "SNP": 0.02,
-        "Plaid Cymru": 0.01,
-        "Other": 0.03
-      },
-      "restore_britain_reported": 0.03,
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
-      "checks": {
-        "fieldwork_start": false,
-        "fieldwork_end": true,
-        "source_url": true,
-        "primary_host": false,
-        "shares": true,
-        "geography": false,
-        "question_type": true,
-        "measure_type": true
-      }
-    },
-    {
-      "poll_id": "wikipedia:2026-10-23:Opinium:5",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-23",
-      "publication_date": null,
-      "pollster": "Opinium",
-      "client": null,
-      "sample_size": null,
-      "mode": null,
-      "geography": "GB_or_UK_as_listed",
-      "question_type": "general_election_voting_intention",
-      "shares": {
-        "Labour": 0.3,
-        "Conservative": 0.2,
-        "Reform UK": 0.22,
-        "Liberal Democrats": 0.09,
+        "Labour": 0.31,
+        "Conservative": 0.26,
+        "Reform UK": 0.18,
+        "Liberal Democrats": 0.07,
         "Green Party": 0.1,
         "SNP": 0.03,
         "Plaid Cymru": 0.01,
@@ -235,125 +358,9 @@
       "source_name": "Wikipedia polling table",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
       "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
+      "status": "not_comparable",
       "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
-      "checks": {
-        "fieldwork_start": false,
-        "fieldwork_end": true,
-        "source_url": true,
-        "primary_host": false,
-        "shares": true,
-        "geography": false,
-        "question_type": true,
-        "measure_type": true
-      }
-    },
-    {
-      "poll_id": "wikipedia:2026-10-26:YouGov:6",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-26",
-      "publication_date": null,
-      "pollster": "YouGov",
-      "client": null,
-      "sample_size": null,
-      "mode": null,
-      "geography": "GB_or_UK_as_listed",
-      "question_type": "general_election_voting_intention",
-      "shares": {
-        "Labour": 0.27,
-        "Conservative": 0.22,
-        "Reform UK": 0.2,
-        "Liberal Democrats": 0.11,
-        "Green Party": 0.1,
-        "SNP": 0.02,
-        "Plaid Cymru": 0.01,
-        "Other": 0.06
-      },
-      "restore_britain_reported": 0.04,
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
-      "checks": {
-        "fieldwork_start": false,
-        "fieldwork_end": true,
-        "source_url": true,
-        "primary_host": false,
-        "shares": true,
-        "geography": false,
-        "question_type": true,
-        "measure_type": true
-      }
-    },
-    {
-      "poll_id": "wikipedia:2026-10-26:More in Common:7",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-26",
-      "publication_date": null,
-      "pollster": "More in Common",
-      "client": null,
-      "sample_size": null,
-      "mode": null,
-      "geography": "GB_or_UK_as_listed",
-      "question_type": "general_election_voting_intention",
-      "shares": {
-        "Labour": 0.28,
-        "Conservative": 0.24,
-        "Reform UK": 0.23,
-        "Liberal Democrats": 0.11,
-        "Green Party": 0.07,
-        "SNP": 0.02,
-        "Plaid Cymru": 0.01,
-        "Other": 0.060000000000000005
-      },
-      "restore_britain_reported": 0.05,
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
-      "checks": {
-        "fieldwork_start": false,
-        "fieldwork_end": true,
-        "source_url": true,
-        "primary_host": false,
-        "shares": false,
-        "geography": false,
-        "question_type": true,
-        "measure_type": true
-      }
-    },
-    {
-      "poll_id": "wikipedia:2026-10-26:Deltapoll:8",
-      "fieldwork_start": null,
-      "fieldwork_end": "2026-10-26",
-      "publication_date": null,
-      "pollster": "Deltapoll",
-      "client": null,
-      "sample_size": null,
-      "mode": null,
-      "geography": "GB_or_UK_as_listed",
-      "question_type": "general_election_voting_intention",
-      "shares": {
-        "Labour": 0.32,
-        "Conservative": 0.21,
-        "Reform UK": 0.25,
-        "Liberal Democrats": 0.07,
-        "Green Party": 0.08,
-        "SNP": 0.04,
-        "Plaid Cymru": 0.01,
-        "Other": 0.03
-      },
-      "source_name": "Wikipedia polling table",
-      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
-      "source_status": "wikipedia_fallback_pending_primary_verification",
-      "status": "pending_primary_verification",
-      "included": false,
-      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
+      "reason": "Uses a likelihood-to-vote threshold rather than the target series' standard Westminster voting-intention measure.",
       "checks": {
         "fieldwork_start": false,
         "fieldwork_end": true,
@@ -364,6 +371,115 @@
         "question_type": true,
         "measure_type": false
       }
+    },
+    {
+      "poll_id": "wikipedia:2026-11-04:Find Out Now:8",
+      "fieldwork_start": "2026-11-04",
+      "fieldwork_end": "2026-11-04",
+      "publication_date": null,
+      "pollster": "Find Out Now",
+      "client": null,
+      "sample_size": 2406,
+      "mode": null,
+      "geography": "GB",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.28,
+        "Conservative": 0.21,
+        "Reform UK": 0.2,
+        "Liberal Democrats": 0.08,
+        "Green Party": 0.13,
+        "SNP": 0.02,
+        "Plaid Cymru": 0.01,
+        "Other": 0.06
+      },
+      "source_name": "Find Out Now published tables",
+      "source_url": "https://cms.findoutnow.co.uk/app/uploads/2026/11/4th-November-VI-Find-Out-Now.xlsx",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "primary_verified",
+      "included": true,
+      "evidence": {
+        "primary_url": "https://cms.findoutnow.co.uk/app/uploads/2026/11/4th-November-VI-Find-Out-Now.xlsx",
+        "checked_at": "2026-11-09",
+        "document_sha256": "d70463a5fecd3ca5043eb94926f201a2c99a17cc9fbe9a43cbaa56403f81d479",
+        "extract_locator": "Sheet 'Headline VI', cells B6:B13, column All, number format 0%; 'Cover page' C5 '4th November 2026', C6 2406, C7 'GB adults (excludes Northern Ireland)'"
+      },
+      "checks": {
+        "fieldwork_start": true,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": true,
+        "shares": true,
+        "geography": true,
+        "question_type": true,
+        "measure_type": true
+      }
+    },
+    {
+      "poll_id": "wikipedia:2026-11-06:Opinium:9",
+      "fieldwork_start": "2026-11-04",
+      "fieldwork_end": "2026-11-06",
+      "publication_date": null,
+      "pollster": "Opinium",
+      "client": "The Observer",
+      "sample_size": 2050,
+      "mode": null,
+      "geography": "UK",
+      "question_type": "general_election_voting_intention",
+      "shares": {
+        "Labour": 0.28,
+        "Conservative": 0.2,
+        "Reform UK": 0.21,
+        "Liberal Democrats": 0.1,
+        "Green Party": 0.11,
+        "SNP": 0.03,
+        "Plaid Cymru": 0.01,
+        "Other": 0.05
+      },
+      "source_name": "Opinium published tables",
+      "source_url": "https://www.opinium.com/wp-content/uploads/2026/11/VI-2026-11-04-Opinium-Observer-Web-Tables-1242.xlsx",
+      "source_status": "primary_verified",
+      "discovered_via": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_United_Kingdom_general_election",
+      "status": "pending_primary_verification",
+      "included": false,
+      "reason": "Record does not yet meet the target-series comparability and provenance policy.",
+      "checks": {
+        "fieldwork_start": true,
+        "fieldwork_end": true,
+        "source_url": true,
+        "primary_host": true,
+        "shares": true,
+        "geography": false,
+        "question_type": true,
+        "measure_type": true
+      }
+    }
+  ],
+  "primary_disagreements": [
+    {
+      "pollster": "BMG Research",
+      "fieldwork_end": "2026-10-29",
+      "primary_url": "https://bmgresearch.com/wp-content/uploads/2026/11/october-2026-omnibus-tables-for-the-i.xlsx",
+      "differences": [
+        {
+          "party": "Other",
+          "pollster_table": 0.06,
+          "wikipedia_row": 0.07
+        }
+      ]
+    },
+    {
+      "pollster": "Freshwater Strategy",
+      "fieldwork_end": "2026-11-01",
+      "primary_url": "https://freshwaterstrategy.com/wp-content/uploads/Data-Tables-City-AM-Freshwater-Strategy-UK-Polling-021126.xlsx",
+      "differences": [
+        {
+          "party": "Plaid Cymru",
+          "pollster_table": null,
+          "wikipedia_row": 0
+        }
+      ]
     }
   ]
 }
