@@ -56,13 +56,14 @@ interface Props {
    * Boundary fidelity. "simplified" (the default) reads the small committed
    * files, which is right for the ~3,800 pages that carry one of these.
    *
-   * "full" reads the raw BUC/BSC boundary instead. This component renders at
+   * "full" reads a more detailed boundary instead: BGC for constituencies,
+   * the raw BUC/BSC files for councils and wards. This component renders at
    * build time and ships no JavaScript, so the only cost of the raw file is
    * parsing it once per Astro process; nothing reaches the browser. Reach for
    * it where the simplified geometry is too coarse to be honest: the
    * simplified PCON file takes small urban seats down to four or five
-   * vertices, so Holborn and St Pancras draws as a triangle that is not the
-   * shape of the seat. A map of the wrong shape is worse than no map.
+   * vertices and even BUC keeps Holborn and St Pancras to eight, so neither
+   * is the shape of the seat. A map of the wrong shape is worse than no map.
    */
   detail?: "simplified" | "full";
   focalColour?: string;
@@ -130,7 +131,10 @@ function deltaColour(delta: number, maxAbs: number): string | null {
 const REGISTRY = {
   pcon: {
     file: "data/geography/pcon24-simplified.geojson",
-    fullFile: "data/geography/pcon24-buc-raw.geojson",
+    // BGC (generalised, 20m), thinned to under a pixel at seat-map scale by
+    // scripts/fetch-pcon24-bgc.mjs. BUC was the "full" file until Nov 2026
+    // but kept Holborn and St Pancras to 8 vertices and the median seat to 31.
+    fullFile: "data/geography/pcon24-bgc.geojson",
     codeField: "PCON24CD",
     nameField: "PCON24NM",
   },
@@ -266,8 +270,17 @@ if (hasFocal) {
       ],
     } as any,
   );
+  // Clip to just outside the frame. Neighbouring areas are mostly off-canvas,
+  // and without this every one of their vertices is written into the SVG.
+  // Set after fitExtent, which ignores and resets any clip extent.
+  projection.clipExtent([
+    [-4, -4],
+    [width + 4, height + 4],
+  ]);
 
-  const path = geoPath(projection);
+  // 0.1px is far finer than a 320px map can show; d3's default of 0.001px
+  // only adds bytes, and the BGC seat outlines carry ten times the vertices.
+  const path = geoPath(projection).digits(1);
   const kindKey = focalKind as keyof typeof REGISTRY;
   const codeField = REGISTRY[kindKey].codeField;
 
