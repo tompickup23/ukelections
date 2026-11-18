@@ -8,7 +8,7 @@ export const GET: APIRoute = () => {
     kind: 'council', name: w.council_name, secondary: w.tier === 'mayor' ? 'Mayoralty' : 'Council', href: `/seats/${w.council_slug}/`,
   }])).values()];
   return new Response(JSON.stringify({
-    constituencies: Object.entries(codes.entries).map(([slug, seat]) => ({kind:'constituency', name:seat.name, secondary:'Parliamentary constituency', href:`/seats/parliament/${slug}/`})),
+    constituencies: Object.entries(codes.entries).map(([slug, seat]) => ({kind:'constituency', name:seat.official_name ?? seat.name, secondary:'Parliamentary constituency', href:`/seats/parliament/${slug}/`})),
     wards: wards.map(w => ({kind:'ward',name:w.ward_name || w.ward_slug,secondary:`${w.council_name} ward`,href:`/seats/${w.council_slug}/${w.ward_slug}/`})),
     councils,
   }), {headers:{'Content-Type':'application/json; charset=utf-8'}});
