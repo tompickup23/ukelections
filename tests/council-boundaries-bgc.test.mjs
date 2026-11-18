@@ -77,3 +77,25 @@ describe("committed BGC council boundaries (December 2024)", () => {
     expect(readFileSync("data/geography/lad24-bgc.geojson").length).toBeLessThan(2_000_000);
   });
 });
+
+describe("committed BGC county electoral divisions (May 2026)", () => {
+  const divisions = load("ced26-bgc.geojson").features;
+
+  it("holds each division once, with closed rings and its county", () => {
+    expect(divisions.length).toBeGreaterThanOrEqual(1300);
+    expectSound(divisions, "CED26CD");
+    expect(divisions.filter((f) => !/^E10/.test(f.properties.CTY25CD) || !f.properties.CTY25NM)).toEqual([]);
+  });
+
+  it("puts in each county the number of divisions it elected by on 7 May 2026", () => {
+    const identity = JSON.parse(readFileSync("data/identity/wards-may-2026.json", "utf8"));
+    for (const county of ["East Sussex", "Essex", "Hampshire", "Norfolk", "Suffolk", "West Sussex"]) {
+      const voted = identity.wards.filter((w) => w.council_name === county && w.tier === "local").length;
+      expect(divisions.filter((f) => f.properties.CTY25NM === county), county).toHaveLength(voted);
+    }
+  });
+
+  it("stays small enough to commit", () => {
+    expect(readFileSync("data/geography/ced26-bgc.geojson").length).toBeLessThan(2_500_000);
+  });
+});
