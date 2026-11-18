@@ -28,14 +28,17 @@ interface Props {
 }
 const { councilName, councilSlug, wards, resultsBy } = Astro.props;
 
-// The raw boundary, not the simplified one: this is drawn at build time and
-// ships no script, so the extra detail costs one parse per build and nothing
-// in the browser. The simplified file takes small wards down to a few corners.
-let boundaryCache: any[] | null = (globalThis as any).__uke_wd25_raw ?? null;
+// The ONS BGC (generalised, 20m) wards as at May 2026, the boundaries in force
+// at the election this map reports, thinned by
+// scripts/fetch-council-boundaries-bgc.mjs. The BSC file used before kept the
+// median ward to 14 vertices and the median Camden ward to 8, which is not
+// the shape of a ward. This is drawn at build time and ships no script, so the
+// extra detail costs one parse per build and nothing in the browser.
+let boundaryCache: any[] | null = (globalThis as any).__uke_wd26_bgc ?? null;
 if (!boundaryCache) {
-  const raw = JSON.parse(readFileSync(resolve(process.cwd(), "data/geography/wd25-bsc-raw.geojson"), "utf8"));
+  const raw = JSON.parse(readFileSync(resolve(process.cwd(), "data/geography/wd26-bgc.geojson"), "utf8"));
   boundaryCache = rewindFeatures(raw.features);
-  (globalThis as any).__uke_wd25_raw = boundaryCache;
+  (globalThis as any).__uke_wd26_bgc = boundaryCache;
 }
 
 interface Row { ward: any; lead: WardLead }
@@ -44,11 +47,11 @@ const rows: Row[] = wards
   .filter((r): r is Row => r.lead !== null);
 const byCode = new Map(rows.filter((r) => r.ward.gss_code).map((r) => [r.ward.gss_code as string, r]));
 
-const matched = boundaryCache.filter((f) => byCode.has(f.properties.WD25CD));
+const matched = boundaryCache.filter((f) => byCode.has(f.properties.WD26CD));
 // A map with wards missing would mislead, so it needs nearly all of them.
 const drawable = rows.length >= 3 && matched.length >= Math.ceil(rows.length * 0.9);
-const ladCode = matched[0]?.properties?.LAD25CD;
-const features = drawable ? boundaryCache.filter((f) => f.properties.LAD25CD === ladCode) : [];
+const ladCode = matched[0]?.properties?.LAD26CD;
+const features = drawable ? boundaryCache.filter((f) => f.properties.LAD26CD === ladCode) : [];
 
 // Fit to the width, then let the height follow the council's own shape, so a
 // tall borough is not shrunk to leave empty margins on a phone.
@@ -118,10 +121,10 @@ const hatchId = `wrm-hatch-${councilSlug}`;
             </pattern>
           </defs>
           {features.map((f) => {
-            const row = byCode.get(f.properties.WD25CD);
+            const row = byCode.get(f.properties.WD26CD);
             const d = path(f as any) || "";
             if (!row) {
-              return <path d={d} class="wrm-none"><title>{f.properties.WD25NM}: no election on 7 May 2026</title></path>;
+              return <path d={d} class="wrm-none"><title>{f.properties.WD26NM}: no election on 7 May 2026</title></path>;
             }
             const { lead, ward } = row;
             const text = `${ward.ward_name}: ${shortPartyLabel(lead.topParty)} topped the poll${lead.leadPts !== null ? `, ${pts(lead.leadPts)} ahead of ${shortPartyLabel(lead.secondParty!)}` : ""}`;

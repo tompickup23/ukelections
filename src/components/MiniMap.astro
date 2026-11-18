@@ -56,8 +56,8 @@ interface Props {
    * Boundary fidelity. "simplified" (the default) reads the small committed
    * files, which is right for the ~3,800 pages that carry one of these.
    *
-   * "full" reads a more detailed boundary instead: BGC for constituencies,
-   * the raw BUC/BSC files for councils and wards. This component renders at
+   * "full" reads a more detailed boundary instead: BGC for constituencies
+   * and councils, the raw BSC file for wards. This component renders at
    * build time and ships no JavaScript, so the only cost of the raw file is
    * parsing it once per Astro process; nothing reaches the browser. Reach for
    * it where the simplified geometry is too coarse to be honest: the
@@ -140,7 +140,9 @@ const REGISTRY = {
   },
   lad: {
     file: "data/geography/lad24-simplified.geojson",
-    fullFile: "data/geography/lad24-buc-raw.geojson",
+    // BGC, thinned by scripts/fetch-council-boundaries-bgc.mjs. BUC kept the
+    // median council to 44 vertices; this keeps several hundred.
+    fullFile: "data/geography/lad24-bgc.geojson",
     codeField: "LAD24CD",
     nameField: "LAD24NM",
   },
