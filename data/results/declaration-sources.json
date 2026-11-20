@@ -1,20 +1,26 @@
 {
   "note": "Where scripts/results-morning.mjs looks for each council's own declaration of result. `contests` pins a known declaration URL for one ballot; `councils` gives the page the declaration is expected to join, scanned for a link naming the ward with 'declaration' or 'result'. `exclude` drops a link that matches (an older declaration for the same ward). Locations for the 12 November 2026 contests were read on 3 November 2026 with an honest user agent; none of these pages is disallowed by robots.txt and none showed a bot check. They are where each council posted its previous by-election notices or results, not a promise that the declaration will appear there.",
-  "checked_at": "2026-11-03",
+  "checked_at": "2026-11-20",
   "councils": {
     "hyndburn": {
       "index_url": "https://www.hyndburnbc.gov.uk/download/election-results/",
-      "also_check": ["https://www.hyndburnbc.gov.uk/electoral-vacancies-and-notices/"],
+      "also_check": [
+        "https://www.hyndburnbc.gov.uk/electoral-vacancies-and-notices/"
+      ],
       "notes": "WordPress Download Manager. The title sits beside a bare 'Download' link and the href carries the filename, so the text before the link is part of the match. Baxenden 2025 was published here as a PDF. By-election notices also land under electoral-vacancies-and-notices."
     },
     "north-east-lincolnshire": {
       "index_url": "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/croft-baker-ward-by-election/",
-      "also_check": ["https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/local-elections/"],
+      "also_check": [
+        "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/local-elections/"
+      ],
       "notes": "robots.txt asks for a 30 second crawl delay; the script waits that long between requests to this host. The ward page says results go on the local elections page, where May 2026 sits as page text."
     },
     "oldham": {
       "index_url": "https://www.oldham.gov.uk/info/200732/election_notices",
-      "also_check": ["https://committees.oldham.gov.uk/mgManageElectionResults.aspx?bcr=1"],
+      "also_check": [
+        "https://committees.oldham.gov.uk/mgManageElectionResults.aspx?bcr=1"
+      ],
       "notes": "The notices page also lists Royton North (3 December), so the ward name decides. Older by-election results are on the ModernGov results list. committees.oldham.gov.uk has no robots.txt (HTTP 404), which the script treats as permission."
     },
     "staffordshire-moorlands": {
@@ -23,15 +29,71 @@
     },
     "suffolk": {
       "index_url": "https://www.midsuffolk.gov.uk/election-results",
-      "also_check": ["https://www.midsuffolk.gov.uk/election-notices"],
+      "also_check": [
+        "https://www.midsuffolk.gov.uk/election-notices"
+      ],
       "exclude": "may 2026",
       "notes": "Mid Suffolk runs the Bosmere division count. The results page already lists 'Suffolk County Council (Bosmere Division May 2026)', the scheduled election, which must not be read as the by-election."
     },
     "wigan": {
       "index_url": "https://www.wigan.gov.uk/Council/Voting-and-Elections/Elections.aspx",
-      "also_check": ["https://electionresults.wigan.gov.uk/"],
+      "also_check": [
+        "https://electionresults.wigan.gov.uk/"
+      ],
       "notes": "Wigan Central (2025) was 'Declaration of Result of Poll - Wigan Central' with a filename that names no ward, so the link text decides. May 2026 ward results sit on electionresults.wigan.gov.uk (no robots.txt; HTTP 404 is permission)."
+    },
+    "caerphilly": {
+      "notes": "Not read for the 19 November 2026 Risca East by-election. robots.txt on www.caerphilly.gov.uk and caerphilly.gov.uk answers a 302 to an error page (checked 20 November 2026), so it could not be read and no page on the host was fetched. Needs a person to open the council elections page."
+    },
+    "conwy": {
+      "index_url": "https://www.conwy.gov.uk/en/Council/Voting-and-Elections/About-Elections/By-elections.aspx",
+      "notes": "The Bryn declaration is an HTML page under Vacancies/, linked from the by-elections page. robots.txt disallows every .pdf and .doc on the host, so only HTML pages can be read. The Bryn declaration prints no electorate, ballot papers issued, turnout or majority, and names one candidate FURBER Nia Charlotte where the council statement of persons nominated says JONES Nia."
+    },
+    "county-durham": {
+      "index_url": "https://www.durham.gov.uk/ElectionResults",
+      "notes": "County declarations are PDFs listed under County Council elections. The same page lists the Stanley Town Council (Craghead and South Stanley) parish declaration, so the 19 November 2026 ballot is pinned under contests."
+    },
+    "fareham": {
+      "notes": "The elections page (https://www.fareham.gov.uk/about_the_council/elections_and_voting/) links the 19 November 2026 Portchester Wicor result to moderngov.fareham.gov.uk, which answered 403 behind an Azure WAF JavaScript check on 20 November 2026. robots.txt on www.fareham.gov.uk disallows /pdf/. Left for a person; do not point the script at the ModernGov page."
+    },
+    "havant": {
+      "index_url": "https://www.havant.gov.uk/elections/election-results",
+      "notes": "The page links each declaration through a media page (/emsworth-elections-declaration0pdf) that is HTML; the PDF itself sits under /sites/default/files/, pinned under contests."
+    },
+    "hertfordshire": {
+      "notes": "Letchworth North is counted by North Hertfordshire as deputy returning officer and published only by Hertfordshire County Council. Its declaration PDF is under /doc/, which robots.txt disallows for every user agent, and democracy.hertfordshire.gov.uk disallows / for every user agent. Neither can be read by the script; a person must open it."
+    },
+    "north-hertfordshire": {
+      "index_url": "https://www.north-herts.gov.uk/election-results-2026",
+      "notes": "Results sit on the page as text with the declaration PDF beside them. The county division (Letchworth North) is not printed here; the page points to Hertfordshire County Council."
+    },
+    "rotherham": {
+      "index_url": "https://www.rotherham.gov.uk/elections-voting/anston-woodsetts-ward-election-thursday-19-november-2026/5",
+      "notes": "The by-election section links a separate HTML results page, pinned under contests."
+    },
+    "south-staffordshire": {
+      "index_url": "https://www.sstaffs.gov.uk/our-council/voting-and-elections/huntington-hatherton-election",
+      "notes": "The 19 November 2026 declaration is a Word document (Doc1.docx) holding a single photograph of the signed form, so it has no text and is read by hand."
     }
   },
-  "contests": {}
+  "contests": {
+    "local.county-durham.craghead-south-moor.by.2026-11-19": {
+      "url": "https://www.durham.gov.uk/media/52026/Declaration-of-Result-Craghead-and-South-Moor/pdf/DeclarationOfResultCragheadSouthMoor.pdf?m=1795131031990"
+    },
+    "local.havant.emsworth.by.2026-11-19": {
+      "url": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf"
+    },
+    "local.north-hertfordshire.letchworth-norton.by.2026-11-19": {
+      "url": "https://www.north-herts.gov.uk/sites/default/files/2026-11/Declaration%20of%20results%20-%20Letchworth%20Norton.pdf"
+    },
+    "local.rotherham.anston-woodsetts.by.2026-11-19": {
+      "url": "https://www.rotherham.gov.uk/elections-voting/anston-woodsetts-ward-elections-19-november"
+    },
+    "local.conwy.bryn.by.2026-11-19": {
+      "url": "https://www.conwy.gov.uk/en/Council/Voting-and-Elections/Vacancies/Bryn-Electoral-Ward.aspx"
+    },
+    "local.south-staffordshire.huntington-hatherton.by.2026-11-19": {
+      "url": "https://www.sstaffs.gov.uk/sites/default/files/2026-11/Doc1.docx"
+    }
+  }
 }

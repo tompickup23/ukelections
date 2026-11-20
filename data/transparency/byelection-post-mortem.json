@@ -7,16 +7,16 @@
     "mean_absolute_error_pp": "Mean over the parties in the published projection of |projected share minus actual share|, in percentage points."
   },
   "overall": {
-    "contests": 48,
-    "winners_called": 22,
-    "mean_absolute_error_pp": 8.56,
+    "contests": 53,
+    "winners_called": 25,
+    "mean_absolute_error_pp": 8.48,
     "named_favourite": {
-      "contests": 21,
-      "called": 8
+      "contests": 23,
+      "called": 10
     },
     "too_close_to_call": {
-      "contests": 27,
-      "called": 14
+      "contests": 30,
+      "called": 15
     }
   },
   "months": [
@@ -231,16 +231,16 @@
     },
     {
       "month": "2026-11",
-      "contests": 7,
-      "winners_called": 4,
-      "mean_absolute_error_pp": 6.86,
+      "contests": 12,
+      "winners_called": 7,
+      "mean_absolute_error_pp": 7.19,
       "named_favourite": {
-        "contests": 4,
-        "called": 2
+        "contests": 6,
+        "called": 4
       },
       "too_close_to_call": {
-        "contests": 3,
-        "called": 2
+        "contests": 6,
+        "called": 3
       },
       "misses": [
         {
@@ -263,6 +263,20 @@
           "projected_winner": "Reform UK",
           "actual_winner": "Labour",
           "too_close_to_call": false
+        },
+        {
+          "slug": "north-hertfordshire-letchworth-norton-2026-11-19",
+          "date": "2026-11-19",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Labour",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "rotherham-anston-woodsetts-2026-11-19",
+          "date": "2026-11-19",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Conservative",
+          "too_close_to_call": true
         }
       ]
     }
@@ -536,7 +550,12 @@
       }
     ]
   },
-  "pending_results": [],
+  "pending_results": [
+    "fareham-portchester-wicor-2026-11-19",
+    "caerphilly-risca-east-2026-11-19",
+    "hertfordshire-letchworth-north-2026-11-19",
+    "conwy-bryn-2026-11-19"
+  ],
   "contests": [
     {
       "slug": "dover-guston-kingsdown-st-margarets-at-cliffe-2026-08-27",
@@ -1305,6 +1324,86 @@
       "mae_pp": 4.39,
       "result_status": "hand_verified_declaration",
       "result_source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480"
+    },
+    {
+      "slug": "county-durham-craghead-south-moor-2026-11-19",
+      "council_name": "County Durham",
+      "ward_name": "Craghead & South Moor",
+      "date": "2026-11-19",
+      "council_slug": "county-durham",
+      "page": "https://ukelections.co.uk/by-elections/local/county-durham-craghead-south-moor-2026-11-19/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 63,
+      "too_close_to_call": false,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 4.24,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.durham.gov.uk/media/52026/Declaration-of-Result-Craghead-and-South-Moor/pdf/DeclarationOfResultCragheadSouthMoor.pdf?m=1795131031990"
+    },
+    {
+      "slug": "havant-emsworth-2026-11-19",
+      "council_name": "Havant",
+      "ward_name": "Emsworth",
+      "date": "2026-11-19",
+      "council_slug": "havant",
+      "page": "https://ukelections.co.uk/by-elections/local/havant-emsworth-2026-11-19/",
+      "projected_winner": "Green Party",
+      "leader_probability_pct": 67,
+      "too_close_to_call": false,
+      "actual_winner": "Green Party",
+      "called": true,
+      "mae_pp": 6.31,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf"
+    },
+    {
+      "slug": "north-hertfordshire-letchworth-norton-2026-11-19",
+      "council_name": "North Hertfordshire",
+      "ward_name": "Letchworth Norton",
+      "date": "2026-11-19",
+      "council_slug": "north-hertfordshire",
+      "page": "https://ukelections.co.uk/by-elections/local/north-hertfordshire-letchworth-norton-2026-11-19/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 42,
+      "too_close_to_call": true,
+      "actual_winner": "Labour",
+      "called": false,
+      "mae_pp": 10.01,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.north-herts.gov.uk/sites/default/files/2026-11/Declaration%20of%20results%20-%20Letchworth%20Norton.pdf"
+    },
+    {
+      "slug": "rotherham-anston-woodsetts-2026-11-19",
+      "council_name": "Rotherham",
+      "ward_name": "Anston & Woodsetts",
+      "date": "2026-11-19",
+      "council_slug": "rotherham",
+      "page": "https://ukelections.co.uk/by-elections/local/rotherham-anston-woodsetts-2026-11-19/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 40,
+      "too_close_to_call": true,
+      "actual_winner": "Conservative",
+      "called": false,
+      "mae_pp": 7.58,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.rotherham.gov.uk/elections-voting/anston-woodsetts-ward-elections-19-november"
+    },
+    {
+      "slug": "south-staffordshire-huntington-hatherton-2026-11-19",
+      "council_name": "South Staffordshire",
+      "ward_name": "Huntington & Hatherton",
+      "date": "2026-11-19",
+      "council_slug": "south-staffordshire",
+      "page": "https://ukelections.co.uk/by-elections/local/south-staffordshire-huntington-hatherton-2026-11-19/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 41,
+      "too_close_to_call": true,
+      "actual_winner": "Reform UK",
+      "called": true,
+      "mae_pp": 10.17,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.sstaffs.gov.uk/sites/default/files/2026-11/Doc1.docx"
     }
   ]
 }

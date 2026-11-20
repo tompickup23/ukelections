@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "generated_at": "2026-11-14T03:52:16.363Z",
   "slug": "havant-emsworth-2026-11-19",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.havant.emsworth.by.2026-11-19",
     "polling_day": "2026-11-19",
@@ -51,43 +51,65 @@
       {
         "name": "Simon Bruce Hagan",
         "party_name": "Labour Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
+        "votes": 144,
+        "elected": false,
+        "source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf",
+        "accessed_at": "2026-11-20",
+        "party": "Labour"
       },
       {
         "name": "Katharine Anne Hulls",
         "party_name": "Green Party",
-        "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "votes": 943,
+        "elected": true,
+        "source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf",
+        "accessed_at": "2026-11-20",
+        "party": "Green Party"
       },
       {
         "name": "Lucy Lawrence",
         "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "votes": 532,
+        "elected": false,
+        "source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf",
+        "accessed_at": "2026-11-20",
+        "party": "Reform UK"
       },
       {
         "name": "Andrew James Proctor",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
+        "votes": 827,
+        "elected": false,
+        "source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf",
+        "accessed_at": "2026-11-20",
+        "party": "Conservative"
       },
       {
         "name": "Iain Sutherland",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
+        "votes": 117,
+        "elected": false,
+        "source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf",
+        "accessed_at": "2026-11-20",
+        "party": "Liberal Democrats"
       }
     ]
   },
   "previous_holder": {
-    "established": false,
-    "note": "We have not established which party held this seat. Local by-elections are usually reported as a gain or a hold, and we will not say which until the previous holder is verified: in a ward that returns several councillors the last ordinary result does not tell you."
+    "party": "Green Party",
+    "member": "Chas Robert",
+    "note": "Charles Robert was elected as a Green Party candidate in the all-out election of May 2024; his resignation as a Green councillor caused the vacancy. Reviewed 20 November 2026.",
+    "sources": [
+      {
+        "label": "Havant Borough Council, Emsworth declaration of result, 2 May 2024",
+        "url": "https://www.havant.gov.uk/media/9824/download?inline"
+      },
+      {
+        "label": "PollCheck, Emsworth by-election, 19 November 2026",
+        "url": "https://www.pollcheck.co.uk/by-elections/council/2026-11-19/havant-emsworth/"
+      }
+    ],
+    "established": true
   },
   "ward_profile": {
     "gss": "E05015583",
@@ -328,9 +350,47 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.2075692547795552,
+      "Labour": 0.05618415918845104,
+      "Conservative": 0.3226687475614514,
+      "Liberal Democrats": 0.04564962934061646,
+      "Green Party": 0.36792820912992585,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Green Party",
+    "winner_candidate": "Katharine Anne Hulls",
+    "winner_party_name": "Green Party",
+    "winner_votes": 943,
+    "runner_up_party": "Conservative",
+    "majority_votes": 116,
+    "total_votes": 2563,
+    "source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf",
+    "outcome": "Green Party hold",
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-11-14",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Green Party",
+      "call_correct": true,
+      "mae_pp": 5.820101443620759
+    },
+    "review_status": "hand_verified_declaration",
+    "checked_at": "2026-11-20",
+    "note": "Havant declaration of result, read by scripts/results-morning.mjs on 2026-11-20: 5 candidate counts total 2,563 valid votes; 5 rejected papers make 2,568. Reconciled on ballot papers: 2563 valid + 5 rejected = 2568; issued 2568; turnout: 2568 of 8369 is 30.68%; printed 30.68%."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.havant.emsworth.by.2026-11-19/"
@@ -339,5 +399,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.havant.emsworth.by.2026-11-19/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-11-20"
 }
