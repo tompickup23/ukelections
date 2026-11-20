@@ -120,7 +120,7 @@ describe("by-election titles", () => {
     expect(localMetadata(shardEnd, TODAY).description).toMatch(/^Shard End, Birmingham: by-election on 26 November 2026\./);
   });
 
-  it("fits every title to 60 characters unless the ward name alone is too long, and keeps them unique", () => {
+  it("fits every title to 60 characters unless ward and council alone are too long, keeps the council, and keeps them unique", () => {
     const contests = loadLocalContests();
     const titles = contests.map((d) => localMetadata(d, TODAY).title);
     expect(new Set(titles).size).toBe(titles.length);
@@ -128,13 +128,16 @@ describe("by-election titles", () => {
       const t = titles[i];
       expect(t, d.slug).not.toMatch(DASHES);
       expect(t, d.slug).not.toContain(" | ");
-      if (isDeclared(d)) expect(t, d.slug).toMatch(/By-election result,/);
+      if (isDeclared(d)) expect(t, d.slug).toMatch(/By-election result(,|$)/);
+      // The council is never dropped: it is what tells two wards of one name apart.
+      const council = d.contest.council_name.replace(/^(?:London Borough of|Royal Borough of) /, "");
+      expect(t.startsWith(`${d.contest.ward_name}, ${council}. `), d.slug).toBe(true);
       const m = localMetadata(d, TODAY);
       expect(m.description, d.slug).toContain(d.contest.council_name);
       expect(m.description.length, d.slug).toBeLessThanOrEqual(160);
       if (t.length > TITLE_LIMIT) {
-        // Only the council-free short form is allowed to run over.
-        expect(t.startsWith(`${d.contest.ward_name}. `), d.slug).toBe(true);
+        // Only the form with the year alone is allowed to run over.
+        expect(t, d.slug).toMatch(/[a-z], \d{4}$/);
       }
     }
   });

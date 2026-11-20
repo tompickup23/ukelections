@@ -272,11 +272,19 @@ export interface PlaceTitleInput {
  * "Belsize, Camden. Election result, 7 May 2026".
  */
 export function placeResultTitle(input: PlaceTitleInput): string {
-  const compose = (council: string | null | undefined, short: boolean) =>
-    `${input.place}${council ? `, ${council}` : ""}. ${input.label}${input.date ? `, ${titleDate(input.date, short)}` : ""}`;
-  const full = compose(input.council, false);
+  // The council is what people search for and what tells two wards of the
+  // same name apart, so a long title gives up the date before the council:
+  // short month, then the year alone, then no date. The council is never dropped.
+  const compose = (council: string | null | undefined, date: string) =>
+    `${input.place}${council ? `, ${council}` : ""}. ${input.label}${date ? `, ${date}` : ""}`;
+  const long = input.date ? titleDate(input.date, false) : "";
+  const short = input.date ? titleDate(input.date, true) : "";
+  const year = input.date ? input.date.slice(0, 4) : "";
+  const full = compose(input.council, long);
   if (!input.fit) return full;
   const shortCouncil = input.council?.replace(/^(?:London Borough of|Royal Borough of) /, "");
-  const ladder = [full, compose(input.council, true), compose(shortCouncil, true), compose(null, true)];
-  return ladder.find((t) => t.length <= TITLE_LIMIT) ?? ladder[ladder.length - 1];
+  const ladder = [full, compose(input.council, short), compose(shortCouncil, short), compose(shortCouncil, year), compose(shortCouncil, "")];
+  // When even the undated form is too long, nothing is gained by dropping the
+  // year, so the title keeps it and runs over.
+  return ladder.find((t) => t.length <= TITLE_LIMIT) ?? ladder[ladder.length - 2];
 }
