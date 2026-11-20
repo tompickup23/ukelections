@@ -2,6 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSyn
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { deflateRawSync } from "node:zlib";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildRow,
@@ -10,6 +11,10 @@ import {
   writeSidecar,
   crawlDelaySeconds,
   declarationLinks,
+  docxToText,
+  handReadOnlyReason,
+  looksLikeBotCheck,
+  unzipEntry,
   duringCountNight,
   fromFixtures,
   mergeRows,
@@ -367,4 +372,86 @@ describe("results morning, command failure recovery", () => {
     expect(readFileSync(sidecarFile)).toEqual(saved);
     expect(readFileSync(path.join(dir, "finalised"), "utf8")).toBe("yes");
   }));
+});
+
+
+// A minimal .docx: a zip holding word/document.xml, built here with node:zlib
+// so the test needs no fixture binary. The CRC is left at zero; the reader
+// does not check it.
+function docx(bodyXml, { method = 8 } = {}) {
+  const name = Buffer.from("word/document.xml");
+  const raw = Buffer.from(`<?xml version="1.0"?><w:document xmlns:w="w"><w:body>${bodyXml}</w:body></w:document>`);
+  const data = method === 8 ? deflateRawSync(raw) : raw;
+  const local = Buffer.alloc(30);
+  local.writeUInt32LE(0x04034b50, 0);
+  local.writeUInt16LE(method, 8);
+  local.writeUInt32LE(data.length, 18);
+  local.writeUInt32LE(raw.length, 22);
+  local.writeUInt16LE(name.length, 26);
+  const central = Buffer.alloc(46);
+  central.writeUInt32LE(0x02014b50, 0);
+  central.writeUInt16LE(method, 10);
+  central.writeUInt32LE(data.length, 20);
+  central.writeUInt32LE(raw.length, 24);
+  central.writeUInt16LE(name.length, 28);
+  central.writeUInt32LE(0, 42);
+  const centralAt = local.length + name.length + data.length;
+  const end = Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50, 0);
+  end.writeUInt16LE(1, 8);
+  end.writeUInt16LE(1, 10);
+  end.writeUInt32LE(central.length + name.length, 12);
+  end.writeUInt32LE(centralAt, 16);
+  return Buffer.concat([local, name, data, central, name, end]);
+}
+
+const para = (...runs) => `<w:p>${runs.map((r) => `<w:r><w:t xml:space="preserve">${r}</w:t></w:r>`).join("")}</w:p>`;
+
+describe("results morning, Word declarations", () => {
+  it("reads the text of a .docx declaration, stored or deflated", () => {
+    const body = para("Declaration of Result of Poll") + para("SMITH ", "Jane") + para("1,234") + para("Total number of ballot papers rejected: 5");
+    for (const method of [0, 8]) {
+      const text = docxToText(docx(body, { method }));
+      expect(text).toBe("Declaration of Result of Poll\nSMITH Jane\n1,234\nTotal number of ballot papers rejected: 5");
+    }
+  });
+
+  it("finds one entry in a zip and returns null for a missing one", () => {
+    const file = docx(para("x"));
+    expect(unzipEntry(file, "word/document.xml").toString()).toContain("<w:t");
+    expect(unzipEntry(file, "word/styles.xml")).toBeNull();
+    expect(unzipEntry(Buffer.from("not a zip"), "word/document.xml")).toBeNull();
+  });
+
+  it("keeps a .docx that holds only a photograph pending, with the reason", () => {
+    const picture = docxToText(docx('<w:p><w:r><w:drawing><pic:pic xmlns:pic="p"/></w:drawing></w:r></w:p>'));
+    expect(picture).toEqual({ unreadable: "Word document holding only an image of the declaration: read by hand" });
+    expect(docxToText(Buffer.from("not a zip")).unreadable).toContain("could not be opened");
+  });
+});
+
+describe("results morning, hosts it must not misread", () => {
+  it("does not take a reCAPTCHA feedback form under real content for a bot check", () => {
+    const page = `<html><head><title>By-Election in Marlbrook Ward</title><script src="https://www.google.com/recaptcha/api.js"></script></head><body><main>${"<p>Notice of Poll and the statement of persons nominated for the ward.</p>".repeat(40)}</main><div class="g-recaptcha"></div></body></html>`;
+    expect(looksLikeBotCheck(page)).toBe(false);
+    expect(looksLikeBotCheck('<html><body><div class="g-recaptcha"></div><p>Please complete the captcha</p></body></html>')).toBe(true);
+    expect(looksLikeBotCheck(`<title>Just a moment...</title>${"<p>long body</p>".repeat(500)}`)).toBe(true);
+  });
+
+  it("matches a ward whose name carries punctuation", () => {
+    const html = '<a href="/x/Declaration-of-Result-Mold-Broncoed-Electoral-Ward.pdf">Declaration of Result</a> <a href="/x/Declaration-of-Result-Mold-Town-Council-Broncoed-Ward.pdf">Declaration of Result, Mold Town Council</a>';
+    expect(declarationLinks(html, "https://www.flintshire.gov.uk/", "Mold: Broncoed", { exclude: "town council" })).toEqual([
+      "https://www.flintshire.gov.uk/x/Declaration-of-Result-Mold-Broncoed-Electoral-Ward.pdf",
+    ]);
+  });
+
+  it("says why a hand-read-only council is pending, instead of 'no declaration source recorded'", () => {
+    const sources = read("data/results/declaration-sources.json");
+    for (const slug of ["caerphilly", "fareham", "hertfordshire", "manchester", "reading"]) {
+      expect(sources.councils[slug].hand_read_only, slug).toBeTruthy();
+      expect(sources.councils[slug].index_url, slug).toBeUndefined();
+    }
+    expect(handReadOnlyReason(sources.councils.manchester)).toMatch(/^hand read only: robots\.txt .*A person reads https:\/\/www\.manchester\.gov\.uk\//);
+    expect(sources.councils.conwy.known_gap).toContain("no electorate");
+  });
 });

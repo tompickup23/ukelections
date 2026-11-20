@@ -7,22 +7,35 @@ const read = (file) => JSON.parse(readFileSync(file, "utf8"));
 const write = (file, value) => writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
 // This repair reads held files only. It never fetches or revises a forecast.
-export function applyCouncilResults(day) {
+//
+// A round is often part declared: on 20 November 2026 five of the nine
+// 19 November councils had published and four had not. A contest with no
+// hand-verified council row (or, for STV, no hand-verified declaration) is
+// left exactly as it is and listed as pending, and the declared ones are
+// applied. Anything wrong with a row that does exist still stops the run.
+//
+// `directory` is the contest folder to rewrite; tests point it at a copy.
+export function applyCouncilResults(day, { directory = "data/contests/local-byelections", log = console.log } = {}) {
   if (!/^\d{4}\x2d\d{2}\x2d\d{2}$/.test(day)) throw new Error("Supply an ISO polling date");
-  const directory = "data/contests/local-byelections";
   const rows = new Map(read("data/history/byelection-appends.json").results.map((row) => [row.ballot_paper_id, row]));
   const declarations = read("data/results/local-byelection-declarations.json").declarations;
   const published = read("data/cards/published-byelection-forecasts.json").forecasts;
   const holders = read("data/contests/local-byelection-holders.json").holders;
-  let changed = 0;
-  for (const file of readdirSync(directory).filter((name) => name.endsWith(`${day}.json`))) {
+  const files = readdirSync(directory).filter((name) => name.endsWith(`${day}.json`));
+  if (!files.length) throw new Error("No contests for that date");
+  const applied = [];
+  const pending = [];
+  for (const file of files) {
     const destination = `${directory}/${file}`;
     const doc = read(destination);
     const id = doc.contest.ballot_paper_id;
     const row = rows.get(id);
     const declaration = declarations[id];
     if (doc.contest.voting_system === "STV") {
-      if (declaration?.review_status !== "hand_verified_declaration") throw new Error(`No council declaration for ${id}`);
+      if (declaration?.review_status !== "hand_verified_declaration") {
+        pending.push({ id, why: "no hand-verified council declaration yet" });
+        continue;
+      }
       doc.declaration = declaration;
       doc.result = null;
       doc.status = "polls_closed";
@@ -32,7 +45,10 @@ export function applyCouncilResults(day) {
         return { ...candidate, ...source, party: canonParty(source.party_name), votes: null };
       });
     } else {
-      if (row?.review_status !== "hand_verified_declaration") throw new Error(`No council counts for ${id}`);
+      if (row?.review_status !== "hand_verified_declaration") {
+        pending.push({ id, why: row ? `council row is ${row.review_status}, not hand_verified_declaration` : "no council counts yet" });
+        continue;
+      }
       const candidates = restoreHistoryCandidates(doc.field.candidates, row);
       if (!candidates) throw new Error(`Incomplete council counts for ${id}`);
       const field = fieldFromCandidates(candidates);
@@ -55,9 +71,13 @@ export function applyCouncilResults(day) {
     doc.sources.unshift({ label: "Returning officer declaration (verified)", url: source.source, accessed_at: source.accessed_at });
     doc.results_updated_at = source.accessed_at;
     write(destination, doc);
-    changed += 1;
+    applied.push(id);
   }
-  if (!changed) throw new Error("No contests for that date");
+  for (const item of pending) log(`  . pending ${item.id}: ${item.why}`);
+  if (!applied.length) {
+    log(`No council declarations to apply for ${day}; ${pending.length} pending. Nothing written.`);
+    return { applied, pending };
+  }
   const priors = buildPriorIndex(loadHistory());
   const corpus = buildSwingCorpus(priors.byelectionRows, corpusPriorFinder(priors, loadPagePriors()));
   const bt = backtest(corpus);
@@ -74,7 +94,8 @@ export function applyCouncilResults(day) {
   meta.party_accuracy = bt.party_accuracy;
   meta.results_updated_at = new Date().toISOString();
   write(metaFile, meta);
-  console.log(`Applied council declarations to ${changed} contests. Forecasts and their generation dates are preserved.`);
+  log(`Applied council declarations to ${applied.length} contests, ${pending.length} pending. Forecasts and their generation dates are preserved.`);
+  return { applied, pending };
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) applyCouncilResults(process.argv[2]);

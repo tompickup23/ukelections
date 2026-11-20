@@ -1,5 +1,5 @@
 {
-  "note": "Where scripts/results-morning.mjs looks for each council's own declaration of result. `contests` pins a known declaration URL for one ballot; `councils` gives the page the declaration is expected to join, scanned for a link naming the ward with 'declaration' or 'result'. `exclude` drops a link that matches (an older declaration for the same ward). Locations for the 12 November 2026 contests were read on 3 November 2026 with an honest user agent; none of these pages is disallowed by robots.txt and none showed a bot check. They are where each council posted its previous by-election notices or results, not a promise that the declaration will appear there.",
+  "note": "Where scripts/results-morning.mjs looks for each council's own declaration of result. `contests` pins a known declaration URL for one ballot; `councils` gives the page the declaration is expected to join, scanned for a link naming the ward with 'declaration' or 'result'. `exclude` drops a link that matches (an older declaration for the same ward). Locations for the 12 November 2026 contests were read on 3 November 2026 with an honest user agent; none of these pages is disallowed by robots.txt and none showed a bot check. They are where each council posted its previous by-election notices or results, not a promise that the declaration will appear there. `hand_read_only` gives the reason a council is never fetched by the script (robots.txt unreadable or disallowing the page, a bot check, or pages the script cannot read); `hand_url` is where a person should look instead. `known_gap` is printed beside a pending line to say what a council's declarations are known to lack. tests/declaration-sources.test.mjs fails when a contest polls within seven days and its council has none of a source, a pinned URL or a hand-read-only reason. Locations for the 26 November and 3 December 2026 contests were checked on 20 November 2026 in the same way, robots.txt first.",
   "checked_at": "2026-11-20",
   "councils": {
     "hyndburn": {
@@ -43,9 +43,11 @@
       "notes": "Wigan Central (2025) was 'Declaration of Result of Poll - Wigan Central' with a filename that names no ward, so the link text decides. May 2026 ward results sit on electionresults.wigan.gov.uk (no robots.txt; HTTP 404 is permission)."
     },
     "caerphilly": {
+      "hand_read_only": "robots.txt on www.caerphilly.gov.uk answers a 302 to an error page, so it cannot be read and nothing on the host is fetched (checked 20 November 2026).",
       "notes": "Not read for the 19 November 2026 Risca East by-election. robots.txt on www.caerphilly.gov.uk and caerphilly.gov.uk answers a 302 to an error page (checked 20 November 2026), so it could not be read and no page on the host was fetched. Needs a person to open the council elections page."
     },
     "conwy": {
+      "known_gap": "its declarations print no electorate, ballot papers issued, turnout or majority, so the script has no cross-check unless Democracy Club carries every count; read it by hand.",
       "index_url": "https://www.conwy.gov.uk/en/Council/Voting-and-Elections/About-Elections/By-elections.aspx",
       "notes": "The Bryn declaration is an HTML page under Vacancies/, linked from the by-elections page. robots.txt disallows every .pdf and .doc on the host, so only HTML pages can be read. The Bryn declaration prints no electorate, ballot papers issued, turnout or majority, and names one candidate FURBER Nia Charlotte where the council statement of persons nominated says JONES Nia."
     },
@@ -54,6 +56,8 @@
       "notes": "County declarations are PDFs listed under County Council elections. The same page lists the Stanley Town Council (Craghead and South Stanley) parish declaration, so the 19 November 2026 ballot is pinned under contests."
     },
     "fareham": {
+      "hand_read_only": "results are linked to moderngov.fareham.gov.uk, which answered 403 behind an Azure WAF JavaScript check on 20 November 2026, and robots.txt on www.fareham.gov.uk disallows /pdf/.",
+      "hand_url": "https://www.fareham.gov.uk/about_the_council/elections_and_voting/",
       "notes": "The elections page (https://www.fareham.gov.uk/about_the_council/elections_and_voting/) links the 19 November 2026 Portchester Wicor result to moderngov.fareham.gov.uk, which answered 403 behind an Azure WAF JavaScript check on 20 November 2026. robots.txt on www.fareham.gov.uk disallows /pdf/. Left for a person; do not point the script at the ModernGov page."
     },
     "havant": {
@@ -61,6 +65,7 @@
       "notes": "The page links each declaration through a media page (/emsworth-elections-declaration0pdf) that is HTML; the PDF itself sits under /sites/default/files/, pinned under contests."
     },
     "hertfordshire": {
+      "hand_read_only": "declarations are published under /doc/ on www.hertfordshire.gov.uk, which robots.txt disallows for every user agent, and democracy.hertfordshire.gov.uk disallows / (checked 20 November 2026).",
       "notes": "Letchworth North is counted by North Hertfordshire as deputy returning officer and published only by Hertfordshire County Council. Its declaration PDF is under /doc/, which robots.txt disallows for every user agent, and democracy.hertfordshire.gov.uk disallows / for every user agent. Neither can be read by the script; a person must open it."
     },
     "north-hertfordshire": {
@@ -74,6 +79,44 @@
     "south-staffordshire": {
       "index_url": "https://www.sstaffs.gov.uk/our-council/voting-and-elections/huntington-hatherton-election",
       "notes": "The 19 November 2026 declaration is a Word document (Doc1.docx) holding a single photograph of the signed form, so it has no text and is read by hand."
+    },
+    "birmingham": {
+      "index_url": "https://www.birmingham.gov.uk/info/20097/elections_and_voting",
+      "also_check": [
+        "https://www.birmingham.gov.uk/info/50381/past_election_results"
+      ],
+      "exclude": "ward results 2026",
+      "notes": "Shard End, 26 November 2026. The elections page carried the Shard End notice of casual vacancy, notice of election, statement of persons nominated and notice of poll on 20 November 2026, so the declaration is expected beside them. Earlier by-elections got their own page under past election results ('By-election results July 2024') whose title names no ward, so a declaration there is only found if its link names Shard End. The May 2026 'Shard End Ward results 2026' page is excluded. robots.txt allows both pages."
+    },
+    "bromsgrove": {
+      "index_url": "https://www.bromsgrove.gov.uk/council/elections/current-elections-and-referendums/by-election-in-marlbrook-ward/",
+      "notes": "Marlbrook, 26 November 2026. The ward's by-election page carried the notice of election, statement of persons nominated, notice of poll and election agents on 20 November 2026, as PDFs under /media/. The page also carries a reCAPTCHA feedback form; the script no longer reads that as a bot check (looksLikeBotCheck). robots.txt allows the page."
+    },
+    "flintshire": {
+      "index_url": "https://www.flintshire.gov.uk/en/Resident/Council-and-Democracy/Elections-and-Electoral-Registration/Casual-Vacancies-and-by-elections.aspx",
+      "exclude": "town council|community council",
+      "notes": "Mold: Broncoed, 26 November 2026. The casual vacancies page lists the county ward's notices and those of the Mold Town Council Broncoed Ward poll on the same day; the town council declaration is excluded. Earlier county declarations (Argoed and New Brighton, Connah's Quay Central, 9 July 2026) were bilingual PDFs under /en/PDFFiles/Council-Democracy/Elections-26/. robots.txt allows the page."
+    },
+    "gosport": {
+      "index_url": "https://www.gosport.gov.uk/article/3079/Election-notices-and-results",
+      "also_check": [
+        "https://www.gosport.gov.uk/article/3070/Hardway-ward-by-election-2026"
+      ],
+      "notes": "Hardway, 3 December 2026. 'Election notices and results' carried the Hardway notice of election, statement of persons nominated and election agents on 20 November 2026. The Bridgemary by-election result was published as its own article ('Bridgemary by-election result', article/3126), so the link may be to an article rather than a PDF. robots.txt allows /article/."
+    },
+    "manchester": {
+      "hand_read_only": "robots.txt on www.manchester.gov.uk answered 403 with a Cloudflare 'Just a moment' challenge on 20 November 2026, so it cannot be read and nothing on the host is fetched.",
+      "hand_url": "https://www.manchester.gov.uk/the-council-and-democracy/elections-and-voting/elections/the-next-election",
+      "notes": "Harpurhey, 26 November 2026. The hand URL comes from a web search result and was not fetched. The council also published the Harpurhey statement of persons nominated and notice of election as pages under /the-council-and-democracy/elections-and-voting/elections/."
+    },
+    "reading": {
+      "hand_read_only": "www.reading.gov.uk serves its pages as an empty JavaScript application shell: the by-election page's HTML holds no text and no links (checked 20 November 2026), so the script has nothing to scan. robots.txt allows the page and asks for a 10 second crawl delay.",
+      "hand_url": "https://www.reading.gov.uk/the-council-and-democracy/elections-and-voting/caversham-heights-by-election/",
+      "notes": "Caversham Heights, 26 November 2026. Earlier notices were PDFs on images.reading.gov.uk; if the declaration's PDF address is known on the day, pin it under contests and the script will read it."
+    },
+    "solihull": {
+      "index_url": "https://www.solihull.gov.uk/councillors-and-democracy/elections-and-voting/castle-bromwich-election-thursday-26-november-2026",
+      "notes": "Castle Bromwich, 26 November 2026, three seats. The by-election page carried the notice of election, statement of persons nominated and notice of poll, and polling stations as PDFs under /sites/default/files/ on 20 November 2026. The script reads single-seat contests only, so this one stays pending for a hand read even once the declaration is found. robots.txt allows the page."
     }
   },
   "contests": {
