@@ -23,6 +23,7 @@
 //   reconcile. Those contests are listed as pending with the reason.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, renameSync, unlinkSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { inflateRawSync } from "node:zlib";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -62,6 +63,87 @@ export function pdfToText(file) {
   const run = spawnSync("pdftotext", ["-layout", file, "-"], { encoding: "utf8" });
   if (run.error || run.status !== 0) return null;
   return run.stdout;
+}
+
+/**
+ * One file out of a zip archive, using only node:zlib. A .docx is a zip, and
+ * Node has no built-in unzip; this reads the central directory, so it copes
+ * with entries whose local header leaves the sizes to a trailing descriptor.
+ * Stored (0) and deflated (8) entries only. Null when the entry is absent or
+ * the archive is not one it can read.
+ */
+export function unzipEntry(buffer, name) {
+  const buf = Buffer.from(buffer);
+  let eocd = -1;
+  for (let i = buf.length - 22; i >= Math.max(0, buf.length - 22 - 65535); i -= 1) {
+    if (buf.readUInt32LE(i) === 0x06054b50) {
+      eocd = i;
+      break;
+    }
+  }
+  if (eocd < 0) return null;
+  const entries = buf.readUInt16LE(eocd + 10);
+  let at = buf.readUInt32LE(eocd + 16);
+  for (let n = 0; n < entries && at + 46 <= buf.length; n += 1) {
+    if (buf.readUInt32LE(at) !== 0x02014b50) return null;
+    const method = buf.readUInt16LE(at + 10);
+    const compressed = buf.readUInt32LE(at + 20);
+    const nameLength = buf.readUInt16LE(at + 28);
+    const extraLength = buf.readUInt16LE(at + 30);
+    const commentLength = buf.readUInt16LE(at + 32);
+    const local = buf.readUInt32LE(at + 42);
+    const entryName = buf.toString("utf8", at + 46, at + 46 + nameLength);
+    at += 46 + nameLength + extraLength + commentLength;
+    if (entryName !== name) continue;
+    if (local + 30 > buf.length || buf.readUInt32LE(local) !== 0x04034b50) return null;
+    const start = local + 30 + buf.readUInt16LE(local + 26) + buf.readUInt16LE(local + 28);
+    const data = buf.subarray(start, start + compressed);
+    if (method === 0) return Buffer.from(data);
+    if (method === 8) return inflateRawSync(data);
+    return null;
+  }
+  return null;
+}
+
+/**
+ * Text from a Word .docx: one line per paragraph or table cell, read from
+ * word/document.xml. A document that is only a picture of the signed form
+ * (South Staffordshire, 19 November 2026) has no text to read, and says so
+ * rather than returning an empty string that would read as "candidate not found".
+ */
+export function docxToText(buffer) {
+  let xml = null;
+  try {
+    xml = unzipEntry(buffer, "word/document.xml")?.toString("utf8") ?? null;
+  } catch {
+    xml = null;
+  }
+  if (!xml) return { unreadable: "Word document that could not be opened: read by hand" };
+  const text = xml
+    .replace(/<w:tab\/>/g, "<w:t> </w:t>")
+    .split(/<w:br\/>|<\/w:p>|<\/w:tc>/)
+    .map((block) => [...block.matchAll(/<w:t(?:\s[^>]*)?>([^<]*)<\/w:t>/g)].map((m) => m[1]).join(""))
+    .map((line) => htmlToText(line))
+    .filter(Boolean)
+    .join("\n");
+  if (!/[A-Za-z]{3}/.test(text) || !/\d/.test(text)) {
+    return /<w:drawing|<w:pict|<pic:/.test(xml)
+      ? { unreadable: "Word document holding only an image of the declaration: read by hand" }
+      : { unreadable: "Word document with no counts in its text: read by hand" };
+  }
+  return text;
+}
+
+/**
+ * True when a council answered with a bot check instead of its page. A bare
+ * "captcha" counts only on a page with almost no text of its own: Bromsgrove's
+ * elections pages carry a reCAPTCHA feedback form under the real content, and
+ * reading that as a bot check would stop a host that serves its page fine.
+ */
+export function looksLikeBotCheck(html) {
+  const source = String(html);
+  if (/<title>[^<]*(?:just a moment|access denied|attention required)|cf-chl-|verify you are human/i.test(source)) return true;
+  return /captcha/i.test(source) && htmlToText(source).length < 1500;
 }
 
 // ---------------------------------------------------------------------------
@@ -417,7 +499,7 @@ export async function politeFetch(url, state, { persist = saveState } = {}) {
     }
     return { blocked, failed: res.status !== 404 };
   }
-  if (/text\/html/.test(type) && /<title>[^<]*(?:just a moment|access denied)|cf-chl-|verify you are human|captcha/i.test(body.toString("utf8"))) {
+  if (/text\/html/.test(type) && looksLikeBotCheck(body.toString("utf8"))) {
     state.stopped ??= {};
     state.stopped[host] = "a bot check answered instead of the page: not retried";
     return { blocked: state.stopped[host], failed: true };
@@ -428,12 +510,13 @@ export async function politeFetch(url, state, { persist = saveState } = {}) {
 function textFrom(type, body, where) {
   if (/pdf/.test(type)) {
     mkdirSync(p(".cache/results-morning"), { recursive: true });
-    const file = p(`.cache/results-morning/${where}.pdf`);
+    const file = p(`.cache/results-morning/${where.slug}.pdf`);
     writeFileSync(file, body);
     const text = pdfToText(file);
     return text ?? { unreadable: "PDF, and pdftotext is not installed (poppler-utils)" };
   }
-  if (/wordprocessingml|msword/.test(type)) return { unreadable: "Word document: read by hand" };
+  if (/wordprocessingml/.test(type) || (/octet-stream/.test(type) && /\.docx(?:$|\?)/i.test(where.url || ""))) return docxToText(body);
+  if (/msword/.test(type)) return { unreadable: "Word 97 to 2003 document (.doc): read by hand" };
   return htmlToText(body.toString("utf8"));
 }
 
@@ -446,7 +529,9 @@ function textFrom(type, body, where) {
  * result on the page the November one will join).
  */
 export function declarationLinks(html, baseUrl, wardName, { exclude = null } = {}) {
-  const ward = normWard(wardName).split(" ").filter((w) => w.length > 2 && w !== "and" && w !== "ward");
+  // Punctuation is dropped from the ward's words: "Mold: Broncoed" must match
+  // a link or filename that prints "Mold Broncoed" or "Mold-Broncoed".
+  const ward = normWard(wardName).replace(/[^a-z0-9' ]+/g, " ").split(" ").filter((w) => w.length > 2 && w !== "and" && w !== "ward");
   const links = [];
   const source = String(html);
   let previousEnd = 0;
@@ -500,7 +585,13 @@ export function fromFixtures(dir, contest) {
   if (existsSync(`${base}.txt`)) return { text: readFileSync(`${base}.txt`, "utf8"), dc };
   if (existsSync(`${base}.html`)) return { text: htmlToText(readFileSync(`${base}.html`, "utf8")), dc };
   if (existsSync(`${base}.pdf`)) return { text: pdfToText(`${base}.pdf`) ?? { unreadable: "pdftotext is not installed" }, dc };
+  if (existsSync(`${base}.docx`)) return { text: docxToText(readFileSync(`${base}.docx`)), dc };
   return { text: null, dc };
+}
+
+/** What the pending line says for a council recorded as hand read only. */
+export function handReadOnlyReason(council) {
+  return `hand read only: ${council.hand_read_only}${council.hand_url ? ` A person reads ${council.hand_url}` : ""}`;
 }
 
 async function readLive(contest, sources, state) {
@@ -517,6 +608,10 @@ async function readLive(contest, sources, state) {
   } catch {
     dc = null;
   }
+  // A council recorded as hand read only is never fetched: its robots.txt
+  // cannot be read, disallows the page, or the host answers with a bot check.
+  // A ballot pinned under `contests` is a person's decision and still wins.
+  if (!known && council?.hand_read_only) return { blocked: handReadOnlyReason(council), dc };
   let target = known;
   const indexes = [council?.index_url, ...(council?.also_check || [])].filter(Boolean);
   for (const indexUrl of target ? [] : indexes) {
@@ -538,7 +633,7 @@ async function readLive(contest, sources, state) {
   if (!target) return { blocked: "no declaration source recorded for this council", dc };
   const doc = await politeFetch(target, state);
   if (doc.blocked) return { blocked: `${target}: ${doc.blocked}`, failed: doc.failed, dc };
-  const text = textFrom(doc.type, doc.body, contest.slug);
+  const text = textFrom(doc.type, doc.body, { slug: contest.slug, url: target });
   return { text, source: target, dc };
 }
 
@@ -641,7 +736,13 @@ async function main() {
   );
   if (pending.some((item) => item.failed)) process.exitCode = 1;
   if (!offline) saveState(state);
-  for (const item of pending) console.log(`  . pending ${item.label}: ${item.why}`);
+  const slugByLabel = new Map(contests.map((c) => [`${c.contest.council_name}, ${c.contest.ward_name}`, c.contest.council_slug]));
+  for (const item of pending) {
+    // A known gap is what to expect from this council's declarations (Conwy
+    // prints no cross-check figures), printed so the reason is not a surprise.
+    const gap = offline ? null : sources.councils?.[slugByLabel.get(item.label)]?.known_gap;
+    console.log(`  . pending ${item.label}: ${item.why}${gap ? ` (known for this council: ${gap})` : ""}`);
+  }
   console.log(`  ${rows.length} reconciled, ${pending.length} pending`);
   if (a.report) writeFileSync(a.report, `${JSON.stringify({ date, rows, pending }, null, 2)}\n`);
   if (!a.write || !rows.length) {

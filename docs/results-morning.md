@@ -11,8 +11,9 @@ that polled on a given day (yesterday by default) and, for each one:
 1. finds the council's own declaration of result, from `data/results/declaration-sources.json`
    (a pinned URL for the ballot, or the council page the declaration is expected to join,
    scanned for a link naming the ward with "declaration" or "result");
-2. reads it: HTML directly, PDF through `pdftotext -layout` (poppler); Word documents and
-   scanned PDFs stay pending for a person;
+2. reads it: HTML directly, PDF through `pdftotext -layout` (poppler), Word .docx through a
+   small zip reader on `node:zlib` (no new dependency); a .docx that holds only a photograph of
+   the signed form, an old .doc, and scanned PDFs stay pending for a person;
 3. matches every candidate on Democracy Club's list by surname and takes their count;
 4. writes a `hand_verified_declaration` row to `data/history/byelection-appends.json` only when
    the counts reconcile, then reruns `finalise-october-byelection-results.mjs` for that day so
@@ -90,6 +91,75 @@ Before it is applied:
    `scripts/lib/election-history.mjs`, or the nightly will let Democracy Club overwrite them.
 4. **Committing to main from cron.** The Friday sweep already does this. If Tom would rather
    review each Friday's rows, drop the commit and push, and read the log and the report instead.
+
+## Before polling day: the Wednesday step
+
+Added 20 November 2026, after the 19 November round, when the script read nothing because
+`declaration-sources.json` had no entry for any of the nine councils.
+
+On the Wednesday before each Thursday poll:
+
+1. List the contests: `ls data/contests/local-byelections/*-<date>.json`.
+2. For each council with no entry, open its robots.txt first. If it cannot be read (an error,
+   a redirect, a bot check) or disallows the page, fetch nothing more from that host and record
+   `hand_read_only` with the reason, plus `hand_url` if you know where a person should look.
+3. Otherwise find the page the declaration is expected to join (the by-election's own page, or
+   the page carrying its notice of poll) and record it as `index_url`, with `also_check` for a
+   second listing and `exclude` for an older result for the same ward. A handful of requests per
+   host, the script's own user agent, no retries past a 403.
+4. `npx vitest run tests/declaration-sources.test.mjs`. It fails, naming the contests, when an
+   upcoming contest polls within seven days and its council has no source, no pinned URL and no
+   hand-read-only reason. It is in `npm test` only, never in the `test:polling-publish` gate:
+   a missing source must not stop the nightly deploy.
+
+**Do not probe a council host on results morning before running the script.** The one-hour guard
+(`.cache/results-morning/last-fetch.json`) counts any run of the script, a dry run included, so
+a "quick look" with the script blocks the real run for an hour. A look by hand in a browser or
+with curl is not recorded by the guard, but it spends the same council's patience; check the
+pages on the Wednesday instead.
+
+### Hand read only
+
+The script never fetches from these; the pending line prints the reason.
+
+| Council | Reason (checked 20 November 2026) |
+|---|---|
+| Caerphilly | robots.txt answers a 302 to an error page, so it cannot be read |
+| Fareham | results link to moderngov.fareham.gov.uk, 403 behind an Azure WAF check; robots.txt disallows /pdf/ |
+| Hertfordshire (county) | declarations under /doc/, disallowed by robots.txt; the democracy host disallows / |
+| Manchester | robots.txt answers 403 with a Cloudflare "Just a moment" challenge |
+| Reading | pages are an empty JavaScript shell: the HTML has no text or links to scan |
+
+Conwy is readable but carries a `known_gap`: its declarations print no electorate, papers issued,
+turnout or majority, so they only reconcile if Democracy Club has every count. Solihull Castle
+Bromwich (26 November) elects three councillors, and the script reads single-seat contests only.
+
+### Where the 26 November and 3 December declarations should appear
+
+Checked 20 November 2026, robots.txt first, with the script's user agent.
+
+| Council | Page | Note |
+|---|---|---|
+| Birmingham (Shard End) | info/20097/elections_and_voting, then past_election_results | notices sit on the first page; May 2026 ward results excluded |
+| Bromsgrove (Marlbrook) | the ward's by-election page | carries a reCAPTCHA feedback form, no longer misread as a bot check |
+| Flintshire (Mold: Broncoed) | Casual vacancies and by-elections | Mold Town Council Broncoed poll on the same day is excluded |
+| Gosport (Hardway, 3 December) | article/3079 Election notices and results, then the Hardway page | Bridgemary's result was its own article |
+| Manchester (Harpurhey) | hand read only | see above |
+| Oldham (Royton North, 3 December) | already recorded for Failsworth West | |
+| Reading (Caversham Heights) | hand read only | pin the declaration's PDF under `contests` if its address is known |
+| Solihull (Castle Bromwich) | the by-election's own page | three seats: pending by design |
+
+### Known limits left open
+
+- **"Commonly known as" names.** Conwy's Bryn declaration printed one candidate as FURBER Nia
+  Charlotte where the statement of persons nominated, and so Democracy Club, says JONES Nia. The
+  script matches by the surname on Democracy Club's list, so that candidate is "not found" and the
+  contest stays pending. Matching an alternative surname would mean accepting a second name per
+  candidate from somewhere other than the declaration, which loosens the rule that every candidate
+  is found once on the declaration itself; it was left alone. Read these by hand.
+- **Part-declared rounds.** `scripts/apply-council-results.mjs <date>` now applies the contests
+  with a hand-verified council row and lists the rest as pending, exiting 0. A row that exists but
+  does not cover the field still stops it.
 
 ## The morning after a poll, by hand
 
