@@ -21,9 +21,11 @@ export function councilDescription(input: {
   controlHeadline: string;
   seatsUp: number;
   nextLabel: string | null;
+  /** "ward", or "division" on a county council (councilAreaNoun). */
+  areaNoun?: string;
 }): string {
   const base = `${input.councilName}, 7 May 2026: ${input.controlHeadline}.`;
-  const seats = ` ${input.seatsUp} seats contested, with each ward's result.`;
+  const seats = ` ${input.seatsUp} seats contested, with each ${input.areaNoun ?? "ward"}'s result.`;
   const next = input.nextLabel ? ` Next: ${input.nextLabel}.` : "";
   for (const candidate of [base + seats + next, base + seats, base]) {
     if (candidate.length < 160) return candidate;

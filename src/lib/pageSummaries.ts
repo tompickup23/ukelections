@@ -233,9 +233,10 @@ function sourceLabel(result: any): string {
 /**
  * The first thing a reader searching "<ward> by-election result" needs, in two
  * or three sentences: who won, by how much, how the shares moved since the
- * ward was last fought, and where the result comes from.
+ * ward was last fought, and where the result comes from. `areaNoun` is
+ * "division" for a county council (councilAreaNoun).
  */
-export function byElectionResultSummary(d: any): string[] {
+export function byElectionResultSummary(d: any, areaNoun: string = "ward"): string[] {
   const c = d?.contest;
   const result = d?.result;
   const where = `the ${c.ward_name} by-election in ${c.council_name} on ${prettyDate(c.polling_day)}`;
@@ -266,7 +267,7 @@ export function byElectionResultSummary(d: any): string[] {
         });
       if (moves.length) {
         s.push(
-          `Against the ward's ${monthYear(prior.election_date)} result${prior.seats_contested && prior.seats_contested > 1 ? " (each party's best-placed candidate)" : ""}, ${moves.join(" and ")}.`,
+          `Against the ${areaNoun}'s ${monthYear(prior.election_date)} result${prior.seats_contested && prior.seats_contested > 1 ? " (each party's best-placed candidate)" : ""}, ${moves.join(" and ")}.`,
         );
       }
     }

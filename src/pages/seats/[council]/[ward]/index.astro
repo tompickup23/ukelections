@@ -17,8 +17,9 @@ import { summariseWardResult, seatsWonLabel, resultSourceLabel } from "../../../
 import { wardResultRowFor } from "../../../../lib/wardResults";
 import { byElectionsSince, wardIndexDecision } from "../../../../lib/wardIndexing";
 import { shortPartyLabel } from "../../../../lib/siteData";
-import { externalHref, type Crumb } from "../../../../lib/seo";
+import { externalHref, placeResultTitle, type Crumb } from "../../../../lib/seo";
 import { wardSummary } from "../../../../lib/pageSummaries";
+import { councilAreaNoun } from "../../../../lib/councilAreaNoun";
 import HistoryStrip from "../../../../components/HistoryStrip.astro";
 import { contestFromCandidates, orderContests } from "../../../../lib/wardHistory";
 
@@ -86,13 +87,22 @@ const actualShares: Array<[string, number]> = result && !result.incomplete && re
   ? Object.entries(resultRow.vote_shares as Record<string, number>).sort((a, b) => b[1] - a[1])
   : [];
 
+// County councils elect by division, as the council page and its map say.
+// Routes and data fields keep "ward"; only the words a reader sees change.
+const area = councilAreaNoun(ward.council_name);
 const tierLabel = { local: "Local council", mayor: "Mayoralty" }[ward.tier] || ward.tier;
 // Titles carry the words people actually search ("<ward> <council> election
 // result"). The bare "Bank Hall. Burnley" form matched no query intent, which
 // cost click-through on pages that were already ranking.
 // Every 7 May 2026 contest has now been held, so the title describes the
 // result rather than selling a forecast for a vote that is over.
-const title = `${ward.ward_name}${ward.council_name ? `, ${ward.council_name}` : ""}. ${result ? "Election result, 7 May 2026" : "Election results"}`;
+// The same form council by-election pages use (placeResultTitle).
+const title = placeResultTitle({
+  place: ward.ward_name || String(Astro.params.ward),
+  council: ward.council_name,
+  label: result ? "Election result" : "Election results",
+  date: result ? "2026-05-07" : null,
+});
 // Lead the snippet with the declared result where we have one. A forecast
 // snippet on a result query reads as stale and loses the click.
 const description = result
@@ -209,10 +219,10 @@ const breadcrumbs: Crumb[] = [
           height={200}
           neighbourShares={neighbourSharesMap}
           focalShare={focalReformShare}
-          ariaLabel={`Ward locator for ${ward.ward_name}; neighbouring wards shaded by Reform UK vote-share difference vs this ward.`}
+          ariaLabel={`${area.One} locator for ${ward.ward_name}; neighbouring ${area.many} shaded by Reform UK vote-share difference vs this ${area.one}.`}
         />
         <p class="ward-hero-map-caption">
-          Neighbours shaded by <strong>Reform UK share vs this ward</strong>, red = higher, blue = lower.
+          Neighbours shaded by <strong>Reform UK share vs this {area.one}</strong>, red = higher, blue = lower.
         </p>
       </div>
     )}
@@ -251,7 +261,7 @@ const breadcrumbs: Crumb[] = [
   {wp?.cancelled && (
     <section class="section prose-block">
       <h2>This election was cancelled</h2>
-      <p>The 7 May 2026 election in this ward was cancelled, most likely because of a candidate-death postponement, so no result was declared on the day. A by-election is held on a later date.</p>
+      <p>The 7 May 2026 election in this {area.one} was cancelled, most likely because of a candidate-death postponement, so no result was declared on the day. A by-election is held on a later date.</p>
     </section>
   )}
 
@@ -265,7 +275,7 @@ const breadcrumbs: Crumb[] = [
       {result.incomplete && (
         <div class="backtest-callout backtest-callout--warn">
           <strong>Partial declaration.</strong>
-          We hold {result.recordedCandidates} of the {result.nominatedCandidates} candidates nominated in this ward,
+          We hold {result.recordedCandidates} of the {result.nominatedCandidates} candidates nominated in this {area.one},
           so vote shares and the majority are withheld rather than calculated from an incomplete field.
           The votes below are the ones we have, not the full count.
         </div>
@@ -277,7 +287,7 @@ const breadcrumbs: Crumb[] = [
           <strong>{seatsWon}</strong>
           <p>
             {result.split
-              ? "The seats split between parties in this ward."
+              ? `The seats split between parties in this ${area.one}.`
               : result.seats === 1
                 ? "One seat was up for election."
                 : `All ${result.seats} seats went the same way.`}
@@ -308,7 +318,7 @@ const breadcrumbs: Crumb[] = [
           <article>
             <p class="status-label">Votes counted</p>
             <strong>{result.totalValidVotes.toLocaleString("en-GB")}</strong>
-            <p>Turnout was not published for this ward.</p>
+            <p>Turnout was not published for this {area.one}.</p>
           </article>
         )}
       </div>
@@ -368,9 +378,9 @@ const breadcrumbs: Crumb[] = [
     <section class="section prose-block">
       <h2>No declared result for 7 May 2026</h2>
       <p>
-        This ward went to the polls on Thursday 7 May 2026, but we have not captured a declaration for it.
+        This {area.one} went to the polls on Thursday 7 May 2026, but we have not captured a declaration for it.
         {councilCoverage
-          ? ` ${ward.council_name} declared ${councilCoverage.declared} of ${councilCoverage.expected} wards into our dataset, and this is one of the ${councilCoverage.missing} still outstanding.`
+          ? ` ${ward.council_name} declared ${councilCoverage.declared} of ${councilCoverage.expected} ${area.many} into our dataset, and this is one of the ${councilCoverage.missing} still outstanding.`
           : " The returning officer's declaration has not reached our dataset."}
         {wp?.prediction && " The model estimate below comes from a rerun after polling day, not the forecast published before the vote."}
       </p>
@@ -393,7 +403,7 @@ const breadcrumbs: Crumb[] = [
     <section class="section">
       <div class="section-head">
         <p class="eyebrow">Model estimate</p>
-        <h2>What the model gives this ward</h2>
+        <h2>What the model gives this {area.one}</h2>
       </div>
       <div class="party-bars party-bars-large">
         {ranked.map(([party, p]) => (
@@ -419,7 +429,7 @@ const breadcrumbs: Crumb[] = [
   {!wp?.prediction && !wp?.cancelled && (
     <section class="section prose-block">
       <h2>No prediction available</h2>
-      <p>{wp?.methodology?.[0]?.description || "We don't yet have enough prior contest results in this ward to produce a forecast, typically because the ward has been redrawn since 2016."}</p>
+      <p>{wp?.methodology?.[0]?.description || `We don't yet have enough prior contest results in this ${area.one} to produce a forecast, typically because the ${area.one} has been redrawn since 2016.`}</p>
     </section>
   )}
 
@@ -478,7 +488,7 @@ const breadcrumbs: Crumb[] = [
           ...historicAll.map((r: any) => contestFromCandidates({ date: r.election_date, byElection: Boolean(r.is_by_election), candidates: r.candidates, turnoutPct: r.turnout_pct, source: r.source })),
           resultRow ? contestFromCandidates({ date: resultRow.election_date, byElection: false, candidates: resultRow.candidates, seats: resultRow.winner_count, turnoutPct: resultRow.turnout_pct, source: resultRow.source }) : null,
         ])}
-        placeName={`${ward.ward_name} ward`}
+        placeName={`${ward.ward_name} ${area.one}`}
       />
     </section>
   )}
@@ -508,7 +518,7 @@ const breadcrumbs: Crumb[] = [
       <h2>How this area looks demographically</h2>
       <p>
         Figures are for {ladProj?.area_name || ward.council_name} as a whole. The same local-authority figures are used
-        for every ward in the council, finer ward-level demographics will land in a future release.
+        for every {area.one} in the council, finer {area.one}-level demographics will land in a future release.
       </p>
       <ul>
         {ladProj && (

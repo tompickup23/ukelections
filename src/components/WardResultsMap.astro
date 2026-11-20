@@ -19,7 +19,7 @@ import { geoMercator, geoPath } from "d3-geo";
 import { rewindFeatures } from "../lib/geoRewind";
 import { partyColour } from "../lib/predictions";
 import { shortPartyLabel } from "../lib/siteData";
-import { matchCouncilBoundaries, normaliseAreaName } from "../lib/wardBoundaryJoin";
+import { councilAreaKind, matchCouncilBoundaries, normaliseAreaName } from "../lib/wardBoundaryJoin";
 import { CLEAR_UNDER, CLOSE_UNDER, wardLead, type Closeness, type WardLead } from "../lib/wardMargins";
 
 interface Props {
@@ -58,8 +58,8 @@ const drawable = match !== null;
 const features = match?.features ?? [];
 const byCode: Map<string, Row> = match?.byCode ?? new Map();
 const codeOf = (f: any) => f.properties[match!.codeField];
-// County councils elect by division; say so.
-const noun = match?.kind === "division" ? "division" : "ward";
+// County councils elect by division; say so, whether or not a map is drawn.
+const noun = match?.kind ?? councilAreaKind(councilName, boundaries("ced26-bgc.geojson"));
 const matchedCount = features.filter((f) => byCode.has(codeOf(f))).length;
 // A poll that was called off is not the same as an area with no election.
 const cancelled = new Set(wards.filter((w) => w.cancelled).map((w) => normaliseAreaName(w.ward_name)));

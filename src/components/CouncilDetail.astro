@@ -20,6 +20,7 @@ import {
 import { wardResultFor } from "../lib/wardResults";
 import { seatsWonLabel, resultSourceLabel } from "../lib/may7WardResult";
 import { councilTitle, councilDescription, wardTableRow } from "../lib/councilPage";
+import { councilAreaNoun } from "../lib/councilAreaNoun";
 import {
   shortPartyLabel,
   formatNextElection,
@@ -42,6 +43,8 @@ const wards = identity.wards
   .sort((a: any, b: any) => (a.ward_name || "").localeCompare(b.ward_name || ""));
 const tier = wards[0]?.tier || "local";
 const councilName = wards[0]?.council_name || council;
+// County councils elect by division; the map uses the same rule for its label.
+const area = councilAreaNoun(councilName);
 const route = `/seats/${council}/`;
 const approvedUrls = new Set((reviewedLinks[route as keyof typeof reviewedLinks] || []).map(link => link.url));
 const spendingCandidate = getAidogeLink(council!);
@@ -151,6 +154,7 @@ const description = councilDescription({
   controlHeadline,
   seatsUp,
   nextLabel: nextKnown ? nextElection.label : null,
+  areaNoun: area.one,
 });
 
 // One row per ward, from the same result helper the ward pages use, so the
@@ -191,7 +195,7 @@ const breadcrumbs: Crumb[] = [
     </p>
     <div class="action-row">
       <a class="button" href="/councils/">← All councils</a>
-      <a class="button" href="/your-area/">Find a ward</a>
+      <a class="button" href="/your-area/">Find a {area.one}</a>
     </div>
     <div class="chamber-side">
       {ctlRow && <CouncilChamber control={ctlRow} councilName={councilName} />}
@@ -228,7 +232,7 @@ const breadcrumbs: Crumb[] = [
   {tier === "local" && (
     <section class="section" id="how-close">
       <div class="section-head">
-        <p class="eyebrow">Ward by ward</p>
+        <p class="eyebrow">{area.One} by {area.one}</p>
         <h2>Where it was close</h2>
       </div>
       <WardResultsMap councilName={councilName} councilSlug={council!} wards={wards} resultsBy={resultsBy} />
@@ -278,7 +282,7 @@ const breadcrumbs: Crumb[] = [
         <StatCard
           icon="circle-check"
           value={`${(winnerAcc * 100).toFixed(0)}%`}
-          label="winners called correctly across this council's wards"
+          label={`winners called correctly across this council's ${area.many}`}
           accent={winnerAcc >= 0.7 ? "var(--status-good-text)" : winnerAcc >= 0.4 ? undefined : "var(--status-bad-text)"}
           trend={`${winnersCorrect} / ${ballotsScored}`}
           trendDirection="flat"
@@ -330,18 +334,18 @@ const breadcrumbs: Crumb[] = [
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">All wards</p>
-      <h2>{councilName} ward by ward results, 7 May 2026</h2>
+      <p class="eyebrow">All {area.many}</p>
+      <h2>{councilName} {area.one} by {area.one} results, 7 May 2026</h2>
     </div>
     <p class="muted">
-      {declaredCount} of {wardRows.length} wards have a declared result in our data. Each ward links to its own page with
+      {declaredCount} of {wardRows.length} {area.many} have a declared result in our data. Each {area.one} links to its own page with
       every candidate's votes.
     </p>
-    <div class="table-scroll" tabindex="0" role="region" aria-label={`${councilName} ward results, 7 May 2026`}>
+    <div class="table-scroll" tabindex="0" role="region" aria-label={`${councilName} ${area.one} results, 7 May 2026`}>
     <table class="ward-grid" data-ward-results>
       <thead>
         <tr>
-          <th scope="col">Ward</th>
+          <th scope="col">{area.One}</th>
           <th scope="col">Won by</th>
           <th scope="col" class="num">Votes</th>
           <th scope="col" class="num">Share</th>
@@ -378,7 +382,7 @@ const breadcrumbs: Crumb[] = [
     </table>
     </div>
     <p class="caption">
-      Votes and share are the winning candidate's; in a ward with more than one seat, the last candidate elected.
+      Votes and share are the winning candidate's; in a {area.one} with more than one seat, the last candidate elected.
       Shares are withheld where we hold fewer candidates than were nominated.
       Turnout is as the source states it.
       {capturedDates.length > 0 && <> Results as captured into our results file on {capturedDates.join(" and ")}, from the source named on each row; Wikipedia rows are provisional until checked against the council's declaration.</>}

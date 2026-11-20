@@ -117,3 +117,33 @@ export function matchCouncilBoundaries<T extends AreaRow>(
   }
   return null;
 }
+
+/**
+ * What a council elects by. County councils elect by division: the county is
+ * one of the counties named in the ONS division layer. This is the same test
+ * the map's division attempt applies (CTY25NM equal to the council name), so
+ * the page's headings and the map's label cannot disagree. East Surrey and
+ * West Surrey are not "Surrey" and stay ward councils.
+ */
+export function councilAreaKind(councilName: string | null | undefined, divisions: BoundaryFeature[]): AreaKind {
+  if (!councilName) return "ward";
+  return divisions.some((f) => f.properties.CTY25NM === councilName) ? "division" : "ward";
+}
+
+export interface AreaNoun {
+  kind: AreaKind;
+  /** "ward" or "division" */
+  one: string;
+  /** "wards" or "divisions" */
+  many: string;
+  /** "Ward" or "Division" */
+  One: string;
+  /** "Wards" or "Divisions" */
+  Many: string;
+}
+
+export function areaNoun(kind: AreaKind): AreaNoun {
+  const one = kind === "division" ? "division" : "ward";
+  const One = one[0].toUpperCase() + one.slice(1);
+  return { kind, one, many: `${one}s`, One, Many: `${One}s` };
+}

@@ -23,7 +23,8 @@ describe("production browser safeguards", () => {
 
   it("puts the council ward table in a labelled horizontal scroll region", () => {
     const council = read("src/components/CouncilDetail.astro");
-    expect(council).toMatch(/class="table-scroll"[^>]+aria-label=.*ward results, 7 May 2026/);
+    // "ward" or "division" (county councils), from councilAreaNoun.
+    expect(council).toMatch(/class="table-scroll"[^>]+aria-label=.*\$\{area\.one\} results, 7 May 2026/);
     expect(council).toMatch(/<div class="table-scroll"[\s\S]*<table class="ward-grid"/);
   });
 });
