@@ -2,6 +2,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { shortPartyLabel } from "./siteData";
+import { placeResultTitle } from "./seo";
 
 export const prettyElectionDate = (iso: string) => iso
   ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "Date to be confirmed";
@@ -18,18 +19,59 @@ export function localStatus(d: any, today = new Date().toISOString().slice(0, 10
 export function localMetadata(d: any, today?: string) {
   const c = d.contest;
   const status = localStatus(d, today);
+  const declared = isDeclared(d);
   const result = d.result || d.declaration;
   const date = prettyElectionDate(c.polling_day);
-  const title = `${c.ward_name} by-election ${isDeclared(d) ? "result" : status === "Result awaited" ? "result awaited" : "candidates"}, ${c.polling_day.slice(0,4)}`;
+  // Answer first, in the form ward pages use: "Huncoat, Hyndburn. By-election
+  // result, 12 November 2026", shortened to 60 characters where the names allow.
+  const label = declared ? "By-election result" : status === "Result awaited" ? "By-election result awaited" : "By-election candidates";
+  const title = placeResultTitle({ place: c.ward_name, council: c.council_name, label, date: c.polling_day, fit: true });
   const winner = result?.winner_candidate;
   const party = result?.winner_party;
-  const description = isDeclared(d)
-    ? `${c.council_name}, ${date}: ${winner ? `${winner} (${shortPartyLabel(party)})` : shortPartyLabel(party)} elected${c.voting_system === "STV" ? " under STV" : Number.isFinite(result?.majority_votes) ? ` with a majority of ${result.majority_votes.toLocaleString("en-GB")}` : ""}. Results and official sources.`
+  // Every description names the ward, the council and the polling day, so a
+  // title shortened to fit still has the council beside it in the snippet.
+  const where = `${c.ward_name}, ${c.council_name}`;
+  const fit = (...parts: string[]) => {
+    for (let n = parts.length; n > 1; n -= 1) {
+      const text = parts.slice(0, n).join(" ");
+      if (text.length <= 155) return text;
+    }
+    return parts[0];
+  };
+  const description = declared
+    ? fit(`${where}, ${date}: ${winner ? `${winner} (${shortPartyLabel(party)})` : shortPartyLabel(party)} elected${c.voting_system === "STV" ? " under STV" : Number.isFinite(result?.majority_votes) ? ` with a majority of ${result.majority_votes.toLocaleString("en-GB")}` : ""}.`, "Results and official sources.")
     : status === "Result awaited"
-      ? `${c.council_name}, ${date}: result awaited for ${c.ward_name}. Candidates, sources and the pre-election record.`
-      : `${c.ward_name}, ${c.council_name}: by-election on ${date}. Candidates, previous results${d.forecast ? " and the published forecast" : "; no forecast published"}.`;
-  // The council disambiguates repeated ward names without front-loading boilerplate.
-  return { title: `${title} | ${c.council_name}`, description, status };
+      ? fit(`${where}, ${date}: polls have closed and the result is awaited.`, "Candidates, sources and the pre-election record.")
+      : fit(`${where}: by-election on ${date}.`, `Candidates, previous results${d.forecast ? " and the published forecast" : "; no forecast published"}.`);
+  return { title, description, status };
+}
+
+/**
+ * The line under "Candidates". The field can only be described as still open
+ * while nominations are: once they have closed, or the contest has polled or
+ * declared, it says so, and it never gives a date already past as a limit
+ * still to come. The overnight feed does not always mark a field as locked
+ * after polling day, so the dates decide, not the lock alone.
+ */
+export function candidateFieldNote(d: any, today = new Date().toISOString().slice(0, 10)): string {
+  const c = d.contest;
+  const f = d.field || {};
+  const n: number = f.candidate_count ?? 0;
+  const close: string | null = c.nominations_close || null;
+  const polled = isDeclared(d) || d.status === "polls_closed" || d.status === "concluded" || c.polling_day < today;
+  const closed = Boolean(f.locked) || polled || Boolean(close && close < today);
+  const candidates = `${n} candidate${n === 1 ? "" : "s"}`;
+  if (!closed) {
+    return n === 0
+      ? `No candidates have been published yet${close ? `; nominations close on ${prettyElectionDate(close)}` : ""}. This page fills in as they are.`
+      : `${candidates} ${n === 1 ? "is" : "are"} known so far and the field can still change${close ? `, up to ${prettyElectionDate(close)}` : " until nominations close"}.`;
+  }
+  const closedLine = `Nominations closed${close && close <= today ? ` on ${prettyElectionDate(close)}` : ""}.`;
+  if (n === 0) return polled ? `${closedLine} We hold no candidate list for this contest.` : `${closedLine} The candidates have not been published here yet.`;
+  if (polled) return `${closedLine} ${candidates} stood.`;
+  return f.locked
+    ? `${closedLine} ${candidates} standing.`
+    : `${closedLine} ${candidates} ${n === 1 ? "is" : "are"} listed here so far; the statement of persons nominated is the official list.`;
 }
 const placeKey = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
   .replace(/&/g, "and").replace(/\b(city|borough|district|county|london|council|bc|dc|lbc)\b/g, "").replace(/[^a-z0-9]/g, "");

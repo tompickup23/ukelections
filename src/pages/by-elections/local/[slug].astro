@@ -8,7 +8,7 @@ import "../../../styles/by-election-details.css";
  * baseline will not support a number the page says so and shows the structure
  * instead, which is the precedent set by the Clacton page.
  */
-import { localMetadata, isDeclared } from "../../../lib/byElections";
+import { localMetadata, isDeclared, candidateFieldNote } from "../../../lib/byElections";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
@@ -24,6 +24,7 @@ import { buildLocalContestJourneyLinks } from "../../../lib/electionJourneys";
 import { externalHref, buildElectionEvent, type Crumb } from "../../../lib/seo";
 import { byElectionResultSummary } from "../../../lib/pageSummaries";
 import { SITE_URL } from "../../../lib/site";
+import { councilAreaNoun } from "../../../lib/councilAreaNoun";
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
@@ -113,6 +114,9 @@ const pp1 = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed
 const prettyDate = (iso: string) =>
   iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
 
+// County council by-elections fill a division, not a ward (the rule the
+// council pages and their results map use).
+const area = councilAreaNoun(c.council_name);
 const { title, description, status: statusLabel } = localMetadata(d);
 const declared = isDeclared(d);
 
@@ -198,7 +202,7 @@ const declaration = d.declaration;
 // Who won, by how much, how the shares moved and where the result comes
 // from, ahead of the tables: the first thing a reader searching
 // "<ward> by-election result" the morning after needs.
-const resultSummary = byElectionResultSummary(d);
+const resultSummary = byElectionResultSummary(d, area.one);
 // Status alone is not enough: a contest file can still read "upcoming" after
 // polling day if the overnight refresh missed it.
 const pollStillToCome = new Date().toISOString().slice(0, 10) <= c.polling_day;
@@ -213,7 +217,7 @@ const recordWon = recordBin ? Math.round(recordBin.observed * recordBin.n) : nul
 const structuredData = d.status === "upcoming" && pollStillToCome
   ? [buildElectionEvent({
       name: `${c.ward_name} by-election, ${c.council_name}`,
-      description: `Council by-election for ${c.ward_name} ward, ${c.council_name}, on ${prettyDate(c.polling_day)}.`,
+      description: `Council by-election for ${c.ward_name} ${area.one}, ${c.council_name}, on ${prettyDate(c.polling_day)}.`,
       url: `${SITE_URL}/by-elections/local/${d.slug}/`,
       pollingDay: c.polling_day,
       area: c.ward_name,
@@ -237,7 +241,7 @@ const breadcrumbs: Crumb[] = [
           focalCode={c.ward_gss}
           focalKind="ward"
           focalColour={result?.winner_party ? partyColour(result.winner_party) : leader && !tooClose ? partyColour(leader) : undefined}
-          ariaLabel={`Location of ${c.ward_name} ward`}
+          ariaLabel={`Location of ${c.ward_name} ${area.one}`}
         />
       </div>
     )}
@@ -252,7 +256,7 @@ const breadcrumbs: Crumb[] = [
     {resultSummary.length > 0 && <p class="result-summary">{resultSummary[0]}</p>}
     <p class="meta-row journey-shortcuts">
       <a href="/by-elections/local/">All council by-elections</a>
-      {wardHref && <><span aria-hidden="true"> · </span><a href={wardHref}>Open the {c.ward_name} ward page</a></>}
+      {wardHref && <><span aria-hidden="true"> · </span><a href={wardHref}>Open the {c.ward_name} {area.one} page</a></>}
     </p>
   </section>
 
@@ -319,13 +323,7 @@ const breadcrumbs: Crumb[] = [
 
   <section class="card" id="candidates">
     <h2>{declared ? "Candidates and results" : "Candidates"}</h2>
-    <p class="note">
-      {f.locked
-        ? `Nominations closed${c.nominations_close ? ` on ${prettyDate(c.nominations_close)}` : ""}. ${f.candidate_count} candidate${f.candidate_count === 1 ? "" : "s"} ${declared ? "stood" : "standing"}.`
-        : f.candidate_count === 0
-          ? `No candidates have been published yet${c.nominations_close ? `; nominations close on ${prettyDate(c.nominations_close)}` : ""}. This page fills in as they are.`
-          : `${f.candidate_count} candidate${f.candidate_count === 1 ? " is" : "s are"} known so far and the field can still change${c.nominations_close ? `, up to ${prettyDate(c.nominations_close)}` : ""}.`}
-    </p>
+    <p class="note">{candidateFieldNote(d)}</p>
     {f.candidate_count > 0 && (
     <div class="by-election-scroll" role="region" aria-label="Candidate votes and parties" tabindex="0"><table>
       <caption>{declared ? "Declared candidate results" : "Candidates on the ballot"}</caption>
@@ -452,12 +450,12 @@ const breadcrumbs: Crumb[] = [
   {!forecast && (
     <section class="card no-forecast">
       <h2>{declared ? "No pre-election projection" : "No projection for this contest"}</h2>
-      <p>We publish a number when the ward gives us something honest to project from. Here it does not:</p>
+      <p>We publish a number when the {area.one} gives us something honest to project from. Here it does not:</p>
       <ul class="plain">
         {(d.no_forecast_reason || []).map((x: string) => <li>{x}</li>)}
       </ul>
       <p class="note">
-        The candidates, the vacancy and the ward's history are all below. A missing forecast is a
+        The candidates, the vacancy and the {area.one}'s history are all below. A missing forecast is a
         statement about the evidence, not about the contest.
       </p>
     </section>
@@ -468,7 +466,7 @@ const breadcrumbs: Crumb[] = [
       <h2>Who has won here</h2>
       <HistoryStrip
         contests={wardHistory}
-        placeName={`${c.ward_name} ward`}
+        placeName={`${c.ward_name} ${area.one}`}
         upcoming={!declared ? { date: c.polling_day, label: "This by-election" } : null}
         breakLabel={c.boundary_set_start ? `New boundaries ${c.boundary_set_start.slice(0, 4)}` : null}
       />
@@ -477,14 +475,14 @@ const breadcrumbs: Crumb[] = [
 
   {prior && (
     <section class="card" id="previous-result">
-      <h2>Last time in this ward</h2>
+      <h2>Last time in this {area.one}</h2>
       <p class="note">
         Ordinary election, {prettyDate(prior.election_date)}.
         {prior.seats_contested && prior.seats_contested > 1
           ? ` ${prior.seats_contested} seats were filled, so shares below are the notional single-seat contest: each party's strongest candidate, normalised.`
           : ""}
         {!prior.usable_as_baseline
-          ? " The ward boundary has changed since, so this is context rather than a baseline."
+          ? ` The ${area.one} boundary has changed since, so this is context rather than a baseline.`
           : ""}
       </p>
       <PartyBars rows={rows(prior.shares)} />
@@ -498,16 +496,16 @@ const breadcrumbs: Crumb[] = [
 
   {profile && (
     <section class="card">
-      <h2>The ward in numbers</h2>
+      <h2>The {area.one} in numbers</h2>
       <p class="note">
-        Census 2021, aggregated from small areas assigned to this ward, with deprivation from IMD 2019. These are best-fit area estimates, not exact ward counts.
+        Census 2021, aggregated from small areas assigned to this {area.one}, with deprivation from IMD 2019. These are best-fit area estimates, not exact {area.one} counts.
         {profile.total_residents ? ` ${profile.total_residents.toLocaleString("en-GB")} residents in the matched Census areas.` : ""}
         {profile.lookup_year && ` Geography lookup: ${profile.lookup_year}.`}
         {" "}Each figure is shown against the median in our England and Wales ward dataset, which includes the boundary versions covered by the source lookups.
       </p>
       <div class="by-election-scroll" role="region" aria-label="Ward demographic comparison" tabindex="0"><table>
 <caption>Ward demographic comparison</caption>
-        <thead><tr><th scope="col">Measure</th><th scope="col">This ward</th><th scope="col">Median ward</th></tr></thead>
+        <thead><tr><th scope="col">Measure</th><th scope="col">This {area.one}</th><th scope="col">Median ward</th></tr></thead>
         <tbody>
           {profile.fields.map((row: any) => (
             <tr>

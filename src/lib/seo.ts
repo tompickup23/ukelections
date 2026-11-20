@@ -232,3 +232,59 @@ export function externalHref(value: unknown): string | null {
   const trimmed = value.trim();
   return /^https?:\/\/\S+$/.test(trimmed) ? trimmed : null;
 }
+
+/* ------------------------------------------------------------------ */
+/* Place result titles                                                 */
+/* ------------------------------------------------------------------ */
+
+const MONTHS_LONG = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "12 November 2026", or "12 Nov 2026" with `short`. British order, no weekday. */
+export function titleDate(iso: string, short = false): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} ${(short ? MONTHS_SHORT : MONTHS_LONG)[m - 1]} ${y}`;
+}
+
+/** The guide every title aims for; longer ones are cut off in search results. */
+export const TITLE_LIMIT = 60;
+
+export interface PlaceTitleInput {
+  /** The ward, division or other area the page is about. */
+  place: string;
+  /** The council, which disambiguates repeated place names. */
+  council?: string | null;
+  /** What the page answers: "Election result", "By-election result", ... */
+  label: string;
+  /** ISO polling date, written in British order. */
+  date?: string | null;
+  /**
+   * Shorten to TITLE_LIMIT where the names allow, in this order: abbreviate the
+   * month, drop a "London Borough of" style prefix from the council, then drop
+   * the council. The council stays in the description and the page heading.
+   * A title that still runs over is one whose place name alone is too long.
+   */
+  fit?: boolean;
+}
+
+/**
+ * The answer-first title shared by ward pages and council by-election pages:
+ * "Belsize, Camden. Election result, 7 May 2026".
+ */
+export function placeResultTitle(input: PlaceTitleInput): string {
+  // The council is what people search for and what tells two wards of the
+  // same name apart, so a long title gives up the date before the council:
+  // short month, then the year alone, then no date. The council is never dropped.
+  const compose = (council: string | null | undefined, date: string) =>
+    `${input.place}${council ? `, ${council}` : ""}. ${input.label}${date ? `, ${date}` : ""}`;
+  const long = input.date ? titleDate(input.date, false) : "";
+  const short = input.date ? titleDate(input.date, true) : "";
+  const year = input.date ? input.date.slice(0, 4) : "";
+  const full = compose(input.council, long);
+  if (!input.fit) return full;
+  const shortCouncil = input.council?.replace(/^(?:London Borough of|Royal Borough of) /, "");
+  const ladder = [full, compose(input.council, short), compose(shortCouncil, short), compose(shortCouncil, year), compose(shortCouncil, "")];
+  // When even the undated form is too long, nothing is gained by dropping the
+  // year, so the title keeps it and runs over.
+  return ladder.find((t) => t.length <= TITLE_LIMIT) ?? ladder[ladder.length - 2];
+}
