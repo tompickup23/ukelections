@@ -7,16 +7,16 @@
     "mean_absolute_error_pp": "Mean over the parties in the published projection of |projected share minus actual share|, in percentage points."
   },
   "overall": {
-    "contests": 53,
-    "winners_called": 25,
-    "mean_absolute_error_pp": 8.48,
+    "contests": 57,
+    "winners_called": 27,
+    "mean_absolute_error_pp": 8.68,
     "named_favourite": {
-      "contests": 23,
-      "called": 10
+      "contests": 24,
+      "called": 11
     },
     "too_close_to_call": {
-      "contests": 30,
-      "called": 15
+      "contests": 33,
+      "called": 16
     }
   },
   "months": [
@@ -231,16 +231,16 @@
     },
     {
       "month": "2026-11",
-      "contests": 12,
-      "winners_called": 7,
-      "mean_absolute_error_pp": 7.19,
+      "contests": 16,
+      "winners_called": 9,
+      "mean_absolute_error_pp": 8.22,
       "named_favourite": {
-        "contests": 6,
-        "called": 4
+        "contests": 7,
+        "called": 5
       },
       "too_close_to_call": {
-        "contests": 6,
-        "called": 3
+        "contests": 9,
+        "called": 4
       },
       "misses": [
         {
@@ -263,6 +263,20 @@
           "projected_winner": "Reform UK",
           "actual_winner": "Labour",
           "too_close_to_call": false
+        },
+        {
+          "slug": "caerphilly-risca-east-2026-11-19",
+          "date": "2026-11-19",
+          "projected_winner": "Labour",
+          "actual_winner": "Reform UK",
+          "too_close_to_call": true
+        },
+        {
+          "slug": "conwy-bryn-2026-11-19",
+          "date": "2026-11-19",
+          "projected_winner": "Reform UK",
+          "actual_winner": "Independent",
+          "too_close_to_call": true
         },
         {
           "slug": "north-hertfordshire-letchworth-norton-2026-11-19",
@@ -551,10 +565,15 @@
     ]
   },
   "pending_results": [
-    "fareham-portchester-wicor-2026-11-19",
-    "caerphilly-risca-east-2026-11-19",
-    "hertfordshire-letchworth-north-2026-11-19",
-    "conwy-bryn-2026-11-19"
+    "reading-caversham-heights-2026-11-26",
+    "birmingham-shard-end-2026-11-26",
+    "solihull-castle-bromwich-2026-11-26",
+    "bromsgrove-marlbrook-2026-11-26",
+    "flintshire-mold-broncoed-2026-11-26",
+    "manchester-harpurhey-2026-11-26",
+    "oldham-royton-north-2026-12-03",
+    "gosport-hardway-2026-12-03",
+    "pembrokeshire-pembroke-dock-central-2026-12-08"
   ],
   "contests": [
     {
@@ -1326,6 +1345,38 @@
       "result_source": "https://electionresults.wigan.gov.uk/LocalElections/Ward/Index/480"
     },
     {
+      "slug": "caerphilly-risca-east-2026-11-19",
+      "council_name": "Caerphilly",
+      "ward_name": "Risca East",
+      "date": "2026-11-19",
+      "council_slug": "caerphilly",
+      "page": "https://ukelections.co.uk/by-elections/local/caerphilly-risca-east-2026-11-19/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 35,
+      "too_close_to_call": true,
+      "actual_winner": "Reform UK",
+      "called": false,
+      "mae_pp": 8.44,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://caerphilly.observer/news/1064539/risca-east-by-election-victory-earns-reform-uk-first-caerphilly-council-seat/"
+    },
+    {
+      "slug": "conwy-bryn-2026-11-19",
+      "council_name": "Conwy",
+      "ward_name": "Bryn",
+      "date": "2026-11-19",
+      "council_slug": "conwy",
+      "page": "https://ukelections.co.uk/by-elections/local/conwy-bryn-2026-11-19/",
+      "projected_winner": "Reform UK",
+      "leader_probability_pct": 48,
+      "too_close_to_call": true,
+      "actual_winner": "Independent",
+      "called": false,
+      "mae_pp": 27.9,
+      "result_status": "hand_verified_declaration",
+      "result_source": "https://www.conwy.gov.uk/en/Council/Voting-and-Elections/Vacancies/Bryn-Electoral-Ward.aspx"
+    },
+    {
       "slug": "county-durham-craghead-south-moor-2026-11-19",
       "council_name": "County Durham",
       "ward_name": "Craghead & South Moor",
@@ -1342,6 +1393,22 @@
       "result_source": "https://www.durham.gov.uk/media/52026/Declaration-of-Result-Craghead-and-South-Moor/pdf/DeclarationOfResultCragheadSouthMoor.pdf?m=1795131031990"
     },
     {
+      "slug": "fareham-portchester-wicor-2026-11-19",
+      "council_name": "Fareham",
+      "ward_name": "Portchester Wicor",
+      "date": "2026-11-19",
+      "council_slug": "fareham",
+      "page": "https://ukelections.co.uk/by-elections/local/fareham-portchester-wicor-2026-11-19/",
+      "projected_winner": "Liberal Democrats",
+      "leader_probability_pct": 40,
+      "too_close_to_call": true,
+      "actual_winner": "Liberal Democrats",
+      "called": true,
+      "mae_pp": 6.34,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election"
+    },
+    {
       "slug": "havant-emsworth-2026-11-19",
       "council_name": "Havant",
       "ward_name": "Emsworth",
@@ -1356,6 +1423,22 @@
       "mae_pp": 6.31,
       "result_status": "hand_verified_declaration",
       "result_source": "https://www.havant.gov.uk/sites/default/files/2026-11/Emsworth%20By%20Elections%20Declaration_0.pdf"
+    },
+    {
+      "slug": "hertfordshire-letchworth-north-2026-11-19",
+      "council_name": "Hertfordshire",
+      "ward_name": "Letchworth North",
+      "date": "2026-11-19",
+      "council_slug": "hertfordshire",
+      "page": "https://ukelections.co.uk/by-elections/local/hertfordshire-letchworth-north-2026-11-19/",
+      "projected_winner": "Labour",
+      "leader_probability_pct": 58,
+      "too_close_to_call": false,
+      "actual_winner": "Labour",
+      "called": true,
+      "mae_pp": 2.48,
+      "result_status": "hand_verified_two_sources",
+      "result_source": "https://www.thecomet.net/news/26749093.comfortable-wins-labour-two-north-herts-by-elections/"
     },
     {
       "slug": "north-hertfordshire-letchworth-norton-2026-11-19",
