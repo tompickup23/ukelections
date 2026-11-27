@@ -10,12 +10,16 @@ import { applyCouncilResults } from "../scripts/apply-council-results.mjs";
 // It now applies the declared ones and lists the rest. The tests run against
 // a copy of the contest folder, so the committed files are never rewritten;
 // the sidecar and the other inputs are only read.
+//
+// On 26 November Conwy's Bryn declaration was read by hand, so it now applies.
+// Risca East, Portchester Wicor and Letchworth North carry
+// hand_verified_two_sources rows (press reports of declarations this script
+// may not fetch); it leaves those to the finaliser, so they stay pending here.
 
 const DIR = "data/contests/local-byelections";
 const DAY = "2026-11-19";
 const PENDING = [
   "local.caerphilly.risca-east.by.2026-11-19",
-  "local.conwy.bryn.by.2026-11-19",
   "local.fareham.portchester-wicor.by.2026-11-19",
   "local.hertfordshire.letchworth-north.by.2026-11-19",
 ];
@@ -37,7 +41,7 @@ describe.skipIf(!present)("apply-council-results on a part-declared round", () =
     try {
       const lines = [];
       const { applied, pending } = applyCouncilResults(DAY, { directory: dir, log: (line) => lines.push(line) });
-      expect(applied).toHaveLength(5);
+      expect(applied).toHaveLength(6);
       expect(pending.map((item) => item.id).sort()).toEqual(PENDING);
       for (const id of PENDING) expect(lines.some((line) => line.includes(`pending ${id}`))).toBe(true);
       for (const file of readdirSync(dir).filter((f) => f.endsWith(`${DAY}.json`))) {
@@ -57,7 +61,7 @@ describe.skipIf(!present)("apply-council-results on a part-declared round", () =
       const before = Object.fromEntries(readdirSync(dir).map((f) => [f, readFileSync(path.join(dir, f), "utf8")]));
       const { applied, pending } = applyCouncilResults(DAY, { directory: dir, log: () => {} });
       expect(applied).toEqual([]);
-      expect(pending).toHaveLength(4);
+      expect(pending).toHaveLength(PENDING.length);
       for (const [file, text] of Object.entries(before)) expect(readFileSync(path.join(dir, file), "utf8")).toBe(text);
     } finally {
       rmSync(dir, { recursive: true, force: true });

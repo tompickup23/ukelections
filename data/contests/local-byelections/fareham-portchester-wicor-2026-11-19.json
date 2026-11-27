@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "generated_at": "2026-11-14T03:52:16.301Z",
   "slug": "fareham-portchester-wicor-2026-11-19",
-  "status": "upcoming",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.fareham.portchester-wicor.by.2026-11-19",
     "polling_day": "2026-11-19",
@@ -51,37 +51,47 @@
       {
         "name": "Harry Patrick Davis",
         "party_name": "Conservative and Unionist Party",
-        "party": "Conservative",
-        "votes": null,
-        "elected": null
+        "votes": 475,
+        "elected": false,
+        "source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election",
+        "accessed_at": "2026-11-26",
+        "party": "Conservative"
       },
       {
         "name": "Lorraine Drinkwater",
         "party_name": "Labour Party",
-        "party": "Labour",
-        "votes": null,
-        "elected": null
+        "votes": 59,
+        "elected": false,
+        "source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election",
+        "accessed_at": "2026-11-26",
+        "party": "Labour"
       },
       {
         "name": "Paul Kimber",
         "party_name": "Reform UK",
-        "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "votes": 618,
+        "elected": false,
+        "source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election",
+        "accessed_at": "2026-11-26",
+        "party": "Reform UK"
       },
       {
         "name": "George William Ponsford",
         "party_name": "Restore Britain",
-        "party": "Restore Britain",
-        "votes": null,
-        "elected": null
+        "votes": 78,
+        "elected": false,
+        "source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election",
+        "accessed_at": "2026-11-26",
+        "party": "Restore Britain"
       },
       {
         "name": "Steve Shaw",
         "party_name": "Liberal Democrats",
-        "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
+        "votes": 980,
+        "elected": true,
+        "source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election",
+        "accessed_at": "2026-11-26",
+        "party": "Liberal Democrats"
       }
     ]
   },
@@ -340,9 +350,47 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.27963800904977376,
+      "Labour": 0.02669683257918552,
+      "Conservative": 0.2149321266968326,
+      "Liberal Democrats": 0.4434389140271493,
+      "Green Party": 0,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0.03529411764705882,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Liberal Democrats",
+    "winner_candidate": "Steve Shaw",
+    "winner_party_name": "Liberal Democrats",
+    "winner_votes": 980,
+    "runner_up_party": "Reform UK",
+    "majority_votes": 362,
+    "total_votes": 2210,
+    "source": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election",
+    "outcome": null,
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-11-14",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Liberal Democrats",
+      "call_correct": true,
+      "mae_pp": 5.605429864253392
+    },
+    "review_status": "hand_verified_two_sources",
+    "checked_at": "2026-11-26",
+    "note": "Fareham's results are on moderngov.fareham.gov.uk, which puts a JavaScript bot check in front of every page, so the declaration was not read. Counts are from the Wikipedia election table, which cites that page (https://moderngov.fareham.gov.uk/mgElectionAreaResults.aspx?ID=150&RPID=32613458): 980, 618, 475, 78, 59; 2,210 valid votes; majority 362. Independently, PollCheck's shares (https://www.pollcheck.co.uk/by-elections/council/2026-11-19/fareham-portchester-wicor/: 44.3, 28.0, 21.5, 3.5, 2.7) equal each count over 2,210 to one decimal place. Rejected papers, ballot papers issued and electorate were not available, so they are left blank. Replace this row's source with the council page when a person has read it."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Report of the declaration (verified against a second source)",
+      "url": "https://en.wikipedia.org/wiki/2026_Fareham_Borough_Council_election"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.fareham.portchester-wicor.by.2026-11-19/"
@@ -351,5 +399,6 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.fareham.portchester-wicor.by.2026-11-19/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-11-26"
 }

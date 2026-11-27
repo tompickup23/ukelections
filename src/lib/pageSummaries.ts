@@ -244,9 +244,15 @@ export function byElectionResultSummary(d: any, areaNoun: string = "ward"): stri
     const s: string[] = [];
     // A winner pooled under "Other" is named by its own label, on its own votes.
     const named = result.winner_party === "Other" && result.winner_party_name;
-    const share = named
-      ? (result.total_votes ? result.winner_votes / result.total_votes : undefined)
-      : result.shares?.[result.winner_party];
+    // The winner's own votes, not the party total: two independents pool under
+    // one label, so Bryn (Conwy, 19 November 2026) read "50.5% of the vote"
+    // for a winner who took 37.3%.
+    const share =
+      Number.isFinite(result.winner_votes) && result.total_votes
+        ? result.winner_votes / result.total_votes
+        : named
+          ? undefined
+          : result.shares?.[result.winner_party];
     s.push(
       `${named ? resultWinnerLabel(result) : cap(partyProse(result.winner_party, true))} won ${where}` +
         (typeof share === "number" ? ` with ${pct1(share)}% of the vote` : "") +
