@@ -1,0 +1,2670 @@
+{
+ "spec": "SAFECALL_SPEC.md",
+ "inputs_sha256": {
+  "recency_predictions.pkl": "84a9a2edabffd310166b78ed4cc662cfcfbece666c10493fbf91f34510a60f91",
+  "candidate-2026-10-24.json": "b508238f9806220a13112ecafd536926a6b36423e8c463e748f58e2a99d62fa8",
+  "fit_meta.pkl": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad",
+  "confidence.json": "bbc7b67f445cf23ec6d9064701c95dc60925a56ee5c48711380d3f191a821def"
+ },
+ "counts_note": "contests are wards (scheduled) or by-elections; labelled is contests at or above the threshold; right is labelled contests whose called leader topped the actual full-slate share",
+ "verdict": {
+  "rule": "blend on May 2026: safe label right in at least 87% of labelled contests and covering at least 15% of contests",
+  "rate_right": 0.9474,
+  "share_of_contests": 0.022,
+  "supported": false
+ },
+ "training": {
+  "training_contests_forecast": 1924,
+  "training_rate_right": 0.4496,
+  "thresholds_isotonic": {
+   "80": 0.6904761904761905,
+   "90": 0.8928571428571429,
+   "95": 0.8928571428571429
+  },
+  "threshold_leads_pp_isotonic": {
+   "80": 33.87,
+   "90": 36.89,
+   "95": 36.89
+  },
+  "thresholds_logistic": {
+   "80": 0.6238201398936183,
+   "90": 0.8249348152447441,
+   "95": 0.9074670210337727
+  },
+  "logistic_coefficients": {
+   "intercept": -1.3937,
+   "lead_pp": 0.0505,
+   "has_prev": 0.9922,
+   "is_by": 0.8497
+  },
+  "isotonic_steps": [
+   {
+    "from_lead_pp": 0.0,
+    "probability": 0.0
+   },
+   {
+    "from_lead_pp": 0.03,
+    "probability": 0.2719
+   },
+   {
+    "from_lead_pp": 1.37,
+    "probability": 0.2719
+   },
+   {
+    "from_lead_pp": 1.41,
+    "probability": 0.2821
+   },
+   {
+    "from_lead_pp": 2.2,
+    "probability": 0.2821
+   },
+   {
+    "from_lead_pp": 2.21,
+    "probability": 0.3285
+   },
+   {
+    "from_lead_pp": 5.19,
+    "probability": 0.3285
+   },
+   {
+    "from_lead_pp": 5.21,
+    "probability": 0.3333
+   },
+   {
+    "from_lead_pp": 5.23,
+    "probability": 0.3333
+   },
+   {
+    "from_lead_pp": 5.25,
+    "probability": 0.3371
+   },
+   {
+    "from_lead_pp": 7.58,
+    "probability": 0.3371
+   },
+   {
+    "from_lead_pp": 7.59,
+    "probability": 0.3824
+   },
+   {
+    "from_lead_pp": 12.73,
+    "probability": 0.3824
+   },
+   {
+    "from_lead_pp": 12.76,
+    "probability": 0.3889
+   },
+   {
+    "from_lead_pp": 13.03,
+    "probability": 0.3889
+   },
+   {
+    "from_lead_pp": 13.03,
+    "probability": 0.4463
+   },
+   {
+    "from_lead_pp": 16.16,
+    "probability": 0.4463
+   },
+   {
+    "from_lead_pp": 16.21,
+    "probability": 0.4545
+   },
+   {
+    "from_lead_pp": 16.44,
+    "probability": 0.4545
+   },
+   {
+    "from_lead_pp": 16.45,
+    "probability": 0.4634
+   },
+   {
+    "from_lead_pp": 19.28,
+    "probability": 0.4634
+   },
+   {
+    "from_lead_pp": 19.31,
+    "probability": 0.5385
+   },
+   {
+    "from_lead_pp": 25.48,
+    "probability": 0.5385
+   },
+   {
+    "from_lead_pp": 25.48,
+    "probability": 0.5446
+   },
+   {
+    "from_lead_pp": 28.67,
+    "probability": 0.5446
+   },
+   {
+    "from_lead_pp": 28.67,
+    "probability": 0.5882
+   },
+   {
+    "from_lead_pp": 29.01,
+    "probability": 0.5882
+   },
+   {
+    "from_lead_pp": 29.01,
+    "probability": 0.6458
+   },
+   {
+    "from_lead_pp": 30.49,
+    "probability": 0.6458
+   },
+   {
+    "from_lead_pp": 30.51,
+    "probability": 0.6571
+   },
+   {
+    "from_lead_pp": 33.87,
+    "probability": 0.6571
+   },
+   {
+    "from_lead_pp": 33.87,
+    "probability": 0.6905
+   },
+   {
+    "from_lead_pp": 36.83,
+    "probability": 0.6905
+   },
+   {
+    "from_lead_pp": 36.89,
+    "probability": 0.8929
+   },
+   {
+    "from_lead_pp": 41.07,
+    "probability": 0.8929
+   },
+   {
+    "from_lead_pp": 41.08,
+    "probability": 1.0
+   },
+   {
+    "from_lead_pp": 68.46,
+    "probability": 1.0
+   }
+  ],
+  "training_check_safe_isotonic": {
+   "contests": 1924,
+   "80": {
+    "labelled": 103,
+    "right": 87,
+    "rate_right": 0.8447,
+    "ci95": [
+     0.7625,
+     0.9021
+    ],
+    "share_of_contests": 0.0535,
+    "threshold": 0.6905
+   },
+   "90": {
+    "labelled": 61,
+    "right": 58,
+    "rate_right": 0.9508,
+    "ci95": [
+     0.8651,
+     0.9831
+    ],
+    "share_of_contests": 0.0317,
+    "threshold": 0.8929
+   },
+   "95": {
+    "labelled": 61,
+    "right": 58,
+    "rate_right": 0.9508,
+    "ci95": [
+     0.8651,
+     0.9831
+    ],
+    "share_of_contests": 0.0317,
+    "threshold": 0.8929
+   }
+  },
+  "training_reliability_isotonic": [
+   {
+    "band": "0.0 to 0.1",
+    "contests": 1,
+    "mean_probability": 0.0,
+    "rate_right": 0.0
+   },
+   {
+    "band": "0.1 to 0.2",
+    "contests": 0,
+    "mean_probability": null,
+    "rate_right": null
+   },
+   {
+    "band": "0.2 to 0.3",
+    "contests": 192,
+    "mean_probability": 0.276,
+    "rate_right": 0.276
+   },
+   {
+    "band": "0.3 to 0.4",
+    "contests": 756,
+    "mean_probability": 0.3571,
+    "rate_right": 0.3571
+   },
+   {
+    "band": "0.4 to 0.5",
+    "contests": 352,
+    "mean_probability": 0.4545,
+    "rate_right": 0.4545
+   },
+   {
+    "band": "0.5 to 0.6",
+    "contests": 402,
+    "mean_probability": 0.5423,
+    "rate_right": 0.5423
+   },
+   {
+    "band": "0.6 to 0.7",
+    "contests": 160,
+    "mean_probability": 0.6625,
+    "rate_right": 0.6625
+   },
+   {
+    "band": "0.7 to 0.8",
+    "contests": 0,
+    "mean_probability": null,
+    "rate_right": null
+   },
+   {
+    "band": "0.8 to 0.9",
+    "contests": 28,
+    "mean_probability": 0.8929,
+    "rate_right": 0.8929
+   },
+   {
+    "band": "0.9 to 1.0",
+    "contests": 33,
+    "mean_probability": 1.0,
+    "rate_right": 1.0
+   }
+  ],
+  "backtest_sensitivity": {
+   "backtest_contests_added": 4506,
+   "backtest_sha256": "d51d1085c019a1a3c18f1606b0432eb261624f7eeb636b17843d02d48706bebd",
+   "training_contests_forecast": 6430,
+   "training_rate_right": 0.7145,
+   "thresholds_isotonic": {
+    "80": 0.6296296296296297,
+    "90": 0.7831325301204821,
+    "95": 0.8888888888888888
+   },
+   "threshold_leads_pp_isotonic": {
+    "80": 12.82,
+    "90": 25.05,
+    "95": 32.86
+   },
+   "thresholds_logistic": {
+    "80": 0.44067672698992827,
+    "90": 0.7093465877481246,
+    "95": 0.8611310056672553
+   },
+   "logistic_coefficients": {
+    "intercept": -1.62,
+    "lead_pp": 0.0742,
+    "has_prev": 1.7862,
+    "is_by": 0.2712
+   }
+  }
+ },
+ "test": {
+  "may_2026_model": {
+   "contests": 2596,
+   "contests_forecast": 2596,
+   "leader_right_all": 1574,
+   "safe_isotonic_primary": {
+    "contests": 2596,
+    "80": {
+     "labelled": 215,
+     "right": 188,
+     "rate_right": 0.8744,
+     "ci95": [
+      0.8235,
+      0.9122
+     ],
+     "share_of_contests": 0.0828,
+     "threshold": 0.6905
+    },
+    "90": {
+     "labelled": 172,
+     "right": 154,
+     "rate_right": 0.8953,
+     "ci95": [
+      0.8407,
+      0.9328
+     ],
+     "share_of_contests": 0.0663,
+     "threshold": 0.8929
+    },
+    "95": {
+     "labelled": 172,
+     "right": 154,
+     "rate_right": 0.8953,
+     "ci95": [
+      0.8407,
+      0.9328
+     ],
+     "share_of_contests": 0.0663,
+     "threshold": 0.8929
+    }
+   },
+   "safe_logistic_secondary": {
+    "contests": 2596,
+    "80": {
+     "labelled": 789,
+     "right": 627,
+     "rate_right": 0.7947,
+     "ci95": [
+      0.7651,
+      0.8214
+     ],
+     "share_of_contests": 0.3039,
+     "threshold": 0.6238
+    },
+    "90": {
+     "labelled": 140,
+     "right": 128,
+     "rate_right": 0.9143,
+     "ci95": [
+      0.8562,
+      0.9503
+     ],
+     "share_of_contests": 0.0539,
+     "threshold": 0.8249
+    },
+    "95": {
+     "labelled": 15,
+     "right": 14,
+     "rate_right": 0.9333,
+     "ci95": [
+      0.7018,
+      0.9881
+     ],
+     "share_of_contests": 0.0058,
+     "threshold": 0.9075
+    }
+   },
+   "reliability_isotonic": [
+    {
+     "band": "0.0 to 0.1",
+     "contests": 2,
+     "mean_probability": 0.0606,
+     "rate_right": 0.5
+    },
+    {
+     "band": "0.1 to 0.2",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.2 to 0.3",
+     "contests": 273,
+     "mean_probability": 0.2753,
+     "rate_right": 0.4359
+    },
+    {
+     "band": "0.3 to 0.4",
+     "contests": 1177,
+     "mean_probability": 0.3553,
+     "rate_right": 0.5166
+    },
+    {
+     "band": "0.4 to 0.5",
+     "contests": 426,
+     "mean_probability": 0.4535,
+     "rate_right": 0.6268
+    },
+    {
+     "band": "0.5 to 0.6",
+     "contests": 391,
+     "mean_probability": 0.5409,
+     "rate_right": 0.7877
+    },
+    {
+     "band": "0.6 to 0.7",
+     "contests": 154,
+     "mean_probability": 0.6631,
+     "rate_right": 0.7532
+    },
+    {
+     "band": "0.7 to 0.8",
+     "contests": 1,
+     "mean_probability": 0.7708,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.8 to 0.9",
+     "contests": 75,
+     "mean_probability": 0.8929,
+     "rate_right": 0.8667
+    },
+    {
+     "band": "0.9 to 1.0",
+     "contests": 97,
+     "mean_probability": 1.0,
+     "rate_right": 0.9175
+    }
+   ],
+   "brier_called_leader_wins": {
+    "isotonic_primary": {
+     "brier": 0.2487,
+     "contests": 2596
+    },
+    "logistic_secondary": {
+     "brier": 0.2233,
+     "contests": 2596
+    },
+    "mapper_scheduled_sigma": {
+     "brier": 0.2256,
+     "contests": 2596
+    },
+    "flat_training_rate": {
+     "brier": 0.2633,
+     "contests": 2596
+    }
+   },
+   "checks_safe90_isotonic": {
+    "by_party_called": {
+     "Conservative": {
+      "labelled": 21,
+      "right": 20,
+      "rate_right": 0.9524,
+      "ci95": [
+       0.7733,
+       0.9915
+      ],
+      "contests_called": 556
+     },
+     "Green Party": {
+      "labelled": 74,
+      "right": 68,
+      "rate_right": 0.9189,
+      "ci95": [
+       0.8342,
+       0.9623
+      ],
+      "contests_called": 357
+     },
+     "Labour": {
+      "labelled": 2,
+      "right": 2,
+      "rate_right": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ],
+      "contests_called": 641
+     },
+     "Liberal Democrats": {
+      "labelled": 24,
+      "right": 24,
+      "rate_right": 1.0,
+      "ci95": [
+       0.862,
+       1.0
+      ],
+      "contests_called": 489
+     },
+     "Others": {
+      "labelled": 51,
+      "right": 40,
+      "rate_right": 0.7843,
+      "ci95": [
+       0.6537,
+       0.8751
+      ],
+      "contests_called": 250
+     },
+     "Reform UK": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 303
+     }
+    },
+    "by_region": {
+     "East Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 13
+     },
+     "East of England": {
+      "labelled": 30,
+      "right": 29,
+      "rate_right": 0.9667,
+      "ci95": [
+       0.8333,
+       0.9941
+      ],
+      "contests_called": 456
+     },
+     "London": {
+      "labelled": 41,
+      "right": 40,
+      "rate_right": 0.9756,
+      "ci95": [
+       0.874,
+       0.9957
+      ],
+      "contests_called": 636
+     },
+     "North East": {
+      "labelled": 3,
+      "right": 3,
+      "rate_right": 1.0,
+      "ci95": [
+       0.4385,
+       1.0
+      ],
+      "contests_called": 92
+     },
+     "North West": {
+      "labelled": 35,
+      "right": 27,
+      "rate_right": 0.7714,
+      "ci95": [
+       0.6098,
+       0.8793
+      ],
+      "contests_called": 372
+     },
+     "South East": {
+      "labelled": 31,
+      "right": 30,
+      "rate_right": 0.9677,
+      "ci95": [
+       0.8381,
+       0.9943
+      ],
+      "contests_called": 550
+     },
+     "South West": {
+      "labelled": 3,
+      "right": 2,
+      "rate_right": 0.6667,
+      "ci95": [
+       0.2077,
+       0.9385
+      ],
+      "contests_called": 58
+     },
+     "Wales": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 2
+     },
+     "West Midlands": {
+      "labelled": 7,
+      "right": 6,
+      "rate_right": 0.8571,
+      "ci95": [
+       0.4869,
+       0.9743
+      ],
+      "contests_called": 230
+     },
+     "Yorkshire and The Humber": {
+      "labelled": 17,
+      "right": 12,
+      "rate_right": 0.7059,
+      "ci95": [
+       0.4687,
+       0.8672
+      ],
+      "contests_called": 140
+     },
+     "unknown": {
+      "labelled": 5,
+      "right": 5,
+      "rate_right": 1.0,
+      "ci95": [
+       0.5655,
+       1.0
+      ],
+      "contests_called": 47
+     }
+    },
+    "by_previous_result": {
+     "no previous result": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 137
+     },
+     "with previous result": {
+      "labelled": 172,
+      "right": 154,
+      "rate_right": 0.8953,
+      "ci95": [
+       0.8407,
+       0.9328
+      ],
+      "contests_called": 2459
+     }
+    }
+   }
+  },
+  "may_2026_blend": {
+   "contests": 2596,
+   "contests_forecast": 2596,
+   "leader_right_all": 1707,
+   "safe_isotonic_primary": {
+    "contests": 2596,
+    "80": {
+     "labelled": 78,
+     "right": 74,
+     "rate_right": 0.9487,
+     "ci95": [
+      0.8754,
+      0.9799
+     ],
+     "share_of_contests": 0.03,
+     "threshold": 0.6905
+    },
+    "90": {
+     "labelled": 57,
+     "right": 54,
+     "rate_right": 0.9474,
+     "ci95": [
+      0.8563,
+      0.9819
+     ],
+     "share_of_contests": 0.022,
+     "threshold": 0.8929
+    },
+    "95": {
+     "labelled": 57,
+     "right": 54,
+     "rate_right": 0.9474,
+     "ci95": [
+      0.8563,
+      0.9819
+     ],
+     "share_of_contests": 0.022,
+     "threshold": 0.8929
+    }
+   },
+   "safe_logistic_secondary": {
+    "contests": 2596,
+    "80": {
+     "labelled": 449,
+     "right": 400,
+     "rate_right": 0.8909,
+     "ci95": [
+      0.8586,
+      0.9165
+     ],
+     "share_of_contests": 0.173,
+     "threshold": 0.6238
+    },
+    "90": {
+     "labelled": 48,
+     "right": 46,
+     "rate_right": 0.9583,
+     "ci95": [
+      0.8602,
+      0.9885
+     ],
+     "share_of_contests": 0.0185,
+     "threshold": 0.8249
+    },
+    "95": {
+     "labelled": 3,
+     "right": 3,
+     "rate_right": 1.0,
+     "ci95": [
+      0.4385,
+      1.0
+     ],
+     "share_of_contests": 0.0012,
+     "threshold": 0.9075
+    }
+   },
+   "reliability_isotonic": [
+    {
+     "band": "0.0 to 0.1",
+     "contests": 3,
+     "mean_probability": 0.0489,
+     "rate_right": 0.3333
+    },
+    {
+     "band": "0.1 to 0.2",
+     "contests": 2,
+     "mean_probability": 0.1247,
+     "rate_right": 0.5
+    },
+    {
+     "band": "0.2 to 0.3",
+     "contests": 411,
+     "mean_probability": 0.2754,
+     "rate_right": 0.4866
+    },
+    {
+     "band": "0.3 to 0.4",
+     "contests": 1409,
+     "mean_probability": 0.3511,
+     "rate_right": 0.6047
+    },
+    {
+     "band": "0.4 to 0.5",
+     "contests": 375,
+     "mean_probability": 0.4529,
+     "rate_right": 0.784
+    },
+    {
+     "band": "0.5 to 0.6",
+     "contests": 242,
+     "mean_probability": 0.5411,
+     "rate_right": 0.8926
+    },
+    {
+     "band": "0.6 to 0.7",
+     "contests": 96,
+     "mean_probability": 0.6606,
+     "rate_right": 0.9167
+    },
+    {
+     "band": "0.7 to 0.8",
+     "contests": 1,
+     "mean_probability": 0.7448,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.8 to 0.9",
+     "contests": 29,
+     "mean_probability": 0.8929,
+     "rate_right": 0.9655
+    },
+    {
+     "band": "0.9 to 1.0",
+     "contests": 28,
+     "mean_probability": 1.0,
+     "rate_right": 0.9286
+    }
+   ],
+   "brier_called_leader_wins": {
+    "isotonic_primary": {
+     "brier": 0.2773,
+     "contests": 2596
+    },
+    "logistic_secondary": {
+     "brier": 0.2292,
+     "contests": 2596
+    },
+    "mapper_scheduled_sigma": {
+     "brier": 0.2118,
+     "contests": 2596
+    },
+    "flat_training_rate": {
+     "brier": 0.2684,
+     "contests": 2596
+    }
+   },
+   "checks_safe90_isotonic": {
+    "by_party_called": {
+     "Conservative": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 544
+     },
+     "Green Party": {
+      "labelled": 32,
+      "right": 31,
+      "rate_right": 0.9688,
+      "ci95": [
+       0.8426,
+       0.9945
+      ],
+      "contests_called": 326
+     },
+     "Labour": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 548
+     },
+     "Liberal Democrats": {
+      "labelled": 4,
+      "right": 4,
+      "rate_right": 1.0,
+      "ci95": [
+       0.5101,
+       1.0
+      ],
+      "contests_called": 451
+     },
+     "Others": {
+      "labelled": 19,
+      "right": 17,
+      "rate_right": 0.8947,
+      "ci95": [
+       0.6861,
+       0.9706
+      ],
+      "contests_called": 191
+     },
+     "Reform UK": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 536
+     }
+    },
+    "by_region": {
+     "East Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 13
+     },
+     "East of England": {
+      "labelled": 12,
+      "right": 12,
+      "rate_right": 1.0,
+      "ci95": [
+       0.7575,
+       1.0
+      ],
+      "contests_called": 456
+     },
+     "London": {
+      "labelled": 7,
+      "right": 6,
+      "rate_right": 0.8571,
+      "ci95": [
+       0.4869,
+       0.9743
+      ],
+      "contests_called": 636
+     },
+     "North East": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 92
+     },
+     "North West": {
+      "labelled": 13,
+      "right": 12,
+      "rate_right": 0.9231,
+      "ci95": [
+       0.6669,
+       0.9863
+      ],
+      "contests_called": 372
+     },
+     "South East": {
+      "labelled": 11,
+      "right": 11,
+      "rate_right": 1.0,
+      "ci95": [
+       0.7412,
+       1.0
+      ],
+      "contests_called": 550
+     },
+     "South West": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 58
+     },
+     "Wales": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 2
+     },
+     "West Midlands": {
+      "labelled": 4,
+      "right": 4,
+      "rate_right": 1.0,
+      "ci95": [
+       0.5101,
+       1.0
+      ],
+      "contests_called": 230
+     },
+     "Yorkshire and The Humber": {
+      "labelled": 7,
+      "right": 6,
+      "rate_right": 0.8571,
+      "ci95": [
+       0.4869,
+       0.9743
+      ],
+      "contests_called": 140
+     },
+     "unknown": {
+      "labelled": 2,
+      "right": 2,
+      "rate_right": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ],
+      "contests_called": 47
+     }
+    },
+    "by_previous_result": {
+     "no previous result": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 137
+     },
+     "with previous result": {
+      "labelled": 57,
+      "right": 54,
+      "rate_right": 0.9474,
+      "ci95": [
+       0.8563,
+       0.9819
+      ],
+      "contests_called": 2459
+     }
+    }
+   }
+  },
+  "may_2026_scheduled_only_model": {
+   "contests": 2576,
+   "contests_forecast": 2576,
+   "leader_right_all": 1559,
+   "safe_isotonic_primary": {
+    "contests": 2576,
+    "80": {
+     "labelled": 213,
+     "right": 186,
+     "rate_right": 0.8732,
+     "ci95": [
+      0.8219,
+      0.9114
+     ],
+     "share_of_contests": 0.0827,
+     "threshold": 0.6905
+    },
+    "90": {
+     "labelled": 171,
+     "right": 153,
+     "rate_right": 0.8947,
+     "ci95": [
+      0.8398,
+      0.9324
+     ],
+     "share_of_contests": 0.0664,
+     "threshold": 0.8929
+    },
+    "95": {
+     "labelled": 171,
+     "right": 153,
+     "rate_right": 0.8947,
+     "ci95": [
+      0.8398,
+      0.9324
+     ],
+     "share_of_contests": 0.0664,
+     "threshold": 0.8929
+    }
+   },
+   "safe_logistic_secondary": {
+    "contests": 2576,
+    "80": {
+     "labelled": 770,
+     "right": 613,
+     "rate_right": 0.7961,
+     "ci95": [
+      0.7662,
+      0.8231
+     ],
+     "share_of_contests": 0.2989,
+     "threshold": 0.6238
+    },
+    "90": {
+     "labelled": 137,
+     "right": 125,
+     "rate_right": 0.9124,
+     "ci95": [
+      0.8531,
+      0.9492
+     ],
+     "share_of_contests": 0.0532,
+     "threshold": 0.8249
+    },
+    "95": {
+     "labelled": 14,
+     "right": 13,
+     "rate_right": 0.9286,
+     "ci95": [
+      0.6853,
+      0.9873
+     ],
+     "share_of_contests": 0.0054,
+     "threshold": 0.9075
+    }
+   },
+   "reliability_isotonic": [
+    {
+     "band": "0.0 to 0.1",
+     "contests": 2,
+     "mean_probability": 0.0606,
+     "rate_right": 0.5
+    },
+    {
+     "band": "0.1 to 0.2",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.2 to 0.3",
+     "contests": 272,
+     "mean_probability": 0.2753,
+     "rate_right": 0.4338
+    },
+    {
+     "band": "0.3 to 0.4",
+     "contests": 1165,
+     "mean_probability": 0.3553,
+     "rate_right": 0.515
+    },
+    {
+     "band": "0.4 to 0.5",
+     "contests": 423,
+     "mean_probability": 0.4536,
+     "rate_right": 0.6241
+    },
+    {
+     "band": "0.5 to 0.6",
+     "contests": 389,
+     "mean_probability": 0.5409,
+     "rate_right": 0.7892
+    },
+    {
+     "band": "0.6 to 0.7",
+     "contests": 153,
+     "mean_probability": 0.6629,
+     "rate_right": 0.7516
+    },
+    {
+     "band": "0.7 to 0.8",
+     "contests": 1,
+     "mean_probability": 0.7708,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.8 to 0.9",
+     "contests": 75,
+     "mean_probability": 0.8929,
+     "rate_right": 0.8667
+    },
+    {
+     "band": "0.9 to 1.0",
+     "contests": 96,
+     "mean_probability": 1.0,
+     "rate_right": 0.9167
+    }
+   ],
+   "brier_called_leader_wins": {
+    "isotonic_primary": {
+     "brier": 0.2484,
+     "contests": 2576
+    },
+    "logistic_secondary": {
+     "brier": 0.2236,
+     "contests": 2576
+    },
+    "mapper_scheduled_sigma": {
+     "brier": 0.2259,
+     "contests": 2576
+    },
+    "flat_training_rate": {
+     "brier": 0.2631,
+     "contests": 2576
+    }
+   },
+   "checks_safe90_isotonic": {
+    "by_party_called": {
+     "Conservative": {
+      "labelled": 21,
+      "right": 20,
+      "rate_right": 0.9524,
+      "ci95": [
+       0.7733,
+       0.9915
+      ],
+      "contests_called": 552
+     },
+     "Green Party": {
+      "labelled": 73,
+      "right": 67,
+      "rate_right": 0.9178,
+      "ci95": [
+       0.8321,
+       0.9618
+      ],
+      "contests_called": 355
+     },
+     "Labour": {
+      "labelled": 2,
+      "right": 2,
+      "rate_right": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ],
+      "contests_called": 641
+     },
+     "Liberal Democrats": {
+      "labelled": 24,
+      "right": 24,
+      "rate_right": 1.0,
+      "ci95": [
+       0.862,
+       1.0
+      ],
+      "contests_called": 481
+     },
+     "Others": {
+      "labelled": 51,
+      "right": 40,
+      "rate_right": 0.7843,
+      "ci95": [
+       0.6537,
+       0.8751
+      ],
+      "contests_called": 249
+     },
+     "Reform UK": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 298
+     }
+    },
+    "by_region": {
+     "East Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 11
+     },
+     "East of England": {
+      "labelled": 30,
+      "right": 29,
+      "rate_right": 0.9667,
+      "ci95": [
+       0.8333,
+       0.9941
+      ],
+      "contests_called": 450
+     },
+     "London": {
+      "labelled": 41,
+      "right": 40,
+      "rate_right": 0.9756,
+      "ci95": [
+       0.874,
+       0.9957
+      ],
+      "contests_called": 636
+     },
+     "North East": {
+      "labelled": 3,
+      "right": 3,
+      "rate_right": 1.0,
+      "ci95": [
+       0.4385,
+       1.0
+      ],
+      "contests_called": 92
+     },
+     "North West": {
+      "labelled": 35,
+      "right": 27,
+      "rate_right": 0.7714,
+      "ci95": [
+       0.6098,
+       0.8793
+      ],
+      "contests_called": 372
+     },
+     "South East": {
+      "labelled": 30,
+      "right": 29,
+      "rate_right": 0.9667,
+      "ci95": [
+       0.8333,
+       0.9941
+      ],
+      "contests_called": 543
+     },
+     "South West": {
+      "labelled": 3,
+      "right": 2,
+      "rate_right": 0.6667,
+      "ci95": [
+       0.2077,
+       0.9385
+      ],
+      "contests_called": 56
+     },
+     "West Midlands": {
+      "labelled": 7,
+      "right": 6,
+      "rate_right": 0.8571,
+      "ci95": [
+       0.4869,
+       0.9743
+      ],
+      "contests_called": 229
+     },
+     "Yorkshire and The Humber": {
+      "labelled": 17,
+      "right": 12,
+      "rate_right": 0.7059,
+      "ci95": [
+       0.4687,
+       0.8672
+      ],
+      "contests_called": 140
+     },
+     "unknown": {
+      "labelled": 5,
+      "right": 5,
+      "rate_right": 1.0,
+      "ci95": [
+       0.5655,
+       1.0
+      ],
+      "contests_called": 47
+     }
+    },
+    "by_previous_result": {
+     "no previous result": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 136
+     },
+     "with previous result": {
+      "labelled": 171,
+      "right": 153,
+      "rate_right": 0.8947,
+      "ci95": [
+       0.8398,
+       0.9324
+      ],
+      "contests_called": 2440
+     }
+    }
+   }
+  },
+  "may_2026_scheduled_only_blend": {
+   "contests": 2576,
+   "contests_forecast": 2576,
+   "leader_right_all": 1692,
+   "safe_isotonic_primary": {
+    "contests": 2576,
+    "80": {
+     "labelled": 77,
+     "right": 73,
+     "rate_right": 0.9481,
+     "ci95": [
+      0.8739,
+      0.9796
+     ],
+     "share_of_contests": 0.0299,
+     "threshold": 0.6905
+    },
+    "90": {
+     "labelled": 56,
+     "right": 53,
+     "rate_right": 0.9464,
+     "ci95": [
+      0.8539,
+      0.9816
+     ],
+     "share_of_contests": 0.0217,
+     "threshold": 0.8929
+    },
+    "95": {
+     "labelled": 56,
+     "right": 53,
+     "rate_right": 0.9464,
+     "ci95": [
+      0.8539,
+      0.9816
+     ],
+     "share_of_contests": 0.0217,
+     "threshold": 0.8929
+    }
+   },
+   "safe_logistic_secondary": {
+    "contests": 2576,
+    "80": {
+     "labelled": 433,
+     "right": 389,
+     "rate_right": 0.8984,
+     "ci95": [
+      0.8663,
+      0.9234
+     ],
+     "share_of_contests": 0.1681,
+     "threshold": 0.6238
+    },
+    "90": {
+     "labelled": 47,
+     "right": 45,
+     "rate_right": 0.9574,
+     "ci95": [
+      0.8575,
+      0.9883
+     ],
+     "share_of_contests": 0.0182,
+     "threshold": 0.8249
+    },
+    "95": {
+     "labelled": 2,
+     "right": 2,
+     "rate_right": 1.0,
+     "ci95": [
+      0.3424,
+      1.0
+     ],
+     "share_of_contests": 0.0008,
+     "threshold": 0.9075
+    }
+   },
+   "reliability_isotonic": [
+    {
+     "band": "0.0 to 0.1",
+     "contests": 3,
+     "mean_probability": 0.0489,
+     "rate_right": 0.3333
+    },
+    {
+     "band": "0.1 to 0.2",
+     "contests": 2,
+     "mean_probability": 0.1247,
+     "rate_right": 0.5
+    },
+    {
+     "band": "0.2 to 0.3",
+     "contests": 408,
+     "mean_probability": 0.2754,
+     "rate_right": 0.4828
+    },
+    {
+     "band": "0.3 to 0.4",
+     "contests": 1398,
+     "mean_probability": 0.351,
+     "rate_right": 0.6052
+    },
+    {
+     "band": "0.4 to 0.5",
+     "contests": 371,
+     "mean_probability": 0.4528,
+     "rate_right": 0.7817
+    },
+    {
+     "band": "0.5 to 0.6",
+     "contests": 241,
+     "mean_probability": 0.5411,
+     "rate_right": 0.8921
+    },
+    {
+     "band": "0.6 to 0.7",
+     "contests": 96,
+     "mean_probability": 0.6606,
+     "rate_right": 0.9167
+    },
+    {
+     "band": "0.7 to 0.8",
+     "contests": 1,
+     "mean_probability": 0.7448,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.8 to 0.9",
+     "contests": 28,
+     "mean_probability": 0.8929,
+     "rate_right": 0.9643
+    },
+    {
+     "band": "0.9 to 1.0",
+     "contests": 28,
+     "mean_probability": 1.0,
+     "rate_right": 0.9286
+    }
+   ],
+   "brier_called_leader_wins": {
+    "isotonic_primary": {
+     "brier": 0.2772,
+     "contests": 2576
+    },
+    "logistic_secondary": {
+     "brier": 0.2296,
+     "contests": 2576
+    },
+    "mapper_scheduled_sigma": {
+     "brier": 0.2119,
+     "contests": 2576
+    },
+    "flat_training_rate": {
+     "brier": 0.2684,
+     "contests": 2576
+    }
+   },
+   "checks_safe90_isotonic": {
+    "by_party_called": {
+     "Conservative": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 540
+     },
+     "Green Party": {
+      "labelled": 31,
+      "right": 30,
+      "rate_right": 0.9677,
+      "ci95": [
+       0.8381,
+       0.9943
+      ],
+      "contests_called": 324
+     },
+     "Labour": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 548
+     },
+     "Liberal Democrats": {
+      "labelled": 4,
+      "right": 4,
+      "rate_right": 1.0,
+      "ci95": [
+       0.5101,
+       1.0
+      ],
+      "contests_called": 443
+     },
+     "Others": {
+      "labelled": 19,
+      "right": 17,
+      "rate_right": 0.8947,
+      "ci95": [
+       0.6861,
+       0.9706
+      ],
+      "contests_called": 191
+     },
+     "Reform UK": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 530
+     }
+    },
+    "by_region": {
+     "East Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 11
+     },
+     "East of England": {
+      "labelled": 12,
+      "right": 12,
+      "rate_right": 1.0,
+      "ci95": [
+       0.7575,
+       1.0
+      ],
+      "contests_called": 450
+     },
+     "London": {
+      "labelled": 7,
+      "right": 6,
+      "rate_right": 0.8571,
+      "ci95": [
+       0.4869,
+       0.9743
+      ],
+      "contests_called": 636
+     },
+     "North East": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 92
+     },
+     "North West": {
+      "labelled": 13,
+      "right": 12,
+      "rate_right": 0.9231,
+      "ci95": [
+       0.6669,
+       0.9863
+      ],
+      "contests_called": 372
+     },
+     "South East": {
+      "labelled": 10,
+      "right": 10,
+      "rate_right": 1.0,
+      "ci95": [
+       0.7225,
+       1.0
+      ],
+      "contests_called": 543
+     },
+     "South West": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 56
+     },
+     "West Midlands": {
+      "labelled": 4,
+      "right": 4,
+      "rate_right": 1.0,
+      "ci95": [
+       0.5101,
+       1.0
+      ],
+      "contests_called": 229
+     },
+     "Yorkshire and The Humber": {
+      "labelled": 7,
+      "right": 6,
+      "rate_right": 0.8571,
+      "ci95": [
+       0.4869,
+       0.9743
+      ],
+      "contests_called": 140
+     },
+     "unknown": {
+      "labelled": 2,
+      "right": 2,
+      "rate_right": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ],
+      "contests_called": 47
+     }
+    },
+    "by_previous_result": {
+     "no previous result": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 136
+     },
+     "with previous result": {
+      "labelled": 56,
+      "right": 53,
+      "rate_right": 0.9464,
+      "ci95": [
+       0.8539,
+       0.9816
+      ],
+      "contests_called": 2440
+     }
+    }
+   }
+  },
+  "byelections_107_model": {
+   "contests": 107,
+   "contests_forecast": 107,
+   "leader_right_all": 65,
+   "safe_isotonic_primary": {
+    "contests": 107,
+    "80": {
+     "labelled": 1,
+     "right": 1,
+     "rate_right": 1.0,
+     "ci95": [
+      0.2065,
+      1.0
+     ],
+     "share_of_contests": 0.0093,
+     "threshold": 0.6905
+    },
+    "90": {
+     "labelled": 1,
+     "right": 1,
+     "rate_right": 1.0,
+     "ci95": [
+      0.2065,
+      1.0
+     ],
+     "share_of_contests": 0.0093,
+     "threshold": 0.8929
+    },
+    "95": {
+     "labelled": 1,
+     "right": 1,
+     "rate_right": 1.0,
+     "ci95": [
+      0.2065,
+      1.0
+     ],
+     "share_of_contests": 0.0093,
+     "threshold": 0.8929
+    }
+   },
+   "safe_logistic_secondary": {
+    "contests": 107,
+    "80": {
+     "labelled": 58,
+     "right": 39,
+     "rate_right": 0.6724,
+     "ci95": [
+      0.5442,
+      0.7792
+     ],
+     "share_of_contests": 0.5421,
+     "threshold": 0.6238
+    },
+    "90": {
+     "labelled": 8,
+     "right": 6,
+     "rate_right": 0.75,
+     "ci95": [
+      0.4093,
+      0.9285
+     ],
+     "share_of_contests": 0.0748,
+     "threshold": 0.8249
+    },
+    "95": {
+     "labelled": 1,
+     "right": 1,
+     "rate_right": 1.0,
+     "ci95": [
+      0.2065,
+      1.0
+     ],
+     "share_of_contests": 0.0093,
+     "threshold": 0.9075
+    }
+   },
+   "reliability_isotonic": [
+    {
+     "band": "0.0 to 0.1",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.1 to 0.2",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.2 to 0.3",
+     "contests": 13,
+     "mean_probability": 0.2743,
+     "rate_right": 0.4615
+    },
+    {
+     "band": "0.3 to 0.4",
+     "contests": 54,
+     "mean_probability": 0.3515,
+     "rate_right": 0.5185
+    },
+    {
+     "band": "0.4 to 0.5",
+     "contests": 25,
+     "mean_probability": 0.4525,
+     "rate_right": 0.76
+    },
+    {
+     "band": "0.5 to 0.6",
+     "contests": 11,
+     "mean_probability": 0.5401,
+     "rate_right": 0.8182
+    },
+    {
+     "band": "0.6 to 0.7",
+     "contests": 3,
+     "mean_probability": 0.6534,
+     "rate_right": 0.6667
+    },
+    {
+     "band": "0.7 to 0.8",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.8 to 0.9",
+     "contests": 1,
+     "mean_probability": 0.8929,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.9 to 1.0",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    }
+   ],
+   "brier_called_leader_wins": {
+    "isotonic_primary": {
+     "brier": 0.2654,
+     "contests": 107
+    },
+    "logistic_secondary": {
+     "brier": 0.2343,
+     "contests": 107
+    },
+    "mapper_scheduled_sigma": {
+     "brier": 0.2122,
+     "contests": 107
+    },
+    "flat_training_rate": {
+     "brier": 0.2634,
+     "contests": 107
+    },
+    "site_confidence_json": {
+     "brier": 0.2193,
+     "contests": 107
+    }
+   },
+   "checks_safe90_isotonic": {
+    "by_party_called": {
+     "Conservative": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 26
+     },
+     "Green Party": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 17
+     },
+     "Labour": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 9
+     },
+     "Liberal Democrats": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 16
+     },
+     "Others": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 1
+     },
+     "Reform UK": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 38
+     }
+    },
+    "by_region": {
+     "East Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 13
+     },
+     "East of England": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 17
+     },
+     "London": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 11
+     },
+     "North East": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 3
+     },
+     "North West": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 14
+     },
+     "South East": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 17
+     },
+     "South West": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 15
+     },
+     "West Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 12
+     },
+     "Yorkshire and The Humber": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 3
+     },
+     "unknown": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 2
+     }
+    },
+    "by_previous_result": {
+     "no previous result": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 44
+     },
+     "with previous result": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 63
+     }
+    }
+   }
+  },
+  "byelections_107_blend_site": {
+   "contests": 103,
+   "contests_forecast": 103,
+   "leader_right_all": 67,
+   "safe_isotonic_primary": {
+    "contests": 103,
+    "80": {
+     "labelled": 3,
+     "right": 3,
+     "rate_right": 1.0,
+     "ci95": [
+      0.4385,
+      1.0
+     ],
+     "share_of_contests": 0.0291,
+     "threshold": 0.6905
+    },
+    "90": {
+     "labelled": 2,
+     "right": 2,
+     "rate_right": 1.0,
+     "ci95": [
+      0.3424,
+      1.0
+     ],
+     "share_of_contests": 0.0194,
+     "threshold": 0.8929
+    },
+    "95": {
+     "labelled": 2,
+     "right": 2,
+     "rate_right": 1.0,
+     "ci95": [
+      0.3424,
+      1.0
+     ],
+     "share_of_contests": 0.0194,
+     "threshold": 0.8929
+    }
+   },
+   "safe_logistic_secondary": {
+    "contests": 103,
+    "80": {
+     "labelled": 63,
+     "right": 41,
+     "rate_right": 0.6508,
+     "ci95": [
+      0.5275,
+      0.7567
+     ],
+     "share_of_contests": 0.6117,
+     "threshold": 0.6238
+    },
+    "90": {
+     "labelled": 10,
+     "right": 7,
+     "rate_right": 0.7,
+     "ci95": [
+      0.3968,
+      0.8922
+     ],
+     "share_of_contests": 0.0971,
+     "threshold": 0.8249
+    },
+    "95": {
+     "labelled": 3,
+     "right": 3,
+     "rate_right": 1.0,
+     "ci95": [
+      0.4385,
+      1.0
+     ],
+     "share_of_contests": 0.0291,
+     "threshold": 0.9075
+    }
+   },
+   "reliability_isotonic": [
+    {
+     "band": "0.0 to 0.1",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.1 to 0.2",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.2 to 0.3",
+     "contests": 21,
+     "mean_probability": 0.2748,
+     "rate_right": 0.5238
+    },
+    {
+     "band": "0.3 to 0.4",
+     "contests": 43,
+     "mean_probability": 0.351,
+     "rate_right": 0.6512
+    },
+    {
+     "band": "0.4 to 0.5",
+     "contests": 20,
+     "mean_probability": 0.454,
+     "rate_right": 0.65
+    },
+    {
+     "band": "0.5 to 0.6",
+     "contests": 15,
+     "mean_probability": 0.5409,
+     "rate_right": 0.7333
+    },
+    {
+     "band": "0.6 to 0.7",
+     "contests": 2,
+     "mean_probability": 0.6738,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.7 to 0.8",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    },
+    {
+     "band": "0.8 to 0.9",
+     "contests": 2,
+     "mean_probability": 0.8929,
+     "rate_right": 1.0
+    },
+    {
+     "band": "0.9 to 1.0",
+     "contests": 0,
+     "mean_probability": null,
+     "rate_right": null
+    }
+   ],
+   "brier_called_leader_wins": {
+    "isotonic_primary": {
+     "brier": 0.2845,
+     "contests": 103
+    },
+    "logistic_secondary": {
+     "brier": 0.242,
+     "contests": 103
+    },
+    "mapper_scheduled_sigma": {
+     "brier": 0.2223,
+     "contests": 103
+    },
+    "flat_training_rate": {
+     "brier": 0.2677,
+     "contests": 103
+    },
+    "site_confidence_json": {
+     "brier": 0.2358,
+     "contests": 103
+    }
+   },
+   "checks_safe90_isotonic": {
+    "by_party_called": {
+     "Conservative": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 19
+     },
+     "Green Party": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 19
+     },
+     "Labour": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 13
+     },
+     "Liberal Democrats": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 18
+     },
+     "Others": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 2
+     },
+     "Reform UK": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 32
+     }
+    },
+    "by_region": {
+     "East Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 13
+     },
+     "East of England": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 16
+     },
+     "London": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 11
+     },
+     "North East": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 3
+     },
+     "North West": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 13
+     },
+     "South East": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 16
+     },
+     "South West": {
+      "labelled": 1,
+      "right": 1,
+      "rate_right": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "contests_called": 14
+     },
+     "West Midlands": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 12
+     },
+     "Yorkshire and The Humber": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 3
+     },
+     "unknown": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 2
+     }
+    },
+    "by_previous_result": {
+     "no previous result": {
+      "labelled": 0,
+      "right": 0,
+      "rate_right": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "contests_called": 41
+     },
+     "with previous result": {
+      "labelled": 2,
+      "right": 2,
+      "rate_right": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ],
+      "contests_called": 62
+     }
+    }
+   }
+  }
+ },
+ "test_with_backtest_mapping_sensitivity": {
+  "may_2026_model": {
+   "safe_isotonic": {
+    "contests": 2596,
+    "80": {
+     "labelled": 1164,
+     "right": 859,
+     "rate_right": 0.738,
+     "ci95": [
+      0.712,
+      0.7624
+     ],
+     "share_of_contests": 0.4484,
+     "threshold": 0.6296
+    },
+    "90": {
+     "labelled": 448,
+     "right": 375,
+     "rate_right": 0.8371,
+     "ci95": [
+      0.8,
+      0.8684
+     ],
+     "share_of_contests": 0.1726,
+     "threshold": 0.7831
+    },
+    "95": {
+     "labelled": 231,
+     "right": 202,
+     "rate_right": 0.8745,
+     "ci95": [
+      0.8255,
+      0.9112
+     ],
+     "share_of_contests": 0.089,
+     "threshold": 0.8889
+    }
+   },
+   "brier_isotonic": {
+    "brier": 0.2204,
+    "contests": 2596
+   }
+  },
+  "may_2026_blend": {
+   "safe_isotonic": {
+    "contests": 2596,
+    "80": {
+     "labelled": 792,
+     "right": 671,
+     "rate_right": 0.8472,
+     "ci95": [
+      0.8205,
+      0.8706
+     ],
+     "share_of_contests": 0.3051,
+     "threshold": 0.6296
+    },
+    "90": {
+     "labelled": 227,
+     "right": 211,
+     "rate_right": 0.9295,
+     "ci95": [
+      0.8886,
+      0.9562
+     ],
+     "share_of_contests": 0.0874,
+     "threshold": 0.7831
+    },
+    "95": {
+     "labelled": 91,
+     "right": 86,
+     "rate_right": 0.9451,
+     "ci95": [
+      0.8778,
+      0.9763
+     ],
+     "share_of_contests": 0.0351,
+     "threshold": 0.8889
+    }
+   },
+   "brier_isotonic": {
+    "brier": 0.2152,
+    "contests": 2596
+   }
+  },
+  "may_2026_scheduled_only_model": {
+   "safe_isotonic": {
+    "contests": 2576,
+    "80": {
+     "labelled": 1157,
+     "right": 853,
+     "rate_right": 0.7373,
+     "ci95": [
+      0.7111,
+      0.7618
+     ],
+     "share_of_contests": 0.4491,
+     "threshold": 0.6296
+    },
+    "90": {
+     "labelled": 445,
+     "right": 372,
+     "rate_right": 0.836,
+     "ci95": [
+      0.7987,
+      0.8675
+     ],
+     "share_of_contests": 0.1727,
+     "threshold": 0.7831
+    },
+    "95": {
+     "labelled": 229,
+     "right": 200,
+     "rate_right": 0.8734,
+     "ci95": [
+      0.824,
+      0.9104
+     ],
+     "share_of_contests": 0.0889,
+     "threshold": 0.8889
+    }
+   },
+   "brier_isotonic": {
+    "brier": 0.2204,
+    "contests": 2576
+   }
+  },
+  "may_2026_scheduled_only_blend": {
+   "safe_isotonic": {
+    "contests": 2576,
+    "80": {
+     "labelled": 786,
+     "right": 665,
+     "rate_right": 0.8461,
+     "ci95": [
+      0.8191,
+      0.8696
+     ],
+     "share_of_contests": 0.3051,
+     "threshold": 0.6296
+    },
+    "90": {
+     "labelled": 226,
+     "right": 210,
+     "rate_right": 0.9292,
+     "ci95": [
+      0.8881,
+      0.956
+     ],
+     "share_of_contests": 0.0877,
+     "threshold": 0.7831
+    },
+    "95": {
+     "labelled": 90,
+     "right": 85,
+     "rate_right": 0.9444,
+     "ci95": [
+      0.8765,
+      0.976
+     ],
+     "share_of_contests": 0.0349,
+     "threshold": 0.8889
+    }
+   },
+   "brier_isotonic": {
+    "brier": 0.2153,
+    "contests": 2576
+   }
+  },
+  "byelections_107_model": {
+   "safe_isotonic": {
+    "contests": 107,
+    "80": {
+     "labelled": 41,
+     "right": 31,
+     "rate_right": 0.7561,
+     "ci95": [
+      0.6066,
+      0.8618
+     ],
+     "share_of_contests": 0.3832,
+     "threshold": 0.6296
+    },
+    "90": {
+     "labelled": 7,
+     "right": 6,
+     "rate_right": 0.8571,
+     "ci95": [
+      0.4869,
+      0.9743
+     ],
+     "share_of_contests": 0.0654,
+     "threshold": 0.7831
+    },
+    "95": {
+     "labelled": 1,
+     "right": 1,
+     "rate_right": 1.0,
+     "ci95": [
+      0.2065,
+      1.0
+     ],
+     "share_of_contests": 0.0093,
+     "threshold": 0.8889
+    }
+   },
+   "brier_isotonic": {
+    "brier": 0.218,
+    "contests": 107
+   }
+  },
+  "byelections_107_blend_site": {
+   "safe_isotonic": {
+    "contests": 103,
+    "80": {
+     "labelled": 41,
+     "right": 28,
+     "rate_right": 0.6829,
+     "ci95": [
+      0.5302,
+      0.8044
+     ],
+     "share_of_contests": 0.3981,
+     "threshold": 0.6296
+    },
+    "90": {
+     "labelled": 10,
+     "right": 8,
+     "rate_right": 0.8,
+     "ci95": [
+      0.4902,
+      0.9433
+     ],
+     "share_of_contests": 0.0971,
+     "threshold": 0.7831
+    },
+    "95": {
+     "labelled": 3,
+     "right": 3,
+     "rate_right": 1.0,
+     "ci95": [
+      0.4385,
+      1.0
+     ],
+     "share_of_contests": 0.0291,
+     "threshold": 0.8889
+    }
+   },
+   "brier_isotonic": {
+    "brier": 0.2349,
+    "contests": 103
+   }
+  }
+ }
+}
