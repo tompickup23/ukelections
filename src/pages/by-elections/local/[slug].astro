@@ -16,6 +16,7 @@ import ExploreNext from "../../../components/ExploreNext.astro";
 import VoteTracker from "../../../components/VoteTracker.astro";
 import ChanceDots from "../../../components/ChanceDots.astro";
 import HistoryStrip from "../../../components/HistoryStrip.astro";
+import ForecastRecordStrip from "../../../components/ForecastRecordStrip.astro";
 import { contestFromCandidates, orderContests } from "../../../lib/wardHistory";
 import { loadHistory, loadMay7ResultForWard } from "../../../lib/predictions";
 import { partyColour } from "../../../lib/predictions";
@@ -460,6 +461,8 @@ const breadcrumbs: Crumb[] = [
       </p>
     </section>
   )}
+
+  <ForecastRecordStrip contest={d} />
 
   {wardHistory.length > 0 && (
     <section class="card" id="history">

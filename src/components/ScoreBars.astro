@@ -1,0 +1,121 @@
+---
+/**
+ * ScoreBars.astro. How often each forecaster and benchmark called the leading
+ * party, as horizontal bars with the count printed beside every bar.
+ *
+ * Not party data, so no party colours: forecasters fill with the accent token,
+ * benchmarks with a hatched muted fill and the word "benchmark", so the
+ * distinction never rests on colour alone.
+ *
+ * Props:
+ *   rows: [{ label, called, contests, kind: "forecaster" | "benchmark", note? }]
+ *   caption: what the bars count, shown under the chart.
+ */
+interface Row {
+  label: string;
+  called: number;
+  contests: number;
+  kind: "forecaster" | "benchmark";
+  note?: string | null;
+}
+interface Props {
+  rows: Row[];
+  caption?: string | null;
+  label?: string;
+}
+const { rows, caption = null, label = "Leading party called, by forecaster and benchmark" } = Astro.props;
+const pct = (r: Row) => (r.contests ? (100 * r.called) / r.contests : 0);
+---
+
+<figure class="score-bars">
+  <ul class="score-bars-list" aria-label={label}>
+    {rows.map((r) => (
+      <li class={`score-row score-row--${r.kind}`}>
+        <span class="score-label">
+          {r.label}
+          {r.kind === "benchmark" && <span class="score-kind">benchmark</span>}
+          {r.note && <span class="score-note">{r.note}</span>}
+        </span>
+        <span class="score-track" aria-hidden="true">
+          <span class="score-fill" style={`width:${pct(r).toFixed(1)}%`}></span>
+        </span>
+        <span class="score-value">
+          <strong>{r.called}</strong> of {r.contests}
+          <span class="score-pct">{r.contests ? `${Math.round(pct(r))}%` : ""}</span>
+        </span>
+      </li>
+    ))}
+  </ul>
+  {caption && <figcaption class="caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .score-bars {
+    margin: 0 0 var(--space-md);
+  }
+  .score-bars-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .score-row {
+    display: grid;
+    grid-template-columns: minmax(9rem, 16rem) 1fr auto;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .score-label {
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .score-kind,
+  .score-note {
+    display: block;
+    font-weight: 400;
+    font-size: var(--text-small);
+    color: var(--muted);
+  }
+  .score-kind {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: var(--text-eyebrow);
+  }
+  .score-track {
+    position: relative;
+    height: var(--space-md);
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--space-2xs);
+    overflow: hidden;
+  }
+  .score-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--accent);
+  }
+  .score-row--benchmark .score-fill {
+    background: repeating-linear-gradient(45deg, var(--muted) 0 var(--space-2xs), transparent var(--space-2xs) var(--space-xs));
+    border-right: 2px solid var(--muted);
+  }
+  .score-value {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .score-pct {
+    margin-left: var(--space-2xs);
+    color: var(--muted);
+  }
+  @media (max-width: 560px) {
+    .score-row {
+      grid-template-columns: 1fr auto;
+    }
+    .score-track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+</style>

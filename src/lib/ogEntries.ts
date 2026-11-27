@@ -1,4 +1,5 @@
 import { byElectionResultCards } from "./byElectionCards";
+import { loadScoreboard } from "./byelectionScoreboard";
 /**
  * ogEntries.ts. single source of truth for which pages get a
  * Satori-rendered Open Graph card, and what goes on it.
@@ -232,6 +233,19 @@ function buildEntries(): OgEntry[] {
     shares: councilShares,
     sharesCaption: "Council control after 7 May 2026",
     accentColour: partyColour("Reform UK"),
+  });
+
+  // Forecaster scoreboard: counts only, no party data, so no party colours.
+  const board = loadScoreboard();
+  const liveBlock = board.live.find((b: any) => b.score.contests > 0);
+  out.push({
+    slug: "by-elections/scoreboard",
+    eyebrow: "Council by-elections · forecaster scoreboard",
+    headline: "How accurate are by-election forecasts?",
+    subline: liveBlock
+      ? `${liveBlock.name}, forecasts made before polls opened: leading party called in ${liveBlock.score.called} of ${liveBlock.score.contests}`
+      : "Every recorded forecast scored on the same contests",
+    accentColour: "#e3d9c3",
   });
 
   out.push({

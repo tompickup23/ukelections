@@ -329,3 +329,48 @@ export function regionSummary(regionName: string, records: any[]): string[] {
     `On current polling the model projects ${listCounts(projected)}, with ${changing === 0 ? "no seats" : changing === 1 ? "one seat" : `${changing} seats`} changing hands against the 2024 result.`,
   ];
 }
+
+/* ------------------------------------------------------------------ */
+/* By-election forecaster scoreboard                                   */
+/* ------------------------------------------------------------------ */
+
+const countOfN = (called: number, n: number) => `${called} of ${n}`;
+const numberWord = (n: number) => (n === 1 ? "one" : String(n));
+
+/**
+ * The opening of /by-elections/scoreboard/, from the scoreboard the page
+ * renders (buildScoreboard). Counts only, each with its denominator; live and
+ * retrospective records are never added together. Forecasters are organisations
+ * and are named as the ledger names them.
+ */
+export function scoreboardSummary(board: any): string[] {
+  const c = board?.counts;
+  if (!c) return [];
+  const s: string[] = [];
+  const liveBlocks = (board.live || []).filter((b: any) => b.score.contests > 0);
+  if (liveBlocks.length) {
+    const parts = liveBlocks.map((b: any) => {
+      const last = b.benchmarks.find((x: any) => x.id === "last_leader");
+      const bench = last && last.score.contests
+        ? ` On ${last.score.contests === b.score.contests ? "the same" : `${last.score.contests} of those`} contests, calling the party that led the ward last time would have been right ${numberWord(last.score.called)} ${last.score.called === 1 ? "time" : "times"}.`
+        : "";
+      return `${b.name} recorded ${numberWord(b.score.contests)} forecasts before polls opened that now have a result, and the party it named as most likely to win led the vote in ${countOfN(b.score.called, b.score.contests)}.${bench}`;
+    });
+    s.push(parts.join(" "));
+  } else {
+    s.push("No forecast recorded before polls opened has a result yet, so the live record is empty.");
+  }
+  if (c.live_pending) {
+    s.push(`${cap(numberWord(c.live_pending))} more live ${c.live_pending === 1 ? "forecast is" : "forecasts are"} waiting for a result.`);
+  }
+  const retro = (board.retrospective || []).filter((b: any) => b.score.contests > 0);
+  if (retro.length) {
+    s.push(
+      `A further ${c.retrospective_entries} entries were recorded after polling day, so they are scored separately as retrospective: ` +
+        retro.map((b: any) => `${b.short_name ?? b.name} ${countOfN(b.score.called, b.score.contests)}`).join("; ") +
+        ".",
+    );
+  }
+  if (!c.outside_entries) s.push("No outside forecaster's calls have been added yet.");
+  return s;
+}
