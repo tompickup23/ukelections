@@ -32,6 +32,14 @@ previous run cannot block the next one. Run it locally with
 `npm run publish:polling -- --no-deploy` to exercise every gate except the
 production swap.
 
+**The scoreboard logger is a second soft step, straight after the contest
+refresh (Nov 2026).** `scripts/scoreboard-log.mjs --state=.cache/scoreboard/site-forecasts.json`
+records each upcoming council by-election's forecast in
+`data/scoreboard/byelection-forecasts.json`; a capture before 07:00 on polling
+day is what makes an entry live on `/by-elections/scoreboard/`. The log lives in
+`.cache/` because this checkout resets and never commits; the Friday sweep folds
+it into the tracked ledger with `--merge-only`. See `data/scoreboard/README.md`.
+
 **The by-election contest refresh inside it is a deliberate soft step, and it
 warns on most nights.** It reaches two Democracy Club APIs across an ~8 minute
 sweep, and DC rate-limits a few requests in a run that long, so the step exits

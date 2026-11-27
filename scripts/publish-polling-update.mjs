@@ -54,7 +54,9 @@ function softStep(label, command, args, options = {}) {
   if (result.status !== 0) {
     process.stdout.write(
       `\n! ${label} failed (exit ${result.status ?? "unknown"}). ` +
-        `Continuing on the contest data already committed; the freshness gate below will stop the run if it is too old.\n`,
+        (options.onFail ??
+          `Continuing on the contest data already committed; the freshness gate below will stop the run if it is too old.`) +
+        `\n`,
     );
   }
 }
@@ -129,6 +131,19 @@ async function main() {
   // week, while every scheduled run went green because no test in this path
   // looked. Regenerating here, and asserting freshness below, closes both ends.
   softStep("Refresh local by-election contest files", "node", ["scripts/build-local-byelections.mjs"]);
+  // Record tonight's council by-election forecasts in the scoreboard ledger,
+  // from the contest files this build is about to publish. A run before 07:00
+  // on polling day is what makes an entry live. This checkout resets to
+  // origin/main every night, so the log is kept in .cache (untracked and left
+  // alone by the reset, like the discovery state) and folded back in first;
+  // the Friday sweep commits it. Soft: a scoreboard problem never stops a
+  // publication, and the logger refuses to write a ledger that fails its rules.
+  softStep(
+    "Log council by-election forecasts for the scoreboard",
+    "node",
+    ["scripts/scoreboard-log.mjs", "--state=.cache/scoreboard/site-forecasts.json"],
+    { onFail: "Continuing; the scoreboard shows the committed ledger tonight." },
+  );
   // This is a narrowly-scoped publisher. Its gate covers the refreshed
   // aggregate and model-input contract, plus the by-election contest freshness
   // this path now owns because nothing else runs often enough to. The separate

@@ -23,6 +23,7 @@ import {
   loadContests,
   loadLedger,
   logSiteForecasts,
+  mergeSiteEntries,
 } from "../scripts/scoreboard-log.mjs";
 import { scoreboardSummary } from "../src/lib/pageSummaries.ts";
 
@@ -275,5 +276,47 @@ describe("one contest's calls", () => {
     expect(out.calls[0]).toMatchObject({ right: true, status: "live" });
     expect(out.benchmarks.find((b) => b.id === "holder")).toMatchObject({ called_leader: "Conservative", right: false });
     expect(out.benchmarks.find((b) => b.id === "last_leader")).toMatchObject({ called_leader: "Labour", right: true });
+  });
+});
+
+describe("the nightly log outside git", () => {
+  const fc = { winner: "Labour", leader_probability: 0.55, central: { Labour: 0.45, "Reform UK": 0.35 }, too_close_to_call: false };
+  const empty = { forecasters: ledger.forecasters, entries: [] };
+  const d = toyContest({ forecast: fc });
+  const at = (iso, winner = "Labour") =>
+    logSiteForecasts(empty, [toyContest({ forecast: { ...fc, winner } })], {}, new Date(iso)).ledger.entries[0];
+
+  it("adds what the ledger lacks", () => {
+    const res = mergeSiteEntries(empty, [at("2026-12-09T03:40:00Z")]);
+    expect(res.added).toBe(1);
+    expect(res.ledger.entries[0].status).toBe("live");
+  });
+
+  it("keeps the later live capture, and a live entry over a retrospective one", () => {
+    const early = { ...empty, entries: [at("2026-12-01T03:40:00Z", "Labour")] };
+    const res = mergeSiteEntries(early, [at("2026-12-10T03:40:00Z", "Reform UK")]);
+    expect(res.replaced).toBe(1);
+    expect(res.ledger.entries[0].called_leader).toBe("Reform UK");
+    const stale = mergeSiteEntries(res.ledger, [at("2026-12-01T03:40:00Z", "Labour")]);
+    expect(stale.replaced).toBe(0);
+    const rebuilt = logSiteForecasts(empty, [toyContest({ forecast: fc, result: { declared: true, shares: { Labour: 0.5 } } })], {}, new Date("2026-12-20T03:40:00Z")).ledger;
+    expect(rebuilt.entries[0].status).toBe("retrospective");
+    const fixed = mergeSiteEntries(rebuilt, [at("2026-12-10T03:40:00Z")]);
+    expect(fixed.ledger.entries[0]).toMatchObject({ status: "live", capture_method: "site_snapshot" });
+  });
+
+  it("never merges another forecaster's entries", () => {
+    expect(mergeSiteEntries(empty, [{ ...at("2026-12-09T03:40:00Z"), forecaster: RESEARCH }]).added).toBe(0);
+  });
+
+  it("is called by the publisher as a soft step after the contest refresh", () => {
+    const src = readFileSync(path.join(ROOT, "scripts/publish-polling-update.mjs"), "utf8");
+    const refresh = src.indexOf('softStep("Refresh local by-election contest files"');
+    const log = src.indexOf('"scripts/scoreboard-log.mjs", "--state=.cache/scoreboard/site-forecasts.json"');
+    const gate = src.indexOf('step("Run polling publication tests"');
+    expect(refresh).toBeGreaterThan(-1);
+    expect(log).toBeGreaterThan(refresh);
+    expect(gate).toBeGreaterThan(log);
+    expect(src.slice(refresh, log)).toContain("softStep(");
   });
 });

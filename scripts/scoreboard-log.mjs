@@ -5,6 +5,12 @@
  *   node scripts/scoreboard-log.mjs                 log this site's forecast for every
  *                                                   contest whose polls have not opened
  *   node scripts/scoreboard-log.mjs --dry-run       say what would change, write nothing
+ *   node scripts/scoreboard-log.mjs --state=.cache/scoreboard/site-forecasts.json
+ *                                                   the nightly publisher's form: merge the
+ *                                                   persistent log in, log, write it back
+ *   node scripts/scoreboard-log.mjs --merge-only --state=<publisher checkout>/.cache/scoreboard/site-forecasts.json
+ *                                                   the weekly commit's form: fold the nightly
+ *                                                   log into the tracked ledger without logging
  *   node scripts/scoreboard-log.mjs --import-research=data/scoreboard/research-ward-model-export-2026-11.json
  *                                                   add the research model's back-test entries
  *   node scripts/scoreboard-log.mjs --add --forecaster=<id> --contest=<slug> --party="<party>"
@@ -24,12 +30,13 @@
  * Nothing here deletes or edits an outside forecaster's entry; corrections to
  * those are made by hand, in the ledger, with a note.
  */
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   CAPTURE_METHODS,
   LEDGER_FILE,
+  capturedInstant,
   entryStatus,
   poolParty,
   pollsOpenAt,
@@ -161,6 +168,41 @@ export function logSiteForecasts(ledger, contests, published, now) {
   return { ledger: { ...ledger, entries: sortEntries(kept) }, changes };
 }
 
+/**
+ * Fold entries kept outside git (the nightly publisher's log) into the ledger.
+ * Only this site's entries are merged. Where both hold the same contest, a
+ * live entry beats a retrospective one and, between two live entries, the
+ * later capture wins: it is the nearer to what the page showed when polls
+ * opened. Two retrospective entries: the ledger's stands.
+ */
+export function mergeSiteEntries(ledger, incoming) {
+  const entries = [...(ledger.entries || [])];
+  const index = new Map(entries.map((e, i) => [`${e.ballot_paper_id}|${e.forecaster}`, i]));
+  let added = 0;
+  let replaced = 0;
+  for (const raw of incoming || []) {
+    if (raw?.forecaster !== SITE) continue;
+    const e = finish({ ...raw });
+    const key = `${e.ballot_paper_id}|${e.forecaster}`;
+    const at = index.get(key);
+    if (at === undefined) {
+      index.set(key, entries.push(e) - 1);
+      added += 1;
+      continue;
+    }
+    const cur = entries[at];
+    const curStatus = entryStatus(cur.captured_at, cur.polling_day);
+    const better =
+      (e.status === "live" && curStatus !== "live") ||
+      (e.status === "live" && curStatus === "live" && capturedInstant(e.captured_at) > capturedInstant(cur.captured_at));
+    if (better) {
+      entries[at] = e;
+      replaced += 1;
+    }
+  }
+  return { ledger: { ...ledger, entries: sortEntries(entries) }, added, replaced };
+}
+
 /** Add the research model's back-test entries. Never replaces an existing entry. */
 export function importResearch(ledger, exportDoc, contests, { capturedAt, source }) {
   const byBallot = new Map(contests.map((d) => [d.contest?.ballot_paper_id, d]));
@@ -249,6 +291,7 @@ function main() {
   const contests = loadContests();
   let ledger = loadLedger();
   const now = args.now ? new Date(args.now) : new Date();
+  const state = args.state ? path.resolve(ROOT, String(args.state)) : null;
   if (args.add) {
     const { ledger: next, entry } = addOutsideEntry(
       ledger,
@@ -275,14 +318,25 @@ function main() {
     console.log(`Research export: ${res.added} entries added; ${res.missing.length} ballots with no contest file.`);
     for (const m of res.missing) console.log(`  ! no contest file for ${m}`);
   } else {
-    const published = existsSync(path.join(ROOT, PUBLISHED_FILE))
-      ? JSON.parse(readFileSync(path.join(ROOT, PUBLISHED_FILE), "utf8")).forecasts || {}
-      : {};
-    const res = logSiteForecasts(ledger, contests, published, now);
-    ledger = res.ledger;
-    console.log(
-      `Site forecasts: ${res.changes.refreshed.length} refreshed, ${res.changes.added.length} added, ${res.changes.withdrawn.length} withdrawn before polling day.`,
-    );
+    if (state && existsSync(state)) {
+      const merged = mergeSiteEntries(ledger, JSON.parse(readFileSync(state, "utf8")).entries);
+      ledger = merged.ledger;
+      console.log(`Persistent log ${state}: ${merged.added} added, ${merged.replaced} replaced.`);
+    } else if (state) {
+      console.log(`Persistent log ${state} not found; starting it.`);
+    }
+    if (args["merge-only"]) {
+      if (!state) throw new Error("--merge-only needs --state=<path>");
+    } else {
+      const published = existsSync(path.join(ROOT, PUBLISHED_FILE))
+        ? JSON.parse(readFileSync(path.join(ROOT, PUBLISHED_FILE), "utf8")).forecasts || {}
+        : {};
+      const res = logSiteForecasts(ledger, contests, published, now);
+      ledger = res.ledger;
+      console.log(
+        `Site forecasts: ${res.changes.refreshed.length} refreshed, ${res.changes.added.length} added, ${res.changes.withdrawn.length} withdrawn before polling day.`,
+      );
+    }
   }
   const errors = validateLedger(ledger);
   if (errors.length) {
@@ -296,6 +350,14 @@ function main() {
   ledger.updated_at = now.toISOString();
   writeFileSync(path.join(ROOT, LEDGER_FILE), `${JSON.stringify(ledger, null, 2)}\n`);
   console.log(`Wrote ${LEDGER_FILE}: ${ledger.entries.length} entries.`);
+  // The publisher's checkout resets to origin/main every night, so its log
+  // lives outside git. Only the logging form writes it; --merge-only reads it.
+  if (state && !args["merge-only"]) {
+    mkdirSync(path.dirname(state), { recursive: true });
+    const site = ledger.entries.filter((e) => e.forecaster === SITE);
+    writeFileSync(state, `${JSON.stringify({ updated_at: now.toISOString(), entries: site }, null, 2)}\n`);
+    console.log(`Wrote ${state}: ${site.length} site entries.`);
+  }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

@@ -45,11 +45,33 @@ node scripts/scoreboard-log.mjs --dry-run  # say what would change
 
 For a contest still ahead, the site's entry is replaced with the forecast the
 contest file holds now, stamped with the time of the run. Once polls open the
-entry is never touched again. Run it, and commit the ledger, at least once
-between a contest's statement of persons nominated and its polling day, or the
-contest has no live entry. A past contest with no entry is filled once from
+entry is never touched again. A past contest with no entry is filled once from
 `data/cards/published-byelection-forecasts.json` where a snapshot exists, and
 from the rebuilt contest file otherwise.
+
+### How it runs on its own
+
+The contest files on `main` are synced by hand, so they can be days behind
+what the live pages show. The logger therefore runs where the live pages are
+built:
+
+1. **Nightly, in the publisher** (`scripts/publish-polling-update.mjs`), as a
+   soft step straight after the contest refresh and before the build:
+   `node scripts/scoreboard-log.mjs --state=.cache/scoreboard/site-forecasts.json`.
+   The 03:30 run on polling day is before 07:00, so the last capture is live.
+   That checkout resets to `origin/main` every night and never commits, so the
+   log is kept in `.cache/scoreboard/site-forecasts.json` (untracked, left
+   alone by the reset) and folded back in at the start of each run. The page
+   built that night shows it.
+2. **Weekly, in the Friday 09:00 sweep** in `/root/ukelections`, which already
+   commits and pushes. Before its `git add`, the sweep runs
+   `node scripts/scoreboard-log.mjs --merge-only --state=/root/ukelections-polling-publisher/.cache/scoreboard/site-forecasts.json`
+   and adds `data/scoreboard/byelection-forecasts.json` to the commit.
+   `--merge-only` never logs from that checkout's own contest files, which may
+   be stale.
+
+When both hold an entry for the same contest, a live entry beats a
+retrospective one, and of two live entries the later capture wins.
 
 ## Adding an outside forecaster
 
