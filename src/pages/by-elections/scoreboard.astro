@@ -1,0 +1,346 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ScoreBars from "../../components/ScoreBars.astro";
+import { buildDataset, type Crumb } from "../../lib/seo";
+import { SITE_URL } from "../../lib/site";
+import { scoreboardSummary } from "../../lib/pageSummaries";
+import {
+  SCOREBOARD_PATH,
+  countOf,
+  loadScoreboard,
+  loadScoreboardLedger,
+  loadLocalContestsForScoreboard,
+  monthLabel,
+} from "../../lib/byelectionScoreboard";
+
+const board = loadScoreboard();
+const ledger = loadScoreboardLedger();
+const c = board.counts;
+const summary = scoreboardSummary(board);
+
+const longDate = (iso: string | null) =>
+  iso ? new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "";
+const brier = (b: any) => (b ? `${b.mean.toFixed(3)} (${b.n})` : "none stated");
+const shareErr = (s: any) => (s ? `${s.mae_pp.toFixed(1)} points (${s.n})` : "no shares");
+
+// The live chart: each live forecaster, then the benchmarks on that forecaster's contests.
+const liveBlock = board.live.find((b: any) => b.score.contests > 0) ?? null;
+const chartRows = liveBlock
+  ? [
+      { label: liveBlock.name, called: liveBlock.score.called, contests: liveBlock.score.contests, kind: "forecaster" as const },
+      ...liveBlock.benchmarks
+        .filter((b: any) => b.score.contests > 0)
+        .map((b: any) => ({
+          label: b.name,
+          called: b.score.called,
+          contests: b.score.contests,
+          kind: "benchmark" as const,
+          note:
+            b.score.contests === liveBlock.score.contests
+              ? "same contests"
+              : `the ${b.score.contests} with a record to call from; ${liveBlock.name} called ${b.forecaster_same_contests.called} of these`,
+        })),
+    ]
+  : [];
+
+const methodLabel: Record<string, string> = {
+  site_snapshot: "copied from the published page",
+  site_rebuild: "contest file rebuilt after polling day",
+  research_export: "research model run after the polls",
+  hand_recorded: "recorded by hand from a public source",
+  supplied_by_forecaster: "supplied by the forecaster",
+};
+const methodsText = (m: Record<string, number>) =>
+  Object.entries(m)
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, n]) => `${n} ${methodLabel[k] ?? k}`)
+    .join("; ");
+
+const seriesName = (s: any) => {
+  const f = board.forecasters[s.forecaster];
+  const name = s.status === "live" ? f.name : f.short_name ?? f.name;
+  return `${name}, ${s.status}`;
+};
+const benchName: Record<string, string> = Object.fromEntries(board.benchmarks.map((b: any) => [b.id, b.name]));
+
+// The snapshot copies the post-mortem also counts, but taken after polling day.
+const lateSnapshots = (ledger.entries || []).filter((e: any) => e.capture_method === "site_snapshot" && e.status === "retrospective").length;
+
+// Dated by the data, never by the build clock: the ledger's last write or the
+// newest result it scores, whichever is later.
+const contests = loadLocalContestsForScoreboard();
+const scoredIds = new Set(
+  (ledger.entries || []).map((e: any) => e.ballot_paper_id),
+);
+const resultDates = contests
+  .filter((d: any) => scoredIds.has(d.contest?.ballot_paper_id) && d.result?.declared)
+  .map((d: any) => d.result.checked_at || d.result.accessed_at || null)
+  .filter(Boolean)
+  .sort();
+const dataDate = [ledger.updated_at?.slice(0, 10), resultDates.at(-1)].filter(Boolean).sort().at(-1) ?? null;
+
+const url = `${SITE_URL}${SCOREBOARD_PATH}`;
+const title = "Council by-election predictions: forecaster scoreboard";
+const description =
+  "How accurate are council by-election predictions? Every recorded forecast scored on the same contests, split by when it was made, beside two benchmarks.";
+const breadcrumbs: Crumb[] = [
+  { name: "By-elections", href: "/by-elections/" },
+  { name: "Forecaster scoreboard", href: SCOREBOARD_PATH },
+];
+const structuredData = [
+  buildDataset({
+    name: "Council by-election forecaster scoreboard",
+    description:
+      "Every recorded forecast for a council by-election in Great Britain since June 2026, one entry per contest per forecaster, with the time it was captured, its source and whether it was recorded before polls opened.",
+    url,
+    dateModified: dataDate ?? undefined,
+    temporalCoverage: c.first_polling_day && c.last_polling_day ? `${c.first_polling_day}/${c.last_polling_day}` : undefined,
+    spatialCoverage: "Great Britain",
+    variableMeasured: ["Leading party called", "Brier score on the named favourite", "Mean absolute share error"],
+    keywords: ["council by-elections", "by-election predictions", "forecast accuracy", "election forecasts"],
+    distributionUrl: "https://raw.githubusercontent.com/tompickup23/ukelections/main/data/scoreboard/byelection-forecasts.json",
+  } as any),
+];
+---
+
+<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs} structuredData={structuredData}>
+  <section class="page-hero">
+    <p class="eyebrow">Council by-elections · {longDate(c.first_polling_day)} to {longDate(c.last_polling_day)}</p>
+    <h1>Council by-election forecaster scoreboard</h1>
+    {summary.map((p) => <p class="lede">{p}</p>)}
+  </section>
+
+  <section class="section" aria-labelledby="live-chart">
+    <h2 id="live-chart">Forecasts made before polls opened</h2>
+    {chartRows.length ? (
+      <ScoreBars
+        rows={chartRows}
+        label="Leading party called by live forecasts and by the benchmarks on the same contests"
+        caption={`Bars count contests where the forecast or benchmark named the party that went on to lead the vote. Live forecasts only: each was captured before 07:00 on polling day. Results declared to ${longDate(c.last_polling_day)}.`}
+      />
+    ) : (
+      <p>No forecast recorded before polls opened has a result yet. The live record starts with the next declared result.</p>
+    )}
+    {c.live_scored > 0 && c.live_scored < 30 && (
+      <p class="caption">{c.live_scored} contests is a small sample. A few results either way move these counts a long way.</p>
+    )}
+  </section>
+
+  <section class="section" aria-labelledby="live-table">
+    <h2 id="live-table">Live record</h2>
+    <p>
+      Every entry here was captured before polls opened. Forecasters are listed alphabetically; each is followed by the two
+      benchmarks, scored on that forecaster's own contests.
+    </p>
+    {board.live.length === 0 ? (
+      <p>The live table is empty.</p>
+    ) : (
+      <div class="table-scroll" role="region" aria-label="Live record" tabindex="0">
+        <table class="seat-table scoreboard-table">
+          <thead>
+            <tr><th scope="col">Forecaster or benchmark</th><th scope="col">Contests with a result</th><th scope="col">Leading party called</th><th scope="col">Brier score (forecasts)</th><th scope="col">Share error (forecasts)</th><th scope="col">Waiting for a result</th></tr>
+          </thead>
+          <tbody>
+            {board.live.map((b: any) => (
+              <>
+                <tr class="row-forecaster">
+                  <td class="row-label">{b.name}</td>
+                  <td>{b.score.contests}</td>
+                  <td>{countOf(b.score.called, b.score.contests)}</td>
+                  <td>{brier(b.score.brier)}</td>
+                  <td>{shareErr(b.score.share_error)}</td>
+                  <td>{b.pending}</td>
+                </tr>
+                {b.benchmarks.map((x: any) => (
+                  <tr class="row-benchmark">
+                    <td class="row-label"><span class="bench-tag">Benchmark</span> {x.name}</td>
+                    <td>{x.score.contests}{x.left_out ? ` (${x.left_out} left out)` : ""}</td>
+                    <td>
+                      {countOf(x.score.called, x.score.contests)}
+                      {x.score.contests !== b.score.contests && x.score.contests > 0 && <span class="cell-note">{b.name} on these: {countOf(x.forecaster_same_contests.called, x.forecaster_same_contests.contests)}</span>}
+                    </td>
+                    <td>not a chance</td>
+                    <td>{shareErr(x.score.share_error)}</td>
+                    <td></td>
+                  </tr>
+                ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+
+  <section class="section" aria-labelledby="retro-table">
+    <h2 id="retro-table">Retrospective record</h2>
+    <p>
+      These entries were made after polls opened, so whoever made them could in principle have known more than a forecaster
+      did on the morning. They are scored by the same rules and never added to the live record.
+      {lateSnapshots > 0 && ` ${lateSnapshots} of them are copies of the published page taken the day after polling, before any result was added; the by-election post-mortem counts those with the published forecasts.`}
+    </p>
+    <div class="table-scroll" role="region" aria-label="Retrospective record" tabindex="0">
+      <table class="seat-table scoreboard-table">
+        <thead>
+          <tr><th scope="col">Forecaster or benchmark</th><th scope="col">Contests with a result</th><th scope="col">Leading party called</th><th scope="col">Brier score (forecasts)</th><th scope="col">Share error (forecasts)</th><th scope="col">How the entries were made</th></tr>
+        </thead>
+        <tbody>
+          {board.retrospective.map((b: any) => (
+            <>
+              <tr class="row-forecaster">
+                <td class="row-label">{b.name}{b.forecaster === "uk-elections-research-model" && <span class="cell-note">back-test, never published before a poll</span>}</td>
+                <td>{b.score.contests}</td>
+                <td>{countOf(b.score.called, b.score.contests)}</td>
+                <td>{brier(b.score.brier)}</td>
+                <td>{shareErr(b.score.share_error)}</td>
+                <td>{methodsText(b.methods)}</td>
+              </tr>
+              {b.benchmarks.map((x: any) => (
+                <tr class="row-benchmark">
+                  <td class="row-label"><span class="bench-tag">Benchmark</span> {x.name}</td>
+                  <td>{x.score.contests}{x.left_out ? ` (${x.left_out} left out)` : ""}</td>
+                  <td>
+                    {countOf(x.score.called, x.score.contests)}
+                    {x.score.contests !== b.score.contests && x.score.contests > 0 && <span class="cell-note">{b.short_name ?? b.name} on these: {countOf(x.forecaster_same_contests.called, x.forecaster_same_contests.contests)}</span>}
+                  </td>
+                  <td>not a chance</td>
+                  <td>{shareErr(x.score.share_error)}</td>
+                  <td></td>
+                </tr>
+              ))}
+            </>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {board.headToHead.length > 0 && (
+    <section class="section" aria-labelledby="head-to-head">
+      <h2 id="head-to-head">Head to head, on the contests both forecast</h2>
+      {board.headToHead.map((h: any) => (
+        <>
+          <p>
+            On the {h.contests} contests with a result that both {h.a.name} and {h.b.name} forecast, {h.a.name} called the
+            leading party in {countOf(h.a.score.called, h.a.score.contests)} and {h.b.name} in {countOf(h.b.score.called, h.b.score.contests)}.
+            Of the {h.a.name} entries on these contests, {h.a.mix.live} are live and {h.a.mix.retrospective} retrospective; of the {h.b.name} entries, {h.b.mix.live} are live and {h.b.mix.retrospective} retrospective.
+          </p>
+          <ScoreBars
+            rows={[
+              { label: h.a.name, called: h.a.score.called, contests: h.a.score.contests, kind: "forecaster" },
+              { label: h.b.name, called: h.b.score.called, contests: h.b.score.contests, kind: "forecaster" },
+              ...h.benchmarks.filter((x: any) => x.score.contests > 0).map((x: any) => ({
+                label: x.name,
+                called: x.score.called,
+                contests: x.score.contests,
+                kind: "benchmark" as const,
+                note: x.left_out ? `${x.left_out} of the ${h.contests} have no record to call from` : "same contests",
+              })),
+            ]}
+            label={`Head to head: ${h.a.name} and ${h.b.name}`}
+            caption="A comparison of a back-test with forecasts that were partly live. It shows how the research model would have done, not how it did."
+          />
+        </>
+      ))}
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="by-month">
+    <h2 id="by-month">Month by month</h2>
+    <p>Each cell counts its own contests, so read it with its count. Months are by polling day.</p>
+    <div class="table-scroll" role="region" aria-label="Leading party called by month" tabindex="0">
+      <table class="seat-table scoreboard-table">
+        <thead>
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Contests with a result</th>
+            {board.series.map((s: any) => <th scope="col">{seriesName(s)}</th>)}
+            {board.benchmarks.map((b: any) => <th scope="col"><span class="bench-tag">Benchmark</span> {b.name}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {board.monthly.map((m: any) => (
+            <tr>
+              <td class="row-label">{monthLabel(m.month)}</td>
+              <td>{m.contests}</td>
+              {m.series.map((s: any) => <td>{s.score.contests ? `${s.score.called} of ${s.score.contests}` : ""}</td>)}
+              {m.benchmarks.map((b: any) => <td>{b.score.contests ? `${b.score.called} of ${b.score.contests}` : ""}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">A blank cell means that series has no scored contest that month. {benchName.holder} has few early entries because the contest pages began recording who held each seat in August 2026.</p>
+  </section>
+
+  <section class="section" aria-labelledby="method">
+    <h2 id="method">How this is worked out</h2>
+    <ul>
+      <li><strong>Live or retrospective.</strong> An entry is live only if it was captured before polls opened for that contest, 07:00 UK time on polling day. A capture recorded only by its date counts as the end of that day, so it is live only if the date is before polling day. Everything else is retrospective. The rule is checked in code for every entry.</li>
+      <li><strong>Leading party called.</strong> The votes are pooled into six lanes: Reform UK, Labour, Conservative, Liberal Democrats, Green Party and Others. Others pools independents and every smaller party. The leader is the lane with the most votes. A forecast calls it when the party it named as most likely to win, pooled the same way, is that lane. {c.leader_differs_from_winner === 0 ? "In every scored contest so far the leading lane is also the winner's party." : `In ${c.leader_differs_from_winner} scored contests the leading lane is not the winner's party.`}</li>
+      <li><strong>Brier score.</strong> Only where a forecaster stated a chance for its favourite: the stated chance minus 1 if the favourite led, or minus 0 if it did not, squared, then averaged. Lower is better. Giving every favourite a 50% chance would score 0.250. The count of forecasts behind it is in brackets.</li>
+      <li><strong>Share error.</strong> Only where shares were published: the gap between forecast and actual share, in percentage points, averaged over the lanes that either side had above zero, then averaged over contests.</li>
+      <li><strong>Benchmarks.</strong> {board.benchmarks.map((b: any) => <>{b.name}: {b.description} </>)}They use only what was known before the poll. They state no chance, so they have no Brier score.</li>
+      <li><strong>Like with like.</strong> Each benchmark is scored on the forecaster's own contests, and head-to-head figures use only contests both sides forecast. Live and retrospective counts are never added together.</li>
+      <li><strong>Coverage.</strong> Council by-elections in England and Wales with a declared count, from the contest pages on this site. Scottish contests use the single transferable vote and are left out because first preferences are not comparable. The research model covers English wards only.</li>
+      <li><strong>Results.</strong> Each contest page carries its result and source: the council's declaration where it has been checked, Democracy Club otherwise.</li>
+      <li><strong>What we did not include.</strong> A national-swing benchmark. The polling series held here starts in January 2026, so it could only swing the wards last fought in May 2026. Most of these wards were last fought earlier, and a benchmark that covered only some of the contests would not be like for like.</li>
+    </ul>
+  </section>
+
+  <section class="section" aria-labelledby="corrections">
+    <h2 id="corrections">Adding a forecaster, and corrections</h2>
+    <p>
+      Any organisation that publishes council by-election forecasts can be added, scored by the same rules. A forecast counts
+      as live only if we can show it was published before polls opened: send the forecast and where and when it was published,
+      or a feed we may record from. {c.outside_entries === 0 ? "No outside forecaster has been added yet." : `${c.outside_entries} outside entries are recorded.`}
+    </p>
+    <p>
+      If an entry is wrong, or a forecaster would like its entries removed, email
+      <!--email_off--><a href="mailto:info@ukelections.co.uk">info@ukelections.co.uk</a><!--/email_off--> or use the <a href="/contact/">contact page</a>. We
+      fix or remove the entry and note the change in the ledger.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>The data</h2>
+    <p>
+      Ledger: <a href="https://github.com/tompickup23/ukelections/blob/main/data/scoreboard/byelection-forecasts.json">byelection-forecasts.json</a>,
+      {c.entries} entries ({c.live_entries} live, {c.retrospective_entries} retrospective). Scoring:
+      <code>scripts/lib/byelection-scoreboard.mjs</code>. Logging: <code>scripts/scoreboard-log.mjs</code>.
+      Related: <a href="/by-elections/post-mortem/">how our published by-election forecasts did, month by month</a>,
+      <a href="/by-elections/this-week/">council by-election results and forecasts this week</a>, and
+      <a href="/by-elections/local/">every council by-election</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .scoreboard-table .row-label {
+    text-align: left;
+    font-weight: 600;
+  }
+  .row-benchmark .row-label {
+    font-weight: 400;
+    padding-left: var(--space-md);
+  }
+  .row-benchmark td {
+    color: var(--ink-soft);
+  }
+  .bench-tag {
+    display: inline-block;
+    padding: 0 var(--space-2xs);
+    border: 1px dashed var(--muted);
+    border-radius: var(--space-2xs);
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+  .cell-note {
+    display: block;
+    font-size: var(--text-small);
+    color: var(--muted);
+    font-weight: 400;
+  }
+</style>
