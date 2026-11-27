@@ -16,7 +16,7 @@ Then commit `live/` and push the same day (see "Proving the time" below).
 - Contest files are always read from `origin/main` (`--ref` to change it). Fetch first.
 - `--dry-run` prints the forecasts and writes nothing except the polls copy.
 - The runner refuses to write if the code in this folder (outside `live/`) has uncommitted changes, so every record names the commit that produced it.
-- One run takes about two and a half minutes (six lane fits on about 17,600 training contests).
+- One run takes about two and a half minutes (six lane fits on about 17,400 training contests).
 
 ## Where the output goes
 
@@ -35,7 +35,7 @@ A record whose contest later disappears from `origin/main` before polling day (w
 
 ## First run, 27 November 2026
 
-See the PR description and `live/live_forecasts.json` for the figures. Sixteen contests had polling days after 27 November on `origin/main`; four got a forecast and twelve were skipped (five outside England, two with no ward code in the feature file, six with no statement of persons nominated on Democracy Club yet). Skipped contests are retried on every run until their polls open, so contests on 10 and 17 December will be forecast once their statements appear on `main`.
+See the PR description and `live/live_forecasts.json` for the figures. Sixteen contests had polling days after 27 November on `origin/main`; four got a forecast and twelve were skipped (four outside England, two with no ward code in the feature file, six with no statement of persons nominated on Democracy Club yet). Skipped contests are retried on every run until their polls open, so contests on 10 and 17 December will be forecast once their statements appear on `main`.
 
 ## Reproduction check
 
