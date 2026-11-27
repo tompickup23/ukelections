@@ -18,10 +18,11 @@ import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   parseCsv, slugify, canonicalParty, fullSlateShares, pooledShares, notionalShares, wardSlugIndex,
-  loadWardLookupCsv, sha256File, round6, parseOrderCommencement, councilLadSlug, sumShares, looseSlug,
+  loadWardLookupCsv, sha256File, round6, parseOrderCommencement, councilLadSlug, sumShares, looseSlug, finishBallot,
 } from "./lib/wards-2027-lib.mjs";
 import { loadInputs, validateNotional } from "./wards-2027-validate-notional.mjs";
 import { readOrder } from "./lib/wards-2027-orders.mjs";
+import { createHash } from "node:crypto";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CACHE = join(ROOT, ".cache/wards-2027");
@@ -41,6 +42,7 @@ const SRC = {
   may2026: { key: "may2026", label: "May 2026 results as merged for the site, data/results/may-2026/local-and-mayor.merged.json", url: null },
   leap2019: { key: "leap2019", label: "Andrew Teale, Local Elections Archive Project, all local election results for 2019 (leap-2019-05-02.csv), retrieved 27 November 2026", url: "https://www.andrewteale.me.uk/2019/leap-2019-05-02.zip" },
   leap2022: { key: "leap2022", label: "Andrew Teale, Local Elections Archive Project, all local election results for 2022 (leap-2022-05-05.csv), retrieved 27 November 2026", url: "https://www.andrewteale.me.uk/2022/leap-2022-05-05.zip" },
+  dc2027: { key: "dc2027", label: "Democracy Club Candidates API results endpoint, every local result for the councils in councils-2027.json, retrieved 16 November 2026 on vps-main (snapshot dc-historic-results-2027-955d88d58a38, data/history/dc-historic-results-2027.json, gitignored); copied read-only 27 November 2026", url: "https://candidates.democracyclub.org.uk/api/next/results/" },
   appends: { key: "appends", label: "Local by-election results since May 2026, data/history/byelection-appends.json", url: null },
 };
 
@@ -63,6 +65,28 @@ function loadLeap(file, date, src) {
     delete w.cands;
   }
   return byWard;
+}
+
+// The 2027-scope Democracy Club export (scripts/ingest-dc-historic-results.mjs
+// --scope=2027). Its snapshot sha256 is of JSON.stringify(results); checked.
+const DC2027_SHA = "955d88d58a38733e6d7509b84763240c289b53d15d2f53f498baf90560aa1616";
+function loadDc2027() {
+  const p = join(CACHE, "dc-historic-results-2027.json");
+  if (!existsSync(p)) throw new Error(".cache/wards-2027/dc-historic-results-2027.json missing (see docs/wards-2027-method.md section 9).");
+  const d = JSON.parse(readFileSync(p, "utf8"));
+  const sha = createHash("sha256").update(JSON.stringify(d.results)).digest("hex");
+  if (sha !== DC2027_SHA || d.snapshot.sha256 !== DC2027_SHA) throw new Error(`dc-historic-results-2027.json results hash ${sha} is not the recorded snapshot ${DC2027_SHA}`);
+  const out = new Map();
+  for (const r of d.results) {
+    if (r.tier && r.tier !== "local") continue;
+    const b = {
+      ballot_paper_id: r.ballot_paper_id, date: r.election_date, council_slug: r.council_slug, ward_slug: r.ward_slug,
+      by_election: Boolean(r.is_by_election), elected: r.candidates.filter((c) => c.elected).length, source: r.source || null, from_2027_export: true,
+      cands: r.candidates.map((c) => ({ party: canonicalParty(c.party_name, c.party_ec_id), votes: c.votes == null ? NaN : Number(c.votes) })),
+    };
+    out.set(b.ballot_paper_id, finishBallot(b));
+  }
+  return out;
 }
 
 function loadOrders() {
@@ -89,7 +113,12 @@ function main() {
   const cbase = new Map(read("data/identity/councils-2027-baselines.json").councils.map((c) => [c.slug, c]));
   const evBySlug = new Map(evidence.councils.map((c) => [c.slug, c]));
   const inputs = loadInputs();
-  const { dc, sets, b2026 } = inputs;
+  const { sets, b2026 } = inputs;
+  // The Drive file plus the 2027-scope export; a ballot in both keeps the
+  // Drive copy (same source, earlier cut).
+  const dc = new Map(inputs.dc);
+  const dc27 = loadDc2027();
+  for (const [id, b] of dc27) if (!dc.has(id)) dc.set(id, b);
   const wd22 = (() => {
     const j = read("data/features/lsoa21-to-ward.json").lookup;
     let csv = "lsoa21cd,wardcd,wardnm,ladcd,ladnm\n";
@@ -115,7 +144,7 @@ function main() {
     const y = Number(b.date.slice(0, 4));
     if (![2022, 2023, 2024].includes(y)) continue;
     const code = idx[y](b.council_slug, b.ward_slug);
-    if (code && ballotSet(y).wards.has(code)) pushResult(code, { ...b, source: SRC.dc, source_url: b.source });
+    if (code && ballotSet(y).wards.has(code)) pushResult(code, { ...b, source: b.from_2027_export ? SRC.dc2027 : SRC.dc, source_url: b.source });
   }
   for (const b of b2026.values()) {
     const code = b.gss && sets[2026].wards.has(b.gss) ? b.gss : idx[2026](b.council_slug, b.ward_slug);
@@ -124,6 +153,20 @@ function main() {
   for (const w of leap2022.values()) pushResult(w.code, { ...w, ballot_paper_id: null, source_url: SRC.leap2022.url });
   for (const list of ordinaryByCode.values()) list.sort((a, b) => b.date.localeCompare(a.date));
 
+  // Ordinary results by council and year, keyed by loose ward slug, for the
+  // name join below. A slug two ballots share is marked and never used.
+  const DC_SLUG = { "folkestone-and-hythe": "folkestone-hythe" };
+  const dcSlug = (slug) => DC_SLUG[slug] || slug;
+  const dcByCouncilYear = new Map();
+  for (const b of dc.values()) {
+    if (b.by_election || !b.ward_slug) continue;
+    const k = `${b.council_slug}/${b.date.slice(0, 4)}`;
+    if (!dcByCouncilYear.has(k)) dcByCouncilYear.set(k, new Map());
+    const m = dcByCouncilYear.get(k);
+    const w = looseSlug(b.ward_slug);
+    m.set(w, m.has(w) && m.get(w).ballot_paper_id !== b.ballot_paper_id ? "AMBIGUOUS" : b);
+  }
+
   // By-elections, by council slug and ward slug, newest first.
   const byeByWard = new Map();
   const pushBye = (council, ward, r) => {
@@ -131,7 +174,7 @@ function main() {
     if (!byeByWard.has(k)) byeByWard.set(k, []);
     byeByWard.get(k).push(r);
   };
-  for (const b of dc.values()) if (b.by_election && b.shares) pushBye(b.council_slug, b.ward_slug, { ballot_paper_id: b.ballot_paper_id, date: b.date, shares: b.shares, rows: b.rows, source: "dc", source_url: b.source });
+  for (const b of dc.values()) if (b.by_election && b.shares) pushBye(b.council_slug, b.ward_slug, { ballot_paper_id: b.ballot_paper_id, date: b.date, shares: b.shares, rows: b.rows, source: b.from_2027_export ? "dc2027" : "dc", source_url: b.source });
   for (const r of appends.results) {
     const s = fullSlateShares(r.candidates.map((c) => ({ party: canonicalParty(c.party_name, c.party_ec_id), votes: c.votes })));
     if (s && !r.candidates.some((c) => c.votes == null)) pushBye(r.council_slug, r.ward_slug, { ballot_paper_id: r.ballot_paper_id, date: r.election_date, shares: s.shares, rows: r.candidates.length, source: "appends", source_url: r.source, review_status: r.review_status });
@@ -272,12 +315,27 @@ function main() {
 
       // Baseline.
       const base = { id, council_slug: c.slug, block: c.block, gss_code: ward.gss_code, method: "none", baseline: null, notional: null, fallback_2019: null, last_by_election: null, note: null };
-      const minDate = /all out/i.test(row.cycle || "") ? row.last_ordinary_poll : null;
+      // The year of the council's last ordinary poll, not its last date: a
+      // delayed ward poll (Bath and North East Somerset, 22 June 2023) must
+      // not push the May results of that same election out of bounds.
+      const minDate = /all out/i.test(row.cycle || "") && row.last_ordinary_poll ? `${row.last_ordinary_poll.slice(0, 4)}-01-01` : null;
       if (x.w) {
-        const res = (ordinaryByCode.get(x.w.code) || []).filter((r) => !minDate || r.date >= minDate);
+        let res = (ordinaryByCode.get(x.w.code) || []).filter((r) => !minDate || r.date >= minDate);
+        let joinedByName = false;
+        if (!res.length && minDate && row.boundaries !== "new") {
+          // ONS best-fit lookups leave out a ward that holds no LSOA centroid,
+          // so its result cannot join by code. An all-out council last elected
+          // in that year has had no ordinary poll since, and an order only
+          // takes effect at one, so its May 2026 wards are the wards of that
+          // poll: join by name inside the council.
+          const y = row.last_ordinary_poll.slice(0, 4);
+          const hit = dcByCouncilYear.get(`${dcSlug(c.slug)}/${y}`)?.get(looseSlug(x.w.slug));
+          if (hit && hit !== "AMBIGUOUS" && hit.shares) { res = [{ ...hit, source: hit.from_2027_export ? SRC.dc2027 : SRC.dc, source_url: hit.source }]; joinedByName = true; }
+        }
         if (res.length) {
           const r = res[0];
           base.method = "same_ward";
+          if (joinedByName) base.joined_by = "ward_name_in_council";
           if (x.altered_by) base.note = `Ward altered by a small area transfer from 2027 (${x.altered_by}); this baseline is on its May 2026 boundaries.`;
           base.baseline = { date: r.date, ballot_paper_id: r.ballot_paper_id || null, source: r.source.key, source_url: r.source_url || null, rows: r.rows, total_votes: r.total_votes, elected: r.elected, shares: r.shares, pooled: pooledShares(r.shares) };
         } else {
@@ -300,7 +358,7 @@ function main() {
           }
           if (base.method === "none") {
             base.note = minDate
-              ? `No result from this council's last ordinary poll (${minDate}) is on hand for this ward. For most such councils the Democracy Club file has no ${minDate.slice(0, 4)} ordinary results at all (see docs/wards-2027-method.md).`
+              ? `No result from this council's last ordinary poll (${row.last_ordinary_poll}) is on hand for this ward, in either Democracy Club file. An uncontested ward has no votes to record; otherwise the record is missing or did not join to an ONS code.`
               : "No ordinary result on hand for this ward since its boundaries were set.";
           }
         }
@@ -495,6 +553,7 @@ function buildInputs(orders) {
   const f = (p) => (existsSync(p) ? sha256File(p) : null);
   return [
     { name: "ward_results_2016-2026_candidates.csv", ...SRC.dc, sha256: f(join(CACHE, "ward_results_2016-2026_candidates.csv")) },
+    { name: "dc-historic-results-2027.json", ...SRC.dc2027, sha256: f(join(CACHE, "dc-historic-results-2027.json")), results_sha256: DC2027_SHA },
     { name: "lsoa21_to_ward_wd23.csv / wd24 / wd25", label: "ONS LSOA (2021) to ward best-fit lookups, Drive library: DOGE/Elections & Demographics/03 Geography and lookups/", sha256: [23, 24, 25].map((y) => f(join(CACHE, `lsoa21_to_ward_wd${y}.csv`))) },
     { name: "lsoa21_population_weighted_centroids.csv", label: "ONS LSOA (2021) population-weighted centroids, Drive library: 03 Geography and lookups/", sha256: f(join(CACHE, "lsoa21_population_weighted_centroids.csv")) },
     { name: "leap-2019-05-02.csv", ...SRC.leap2019, sha256: f(join(CACHE, "leap-2019-05-02.csv")) },
