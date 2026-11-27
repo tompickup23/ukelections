@@ -1,0 +1,524 @@
+{
+  "_readme": "Research only. Pre-registered shadow forecasts for the council by-election swing variant in docs/byelection-shadow-variant-2026-11.md. No page reads this file and it changes no published forecast. Each forecast is written once, before its result is in the repository, and is never overwritten.",
+  "variant": "restore-aware-reform-180d-2026-11",
+  "protocol": "docs/byelection-shadow-variant-2026-11.md",
+  "cut": "2026-11-26",
+  "forecasts": {
+    "birmingham-shard-end-2026-11-26": {
+      "slug": "birmingham-shard-end-2026-11-26",
+      "ballot_paper_id": "local.birmingham.shard-end.by.2026-11-26",
+      "polling_day": "2026-11-26",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.383Z",
+        "baseline_election_date": "2026-05-07",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.birmingham.shard-end.2026-05-07/",
+        "era": "post_may_2025",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Independent",
+          "Labour",
+          "Other",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "post_may_2025|reform_already_stood",
+        "contests_used": 60,
+        "window_days": 180,
+        "reform_logodds_shift": -0.5545901765017107,
+        "reform_entry_share": null,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 16,
+          "shift_n": 16,
+          "shift_source": "restore_status_pool",
+          "entry_n": 0,
+          "entry_source": "window_estimate"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 42.5,
+        "Labour": 29.5,
+        "Conservative": 5.6,
+        "Green Party": 9.4,
+        "Restore Britain": 7.5,
+        "Independent": 5.6
+      },
+      "unpriced_parties": [
+        "Other"
+      ],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 46.7,
+        "Labour": 26.4,
+        "Conservative": 5.1,
+        "Green Party": 9.8,
+        "Restore Britain": 6.9,
+        "Independent": 5
+      }
+    },
+    "bromsgrove-marlbrook-2026-11-26": {
+      "slug": "bromsgrove-marlbrook-2026-11-26",
+      "ballot_paper_id": "local.bromsgrove.marlbrook.by.2026-11-26",
+      "polling_day": "2026-11-26",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.403Z",
+        "baseline_election_date": "2023-05-04",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.bromsgrove.marlbrook.2023-05-04/",
+        "era": "pre_realignment",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Labour",
+          "Liberal Democrats",
+          "Reform UK"
+        ]
+      },
+      "swing": {
+        "stratum": "pre_realignment",
+        "contests_used": 77,
+        "window_days": 180,
+        "reform_logodds_shift": null,
+        "reform_entry_share": 0.2793696275071633,
+        "reform": {
+          "restore_standing": false,
+          "pool_contests": 69,
+          "shift_n": 2,
+          "shift_source": "window_estimate",
+          "entry_n": 67,
+          "entry_source": "restore_status_pool"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 8.6,
+        "Labour": 13.6,
+        "Conservative": 43.1,
+        "Liberal Democrats": 20.9,
+        "Green Party": 13.7
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 9.6,
+        "Labour": 15,
+        "Conservative": 47.1,
+        "Liberal Democrats": 9.8,
+        "Green Party": 18.5
+      }
+    },
+    "flintshire-mold-broncoed-2026-11-26": {
+      "slug": "flintshire-mold-broncoed-2026-11-26",
+      "ballot_paper_id": "local.flintshire.mold-broncoed.by.2026-11-26",
+      "polling_day": "2026-11-26",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.413Z",
+        "baseline_election_date": "2022-05-05",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.flintshire.mold-broncoed.2022-05-05/",
+        "era": "pre_realignment",
+        "reform_entering": true,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Labour",
+          "Liberal Democrats",
+          "Other",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "pre_realignment|reform_entering",
+        "contests_used": 74,
+        "window_days": 180,
+        "reform_logodds_shift": null,
+        "reform_entry_share": 0.27515015015015015,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 8,
+          "shift_n": 1,
+          "shift_source": "window_estimate",
+          "entry_n": 7,
+          "entry_source": "restore_status_pool"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 31.8,
+        "Labour": 29.6,
+        "Conservative": 6.7,
+        "Liberal Democrats": 20.4,
+        "Green Party": 5.4,
+        "Restore Britain": 6.1
+      },
+      "unpriced_parties": [
+        "Other"
+      ],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 35.5,
+        "Labour": 33.2,
+        "Conservative": 7.4,
+        "Liberal Democrats": 9.7,
+        "Green Party": 7.2,
+        "Restore Britain": 6.9
+      }
+    },
+    "gosport-hardway-2026-12-03": {
+      "slug": "gosport-hardway-2026-12-03",
+      "ballot_paper_id": "local.gosport.hardway.by.2026-12-03",
+      "polling_day": "2026-12-03",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.444Z",
+        "baseline_election_date": "2026-05-07",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.gosport.hardway.2026-05-07/",
+        "era": "post_may_2025",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Labour",
+          "Liberal Democrats",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "post_may_2025|reform_already_stood",
+        "contests_used": 60,
+        "window_days": 180,
+        "reform_logodds_shift": -0.5545901765017107,
+        "reform_entry_share": null,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 16,
+          "shift_n": 16,
+          "shift_source": "restore_status_pool",
+          "entry_n": 0,
+          "entry_source": "window_estimate"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 31.6,
+        "Labour": 7.4,
+        "Conservative": 19.9,
+        "Liberal Democrats": 25.7,
+        "Green Party": 7.5,
+        "Restore Britain": 7.9
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 36.2,
+        "Labour": 6.6,
+        "Conservative": 18.2,
+        "Liberal Democrats": 24.2,
+        "Green Party": 7.6,
+        "Restore Britain": 7.3
+      }
+    },
+    "manchester-harpurhey-2026-11-26": {
+      "slug": "manchester-harpurhey-2026-11-26",
+      "ballot_paper_id": "local.manchester.harpurhey.by.2026-11-26",
+      "polling_day": "2026-11-26",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.424Z",
+        "baseline_election_date": "2026-05-07",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.manchester.harpurhey.2026-05-07/",
+        "era": "post_may_2025",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Independent",
+          "Labour",
+          "Liberal Democrats",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "post_may_2025|reform_already_stood",
+        "contests_used": 60,
+        "window_days": 180,
+        "reform_logodds_shift": -0.5545901765017107,
+        "reform_entry_share": null,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 16,
+          "shift_n": 16,
+          "shift_source": "restore_status_pool",
+          "entry_n": 0,
+          "entry_source": "window_estimate"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 16.9,
+        "Labour": 46.3,
+        "Conservative": 5.4,
+        "Liberal Democrats": 3.4,
+        "Green Party": 16.3,
+        "Restore Britain": 6.6,
+        "Independent": 5.1
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 20.3,
+        "Labour": 43,
+        "Conservative": 5.2,
+        "Liberal Democrats": 3.2,
+        "Green Party": 17.2,
+        "Restore Britain": 6.3,
+        "Independent": 4.8
+      }
+    },
+    "oldham-royton-north-2026-12-03": {
+      "slug": "oldham-royton-north-2026-12-03",
+      "ballot_paper_id": "local.oldham.royton-north.by.2026-12-03",
+      "polling_day": "2026-12-03",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.434Z",
+        "baseline_election_date": "2026-05-07",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.oldham.royton-north.2026-05-07/",
+        "era": "post_may_2025",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Labour",
+          "Liberal Democrats",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "post_may_2025|reform_already_stood",
+        "contests_used": 60,
+        "window_days": 180,
+        "reform_logodds_shift": -0.5545901765017107,
+        "reform_entry_share": null,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 16,
+          "shift_n": 16,
+          "shift_source": "restore_status_pool",
+          "entry_n": 0,
+          "entry_source": "window_estimate"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 50.1,
+        "Labour": 20.7,
+        "Conservative": 11.8,
+        "Liberal Democrats": 3.4,
+        "Green Party": 6.7,
+        "Restore Britain": 7.3
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 54,
+        "Labour": 18.4,
+        "Conservative": 10.8,
+        "Liberal Democrats": 3.2,
+        "Green Party": 6.8,
+        "Restore Britain": 6.8
+      }
+    },
+    "pembrokeshire-pembroke-dock-central-2026-12-08": {
+      "slug": "pembrokeshire-pembroke-dock-central-2026-12-08",
+      "ballot_paper_id": "local.pembrokeshire.pembroke-dock-central.by.2026-12-08",
+      "polling_day": "2026-12-08",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.451Z",
+        "baseline_election_date": "2022-05-05",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.pembrokeshire.pembroke-dock-central.2022-05-05/",
+        "era": "pre_realignment",
+        "reform_entering": true,
+        "field": [
+          "Conservative",
+          "Labour",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "pre_realignment|reform_entering",
+        "contests_used": 74,
+        "window_days": 180,
+        "reform_logodds_shift": null,
+        "reform_entry_share": 0.27515015015015015,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 8,
+          "shift_n": 1,
+          "shift_source": "window_estimate",
+          "entry_n": 7,
+          "entry_source": "restore_status_pool"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 30.9,
+        "Labour": 45.6,
+        "Conservative": 17.6,
+        "Restore Britain": 5.9
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 30.7,
+        "Labour": 45.8,
+        "Conservative": 17.5,
+        "Restore Britain": 6
+      }
+    },
+    "reading-caversham-heights-2026-11-26": {
+      "slug": "reading-caversham-heights-2026-11-26",
+      "ballot_paper_id": "local.reading.caversham-heights.by.2026-11-26",
+      "polling_day": "2026-11-26",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.373Z",
+        "baseline_election_date": "2026-05-07",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.reading.caversham-heights.2026-05-07/",
+        "era": "post_may_2025",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Labour",
+          "Liberal Democrats",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "post_may_2025|reform_already_stood",
+        "contests_used": 60,
+        "window_days": 180,
+        "reform_logodds_shift": -0.5545901765017107,
+        "reform_entry_share": null,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 16,
+          "shift_n": 16,
+          "shift_source": "restore_status_pool",
+          "entry_n": 0,
+          "entry_source": "window_estimate"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 7.6,
+        "Labour": 31,
+        "Conservative": 35.1,
+        "Liberal Democrats": 7.1,
+        "Green Party": 12.3,
+        "Restore Britain": 7
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 9.7,
+        "Labour": 29.1,
+        "Conservative": 34.1,
+        "Liberal Democrats": 6.9,
+        "Green Party": 13.3,
+        "Restore Britain": 6.8
+      }
+    },
+    "solihull-castle-bromwich-2026-11-26": {
+      "slug": "solihull-castle-bromwich-2026-11-26",
+      "ballot_paper_id": "local.solihull.castle-bromwich.by.2026-11-26",
+      "polling_day": "2026-11-26",
+      "variant": "restore-aware-reform-180d-2026-11",
+      "generated_at": "2026-11-27T01:04:26.281Z",
+      "result_in_repo_at_generation": false,
+      "inputs": {
+        "latest_corpus_contest_date": "2026-11-19",
+        "corpus_contests_before_polling_day": 1000,
+        "contest_file_generated_at": "2026-11-14T03:52:16.394Z",
+        "baseline_election_date": "2026-05-07",
+        "baseline_source": "https://candidates.democracyclub.org.uk/elections/local.solihull.castle-bromwich.2026-05-07/",
+        "era": "post_may_2025",
+        "reform_entering": false,
+        "field": [
+          "Conservative",
+          "Green Party",
+          "Independent",
+          "Labour",
+          "Liberal Democrats",
+          "Reform UK",
+          "Restore Britain"
+        ]
+      },
+      "swing": {
+        "stratum": "post_may_2025|reform_already_stood",
+        "contests_used": 60,
+        "window_days": 180,
+        "reform_logodds_shift": -0.5545901765017107,
+        "reform_entry_share": null,
+        "reform": {
+          "restore_standing": true,
+          "pool_contests": 16,
+          "shift_n": 16,
+          "shift_source": "restore_status_pool",
+          "entry_n": 0,
+          "entry_source": "window_estimate"
+        }
+      },
+      "central_pct": {
+        "Reform UK": 41.8,
+        "Labour": 11.9,
+        "Conservative": 21.3,
+        "Liberal Democrats": 4,
+        "Green Party": 8.1,
+        "Restore Britain": 7.3,
+        "Independent": 5.6
+      },
+      "unpriced_parties": [],
+      "diagnostic_current_engine_same_inputs_pct": {
+        "Reform UK": 45.7,
+        "Labour": 10.5,
+        "Conservative": 19.7,
+        "Liberal Democrats": 3.7,
+        "Green Party": 8.4,
+        "Restore Britain": 6.7,
+        "Independent": 5.2
+      }
+    }
+  }
+}
