@@ -80,14 +80,23 @@ def main():
     keys = list(matched)
     tree = STRtree([matched[k]["geom"] for k in keys])
     inside = defaultdict(list)
+    points = {}
     with open(D03 / "lsoa21_population_weighted_centroids.csv", newline="") as f:
         for r in csv.DictReader(f):
             lon, lat = tr.transform(float(r["x_bng"]), float(r["y_bng"]))
             pt = Point(lon, lat)
+            points[r["LSOA21CD"]] = pt
             for j in tree.query(pt):
                 if matched[keys[j]]["geom"].contains(pt):
                     inside[keys[j]].append(r["LSOA21CD"])
                     break
+    nearest = 0
+    for k in keys:  # a new area containing no centroid takes the single nearest one
+        if not inside.get(k):
+            g = matched[k]["geom"]
+            inside[k] = [min(points, key=lambda c: g.distance(points[c]))]
+            nearest += 1
+    print("areas given their nearest small area", nearest)
     gss_with_result = set(df.loc[df["gss"].notna() & (df.d < "2026-05-07"), "gss"])
     out = {}
     stats = Counter()
