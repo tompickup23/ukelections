@@ -154,7 +154,13 @@ def place_rows(df: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
 
 
 def region_of_lad() -> dict:
-    return {k: v["region_name"] for k, v in rj(GEO / "lad24-to-region.json").items()}
+    reg = {k: v["region_name"] for k, v in rj(GEO / "lad24-to-region.json").items()}
+    # lad24-to-region.json keeps Barnsley's and Sheffield's pre-2023 codes only;
+    # fall back to the ukplaces registry region (fault found after the run, see ESTATE_RESULTS.md).
+    for k, v in rj(PLACES).items():
+        if k not in reg and v.get("region"):
+            reg[k] = v["region"]
+    return reg
 
 
 # -------------------------------------------------------- measures ----
