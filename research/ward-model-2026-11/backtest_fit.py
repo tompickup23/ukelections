@@ -33,11 +33,19 @@ MIN_ROWS = 50
 
 def fit_cut(params, X, y, w_age, train_idx, test_idx):
     """Fit both arms for one lane at one cut; return {arm: predicted offsets for test_idx}."""
+    Xt = X[train_idx].copy()
+    # Fault found on the first run, before any forecast was written: sklearn's
+    # binning fails on a column with no non-missing value (prev_rel_ref when
+    # forecasting from 2021 rows, as Reform UK had stood in none of the earlier
+    # contests). A single-value column gets no bin thresholds and is never split,
+    # so filling it with 0 in training leaves every forecast as it would be.
+    empty = np.isnan(Xt).all(axis=0)
+    Xt[:, empty] = 0.0
     with threadpool_limits(1):
         out = {}
         for arm, half in ARMS.items():
             sw = None if half is None else 0.5 ** (w_age / half)
-            m = make(params, FEATURES).fit(X[train_idx], y[train_idx], sample_weight=sw)
+            m = make(params, FEATURES).fit(Xt, y[train_idx], sample_weight=sw)
             out[arm] = m.predict(X[test_idx])
         return out
 
