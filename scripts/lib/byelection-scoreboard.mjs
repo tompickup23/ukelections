@@ -15,7 +15,10 @@
  * script, the tests and the pages all share exactly this code.
  */
 
+import { benchmarkHolder } from "./seats-defended.mjs";
+
 export const LEDGER_FILE = "data/scoreboard/byelection-forecasts.json";
+export { SEATS_FILE } from "./seats-defended.mjs";
 
 /** The six pooled lanes. Others pools independents and every smaller party. */
 export const MAJOR = ["Reform UK", "Labour", "Conservative", "Liberal Democrats", "Green Party"];
@@ -146,14 +149,28 @@ export function hasScorableResult(d) {
   return Boolean(d?.result?.declared && d.result.shares && topLane(poolShares(d.result.shares)));
 }
 
+/**
+ * The defending party for the "holder" benchmark.
+ *
+ * With a seats-defended map (data/seats/seats-defended.json, by_elections) the
+ * benchmark uses only that file, and only records it marks as determined with
+ * a single party. Without one it falls back to the contest page's own
+ * previous_holder, which is what the scoreboard used before that file existed.
+ */
+export function holderFor(d, seats) {
+  if (seats) return benchmarkHolder(seats[d?.contest?.ballot_paper_id]);
+  return d?.previous_holder?.established && d.previous_holder.party ? d.previous_holder.party : null;
+}
+
 /** What the scoreboard needs from one contest file. */
-export function contestRecord(d) {
+export function contestRecord(d, seats) {
   const c = d.contest;
   const scorable = hasScorableResult(d);
   const actual = scorable ? poolShares(d.result.shares) : null;
   const leader = actual ? topLane(actual) : null;
   const prior = d.prior_result?.shares && !c.boundary_changed_since_prior ? poolShares(d.prior_result.shares) : null;
-  const holder = d.previous_holder?.established && d.previous_holder.party ? poolParty(d.previous_holder.party) : null;
+  const held = holderFor(d, seats);
+  const holder = held ? poolParty(held) : null;
   return {
     slug: d.slug,
     ballot_paper_id: c.ballot_paper_id,
@@ -178,7 +195,7 @@ export const BENCHMARKS = [
     id: "holder",
     name: "The defending party holds",
     description:
-      "Calls the party that held the seat before the vacancy, as recorded on the contest page. Left out where no holder is recorded.",
+      "Calls the party defending the seat, from the seats-defended record: a named source where one is held, otherwise the party last elected where held results leave only one possibility. Left out where the defending party is not determined.",
   },
   {
     id: "last_leader",
@@ -248,10 +265,10 @@ const byName = (forecasters) => (a, b) =>
  * Returns plain data the pages render: tables for live and retrospective,
  * head-to-head pairs, a monthly view and the counts the method note quotes.
  */
-export function buildScoreboard(ledger, contests) {
+export function buildScoreboard(ledger, contests, seats) {
   const records = new Map();
   for (const d of contests) {
-    if (d?.contest?.ballot_paper_id && d.slug) records.set(d.contest.ballot_paper_id, contestRecord(d));
+    if (d?.contest?.ballot_paper_id && d.slug) records.set(d.contest.ballot_paper_id, contestRecord(d, seats));
   }
   const forecasters = ledger.forecasters || {};
   const entries = (ledger.entries || []).map((e) => ({ ...e, status: entryStatus(e.captured_at, e.polling_day) }));
@@ -398,8 +415,8 @@ export function runningRecord(board) {
 }
 
 /** Who called one finished contest, from the ledger, plus the benchmarks for it. */
-export function contestCalls(ledger, d) {
-  const r = contestRecord(d);
+export function contestCalls(ledger, d, seats) {
+  const r = contestRecord(d, seats);
   const forecasters = ledger.forecasters || {};
   const calls = (ledger.entries || [])
     .filter((e) => e.ballot_paper_id === r.ballot_paper_id)

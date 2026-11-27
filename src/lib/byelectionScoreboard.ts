@@ -10,6 +10,7 @@ import path from "node:path";
 import { loadLocalContests } from "./byElections";
 import {
   LEDGER_FILE,
+  SEATS_FILE,
   buildScoreboard,
   contestCalls,
   runningRecord,
@@ -17,13 +18,14 @@ import {
 
 export const SCOREBOARD_PATH = "/by-elections/scoreboard/";
 
-let cache: { ledger: any; contests: any[]; board: any } | null = null;
+let cache: { ledger: any; contests: any[]; seats: any; board: any } | null = null;
 
 function load() {
   if (!cache) {
     const ledger = JSON.parse(readFileSync(path.join(process.cwd(), LEDGER_FILE), "utf8"));
+    const seats = JSON.parse(readFileSync(path.join(process.cwd(), SEATS_FILE), "utf8")).by_elections || {};
     const contests = loadLocalContests();
-    cache = { ledger, contests, board: buildScoreboard(ledger, contests) };
+    cache = { ledger, contests, seats, board: buildScoreboard(ledger, contests, seats) };
   }
   return cache;
 }
@@ -31,7 +33,7 @@ function load() {
 export const loadScoreboard = () => load().board;
 export const loadScoreboardLedger = () => load().ledger;
 export const scoreboardRunningRecord = () => runningRecord(load().board);
-export const scoreboardContestCalls = (d: any) => contestCalls(load().ledger, d);
+export const scoreboardContestCalls = (d: any) => contestCalls(load().ledger, d, load().seats);
 
 /** "24 of 52 (46%)": the count always comes first, the rate never stands alone. */
 export function countOf(called: number, contests: number): string {
