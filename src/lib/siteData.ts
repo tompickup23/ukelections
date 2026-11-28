@@ -168,6 +168,8 @@ export interface May7Headline {
   noc_count: number;
   /** Share of the target cohort declared, as a fraction (0.977, not 97.7). */
   declared_coverage_share: number;
+  /** Ward and mayoral ballots the May 2026 scorecard graded. */
+  ballots_evaluated: number;
   live_winner_accuracy: number;
   live_major_party_mae: number;
   prereg_winner_accuracy: number;
@@ -195,11 +197,23 @@ export function loadMay7Headline(): May7Headline {
     declared_coverage_share: typeof pa.snapshot?.coverage_pct === "number"
       ? pa.snapshot.coverage_pct / 100
       : (totalTargeted ? totalDeclared / totalTargeted : 0),
+    ballots_evaluated: pa.live?.summary?.ballots_evaluated ?? 0,
     live_winner_accuracy: pa.live?.summary?.winner_accuracy ?? 0,
     live_major_party_mae: pa.live?.summary?.major_party_mae_avg ?? 0,
     prereg_winner_accuracy: pa.prereg?.summary?.winner_accuracy ?? 0,
     prereg_major_party_mae: pa.prereg?.summary?.major_party_mae_avg ?? 0,
   };
+}
+
+/**
+ * Council by-election results in the tracked ledger that were read from the
+ * returning officer's own declaration (review_status hand_verified_declaration).
+ * Rows checked another way are not counted.
+ */
+export function loadDeclarationCheckedCount(): number {
+  const ledger = readJsonIfExists("data/history/byelection-appends.json");
+  const rows: any[] = Array.isArray(ledger) ? ledger : (ledger?.results ?? []);
+  return rows.filter((row) => row?.review_status === "hand_verified_declaration").length;
 }
 
 export function loadCycleFor(councilSlug: string): CouncilCycle | null {
