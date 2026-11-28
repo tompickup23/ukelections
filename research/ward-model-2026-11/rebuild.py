@@ -1,7 +1,8 @@
 """Checked rebuild of the research dataset and anchors (REBUILD_SPEC.md).
 
 One command:
-  uv run python rebuild.py --polls corrected          # the PR 199 extract for 13 Dec 2019 to 3 Jul 2024
+  uv run python rebuild.py --polls corrected          # PR 199 extract + area rule (amendment, 28 Nov 2026)
+  uv run python rebuild.py --polls pr199              # PR 199 extract only, bridge file as committed
   uv run python rebuild.py --polls old --reproduce    # the stage A extract, compared with the PR 197 cache
 
 Runs prepare.py, backtest_b_anchor.py and bridge_level_anchor.py unchanged, in
@@ -53,6 +54,8 @@ GIT_SOURCES = {  # cache file: (commit, path in that commit)
 SHARE_TOL = 0.001
 PLAID_MAX = 0.03
 MIN_POLLS = 3
+SNP_MAX = 0.08
+AREAS_KEPT = {"GB", "UK"}  # amendment rule 3: every other area, null included, is excluded (mode corrected)
 
 
 class Checks:
@@ -145,13 +148,18 @@ def window_count(polls, when: date, window: int):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--polls", choices=["old", "corrected"], default="corrected")
+    ap.add_argument("--polls", choices=["old", "pr199", "corrected"], default="corrected")
     ap.add_argument("--reproduce", action="store_true", help="compare with cache/reference and require nil difference (old polls)")
     args = ap.parse_args()
-    polls_2019_24 = NEW_2019_24 if args.polls == "corrected" else OLD_2019_24
+    polls_2019_24 = OLD_2019_24 if args.polls == "old" else NEW_2019_24
     out = BASE_CACHE / "rebuild" / args.polls
     out.mkdir(parents=True, exist_ok=True)
-    checks = Checks(expected_fail={"P3_no_party_column_misfiled"} if (args.polls == "old" and args.reproduce) else ())
+    expected = set()
+    if args.polls == "old" and args.reproduce:
+        expected = {"P3_no_party_column_misfiled", "P6_area_check_every_file"}
+    elif args.polls == "pr199":
+        expected = {"P6_area_check_every_file"}  # P3 handled below: expected only if confined to the bridge file
+    checks = Checks(expected_fail=expected)
     manifest = {"spec": "REBUILD_SPEC.md", "polls_2019_to_2024": args.polls, "output_dir": str(out.relative_to(HERE)),
                 "reference_dir": str(REF.relative_to(HERE))}
 
@@ -186,21 +194,56 @@ def main():
     if bad:
         sys.exit(f"STOP: inputs do not match their named editions: {bad}")
 
+    # ---------------------------------------------------------------- area check (amendment rule 3)
+    pr192_used, p2019_used, bridge_used, p2025_used = list(PR192), polls_2019_24, BRIDGE_POLLS, common.POLLS_2025
+    area_report, excluded = {}, {}
+    (out / "polls").mkdir(exist_ok=True)
+
+    def area_filter(f: Path) -> Path:
+        src = common.read_json(f)
+        P = src["polls"]
+        area_report[f.name] = dict(Counter(str(p.get("area")) for p in P))
+        bad = [p for p in P if p.get("area") not in AREAS_KEPT]
+        if bad:
+            excluded[f.name] = [{"fieldwork_end": p["fieldwork_end"], "pollster": p["pollster"], "client": p.get("client"),
+                                 "area": p.get("area"), "sample": p.get("sample")} for p in bad]
+        if args.polls != "corrected" or not bad:
+            return f
+        dst = out / "polls" / f.name
+        dst.write_text(json.dumps({**src, "polls": [p for p in P if p.get("area") in AREAS_KEPT],
+                                   "area_filter": f"amendment of 28 Nov 2026: {len(bad)} polls with area not in GB/UK removed"},
+                                  indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+        return dst
+
+    pr192_used = [area_filter(f) for f in PR192]
+    p2019_used = area_filter(polls_2019_24)
+    bridge_used = area_filter(BRIDGE_POLLS)
+    p2025_used = area_filter(common.POLLS_2025)
+    ts = common.read_json(common.POLLS_TS)["polls"]
+    ts_flag = [(p["date"], p["pollster"]) for p in ts
+               if (p["shares"].get("Plaid Cymru") or 0) > PLAID_MAX or (p["shares"].get("SNP") or 0) > SNP_MAX]
+    area_report[common.POLLS_TS.name] = {"no area field": len(ts), "plaid_or_snp_above_threshold": ts_flag}
+    manifest["area_check"] = {"rule": "keep area GB or UK; exclude every other value, null included" + ("" if args.polls == "corrected" else " (reported, not applied, in this mode)"),
+                              "by_file": area_report, "excluded_or_would_be": excluded,
+                              "files_read": [str(x.relative_to(HERE)) if str(x).startswith(str(HERE)) else str(x.relative_to(REPO))
+                                             for x in pr192_used + [p2019_used, bridge_used, p2025_used]]}
+
     # ---------------------------------------------------------------- build, scripts unchanged
     common.CACHE = out  # the three scripts read and write CACHE / <file>; inputs keep their own paths
     import prepare
+    prepare.POLLS_2025 = p2025_used
     prepare.main()
     import backtest_b_anchor as bba
-    bba.POLL_FILES = PR192 + [polls_2019_24]
+    bba.POLL_FILES = pr192_used + [p2019_used]
     bba.main()
     import bridge_level_anchor as bla
-    bba.POLL_FILES = [polls_2019_24, BRIDGE_POLLS, common.POLLS_2025]
+    bba.POLL_FILES = [p2019_used, bridge_used, p2025_used]
     bla.main()
     shutil.copy2(BASE_CACHE / "fit_meta.pkl", out / "fit_meta.pkl")
     manifest["build_steps"] = [
         "prepare.main() -> dataset.pkl, dataset_meta.pkl",
-        f"backtest_b_anchor.main() with POLL_FILES = PR 192 x3 + {polls_2019_24.name} -> backtest_b_dataset.pkl",
-        f"bridge_level_anchor.main() with POLL_FILES = {polls_2019_24.name}, {BRIDGE_POLLS.name}, {common.POLLS_2025.name} -> bridge_level_dataset.pkl",
+        f"backtest_b_anchor.main() with POLL_FILES = PR 192 x3 + {p2019_used.name} -> backtest_b_dataset.pkl",
+        f"bridge_level_anchor.main() with POLL_FILES = {p2019_used}, {bridge_used}, {p2025_used} -> bridge_level_dataset.pkl",
     ]
 
     # Pickles here are this folder's own cache, written by the steps above or copied from our own
@@ -210,9 +253,9 @@ def main():
     meta = pd.read_pickle(out / "dataset_meta.pkl")
 
     # ---------------------------------------------------------------- P. polling
-    bba.POLL_FILES = PR192 + [polls_2019_24]
+    bba.POLL_FILES = pr192_used + [p2019_used]
     srcB, pollsB, r0, multiB = bba.load_polls()
-    bba.POLL_FILES = [polls_2019_24, BRIDGE_POLLS, common.POLLS_2025]
+    bba.POLL_FILES = [p2019_used, bridge_used, p2025_used]
     srcL, pollsL, multiL = bla.load_polls()
     pollsP = prepare.load_polls()
     stage_polls = {"B": [(d, s) for d, s, _, _ in pollsB], "L": [(d, s) for d, s, _, _ in pollsL], "P": pollsP}
@@ -267,19 +310,21 @@ def main():
                    "rows_without_anchor": int(sum(u["rows"] for u in unanch))})
 
     p3 = {}
-    files = PR192 + [polls_2019_24, BRIDGE_POLLS, common.POLLS_2025]
+    files = pr192_used + [p2019_used, bridge_used, p2025_used]
     for f in files:
         P = common.read_json(f)["polls"]
         hi = [(p["fieldwork_end"], p["pollster"], p["shares"]["Plaid Cymru"]) for p in P if (p["shares"].get("Plaid Cymru") or 0) > PLAID_MAX]
         if hi:
             p3[f"{f.name}: Plaid Cymru above {PLAID_MAX}"] = {"polls": len(hi), "examples": hi[:5]}
-    P = common.read_json(polls_2019_24)["polls"]
+    P = common.read_json(p2019_used)["polls"]
     brx20 = sum(1 for p in P if p["fieldwork_end"].startswith("2020") and "Brexit Party" in p["shares"])
     if brx20 < 100:
         p3["2020 polls with a Brexit Party share"] = brx20
     dp = [p["shares"] for p in P if p["pollster"] == "Deltapoll" and p["fieldwork_end"] == "2020-12-30"]
     if not dp or dp[0].get("Brexit Party") != 0.03 or dp[0].get("Plaid Cymru") not in (0, 0.0):
         p3["Deltapoll ending 30 Dec 2020 (page: Brexit Party 3%, Plaid Cymru 0%)"] = dp
+    if args.polls == "pr199" and p3 and all(k.startswith(BRIDGE_POLLS.name + ":") for k in p3):
+        checks.expected.add("P3_no_party_column_misfiled")  # amendment: expected on the bridge file alone
     checks.record("P3_no_party_column_misfiled", not p3, {"faults": p3, "polls_2020_with_brexit_party": brx20})
 
     def raw_count(fs):
@@ -294,12 +339,17 @@ def main():
                     seen.add(key)
                     n += 1
         return n
-    nb, nl = raw_count(PR192 + [polls_2019_24]), raw_count([polls_2019_24, BRIDGE_POLLS, common.POLLS_2025])
+    nb, nl = raw_count(pr192_used + [p2019_used]), raw_count([p2019_used, bridge_used, p2025_used])
     areaB, areaL = Counter(a for *_, a in pollsB), Counter(a for *_, a in pollsL)
     checks.record("P4_uk_samples_pooled_not_filtered", nb == len(pollsB) and nl == len(pollsL),
                   {"stage_b_loaded": len(pollsB), "stage_b_in_files_less_duplicates_and_multi_row": nb, "stage_b_by_area": dict(areaB),
                    "bridge_loaded": len(pollsL), "bridge_in_files_less_duplicates_and_multi_row": nl, "bridge_by_area": dict(areaL),
                    "rule": "GB and UK samples pooled without distinction (backtest_b_anchor.load_polls keeps every area)"})
+
+    loaded_bad = {"stage_b": sum(1 for *_, a in pollsB if a not in AREAS_KEPT), "bridge": sum(1 for *_, a in pollsL if a not in AREAS_KEPT)}
+    checks.record("P6_area_check_every_file", not any(loaded_bad.values()) and not ts_flag,
+                  {"loaded_with_area_not_gb_uk": loaded_bad, "excluded_by_file": {k: len(v) for k, v in excluded.items()},
+                   "timeseries_no_area_flagged": ts_flag, "applied": args.polls == "corrected"})
 
     ge = meta["ge2024_gb"]["shares"]
     win = final[(final.date >= "2024-07-04") & (final.date < "2025-05-01")]

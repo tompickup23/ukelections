@@ -102,10 +102,133 @@
    "source": "tracked repo files"
   }
  ],
+ "area_check": {
+  "rule": "keep area GB or UK; exclude every other value, null included (reported, not applied, in this mode)",
+  "by_file": {
+   "westminster-2017-06-08-to-2017-12-31.json": {
+    "UK": 9,
+    "GB": 51
+   },
+   "westminster-2018-01-01-to-2019-05-02.json": {
+    "GB": 186,
+    "UK": 21
+   },
+   "westminster-2019-05-03-to-2019-12-12.json": {
+    "GB": 175,
+    "UK": 14
+   },
+   "westminster-2019-12-13-to-2024-07-04.json": {
+    "GB": 608,
+    "UK": 388
+   },
+   "bridge_level_polls_2024-07-05_to_2025-04-14.json": {
+    "None": 11,
+    "GB": 108,
+    "UK": 28
+   },
+   "westminster-2025-04-15-to-2026-04-25.json": {
+    "GB": 263,
+    "UK": 27
+   },
+   "timeseries.json": {
+    "no area field": 269,
+    "plaid_or_snp_above_threshold": []
+   }
+  },
+  "excluded_or_would_be": {
+   "bridge_level_polls_2024-07-05_to_2025-04-14.json": [
+    {
+     "fieldwork_end": "2024-07-08",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1038
+    },
+    {
+     "fieldwork_end": "2024-08-24",
+     "pollster": "Survation",
+     "client": "YesCymru",
+     "area": null,
+     "sample": 845
+    },
+    {
+     "fieldwork_end": "2024-09-10",
+     "pollster": "YouGov",
+     "client": "Barn Cymru",
+     "area": null,
+     "sample": 1220
+    },
+    {
+     "fieldwork_end": "2024-09-13",
+     "pollster": "YouGov",
+     "client": "ITV Cymru Wales / Cardiff University",
+     "area": null,
+     "sample": 1102
+    },
+    {
+     "fieldwork_end": "2024-09-30",
+     "pollster": "More in Common",
+     "client": "N/A",
+     "area": null,
+     "sample": null
+    },
+    {
+     "fieldwork_end": "2024-11-04",
+     "pollster": "Survation",
+     "client": "Reform UK",
+     "area": null,
+     "sample": 2006
+    },
+    {
+     "fieldwork_end": "2024-11-07",
+     "pollster": "Savanta",
+     "client": "Centre for London",
+     "area": null,
+     "sample": 1242
+    },
+    {
+     "fieldwork_end": "2024-11-11",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1004
+    },
+    {
+     "fieldwork_end": "2024-12-10",
+     "pollster": "YouGov",
+     "client": "Cardiff University",
+     "area": null,
+     "sample": 2500
+    },
+    {
+     "fieldwork_end": "2024-12-21",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1006
+    },
+    {
+     "fieldwork_end": "2024-12-23",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1006
+    }
+   ]
+  },
+  "files_read": [
+   "cache/pr192/westminster-2017-06-08-to-2017-12-31.json",
+   "cache/pr192/westminster-2018-01-01-to-2019-05-02.json",
+   "cache/pr192/westminster-2019-05-03-to-2019-12-12.json",
+   "data/polling/wikipedia/westminster-2019-12-13-to-2024-07-04.json",
+   "bridge_level_polls_2024-07-05_to_2025-04-14.json",
+   "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+  ]
+ },
  "build_steps": [
   "prepare.main() -> dataset.pkl, dataset_meta.pkl",
   "backtest_b_anchor.main() with POLL_FILES = PR 192 x3 + westminster-2019-12-13-to-2024-07-04.json -> backtest_b_dataset.pkl",
-  "bridge_level_anchor.main() with POLL_FILES = westminster-2019-12-13-to-2024-07-04.json, bridge_level_polls_2024-07-05_to_2025-04-14.json, westminster-2025-04-15-to-2026-04-25.json -> bridge_level_dataset.pkl"
+  "bridge_level_anchor.main() with POLL_FILES = /Users/tompickup/ukelections/.claude/worktrees/data-seats-defended-2f4514/data/polling/wikipedia/westminster-2019-12-13-to-2024-07-04.json, /Users/tompickup/ukelections/.claude/worktrees/data-seats-defended-2f4514/research/ward-model-2026-11/bridge_level_polls_2024-07-05_to_2025-04-14.json, /Users/tompickup/ukelections/.claude/worktrees/data-seats-defended-2f4514/data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json -> bridge_level_dataset.pkl"
  ],
  "contest_dates_without_anchor": [
   {
@@ -796,6 +919,20 @@
     "rule": "GB and UK samples pooled without distinction (backtest_b_anchor.load_polls keeps every area)"
    }
   },
+  "P6_area_check_every_file": {
+   "status": "fail_expected",
+   "detail": {
+    "loaded_with_area_not_gb_uk": {
+     "stage_b": 0,
+     "bridge": 11
+    },
+    "excluded_by_file": {
+     "bridge_level_polls_2024-07-05_to_2025-04-14.json": 11
+    },
+    "timeseries_no_area_flagged": [],
+    "applied": false
+   }
+  },
   "P5_jul2024_apr2025_anchored_on_polls": {
    "status": "pass",
    "detail": {
@@ -863,6 +1000,7 @@
  },
  "failed": [],
  "expected_failures": [
-  "P3_no_party_column_misfiled"
+  "P3_no_party_column_misfiled",
+  "P6_area_check_every_file"
  ]
 }

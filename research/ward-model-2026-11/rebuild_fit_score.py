@@ -19,7 +19,7 @@ import sys
 import common
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--polls", choices=["old", "corrected"], default="corrected")
+ap.add_argument("--polls", choices=["old", "pr199", "corrected"], default="corrected")
 args = ap.parse_args()
 
 cache = common.CACHE / "rebuild" / args.polls

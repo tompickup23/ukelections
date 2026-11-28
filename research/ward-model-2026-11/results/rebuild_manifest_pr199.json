@@ -1,0 +1,1081 @@
+{
+ "spec": "REBUILD_SPEC.md",
+ "polls_2019_to_2024": "pr199",
+ "output_dir": "cache/rebuild/pr199",
+ "reference_dir": "cache/reference",
+ "inputs": [
+  {
+   "path": "research/ward-model-2026-11/cache/drive07/ward_contests_v2.csv",
+   "via_symlink": false,
+   "bytes": 17549121,
+   "sha256": "23baa08041a06683d2a54638afb07fd38586e1e5b61f041d253fbaeb8bc99f6d",
+   "source": "Drive doge:DOGE/Elections & Demographics/07 Models (Reform propensity)/ward_contests_v2.csv (9 Aug 2026), this Mac only"
+  },
+  {
+   "path": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+   "via_symlink": false,
+   "bytes": 6349494,
+   "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404",
+   "source": "Drive doge:DOGE/Elections & Demographics/07 Models (Reform propensity)/universe_features_v2.csv (9 Aug 2026), this Mac only"
+  },
+  {
+   "path": "/Users/tompickup/ukelections/data/history/dc-historic-results.json",
+   "via_symlink": true,
+   "bytes": 64215517,
+   "sha256": "9b01794873e6125d2c505c8ec98123788b3042b84d9b5b59d9ecd143df5f0b16",
+   "source": "data/history/dc-historic-results.json, gitignored, this Mac only (scripts/ingest-dc-historic-results.mjs)"
+  },
+  {
+   "path": "data/results/may-2026/local-and-mayor.merged.json",
+   "via_symlink": false,
+   "bytes": 20585597,
+   "sha256": "99ff664e6de1d2a71c5d178bb27ecbaec3b29b1548d9c10088c6a8ef4f622e74",
+   "source": "tracked repo file"
+  },
+  {
+   "path": "data/transparency/may-2026-postaudit-2026-05-10.json",
+   "via_symlink": false,
+   "bytes": 6710350,
+   "sha256": "479328b5aeda5856b66b7d553091c6f8db0f0131054eddac2d2934bc03cbbd02",
+   "source": "tracked repo file"
+  },
+  {
+   "path": "data/polling/timeseries.json",
+   "via_symlink": false,
+   "bytes": 166040,
+   "sha256": "4a5203aa68cbc2658dcd3476720c3b243f5857782c28773cdb7e62f35c76122c",
+   "source": "tracked repo file"
+  },
+  {
+   "path": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json",
+   "via_symlink": false,
+   "bytes": 130662,
+   "sha256": "1da7b7a373f1dee1de3fd55ce2b3e494f0a60db9ff40e56785cfa8fd014dc461",
+   "source": "tracked; Wikipedia 'Opinion polling for the next United Kingdom general election' rev 1383556886"
+  },
+  {
+   "path": "research/ward-model-2026-11/bridge_level_polls_2024-07-05_to_2025-04-14.json",
+   "via_symlink": false,
+   "bytes": 65893,
+   "sha256": "9b4266b254b2a569e6f9cf854f6d22d2dba6230d4d9bc3eaa5bf6725ca99ff74",
+   "source": "this folder (PR 197); same page and revision"
+  },
+  {
+   "path": "research/ward-model-2026-11/cache/pr192/westminster-2017-06-08-to-2017-12-31.json",
+   "via_symlink": false,
+   "bytes": 28517,
+   "sha256": "5c186a8036c953e1cade962523fe46ef7d8c814d0312dcb82c7624001d2a4a0e",
+   "source": "PR 192 commit 6ad3327 via git show; Wikipedia 'Opinion polling for the 2019 United Kingdom general election' rev 1374586459"
+  },
+  {
+   "path": "research/ward-model-2026-11/cache/pr192/westminster-2018-01-01-to-2019-05-02.json",
+   "via_symlink": false,
+   "bytes": 96252,
+   "sha256": "7a1715c6bf357ba4210b3f2dd4ae6cf23d925f2e3ffcad45241387f190e1b384",
+   "source": "PR 192 commit 6ad3327 via git show; Wikipedia 'Opinion polling for the 2019 United Kingdom general election' rev 1374586459"
+  },
+  {
+   "path": "research/ward-model-2026-11/cache/pr192/westminster-2019-05-03-to-2019-12-12.json",
+   "via_symlink": false,
+   "bytes": 95396,
+   "sha256": "b222bc3915975b2c4332ac8875ff81a2f259a8dce2a6a2af6829b1cb298e0492",
+   "source": "PR 192 commit 6ad3327 via git show; Wikipedia 'Opinion polling for the 2019 United Kingdom general election' rev 1374586459"
+  },
+  {
+   "path": "research/ward-model-2026-11/cache/pr199/westminster-2019-12-13-to-2024-07-03.json",
+   "via_symlink": false,
+   "bytes": 650234,
+   "sha256": "d0b8ea74110526654010a89ec0c440ca26adce98a0afccbb711b09acbd67cd63",
+   "source": "PR 199 commit ef8f046 via git show; Wikipedia 'Opinion polling for the 2024 United Kingdom general election' rev 1363820081"
+  },
+  {
+   "path": "research/ward-model-2026-11/cache/fit_meta.pkl",
+   "via_symlink": false,
+   "bytes": 1747,
+   "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad",
+   "source": "fit_predict.py output of 27 Nov 2026 02:04, gitignored cache"
+  },
+  {
+   "path": "data/contests/local-byelections/*.json",
+   "files": 182,
+   "sha256_of_names_and_bytes_in_name_order": "66f9596193262d9eb4a80c238dfce7f688096d1befc94f5677d33f83ef4fd642",
+   "source": "tracked repo files"
+  }
+ ],
+ "area_check": {
+  "rule": "keep area GB or UK; exclude every other value, null included (reported, not applied, in this mode)",
+  "by_file": {
+   "westminster-2017-06-08-to-2017-12-31.json": {
+    "UK": 9,
+    "GB": 51
+   },
+   "westminster-2018-01-01-to-2019-05-02.json": {
+    "GB": 186,
+    "UK": 21
+   },
+   "westminster-2019-05-03-to-2019-12-12.json": {
+    "GB": 175,
+    "UK": 14
+   },
+   "westminster-2019-12-13-to-2024-07-03.json": {
+    "GB": 1082,
+    "UK": 414
+   },
+   "bridge_level_polls_2024-07-05_to_2025-04-14.json": {
+    "None": 11,
+    "GB": 108,
+    "UK": 28
+   },
+   "westminster-2025-04-15-to-2026-04-25.json": {
+    "GB": 263,
+    "UK": 27
+   },
+   "timeseries.json": {
+    "no area field": 269,
+    "plaid_or_snp_above_threshold": []
+   }
+  },
+  "excluded_or_would_be": {
+   "bridge_level_polls_2024-07-05_to_2025-04-14.json": [
+    {
+     "fieldwork_end": "2024-07-08",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1038
+    },
+    {
+     "fieldwork_end": "2024-08-24",
+     "pollster": "Survation",
+     "client": "YesCymru",
+     "area": null,
+     "sample": 845
+    },
+    {
+     "fieldwork_end": "2024-09-10",
+     "pollster": "YouGov",
+     "client": "Barn Cymru",
+     "area": null,
+     "sample": 1220
+    },
+    {
+     "fieldwork_end": "2024-09-13",
+     "pollster": "YouGov",
+     "client": "ITV Cymru Wales / Cardiff University",
+     "area": null,
+     "sample": 1102
+    },
+    {
+     "fieldwork_end": "2024-09-30",
+     "pollster": "More in Common",
+     "client": "N/A",
+     "area": null,
+     "sample": null
+    },
+    {
+     "fieldwork_end": "2024-11-04",
+     "pollster": "Survation",
+     "client": "Reform UK",
+     "area": null,
+     "sample": 2006
+    },
+    {
+     "fieldwork_end": "2024-11-07",
+     "pollster": "Savanta",
+     "client": "Centre for London",
+     "area": null,
+     "sample": 1242
+    },
+    {
+     "fieldwork_end": "2024-11-11",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1004
+    },
+    {
+     "fieldwork_end": "2024-12-10",
+     "pollster": "YouGov",
+     "client": "Cardiff University",
+     "area": null,
+     "sample": 2500
+    },
+    {
+     "fieldwork_end": "2024-12-21",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1006
+    },
+    {
+     "fieldwork_end": "2024-12-23",
+     "pollster": "Savanta",
+     "client": "QMUL",
+     "area": null,
+     "sample": 1006
+    }
+   ]
+  },
+  "files_read": [
+   "cache/pr192/westminster-2017-06-08-to-2017-12-31.json",
+   "cache/pr192/westminster-2018-01-01-to-2019-05-02.json",
+   "cache/pr192/westminster-2019-05-03-to-2019-12-12.json",
+   "cache/pr199/westminster-2019-12-13-to-2024-07-03.json",
+   "bridge_level_polls_2024-07-05_to_2025-04-14.json",
+   "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+  ]
+ },
+ "build_steps": [
+  "prepare.main() -> dataset.pkl, dataset_meta.pkl",
+  "backtest_b_anchor.main() with POLL_FILES = PR 192 x3 + westminster-2019-12-13-to-2024-07-03.json -> backtest_b_dataset.pkl",
+  "bridge_level_anchor.main() with POLL_FILES = /Users/tompickup/ukelections/.claude/worktrees/data-seats-defended-2f4514/research/ward-model-2026-11/cache/pr199/westminster-2019-12-13-to-2024-07-03.json, /Users/tompickup/ukelections/.claude/worktrees/data-seats-defended-2f4514/research/ward-model-2026-11/bridge_level_polls_2024-07-05_to_2025-04-14.json, /Users/tompickup/ukelections/.claude/worktrees/data-seats-defended-2f4514/data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json -> bridge_level_dataset.pkl"
+ ],
+ "contest_dates_without_anchor": [
+  {
+   "date": "2016-05-05",
+   "rows": 1513,
+   "scheduled_rows": 1497,
+   "polls_14d": 0,
+   "polls_21d": 0
+  },
+  {
+   "date": "2017-05-04",
+   "rows": 755,
+   "scheduled_rows": 721,
+   "polls_14d": 0,
+   "polls_21d": 0
+  },
+  {
+   "date": "2017-06-08",
+   "rows": 1,
+   "scheduled_rows": 0,
+   "polls_14d": 0,
+   "polls_21d": 0
+  },
+  {
+   "date": "2017-08-17",
+   "rows": 1,
+   "scheduled_rows": 0,
+   "polls_14d": 1,
+   "polls_21d": 2
+  },
+  {
+   "date": "2018-01-04",
+   "rows": 1,
+   "scheduled_rows": 0,
+   "polls_14d": 0,
+   "polls_21d": 1
+  },
+  {
+   "date": "2019-01-10",
+   "rows": 1,
+   "scheduled_rows": 0,
+   "polls_14d": 2,
+   "polls_21d": 2
+  },
+  {
+   "date": "2019-03-14",
+   "rows": 2,
+   "scheduled_rows": 0,
+   "polls_14d": 3,
+   "polls_21d": 4
+  },
+  {
+   "date": "2020-01-23",
+   "rows": 3,
+   "scheduled_rows": 0,
+   "polls_14d": 2,
+   "polls_21d": 2
+  },
+  {
+   "date": "2020-03-12",
+   "rows": 1,
+   "scheduled_rows": 0,
+   "polls_14d": 2,
+   "polls_21d": 2
+  },
+  {
+   "date": "2024-08-29",
+   "rows": 3,
+   "scheduled_rows": 0,
+   "polls_14d": 2,
+   "polls_21d": 2
+  },
+  {
+   "date": "2024-09-03",
+   "rows": 1,
+   "scheduled_rows": 0,
+   "polls_14d": 2,
+   "polls_21d": 2
+  },
+  {
+   "date": "2024-09-05",
+   "rows": 7,
+   "scheduled_rows": 0,
+   "polls_14d": 2,
+   "polls_21d": 2
+  }
+ ],
+ "row_counts": {
+  "dataset": {
+   "2016 scheduled": 1497,
+   "2016 by-election": 16,
+   "2017 scheduled": 721,
+   "2017 by-election": 74,
+   "2018 scheduled": 2119,
+   "2018 by-election": 60,
+   "2019 scheduled": 1678,
+   "2019 by-election": 65,
+   "2020 by-election": 12,
+   "2021 scheduled": 2257,
+   "2021 by-election": 116,
+   "2022 scheduled": 2536,
+   "2022 by-election": 66,
+   "2023 scheduled": 1737,
+   "2023 by-election": 83,
+   "2024 scheduled": 1902,
+   "2024 by-election": 310,
+   "2025 scheduled": 1406,
+   "2025 by-election": 324,
+   "2026 scheduled": 2576,
+   "2026 by-election": 168
+  },
+  "backtest_b_dataset": {
+   "2016 scheduled": 1497,
+   "2016 by-election": 16,
+   "2017 scheduled": 721,
+   "2017 by-election": 74,
+   "2018 scheduled": 2119,
+   "2018 by-election": 60,
+   "2019 scheduled": 1678,
+   "2019 by-election": 65,
+   "2020 by-election": 12,
+   "2021 scheduled": 2257,
+   "2021 by-election": 116,
+   "2022 scheduled": 2536,
+   "2022 by-election": 66,
+   "2023 scheduled": 1737,
+   "2023 by-election": 83,
+   "2024 scheduled": 1902,
+   "2024 by-election": 310,
+   "2025 scheduled": 1406,
+   "2025 by-election": 324,
+   "2026 scheduled": 2576,
+   "2026 by-election": 168
+  },
+  "bridge_level_dataset": {
+   "2016 scheduled": 1497,
+   "2016 by-election": 16,
+   "2017 scheduled": 721,
+   "2017 by-election": 74,
+   "2018 scheduled": 2119,
+   "2018 by-election": 60,
+   "2019 scheduled": 1678,
+   "2019 by-election": 65,
+   "2020 by-election": 12,
+   "2021 scheduled": 2257,
+   "2021 by-election": 116,
+   "2022 scheduled": 2536,
+   "2022 by-election": 66,
+   "2023 scheduled": 1737,
+   "2023 by-election": 83,
+   "2024 scheduled": 1902,
+   "2024 by-election": 310,
+   "2025 scheduled": 1406,
+   "2025 by-election": 324,
+   "2026 scheduled": 2576,
+   "2026 by-election": 168
+  }
+ },
+ "comparison_with_reference": {
+  "dataset": {
+   "identical": true,
+   "differing_columns": {}
+  },
+  "backtest_b_dataset": {
+   "identical": false,
+   "differing_columns": {
+    "anchor_kind": {
+     "rows_differing": 17
+    },
+    "a_ref": {
+     "max_abs_difference": 0.023333333333333317,
+     "rows_differing": 3843,
+     "blank_in_one_only": 14
+    },
+    "a_lab": {
+     "max_abs_difference": 0.024946236559139856,
+     "rows_differing": 3843,
+     "blank_in_one_only": 14
+    },
+    "a_con": {
+     "max_abs_difference": 0.018166666666666664,
+     "rows_differing": 3843,
+     "blank_in_one_only": 14
+    },
+    "a_ld": {
+     "max_abs_difference": 0.010666666666666672,
+     "rows_differing": 3843,
+     "blank_in_one_only": 14
+    },
+    "a_grn": {
+     "max_abs_difference": 0.014423076923076934,
+     "rows_differing": 3839,
+     "blank_in_one_only": 14
+    },
+    "a_oth": {
+     "max_abs_difference": 0.011333333333333306,
+     "rows_differing": 3843,
+     "blank_in_one_only": 14
+    },
+    "prev_anchor_kind": {
+     "rows_differing": 12
+    },
+    "prev_a_ref": {
+     "max_abs_difference": 0.021290322580645143,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_lab": {
+     "max_abs_difference": 0.024946236559139856,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_con": {
+     "max_abs_difference": 0.016421052631578975,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_ld": {
+     "max_abs_difference": 0.009999999999999995,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_grn": {
+     "max_abs_difference": 0.014423076923076934,
+     "rows_differing": 2677,
+     "blank_in_one_only": 11
+    },
+    "prev_a_oth": {
+     "max_abs_difference": 0.011333333333333306,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    }
+   }
+  },
+  "bridge_level_dataset": {
+   "identical": false,
+   "differing_columns": {
+    "anchor_kind": {
+     "rows_differing": 17
+    },
+    "a_ref": {
+     "max_abs_difference": 0.023333333333333317,
+     "rows_differing": 3903,
+     "blank_in_one_only": 14
+    },
+    "a_lab": {
+     "max_abs_difference": 0.024946236559139856,
+     "rows_differing": 3903,
+     "blank_in_one_only": 14
+    },
+    "a_con": {
+     "max_abs_difference": 0.018166666666666664,
+     "rows_differing": 3903,
+     "blank_in_one_only": 14
+    },
+    "a_ld": {
+     "max_abs_difference": 0.010666666666666672,
+     "rows_differing": 3903,
+     "blank_in_one_only": 14
+    },
+    "a_grn": {
+     "max_abs_difference": 0.014423076923076934,
+     "rows_differing": 3899,
+     "blank_in_one_only": 14
+    },
+    "a_oth": {
+     "max_abs_difference": 0.011333333333333306,
+     "rows_differing": 3903,
+     "blank_in_one_only": 14
+    },
+    "prev_anchor_kind": {
+     "rows_differing": 12
+    },
+    "prev_a_ref": {
+     "max_abs_difference": 0.021290322580645143,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_lab": {
+     "max_abs_difference": 0.024946236559139856,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_con": {
+     "max_abs_difference": 0.016421052631578975,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_ld": {
+     "max_abs_difference": 0.009999999999999995,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    },
+    "prev_a_grn": {
+     "max_abs_difference": 0.014423076923076934,
+     "rows_differing": 2677,
+     "blank_in_one_only": 11
+    },
+    "prev_a_oth": {
+     "max_abs_difference": 0.011333333333333306,
+     "rows_differing": 2679,
+     "blank_in_one_only": 11
+    }
+   }
+  }
+ },
+ "forward_only_folds": [
+  {
+   "cut": "2019-05-02",
+   "train_rows": 2229,
+   "latest_training_date": "2019-04-11",
+   "test_rows": 1683,
+   "earliest_test_date": "2019-05-02",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2021-05-06",
+   "train_rows": 3964,
+   "latest_training_date": "2020-03-19",
+   "test_rows": 2322,
+   "earliest_test_date": "2021-05-06",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2022-05-05",
+   "train_rows": 6349,
+   "latest_training_date": "2022-04-07",
+   "test_rows": 2536,
+   "earliest_test_date": "2022-05-05",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2023-05-04",
+   "train_rows": 8955,
+   "latest_training_date": "2023-04-20",
+   "test_rows": 1744,
+   "earliest_test_date": "2023-05-04",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2025-05-01",
+   "train_rows": 13020,
+   "latest_training_date": "2025-04-24",
+   "test_rows": 1504,
+   "earliest_test_date": "2025-05-01",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2026-05-07",
+   "train_rows": 14731,
+   "latest_training_date": "2026-04-23",
+   "test_rows": 2596,
+   "earliest_test_date": "2026-05-07",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2018-05-01",
+   "train_rows": 51,
+   "latest_training_date": "2018-03-29",
+   "test_rows": 2,
+   "earliest_test_date": "2018-05-03",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2018-11-01",
+   "train_rows": 2202,
+   "latest_training_date": "2018-10-25",
+   "test_rows": 10,
+   "earliest_test_date": "2018-11-01",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2019-05-01",
+   "train_rows": 2229,
+   "latest_training_date": "2019-04-11",
+   "test_rows": 1,
+   "earliest_test_date": "2019-05-09",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2019-11-01",
+   "train_rows": 3934,
+   "latest_training_date": "2019-10-24",
+   "test_rows": 5,
+   "earliest_test_date": "2019-11-07",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2021-07-01",
+   "train_rows": 6292,
+   "latest_training_date": "2021-06-24",
+   "test_rows": 12,
+   "earliest_test_date": "2021-07-01",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2022-02-01",
+   "train_rows": 6337,
+   "latest_training_date": "2021-12-16",
+   "test_rows": 4,
+   "earliest_test_date": "2022-02-03",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2022-08-01",
+   "train_rows": 8905,
+   "latest_training_date": "2022-07-28",
+   "test_rows": 1,
+   "earliest_test_date": "2022-08-18",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2023-02-01",
+   "train_rows": 8943,
+   "latest_training_date": "2023-01-19",
+   "test_rows": 4,
+   "earliest_test_date": "2023-02-09",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2023-09-01",
+   "train_rows": 10725,
+   "latest_training_date": "2023-08-31",
+   "test_rows": 9,
+   "earliest_test_date": "2023-09-07",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2024-03-01",
+   "train_rows": 10790,
+   "latest_training_date": "2024-02-29",
+   "test_rows": 11,
+   "earliest_test_date": "2024-03-06",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2024-09-01",
+   "train_rows": 12838,
+   "latest_training_date": "2024-08-22",
+   "test_rows": 24,
+   "earliest_test_date": "2024-09-12",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2025-03-01",
+   "train_rows": 12986,
+   "latest_training_date": "2025-02-27",
+   "test_rows": 17,
+   "earliest_test_date": "2025-03-06",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2025-10-01",
+   "train_rows": 14616,
+   "latest_training_date": "2025-09-25",
+   "test_rows": 33,
+   "earliest_test_date": "2025-10-02",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2026-04-01",
+   "train_rows": 14722,
+   "latest_training_date": "2026-03-26",
+   "test_rows": 9,
+   "earliest_test_date": "2026-04-02",
+   "test_ballots_in_training": 0,
+   "ok": true
+  },
+  {
+   "cut": "2026-11-01",
+   "train_rows": 17421,
+   "latest_training_date": "2026-10-29",
+   "test_rows": 13,
+   "earliest_test_date": "2026-11-05",
+   "test_ballots_in_training": 0,
+   "ok": true
+  }
+ ],
+ "anchors_on_scheduled_days": {
+  "2019-05-02": {
+   "anchor_kind": "polls_21d_stage_b",
+   "polls_14d": 4,
+   "polls_21d": 8,
+   "polls_21d_ref": 7,
+   "polls_21d_lab": 8,
+   "polls_21d_con": 8,
+   "polls_21d_ld": 8,
+   "polls_21d_grn": 5,
+   "a_ref": 0.14143,
+   "a_lab": 0.32,
+   "a_con": 0.27,
+   "a_ld": 0.08875,
+   "a_grn": 0.036,
+   "a_oth": 0.14382
+  },
+  "2021-05-06": {
+   "anchor_kind": "polls_14d_stage_b",
+   "polls_14d": 14,
+   "polls_21d": 19,
+   "polls_14d_ref": 12,
+   "polls_14d_lab": 14,
+   "polls_14d_con": 14,
+   "polls_14d_ld": 14,
+   "polls_14d_grn": 14,
+   "a_ref": 0.0225,
+   "a_lab": 0.35286,
+   "a_con": 0.41857,
+   "a_ld": 0.07429,
+   "a_grn": 0.05214,
+   "a_oth": 0.07964
+  },
+  "2022-05-05": {
+   "anchor_kind": "polls_14d_stage_b",
+   "polls_14d": 11,
+   "polls_21d": 14,
+   "polls_14d_ref": 7,
+   "polls_14d_lab": 11,
+   "polls_14d_con": 11,
+   "polls_14d_ld": 11,
+   "polls_14d_grn": 11,
+   "a_ref": 0.02714,
+   "a_lab": 0.39818,
+   "a_con": 0.34091,
+   "a_ld": 0.10182,
+   "a_grn": 0.05364,
+   "a_oth": 0.07831
+  },
+  "2023-05-04": {
+   "anchor_kind": "polls_14d_stage_b",
+   "polls_14d": 14,
+   "polls_21d": 21,
+   "polls_14d_ref": 14,
+   "polls_14d_lab": 14,
+   "polls_14d_con": 14,
+   "polls_14d_ld": 14,
+   "polls_14d_grn": 14,
+   "a_ref": 0.05714,
+   "a_lab": 0.43643,
+   "a_con": 0.28643,
+   "a_ld": 0.10357,
+   "a_grn": 0.05071,
+   "a_oth": 0.06571
+  },
+  "2025-05-01": {
+   "anchor_kind": "polls_14d",
+   "polls_14d": 8,
+   "polls_21d": 9,
+   "polls_14d_ref": 8,
+   "polls_14d_lab": 8,
+   "polls_14d_con": 8,
+   "polls_14d_ld": 8,
+   "polls_14d_grn": 8,
+   "a_ref": 0.26,
+   "a_lab": 0.23125,
+   "a_con": 0.20875,
+   "a_ld": 0.14,
+   "a_grn": 0.095,
+   "a_oth": 0.065
+  },
+  "2026-05-07": {
+   "anchor_kind": "polls_14d",
+   "polls_14d": 14,
+   "polls_21d": 22,
+   "polls_14d_ref": 14,
+   "polls_14d_lab": 14,
+   "polls_14d_con": 14,
+   "polls_14d_ld": 14,
+   "polls_14d_grn": 14,
+   "a_ref": 0.26286,
+   "a_lab": 0.185,
+   "a_con": 0.185,
+   "a_ld": 0.11857,
+   "a_grn": 0.15714,
+   "a_oth": 0.09143
+  }
+ },
+ "anchored_rows_by_year": {
+  "2017": 38,
+  "2018": 2178,
+  "2019": 1740,
+  "2020": 8,
+  "2021": 2373,
+  "2022": 2602,
+  "2023": 1820,
+  "2024": 2201,
+  "2025": 1730,
+  "2026": 2744
+ },
+ "outputs": {
+  "backtest_b_anchor_report.json": {
+   "bytes": 3930,
+   "sha256": "e03de4065a20b8fa3f74271fbee15e66a5c893b765c14370ea74b415c9682033"
+  },
+  "backtest_b_dataset.pkl": {
+   "bytes": 16059490,
+   "sha256": "eeb48b316335ca0ae4f6fdc6a263c92692d531fc279ff6495d973a76ba942c47"
+  },
+  "bridge_level_anchor_report.json": {
+   "bytes": 2442,
+   "sha256": "0b92bed49ae5706bb019e3e7261ea32f91bbb70723e7dd40eee4f3e997cf5f05"
+  },
+  "bridge_level_dataset.pkl": {
+   "bytes": 16064226,
+   "sha256": "a20c17375751b76444624507dc1d85825d61a2a9d15b193fff6ecef7791e6483"
+  },
+  "dataset.pkl": {
+   "bytes": 13761119,
+   "sha256": "c2fa5e5272b0fcb68d8679eeb97188e576ea8b791998a2daf072905190f2408b"
+  },
+  "dataset_meta.pkl": {
+   "bytes": 1660,
+   "sha256": "c002ea15c221e3a8dcbdf7f93e5f6a81fd491fa3cd1e10c9dfed543639957c33"
+  },
+  "fit_meta.pkl": {
+   "bytes": 1747,
+   "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+  },
+  "polls_by_date.csv": {
+   "bytes": 38832,
+   "sha256": "6ef52bfbe0e7903cf5f21f4361fcecf68058b0a8c2a7e9766eb7d5fed85e42d5"
+  }
+ },
+ "checks": {
+  "I1_inputs_present": {
+   "status": "pass",
+   "detail": {
+    "missing": [],
+    "files": 13,
+    "byelection_contest_files": 182
+   }
+  },
+  "I2_inputs_match_named_editions": {
+   "status": "pass",
+   "detail": {
+    "mismatches": {}
+   }
+  },
+  "P1_anchored_dates_have_enough_polls": {
+   "status": "pass",
+   "detail": {
+    "contest_dates": 343,
+    "violations": []
+   }
+  },
+  "P2_scheduled_days_anchored": {
+   "status": "pass",
+   "detail": {
+    "scheduled_days_without_anchor": [],
+    "contest_dates_without_anchor": 12,
+    "rows_without_anchor": 2289
+   }
+  },
+  "P3_no_party_column_misfiled": {
+   "status": "fail_expected",
+   "detail": {
+    "faults": {
+     "bridge_level_polls_2024-07-05_to_2025-04-14.json: Plaid Cymru above 0.03": {
+      "polls": 6,
+      "examples": [
+       [
+        "2024-08-24",
+        "Survation",
+        0.21
+       ],
+       [
+        "2024-09-10",
+        "YouGov",
+        0.23
+       ],
+       [
+        "2024-09-13",
+        "YouGov",
+        0.27
+       ],
+       [
+        "2024-09-30",
+        "More in Common",
+        0.18
+       ],
+       [
+        "2024-11-04",
+        "Survation",
+        0.13
+       ]
+      ]
+     }
+    },
+    "polls_2020_with_brexit_party": 114
+   }
+  },
+  "P4_uk_samples_pooled_not_filtered": {
+   "status": "pass",
+   "detail": {
+    "stage_b_loaded": 1938,
+    "stage_b_in_files_less_duplicates_and_multi_row": 1938,
+    "stage_b_by_area": {
+     "UK": 458,
+     "GB": 1480
+    },
+    "bridge_loaded": 1933,
+    "bridge_in_files_less_duplicates_and_multi_row": 1933,
+    "bridge_by_area": {
+     "GB": 1453,
+     "UK": 469,
+     "null": 11
+    },
+    "rule": "GB and UK samples pooled without distinction (backtest_b_anchor.load_polls keeps every area)"
+   }
+  },
+  "P6_area_check_every_file": {
+   "status": "fail_expected",
+   "detail": {
+    "loaded_with_area_not_gb_uk": {
+     "stage_b": 0,
+     "bridge": 11
+    },
+    "excluded_by_file": {
+     "bridge_level_polls_2024-07-05_to_2025-04-14.json": 11
+    },
+    "timeseries_no_area_flagged": [],
+    "applied": false
+   }
+  },
+  "P5_jul2024_apr2025_anchored_on_polls": {
+   "status": "pass",
+   "detail": {
+    "rows": 257,
+    "anchor_kinds": {
+     "polls_14d_bridge_level": 232,
+     "polls_21d_bridge_level": 14,
+     "nan": 11
+    },
+    "kinds_not_from_polls": [],
+    "anchored_rows_equal_to_ge2024_result": 0
+   }
+  },
+  "R1_row_counts_match_last_build": {
+   "status": "pass",
+   "detail": {
+    "differences": {},
+    "rows": {
+     "dataset": 19723,
+     "backtest_b_dataset": 19723,
+     "bridge_level_dataset": 19723
+    }
+   }
+  },
+  "R2_only_anchor_columns_change": {
+   "status": "pass",
+   "detail": {
+    "non_anchor_differences": {
+     "dataset": {},
+     "backtest_b_dataset": {},
+     "bridge_level_dataset": {}
+    },
+    "anchor_columns_differing": {
+     "dataset": [],
+     "backtest_b_dataset": [
+      "a_con",
+      "a_grn",
+      "a_lab",
+      "a_ld",
+      "a_oth",
+      "a_ref",
+      "anchor_kind",
+      "prev_a_con",
+      "prev_a_grn",
+      "prev_a_lab",
+      "prev_a_ld",
+      "prev_a_oth",
+      "prev_a_ref",
+      "prev_anchor_kind"
+     ],
+     "bridge_level_dataset": [
+      "a_con",
+      "a_grn",
+      "a_lab",
+      "a_ld",
+      "a_oth",
+      "a_ref",
+      "anchor_kind",
+      "prev_a_con",
+      "prev_a_grn",
+      "prev_a_lab",
+      "prev_a_ld",
+      "prev_a_oth",
+      "prev_a_ref",
+      "prev_anchor_kind"
+     ]
+    }
+   }
+  },
+  "S1_shares_sum_to_one": {
+   "status": "pass",
+   "detail": {
+    "tolerance": 0.001,
+    "dataset": {
+     "max_abs_deviation_from_1": 2.220446049250313e-16,
+     "rows_beyond_tolerance": 0
+    },
+    "backtest_b_dataset": {
+     "max_abs_deviation_from_1": 2.220446049250313e-16,
+     "rows_beyond_tolerance": 0
+    },
+    "bridge_level_dataset": {
+     "max_abs_deviation_from_1": 2.220446049250313e-16,
+     "rows_beyond_tolerance": 0
+    }
+   }
+  },
+  "S2_forward_only_folds": {
+   "status": "pass",
+   "detail": {
+    "folds_checked": 21,
+    "failing": []
+   }
+  },
+  "S3_previous_contest_earlier": {
+   "status": "pass",
+   "detail": {
+    "rows_with_previous_contest": 13654,
+    "previous_not_earlier": 0
+   }
+  }
+ },
+ "failed": [],
+ "expected_failures": [
+  "P3_no_party_column_misfiled",
+  "P6_area_check_every_file"
+ ]
+}
