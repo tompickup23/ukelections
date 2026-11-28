@@ -1,0 +1,2744 @@
+{
+ "inputs": {
+  "cache/rebuild/corrected/bridge_level_predictions.pkl": "bb7586ce43bded0159aa7dca8af41fbf1532a26ac7ae3a5337c363d6d8e25d8a",
+  "cache/rebuild/corrected/fit_meta.pkl": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad",
+  "cache/rebuild/corrected/bridge_level_dataset.pkl": "3393cfdba3437f46ad2f2b8485e1621b8a38d4c5605ee33c4c4cd9be38de53a8"
+ },
+ "sets": {
+  "may_2019": {
+   "rows": 1678,
+   "groups": {
+    "all": {
+     "rows": 1678,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1375,
+       "share_mae_pp_all_lanes": 6.18,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 1389,
+       "share_mae_pp_all_lanes": 5.94,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 0,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 0,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 0,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 1678,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1375,
+       "share_mae_pp_all_lanes": 6.18,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 1389,
+       "share_mae_pp_all_lanes": 5.94,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 0,
+    "latest_contest_rule": 0,
+    "any_earlier_contest": 0
+   }
+  },
+  "may_2021": {
+   "rows": 2255,
+   "groups": {
+    "all": {
+     "rows": 2255,
+     "unforecastable": 149,
+     "arms": {
+      "c2": {
+       "leaders_called": 1713,
+       "share_mae_pp_all_lanes": 6.04,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 1726,
+       "share_mae_pp_all_lanes": 5.85,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 0,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 145,
+     "unforecastable": 145,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 4,
+     "unforecastable": 4,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 2106,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1713,
+       "share_mae_pp_all_lanes": 6.04,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 1726,
+       "share_mae_pp_all_lanes": 5.85,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 149,
+    "latest_contest_rule": 0,
+    "any_earlier_contest": 0
+   }
+  },
+  "may_2022": {
+   "rows": 2533,
+   "groups": {
+    "all": {
+     "rows": 2533,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 2138,
+       "share_mae_pp_all_lanes": 5.7,
+       "reform": {
+        "rows_reform_stood_forecast": 97,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.38,
+        "mae_pp": 1.73,
+        "mean_forecast_pp": 3.43,
+        "mean_actual_pp": 3.81,
+        "sd_forecast_pp": 1.65,
+        "sd_actual_pp": 3.41,
+        "calibration_slope": 1.176
+       }
+      },
+      "m50": {
+       "leaders_called": 2165,
+       "share_mae_pp_all_lanes": 5.27,
+       "reform": {
+        "rows_reform_stood_forecast": 97,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.33,
+        "mae_pp": 1.7,
+        "mean_forecast_pp": 3.48,
+        "mean_actual_pp": 3.81,
+        "sd_forecast_pp": 1.81,
+        "sd_actual_pp": 3.41,
+        "calibration_slope": 1.09
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 23,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 19,
+       "share_mae_pp_all_lanes": 4.39,
+       "reform": {
+        "rows_reform_stood_forecast": 23,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.81,
+        "mae_pp": 1.92,
+        "mean_forecast_pp": 4.68,
+        "mean_actual_pp": 5.49,
+        "sd_forecast_pp": 2.36,
+        "sd_actual_pp": 4.04,
+        "calibration_slope": 1.045
+       }
+      },
+      "m50": {
+       "leaders_called": 20,
+       "share_mae_pp_all_lanes": 3.85,
+       "reform": {
+        "rows_reform_stood_forecast": 23,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.62,
+        "mae_pp": 1.79,
+        "mean_forecast_pp": 4.87,
+        "mean_actual_pp": 5.49,
+        "sd_forecast_pp": 2.7,
+        "sd_actual_pp": 4.04,
+        "calibration_slope": 0.952
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 59,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 53,
+       "share_mae_pp_all_lanes": 3.98,
+       "reform": {
+        "rows_reform_stood_forecast": 59,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.61,
+        "mae_pp": 1.77,
+        "mean_forecast_pp": 3.15,
+        "mean_actual_pp": 3.76,
+        "sd_forecast_pp": 1.17,
+        "sd_actual_pp": 3.16,
+        "calibration_slope": 1.203
+       }
+      },
+      "m50": {
+       "leaders_called": 51,
+       "share_mae_pp_all_lanes": 3.69,
+       "reform": {
+        "rows_reform_stood_forecast": 59,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.6,
+        "mae_pp": 1.77,
+        "mean_forecast_pp": 3.15,
+        "mean_actual_pp": 3.76,
+        "sd_forecast_pp": 1.17,
+        "sd_actual_pp": 3.16,
+        "calibration_slope": 1.203
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 15,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 11,
+       "share_mae_pp_all_lanes": 6.92,
+       "reform": {
+        "rows_reform_stood_forecast": 15,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 1.21,
+        "mae_pp": 1.31,
+        "mean_forecast_pp": 2.64,
+        "mean_actual_pp": 1.42,
+        "sd_forecast_pp": 0.65,
+        "sd_actual_pp": 0.82,
+        "calibration_slope": 0.493
+       }
+      },
+      "m50": {
+       "leaders_called": 11,
+       "share_mae_pp_all_lanes": 6.92,
+       "reform": {
+        "rows_reform_stood_forecast": 15,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 1.21,
+        "mae_pp": 1.31,
+        "mean_forecast_pp": 2.64,
+        "mean_actual_pp": 1.42,
+        "sd_forecast_pp": 0.65,
+        "sd_actual_pp": 0.82,
+        "calibration_slope": 0.493
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 2436,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 2055,
+       "share_mae_pp_all_lanes": 5.76,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 2083,
+       "share_mae_pp_all_lanes": 5.32,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 97,
+    "latest_contest_rule": 23,
+    "any_earlier_contest": 23
+   }
+  },
+  "may_2023": {
+   "rows": 1734,
+   "groups": {
+    "all": {
+     "rows": 1734,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1442,
+       "share_mae_pp_all_lanes": 5.43,
+       "reform": {
+        "rows_reform_stood_forecast": 190,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.42,
+        "mae_pp": 2.95,
+        "mean_forecast_pp": 7.98,
+        "mean_actual_pp": 5.56,
+        "sd_forecast_pp": 3.07,
+        "sd_actual_pp": 3.51,
+        "calibration_slope": 0.757
+       }
+      },
+      "m50": {
+       "leaders_called": 1439,
+       "share_mae_pp_all_lanes": 5.22,
+       "reform": {
+        "rows_reform_stood_forecast": 190,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.55,
+        "mae_pp": 3.09,
+        "mean_forecast_pp": 8.11,
+        "mean_actual_pp": 5.56,
+        "sd_forecast_pp": 3.32,
+        "sd_actual_pp": 3.51,
+        "calibration_slope": 0.688
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 33,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 26,
+       "share_mae_pp_all_lanes": 4.76,
+       "reform": {
+        "rows_reform_stood_forecast": 33,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 3.18,
+        "mae_pp": 3.21,
+        "mean_forecast_pp": 9.21,
+        "mean_actual_pp": 6.03,
+        "sd_forecast_pp": 3.25,
+        "sd_actual_pp": 3.59,
+        "calibration_slope": 0.858
+       }
+      },
+      "m50": {
+       "leaders_called": 26,
+       "share_mae_pp_all_lanes": 4.57,
+       "reform": {
+        "rows_reform_stood_forecast": 33,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 3.91,
+        "mae_pp": 3.96,
+        "mean_forecast_pp": 9.94,
+        "mean_actual_pp": 6.03,
+        "sd_forecast_pp": 4.17,
+        "sd_actual_pp": 3.59,
+        "calibration_slope": 0.649
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 147,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 125,
+       "share_mae_pp_all_lanes": 4.51,
+       "reform": {
+        "rows_reform_stood_forecast": 147,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.21,
+        "mae_pp": 2.79,
+        "mean_forecast_pp": 7.76,
+        "mean_actual_pp": 5.55,
+        "sd_forecast_pp": 2.97,
+        "sd_actual_pp": 3.37,
+        "calibration_slope": 0.726
+       }
+      },
+      "m50": {
+       "leaders_called": 127,
+       "share_mae_pp_all_lanes": 4.16,
+       "reform": {
+        "rows_reform_stood_forecast": 147,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.22,
+        "mae_pp": 2.8,
+        "mean_forecast_pp": 7.77,
+        "mean_actual_pp": 5.55,
+        "sd_forecast_pp": 2.98,
+        "sd_actual_pp": 3.37,
+        "calibration_slope": 0.725
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 10,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 6,
+       "share_mae_pp_all_lanes": 8.57,
+       "reform": {
+        "rows_reform_stood_forecast": 10,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.97,
+        "mae_pp": 4.5,
+        "mean_forecast_pp": 7.08,
+        "mean_actual_pp": 4.11,
+        "sd_forecast_pp": 2.73,
+        "sd_actual_pp": 4.77
+       }
+      },
+      "m50": {
+       "leaders_called": 6,
+       "share_mae_pp_all_lanes": 8.57,
+       "reform": {
+        "rows_reform_stood_forecast": 10,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.97,
+        "mae_pp": 4.5,
+        "mean_forecast_pp": 7.08,
+        "mean_actual_pp": 4.11,
+        "sd_forecast_pp": 2.73,
+        "sd_actual_pp": 4.77
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 1544,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1285,
+       "share_mae_pp_all_lanes": 5.53,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 1280,
+       "share_mae_pp_all_lanes": 5.33,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 190,
+    "latest_contest_rule": 33,
+    "any_earlier_contest": 49
+   }
+  },
+  "may_2025": {
+   "rows": 1399,
+   "groups": {
+    "all": {
+     "rows": 1399,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 703,
+       "share_mae_pp_all_lanes": 8.3,
+       "reform": {
+        "rows_reform_stood_forecast": 1393,
+        "wards_won": 551,
+        "wards_called_first": 447,
+        "called_first_and_won": 299,
+        "signed_error_pp": -4.22,
+        "mae_pp": 7.19,
+        "mean_forecast_pp": 26.76,
+        "mean_actual_pp": 30.98,
+        "sd_forecast_pp": 7.01,
+        "sd_actual_pp": 11.26,
+        "calibration_slope": 1.116,
+        "won_mean_forecast_lead_pp": 0.53,
+        "won_mean_actual_lead_pp": 13.42,
+        "won_with_rival_forecast": 551
+       }
+      },
+      "m50": {
+       "leaders_called": 704,
+       "share_mae_pp_all_lanes": 8.3,
+       "reform": {
+        "rows_reform_stood_forecast": 1393,
+        "wards_won": 551,
+        "wards_called_first": 450,
+        "called_first_and_won": 300,
+        "signed_error_pp": -4.21,
+        "mae_pp": 7.19,
+        "mean_forecast_pp": 26.77,
+        "mean_actual_pp": 30.98,
+        "sd_forecast_pp": 7.01,
+        "sd_actual_pp": 11.26,
+        "calibration_slope": 1.115,
+        "won_mean_forecast_lead_pp": 0.58,
+        "won_mean_actual_lead_pp": 13.42,
+        "won_with_rival_forecast": 551
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 13,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 11,
+       "share_mae_pp_all_lanes": 3.71,
+       "reform": {
+        "rows_reform_stood_forecast": 13,
+        "wards_won": 4,
+        "wards_called_first": 2,
+        "called_first_and_won": 2,
+        "signed_error_pp": -2.13,
+        "mae_pp": 4.36,
+        "mean_forecast_pp": 22.5,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 6.55,
+        "sd_actual_pp": 8.86,
+        "calibration_slope": 1.088,
+        "won_mean_forecast_lead_pp": 0.5,
+        "won_mean_actual_lead_pp": 9.32,
+        "won_with_rival_forecast": 4
+       }
+      },
+      "m50": {
+       "leaders_called": 9,
+       "share_mae_pp_all_lanes": 3.97,
+       "reform": {
+        "rows_reform_stood_forecast": 13,
+        "wards_won": 4,
+        "wards_called_first": 2,
+        "called_first_and_won": 1,
+        "signed_error_pp": -1.54,
+        "mae_pp": 5.06,
+        "mean_forecast_pp": 23.08,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 7.34,
+        "sd_actual_pp": 8.86,
+        "calibration_slope": 0.888,
+        "won_mean_forecast_lead_pp": 2.24,
+        "won_mean_actual_lead_pp": 9.32,
+        "won_with_rival_forecast": 4
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 121,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 86,
+       "share_mae_pp_all_lanes": 5.17,
+       "reform": {
+        "rows_reform_stood_forecast": 121,
+        "wards_won": 22,
+        "wards_called_first": 3,
+        "called_first_and_won": 3,
+        "signed_error_pp": -4.36,
+        "mae_pp": 5.52,
+        "mean_forecast_pp": 21.0,
+        "mean_actual_pp": 25.36,
+        "sd_forecast_pp": 4.04,
+        "sd_actual_pp": 7.46,
+        "calibration_slope": 1.3,
+        "won_mean_forecast_lead_pp": -6.79,
+        "won_mean_actual_lead_pp": 7.85,
+        "won_with_rival_forecast": 22
+       }
+      },
+      "m50": {
+       "leaders_called": 89,
+       "share_mae_pp_all_lanes": 5.16,
+       "reform": {
+        "rows_reform_stood_forecast": 121,
+        "wards_won": 22,
+        "wards_called_first": 6,
+        "called_first_and_won": 5,
+        "signed_error_pp": -4.33,
+        "mae_pp": 5.5,
+        "mean_forecast_pp": 21.03,
+        "mean_actual_pp": 25.36,
+        "sd_forecast_pp": 4.05,
+        "sd_actual_pp": 7.46,
+        "calibration_slope": 1.295,
+        "won_mean_forecast_lead_pp": -6.08,
+        "won_mean_actual_lead_pp": 7.85,
+        "won_with_rival_forecast": 22
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1259,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 602,
+       "share_mae_pp_all_lanes": 8.68,
+       "reform": {
+        "rows_reform_stood_forecast": 1259,
+        "wards_won": 525,
+        "wards_called_first": 442,
+        "called_first_and_won": 294,
+        "signed_error_pp": -4.23,
+        "mae_pp": 7.37,
+        "mean_forecast_pp": 27.36,
+        "mean_actual_pp": 31.59,
+        "sd_forecast_pp": 6.97,
+        "sd_actual_pp": 11.41,
+        "calibration_slope": 1.119,
+        "won_mean_forecast_lead_pp": 0.84,
+        "won_mean_actual_lead_pp": 13.69,
+        "won_with_rival_forecast": 525
+       }
+      },
+      "m50": {
+       "leaders_called": 602,
+       "share_mae_pp_all_lanes": 8.68,
+       "reform": {
+        "rows_reform_stood_forecast": 1259,
+        "wards_won": 525,
+        "wards_called_first": 442,
+        "called_first_and_won": 294,
+        "signed_error_pp": -4.23,
+        "mae_pp": 7.37,
+        "mean_forecast_pp": 27.36,
+        "mean_actual_pp": 31.59,
+        "sd_forecast_pp": 6.97,
+        "sd_actual_pp": 11.41,
+        "calibration_slope": 1.119,
+        "won_mean_forecast_lead_pp": 0.84,
+        "won_mean_actual_lead_pp": 13.69,
+        "won_with_rival_forecast": 525
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 6,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 4,
+       "share_mae_pp_all_lanes": 7.26,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 4,
+       "share_mae_pp_all_lanes": 7.26,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 1393,
+    "latest_contest_rule": 13,
+    "any_earlier_contest": 13
+   }
+  },
+  "may_2026": {
+   "rows": 2576,
+   "groups": {
+    "all": {
+     "rows": 2576,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1764,
+       "share_mae_pp_all_lanes": 5.48,
+       "reform": {
+        "rows_reform_stood_forecast": 2569,
+        "wards_won": 858,
+        "wards_called_first": 641,
+        "called_first_and_won": 527,
+        "signed_error_pp": -2.79,
+        "mae_pp": 5.79,
+        "mean_forecast_pp": 23.77,
+        "mean_actual_pp": 26.56,
+        "sd_forecast_pp": 10.27,
+        "sd_actual_pp": 14.02,
+        "calibration_slope": 1.195,
+        "won_mean_forecast_lead_pp": 2.93,
+        "won_mean_actual_lead_pp": 14.53,
+        "won_with_rival_forecast": 858
+       }
+      },
+      "m50": {
+       "leaders_called": 1746,
+       "share_mae_pp_all_lanes": 5.63,
+       "reform": {
+        "rows_reform_stood_forecast": 2569,
+        "wards_won": 858,
+        "wards_called_first": 624,
+        "called_first_and_won": 515,
+        "signed_error_pp": -3.02,
+        "mae_pp": 5.97,
+        "mean_forecast_pp": 23.54,
+        "mean_actual_pp": 26.56,
+        "sd_forecast_pp": 10.11,
+        "sd_actual_pp": 14.02,
+        "calibration_slope": 1.204,
+        "won_mean_forecast_lead_pp": 2.51,
+        "won_mean_actual_lead_pp": 14.53,
+        "won_with_rival_forecast": 858
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 407,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 303,
+       "share_mae_pp_all_lanes": 4.91,
+       "reform": {
+        "rows_reform_stood_forecast": 407,
+        "wards_won": 179,
+        "wards_called_first": 148,
+        "called_first_and_won": 133,
+        "signed_error_pp": -4.04,
+        "mae_pp": 5.81,
+        "mean_forecast_pp": 27.38,
+        "mean_actual_pp": 31.42,
+        "sd_forecast_pp": 10.96,
+        "sd_actual_pp": 13.41,
+        "calibration_slope": 1.084,
+        "won_mean_forecast_lead_pp": 6.89,
+        "won_mean_actual_lead_pp": 16.7,
+        "won_with_rival_forecast": 179
+       }
+      },
+      "m50": {
+       "leaders_called": 290,
+       "share_mae_pp_all_lanes": 5.25,
+       "reform": {
+        "rows_reform_stood_forecast": 407,
+        "wards_won": 179,
+        "wards_called_first": 120,
+        "called_first_and_won": 111,
+        "signed_error_pp": -5.86,
+        "mae_pp": 7.02,
+        "mean_forecast_pp": 25.56,
+        "mean_actual_pp": 31.42,
+        "sd_forecast_pp": 10.37,
+        "sd_actual_pp": 13.41,
+        "calibration_slope": 1.107,
+        "won_mean_forecast_lead_pp": 2.84,
+        "won_mean_actual_lead_pp": 16.7,
+        "won_with_rival_forecast": 179
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2027,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1372,
+       "share_mae_pp_all_lanes": 5.52,
+       "reform": {
+        "rows_reform_stood_forecast": 2027,
+        "wards_won": 613,
+        "wards_called_first": 425,
+        "called_first_and_won": 343,
+        "signed_error_pp": -2.53,
+        "mae_pp": 5.79,
+        "mean_forecast_pp": 22.61,
+        "mean_actual_pp": 25.14,
+        "sd_forecast_pp": 9.78,
+        "sd_actual_pp": 13.9,
+        "calibration_slope": 1.24,
+        "won_mean_forecast_lead_pp": 1.0,
+        "won_mean_actual_lead_pp": 13.67,
+        "won_with_rival_forecast": 613
+       }
+      },
+      "m50": {
+       "leaders_called": 1368,
+       "share_mae_pp_all_lanes": 5.64,
+       "reform": {
+        "rows_reform_stood_forecast": 2027,
+        "wards_won": 613,
+        "wards_called_first": 436,
+        "called_first_and_won": 353,
+        "signed_error_pp": -2.46,
+        "mae_pp": 5.76,
+        "mean_forecast_pp": 22.68,
+        "mean_actual_pp": 25.14,
+        "sd_forecast_pp": 9.8,
+        "sd_actual_pp": 13.9,
+        "calibration_slope": 1.237,
+        "won_mean_forecast_lead_pp": 1.59,
+        "won_mean_actual_lead_pp": 13.67,
+        "won_with_rival_forecast": 613
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 135,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 83,
+       "share_mae_pp_all_lanes": 6.59,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 66,
+        "wards_called_first": 68,
+        "called_first_and_won": 51,
+        "signed_error_pp": -2.98,
+        "mae_pp": 5.82,
+        "mean_forecast_pp": 30.35,
+        "mean_actual_pp": 33.33,
+        "sd_forecast_pp": 10.39,
+        "sd_actual_pp": 12.32,
+        "calibration_slope": 0.969,
+        "won_mean_forecast_lead_pp": 10.13,
+        "won_mean_actual_lead_pp": 16.71,
+        "won_with_rival_forecast": 66
+       }
+      },
+      "m50": {
+       "leaders_called": 83,
+       "share_mae_pp_all_lanes": 6.59,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 66,
+        "wards_called_first": 68,
+        "called_first_and_won": 51,
+        "signed_error_pp": -2.98,
+        "mae_pp": 5.82,
+        "mean_forecast_pp": 30.35,
+        "mean_actual_pp": 33.33,
+        "sd_forecast_pp": 10.39,
+        "sd_actual_pp": 12.32,
+        "calibration_slope": 0.969,
+        "won_mean_forecast_lead_pp": 10.13,
+        "won_mean_actual_lead_pp": 16.71,
+        "won_with_rival_forecast": 66
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 7,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 6,
+       "share_mae_pp_all_lanes": 7.09,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 5,
+       "share_mae_pp_all_lanes": 10.08,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 2569,
+    "latest_contest_rule": 407,
+    "any_earlier_contest": 477
+   }
+  },
+  "may_pooled_six": {
+   "rows": 12175,
+   "groups": {
+    "all": {
+     "rows": 12175,
+     "unforecastable": 149,
+     "arms": {
+      "c2": {
+       "leaders_called": 9135,
+       "share_mae_pp_all_lanes": 6.08,
+       "reform": {
+        "rows_reform_stood_forecast": 4249,
+        "wards_won": 1409,
+        "wards_called_first": 1088,
+        "called_first_and_won": 826,
+        "signed_error_pp": -2.97,
+        "mae_pp": 6.03,
+        "mean_forecast_pp": 23.58,
+        "mean_actual_pp": 26.55,
+        "sd_forecast_pp": 10.19,
+        "sd_actual_pp": 14.11,
+        "calibration_slope": 1.197,
+        "won_mean_forecast_lead_pp": 1.99,
+        "won_mean_actual_lead_pp": 14.1,
+        "won_with_rival_forecast": 1409
+       }
+      },
+      "m50": {
+       "leaders_called": 9169,
+       "share_mae_pp_all_lanes": 5.95,
+       "reform": {
+        "rows_reform_stood_forecast": 4249,
+        "wards_won": 1409,
+        "wards_called_first": 1074,
+        "called_first_and_won": 815,
+        "signed_error_pp": -3.1,
+        "mae_pp": 6.14,
+        "mean_forecast_pp": 23.45,
+        "mean_actual_pp": 26.55,
+        "sd_forecast_pp": 10.08,
+        "sd_actual_pp": 14.11,
+        "calibration_slope": 1.203,
+        "won_mean_forecast_lead_pp": 1.75,
+        "won_mean_actual_lead_pp": 14.1,
+        "won_with_rival_forecast": 1409
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 476,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 359,
+       "share_mae_pp_all_lanes": 4.84,
+       "reform": {
+        "rows_reform_stood_forecast": 476,
+        "wards_won": 183,
+        "wards_called_first": 150,
+        "called_first_and_won": 135,
+        "signed_error_pp": -3.33,
+        "mae_pp": 5.4,
+        "mean_forecast_pp": 24.89,
+        "mean_actual_pp": 28.22,
+        "sd_forecast_pp": 12.13,
+        "sd_actual_pp": 15.03,
+        "calibration_slope": 1.135,
+        "won_mean_forecast_lead_pp": 6.75,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      },
+      "m50": {
+       "leaders_called": 345,
+       "share_mae_pp_all_lanes": 5.12,
+       "reform": {
+        "rows_reform_stood_forecast": 476,
+        "wards_won": 183,
+        "wards_called_first": 122,
+        "called_first_and_won": 112,
+        "signed_error_pp": -4.81,
+        "mae_pp": 6.51,
+        "mean_forecast_pp": 23.41,
+        "mean_actual_pp": 28.22,
+        "sd_forecast_pp": 11.32,
+        "sd_actual_pp": 15.03,
+        "calibration_slope": 1.18,
+        "won_mean_forecast_lead_pp": 2.83,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2499,
+     "unforecastable": 145,
+     "arms": {
+      "c2": {
+       "leaders_called": 1636,
+       "share_mae_pp_all_lanes": 5.41,
+       "reform": {
+        "rows_reform_stood_forecast": 2354,
+        "wards_won": 635,
+        "wards_called_first": 428,
+        "called_first_and_won": 346,
+        "signed_error_pp": -2.28,
+        "mae_pp": 5.49,
+        "mean_forecast_pp": 21.11,
+        "mean_actual_pp": 23.39,
+        "sd_forecast_pp": 10.24,
+        "sd_actual_pp": 14.23,
+        "calibration_slope": 1.235,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      },
+      "m50": {
+       "leaders_called": 1635,
+       "share_mae_pp_all_lanes": 5.48,
+       "reform": {
+        "rows_reform_stood_forecast": 2354,
+        "wards_won": 635,
+        "wards_called_first": 442,
+        "called_first_and_won": 358,
+        "signed_error_pp": -2.21,
+        "mae_pp": 5.47,
+        "mean_forecast_pp": 21.18,
+        "mean_actual_pp": 23.39,
+        "sd_forecast_pp": 10.27,
+        "sd_actual_pp": 14.23,
+        "calibration_slope": 1.232,
+        "won_mean_forecast_lead_pp": 1.32,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1423,
+     "unforecastable": 4,
+     "arms": {
+      "c2": {
+       "leaders_called": 702,
+       "share_mae_pp_all_lanes": 8.46,
+       "reform": {
+        "rows_reform_stood_forecast": 1419,
+        "wards_won": 591,
+        "wards_called_first": 510,
+        "called_first_and_won": 345,
+        "signed_error_pp": -4.0,
+        "mae_pp": 7.14,
+        "mean_forecast_pp": 27.24,
+        "mean_actual_pp": 31.24,
+        "sd_forecast_pp": 7.98,
+        "sd_actual_pp": 12.05,
+        "calibration_slope": 1.108,
+        "won_mean_forecast_lead_pp": 1.88,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      },
+      "m50": {
+       "leaders_called": 702,
+       "share_mae_pp_all_lanes": 8.46,
+       "reform": {
+        "rows_reform_stood_forecast": 1419,
+        "wards_won": 591,
+        "wards_called_first": 510,
+        "called_first_and_won": 345,
+        "signed_error_pp": -4.0,
+        "mae_pp": 7.14,
+        "mean_forecast_pp": 27.24,
+        "mean_actual_pp": 31.24,
+        "sd_forecast_pp": 7.98,
+        "sd_actual_pp": 12.05,
+        "calibration_slope": 1.108,
+        "won_mean_forecast_lead_pp": 1.88,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 7777,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 6438,
+       "share_mae_pp_all_lanes": 5.89,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 6487,
+       "share_mae_pp_all_lanes": 5.61,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 4398,
+    "latest_contest_rule": 476,
+    "any_earlier_contest": 562
+   }
+  },
+  "may_2025_2026": {
+   "rows": 3975,
+   "groups": {
+    "all": {
+     "rows": 3975,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 2467,
+       "share_mae_pp_all_lanes": 6.46,
+       "reform": {
+        "rows_reform_stood_forecast": 3962,
+        "wards_won": 1409,
+        "wards_called_first": 1088,
+        "called_first_and_won": 826,
+        "signed_error_pp": -3.29,
+        "mae_pp": 6.28,
+        "mean_forecast_pp": 24.82,
+        "mean_actual_pp": 28.12,
+        "sd_forecast_pp": 9.37,
+        "sd_actual_pp": 13.29,
+        "calibration_slope": 1.186,
+        "won_mean_forecast_lead_pp": 1.99,
+        "won_mean_actual_lead_pp": 14.1,
+        "won_with_rival_forecast": 1409
+       }
+      },
+      "m50": {
+       "leaders_called": 2450,
+       "share_mae_pp_all_lanes": 6.56,
+       "reform": {
+        "rows_reform_stood_forecast": 3962,
+        "wards_won": 1409,
+        "wards_called_first": 1074,
+        "called_first_and_won": 815,
+        "signed_error_pp": -3.44,
+        "mae_pp": 6.4,
+        "mean_forecast_pp": 24.68,
+        "mean_actual_pp": 28.12,
+        "sd_forecast_pp": 9.27,
+        "sd_actual_pp": 13.29,
+        "calibration_slope": 1.191,
+        "won_mean_forecast_lead_pp": 1.75,
+        "won_mean_actual_lead_pp": 14.1,
+        "won_with_rival_forecast": 1409
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 420,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 314,
+       "share_mae_pp_all_lanes": 4.87,
+       "reform": {
+        "rows_reform_stood_forecast": 420,
+        "wards_won": 183,
+        "wards_called_first": 150,
+        "called_first_and_won": 135,
+        "signed_error_pp": -3.98,
+        "mae_pp": 5.77,
+        "mean_forecast_pp": 27.22,
+        "mean_actual_pp": 31.21,
+        "sd_forecast_pp": 10.88,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 1.086,
+        "won_mean_forecast_lead_pp": 6.75,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      },
+      "m50": {
+       "leaders_called": 299,
+       "share_mae_pp_all_lanes": 5.21,
+       "reform": {
+        "rows_reform_stood_forecast": 420,
+        "wards_won": 183,
+        "wards_called_first": 122,
+        "called_first_and_won": 112,
+        "signed_error_pp": -5.72,
+        "mae_pp": 6.96,
+        "mean_forecast_pp": 25.48,
+        "mean_actual_pp": 31.21,
+        "sd_forecast_pp": 10.3,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 1.106,
+        "won_mean_forecast_lead_pp": 2.83,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2148,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1458,
+       "share_mae_pp_all_lanes": 5.5,
+       "reform": {
+        "rows_reform_stood_forecast": 2148,
+        "wards_won": 635,
+        "wards_called_first": 428,
+        "called_first_and_won": 346,
+        "signed_error_pp": -2.63,
+        "mae_pp": 5.77,
+        "mean_forecast_pp": 22.52,
+        "mean_actual_pp": 25.15,
+        "sd_forecast_pp": 9.55,
+        "sd_actual_pp": 13.62,
+        "calibration_slope": 1.238,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      },
+      "m50": {
+       "leaders_called": 1457,
+       "share_mae_pp_all_lanes": 5.61,
+       "reform": {
+        "rows_reform_stood_forecast": 2148,
+        "wards_won": 635,
+        "wards_called_first": 442,
+        "called_first_and_won": 358,
+        "signed_error_pp": -2.56,
+        "mae_pp": 5.75,
+        "mean_forecast_pp": 22.59,
+        "mean_actual_pp": 25.15,
+        "sd_forecast_pp": 9.57,
+        "sd_actual_pp": 13.62,
+        "calibration_slope": 1.235,
+        "won_mean_forecast_lead_pp": 1.32,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1394,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 685,
+       "share_mae_pp_all_lanes": 8.48,
+       "reform": {
+        "rows_reform_stood_forecast": 1394,
+        "wards_won": 591,
+        "wards_called_first": 510,
+        "called_first_and_won": 345,
+        "signed_error_pp": -4.11,
+        "mae_pp": 7.22,
+        "mean_forecast_pp": 27.65,
+        "mean_actual_pp": 31.76,
+        "sd_forecast_pp": 7.43,
+        "sd_actual_pp": 11.51,
+        "calibration_slope": 1.083,
+        "won_mean_forecast_lead_pp": 1.88,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      },
+      "m50": {
+       "leaders_called": 685,
+       "share_mae_pp_all_lanes": 8.48,
+       "reform": {
+        "rows_reform_stood_forecast": 1394,
+        "wards_won": 591,
+        "wards_called_first": 510,
+        "called_first_and_won": 345,
+        "signed_error_pp": -4.11,
+        "mae_pp": 7.22,
+        "mean_forecast_pp": 27.65,
+        "mean_actual_pp": 31.76,
+        "sd_forecast_pp": 7.43,
+        "sd_actual_pp": 11.51,
+        "calibration_slope": 1.083,
+        "won_mean_forecast_lead_pp": 1.88,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 13,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 10,
+       "share_mae_pp_all_lanes": 7.2,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 9,
+       "share_mae_pp_all_lanes": 8.39,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 3962,
+    "latest_contest_rule": 420,
+    "any_earlier_contest": 490
+   }
+  },
+  "by_all": {
+   "rows": 1190,
+   "groups": {
+    "all": {
+     "rows": 1190,
+     "unforecastable": 41,
+     "arms": {
+      "c2": {
+       "leaders_called": 786,
+       "share_mae_pp_all_lanes": 7.26,
+       "reform": {
+        "rows_reform_stood_forecast": 544,
+        "wards_won": 145,
+        "wards_called_first": 147,
+        "called_first_and_won": 90,
+        "signed_error_pp": -1.0,
+        "mae_pp": 6.17,
+        "mean_forecast_pp": 24.64,
+        "mean_actual_pp": 25.64,
+        "sd_forecast_pp": 11.05,
+        "sd_actual_pp": 13.27,
+        "calibration_slope": 0.938,
+        "won_mean_forecast_lead_pp": 3.85,
+        "won_mean_actual_lead_pp": 12.86,
+        "won_with_rival_forecast": 145
+       }
+      },
+      "m50": {
+       "leaders_called": 788,
+       "share_mae_pp_all_lanes": 7.25,
+       "reform": {
+        "rows_reform_stood_forecast": 544,
+        "wards_won": 145,
+        "wards_called_first": 153,
+        "called_first_and_won": 93,
+        "signed_error_pp": -0.95,
+        "mae_pp": 6.27,
+        "mean_forecast_pp": 24.69,
+        "mean_actual_pp": 25.64,
+        "sd_forecast_pp": 11.21,
+        "sd_actual_pp": 13.27,
+        "calibration_slope": 0.916,
+        "won_mean_forecast_lead_pp": 4.13,
+        "won_mean_actual_lead_pp": 12.86,
+        "won_with_rival_forecast": 145
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 108,
+     "unforecastable": 1,
+     "arms": {
+      "c2": {
+       "leaders_called": 69,
+       "share_mae_pp_all_lanes": 5.41,
+       "reform": {
+        "rows_reform_stood_forecast": 107,
+        "wards_won": 26,
+        "wards_called_first": 33,
+        "called_first_and_won": 19,
+        "signed_error_pp": 0.76,
+        "mae_pp": 4.44,
+        "mean_forecast_pp": 24.5,
+        "mean_actual_pp": 23.74,
+        "sd_forecast_pp": 13.81,
+        "sd_actual_pp": 14.09,
+        "calibration_slope": 0.922,
+        "won_mean_forecast_lead_pp": 8.97,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      },
+      "m50": {
+       "leaders_called": 70,
+       "share_mae_pp_all_lanes": 5.19,
+       "reform": {
+        "rows_reform_stood_forecast": 107,
+        "wards_won": 26,
+        "wards_called_first": 35,
+        "called_first_and_won": 20,
+        "signed_error_pp": 0.9,
+        "mae_pp": 4.95,
+        "mean_forecast_pp": 24.64,
+        "mean_actual_pp": 23.74,
+        "sd_forecast_pp": 14.45,
+        "sd_actual_pp": 14.09,
+        "calibration_slope": 0.857,
+        "won_mean_forecast_lead_pp": 8.52,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 197,
+     "unforecastable": 7,
+     "arms": {
+      "c2": {
+       "leaders_called": 142,
+       "share_mae_pp_all_lanes": 5.5,
+       "reform": {
+        "rows_reform_stood_forecast": 190,
+        "wards_won": 38,
+        "wards_called_first": 22,
+        "called_first_and_won": 19,
+        "signed_error_pp": -2.54,
+        "mae_pp": 6.05,
+        "mean_forecast_pp": 20.66,
+        "mean_actual_pp": 23.19,
+        "sd_forecast_pp": 8.76,
+        "sd_actual_pp": 12.11,
+        "calibration_slope": 1.094,
+        "won_mean_forecast_lead_pp": -0.96,
+        "won_mean_actual_lead_pp": 12.2,
+        "won_with_rival_forecast": 38
+       }
+      },
+      "m50": {
+       "leaders_called": 143,
+       "share_mae_pp_all_lanes": 5.58,
+       "reform": {
+        "rows_reform_stood_forecast": 190,
+        "wards_won": 38,
+        "wards_called_first": 26,
+        "called_first_and_won": 21,
+        "signed_error_pp": -2.48,
+        "mae_pp": 6.05,
+        "mean_forecast_pp": 20.71,
+        "mean_actual_pp": 23.19,
+        "sd_forecast_pp": 8.8,
+        "sd_actual_pp": 12.11,
+        "calibration_slope": 1.089,
+        "won_mean_forecast_lead_pp": 0.44,
+        "won_mean_actual_lead_pp": 12.2,
+        "won_with_rival_forecast": 38
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 251,
+     "unforecastable": 4,
+     "arms": {
+      "c2": {
+       "leaders_called": 125,
+       "share_mae_pp_all_lanes": 8.8,
+       "reform": {
+        "rows_reform_stood_forecast": 247,
+        "wards_won": 81,
+        "wards_called_first": 92,
+        "called_first_and_won": 52,
+        "signed_error_pp": -0.57,
+        "mae_pp": 7.02,
+        "mean_forecast_pp": 27.78,
+        "mean_actual_pp": 28.35,
+        "sd_forecast_pp": 10.25,
+        "sd_actual_pp": 13.24,
+        "calibration_slope": 0.906,
+        "won_mean_forecast_lead_pp": 4.46,
+        "won_mean_actual_lead_pp": 14.45,
+        "won_with_rival_forecast": 81
+       }
+      },
+      "m50": {
+       "leaders_called": 125,
+       "share_mae_pp_all_lanes": 8.8,
+       "reform": {
+        "rows_reform_stood_forecast": 247,
+        "wards_won": 81,
+        "wards_called_first": 92,
+        "called_first_and_won": 52,
+        "signed_error_pp": -0.57,
+        "mae_pp": 7.02,
+        "mean_forecast_pp": 27.78,
+        "mean_actual_pp": 28.35,
+        "sd_forecast_pp": 10.25,
+        "sd_actual_pp": 13.24,
+        "calibration_slope": 0.906,
+        "won_mean_forecast_lead_pp": 4.46,
+        "won_mean_actual_lead_pp": 14.45,
+        "won_with_rival_forecast": 81
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 634,
+     "unforecastable": 29,
+     "arms": {
+      "c2": {
+       "leaders_called": 450,
+       "share_mae_pp_all_lanes": 7.64,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 450,
+       "share_mae_pp_all_lanes": 7.63,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 556,
+    "latest_contest_rule": 108,
+    "any_earlier_contest": 114
+   }
+  },
+  "by_before_2025-05-01": {
+   "rows": 753,
+   "groups": {
+    "all": {
+     "rows": 753,
+     "unforecastable": 41,
+     "arms": {
+      "c2": {
+       "leaders_called": 511,
+       "share_mae_pp_all_lanes": 7.53,
+       "reform": {
+        "rows_reform_stood_forecast": 130,
+        "wards_won": 15,
+        "wards_called_first": 4,
+        "called_first_and_won": 2,
+        "signed_error_pp": -1.01,
+        "mae_pp": 5.66,
+        "mean_forecast_pp": 15.94,
+        "mean_actual_pp": 16.94,
+        "sd_forecast_pp": 7.54,
+        "sd_actual_pp": 11.5,
+        "calibration_slope": 1.096,
+        "won_mean_forecast_lead_pp": -13.96,
+        "won_mean_actual_lead_pp": 9.89,
+        "won_with_rival_forecast": 15
+       }
+      },
+      "m50": {
+       "leaders_called": 512,
+       "share_mae_pp_all_lanes": 7.52,
+       "reform": {
+        "rows_reform_stood_forecast": 130,
+        "wards_won": 15,
+        "wards_called_first": 5,
+        "called_first_and_won": 3,
+        "signed_error_pp": -1.05,
+        "mae_pp": 5.65,
+        "mean_forecast_pp": 15.89,
+        "mean_actual_pp": 16.94,
+        "sd_forecast_pp": 7.54,
+        "sd_actual_pp": 11.5,
+        "calibration_slope": 1.099,
+        "won_mean_forecast_lead_pp": -13.57,
+        "won_mean_actual_lead_pp": 9.89,
+        "won_with_rival_forecast": 15
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 18,
+     "unforecastable": 1,
+     "arms": {
+      "c2": {
+       "leaders_called": 13,
+       "share_mae_pp_all_lanes": 4.5,
+       "reform": {
+        "rows_reform_stood_forecast": 17,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 1.17,
+        "mae_pp": 2.38,
+        "mean_forecast_pp": 10.23,
+        "mean_actual_pp": 9.07,
+        "sd_forecast_pp": 7.89,
+        "sd_actual_pp": 7.08,
+        "calibration_slope": 0.809
+       }
+      },
+      "m50": {
+       "leaders_called": 14,
+       "share_mae_pp_all_lanes": 4.17,
+       "reform": {
+        "rows_reform_stood_forecast": 17,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 0.67,
+        "mae_pp": 2.25,
+        "mean_forecast_pp": 9.74,
+        "mean_actual_pp": 9.07,
+        "sd_forecast_pp": 7.5,
+        "sd_actual_pp": 7.08,
+        "calibration_slope": 0.865
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 62,
+     "unforecastable": 7,
+     "arms": {
+      "c2": {
+       "leaders_called": 39,
+       "share_mae_pp_all_lanes": 5.75,
+       "reform": {
+        "rows_reform_stood_forecast": 55,
+        "wards_won": 4,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": -0.83,
+        "mae_pp": 5.51,
+        "mean_forecast_pp": 14.9,
+        "mean_actual_pp": 15.74,
+        "sd_forecast_pp": 7.03,
+        "sd_actual_pp": 11.44,
+        "calibration_slope": 1.309,
+        "won_mean_forecast_lead_pp": -15.33,
+        "won_mean_actual_lead_pp": 11.5,
+        "won_with_rival_forecast": 4
+       }
+      },
+      "m50": {
+       "leaders_called": 39,
+       "share_mae_pp_all_lanes": 5.86,
+       "reform": {
+        "rows_reform_stood_forecast": 55,
+        "wards_won": 4,
+        "wards_called_first": 1,
+        "called_first_and_won": 1,
+        "signed_error_pp": -0.78,
+        "mae_pp": 5.52,
+        "mean_forecast_pp": 14.95,
+        "mean_actual_pp": 15.74,
+        "sd_forecast_pp": 7.05,
+        "sd_actual_pp": 11.44,
+        "calibration_slope": 1.3,
+        "won_mean_forecast_lead_pp": -13.87,
+        "won_mean_actual_lead_pp": 11.5,
+        "won_with_rival_forecast": 4
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 62,
+     "unforecastable": 4,
+     "arms": {
+      "c2": {
+       "leaders_called": 22,
+       "share_mae_pp_all_lanes": 10.04,
+       "reform": {
+        "rows_reform_stood_forecast": 58,
+        "wards_won": 11,
+        "wards_called_first": 4,
+        "called_first_and_won": 2,
+        "signed_error_pp": -1.81,
+        "mae_pp": 6.76,
+        "mean_forecast_pp": 18.59,
+        "mean_actual_pp": 20.4,
+        "sd_forecast_pp": 6.69,
+        "sd_actual_pp": 11.22,
+        "calibration_slope": 0.896,
+        "won_mean_forecast_lead_pp": -13.46,
+        "won_mean_actual_lead_pp": 9.31,
+        "won_with_rival_forecast": 11
+       }
+      },
+      "m50": {
+       "leaders_called": 22,
+       "share_mae_pp_all_lanes": 10.04,
+       "reform": {
+        "rows_reform_stood_forecast": 58,
+        "wards_won": 11,
+        "wards_called_first": 4,
+        "called_first_and_won": 2,
+        "signed_error_pp": -1.81,
+        "mae_pp": 6.76,
+        "mean_forecast_pp": 18.59,
+        "mean_actual_pp": 20.4,
+        "sd_forecast_pp": 6.69,
+        "sd_actual_pp": 11.22,
+        "calibration_slope": 0.896,
+        "won_mean_forecast_lead_pp": -13.46,
+        "won_mean_actual_lead_pp": 9.31,
+        "won_with_rival_forecast": 11
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 611,
+     "unforecastable": 29,
+     "arms": {
+      "c2": {
+       "leaders_called": 437,
+       "share_mae_pp_all_lanes": 7.56,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 437,
+       "share_mae_pp_all_lanes": 7.54,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 142,
+    "latest_contest_rule": 18,
+    "any_earlier_contest": 22
+   }
+  },
+  "by_from_2025-05-01": {
+   "rows": 437,
+   "groups": {
+    "all": {
+     "rows": 437,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 275,
+       "share_mae_pp_all_lanes": 6.9,
+       "reform": {
+        "rows_reform_stood_forecast": 414,
+        "wards_won": 130,
+        "wards_called_first": 143,
+        "called_first_and_won": 88,
+        "signed_error_pp": -0.99,
+        "mae_pp": 6.34,
+        "mean_forecast_pp": 27.38,
+        "mean_actual_pp": 28.37,
+        "sd_forecast_pp": 10.55,
+        "sd_actual_pp": 12.59,
+        "calibration_slope": 0.895,
+        "won_mean_forecast_lead_pp": 5.9,
+        "won_mean_actual_lead_pp": 13.2,
+        "won_with_rival_forecast": 130
+       }
+      },
+      "m50": {
+       "leaders_called": 276,
+       "share_mae_pp_all_lanes": 6.87,
+       "reform": {
+        "rows_reform_stood_forecast": 414,
+        "wards_won": 130,
+        "wards_called_first": 148,
+        "called_first_and_won": 90,
+        "signed_error_pp": -0.91,
+        "mae_pp": 6.47,
+        "mean_forecast_pp": 27.46,
+        "mean_actual_pp": 28.37,
+        "sd_forecast_pp": 10.74,
+        "sd_actual_pp": 12.59,
+        "calibration_slope": 0.867,
+        "won_mean_forecast_lead_pp": 6.18,
+        "won_mean_actual_lead_pp": 13.2,
+        "won_with_rival_forecast": 130
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 90,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 56,
+       "share_mae_pp_all_lanes": 5.58,
+       "reform": {
+        "rows_reform_stood_forecast": 90,
+        "wards_won": 26,
+        "wards_called_first": 33,
+        "called_first_and_won": 19,
+        "signed_error_pp": 0.69,
+        "mae_pp": 4.83,
+        "mean_forecast_pp": 27.19,
+        "mean_actual_pp": 26.51,
+        "sd_forecast_pp": 13.01,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 0.901,
+        "won_mean_forecast_lead_pp": 8.97,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      },
+      "m50": {
+       "leaders_called": 56,
+       "share_mae_pp_all_lanes": 5.39,
+       "reform": {
+        "rows_reform_stood_forecast": 90,
+        "wards_won": 26,
+        "wards_called_first": 35,
+        "called_first_and_won": 20,
+        "signed_error_pp": 0.95,
+        "mae_pp": 5.46,
+        "mean_forecast_pp": 27.45,
+        "mean_actual_pp": 26.51,
+        "sd_forecast_pp": 13.7,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 0.823,
+        "won_mean_forecast_lead_pp": 8.52,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 135,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 103,
+       "share_mae_pp_all_lanes": 5.4,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 34,
+        "wards_called_first": 22,
+        "called_first_and_won": 19,
+        "signed_error_pp": -3.23,
+        "mae_pp": 6.27,
+        "mean_forecast_pp": 23.0,
+        "mean_actual_pp": 26.23,
+        "sd_forecast_pp": 8.31,
+        "sd_actual_pp": 11.01,
+        "calibration_slope": 0.976,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 12.28,
+        "won_with_rival_forecast": 34
+       }
+      },
+      "m50": {
+       "leaders_called": 104,
+       "share_mae_pp_all_lanes": 5.47,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 34,
+        "wards_called_first": 25,
+        "called_first_and_won": 20,
+        "signed_error_pp": -3.17,
+        "mae_pp": 6.26,
+        "mean_forecast_pp": 23.06,
+        "mean_actual_pp": 26.23,
+        "sd_forecast_pp": 8.35,
+        "sd_actual_pp": 11.01,
+        "calibration_slope": 0.971,
+        "won_mean_forecast_lead_pp": 2.13,
+        "won_mean_actual_lead_pp": 12.28,
+        "won_with_rival_forecast": 34
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 189,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 103,
+       "share_mae_pp_all_lanes": 8.41,
+       "reform": {
+        "rows_reform_stood_forecast": 189,
+        "wards_won": 70,
+        "wards_called_first": 88,
+        "called_first_and_won": 50,
+        "signed_error_pp": -0.19,
+        "mae_pp": 7.1,
+        "mean_forecast_pp": 30.6,
+        "mean_actual_pp": 30.78,
+        "sd_forecast_pp": 9.48,
+        "sd_actual_pp": 12.85,
+        "calibration_slope": 0.922,
+        "won_mean_forecast_lead_pp": 7.27,
+        "won_mean_actual_lead_pp": 15.26,
+        "won_with_rival_forecast": 70
+       }
+      },
+      "m50": {
+       "leaders_called": 103,
+       "share_mae_pp_all_lanes": 8.41,
+       "reform": {
+        "rows_reform_stood_forecast": 189,
+        "wards_won": 70,
+        "wards_called_first": 88,
+        "called_first_and_won": 50,
+        "signed_error_pp": -0.19,
+        "mae_pp": 7.1,
+        "mean_forecast_pp": 30.6,
+        "mean_actual_pp": 30.78,
+        "sd_forecast_pp": 9.48,
+        "sd_actual_pp": 12.85,
+        "calibration_slope": 0.922,
+        "won_mean_forecast_lead_pp": 7.27,
+        "won_mean_actual_lead_pp": 15.26,
+        "won_with_rival_forecast": 70
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 23,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 13,
+       "share_mae_pp_all_lanes": 10.11,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 13,
+       "share_mae_pp_all_lanes": 10.04,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 414,
+    "latest_contest_rule": 90,
+    "any_earlier_contest": 92
+   }
+  },
+  "by_after_2026-05-07": {
+   "rows": 107,
+   "groups": {
+    "all": {
+     "rows": 107,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 68,
+       "share_mae_pp_all_lanes": 6.66,
+       "reform": {
+        "rows_reform_stood_forecast": 107,
+        "wards_won": 22,
+        "wards_called_first": 30,
+        "called_first_and_won": 16,
+        "signed_error_pp": 1.63,
+        "mae_pp": 5.44,
+        "mean_forecast_pp": 26.26,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 11.79,
+        "sd_actual_pp": 12.92,
+        "calibration_slope": 0.924,
+        "won_mean_forecast_lead_pp": 7.34,
+        "won_mean_actual_lead_pp": 8.71,
+        "won_with_rival_forecast": 22
+       }
+      },
+      "m50": {
+       "leaders_called": 67,
+       "share_mae_pp_all_lanes": 6.48,
+       "reform": {
+        "rows_reform_stood_forecast": 107,
+        "wards_won": 22,
+        "wards_called_first": 33,
+        "called_first_and_won": 17,
+        "signed_error_pp": 1.89,
+        "mae_pp": 5.45,
+        "mean_forecast_pp": 26.52,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 12.26,
+        "sd_actual_pp": 12.92,
+        "calibration_slope": 0.895,
+        "won_mean_forecast_lead_pp": 8.2,
+        "won_mean_actual_lead_pp": 8.71,
+        "won_with_rival_forecast": 22
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 52,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 34,
+       "share_mae_pp_all_lanes": 5.79,
+       "reform": {
+        "rows_reform_stood_forecast": 52,
+        "wards_won": 10,
+        "wards_called_first": 14,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.68,
+        "mae_pp": 4.06,
+        "mean_forecast_pp": 24.26,
+        "mean_actual_pp": 22.58,
+        "sd_forecast_pp": 13.72,
+        "sd_actual_pp": 13.37,
+        "calibration_slope": 0.903,
+        "won_mean_forecast_lead_pp": 12.16,
+        "won_mean_actual_lead_pp": 5.21,
+        "won_with_rival_forecast": 10
+       }
+      },
+      "m50": {
+       "leaders_called": 33,
+       "share_mae_pp_all_lanes": 5.37,
+       "reform": {
+        "rows_reform_stood_forecast": 52,
+        "wards_won": 10,
+        "wards_called_first": 16,
+        "called_first_and_won": 9,
+        "signed_error_pp": 2.21,
+        "mae_pp": 4.05,
+        "mean_forecast_pp": 24.79,
+        "mean_actual_pp": 22.58,
+        "sd_forecast_pp": 14.61,
+        "sd_actual_pp": 13.37,
+        "calibration_slope": 0.86,
+        "won_mean_forecast_lead_pp": 14.05,
+        "won_mean_actual_lead_pp": 5.21,
+        "won_with_rival_forecast": 10
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 11,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 8,
+       "share_mae_pp_all_lanes": 5.41,
+       "reform": {
+        "rows_reform_stood_forecast": 11,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.43,
+        "mae_pp": 6.18,
+        "mean_forecast_pp": 22.24,
+        "mean_actual_pp": 19.81,
+        "sd_forecast_pp": 5.17,
+        "sd_actual_pp": 8.14,
+        "calibration_slope": 0.962
+       }
+      },
+      "m50": {
+       "leaders_called": 8,
+       "share_mae_pp_all_lanes": 5.76,
+       "reform": {
+        "rows_reform_stood_forecast": 11,
+        "wards_won": 0,
+        "wards_called_first": 1,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.5,
+        "mae_pp": 6.24,
+        "mean_forecast_pp": 22.31,
+        "mean_actual_pp": 19.81,
+        "sd_forecast_pp": 5.19,
+        "sd_actual_pp": 8.14,
+        "calibration_slope": 0.951
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 44,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 26,
+       "share_mae_pp_all_lanes": 8.11,
+       "reform": {
+        "rows_reform_stood_forecast": 44,
+        "wards_won": 12,
+        "wards_called_first": 16,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.36,
+        "mae_pp": 6.89,
+        "mean_forecast_pp": 29.62,
+        "mean_actual_pp": 28.26,
+        "sd_forecast_pp": 9.43,
+        "sd_actual_pp": 12.41,
+        "calibration_slope": 0.934,
+        "won_mean_forecast_lead_pp": 3.33,
+        "won_mean_actual_lead_pp": 11.62,
+        "won_with_rival_forecast": 12
+       }
+      },
+      "m50": {
+       "leaders_called": 26,
+       "share_mae_pp_all_lanes": 8.11,
+       "reform": {
+        "rows_reform_stood_forecast": 44,
+        "wards_won": 12,
+        "wards_called_first": 16,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.36,
+        "mae_pp": 6.89,
+        "mean_forecast_pp": 29.62,
+        "mean_actual_pp": 28.26,
+        "sd_forecast_pp": 9.43,
+        "sd_actual_pp": 12.41,
+        "calibration_slope": 0.934,
+        "won_mean_forecast_lead_pp": 3.33,
+        "won_mean_actual_lead_pp": 11.62,
+        "won_with_rival_forecast": 12
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 0,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 0,
+       "share_mae_pp_all_lanes": null,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 107,
+    "latest_contest_rule": 52,
+    "any_earlier_contest": 52
+   }
+  },
+  "pooled_from_2025-05-01": {
+   "rows": 4412,
+   "groups": {
+    "all": {
+     "rows": 4412,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 2742,
+       "share_mae_pp_all_lanes": 6.5,
+       "reform": {
+        "rows_reform_stood_forecast": 4376,
+        "wards_won": 1539,
+        "wards_called_first": 1231,
+        "called_first_and_won": 914,
+        "signed_error_pp": -3.08,
+        "mae_pp": 6.29,
+        "mean_forecast_pp": 25.07,
+        "mean_actual_pp": 28.14,
+        "sd_forecast_pp": 9.51,
+        "sd_actual_pp": 13.22,
+        "calibration_slope": 1.145,
+        "won_mean_forecast_lead_pp": 2.32,
+        "won_mean_actual_lead_pp": 14.02,
+        "won_with_rival_forecast": 1539
+       }
+      },
+      "m50": {
+       "leaders_called": 2726,
+       "share_mae_pp_all_lanes": 6.59,
+       "reform": {
+        "rows_reform_stood_forecast": 4376,
+        "wards_won": 1539,
+        "wards_called_first": 1222,
+        "called_first_and_won": 905,
+        "signed_error_pp": -3.2,
+        "mae_pp": 6.4,
+        "mean_forecast_pp": 24.94,
+        "mean_actual_pp": 28.14,
+        "sd_forecast_pp": 9.45,
+        "sd_actual_pp": 13.22,
+        "calibration_slope": 1.143,
+        "won_mean_forecast_lead_pp": 2.13,
+        "won_mean_actual_lead_pp": 14.02,
+        "won_with_rival_forecast": 1539
+       }
+      }
+     }
+    },
+    "reform_prev": {
+     "rows": 510,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 370,
+       "share_mae_pp_all_lanes": 5.0,
+       "reform": {
+        "rows_reform_stood_forecast": 510,
+        "wards_won": 209,
+        "wards_called_first": 183,
+        "called_first_and_won": 154,
+        "signed_error_pp": -3.16,
+        "mae_pp": 5.6,
+        "mean_forecast_pp": 27.22,
+        "mean_actual_pp": 30.38,
+        "sd_forecast_pp": 11.29,
+        "sd_actual_pp": 13.47,
+        "calibration_slope": 1.043,
+        "won_mean_forecast_lead_pp": 7.03,
+        "won_mean_actual_lead_pp": 15.58,
+        "won_with_rival_forecast": 209
+       }
+      },
+      "m50": {
+       "leaders_called": 355,
+       "share_mae_pp_all_lanes": 5.24,
+       "reform": {
+        "rows_reform_stood_forecast": 510,
+        "wards_won": 209,
+        "wards_called_first": 157,
+        "called_first_and_won": 132,
+        "signed_error_pp": -4.55,
+        "mae_pp": 6.7,
+        "mean_forecast_pp": 25.83,
+        "mean_actual_pp": 30.38,
+        "sd_forecast_pp": 11.0,
+        "sd_actual_pp": 13.47,
+        "calibration_slope": 1.013,
+        "won_mean_forecast_lead_pp": 3.54,
+        "won_mean_actual_lead_pp": 15.58,
+        "won_with_rival_forecast": 209
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2283,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 1561,
+       "share_mae_pp_all_lanes": 5.49,
+       "reform": {
+        "rows_reform_stood_forecast": 2283,
+        "wards_won": 669,
+        "wards_called_first": 450,
+        "called_first_and_won": 365,
+        "signed_error_pp": -2.67,
+        "mae_pp": 5.8,
+        "mean_forecast_pp": 22.55,
+        "mean_actual_pp": 25.21,
+        "sd_forecast_pp": 9.49,
+        "sd_actual_pp": 13.48,
+        "calibration_slope": 1.226,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 13.41,
+        "won_with_rival_forecast": 669
+       }
+      },
+      "m50": {
+       "leaders_called": 1561,
+       "share_mae_pp_all_lanes": 5.6,
+       "reform": {
+        "rows_reform_stood_forecast": 2283,
+        "wards_won": 669,
+        "wards_called_first": 467,
+        "called_first_and_won": 378,
+        "signed_error_pp": -2.6,
+        "mae_pp": 5.78,
+        "mean_forecast_pp": 22.62,
+        "mean_actual_pp": 25.21,
+        "sd_forecast_pp": 9.51,
+        "sd_actual_pp": 13.48,
+        "calibration_slope": 1.223,
+        "won_mean_forecast_lead_pp": 1.36,
+        "won_mean_actual_lead_pp": 13.41,
+        "won_with_rival_forecast": 669
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1583,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 788,
+       "share_mae_pp_all_lanes": 8.47,
+       "reform": {
+        "rows_reform_stood_forecast": 1583,
+        "wards_won": 661,
+        "wards_called_first": 598,
+        "called_first_and_won": 395,
+        "signed_error_pp": -3.64,
+        "mae_pp": 7.21,
+        "mean_forecast_pp": 28.0,
+        "mean_actual_pp": 31.64,
+        "sd_forecast_pp": 7.76,
+        "sd_actual_pp": 11.69,
+        "calibration_slope": 1.033,
+        "won_mean_forecast_lead_pp": 2.45,
+        "won_mean_actual_lead_pp": 14.16,
+        "won_with_rival_forecast": 661
+       }
+      },
+      "m50": {
+       "leaders_called": 788,
+       "share_mae_pp_all_lanes": 8.47,
+       "reform": {
+        "rows_reform_stood_forecast": 1583,
+        "wards_won": 661,
+        "wards_called_first": 598,
+        "called_first_and_won": 395,
+        "signed_error_pp": -3.64,
+        "mae_pp": 7.21,
+        "mean_forecast_pp": 28.0,
+        "mean_actual_pp": 31.64,
+        "sd_forecast_pp": 7.76,
+        "sd_actual_pp": 11.69,
+        "calibration_slope": 1.033,
+        "won_mean_forecast_lead_pp": 2.45,
+        "won_mean_actual_lead_pp": 14.16,
+        "won_with_rival_forecast": 661
+       }
+      }
+     }
+    },
+    "reform_not_standing": {
+     "rows": 36,
+     "unforecastable": 0,
+     "arms": {
+      "c2": {
+       "leaders_called": 23,
+       "share_mae_pp_all_lanes": 9.09,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      },
+      "m50": {
+       "leaders_called": 22,
+       "share_mae_pp_all_lanes": 9.47,
+       "reform": {
+        "rows_reform_stood_forecast": 0,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0
+       }
+      }
+     }
+    }
+   },
+   "sensitivity_any_earlier_reform_result": {
+    "reform_stood": 4376,
+    "latest_contest_rule": 510,
+    "any_earlier_contest": 582
+   }
+  }
+ },
+ "baseline_check": "C2 reproduces REBUILD_RESULTS.md 'Both': six Mays 9,135 (6.08), by-elections 786 (7.26)",
+ "inputs_for_a_lane_without_previous_result": {
+  "c2_inputs": 73,
+  "previous_result_inputs": [
+   "prev_gap_years",
+   "has_prev",
+   "prev_rel_ref",
+   "prev_rel_lab",
+   "prev_rel_con",
+   "prev_rel_ld",
+   "prev_rel_grn",
+   "prev_rel_oth",
+   "prev_nat_stand_ref",
+   "prev_nat_stand_lab",
+   "prev_nat_stand_con",
+   "prev_nat_stand_ld",
+   "prev_nat_stand_grn",
+   "prev_nat_stand_oth"
+  ],
+  "rule": "prev_rel_<lane> is the lane's share at the latest earlier contest under the same GSS code minus that year's mean share for the lane; NaN when there is no earlier contest or the lane did not stand in it (prepare.py, lines 279 to 303). HistGradientBoostingRegressor routes NaN to a learned side of each split.",
+  "rows_by_year_reform_stood": {
+   "2017": {
+    "reform_stood": 0,
+    "prev_rel_ref_present": 0,
+    "ward_had_previous_contest_reform_absent": 0,
+    "no_previous_contest": 0
+   },
+   "2018": {
+    "reform_stood": 0,
+    "prev_rel_ref_present": 0,
+    "ward_had_previous_contest_reform_absent": 0,
+    "no_previous_contest": 0
+   },
+   "2019": {
+    "reform_stood": 2,
+    "prev_rel_ref_present": 0,
+    "ward_had_previous_contest_reform_absent": 2,
+    "no_previous_contest": 0
+   },
+   "2020": {
+    "reform_stood": 0,
+    "prev_rel_ref_present": 0,
+    "ward_had_previous_contest_reform_absent": 0,
+    "no_previous_contest": 0
+   },
+   "2021": {
+    "reform_stood": 152,
+    "prev_rel_ref_present": 1,
+    "ward_had_previous_contest_reform_absent": 147,
+    "no_previous_contest": 4
+   },
+   "2022": {
+    "reform_stood": 102,
+    "prev_rel_ref_present": 27,
+    "ward_had_previous_contest_reform_absent": 60,
+    "no_previous_contest": 15
+   },
+   "2023": {
+    "reform_stood": 201,
+    "prev_rel_ref_present": 38,
+    "ward_had_previous_contest_reform_absent": 153,
+    "no_previous_contest": 10
+   },
+   "2024": {
+    "reform_stood": 380,
+    "prev_rel_ref_present": 102,
+    "ward_had_previous_contest_reform_absent": 160,
+    "no_previous_contest": 118
+   },
+   "2025": {
+    "reform_stood": 1690,
+    "prev_rel_ref_present": 45,
+    "ward_had_previous_contest_reform_absent": 239,
+    "no_previous_contest": 1406
+   },
+   "2026": {
+    "reform_stood": 2737,
+    "prev_rel_ref_present": 468,
+    "ward_had_previous_contest_reform_absent": 2065,
+    "no_previous_contest": 204
+   }
+  },
+  "reform_training_rows_at_cut": {
+   "2025-05-01": {
+    "reform_stood_anchored_before_cut": 886,
+    "with_prev_rel_ref": 171,
+    "ward_had_previous_contest_reform_absent": 543,
+    "no_previous_contest": 172
+   },
+   "2026-05-07": {
+    "reform_stood_anchored_before_cut": 2568,
+    "with_prev_rel_ref": 219,
+    "ward_had_previous_contest_reform_absent": 772,
+    "no_previous_contest": 1577
+   }
+  }
+ }
+}
