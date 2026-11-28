@@ -10,7 +10,7 @@ import {
   type StructuredDataNode
 } from "../lib/site";
 import { hasOgCard, ogSlugForPathname } from "../lib/ogEntries";
-import { buildBreadcrumbList, type Crumb } from "../lib/seo";
+import { authorNode, buildBreadcrumbList, organizationNode, personNode, publisherNode, type Crumb } from "../lib/seo";
 
 interface Props {
   title: string;
@@ -61,6 +61,14 @@ const socialImageRaw = explicitImage ? image : (dynamicOgPath ?? DEFAULT_SOCIAL_
 const socialImageUrl = /^https?:\/\//.test(socialImageRaw) ? socialImageRaw : new URL(socialImageRaw, siteOrigin).toString();
 const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
 const socialImageMime = socialImageUrl.endsWith(".svg") ? "image/svg+xml" : socialImageUrl.endsWith(".png") ? "image/png" : undefined;
+// Forecast, methodology and accountability pages name who wrote them and who
+// publishes them. The nodes come from seo.ts, the only place the Person and
+// Organization are spelled out, so the disclosure cannot drift between pages.
+const AUTHORED_PREFIXES = ["/forecasts/", "/methodology/", "/data-quality/", "/changelog/", "/about/", "/transparency/"];
+const isAuthoredPage = AUTHORED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+// The full Person and Organization nodes appear where the site describes
+// itself: the homepage and /about/.
+const isIdentityPage = pathname === "/" || pathname === "/about/";
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -72,6 +80,7 @@ const structuredData = [
     isPartOf: {
       "@id": `${SITE_URL}/#website`
     },
+    ...(isAuthoredPage ? { author: authorNode(), publisher: publisherNode() } : {}),
     primaryImageOfPage: {
       "@type": "ImageObject",
       url: socialImageUrl
@@ -90,20 +99,10 @@ const structuredData = [
           publisher: {
             "@id": `${SITE_URL}/#organization`
           }
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "@id": `${SITE_URL}/#organization`,
-          name: SITE_NAME,
-          url: SITE_URL,
-          logo: {
-            "@type": "ImageObject",
-            url: new URL("/favicon.svg", siteOrigin).toString()
-          }
         }
       ]
     : []),
+  ...(isIdentityPage ? [organizationNode(), personNode()] : []),
   ...(breadcrumbs.length ? [buildBreadcrumbList(breadcrumbs)] : []),
   ...pageStructuredData
 ];
@@ -203,6 +202,7 @@ const structuredData = [
             <a href="/sources/">Sources</a>
             <a href="/downloads/">Downloads</a>
             <a href="/methodology/">Methodology</a>
+            <a href="/changelog/">Changelog</a>
             <a href="/contact/">Contact</a>
             <a href="/privacy/">Privacy</a>
             <a href="/terms/">Terms</a>

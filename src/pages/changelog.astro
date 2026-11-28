@@ -1,0 +1,239 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import changelog from "../../data/transparency/changelog.json";
+import { authorNode, publisherNode, titleDate } from "../lib/seo";
+import { SITE_URL } from "../lib/site";
+
+// Every line here comes from data/transparency/changelog.json, which
+// scripts/build-changelog.mjs writes from the pull requests merged into main.
+// The page never reads git. Edit the reader copy in changelog-copy.json and
+// rerun the script; never edit an entry by hand.
+
+type Entry = { date: string; merged_at: string; pr: number; url: string; category: string; summary: string };
+const entries = changelog.entries as Entry[];
+
+const CATEGORY_LABELS: Record<string, string> = {
+  data: "Data",
+  results: "Results",
+  model: "Forecast model",
+  pages: "Pages",
+  corrections: "Corrections",
+};
+const CATEGORY_ORDER = ["data", "results", "model", "pages", "corrections"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthLabel = (ym: string) => `${MONTHS[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
+const monthShort = (ym: string) => MONTHS[Number(ym.slice(5, 7)) - 1].slice(0, 3);
+
+// Newest month first for the list; oldest first for the chart, which reads in time order.
+const months = [...new Set(entries.map((e) => e.date.slice(0, 7)))].sort().reverse();
+const chartMonths = [...months].reverse();
+const counts: Record<string, Record<string, number>> = {};
+for (const m of months) counts[m] = Object.fromEntries(CATEGORY_ORDER.map((c) => [c, 0]));
+for (const e of entries) counts[e.date.slice(0, 7)][e.category] += 1;
+const totals = Object.fromEntries(months.map((m) => [m, CATEGORY_ORDER.reduce((s, c) => s + counts[m][c], 0)]));
+const categoryTotals = Object.fromEntries(CATEGORY_ORDER.map((c) => [c, entries.filter((e) => e.category === c).length]));
+const maxCell = Math.max(1, ...months.flatMap((m) => CATEGORY_ORDER.map((c) => counts[m][c])));
+const maxTotal = Math.max(1, ...Object.values(totals));
+
+const newest = entries[0]?.date;
+const oldestMonth = chartMonths[0];
+const corrections = categoryTotals.corrections;
+
+const description =
+  "Every change to UK Elections since August 2026, newest first: data updates, results, forecast model changes, new pages and corrections, each linked to its public record.";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "UK Elections changelog",
+    description,
+    url: `${SITE_URL}/changelog/`,
+    inLanguage: "en-GB",
+    ...(newest ? { dateModified: newest } : {}),
+    author: authorNode(),
+    publisher: publisherNode(),
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+  },
+];
+---
+
+<BaseLayout
+  title="Changelog: every change to UK Elections"
+  description={description}
+  structuredData={structuredData}
+  breadcrumbs={[{ name: "Changelog", href: "/changelog/" }]}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Changelog</p>
+    <h1>What has changed on UK Elections</h1>
+    <p class="lede">
+      Every change that reached the live site since {monthLabel(oldestMonth)}, newest first. Each line links to the
+      public record of the change, with the code and data it touched. Updates to software libraries and to the
+      site's own test machinery are left out.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="changelog-chart-title">
+    <div class="section-head">
+      <p class="eyebrow">Changes by month</p>
+      <h2 id="changelog-chart-title">{entries.length} changes, {corrections} of them corrections</h2>
+    </div>
+    <div class="cl-chart-wrap">
+      <table class="cl-chart">
+        <caption class="visually-hidden">Number of changes each month, by kind of change</caption>
+        <thead>
+          <tr>
+            <th scope="col">Kind of change</th>
+            {chartMonths.map((m) => <th scope="col"><abbr title={monthLabel(m)}>{monthShort(m)}</abbr></th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {CATEGORY_ORDER.map((c) => (
+            <tr>
+              <th scope="row">{CATEGORY_LABELS[c]}</th>
+              {chartMonths.map((m) => (
+                <td title={`${CATEGORY_LABELS[c]}, ${monthLabel(m)}: ${counts[m][c]}`}>
+                  <span class="cl-bar" style={`--w: ${(counts[m][c] / maxCell) * 100}%`} aria-hidden="true"></span>
+                  <span class="cl-n">{counts[m][c]}</span>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">All changes</th>
+            {chartMonths.map((m) => (
+              <td title={`${monthLabel(m)}: ${totals[m]} changes`}>
+                <span class="cl-bar cl-bar--total" style={`--w: ${(totals[m] / maxTotal) * 100}%`} aria-hidden="true"></span>
+                <span class="cl-n">{totals[m]}</span>
+              </td>
+            ))}
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="caption">
+      Bars in each kind of change share one scale; the totals row has its own. {monthLabel(chartMonths[chartMonths.length - 1])}
+      runs to {newest ? titleDate(newest) : "the latest merge"}. Source: the merged changes on the site's public code
+      repository, compiled into <a href="/data/transparency/changelog.json">changelog.json</a>.
+    </p>
+  </section>
+
+  <section class="section cl-corrections" aria-labelledby="corrections-title">
+    <h2 id="corrections-title">Corrections</h2>
+    <p>
+      A correction is a change that fixes something the site had published wrongly: a figure, a label, a place or a
+      claim. They are listed here with every other change, and the filter below shows them on their own. To report an
+      error, see the <a href="/contact/#corrections">corrections policy on the contact page</a>.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="changelog-list-title">
+    <h2 id="changelog-list-title" class="visually-hidden">All changes</h2>
+    <fieldset class="cl-filter" data-cl-filter hidden>
+      <legend>Show</legend>
+      <label><input type="radio" name="cl-kind" value="" checked /> All ({entries.length})</label>
+      {CATEGORY_ORDER.map((c) => (
+        <label><input type="radio" name="cl-kind" value={c} /> {CATEGORY_LABELS[c]} ({categoryTotals[c]})</label>
+      ))}
+      <p role="status" aria-live="polite" data-cl-status></p>
+    </fieldset>
+
+    {months.map((m) => (
+      <section class="cl-month" data-cl-month aria-labelledby={`m-${m}`}>
+        <h3 id={`m-${m}`}>{monthLabel(m)}</h3>
+        <ol class="cl-list">
+          {entries.filter((e) => e.date.startsWith(m)).map((e) => (
+            <li data-cl-item data-kind={e.category} id={`pr-${e.pr}`}>
+              <time datetime={e.date}>{titleDate(e.date, true)}</time>
+              <span class:list={["cl-kind", { "cl-kind--correction": e.category === "corrections" }]}>{CATEGORY_LABELS[e.category]}</span>
+              <p>{e.summary} <a href={e.url} aria-label={`Change ${e.pr} on GitHub`}>#{e.pr}</a></p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </section>
+</BaseLayout>
+
+<script>
+  const filter = document.querySelector<HTMLFieldSetElement>("[data-cl-filter]");
+  if (filter) {
+    const items = [...document.querySelectorAll<HTMLElement>("[data-cl-item]")];
+    const groups = [...document.querySelectorAll<HTMLElement>("[data-cl-month]")];
+    const status = filter.querySelector<HTMLElement>("[data-cl-status]")!;
+    const update = () => {
+      const kind = (filter.querySelector<HTMLInputElement>("input:checked")?.value) || "";
+      let shown = 0;
+      for (const item of items) {
+        item.hidden = Boolean(kind && item.dataset.kind !== kind);
+        if (!item.hidden) shown++;
+      }
+      for (const g of groups) g.hidden = !g.querySelector("[data-cl-item]:not([hidden])");
+      status.textContent = kind ? `${shown} change${shown === 1 ? "" : "s"} shown` : "";
+    };
+    filter.hidden = false;
+    filter.addEventListener("change", update);
+    update();
+  }
+</script>
+
+<style>
+  .cl-chart-wrap { overflow-x: auto; }
+  .cl-chart { width: 100%; border-collapse: collapse; font-size: var(--text-small); }
+  .cl-chart th, .cl-chart td { padding: var(--space-2xs) var(--space-xs); text-align: left; border-bottom: 1px solid var(--border); }
+  .cl-chart thead th { color: var(--muted); font-weight: 600; }
+  .cl-chart abbr { text-decoration: none; }
+  .cl-chart tbody th, .cl-chart tfoot th { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .cl-chart td { position: relative; min-width: 4.5rem; }
+  .cl-chart tfoot th, .cl-chart tfoot td { border-bottom: 0; border-top: 2px solid var(--border); }
+  .cl-bar {
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(var(--w) * 0.7);
+    height: 0.7rem;
+    background: var(--accent);
+    border-radius: 0 var(--space-2xs) var(--space-2xs) 0;
+    margin-right: var(--space-2xs);
+  }
+  .cl-bar--total { background: var(--ink-soft); }
+  .cl-n { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .cl-corrections { border-left: 3px solid var(--accent); padding: var(--space-sm) 0 var(--space-sm) var(--space-md); }
+  .cl-corrections p { margin-bottom: 0; }
+  .cl-corrections h2 { margin-top: 0; }
+
+  .cl-filter { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); border: 1px solid var(--border); padding: var(--space-sm) var(--space-md); margin: 0 0 var(--space-lg); }
+  .cl-filter[hidden] { display: none; }
+  .cl-filter legend { font-weight: 600; padding: 0 var(--space-2xs); }
+  .cl-filter label { display: inline-flex; gap: var(--space-2xs); align-items: center; cursor: pointer; }
+  .cl-filter input { accent-color: var(--accent); }
+  .cl-filter [role="status"] { flex-basis: 100%; margin: 0; color: var(--muted); }
+  .cl-filter [role="status"]:empty { display: none; }
+
+  .cl-month { margin-bottom: var(--space-xl); }
+  .cl-month[hidden] { display: none; }
+  .cl-month h3 { font-size: var(--text-h3); margin: 0 0 var(--space-sm); }
+  .cl-list { list-style: none; margin: 0; padding: 0; }
+  .cl-list li {
+    display: grid;
+    grid-template-columns: 5.5rem 8.5rem 1fr;
+    gap: var(--space-2xs) var(--space-md);
+    align-items: baseline;
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--border);
+  }
+  .cl-list li[hidden] { display: none; }
+  .cl-list time { color: var(--muted); font-variant-numeric: tabular-nums; font-size: var(--text-small); }
+  .cl-kind { font-size: var(--text-eyebrow); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); }
+  .cl-kind--correction { color: var(--accent); }
+  .cl-list p { margin: 0; line-height: 1.5; }
+  .cl-list a { color: var(--accent); font-weight: 600; white-space: nowrap; }
+
+  @media (max-width: 40rem) {
+    .cl-list li { grid-template-columns: auto 1fr; }
+    .cl-list p { grid-column: 1 / -1; }
+  }
+</style>

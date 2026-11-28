@@ -45,17 +45,61 @@ export function buildBreadcrumbList(trail: Crumb[]): Record<string, unknown> {
   };
 }
 
+/**
+ * The person who runs the site, as the footer and /about/ describe them.
+ *
+ * Every property restates something the site already publishes in its own
+ * words (footer, /about/, /contact/). Add nothing here that a reader cannot
+ * already find on the site, and keep the description in step with the footer
+ * disclosure: the party membership is stated, not softened or left out.
+ */
+export const AUTHOR_ID = `${SITE_URL}/about/#author`;
+export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+
+export function authorNode(): Record<string, unknown> {
+  return {
+    "@type": "Person",
+    "@id": AUTHOR_ID,
+    name: "Tom Pickup",
+    url: `${SITE_URL}/about/`,
+    description:
+      "Runs UK Elections as an independent research project. A Lancashire county councillor and Reform UK member; no party, council, candidate or election authority has any say over what appears on the site.",
+  };
+}
+
+/** Full Organization node for the site, with its contact route. */
+export function organizationNode(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    ...publisherNode(),
+    description:
+      "An independent research project publishing UK election results, forecasts and boundaries from public data.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "corrections and data queries",
+      url: `${SITE_URL}/contact/`,
+    },
+  };
+}
+
+/** Standalone Person node, for pages that describe the author. */
+export function personNode(): Record<string, unknown> {
+  return { "@context": "https://schema.org", ...authorNode() };
+}
+
 /** Shared publisher identity for structured data. */
 export function publisherNode(): Record<string, unknown> {
   return {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     name: SITE_NAME,
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
-      url: `${SITE_URL}/og-default.png`,
-      width: 1200,
-      height: 630
+      // Square, as Google's logo guidance asks; the 1200x630 social card is not a logo.
+      url: `${SITE_URL}/apple-touch-icon.png`,
+      width: 180,
+      height: 180
     }
   };
 }
@@ -95,7 +139,7 @@ export function buildNewsArticle(input: NewsArticleInput): Record<string, unknow
     dateModified: input.dateModified ?? input.datePublished,
     inLanguage: "en-GB",
     isAccessibleForFree: true,
-    author: { "@type": "Person", name: "Tom Pickup", url: `${SITE_URL}/contact/` },
+    author: authorNode(),
     publisher: publisherNode(),
     ...(input.image ? { image: [input.image] } : {})
   };
