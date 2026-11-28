@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import {
   buildPollingDays,
@@ -43,14 +43,22 @@ describe("polling days", () => {
     expect(days.map((d) => d.date)).toEqual([...days.map((d) => d.date)].sort().reverse());
   });
 
-  it("puts the index and every day in the by-elections sitemap", () => {
-    const all = getAllSitemapPaths();
+  it("groups the index and the day pages for the sitemap", () => {
     const dayPaths = getByElectionDayPaths();
     expect(dayPaths[0]).toBe("/by-elections/week/");
-    for (const p of dayPaths) expect(all).toContain(p);
     expect(sitemapGroupFor("/by-elections/week/")).toBe("core");
     expect(sitemapGroupFor(dayPaths[1])).toBe("by-elections");
   });
+
+  // getAllSitemapPaths() reads the gitignored historic corpus, which is on
+  // vps-main and this Mac but not on a CI runner (as in sitemap-paths.test.ts).
+  it.skipIf(!existsSync(path.join(process.cwd(), "data/history/dc-historic-results.json")))(
+    "puts the index and every day in the full sitemap list",
+    () => {
+      const all = getAllSitemapPaths();
+      for (const p of getByElectionDayPaths()) expect(all).toContain(p);
+    },
+  );
 
   it("reads hold and gain from the recorded outcome first, then the reviewed holder", () => {
     expect(contestOutcome(fptp({ result: { outcome: "Labour hold" } }))).toMatchObject({ kind: "hold", previous: "Labour" });
