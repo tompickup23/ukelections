@@ -1,4 +1,5 @@
 import { archiveYears } from "./byElections";
+import { getByElectionDayPaths } from "./byElectionDays";
 import articles from "../../data/editorial/articles.json";
 import { validateEditorialRegistry, type EditorialArticle } from "./editorial";
 import { existsSync, readdirSync } from "node:fs";
@@ -120,6 +121,7 @@ export function getAllSitemapPaths(): string[] {
     ...getParliamentSeatPaths(),
     ...getParliamentRegionPaths(),
     ...getLocalByElectionPaths(),
+    ...getByElectionDayPaths(),
     "/by-elections/archive/",
     "/by-elections/this-week/",
     ...archiveYears().map(year => `/by-elections/archive/${year}/`),
@@ -146,6 +148,7 @@ const HUB_PATHS = new Set([
   "/by-elections/post-mortem/",
   "/by-elections/barometer/",
   "/by-elections/this-week/",
+  "/by-elections/week/",
 ]);
 
 /**

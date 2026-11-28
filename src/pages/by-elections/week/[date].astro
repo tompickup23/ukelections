@@ -1,0 +1,211 @@
+---
+/**
+ * One stable page per council by-election polling day.
+ *
+ * Before polling day it lists each contest with the parties standing and the
+ * published forecast; after it, each declared result with the winner, the
+ * shares, hold or gain and the official source. Pages exist only for dates
+ * with at least one contest (byElectionDays.ts), so none is empty.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PartyBars from "../../../components/PartyBars.astro";
+import { isDeclared, prettyElectionDate } from "../../../lib/byElections";
+import { loadPollingDays, pollingDayDescription, pollingDayTitle, type PollingDay } from "../../../lib/byElectionDays";
+import { pollingDaySummary } from "../../../lib/pageSummaries";
+import { councilAreaNoun } from "../../../lib/councilAreaNoun";
+import { partyColour } from "../../../lib/predictions";
+import { resultWinnerLabel, shortPartyLabel } from "../../../lib/siteData";
+import { externalHref } from "../../../lib/seo";
+
+export function getStaticPaths() {
+  const days = loadPollingDays();
+  return days.map((day, i) => ({
+    params: { date: day.date },
+    // Newest first, so the later day sits before this one in the list.
+    props: { day, newer: days[i - 1]?.date ?? null, older: days[i + 1]?.date ?? null },
+  }));
+}
+
+const { day, newer, older } = Astro.props as { day: PollingDay; newer: string | null; older: string | null };
+const title = pollingDayTitle(day);
+const description = pollingDayDescription(day);
+const summary = pollingDaySummary(day);
+const longDate = prettyElectionDate(day.date);
+const weekday = new Date(`${day.date}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "long", timeZone: "UTC" });
+const n = day.contests.length;
+const polled = day.phase !== "upcoming";
+const pct1 = (x: number) => `${(x * 100).toFixed(1)}%`;
+
+const shareRows = (shares: Record<string, number>) =>
+  Object.entries(shares || {})
+    .filter(([, v]) => v > 0.0005)
+    .sort((a, b) => b[1] - a[1])
+    .map(([party, pct]) => ({ party, pct }));
+
+// The summary chart: seats won, with net change where the previous holder is
+// known. Bars share one scale, the day's largest haul.
+const maxWon = Math.max(1, ...day.tally.map((t) => t.won));
+const tallyRows = day.tally.map((t) => ({
+  party: t.party,
+  pct: t.won / maxWon,
+  value: `${t.won} won`,
+  annotation: day.changeKnown ? (t.net > 0 ? `net +${t.net}` : t.net < 0 ? `net ${t.net}` : "no net change") : null,
+  annotationDirection: (t.net > 0 ? "up" : t.net < 0 ? "down" : "flat") as "up" | "down" | "flat",
+}));
+// Before a result: how many of the day's contests each party stands in.
+const standingRows = day.standing.map((s) => ({ party: s.party, pct: s.contests / n, value: `${s.contests} of ${n}` }));
+
+const chanceIn20 = (p: number) => (p < 0.025 ? "under 1 in 20" : p > 0.975 ? "over 19 in 20" : `${Math.round(p * 20)} in 20`);
+const statusLine = day.phase === "declared"
+  ? `All ${n} declared`
+  : day.phase === "part-declared"
+    ? `${day.declared} of ${n} declared`
+    : day.phase === "awaited" ? "Results awaited" : "Upcoming";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[
+    { name: "By-elections", href: "/by-elections/" },
+    { name: "Council by-elections", href: "/by-elections/local/" },
+    { name: "By polling day", href: "/by-elections/week/" },
+    { name: longDate, href: day.path },
+  ]}
+>
+  <section class="page-hero compact-hero">
+    <p class="eyebrow">Council by-elections, {weekday}</p>
+    <h1>{polled ? `Council by-election results, ${longDate}` : `Council by-elections on ${longDate}`}</h1>
+    {summary.length > 0 && <p class="lede">{summary.join(" ")}</p>}
+    <p class="day-status" data-phase={day.phase}>{statusLine}</p>
+    <nav class="day-pager" aria-label="Other polling days">
+      {older ? <a href={`/by-elections/week/${older}/`} rel="prev">Earlier: {prettyElectionDate(older)}</a> : <span></span>}
+      <a href="/by-elections/week/">Every polling day</a>
+      {newer ? <a href={`/by-elections/week/${newer}/`} rel="next">Later: {prettyElectionDate(newer)}</a> : <span></span>}
+    </nav>
+  </section>
+
+  {day.declared > 0 ? (
+    <section class="day-card" id="summary" aria-labelledby="summary-h">
+      <h2 id="summary-h">Seats won{day.changeKnown ? " and net change" : ""}</h2>
+      <PartyBars rows={tallyRows} />
+      <p class="note">
+        Across the {day.declared === n ? `${n} contest${n === 1 ? "" : "s"}` : `${day.declared} declared contest${day.declared === 1 ? "" : "s"} of ${n}`}.
+        {day.changeKnown
+          ? ` Net change counts the ${day.changeKnown} where the previous holder is recorded${day.changeKnown < day.declared ? `; the other ${day.declared - day.changeKnown} count as seats won only` : ""}.`
+          : " No previous holder is recorded for these contests, so no net change is shown."}
+      </p>
+    </section>
+  ) : (
+    <section class="day-card" id="summary" aria-labelledby="summary-h">
+      <h2 id="summary-h">Parties standing</h2>
+      <PartyBars rows={standingRows} />
+      <p class="note">How many of the day's {n} contest{n === 1 ? "" : "s"} each party has a candidate in, from the published candidate lists. Independents and local parties are grouped as the contest pages group them.</p>
+    </section>
+  )}
+
+  <section aria-labelledby="contests-h">
+    <h2 id="contests-h">{n === 1 ? "The contest" : `The ${n} contests`}</h2>
+    <ol class="contest-cards">
+      {day.contests.map((d) => {
+        const c = d.contest;
+        const area = councilAreaNoun(c.council_name);
+        const result = d.result?.declared ? d.result : null;
+        const dec = !result && d.declaration?.declared ? d.declaration : null;
+        const outcome = day.outcomes.get(d.slug);
+        const f = d.forecast;
+        const source = externalHref(result?.source ?? dec?.source);
+        const winnerLabel = result ? resultWinnerLabel(result) : dec ? shortPartyLabel(dec.winner_party) : null;
+        const winnerParty = result?.winner_party ?? dec?.winner_party ?? null;
+        const parties: string[] = [...(d.field?.parties || [])].sort((a: string, b: string) => a.localeCompare(b, "en-GB"));
+        return (
+          <li class="contest-card" style={`--edge:${winnerParty ? partyColour(winnerParty) : "var(--border)"}`}>
+            <header>
+              <p class="council">{c.council_name}</p>
+              <h3><a href={`/by-elections/local/${d.slug}/`}>{c.ward_name}</a></h3>
+              {c.voting_system === "STV" && <p class="tag">Single transferable vote</p>}
+            </header>
+            {isDeclared(d) && winnerParty ? (
+              <div class="outcome">
+                <p class="winner">
+                  <span class="win-chip" style={`--chip:${partyColour(winnerParty)}`}>{outcome?.label ?? `${winnerLabel} won`}</span>
+                  {!outcome?.label && <span class="muted held-by">Previous holder not recorded</span>}
+                </p>
+                {result && <PartyBars rows={shareRows(result.shares)} />}
+                <p class="facts">
+                  {result && Number.isFinite(result.winner_votes) && result.total_votes
+                    ? `Winner ${pct1(result.winner_votes / result.total_votes)}. `
+                    : ""}
+                  {result && result.majority_votes != null ? `Majority ${result.majority_votes.toLocaleString("en-GB")}. ` : ""}
+                  {result ? `${result.total_votes.toLocaleString("en-GB")} valid votes.` : ""}
+                  {dec ? `Declared under STV; first-round counts are not published as shares here.${dec.turnout_pct != null ? ` Turnout ${dec.turnout_pct}%.` : ""}` : ""}
+                </p>
+              </div>
+            ) : (
+              <div class="preview">
+                <p class="facts">
+                  {polled ? "Result awaited. " : ""}
+                  {d.field?.candidate_count
+                    ? `${d.field.candidate_count} candidate${d.field.candidate_count === 1 ? "" : "s"}${polled ? " stood" : ""}: ${parties.map(shortPartyLabel).join(", ")}.`
+                    : "No candidates published yet."}
+                </p>
+                {f ? (
+                  <>
+                    <p class="forecast-line">
+                      {polled ? "Pre-poll forecast: " : "Published forecast: "}
+                      {f.too_close_to_call
+                        ? "too close to call."
+                        : `${shortPartyLabel(f.winner)} most likely, ${chanceIn20(f.leader_probability)}.`}
+                    </p>
+                    <PartyBars rows={shareRows(f.central).slice(0, 4)} />
+                  </>
+                ) : (
+                  <p class="forecast-line muted">No forecast published for this {area.one}.</p>
+                )}
+              </div>
+            )}
+            <p class="links">
+              <a href={`/by-elections/local/${d.slug}/`}>Full {area.one} page</a>
+              {source && <> · <a href={source} rel="nofollow noopener">{/\.gov\.uk$/.test(new URL(source).hostname) ? "Council declaration" : "Result source"}</a></>}
+              {!source && d.sources?.[0]?.url && <> · <a href={d.sources[0].url} rel="nofollow noopener">Election record</a></>}
+            </p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <p class="day-foot">
+    <a href="/by-elections/this-week/">This week</a> · <a href="/by-elections/local/">Every council by-election we track</a> · <a href={`/by-elections/archive/${day.date.slice(0, 4)}/`}>{day.date.slice(0, 4)} archive</a> · <a href="/by-elections/scoreboard/">Forecaster scoreboard</a>
+  </p>
+  <p class="note">Contest data from Democracy Club, used under their open licence; results from each council's declaration where linked. Shares are of valid votes. Forecasts are the ones published before polling day and are never revised after it.</p>
+</BaseLayout>
+
+<style>
+  .compact-hero { max-width: none; padding-block: var(--space-xl) var(--space-lg); }
+  .compact-hero h1 { font-size: var(--text-h1); }
+  .compact-hero .lede { font-size: var(--text-body); max-width: 70ch; margin-top: var(--space-sm); }
+  .day-status { display: inline-block; margin-top: var(--space-md); padding: var(--space-2xs) var(--space-sm); border: 1px solid var(--border); border-radius: 8px; font-size: var(--text-small); font-weight: 600; }
+  .day-status[data-phase="part-declared"], .day-status[data-phase="awaited"] { background: var(--status-warn-bg); border-color: var(--status-warn-border); color: var(--status-warn-text); }
+  .day-pager { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-sm); margin-top: var(--space-lg); font-size: var(--text-small); }
+  .day-pager a[rel="next"] { text-align: right; }
+  .day-card { margin-block: var(--space-xl); padding: var(--space-lg); border: 1px solid var(--card-border-soft); border-radius: 8px; background: var(--card-bg-soft); }
+  .day-card h2 { margin-top: 0; }
+  .note, .muted { color: var(--muted); }
+  .note { font-size: var(--text-small); }
+  .contest-cards { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: var(--space-md); }
+  .contest-card { display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-md); border: 1px solid var(--border); border-left: 4px solid var(--edge); border-radius: 8px; background: var(--surface); }
+  .contest-card header > * { margin: 0; }
+  .contest-card h3 { font-size: var(--text-h3); }
+  .council, .tag { color: var(--muted); font-size: var(--text-small); }
+  .held-by { font-weight: 400; font-size: var(--text-small); }
+  .winner { display: flex; flex-wrap: wrap; gap: var(--space-xs); align-items: baseline; font-weight: 600; margin: 0; }
+  .win-chip { border-left: 4px solid var(--chip, var(--border)); padding-left: var(--space-xs); }
+  .facts, .forecast-line, .links { font-size: var(--text-small); margin: 0; }
+  .links { margin-top: auto; padding-top: var(--space-xs); }
+  .day-foot { margin-top: var(--space-xl); }
+  @media (max-width: 40rem) {
+    .day-pager { grid-template-columns: 1fr; }
+    .day-pager a[rel="next"] { text-align: left; }
+  }
+</style>

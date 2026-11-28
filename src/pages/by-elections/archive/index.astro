@@ -6,7 +6,7 @@ const years = archiveYears();
 <BaseLayout title="UK by-election results archive by year" description="Browse the UK Elections archive of parliamentary and council by-election results by polling year, with declared winners, sources and the pre-election record."
  breadcrumbs={[{name:"By-elections",href:"/by-elections/"},{name:"Results archive",href:"/by-elections/archive/"}]}>
   <section class="page-hero compact-hero"><h1>By-election results archive</h1><p class="lede">Parliamentary and council contests covered by UK Elections, organised by polling year. This is our coverage archive, not a complete historical register of every UK by-election.</p></section>
-  <section class="section"><h2>Browse by year</h2><ul>{years.map(year=><li><a href={`/by-elections/archive/${year}/`}>{year} by-election results</a></li>)}</ul></section>
+  <section class="section"><h2>Browse by year</h2><ul>{years.map(year=><li><a href={`/by-elections/archive/${year}/`}>{year} by-election results</a></li>)}</ul><p><a href="/by-elections/week/">Council by-election results by polling day</a></p></section>
   <p><a href="/by-elections/local/">Latest council results and upcoming polls</a> · <a href="/by-elections/">Parliamentary by-elections</a></p>
 </BaseLayout>
 
