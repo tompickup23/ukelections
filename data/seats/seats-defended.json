@@ -16,16 +16,16 @@
   },
   "counts": {
     "by_elections": {
-      "records": 181,
-      "determined": 155,
+      "records": 183,
+      "determined": 156,
       "determined_by_tier": {
         "hand_verified_two_sources": 52,
         "published_roundup": 84,
-        "derived": 13,
+        "derived": 14,
         "hand_recorded": 6
       },
       "unresolved_by_reason": {
-        "no_election_in_window": 22,
+        "no_election_in_window": 23,
         "seat_count_mismatch": 2,
         "two_or_more_parties_in_ward": 1,
         "source_inconsistent": 1
@@ -3823,6 +3823,20 @@
       "note": "The roundup and held election data agree.",
       "held_data_check": "agrees"
     },
+    "local.scottish-borders.leaderdale-and-melrose.by.2027-01-21": {
+      "kind": "by_election",
+      "council": "Scottish Borders",
+      "ward": "Leaderdale and Melrose",
+      "polling_day": "2027-01-21",
+      "seats_contested": 1,
+      "ward_seats": 3,
+      "confidence": "unresolved",
+      "holders": null,
+      "reason": "no_election_in_window",
+      "detail": "no ordinary election for this ward on its current boundaries (from 2007-10-18) in the four years before 2027-01-21 in held data: a redrawn ward, a postponed election or a gap in the data. Scottish wards elect by STV, and held data has no elected flags for them",
+      "review_status": "derived",
+      "source": []
+    },
     "local.sefton.netherton-north.by.2026-12-10": {
       "kind": "by_election",
       "council": "Sefton",
@@ -4436,6 +4450,27 @@
       ],
       "note": "Elected for Labour in 2023 and resigned for work reasons; no change of party before the vacancy. Reviewed 14 November 2026.",
       "held_data_check": "not_determined"
+    },
+    "local.staffordshire.brewood.by.2026-12-17": {
+      "kind": "by_election",
+      "council": "Staffordshire",
+      "ward": "Brewood",
+      "polling_day": "2026-12-17",
+      "seats_contested": 1,
+      "ward_seats": 1,
+      "confidence": "determined",
+      "holders": [
+        "Reform UK"
+      ],
+      "basis": "single_member_ward_last_election",
+      "review_status": "derived",
+      "source": [
+        {
+          "label": "Result local.staffordshire.brewood.2025-05-01 (dc-historic-results.json)",
+          "url": "https://staffordshire.moderngov.co.uk/mgElectionElectionAreaResults.aspx?Page=all&EID=38"
+        }
+      ],
+      "note": "Party as last elected. A change of party since then is not checked unless a source is named."
     },
     "local.staffordshire.stretton.by.2026-06-25": {
       "kind": "by_election",

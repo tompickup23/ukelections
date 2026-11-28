@@ -26,8 +26,9 @@ if any stored `status` disagrees with the rule.
 | `shares` | published vote shares, 0 to 1, or null |
 | `captured_at` | when the forecast was recorded |
 | `source` | the file or URL the entry was taken from |
-| `capture_method` | `site_snapshot`, `site_rebuild`, `research_export`, `hand_recorded` or `supplied_by_forecaster` |
-| `basis` | `as_published`, `rebuilt_after_poll` or `back_test` |
+| `capture_method` | `site_snapshot`, `site_rebuild`, `research_export`, `research_live`, `hand_recorded` or `supplied_by_forecaster` |
+| `basis` | `as_published`, `rebuilt_after_poll`, `back_test` or `research_live` |
+| `research` | live research entries only: model version, code commit, contest files commit, and the polls file with its sha256 and latest poll date |
 | `status` | `live` or `retrospective`, always the value the rule gives |
 | `note` | anything a reader needs to know about the entry |
 
@@ -72,6 +73,55 @@ built:
 
 When both hold an entry for the same contest, a live entry beats a
 retrospective one, and of two live entries the later capture wins.
+
+## The research ward model
+
+Two forecasters in the ledger are research, marked `"research": true`, and
+neither is this site's published forecast. The page and the strip label both
+as research and never add them to the site's record.
+
+- `uk-elections-research-model`: the back-test. A model frozen before
+  7 May 2026 and run in November 2026 on contests that had already polled, so
+  every entry is retrospective. Imported once with `--import-research`; nothing
+  touches those entries again.
+- `uk-elections-research-model-live`: the same all-party ward model (C2),
+  retrained before each run and run each week on the coming contests in
+  England by `research/ward-model-2026-11/live_forecast.py` on the research
+  branch (ukelections PR 200 and its successors). Its entries come from that
+  runner's `live/live_forecasts.json`, copied here as
+  `research-ward-model-live.json` and imported with:
+
+  ```bash
+  node scripts/scoreboard-log.mjs --import-research-live=data/scoreboard/research-ward-model-live.json
+  ```
+
+  `captured_at` is the runner's own time for each record, never the import's,
+  and the one live rule above decides live or retrospective. The import refuses
+  a record with no contest file or a different polling day, never changes an
+  entry once polls for that contest have opened (an identical re-import is a
+  no-op), takes a later capture over an earlier one before polls open, reads
+  no skipped record, and touches no other forecaster's entries. `--add`
+  refuses both research forecasters.
+
+### The weekly routine for the live research model
+
+Before the coming Thursday's polls open (07:00 UK time), on the Mac that holds
+the research caches:
+
+1. In a checkout of the research branch, from `research/ward-model-2026-11/`:
+   `git fetch origin`, get the publisher's current
+   `data/polling/timeseries.json` (see `LIVE_README.md` there), then
+   `uv run python live_forecast.py --polls=<that file>`. Commit `live/` and
+   push the same day: the push time is the independent proof of when the
+   forecasts were written.
+2. In a site branch from `main`: copy that `live/live_forecasts.json` over
+   `data/scoreboard/research-ward-model-live.json`, run the import above and
+   `npm test`, and commit both files. A merge after polling day still counts
+   as live, because the entry carries the runner's capture time and the
+   research branch's push shows it; it cannot change a frozen entry.
+
+Results score themselves: once a contest file carries a declared result the
+entry is scored on the next build, with nothing to run.
 
 ## Adding an outside forecaster
 

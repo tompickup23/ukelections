@@ -1,0 +1,715 @@
+{
+ "elections": {
+  "2026-05-07": {
+   "role": "discovery",
+   "scored_wards": 2576,
+   "districts_with_wards": 152,
+   "councils": 134
+  },
+  "2025-05-01": {
+   "role": "confirmation",
+   "scored_wards": 1399,
+   "districts_with_wards": 115,
+   "councils": 23
+  },
+  "2022-05-05": {
+   "role": "check",
+   "scored_wards": 2533,
+   "districts_with_wards": 131,
+   "councils": 131
+  },
+  "2023-05-04": {
+   "role": "check",
+   "scored_wards": 1734,
+   "districts_with_wards": 96,
+   "councils": 96
+  }
+ },
+ "measures": {
+  "pop_change_21": {
+   "label": "Population change since mid-2021, per cent",
+   "family": "tested",
+   "source": "ONS, Mid-Year Population Estimates, England and Wales, June 2025 edition (published 29 July 2026), MYE4 series mid-2011 to mid-2025 as revised; ukdemographics src/data/live/population-estimates.json. Counts: usual residents.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "mid-2021 to mid-2025 (reference 30 June 2025)",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "mid-2021 to mid-2024 (reference 30 June 2024)",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "not defined: no mid-year value after mid-2021 is dated before this polling day",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "mid-2021 to mid-2022 (reference 30 June 2022)",
+     "districts_covered": 96,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "nino_rate": {
+   "label": "NINo registrations to adult overseas nationals in the calendar year before polling day, per 1,000 residents",
+   "family": "tested",
+   "source": "DWP Stat-Xplore, NINo registrations to adult overseas nationals, calendar years 2002 to 2025; ukdemographics nino-historical.json (lastUpdated 2026-04-29). Counts: new registrations (a flow, not a stock). Denominator: ONS mid-year estimate of the same year.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "calendar 2025 registrations over mid-2025 population",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "calendar 2024 registrations over mid-2024 population",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "calendar 2021 registrations over mid-2021 population",
+     "districts_covered": 131,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "calendar 2022 registrations over mid-2022 population",
+     "districts_covered": 96,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "nino_change_21": {
+   "label": "Change in NINo registrations per 1,000 residents since calendar 2021",
+   "family": "tested",
+   "source": "As nino_rate.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "calendar 2025 rate minus calendar 2021 rate",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "calendar 2024 rate minus calendar 2021 rate",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "not defined: base year is the year before polling day",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "calendar 2022 rate minus calendar 2021 rate",
+     "districts_covered": 96,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "asylum_rate": {
+   "label": "Supported asylum seekers at the last quarter end before polling day, per 1,000 residents",
+   "family": "tested",
+   "source": "Home Office immigration system statistics, year ending June 2026 (published 27 August 2026), Asy_D11 quarterly supported asylum by local authority; asylumstats area-series.json. Counts: people in receipt of asylum support at quarter end. Denominator: ONS mid-year estimate.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "stock at 2026-03-31 over mid-2025 population",
+     "districts_covered": 149,
+     "of_districts_with_wards": 152,
+     "missing": [
+      "E06000046",
+      "E07000089",
+      "E07000091"
+     ]
+    },
+    "2025-05-01": {
+     "value_used": "stock at 2025-03-31 over mid-2024 population",
+     "districts_covered": 106,
+     "of_districts_with_wards": 115,
+     "missing": [
+      "E07000010",
+      "E07000035",
+      "E07000042",
+      "E07000046",
+      "E07000047",
+      "E07000079",
+      "E07000194",
+      "E07000235",
+      "E07000242"
+     ]
+    },
+    "2022-05-05": {
+     "value_used": "stock at 2022-03-31 over mid-2021 population",
+     "districts_covered": 122,
+     "of_districts_with_wards": 131,
+     "missing": [
+      "E06000066",
+      "E07000012",
+      "E07000094",
+      "E07000102",
+      "E07000199",
+      "E07000219",
+      "E08000038",
+      "E08000039",
+      "W06000023"
+     ]
+    },
+    "2023-05-04": {
+     "value_used": "stock at 2023-03-31 over mid-2022 population",
+     "districts_covered": 90,
+     "of_districts_with_wards": 96,
+     "missing": [
+      "E07000064",
+      "E07000102",
+      "E07000242",
+      "E07000245",
+      "E08000038",
+      "E08000039"
+     ]
+    }
+   }
+  },
+  "asylum_change_21": {
+   "label": "Change in supported asylum seekers per 1,000 residents since 31 March 2021",
+   "family": "tested",
+   "source": "As asylum_rate.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "rate at 2026-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+     "districts_covered": 129,
+     "of_districts_with_wards": 152,
+     "missing": [
+      "E06000046",
+      "E07000008",
+      "E07000011",
+      "E07000012",
+      "E07000063",
+      "E07000065",
+      "E07000067",
+      "E07000077",
+      "E07000084",
+      "E07000085",
+      "E07000089",
+      "E07000091",
+      "E07000094",
+      "E07000102",
+      "E07000147",
+      "E07000181",
+      "E07000192",
+      "E07000199",
+      "E07000219",
+      "E07000229",
+      "E08000029",
+      "E08000038",
+      "E08000039"
+     ]
+    },
+    "2025-05-01": {
+     "value_used": "rate at 2025-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+     "districts_covered": 70,
+     "of_districts_with_wards": 115,
+     "missing": [
+      "E06000051",
+      "E07000008",
+      "E07000010",
+      "E07000011",
+      "E07000012",
+      "E07000032",
+      "E07000033",
+      "E07000035",
+      "E07000036",
+      "E07000038",
+      "E07000039",
+      "E07000042",
+      "E07000043",
+      "E07000044",
+      "E07000045",
+      "E07000046",
+      "E07000047",
+      "E07000079",
+      "E07000080",
+      "E07000082",
+      "E07000102",
+      "E07000106",
+      "E07000115",
+      "E07000129",
+      "E07000131",
+      "E07000132",
+      "E07000133",
+      "E07000134",
+      "E07000137",
+      "E07000139",
+      "E07000141",
+      "E07000174",
+      "E07000175",
+      "E07000176",
+      "E07000181",
+      "E07000192",
+      "E07000194",
+      "E07000196",
+      "E07000199",
+      "E07000218",
+      "E07000219",
+      "E07000221",
+      "E07000235",
+      "E07000237",
+      "E07000242"
+     ]
+    },
+    "2022-05-05": {
+     "value_used": "rate at 2022-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+     "districts_covered": 115,
+     "of_districts_with_wards": 131,
+     "missing": [
+      "E06000066",
+      "E07000008",
+      "E07000011",
+      "E07000012",
+      "E07000084",
+      "E07000094",
+      "E07000102",
+      "E07000181",
+      "E07000192",
+      "E07000199",
+      "E07000219",
+      "E07000229",
+      "E08000029",
+      "E08000038",
+      "E08000039",
+      "W06000023"
+     ]
+    },
+    "2023-05-04": {
+     "value_used": "rate at 2023-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+     "districts_covered": 80,
+     "of_districts_with_wards": 96,
+     "missing": [
+      "E07000008",
+      "E07000063",
+      "E07000064",
+      "E07000084",
+      "E07000094",
+      "E07000102",
+      "E07000181",
+      "E07000192",
+      "E07000199",
+      "E07000221",
+      "E07000229",
+      "E07000242",
+      "E07000245",
+      "E08000029",
+      "E08000038",
+      "E08000039"
+     ]
+    }
+   }
+  },
+  "income_median": {
+   "label": "Median income of income taxpayers, 2023 to 2024, pounds",
+   "family": "tested",
+   "source": "HMRC Personal Incomes Statistics 2023 to 2024, Table 3.14 (published 29 April 2026); ukdemographics income-taxpayers-la.json. Counts: median total income of individuals liable to income tax (sample estimate).",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "tax year 6 April 2023 to 5 April 2024",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "tax year 6 April 2023 to 5 April 2024",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "excluded: the only edition held (2023 to 2024) ends after this polling day",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "excluded: the only edition held (2023 to 2024) ends after this polling day",
+     "districts_covered": 0,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "band_d": {
+   "label": "Band D area council tax in force on polling day, pounds",
+   "family": "tested",
+   "source": "MHCLG, Council Tax levels set by local authorities in England 2025 to 2026 (revised 22 April 2026) and 2026 to 2027 (25 March 2026), area Band D for two adults including precepts; ukcounciltax data/council-tax/england-*.json.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "2026-27, in force from 1 April 2026",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "2025-26, in force from 1 April 2025",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "excluded: 2022-23 or 2021-22 not held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "excluded: 2023-24 or 2022-23 not held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "band_d_rise": {
+   "label": "Band D area council tax rise into the year in force on polling day, per cent",
+   "family": "tested",
+   "source": "As band_d, plus Council Tax levels 2024 to 2025 (updated 8 May 2024).",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "2025-26 to 2026-27",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "2024-25 to 2025-26",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "excluded: 2022-23 or 2021-22 not held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "excluded: 2023-24 or 2022-23 not held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "hmo_rate": {
+   "label": "Houses in multiple occupation per 1,000 residents, Census 2021",
+   "family": "tested",
+   "source": "ONS Census 2021 RM192, dwellings that are houses in multiple occupation, over Census 2021 population; ukdemographics hmo-density.json (lastUpdated 2026-04-29).",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "Census Day, 21 March 2021",
+     "districts_covered": 150,
+     "of_districts_with_wards": 152,
+     "missing": [
+      "E08000038",
+      "E08000039"
+     ]
+    },
+    "2025-05-01": {
+     "value_used": "Census Day, 21 March 2021",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "Census Day, 21 March 2021",
+     "districts_covered": 129,
+     "of_districts_with_wards": 131,
+     "missing": [
+      "E08000038",
+      "E08000039"
+     ]
+    },
+    "2023-05-04": {
+     "value_used": "Census Day, 21 March 2021",
+     "districts_covered": 94,
+     "of_districts_with_wards": 96,
+     "missing": [
+      "E08000038",
+      "E08000039"
+     ]
+    }
+   }
+  },
+  "wb_change_1121": {
+   "label": "Annual change in White British share, Census 2011 to 2021, points a year",
+   "family": "tested",
+   "source": "ONS Census 2011 KS201EW and Census 2021 TS021 ethnic group, as held as the base of the UK Demographics projections (ethnic-projections.json, annualChangePp, model version as recorded in the file). Counts: change in the White British share of usual residents, points a year.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+     "districts_covered": 131,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+     "districts_covered": 96,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "placebo_hash": {
+   "label": "Placebo: fixed pseudo-random number from the district code",
+   "family": "tested",
+   "source": "None: SHA-256 of a fixed salt and the district code.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "no date",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "no date",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "no date",
+     "districts_covered": 131,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "no date",
+     "districts_covered": 96,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "placebo_digit": {
+   "label": "Placebo: last digit of the mid-2021 population estimate",
+   "family": "tested",
+   "source": "Last digit of the ONS mid-2021 estimate (population-estimates.json).",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "mid-2021 estimate",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "mid-2021 estimate",
+     "districts_covered": 115,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "mid-2021 estimate",
+     "districts_covered": 131,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "mid-2021 estimate",
+     "districts_covered": 96,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "spd_share": {
+   "label": "Single person discount share of chargeable dwellings, 6 October 2025",
+   "family": "may2026_only",
+   "source": "MHCLG Council Taxbase 2025 in England (snapshot 6 October 2025, revised 21 January 2026); ukdemographics council-tax-spd.json. Counts: dwellings with a 25% single person discount over chargeable dwellings.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "CTB snapshot 6 October 2025",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "excluded: only the 6 October 2025 snapshot is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "excluded: only the 6 October 2025 snapshot is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "excluded: only the 6 October 2025 snapshot is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "ta_rate": {
+   "label": "Households in temporary accommodation at 31 March 2026, per 1,000 residents",
+   "family": "may2026_only",
+   "source": "MHCLG Statutory homelessness detailed local authority tables, January to March 2026 (13 August 2026, provisional), TA1; asylumstats housing-pressure.json. Counts: households in temporary accommodation at 31 March 2026. Denominator: ONS mid-2025.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "stock at 31 March 2026 over mid-2025 population",
+     "districts_covered": 149,
+     "of_districts_with_wards": 152,
+     "missing": [
+      "E06000012",
+      "E07000066",
+      "E07000069"
+     ]
+    },
+    "2025-05-01": {
+     "value_used": "excluded: only the 31 March 2026 stock is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "excluded: only the 31 March 2026 stock is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "excluded: only the 31 March 2026 stock is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  },
+  "births_nonuk_mother": {
+   "label": "Share of 2025 live births to mothers born outside the UK, per cent",
+   "family": "may2026_only",
+   "source": "ONS Births in England and Wales: 2025, parents' country of birth, Table 6a (27 May 2026); ukdemographics births-by-mother-cob.json. Counts: live births to mothers born outside the UK over all live births.",
+   "by_election": {
+    "2026-05-07": {
+     "value_used": "calendar 2025 births",
+     "districts_covered": 152,
+     "of_districts_with_wards": 152,
+     "missing": []
+    },
+    "2025-05-01": {
+     "value_used": "excluded: only calendar 2025 is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 115,
+     "missing": []
+    },
+    "2022-05-05": {
+     "value_used": "excluded: only calendar 2025 is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 131,
+     "missing": []
+    },
+    "2023-05-04": {
+     "value_used": "excluded: only calendar 2025 is held",
+     "districts_covered": 0,
+     "of_districts_with_wards": 96,
+     "missing": []
+    }
+   }
+  }
+ },
+ "placement": {
+  "2026-05-07": {
+   "1_wd25": 2239,
+   "3_ced26_point": 196,
+   "5_sopn_host": 119,
+   "unplaced_sopn_host:www.southnorfolkandbroadland.gov.uk": 22
+  },
+  "2025-05-01": {
+   "1_wd25": 512,
+   "3_ced26_point": 887
+  },
+  "2022-05-05": {
+   "1_wd25": 2110,
+   "4_council_slug": 423
+  },
+  "2023-05-04": {
+   "1_wd25": 1350,
+   "4_council_slug": 384
+  }
+ },
+ "slug_join": {
+  "2026-05-07": {
+   "councils": 134,
+   "matched_to_places_json": 126,
+   "unmatched": [
+    "city-of-lincoln",
+    "east-sussex",
+    "essex",
+    "hampshire",
+    "kingston-upon-hull",
+    "norfolk",
+    "suffolk",
+    "west-sussex"
+   ]
+  },
+  "2025-05-01": {
+   "councils": 23,
+   "matched_to_places_json": 9,
+   "unmatched": [
+    "cambridgeshire",
+    "derbyshire",
+    "devon",
+    "gloucestershire",
+    "hertfordshire",
+    "kent",
+    "lancashire",
+    "leicestershire",
+    "lincolnshire",
+    "nottinghamshire",
+    "oxfordshire",
+    "staffordshire",
+    "warwickshire",
+    "worcestershire"
+   ]
+  },
+  "2022-05-05": {
+   "councils": 131,
+   "matched_to_places_json": 129,
+   "unmatched": [
+    "city-of-lincoln",
+    "kingston-upon-hull"
+   ]
+  },
+  "2023-05-04": {
+   "councils": 96,
+   "matched_to_places_json": 94,
+   "unmatched": [
+    "city-of-lincoln",
+    "kingston-upon-hull"
+   ]
+  }
+ }
+}

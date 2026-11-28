@@ -146,6 +146,7 @@ const HUB_PATHS = new Set([
   "/by-elections/local/",
   "/by-elections/archive/",
   "/by-elections/post-mortem/",
+  "/by-elections/barometer/",
   "/by-elections/this-week/",
   "/by-elections/week/",
 ]);

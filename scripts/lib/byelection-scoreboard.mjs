@@ -28,6 +28,7 @@ export const CAPTURE_METHODS = [
   "site_snapshot", // this site's forecast, copied from what the site published
   "site_rebuild", // this site's forecast as the contest file was rebuilt after the poll
   "research_export", // a research model run after the polls, so a back-test
+  "research_live", // a research model's forecast written before polls opened, imported from its own file
   "hand_recorded", // an outside forecast typed in by the owner from a public source
   "supplied_by_forecaster", // an outside forecast sent in by the forecaster
 ];
@@ -137,6 +138,9 @@ export function validateLedger(ledger) {
       if (vals.some((v) => typeof v !== "number" || v < 0 || v > 1)) errors.push(`${where}: shares must be between 0 and 1`);
     }
     if (e.capture_method === "research_export" && e.status === "live") errors.push(`${where}: a research export cannot be live`);
+    if (e.capture_method === "research_live" && !forecasters[e.forecaster]?.research) {
+      errors.push(`${where}: research_live entries belong to a forecaster marked research`);
+    }
     const key = `${e.ballot_paper_id}|${e.forecaster}`;
     if (seen.has(key)) errors.push(`${where}: duplicate entry`);
     seen.add(key);
@@ -299,6 +303,7 @@ export function buildScoreboard(ledger, contests, seats) {
         forecaster: fid,
         name: forecasters[fid].name,
         short_name: forecasters[fid].short_name || forecasters[fid].name,
+        research: Boolean(forecasters[fid].research),
         entries: mine.length,
         pending,
         methods,
@@ -408,7 +413,15 @@ export function runningRecord(board) {
   const rows = [];
   for (const status of STATUSES) {
     for (const block of board[status]) {
-      rows.push({ forecaster: block.forecaster, name: block.name, short_name: block.short_name, status, score: block.score });
+      rows.push({
+        forecaster: block.forecaster,
+        name: block.name,
+        short_name: block.short_name,
+        research: block.research,
+        status,
+        score: block.score,
+        pending: block.pending,
+      });
     }
   }
   return rows;
@@ -424,6 +437,7 @@ export function contestCalls(ledger, d, seats) {
     .map((e) => ({
       forecaster: e.forecaster,
       name: forecasters[e.forecaster]?.name || e.forecaster,
+      research: Boolean(forecasters[e.forecaster]?.research),
       status: entryStatus(e.captured_at, e.polling_day),
       called_party: e.called_party,
       called_leader: e.called_leader,

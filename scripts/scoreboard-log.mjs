@@ -13,6 +13,10 @@
  *                                                   log into the tracked ledger without logging
  *   node scripts/scoreboard-log.mjs --import-research=data/scoreboard/research-ward-model-export-2026-11.json
  *                                                   add the research model's back-test entries
+ *   node scripts/scoreboard-log.mjs --import-research-live=data/scoreboard/research-ward-model-live.json
+ *                                                   add the live research model's forecasts, written
+ *                                                   before polls opened by
+ *                                                   research/ward-model-2026-11/live_forecast.py
  *   node scripts/scoreboard-log.mjs --add --forecaster=<id> --contest=<slug> --party="<party>"
  *        --captured-at=<date or zoned timestamp> --source=<url or file>
  *        [--chance=0.62] [--shares='{"Labour":0.41,"Reform UK":0.33}']
@@ -50,6 +54,7 @@ const PUBLISHED_FILE = "data/cards/published-byelection-forecasts.json";
 
 export const SITE = "uk-elections";
 export const RESEARCH = "uk-elections-research-model";
+export const RESEARCH_LIVE = "uk-elections-research-model-live";
 
 const round4 = (x) => Math.round(x * 10000) / 10000;
 const positiveShares = (shares) =>
@@ -236,6 +241,106 @@ export function importResearch(ledger, exportDoc, contests, { capturedAt, source
   return { ledger: { ...ledger, entries: sortEntries(entries) }, added, missing };
 }
 
+/** The ledger entry for one forecast record of the live research runner. */
+export function researchLiveEntry(d, record, source) {
+  const polls = record.inputs?.polls || {};
+  return finish({
+    ...base(d, RESEARCH_LIVE),
+    called_party: record.called_leader,
+    win_chance: typeof record.win_chance?.[record.called_leader] === "number" ? round4(record.win_chance[record.called_leader]) : null,
+    shares: positiveShares(record.shares),
+    captured_at: record.captured_at,
+    source,
+    capture_method: "research_live",
+    basis: "research_live",
+    research: {
+      model_version: record.model_version ?? null,
+      code_commit: record.code_commit ?? null,
+      contest_files_commit: record.inputs?.contest_files?.commit ?? null,
+      polls_file: polls.file ?? null,
+      polls_sha256: polls.sha256 ?? null,
+      polls_latest_poll_date: polls.latest_poll_date ?? null,
+    },
+    note:
+      `Research model, not this site's published forecast. Written by research/ward-model-2026-11/live_forecast.py ` +
+      `(${record.model_version ?? "model version not stated"}) before polls opened` +
+      (polls.latest_poll_date ? `, with national polls to ${polls.latest_poll_date}.` : "."),
+  });
+}
+
+const sameForecast = (a, b) =>
+  a.captured_at === b.captured_at &&
+  a.called_party === b.called_party &&
+  a.win_chance === b.win_chance &&
+  JSON.stringify(a.shares) === JSON.stringify(b.shares);
+
+/**
+ * Add the live research model's forecasts from its live_forecasts.json.
+ * Pure: `now` is a Date. Rules, each tested:
+ *  1. only records with status "forecast" are read; skipped records are counted;
+ *  2. a record whose contest has no contest file, or whose polling day differs
+ *     from the contest file's, is refused;
+ *  3. captured_at comes from the record, never from this run, and the ledger's
+ *     one live rule decides live or retrospective;
+ *  4. once polls have opened an existing entry is never changed: a record that
+ *     differs from it is refused, an identical one is a no-op;
+ *  5. before polls open, a record replaces the entry only if it was captured later;
+ *  6. no other forecaster's entry is read or written.
+ */
+export function importResearchLive(ledger, doc, contests, { source, now }) {
+  const byBallot = new Map(contests.map((d) => [d.contest?.ballot_paper_id, d]));
+  const entries = [...(ledger.entries || [])];
+  const index = new Map(entries.map((e, i) => [`${e.ballot_paper_id}|${e.forecaster}`, i]));
+  const out = { added: [], replaced: [], unchanged: [], refused: [], skipped_records: 0 };
+  for (const [ballot, record] of Object.entries(doc?.records || {})) {
+    if (record?.status !== "forecast") {
+      out.skipped_records += 1;
+      continue;
+    }
+    const d = byBallot.get(ballot);
+    if (!d) {
+      out.refused.push({ ballot, reason: "no contest file for this ballot" });
+      continue;
+    }
+    if (record.polling_day && record.polling_day !== d.contest.polling_day) {
+      out.refused.push({ ballot, reason: `polling day ${record.polling_day} but the contest file says ${d.contest.polling_day}` });
+      continue;
+    }
+    if (!/T/.test(record.captured_at || "") || !capturedInstant(record.captured_at)) {
+      out.refused.push({ ballot, reason: "captured_at must be a timestamp with its zone" });
+      continue;
+    }
+    if (!record.called_leader) {
+      out.refused.push({ ballot, reason: "no called leader" });
+      continue;
+    }
+    const entry = researchLiveEntry(d, record, source);
+    const key = `${ballot}|${RESEARCH_LIVE}`;
+    const at = index.get(key);
+    if (at === undefined) {
+      index.set(key, entries.push(entry) - 1);
+      out.added.push(ballot);
+      continue;
+    }
+    const cur = entries[at];
+    if (sameForecast(cur, entry)) {
+      out.unchanged.push(ballot);
+      continue;
+    }
+    if (now.getTime() >= pollsOpenAt(d.contest.polling_day).getTime()) {
+      out.refused.push({ ballot, reason: "polls have opened; the entry is frozen" });
+      continue;
+    }
+    if (capturedInstant(entry.captured_at) > capturedInstant(cur.captured_at)) {
+      entries[at] = entry;
+      out.replaced.push(ballot);
+    } else {
+      out.unchanged.push(ballot);
+    }
+  }
+  return { ledger: { ...ledger, entries: sortEntries(entries) }, ...out };
+}
+
 /** Add one outside forecaster's call. Throws on anything the ledger rules would reject. */
 export function addOutsideEntry(ledger, input, contests) {
   const d = contests.find((x) => x.slug === input.contest || x.contest?.ballot_paper_id === input.contest);
@@ -243,7 +348,7 @@ export function addOutsideEntry(ledger, input, contests) {
   if (!ledger.forecasters?.[input.forecaster]) {
     throw new Error(`Add ${input.forecaster} to "forecasters" in ${LEDGER_FILE} first (name, kind "forecaster", url, permission).`);
   }
-  if (input.forecaster === SITE || input.forecaster === RESEARCH) throw new Error("Use the logger, not --add, for this site's own forecasts.");
+  if ([SITE, RESEARCH, RESEARCH_LIVE].includes(input.forecaster)) throw new Error("Use the logger, not --add, for this site's own forecasts.");
   const method = input.method || "hand_recorded";
   if (!["hand_recorded", "supplied_by_forecaster"].includes(method) || !CAPTURE_METHODS.includes(method)) {
     throw new Error(`--method must be hand_recorded or supplied_by_forecaster`);
@@ -317,6 +422,16 @@ function main() {
     ledger = res.ledger;
     console.log(`Research export: ${res.added} entries added; ${res.missing.length} ballots with no contest file.`);
     for (const m of res.missing) console.log(`  ! no contest file for ${m}`);
+  } else if (args["import-research-live"]) {
+    const file = String(args["import-research-live"]);
+    const doc = JSON.parse(readFileSync(path.resolve(ROOT, file), "utf8"));
+    const res = importResearchLive(ledger, doc, contests, { source: path.isAbsolute(file) ? path.relative(ROOT, file) : file, now });
+    ledger = res.ledger;
+    console.log(
+      `Live research forecasts: ${res.added.length} added, ${res.replaced.length} replaced by a later capture, ` +
+        `${res.unchanged.length} unchanged, ${res.refused.length} refused; ${res.skipped_records} skipped records not read.`,
+    );
+    for (const r of res.refused) console.log(`  ! refused ${r.ballot}: ${r.reason}`);
   } else {
     if (state && existsSync(state)) {
       const merged = mergeSiteEntries(ledger, JSON.parse(readFileSync(state, "utf8")).entries);

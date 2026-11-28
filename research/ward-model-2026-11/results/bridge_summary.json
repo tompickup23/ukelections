@@ -1,0 +1,942 @@
+{
+ "bridged_220": {
+  "model": {
+   "wards": 220,
+   "wards_forecast": 220,
+   "leader_correct": 140,
+   "leader_accuracy": 0.6364,
+   "share_mae_pp_all_lanes": 6.05,
+   "brier_common": 0.5385,
+   "brier_common_n": 220,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 220,
+     "mae_pp": 9.01,
+     "signed_bias_pp": -6.1,
+     "actual_leads": 110,
+     "called_leads": 77,
+     "expected_leads_common": 68.9
+    },
+    "Labour": {
+     "n": 220,
+     "mae_pp": 4.66,
+     "signed_bias_pp": 1.4,
+     "actual_leads": 29,
+     "called_leads": 52,
+     "expected_leads_common": 47.2
+    },
+    "Conservative": {
+     "n": 218,
+     "mae_pp": 5.9,
+     "signed_bias_pp": 0.15,
+     "actual_leads": 37,
+     "called_leads": 26,
+     "expected_leads_common": 34.9
+    },
+    "Liberal Democrats": {
+     "n": 194,
+     "mae_pp": 3.87,
+     "signed_bias_pp": 1.01,
+     "actual_leads": 20,
+     "called_leads": 30,
+     "expected_leads_common": 23.1
+    },
+    "Green Party": {
+     "n": 209,
+     "mae_pp": 5.34,
+     "signed_bias_pp": 2.78,
+     "actual_leads": 15,
+     "called_leads": 23,
+     "expected_leads_common": 30.7
+    },
+    "Others": {
+     "n": 77,
+     "mae_pp": 9.36,
+     "signed_bias_pp": 2.91,
+     "actual_leads": 9,
+     "called_leads": 12,
+     "expected_leads_common": 15.2
+    }
+   }
+  },
+  "candidate_engine": {
+   "wards": 220,
+   "wards_forecast": 220,
+   "leader_correct": 110,
+   "leader_accuracy": 0.5,
+   "share_mae_pp_all_lanes": 9.37,
+   "brier_common": 0.6861,
+   "brier_common_n": 220,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 220,
+     "mae_pp": 8.44,
+     "signed_bias_pp": -0.15,
+     "actual_leads": 110,
+     "called_leads": 220,
+     "expected_leads_common": 117.8
+    },
+    "Labour": {
+     "n": 220,
+     "mae_pp": 8.29,
+     "signed_bias_pp": -4.05,
+     "actual_leads": 29,
+     "called_leads": 0,
+     "expected_leads_common": 10.9
+    },
+    "Conservative": {
+     "n": 219,
+     "mae_pp": 10.03,
+     "signed_bias_pp": 1.04,
+     "actual_leads": 37,
+     "called_leads": 0,
+     "expected_leads_common": 32.8
+    },
+    "Liberal Democrats": {
+     "n": 194,
+     "mae_pp": 8.18,
+     "signed_bias_pp": -1.99,
+     "actual_leads": 20,
+     "called_leads": 0,
+     "expected_leads_common": 5.7
+    },
+    "Green Party": {
+     "n": 209,
+     "mae_pp": 11.22,
+     "signed_bias_pp": 8.66,
+     "actual_leads": 15,
+     "called_leads": 0,
+     "expected_leads_common": 50.2
+    },
+    "Others": {
+     "n": 77,
+     "mae_pp": 11.21,
+     "signed_bias_pp": -9.42,
+     "actual_leads": 9,
+     "called_leads": 0,
+     "expected_leads_common": 2.5
+    }
+   }
+  },
+  "blend": {
+   "wards": 220,
+   "wards_forecast": 220,
+   "leader_correct": 143,
+   "leader_accuracy": 0.65,
+   "share_mae_pp_all_lanes": 6.54,
+   "brier_common": 0.4951,
+   "brier_common_n": 220,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 220,
+     "mae_pp": 7.41,
+     "signed_bias_pp": -3.12,
+     "actual_leads": 110,
+     "called_leads": 130,
+     "expected_leads_common": 95.7
+    },
+    "Labour": {
+     "n": 220,
+     "mae_pp": 5.08,
+     "signed_bias_pp": -1.33,
+     "actual_leads": 29,
+     "called_leads": 32,
+     "expected_leads_common": 27.9
+    },
+    "Conservative": {
+     "n": 219,
+     "mae_pp": 7.33,
+     "signed_bias_pp": 0.59,
+     "actual_leads": 37,
+     "called_leads": 22,
+     "expected_leads_common": 33.4
+    },
+    "Liberal Democrats": {
+     "n": 194,
+     "mae_pp": 5.33,
+     "signed_bias_pp": -0.49,
+     "actual_leads": 20,
+     "called_leads": 4,
+     "expected_leads_common": 12.4
+    },
+    "Green Party": {
+     "n": 209,
+     "mae_pp": 7.22,
+     "signed_bias_pp": 5.72,
+     "actual_leads": 15,
+     "called_leads": 27,
+     "expected_leads_common": 41.8
+    },
+    "Others": {
+     "n": 77,
+     "mae_pp": 7.23,
+     "signed_bias_pp": -3.25,
+     "actual_leads": 9,
+     "called_leads": 5,
+     "expected_leads_common": 8.8
+    }
+   }
+  }
+ },
+ "wards": {
+  "model": {
+   "wards": 131,
+   "wards_forecast": 131,
+   "leader_correct": 81,
+   "leader_accuracy": 0.6183,
+   "share_mae_pp_all_lanes": 6.2,
+   "brier_common": 0.5295,
+   "brier_common_n": 131,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 131,
+     "mae_pp": 10.8,
+     "signed_bias_pp": -10.21,
+     "actual_leads": 59,
+     "called_leads": 18,
+     "expected_leads_common": 22.0
+    },
+    "Labour": {
+     "n": 131,
+     "mae_pp": 5.43,
+     "signed_bias_pp": 2.98,
+     "actual_leads": 25,
+     "called_leads": 52,
+     "expected_leads_common": 45.2
+    },
+    "Conservative": {
+     "n": 131,
+     "mae_pp": 5.01,
+     "signed_bias_pp": 0.82,
+     "actual_leads": 21,
+     "called_leads": 17,
+     "expected_leads_common": 20.0
+    },
+    "Liberal Democrats": {
+     "n": 110,
+     "mae_pp": 3.24,
+     "signed_bias_pp": 1.67,
+     "actual_leads": 14,
+     "called_leads": 21,
+     "expected_leads_common": 15.2
+    },
+    "Green Party": {
+     "n": 123,
+     "mae_pp": 5.49,
+     "signed_bias_pp": 3.66,
+     "actual_leads": 10,
+     "called_leads": 16,
+     "expected_leads_common": 20.9
+    },
+    "Others": {
+     "n": 43,
+     "mae_pp": 7.73,
+     "signed_bias_pp": 4.8,
+     "actual_leads": 2,
+     "called_leads": 7,
+     "expected_leads_common": 7.7
+    }
+   }
+  },
+  "candidate_engine": {
+   "wards": 131,
+   "wards_forecast": 131,
+   "leader_correct": 59,
+   "leader_accuracy": 0.4504,
+   "share_mae_pp_all_lanes": 9.63,
+   "brier_common": 0.7037,
+   "brier_common_n": 131,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 131,
+     "mae_pp": 8.9,
+     "signed_bias_pp": 1.67,
+     "actual_leads": 59,
+     "called_leads": 131,
+     "expected_leads_common": 75.5
+    },
+    "Labour": {
+     "n": 131,
+     "mae_pp": 9.76,
+     "signed_bias_pp": -5.15,
+     "actual_leads": 25,
+     "called_leads": 0,
+     "expected_leads_common": 10.7
+    },
+    "Conservative": {
+     "n": 131,
+     "mae_pp": 9.75,
+     "signed_bias_pp": -0.2,
+     "actual_leads": 21,
+     "called_leads": 0,
+     "expected_leads_common": 10.3
+    },
+    "Liberal Democrats": {
+     "n": 110,
+     "mae_pp": 8.32,
+     "signed_bias_pp": -3.56,
+     "actual_leads": 14,
+     "called_leads": 0,
+     "expected_leads_common": 2.0
+    },
+    "Green Party": {
+     "n": 123,
+     "mae_pp": 11.92,
+     "signed_bias_pp": 8.73,
+     "actual_leads": 10,
+     "called_leads": 0,
+     "expected_leads_common": 30.1
+    },
+    "Others": {
+     "n": 43,
+     "mae_pp": 7.8,
+     "signed_bias_pp": -4.68,
+     "actual_leads": 2,
+     "called_leads": 0,
+     "expected_leads_common": 2.4
+    }
+   }
+  },
+  "blend": {
+   "wards": 131,
+   "wards_forecast": 131,
+   "leader_correct": 90,
+   "leader_accuracy": 0.687,
+   "share_mae_pp_all_lanes": 6.61,
+   "brier_common": 0.4624,
+   "brier_common_n": 131,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 131,
+     "mae_pp": 7.92,
+     "signed_bias_pp": -4.27,
+     "actual_leads": 59,
+     "called_leads": 52,
+     "expected_leads_common": 47.8
+    },
+    "Labour": {
+     "n": 131,
+     "mae_pp": 5.63,
+     "signed_bias_pp": -1.09,
+     "actual_leads": 25,
+     "called_leads": 32,
+     "expected_leads_common": 27.2
+    },
+    "Conservative": {
+     "n": 131,
+     "mae_pp": 6.9,
+     "signed_bias_pp": 0.31,
+     "actual_leads": 21,
+     "called_leads": 20,
+     "expected_leads_common": 15.6
+    },
+    "Liberal Democrats": {
+     "n": 110,
+     "mae_pp": 5.1,
+     "signed_bias_pp": -0.94,
+     "actual_leads": 14,
+     "called_leads": 4,
+     "expected_leads_common": 7.3
+    },
+    "Green Party": {
+     "n": 123,
+     "mae_pp": 7.7,
+     "signed_bias_pp": 6.2,
+     "actual_leads": 10,
+     "called_leads": 20,
+     "expected_leads_common": 28.1
+    },
+    "Others": {
+     "n": 43,
+     "mae_pp": 5.46,
+     "signed_bias_pp": 0.06,
+     "actual_leads": 2,
+     "called_leads": 3,
+     "expected_leads_common": 5.1
+    }
+   }
+  }
+ },
+ "county_divisions": {
+  "model": {
+   "wards": 89,
+   "wards_forecast": 89,
+   "leader_correct": 59,
+   "leader_accuracy": 0.6629,
+   "share_mae_pp_all_lanes": 5.83,
+   "brier_common": 0.5518,
+   "brier_common_n": 89,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 89,
+     "mae_pp": 6.37,
+     "signed_bias_pp": -0.04,
+     "actual_leads": 51,
+     "called_leads": 59,
+     "expected_leads_common": 46.9
+    },
+    "Labour": {
+     "n": 89,
+     "mae_pp": 3.52,
+     "signed_bias_pp": -0.93,
+     "actual_leads": 4,
+     "called_leads": 0,
+     "expected_leads_common": 2.0
+    },
+    "Conservative": {
+     "n": 87,
+     "mae_pp": 7.25,
+     "signed_bias_pp": -0.86,
+     "actual_leads": 16,
+     "called_leads": 9,
+     "expected_leads_common": 14.9
+    },
+    "Liberal Democrats": {
+     "n": 84,
+     "mae_pp": 4.69,
+     "signed_bias_pp": 0.14,
+     "actual_leads": 6,
+     "called_leads": 9,
+     "expected_leads_common": 7.9
+    },
+    "Green Party": {
+     "n": 86,
+     "mae_pp": 5.12,
+     "signed_bias_pp": 1.53,
+     "actual_leads": 5,
+     "called_leads": 7,
+     "expected_leads_common": 9.9
+    },
+    "Others": {
+     "n": 34,
+     "mae_pp": 11.43,
+     "signed_bias_pp": 0.53,
+     "actual_leads": 7,
+     "called_leads": 5,
+     "expected_leads_common": 7.5
+    }
+   }
+  },
+  "candidate_engine": {
+   "wards": 89,
+   "wards_forecast": 89,
+   "leader_correct": 51,
+   "leader_accuracy": 0.573,
+   "share_mae_pp_all_lanes": 9.01,
+   "brier_common": 0.6601,
+   "brier_common_n": 89,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 89,
+     "mae_pp": 7.75,
+     "signed_bias_pp": -2.84,
+     "actual_leads": 51,
+     "called_leads": 89,
+     "expected_leads_common": 42.3
+    },
+    "Labour": {
+     "n": 89,
+     "mae_pp": 6.12,
+     "signed_bias_pp": -2.43,
+     "actual_leads": 4,
+     "called_leads": 0,
+     "expected_leads_common": 0.2
+    },
+    "Conservative": {
+     "n": 88,
+     "mae_pp": 10.46,
+     "signed_bias_pp": 2.88,
+     "actual_leads": 16,
+     "called_leads": 0,
+     "expected_leads_common": 22.5
+    },
+    "Liberal Democrats": {
+     "n": 84,
+     "mae_pp": 8.0,
+     "signed_bias_pp": 0.06,
+     "actual_leads": 6,
+     "called_leads": 0,
+     "expected_leads_common": 3.7
+    },
+    "Green Party": {
+     "n": 86,
+     "mae_pp": 10.2,
+     "signed_bias_pp": 8.54,
+     "actual_leads": 5,
+     "called_leads": 0,
+     "expected_leads_common": 20.1
+    },
+    "Others": {
+     "n": 34,
+     "mae_pp": 15.53,
+     "signed_bias_pp": -15.43,
+     "actual_leads": 7,
+     "called_leads": 0,
+     "expected_leads_common": 0.1
+    }
+   }
+  },
+  "blend": {
+   "wards": 89,
+   "wards_forecast": 89,
+   "leader_correct": 53,
+   "leader_accuracy": 0.5955,
+   "share_mae_pp_all_lanes": 6.46,
+   "brier_common": 0.5434,
+   "brier_common_n": 89,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 89,
+     "mae_pp": 6.67,
+     "signed_bias_pp": -1.44,
+     "actual_leads": 51,
+     "called_leads": 78,
+     "expected_leads_common": 47.9
+    },
+    "Labour": {
+     "n": 89,
+     "mae_pp": 4.27,
+     "signed_bias_pp": -1.68,
+     "actual_leads": 4,
+     "called_leads": 0,
+     "expected_leads_common": 0.7
+    },
+    "Conservative": {
+     "n": 88,
+     "mae_pp": 7.98,
+     "signed_bias_pp": 1.01,
+     "actual_leads": 16,
+     "called_leads": 2,
+     "expected_leads_common": 17.8
+    },
+    "Liberal Democrats": {
+     "n": 84,
+     "mae_pp": 5.64,
+     "signed_bias_pp": 0.1,
+     "actual_leads": 6,
+     "called_leads": 0,
+     "expected_leads_common": 5.1
+    },
+    "Green Party": {
+     "n": 86,
+     "mae_pp": 6.54,
+     "signed_bias_pp": 5.04,
+     "actual_leads": 5,
+     "called_leads": 7,
+     "expected_leads_common": 13.8
+    },
+    "Others": {
+     "n": 34,
+     "mae_pp": 9.48,
+     "signed_bias_pp": -7.45,
+     "actual_leads": 7,
+     "called_leads": 2,
+     "expected_leads_common": 3.7
+    }
+   }
+  }
+ },
+ "one_old_area": {
+  "model": {
+   "wards": 97,
+   "wards_forecast": 97,
+   "leader_correct": 65,
+   "leader_accuracy": 0.6701,
+   "share_mae_pp_all_lanes": 5.78,
+   "brier_common": 0.4756,
+   "brier_common_n": 97,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 97,
+     "mae_pp": 9.0,
+     "signed_bias_pp": -6.96,
+     "actual_leads": 53,
+     "called_leads": 29,
+     "expected_leads_common": 28.6
+    },
+    "Labour": {
+     "n": 97,
+     "mae_pp": 4.76,
+     "signed_bias_pp": 2.36,
+     "actual_leads": 12,
+     "called_leads": 29,
+     "expected_leads_common": 25.2
+    },
+    "Conservative": {
+     "n": 96,
+     "mae_pp": 6.14,
+     "signed_bias_pp": -0.14,
+     "actual_leads": 17,
+     "called_leads": 13,
+     "expected_leads_common": 15.2
+    },
+    "Liberal Democrats": {
+     "n": 83,
+     "mae_pp": 3.09,
+     "signed_bias_pp": 1.12,
+     "actual_leads": 5,
+     "called_leads": 9,
+     "expected_leads_common": 7.6
+    },
+    "Green Party": {
+     "n": 90,
+     "mae_pp": 4.83,
+     "signed_bias_pp": 2.32,
+     "actual_leads": 7,
+     "called_leads": 9,
+     "expected_leads_common": 12.0
+    },
+    "Others": {
+     "n": 40,
+     "mae_pp": 7.31,
+     "signed_bias_pp": 3.96,
+     "actual_leads": 3,
+     "called_leads": 8,
+     "expected_leads_common": 8.5
+    }
+   }
+  },
+  "candidate_engine": {
+   "wards": 97,
+   "wards_forecast": 97,
+   "leader_correct": 53,
+   "leader_accuracy": 0.5464,
+   "share_mae_pp_all_lanes": 9.48,
+   "brier_common": 0.6235,
+   "brier_common_n": 97,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 97,
+     "mae_pp": 8.67,
+     "signed_bias_pp": 0.12,
+     "actual_leads": 53,
+     "called_leads": 97,
+     "expected_leads_common": 53.6
+    },
+    "Labour": {
+     "n": 97,
+     "mae_pp": 9.01,
+     "signed_bias_pp": -4.52,
+     "actual_leads": 12,
+     "called_leads": 0,
+     "expected_leads_common": 6.2
+    },
+    "Conservative": {
+     "n": 96,
+     "mae_pp": 10.54,
+     "signed_bias_pp": 0.12,
+     "actual_leads": 17,
+     "called_leads": 0,
+     "expected_leads_common": 11.5
+    },
+    "Liberal Democrats": {
+     "n": 83,
+     "mae_pp": 7.16,
+     "signed_bias_pp": -1.28,
+     "actual_leads": 5,
+     "called_leads": 0,
+     "expected_leads_common": 1.7
+    },
+    "Green Party": {
+     "n": 90,
+     "mae_pp": 11.54,
+     "signed_bias_pp": 9.24,
+     "actual_leads": 7,
+     "called_leads": 0,
+     "expected_leads_common": 22.0
+    },
+    "Others": {
+     "n": 40,
+     "mae_pp": 10.24,
+     "signed_bias_pp": -7.74,
+     "actual_leads": 3,
+     "called_leads": 0,
+     "expected_leads_common": 2.0
+    }
+   }
+  },
+  "blend": {
+   "wards": 97,
+   "wards_forecast": 97,
+   "leader_correct": 76,
+   "leader_accuracy": 0.7835,
+   "share_mae_pp_all_lanes": 6.39,
+   "brier_common": 0.3996,
+   "brier_common_n": 97,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 97,
+     "mae_pp": 7.44,
+     "signed_bias_pp": -3.42,
+     "actual_leads": 53,
+     "called_leads": 56,
+     "expected_leads_common": 42.0
+    },
+    "Labour": {
+     "n": 97,
+     "mae_pp": 5.13,
+     "signed_bias_pp": -1.08,
+     "actual_leads": 12,
+     "called_leads": 15,
+     "expected_leads_common": 15.4
+    },
+    "Conservative": {
+     "n": 96,
+     "mae_pp": 7.67,
+     "signed_bias_pp": -0.01,
+     "actual_leads": 17,
+     "called_leads": 10,
+     "expected_leads_common": 13.0
+    },
+    "Liberal Democrats": {
+     "n": 83,
+     "mae_pp": 4.51,
+     "signed_bias_pp": -0.08,
+     "actual_leads": 5,
+     "called_leads": 2,
+     "expected_leads_common": 3.9
+    },
+    "Green Party": {
+     "n": 90,
+     "mae_pp": 7.14,
+     "signed_bias_pp": 5.78,
+     "actual_leads": 7,
+     "called_leads": 11,
+     "expected_leads_common": 17.3
+    },
+    "Others": {
+     "n": 40,
+     "mae_pp": 6.01,
+     "signed_bias_pp": -1.89,
+     "actual_leads": 3,
+     "called_leads": 3,
+     "expected_leads_common": 5.4
+    }
+   }
+  }
+ },
+ "several_old_areas": {
+  "model": {
+   "wards": 123,
+   "wards_forecast": 123,
+   "leader_correct": 75,
+   "leader_accuracy": 0.6098,
+   "share_mae_pp_all_lanes": 6.26,
+   "brier_common": 0.5882,
+   "brier_common_n": 123,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 123,
+     "mae_pp": 9.02,
+     "signed_bias_pp": -5.41,
+     "actual_leads": 57,
+     "called_leads": 48,
+     "expected_leads_common": 40.4
+    },
+    "Labour": {
+     "n": 123,
+     "mae_pp": 4.58,
+     "signed_bias_pp": 0.63,
+     "actual_leads": 17,
+     "called_leads": 23,
+     "expected_leads_common": 22.0
+    },
+    "Conservative": {
+     "n": 122,
+     "mae_pp": 5.71,
+     "signed_bias_pp": 0.37,
+     "actual_leads": 20,
+     "called_leads": 13,
+     "expected_leads_common": 19.7
+    },
+    "Liberal Democrats": {
+     "n": 111,
+     "mae_pp": 4.45,
+     "signed_bias_pp": 0.93,
+     "actual_leads": 15,
+     "called_leads": 21,
+     "expected_leads_common": 15.5
+    },
+    "Green Party": {
+     "n": 119,
+     "mae_pp": 5.72,
+     "signed_bias_pp": 3.14,
+     "actual_leads": 8,
+     "called_leads": 14,
+     "expected_leads_common": 18.7
+    },
+    "Others": {
+     "n": 37,
+     "mae_pp": 11.57,
+     "signed_bias_pp": 1.79,
+     "actual_leads": 6,
+     "called_leads": 4,
+     "expected_leads_common": 6.8
+    }
+   }
+  },
+  "candidate_engine": {
+   "wards": 123,
+   "wards_forecast": 123,
+   "leader_correct": 57,
+   "leader_accuracy": 0.4634,
+   "share_mae_pp_all_lanes": 9.28,
+   "brier_common": 0.7354,
+   "brier_common_n": 123,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 123,
+     "mae_pp": 8.25,
+     "signed_bias_pp": -0.37,
+     "actual_leads": 57,
+     "called_leads": 123,
+     "expected_leads_common": 64.2
+    },
+    "Labour": {
+     "n": 123,
+     "mae_pp": 7.72,
+     "signed_bias_pp": -3.68,
+     "actual_leads": 17,
+     "called_leads": 0,
+     "expected_leads_common": 4.8
+    },
+    "Conservative": {
+     "n": 123,
+     "mae_pp": 9.64,
+     "signed_bias_pp": 1.76,
+     "actual_leads": 20,
+     "called_leads": 0,
+     "expected_leads_common": 21.3
+    },
+    "Liberal Democrats": {
+     "n": 111,
+     "mae_pp": 8.94,
+     "signed_bias_pp": -2.52,
+     "actual_leads": 15,
+     "called_leads": 0,
+     "expected_leads_common": 4.0
+    },
+    "Green Party": {
+     "n": 119,
+     "mae_pp": 10.97,
+     "signed_bias_pp": 8.22,
+     "actual_leads": 8,
+     "called_leads": 0,
+     "expected_leads_common": 28.2
+    },
+    "Others": {
+     "n": 37,
+     "mae_pp": 12.26,
+     "signed_bias_pp": -11.24,
+     "actual_leads": 6,
+     "called_leads": 0,
+     "expected_leads_common": 0.5
+    }
+   }
+  },
+  "blend": {
+   "wards": 123,
+   "wards_forecast": 123,
+   "leader_correct": 67,
+   "leader_accuracy": 0.5447,
+   "share_mae_pp_all_lanes": 6.67,
+   "brier_common": 0.5705,
+   "brier_common_n": 123,
+   "brier_native": null,
+   "brier_native_n": 0,
+   "by_party": {
+    "Reform UK": {
+     "n": 123,
+     "mae_pp": 7.39,
+     "signed_bias_pp": -2.89,
+     "actual_leads": 57,
+     "called_leads": 74,
+     "expected_leads_common": 53.7
+    },
+    "Labour": {
+     "n": 123,
+     "mae_pp": 5.04,
+     "signed_bias_pp": -1.53,
+     "actual_leads": 17,
+     "called_leads": 17,
+     "expected_leads_common": 12.6
+    },
+    "Conservative": {
+     "n": 123,
+     "mae_pp": 7.06,
+     "signed_bias_pp": 1.06,
+     "actual_leads": 20,
+     "called_leads": 12,
+     "expected_leads_common": 20.4
+    },
+    "Liberal Democrats": {
+     "n": 111,
+     "mae_pp": 5.95,
+     "signed_bias_pp": -0.8,
+     "actual_leads": 15,
+     "called_leads": 2,
+     "expected_leads_common": 8.4
+    },
+    "Green Party": {
+     "n": 119,
+     "mae_pp": 7.28,
+     "signed_bias_pp": 5.68,
+     "actual_leads": 8,
+     "called_leads": 16,
+     "expected_leads_common": 24.5
+    },
+    "Others": {
+     "n": 37,
+     "mae_pp": 8.56,
+     "signed_bias_pp": -4.73,
+     "actual_leads": 6,
+     "called_leads": 2,
+     "expected_leads_common": 3.4
+    }
+   }
+  }
+ },
+ "all_2897_after_bridge": {
+  "model": {
+   "before": 1574,
+   "after": 1714
+  },
+  "blend": {
+   "before": 1707,
+   "after": 1850
+  },
+  "candidate_engine": {
+   "all": 1684
+  },
+  "wards": 2897,
+  "still_unscored": 81
+ }
+}

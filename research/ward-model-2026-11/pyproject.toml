@@ -1,0 +1,15 @@
+[project]
+name = "uke-ward-model-research-2026-11"
+version = "0.1.0"
+description = "Research only: all-party ward share model for English local elections, walk-forward tested on May 2026 and later by-elections."
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "pyproj>=3.7.2",
+  "scikit-learn>=1.4",
+  "shapely>=2.2.0",
+]
+
+[tool.uv]
+package = false
