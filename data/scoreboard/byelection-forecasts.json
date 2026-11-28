@@ -23,7 +23,19 @@
       "url": "https://github.com/tompickup23/ukelections/pull/185",
       "permission": "Own research.",
       "export": "data/scoreboard/research-ward-model-export-2026-11.json",
-      "export_note": "Copied unchanged, meta block included, from research/ward-model-2026-11/cache/scoreboard_export.json on branch claude/research-ward-model-all-party-b40f30 (ukelections PR 185), where it is an untracked cache file. Exported 27 November 2026."
+      "export_note": "Copied unchanged, meta block included, from research/ward-model-2026-11/cache/scoreboard_export.json on branch claude/research-ward-model-all-party-b40f30 (ukelections PR 185), where it is an untracked cache file. Exported 27 November 2026.",
+      "research": true
+    },
+    "uk-elections-research-model-live": {
+      "name": "UK Elections research ward model (live)",
+      "short_name": "Research model (live)",
+      "kind": "forecaster",
+      "research": true,
+      "description": "Research, not this site's published forecast. The all-party ward model (C2) retrained on every contest before the day it is run, and run each week on the coming council by-elections in England. Each forecast is written and pushed to GitHub before polls open and is frozen once they do. It is a separate record from the back-test.",
+      "url": "https://github.com/tompickup23/ukelections/pull/200",
+      "permission": "Own research.",
+      "export": "data/scoreboard/research-ward-model-live.json",
+      "export_note": "Copied unchanged from research/ward-model-2026-11/live/live_forecasts.json on the research branch that holds the live runner, then imported with node scripts/scoreboard-log.mjs --import-research-live. See data/scoreboard/README.md."
     }
   },
   "entries": [
@@ -6248,6 +6260,39 @@
       "status": "live"
     },
     {
+      "contest": "gosport-hardway-2026-12-03",
+      "ballot_paper_id": "local.gosport.hardway.by.2026-12-03",
+      "polling_day": "2026-12-03",
+      "council": "Gosport",
+      "ward": "Hardway",
+      "forecaster": "uk-elections-research-model-live",
+      "called_party": "Reform UK",
+      "win_chance": 0.4566,
+      "shares": {
+        "Reform UK": 0.3166,
+        "Labour": 0.086,
+        "Conservative": 0.2102,
+        "Liberal Democrats": 0.2801,
+        "Green Party": 0.0629,
+        "Others": 0.0442
+      },
+      "captured_at": "2026-11-27T23:52:05Z",
+      "source": "data/scoreboard/research-ward-model-live.json",
+      "capture_method": "research_live",
+      "basis": "research_live",
+      "research": {
+        "model_version": "ward-model-2026-11/C2",
+        "code_commit": "25c5a0df5bc8ae32898cd26b65d63b060d0acfbe",
+        "contest_files_commit": "129c58ddfd2264c8b7c30ade4ae4670b3083ca83",
+        "polls_file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+        "polls_sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+        "polls_latest_poll_date": "2026-11-23"
+      },
+      "note": "Research model, not this site's published forecast. Written by research/ward-model-2026-11/live_forecast.py (ward-model-2026-11/C2) before polls opened, with national polls to 2026-11-23.",
+      "called_leader": "Reform UK",
+      "status": "live"
+    },
+    {
       "contest": "oldham-royton-north-2026-12-03",
       "ballot_paper_id": "local.oldham.royton-north.by.2026-12-03",
       "polling_day": "2026-12-03",
@@ -6274,6 +6319,39 @@
       "status": "live"
     },
     {
+      "contest": "oldham-royton-north-2026-12-03",
+      "ballot_paper_id": "local.oldham.royton-north.by.2026-12-03",
+      "polling_day": "2026-12-03",
+      "council": "Oldham",
+      "ward": "Royton North",
+      "forecaster": "uk-elections-research-model-live",
+      "called_party": "Reform UK",
+      "win_chance": 0.7478,
+      "shares": {
+        "Reform UK": 0.4201,
+        "Labour": 0.2679,
+        "Conservative": 0.1527,
+        "Liberal Democrats": 0.0465,
+        "Green Party": 0.0441,
+        "Others": 0.0688
+      },
+      "captured_at": "2026-11-27T23:52:05Z",
+      "source": "data/scoreboard/research-ward-model-live.json",
+      "capture_method": "research_live",
+      "basis": "research_live",
+      "research": {
+        "model_version": "ward-model-2026-11/C2",
+        "code_commit": "25c5a0df5bc8ae32898cd26b65d63b060d0acfbe",
+        "contest_files_commit": "129c58ddfd2264c8b7c30ade4ae4670b3083ca83",
+        "polls_file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+        "polls_sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+        "polls_latest_poll_date": "2026-11-23"
+      },
+      "note": "Research model, not this site's published forecast. Written by research/ward-model-2026-11/live_forecast.py (ward-model-2026-11/C2) before polls opened, with national polls to 2026-11-23.",
+      "called_leader": "Reform UK",
+      "status": "live"
+    },
+    {
       "contest": "pembrokeshire-pembroke-dock-central-2026-12-08",
       "ballot_paper_id": "local.pembrokeshire.pembroke-dock-central.by.2026-12-08",
       "polling_day": "2026-12-08",
@@ -6296,7 +6374,73 @@
       "note": null,
       "called_leader": "Labour",
       "status": "live"
+    },
+    {
+      "contest": "bolton-westhoughton-south-2026-12-10",
+      "ballot_paper_id": "local.bolton.westhoughton-south.by.2026-12-10",
+      "polling_day": "2026-12-10",
+      "council": "Bolton",
+      "ward": "Westhoughton South",
+      "forecaster": "uk-elections-research-model-live",
+      "called_party": "Reform UK",
+      "win_chance": 0.454,
+      "shares": {
+        "Reform UK": 0.3446,
+        "Labour": 0.1647,
+        "Conservative": 0.0536,
+        "Liberal Democrats": 0.3427,
+        "Green Party": 0.0394,
+        "Others": 0.0548
+      },
+      "captured_at": "2026-11-27T23:52:05Z",
+      "source": "data/scoreboard/research-ward-model-live.json",
+      "capture_method": "research_live",
+      "basis": "research_live",
+      "research": {
+        "model_version": "ward-model-2026-11/C2",
+        "code_commit": "25c5a0df5bc8ae32898cd26b65d63b060d0acfbe",
+        "contest_files_commit": "129c58ddfd2264c8b7c30ade4ae4670b3083ca83",
+        "polls_file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+        "polls_sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+        "polls_latest_poll_date": "2026-11-23"
+      },
+      "note": "Research model, not this site's published forecast. Written by research/ward-model-2026-11/live_forecast.py (ward-model-2026-11/C2) before polls opened, with national polls to 2026-11-23.",
+      "called_leader": "Reform UK",
+      "status": "live"
+    },
+    {
+      "contest": "leeds-cross-gates-whinmoor-2026-12-10",
+      "ballot_paper_id": "local.leeds.cross-gates-whinmoor.by.2026-12-10",
+      "polling_day": "2026-12-10",
+      "council": "Leeds",
+      "ward": "Cross Gates & Whinmoor",
+      "forecaster": "uk-elections-research-model-live",
+      "called_party": "Labour",
+      "win_chance": 0.5931,
+      "shares": {
+        "Reform UK": 0.3163,
+        "Labour": 0.3699,
+        "Conservative": 0.1431,
+        "Liberal Democrats": 0.0492,
+        "Green Party": 0.0612,
+        "Others": 0.0603
+      },
+      "captured_at": "2026-11-27T23:52:05Z",
+      "source": "data/scoreboard/research-ward-model-live.json",
+      "capture_method": "research_live",
+      "basis": "research_live",
+      "research": {
+        "model_version": "ward-model-2026-11/C2",
+        "code_commit": "25c5a0df5bc8ae32898cd26b65d63b060d0acfbe",
+        "contest_files_commit": "129c58ddfd2264c8b7c30ade4ae4670b3083ca83",
+        "polls_file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+        "polls_sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+        "polls_latest_poll_date": "2026-11-23"
+      },
+      "note": "Research model, not this site's published forecast. Written by research/ward-model-2026-11/live_forecast.py (ward-model-2026-11/C2) before polls opened, with national polls to 2026-11-23.",
+      "called_leader": "Labour",
+      "status": "live"
     }
   ],
-  "updated_at": "2026-11-27T21:36:01.162Z"
+  "updated_at": "2026-11-27T23:54:42.429Z"
 }

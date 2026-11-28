@@ -347,7 +347,10 @@ export function scoreboardSummary(board: any): string[] {
   const c = board?.counts;
   if (!c) return [];
   const s: string[] = [];
-  const liveBlocks = (board.live || []).filter((b: any) => b.score.contests > 0);
+  // Research models are reported apart, so a research record is never read as
+  // this site's published forecast.
+  const liveBlocks = (board.live || []).filter((b: any) => b.score.contests > 0 && !b.research);
+  const researchLive = (board.live || []).filter((b: any) => b.research);
   if (liveBlocks.length) {
     const parts = liveBlocks.map((b: any) => {
       const last = b.benchmarks.find((x: any) => x.id === "last_leader");
@@ -360,8 +363,24 @@ export function scoreboardSummary(board: any): string[] {
   } else {
     s.push("No forecast recorded before polls opened has a result yet, so the live record is empty.");
   }
-  if (c.live_pending) {
-    s.push(`${cap(numberWord(c.live_pending))} more live ${c.live_pending === 1 ? "forecast is" : "forecasts are"} waiting for a result.`);
+  const sitePending = (board.live || []).filter((b: any) => !b.research).reduce((n: number, b: any) => n + b.pending, 0);
+  if (sitePending) {
+    s.push(`${cap(numberWord(sitePending))} more live ${sitePending === 1 ? "forecast is" : "forecasts are"} waiting for a result.`);
+  }
+  for (const b of researchLive) {
+    const who = `${b.name}, a research model and not this site's published forecast,`;
+    if (b.score.contests === 0) {
+      s.push(
+        b.pending === 1
+          ? `${who} has recorded one forecast before polls opened, and it has no result yet.`
+          : `${who} has recorded ${b.pending} forecasts before polls opened, and none of them has a result yet.`,
+      );
+    } else {
+      s.push(
+        `${who} recorded ${numberWord(b.score.contests)} forecasts before polls opened that now have a result, and the party it named as most likely to win led the vote in ${countOfN(b.score.called, b.score.contests)}.` +
+          (b.pending ? ` ${cap(numberWord(b.pending))} more ${b.pending === 1 ? "is" : "are"} waiting for a result.` : ""),
+      );
+    }
   }
   const retro = (board.retrospective || []).filter((b: any) => b.score.contests > 0);
   if (retro.length) {
