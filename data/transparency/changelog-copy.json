@@ -1,0 +1,505 @@
+{
+  "_about": "Reader-language copy for the public changelog at /changelog/. Keyed by pull request number. scripts/build-changelog.mjs joins this to the merged pull requests on main and writes changelog.json. Categories: data, results, model, pages, corrections. An entry with omit: true is left out of the public list (dependency bumps, CI and internal tooling) and must say why. A merged pull request with no entry here makes the script fail, so nothing reaches the page in developer language.",
+  "entries": {
+    "38": {
+      "category": "model",
+      "summary": "New forecasts for the May 2027 mayoral elections, using the supplementary vote that is being restored for them."
+    },
+    "39": {
+      "category": "pages",
+      "summary": "New polling trends page, and a hypothetical forecast for a Lancashire mayor."
+    },
+    "40": {
+      "category": "model",
+      "summary": "Lancashire reorganisation forecast rebuilt on newer data, with Blackpool's 2023 election as its base and demographic swing borrowed from similar areas."
+    },
+    "41": {
+      "category": "model",
+      "summary": "Lancashire forecast now shows drift scenarios and calibrates the mayoral second-preference vote; by-election results refresh automatically."
+    },
+    "42": {
+      "category": "pages",
+      "summary": "A dedicated page for the Mayor of Lancashire forecast."
+    },
+    "43": {
+      "category": "corrections",
+      "summary": "Lancashire forecast now says plainly where a division shared between two new councils is approximated."
+    },
+    "44": {
+      "category": "corrections",
+      "summary": "Reworded where Lancashire ward boundaries came from so the description is neutral, and made the county structure consistent across pages."
+    },
+    "45": {
+      "category": "corrections",
+      "summary": "Corrected a fact about Lancashire's districts, and stopped wide tables spilling off phone screens."
+    },
+    "46": {
+      "category": "model",
+      "summary": "A second, independent forecast method for the Lancashire unitaries built from ward demographics, with its own methodology page."
+    },
+    "49": {
+      "category": "results",
+      "summary": "Clacton by-election called at the close of poll."
+    },
+    "50": {
+      "category": "corrections",
+      "summary": "Fixed maps that drew every area as a solid rectangle."
+    },
+    "51": {
+      "category": "pages",
+      "summary": "Removed long dashes from generated text so it follows the site's house style everywhere."
+    },
+    "52": {
+      "omit": true,
+      "reason": "analytics tooling, no change readers see"
+    },
+    "53": {
+      "category": "pages",
+      "summary": "Fixed a font that the browser was blocking from loading."
+    },
+    "54": {
+      "category": "pages",
+      "summary": "All 3,785 seat pages are now listed for search engines, and ward page titles say what the page answers."
+    },
+    "55": {
+      "category": "data",
+      "summary": "Repaired the by-election results feed so weekly results are no longer lost, and backfilled Clacton and four rounds of council by-elections."
+    },
+    "56": {
+      "category": "data",
+      "summary": "Weekly by-election results are now always folded into the history the forecasts use."
+    },
+    "57": {
+      "category": "results",
+      "summary": "Ward pages now lead with the declared 7 May 2026 result."
+    },
+    "58": {
+      "category": "data",
+      "summary": "Fixed a results cache that had frozen the by-election history at 26 April."
+    },
+    "59": {
+      "category": "data",
+      "summary": "The record of the May 2026 forecast as published before polling day can be checked again."
+    },
+    "60": {
+      "category": "model",
+      "summary": "Ward forecasts now correct each party's measured historical bias, tested on elections the correction was not fitted to."
+    },
+    "61": {
+      "category": "model",
+      "summary": "Refitted the party bias correction on uncorrected forecasts, and blocked it from being fitted on already corrected ones."
+    },
+    "62": {
+      "category": "pages",
+      "summary": "Pages no longer point social media previews at images that were never made."
+    },
+    "63": {
+      "category": "model",
+      "summary": "The high, medium and low confidence label is replaced by a winner probability measured against past results."
+    },
+    "64": {
+      "category": "model",
+      "summary": "Forecast adjustments are now fitted to past results, older results count for less, and the accuracy page tracks forecasts made since."
+    },
+    "65": {
+      "omit": true,
+      "reason": "internal documentation"
+    },
+    "66": {
+      "category": "corrections",
+      "summary": "The homepage vote share strip is now labelled as our projection, not as polling."
+    },
+    "67": {
+      "category": "pages",
+      "summary": "A proper page not found screen."
+    },
+    "68": {
+      "omit": true,
+      "reason": "analytics tooling, no change readers see"
+    },
+    "69": {
+      "category": "pages",
+      "summary": "Every council by-election gets its own page with a measured projection; fixed the ward demographics behind them."
+    },
+    "70": {
+      "category": "pages",
+      "summary": "Link to the site's Facebook page."
+    },
+    "71": {
+      "category": "corrections",
+      "summary": "Corrected the privacy statement, and fixed forecast text that showed broken dashed strings."
+    },
+    "72": {
+      "category": "pages",
+      "summary": "New visual design across the site, and a contact page."
+    },
+    "73": {
+      "category": "pages",
+      "summary": "Per-page preview images, an RSS feed, and clearer labelling of forecasts that are now archived."
+    },
+    "74": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "75": {
+      "category": "corrections",
+      "summary": "By-election pages now name the most likely winner by probability rather than by the central estimate."
+    },
+    "76": {
+      "category": "pages",
+      "summary": "Two status labels no longer use party colours, and preview images now work on Instagram."
+    },
+    "79": {
+      "category": "model",
+      "summary": "Published the council by-election forecast model in full."
+    },
+    "80": {
+      "category": "data",
+      "summary": "Westminster polling average updated to fieldwork ending 24 August."
+    },
+    "81": {
+      "category": "pages",
+      "summary": "Breadcrumb trails on every page, and structured descriptions of datasets for search engines."
+    },
+    "82": {
+      "category": "corrections",
+      "summary": "Source names were being turned into broken links; they are now shown as text. The www address now redirects."
+    },
+    "83": {
+      "category": "pages",
+      "summary": "A new index of all constituencies, and limits that keep page titles readable in search results."
+    },
+    "85": {
+      "omit": true,
+      "reason": "internal test settings"
+    },
+    "86": {
+      "category": "results",
+      "summary": "By-election results for 27 August 2026, each graded against the forecast we published."
+    },
+    "87": {
+      "category": "corrections",
+      "summary": "By-elections are now graded against the forecast as published, and a gap in the 20 August scorecard is filled."
+    },
+    "88": {
+      "category": "corrections",
+      "summary": "The two by-election records on the site now agree, and three errors found in the process are corrected."
+    },
+    "89": {
+      "category": "model",
+      "summary": "Forecast probabilities are now checked across their whole range, not only for the favourite."
+    },
+    "90": {
+      "category": "corrections",
+      "summary": "Corrected a count in the forecast probability notes."
+    },
+    "91": {
+      "category": "corrections",
+      "summary": "Every council's seat total reconciled, a new locator map tile, and the accuracy claim in the menu corrected."
+    },
+    "92": {
+      "category": "results",
+      "summary": "Holborn and St Pancras by-election page, with refreshed polling and by-election results."
+    },
+    "93": {
+      "category": "pages",
+      "summary": "Links to the AI DOGE sister site."
+    },
+    "99": {
+      "category": "pages",
+      "summary": "The footer now says what the site is, who publishes it and what holds it to account."
+    },
+    "100": {
+      "category": "data",
+      "summary": "By-election contest pages are now rebuilt by the nightly update that checks they are current."
+    },
+    "101": {
+      "category": "corrections",
+      "summary": "Fixed how Scottish by-election declarations are shown."
+    },
+    "103": {
+      "category": "pages",
+      "summary": "Look up your elections by place, with data integrity checks and better routes into the site."
+    },
+    "104": {
+      "category": "data",
+      "summary": "Fixed the publishing of linked election datasets for download."
+    },
+    "105": {
+      "category": "pages",
+      "summary": "Tables now fit phone screens, and email links display correctly."
+    },
+    "106": {
+      "omit": true,
+      "reason": "internal documentation"
+    },
+    "107": {
+      "category": "data",
+      "summary": "Candidate lists that failed to download are now retried."
+    },
+    "108": {
+      "category": "corrections",
+      "summary": "Holborn and St Pancras now shows the statutory ballot paper and no longer says nominations are open."
+    },
+    "109": {
+      "category": "model",
+      "summary": "Projections now say when they rest on a starting estimate rather than local results."
+    },
+    "110": {
+      "category": "pages",
+      "summary": "Easier to find elections, clearer sources on each page, and simpler routes for voters."
+    },
+    "113": {
+      "category": "pages",
+      "summary": "Stopped a second copy of the site being served at another address."
+    },
+    "114": {
+      "category": "corrections",
+      "summary": "Each page now shows when it last changed and opens with its own summary; seat swings, which showed the whole projected share, are fixed; new region pages."
+    },
+    "115": {
+      "category": "model",
+      "summary": "Independent candidates standing as a group are scored by their best candidate in by-election baselines."
+    },
+    "116": {
+      "category": "corrections",
+      "summary": "Motherwell, Wishaw and Carluke is now placed in Scotland."
+    },
+    "117": {
+      "category": "results",
+      "summary": "Scorecard for council by-elections from 23 September to 1 October."
+    },
+    "119": {
+      "category": "data",
+      "summary": "Live data synced, missing results recovered, and the poll reader fixed."
+    },
+    "120": {
+      "category": "results",
+      "summary": "October by-election results, with presentation improvements."
+    },
+    "124": {
+      "omit": true,
+      "reason": "server housekeeping"
+    },
+    "126": {
+      "category": "corrections",
+      "summary": "Live data synced, the last good version kept if a download fails, and three by-election declarations corrected."
+    },
+    "128": {
+      "category": "results",
+      "summary": "By-elections to 22 October: verified results, the parties defending each seat, and scorecard rounds."
+    },
+    "129": {
+      "category": "pages",
+      "summary": "A calendar of next elections with verified council dates; pages that are not ready show a notice instead of an error."
+    },
+    "130": {
+      "category": "model",
+      "summary": "The May 2026 local forecast is now scored like for like against the results."
+    },
+    "131": {
+      "category": "model",
+      "summary": "Local forecast engine: what went wrong in May 2026, a protocol for testing on held-back results, and one candidate improvement."
+    },
+    "132": {
+      "category": "pages",
+      "summary": "New council by-election review page, with the September and October forecasts scored again."
+    },
+    "133": {
+      "category": "data",
+      "summary": "List of 2027 council elections: seats up, election cycle, current control and last election, each with its source."
+    },
+    "135": {
+      "category": "model",
+      "summary": "Lancashire mayor: status of the 2028 election and five fixes to the model."
+    },
+    "137": {
+      "category": "model",
+      "summary": "Greater Manchester mayoral back-test now uses the polls available at the time, with new back-tests from borough votes."
+    },
+    "139": {
+      "category": "results",
+      "summary": "By-elections to 29 October: verified results, defending parties, a scorecard round and the review."
+    },
+    "140": {
+      "category": "model",
+      "summary": "Each by-election is now paired with its own page's starting estimate when measuring swing."
+    },
+    "141": {
+      "category": "pages",
+      "summary": "Better search result snippets, a 2027 page title and a new About page."
+    },
+    "142": {
+      "category": "data",
+      "summary": "By-election contest data brought up to date using council declarations."
+    },
+    "144": {
+      "category": "model",
+      "summary": "Tested London-specific adjustments on held-back results; none was good enough to use."
+    },
+    "145": {
+      "category": "model",
+      "summary": "Tooling to rebuild the election history as it stood on any past date, for fair testing."
+    },
+    "146": {
+      "category": "model",
+      "summary": "Full forecast run on 25 April 2026 inputs, tested on held-back results; it did not pass the London test."
+    },
+    "147": {
+      "omit": true,
+      "reason": "internal decision note"
+    },
+    "148": {
+      "category": "model",
+      "summary": "Second London test protocol; it still did not pass."
+    },
+    "149": {
+      "category": "model",
+      "summary": "Third and final London test, using polls from before the cut-off; it did not pass."
+    },
+    "150": {
+      "category": "model",
+      "summary": "Published in advance how the May 2027 forecast will be judged, excluding London where the tests failed."
+    },
+    "151": {
+      "category": "corrections",
+      "summary": "By-election counts checked by hand are no longer replaced by feed figures in the nightly update."
+    },
+    "152": {
+      "category": "results",
+      "summary": "Results are now read from council declarations the morning after a by-election."
+    },
+    "154": {
+      "omit": true,
+      "reason": "repository tooling"
+    },
+    "155": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "156": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "157": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "158": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "118": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "121": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "122": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "134": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "136": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "143": {
+      "omit": true,
+      "reason": "dependency update"
+    },
+    "159": {
+      "category": "pages",
+      "summary": "Look-up pages for the 12 November by-elections."
+    },
+    "160": {
+      "category": "pages",
+      "summary": "Clearer council hub, election dates and data downloads."
+    },
+    "161": {
+      "category": "pages",
+      "summary": "Charts now have names for screen readers, the forecast page no longer jumps while loading, and the phone header fits on one line."
+    },
+    "162": {
+      "category": "pages",
+      "summary": "Ward pages with little to show are kept out of search results, and council pages now carry ward results."
+    },
+    "165": {
+      "category": "pages",
+      "summary": "Homepage puts the most important information first; dark mode and search fixed."
+    },
+    "166": {
+      "category": "model",
+      "summary": "General election forecast now shows win probabilities and seat ranges, states its assumptions and uses verified polls only."
+    },
+    "167": {
+      "category": "pages",
+      "summary": "New voter tools: a vote tracker, chances shown as countable dots, ward history, a postcode answer and a ward map."
+    },
+    "169": {
+      "category": "results",
+      "summary": "By-elections to 12 November: verified results, defending parties, scorecard rounds and the review."
+    },
+    "170": {
+      "category": "data",
+      "summary": "Lancashire reorganisation timetable updated from the government's letter of 29 October 2026."
+    },
+    "171": {
+      "category": "data",
+      "summary": "Baselines for every English and Welsh council up in 2027, with evidence for the election cycle of the 65 not yet verified."
+    },
+    "172": {
+      "category": "pages",
+      "summary": "Seat maps now use real constituency outlines, with a map on all 650 seat pages."
+    },
+    "173": {
+      "category": "corrections",
+      "summary": "Official spellings for 11 seats whose names had been made from their web address."
+    },
+    "174": {
+      "category": "pages",
+      "summary": "Council maps now use real ward and council outlines."
+    },
+    "175": {
+      "category": "pages",
+      "summary": "Maps drawn for the 23 councils that had none."
+    },
+    "176": {
+      "category": "pages",
+      "summary": "Stopped email links being rewritten on the page, so updated pages can be sent to search engines again."
+    },
+    "177": {
+      "category": "results",
+      "summary": "By-elections of 19 November: five council declarations, four still to come."
+    },
+    "178": {
+      "category": "data",
+      "summary": "Sources for the 26 November by-elections prepared before polling day."
+    },
+    "179": {
+      "category": "pages",
+      "summary": "Fixes for readers: closed candidate lists, county divisions and by-election page titles."
+    },
+    "180": {
+      "category": "results",
+      "summary": "By-elections of 19 November: the last four results."
+    },
+    "183": {
+      "category": "model",
+      "summary": "A pre-registered side-by-side test of a new by-election swing method; no published forecast changes."
+    },
+    "198": {
+      "category": "results",
+      "summary": "A by-election forecaster scoreboard comparing published forecasts with results."
+    },
+    "201": {
+      "category": "data",
+      "summary": "Sourced records of which party is defending each seat at by-elections and at councils electing by thirds."
+    }
+  }
+}

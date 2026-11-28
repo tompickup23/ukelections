@@ -172,6 +172,7 @@ const STATIC_PATHS = [
   "/coverage/",
   "/past-results/by-region/",
   "/transparency/",
+  "/changelog/",
   "/contact/",
   "/about/"
 ] as const;

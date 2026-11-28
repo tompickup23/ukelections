@@ -56,6 +56,10 @@ export const PUBLISHED_DATA: PublishedFile[] = [
     label: "Machine-readable analysis of the May 2025 council elections",
   },
   {
+    path: "transparency/changelog.json",
+    label: "Public changelog: every change merged into the site since August 2026",
+  },
+  {
     path: "transparency/may-2026-postaudit-2026-05-10.json",
     label: "May 2026 forecast post-audit scored against the declared results",
   },

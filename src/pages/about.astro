@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { publisherNode } from "../lib/seo";
+import { authorNode, publisherNode } from "../lib/seo";
 import { SITE_URL } from "../lib/site";
 
 // Every statement here is already made elsewhere on the site: the footer
-// (who runs it), /sources/ and /methodology/ (inputs and model), /terms/
+// (who runs it, word for word in the author section), /sources/ and /methodology/ (inputs and model), /terms/
 // (what the site is not) and /contact/ (corrections). Keep it that way: this
 // page gathers them, it does not add claims of its own.
 const CONTACT_EMAIL = "info@ukelections.co.uk";
@@ -17,7 +17,7 @@ const structuredData = [
     name: "About UK Elections",
     url: `${SITE_URL}/about/`,
     publisher: publisherNode(),
-    author: { "@type": "Person", name: "Tom Pickup", url: `${SITE_URL}/about/` },
+    author: authorNode(),
   },
 ];
 ---
@@ -37,12 +37,30 @@ const structuredData = [
     </p>
   </section>
 
-  <section class="section prose-block">
-    <h2>Who runs it</h2>
+  <section class="section prose-block" id="author" aria-labelledby="author-title">
+    <h2 id="author-title">Who runs it</h2>
     <p>
-      The site is run by Tom Pickup, a Lancashire county councillor and Reform UK member. No party, council,
-      candidate or election authority has any say over what appears here. The same model rules apply to every
-      party, and every forecast is graded against the declared result once it is in.
+      UK Elections is an independent research project by Tom Pickup, a Lancashire county councillor and Reform UK
+      member. No party, council, candidate or election authority has any say over what appears here.
+    </p>
+    <h3>What the author does on the site</h3>
+    <p>
+      The author runs the site: the forecast models, the public data that feeds them and the pages that publish them. The
+      same model rules apply to every party, the assumptions and code are published in full, and every forecast is
+      graded against the declared result once it is in. Every change that reaches the site is listed, with a link
+      to its public record, in the <a href="/changelog/">changelog</a>.
+    </p>
+    <h3>How corrections are made</h3>
+    <p>
+      When a published figure, label or claim is wrong, it is corrected on the page and the correction is noted.
+      Corrections are also listed on their own in the <a href="/changelog/">changelog</a>, so the record of what
+      was fixed, and when, stays public. To report an error, follow the
+      <a href="/contact/#corrections">corrections policy</a>.
+    </p>
+    <h3>How to get in touch</h3>
+    <p>
+      Email <!--email_off--><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><!--/email_off-->, or use the
+      <a href="/contact/">contact page</a>.
     </p>
   </section>
 
