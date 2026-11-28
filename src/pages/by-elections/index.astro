@@ -1,6 +1,7 @@
 ---
 import CouncilResultsTable from "../../components/CouncilResultsTable.astro";
 import CouncilRoundup from "../../components/CouncilRoundup.astro";
+import ForecastRecordStrip from "../../components/ForecastRecordStrip.astro";
 import { loadLocalHub, partyScorecard } from "../../lib/byElections";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { partyColour } from "../../lib/predictions";
@@ -149,6 +150,7 @@ const leaderboard: Lead[] = [
     <p>{nextDay ? <>Next council by-election date: <strong>{prettyDate(nextDay)}</strong>. <a href="/by-elections/local/#upcoming">See the upcoming polls</a>.</> : "No future council by-election date is recorded in the current data."}</p>
     {latest.length > 0 ? <CouncilResultsTable contests={latest} /> : <p>No recent council results are recorded.</p>}
     <p><a href="/by-elections/local/">All council results and upcoming polls</a></p>
+    <ForecastRecordStrip heading="How council by-election forecasts have done" />
   </section>
   <section class="section" id="parliamentary">
     <h2>Parliamentary by-elections</h2>

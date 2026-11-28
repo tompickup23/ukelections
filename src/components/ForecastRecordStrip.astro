@@ -1,0 +1,171 @@
+---
+/**
+ * ForecastRecordStrip.astro. The compact "how forecasts have done" strip,
+ * read from the forecaster ledger (data/scoreboard/byelection-forecasts.json).
+ *
+ *   <ForecastRecordStrip />                 running record of every forecaster
+ *   <ForecastRecordStrip contest={d} />     on a contest page: who called this
+ *                                           one if it has a result, otherwise
+ *                                           the running record
+ *
+ * One component for every page that shows it, so the figures cannot drift
+ * apart. Live and retrospective records are never added together, and every
+ * figure carries its count.
+ */
+import { shortPartyLabel } from "../lib/siteData";
+import {
+  SCOREBOARD_PATH,
+  countOf,
+  loadScoreboard,
+  scoreboardContestCalls,
+} from "../lib/byelectionScoreboard";
+
+interface Props {
+  contest?: any;
+  heading?: string;
+}
+const { contest = null, heading = "How forecasts have done" } = Astro.props;
+const board = loadScoreboard();
+const laneLabel = (lane: string | null) => (lane ? (lane === "Others" ? "Others" : shortPartyLabel(lane)) : "");
+
+const here = contest ? scoreboardContestCalls(contest) : null;
+const showCalls = Boolean(here?.record.scorable && here.calls.length);
+const leaderLabel = here?.record.leader ? laneLabel(here.record.leader) : "";
+const pollStillToCome = contest ? new Date().toISOString().slice(0, 10) <= contest.contest.polling_day : false;
+
+const live = board.live.filter((b: any) => b.score.contests > 0);
+const retro = board.retrospective.filter((b: any) => b.score.contests > 0);
+---
+
+<aside class="record-strip" aria-label={heading}>
+  <p class="record-strip-head">{showCalls ? "Who called it" : heading}</p>
+  {showCalls ? (
+    <>
+      <ul class="record-strip-list">
+        {here!.calls.map((x: any) => (
+          <li>
+            <span class="record-name">{x.name}</span>
+            <span class={`record-chip record-chip--${x.status}`}>{x.status === "live" ? "live" : x.basis === "back_test" ? "back-test" : "retrospective"}</span>
+            had {laneLabel(x.called_leader)} ahead:
+            <strong class={x.right ? "record-right" : "record-wrong"}>{x.right ? "right" : "wrong"}</strong>
+          </li>
+        ))}
+        {here!.benchmarks.map((b: any) => (
+          <li class="record-bench">
+            <span class="record-name">{b.name}</span>
+            <span class="record-chip record-chip--benchmark">benchmark</span>
+            {b.called_leader ? (
+              <>
+                {laneLabel(b.called_leader)}:
+                <strong class={b.right ? "record-right" : "record-wrong"}>{b.right ? "right" : "wrong"}</strong>
+              </>
+            ) : (
+              <span class="record-na">no record to call from</span>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p class="record-strip-foot">
+        {leaderLabel} led the vote here, with independents and smaller parties pooled as Others.
+        <a href={SCOREBOARD_PATH}>See every forecaster's record on the by-election scoreboard</a>.
+      </p>
+    </>
+  ) : (
+    <>
+      <ul class="record-strip-list">
+        {live.map((b: any) => (
+          <li>
+            <span class="record-name">{b.name}</span>
+            <span class="record-chip record-chip--live">live</span>
+            called the leading party in <strong>{countOf(b.score.called, b.score.contests)}</strong>
+          </li>
+        ))}
+        {live.length === 0 && <li>No forecast recorded before polls opened has a result yet.</li>}
+        {live[0] && live[0].benchmarks.filter((x: any) => x.id === "last_leader" && x.score.contests).map((x: any) => (
+          <li class="record-bench">
+            <span class="record-name">{x.name}</span>
+            <span class="record-chip record-chip--benchmark">benchmark</span>
+            <strong>{countOf(x.score.called, x.score.contests)}</strong> on the same contests
+          </li>
+        ))}
+        {retro.length > 0 && (
+          <li class="record-retro">
+            <span class="record-chip record-chip--retrospective">retrospective</span>
+            {retro.map((b: any) => `${b.short_name ?? b.name} ${countOf(b.score.called, b.score.contests)}`).join("; ")}
+          </li>
+        )}
+      </ul>
+      <p class="record-strip-foot">
+        {contest && pollStillToCome && "Forecasts for this contest are logged before polls open and scored once the result is declared. "}
+        <a href={SCOREBOARD_PATH}>Council by-election forecast scoreboard: every forecaster on the same contests</a>.
+      </p>
+    </>
+  )}
+</aside>
+
+<style>
+  .record-strip {
+    margin: var(--space-lg) 0;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--space-2xs);
+    background: var(--surface-muted);
+    font-size: var(--text-small);
+  }
+  .record-strip-head {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--eyebrow-ink);
+  }
+  .record-strip-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
+  }
+  .record-name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .record-chip {
+    display: inline-block;
+    margin: 0 var(--space-2xs);
+    padding: 0 var(--space-2xs);
+    border: 1px solid var(--border);
+    border-radius: var(--space-2xs);
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+  .record-chip--live {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .record-chip--benchmark {
+    border-style: dashed;
+  }
+  .record-right {
+    color: var(--status-good-text);
+  }
+  .record-wrong {
+    color: var(--status-bad-text);
+  }
+  .record-na {
+    color: var(--muted);
+  }
+  .record-strip-foot {
+    margin: var(--space-xs) 0 0;
+    color: var(--ink-soft);
+  }
+  .record-strip-foot a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+</style>

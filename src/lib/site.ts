@@ -61,6 +61,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { href: "/past-results/by-region/", label: "By Region", desc: "Reform UK share heatmap across the 12 regions" },
       { href: "/forecasts/may-2026/", label: "Council Elections 2026", desc: ACCURACY_HEADLINE },
       { href: "/data-quality/", label: "Accuracy record", desc: "Every forecast graded, including the misses" },
+      { href: "/by-elections/scoreboard/", label: "By-election scoreboard", desc: "Council by-election forecasts scored on the same contests, beside simple benchmarks" },
     ],
   },
   {
@@ -144,6 +145,7 @@ const STATIC_PATHS = [
   "/by-elections/local/",
   "/by-elections/post-mortem/",
   "/by-elections/barometer/",
+  "/by-elections/scoreboard/",
   "/by-elections/makerfield/",
   "/by-elections/aberdeen-south/",
   "/by-elections/arbroath-and-broughty-ferry/",
@@ -210,6 +212,13 @@ export const SEARCH_ENTRIES: SearchEntry[] = [
     kind: "page",
     description: "Every scheduled council by-election in Great Britain, with the candidates, the reason the seat fell vacant, how the ward last voted, and a projection wherever the ward gives an honest baseline. The method's record on every council by-election since May 2025 is published alongside it.",
     priority: 111
+  },
+  {
+    href: "/by-elections/scoreboard/",
+    title: "Council by-election predictions: forecaster scoreboard",
+    kind: "page",
+    description: "How accurate council by-election forecasts have been: every recorded forecast scored on the same contests, forecasts made before polls opened kept apart from those made after, beside two simple benchmarks.",
+    priority: 110
   },
   {
     href: "/by-elections/clacton/",

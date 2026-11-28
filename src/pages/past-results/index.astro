@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import PartyBars from "../../components/PartyBars.astro";
 import StatCard from "../../components/StatCard.astro";
+import ForecastRecordStrip from "../../components/ForecastRecordStrip.astro";
 import {
   loadMay7Control,
   loadMay7Postaudit,
@@ -358,6 +359,7 @@ const reformMajorities = (ctl.councils as any[])
       <p class="eyebrow">More accuracy</p>
       <h2>Other backtests on record</h2>
     </div>
+    <ForecastRecordStrip heading="How council by-election forecasts have done" />
     <div class="feature-list">
       <article>
         <h3>2024 general election backtest</h3>

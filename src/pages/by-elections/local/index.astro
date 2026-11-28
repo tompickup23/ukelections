@@ -7,6 +7,7 @@ import CouncilResultsTable from "../../../components/CouncilResultsTable.astro";
 import ByElectionFilters from "../../../components/ByElectionFilters.astro";
 import { archiveYears, loadLocalHub } from "../../../lib/byElections";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ForecastRecordStrip from "../../../components/ForecastRecordStrip.astro";
 import { partyColour } from "../../../lib/predictions";
 import { shortPartyLabel } from "../../../lib/siteData";
 const { contests, upcoming, held, latest, earlier, meta } = loadLocalHub();
@@ -53,7 +54,8 @@ const gradedRight = graded.filter((c) => c.result.grading.call_correct).length;
   </section>
 
 
-  <nav class="journey-shortcuts" aria-label="By-election sections"><a href="#latest-results">Latest results</a> · <a href="/by-elections/this-week/">This week</a> · <a href="#upcoming">Upcoming polls</a> · <a href="/by-elections/archive/">Results archive</a> · <a href="/by-elections/post-mortem/">How our forecasts did</a></nav>
+  <nav class="journey-shortcuts" aria-label="By-election sections"><a href="#latest-results">Latest results</a> · <a href="/by-elections/this-week/">This week</a> · <a href="#upcoming">Upcoming polls</a> · <a href="/by-elections/archive/">Results archive</a> · <a href="/by-elections/post-mortem/">How our forecasts did</a> · <a href="/by-elections/scoreboard/">Forecaster scoreboard</a></nav>
+  <ForecastRecordStrip />
   <ByElectionFilters contests={contests} />
   {latest.length > 0 && (
     <section class="card" id="latest-results" data-contest-group>

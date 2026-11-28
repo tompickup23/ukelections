@@ -5,6 +5,7 @@
  * Built nightly, so "this week" is the seven days to the build.
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ForecastRecordStrip from "../../components/ForecastRecordStrip.astro";
 import { councilByElectionWeek, isDeclared, loadLocalContests } from "../../lib/byElections";
 import { partyColour } from "../../lib/predictions";
 import { shortPartyLabel } from "../../lib/siteData";
@@ -45,6 +46,7 @@ const right = graded.filter((c) => c.result.grading.call_correct).length;
         : `${week.held.length} contest${week.held.length === 1 ? "" : "s"}, ${declared} declared.`}
       {graded.length > 0 && ` Our pre-poll forecasts named the winner in ${right} of ${graded.length}.`}
     </p>
+    <ForecastRecordStrip heading="How forecasts have done so far" />
   </section>
 
   {week.held.length > 0 && (
