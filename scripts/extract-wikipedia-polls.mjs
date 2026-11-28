@@ -12,8 +12,12 @@
  * so a run is reproducible from the revision id.
  *
  * Two date styles are read. Pages with {{opdrts}} rows (the 2024 and next
- * general election pages) take the original path below, whose output is
- * locked by tests/wikipedia-polls-plain-dates.test.mjs. Pages with no
+ * general election pages) take the original path below. It reads the 2020
+ * table's Brexit Party column, rows whose cells are shared with the row above
+ * (rowspan), and the odd row whose dates are written as text; it skips tables
+ * that are not under a year heading. tests/wikipedia-polls-plain-dates.test.mjs
+ * says which committed extracts are unchanged by that and which are frozen
+ * beside a corrected copy. Pages with no
  * {{opdrts}} rows at all (the 2017 and 2019 general election pages) take
  * extractPlainPolls, which reads plain-text dates, keeps UKIP, Brexit Party
  * and Change UK as their own keys, and adds a "counts" block saying how many
@@ -21,7 +25,7 @@
  *
  * Usage:
  *   node scripts/extract-wikipedia-polls.mjs --wikitext=<file> --page=<title>
- *     --revid=<id> --from=YYYY-MM-DD --to=YYYY-MM-DD [--out=<path>]
+ *     --revid=<id> --from=YYYY-MM-DD --to=YYYY-MM-DD [--section=<name>] [--counts] [--out=<path>]
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -84,6 +88,45 @@ function pct(v) {
   return m[1] ? 0 : Number(m[2]) / 100;
 }
 
+// The {{opdrts}} header list adds the 2020 table's Brexit Party column,
+// written "[[Reform UK|Brx]]" on the 2024 page. It is its own key: folding it
+// into Reform UK is a modelling decision made elsewhere. Before this entry the
+// header was skipped but its data cell was not, so every 2020 row stored the
+// Brexit Party figure under "Plaid Cymru".
+const OPDRTS_HEADER_PARTY = [...HEADER_PARTY, [/\|Brx\]\]/, "Brexit Party"]];
+
+// Leading attributes of a data cell, as in 'rowspan="2" |GB' or the 2019
+// election row's 'rowspan="2" {{opdrts|...}}', which has no pipe after them.
+const CELL_ATTRS_RE = /^\s*((?:(?:style|class|data-sort-value|colspan|rowspan|align)\s*=\s*(?:"[^"]*"|[^\s|"]+)\s*)+)/;
+function cellSpans(raw) {
+  const head = raw.match(CELL_ATTRS_RE)?.[1] ?? "";
+  const num = (name) => Number(head.match(new RegExp(`${name}\\s*=\\s*"?(\\d+)`))?.[1] || 1);
+  return { rowspan: num("rowspan"), colspan: num("colspan") };
+}
+
+export function newOpdrtsStats() {
+  return {
+    date_format: "opdrts",
+    tables_read: 0,
+    tables_skipped_outside_year_sections: 0,
+    rows_seen: 0,
+    event_rows: 0,
+    election_result_rows: 0,
+    date_unparsed: { count: 0, examples: [] },
+    outside_window: 0,
+    found_in_window: 0,
+    kept: 0,
+    dropped: {
+      short_row: { count: 0, examples: [] },
+      area_not_gb_or_uk: { count: 0, areas: {} },
+      share_unparsed: { count: 0, examples: [] },
+    },
+    rows_with_cells_from_row_above: 0,
+    rows_with_dates_written_as_text: 0,
+    year_corrected_from_section: 0,
+  };
+}
+
 export function extractPolls(wikitext, { from, to, section = null, stats = null }) {
   let source = wikitext;
   // A sub-national section, such as "==== London ====", up to the next heading of the same depth.
@@ -100,61 +143,137 @@ export function extractPolls(wikitext, { from, to, section = null, stats = null 
   // The choice is made for the whole page, so a page with {{opdrts}} rows, such
   // as the 2024 page, never reaches the plain-text path.
   if (!/\{\{opdrts\|/.test(text)) return extractPlainPolls(text, { from, to, section, stats });
+  const s = newOpdrtsStats();
   const polls = [];
   const chunks = text.split(/\n\{\|/);
-  // Tables sit under "=== YYYY ===" headings. A row whose template year
-  // disagrees with its section (a typo on the page, such as "31|2|Feb|2025"
-  // in the 2026 table) takes the section year and is flagged.
+  // National tables sit under "=== YYYY ===" headings. A row whose template
+  // year disagrees with its section (a typo on the page, such as
+  // "31|2|Feb|2025" in the 2026 table) takes the section year and is flagged.
+  // Without --section, a table under any other heading is not a national
+  // table and is skipped: on the 2024 page the "Non-geographical samples"
+  // tables (ethnic minority, Muslim, Jewish, renter, young voters, GB News
+  // viewers) sit under their own headings, carry Area GB, and used to be read
+  // as national polls with their dates forced into the year 2020.
+  const lastHeading = (str) => { const all = [...str.matchAll(/^(={2,6})\s*(.*?)\s*\1\s*$/gm)]; return all.length ? all[all.length - 1][2] : undefined; };
   const headingYear = (s) => { const all = [...s.matchAll(/^===\s*(\d{4})\s*===\s*$/gm)]; return all.length ? Number(all[all.length - 1][1]) : null; };
   let sectionYear = headingYear(chunks[0]);
+  let heading = lastHeading(chunks[0]);
   for (const table of chunks.slice(1)) {
     const tableYear = sectionYear;
+    const tableHeading = heading;
     const tail = table.split(/\n\|\}/).slice(1).join("\n|}");
     sectionYear = headingYear(tail) ?? sectionYear;
+    heading = lastHeading(tail) ?? heading;
     const body = table.split(/\n\|\}/)[0];
     const rows = body.split(/\n\|-[^\n]*/);
     const header = rows[0];
     const cols = [];
     for (const line of header.split("\n")) {
       if (!line.startsWith("!")) continue;
-      const hit = HEADER_PARTY.find(([re]) => re.test(line));
+      const hit = OPDRTS_HEADER_PARTY.find(([re]) => re.test(line));
       if (hit) cols.push(hit[1]);
     }
     if (!cols.length || !/Pollster/.test(header)) continue;
+    if (!section && !/^\d{4}$/.test(tableHeading ?? "")) { s.tables_skipped_outside_year_sections++; continue; }
+    s.tables_read++;
     // National tables carry an Area column before the sample size; sub-national ones do not.
     const hasArea = /\|\s*Area\s*$/m.test(header);
     const offset = hasArea ? 5 : 4;
+    // A cell with rowspan="N" fills the same column in the N-1 data rows below
+    // it, most often one Area cell ("GB") shared by a run of polls. Those rows
+    // are one cell short in the wikitext, so each row is laid out on the
+    // table's column grid before it is read.
+    const carry = [];
     for (const row of rows.slice(1)) {
       const cells = row.split("\n").filter((l) => l.startsWith("|") && !l.startsWith("|}")).map((l) => l.slice(1));
-      if (cells.length < offset + cols.length) continue;
-      let end = fieldworkEnd(cells[0]);
+      if (!cells.length) continue;
+      const spans = cells.map(cellSpans);
+      // A political event written across the table ("Nigel Farage becomes
+      // leader of Reform UK"). Cells merged from above still cover it.
+      if (spans.some((c) => c.colspan >= 6)) {
+        s.event_rows++;
+        for (const c of carry) if (c?.left > 0) c.left--;
+        continue;
+      }
+      s.rows_seen++;
+      const grid = [];
+      let fromAbove = false;
+      let k = 0;
+      for (let col = 0; k < cells.length || carry[col]?.left > 0; ) {
+        if (carry[col]?.left > 0) { grid[col] = carry[col].cell; carry[col].left--; fromAbove = true; col++; continue; }
+        const cell = { raw: cells[k], ...spans[k], spanStart: col };
+        k++;
+        for (let j = 0; j < cell.colspan; j++) {
+          grid[col + j] = cell;
+          if (cell.rowspan > 1) carry[col + j] = { cell, left: cell.rowspan - 1 };
+        }
+        col += cell.colspan;
+      }
+      const dateCell = grid[0]?.raw ?? "";
+      const pollster = plainText(cellValue(grid[1]?.raw ?? ""));
+      if (/general election/i.test(pollster)) { s.election_result_rows++; continue; }
+      let end = fieldworkEnd(dateCell);
       let yearCorrected = false;
-      if (end && tableYear && Number(end.slice(0, 4)) !== tableYear) { end = `${tableYear}${end.slice(4)}`; yearCorrected = true; }
-      if (!end || end < from || end > to) continue;
-      const area = hasArea ? plainText(cellValue(cells[3])) : section;
-      if (hasArea && area !== "GB" && area !== "UK") continue;
+      // A few rows on {{opdrts}} pages write their dates as text ("18 Jun",
+      // "9 Apr", a dash, "29 May"); they are read the way the plain-text pages are,
+      // with the year from the section heading, and flagged.
+      let textDates = null;
+      let textCell = null;
+      if (!end) {
+        // Page dashes in a date range are written as "to" (house style); the parser reads either.
+        textCell = plainText(cellValue(dateCell).replace(CELL_ATTRS_RE, "")).replace(/\s*[\u2013\u2014]\s*/g, " to ").replace(/\s+/g, " ");
+        textDates = plainFieldwork(textCell, tableYear);
+        if (!textDates) { s.date_unparsed.count++; note(s.date_unparsed.examples, { section: tableYear, cell: plainText(dateCell).slice(0, 80) }); continue; }
+        end = textDates.end;
+      } else if (tableYear && Number(end.slice(0, 4)) !== tableYear) { end = `${tableYear}${end.slice(4)}`; yearCorrected = true; }
+      if (end < from || end > to) { s.outside_window++; continue; }
+      s.found_in_window++;
+      const needed = offset + cols.length;
+      if (grid.length < needed || grid.slice(0, needed).some((c) => !c)) {
+        s.dropped.short_row.count++;
+        note(s.dropped.short_row.examples, { fieldwork_end: end, pollster, cells: grid.length, needed });
+        continue;
+      }
+      const area = hasArea ? plainText(cellValue(grid[3].raw)) : section;
+      if (hasArea && area !== "GB" && area !== "UK") {
+        s.dropped.area_not_gb_or_uk.count++;
+        s.dropped.area_not_gb_or_uk.areas[area] = (s.dropped.area_not_gb_or_uk.areas[area] || 0) + 1;
+        continue;
+      }
       const shares = {};
-      let ok = true;
+      let bad = null;
       cols.forEach((p, i) => {
-        const v = pct(cellValue(cells[offset + i]));
-        if (v === undefined) ok = false;
+        const cell = grid[offset + i];
+        // One figure printed across two parties cannot be given to either.
+        const v = cell.colspan > 1 ? undefined : pct(cellValue(cell.raw));
+        if (v === undefined) bad ??= { party: p, text: plainText(cellValue(cell.raw)).slice(0, 40) };
         else if (v != null) shares[p] = v;
       });
-      if (!ok) continue;
-      const startDay = cells[0].match(/\{\{opdrts\|([^}]*)\}\}/)[1].split("|")[0];
+      if (bad) {
+        s.dropped.share_unparsed.count++;
+        note(s.dropped.share_unparsed.examples, { fieldwork_end: end, pollster, ...bad });
+        continue;
+      }
+      if (fromAbove) s.rows_with_cells_from_row_above++;
+      if (yearCorrected) s.year_corrected_from_section++;
+      if (textDates) s.rows_with_dates_written_as_text++;
+      s.kept++;
+      const startDay = textDates ? String(Number(textDates.start.slice(8))) : dateCell.match(/\{\{opdrts\|([^}]*)\}\}/)[1].split("|")[0];
       polls.push({
         fieldwork_end: end,
-        fieldwork_cell: plainText(cells[0].replace(/\{\{opdrts\|([^}]*)\}\}/, (_, x) => x.split("|").filter((t) => t && t !== "year").join(" "))),
+        fieldwork_cell: textDates ? textCell : plainText(cellValue(dateCell).replace(CELL_ATTRS_RE, "").replace(/\{\{opdrts\|([^}]*)\}\}/, (_, x) => x.split("|").filter((t) => t && t !== "year").join(" "))),
         fieldwork_start_day: startDay || null,
-        pollster: plainText(cellValue(cells[1])),
-        client: plainText(cellValue(cells[2])),
+        ...(textDates ? { fieldwork_start: textDates.start, date_written_as_text: true } : {}),
+        pollster,
+        client: plainText(cellValue(grid[2].raw)),
         area,
-        sample: Number(plainText(cellValue(cells[offset - 1])).replace(/[^0-9]/g, "")) || null,
+        sample: Number(plainText(cellValue(grid[offset - 1].raw)).replace(/[^0-9]/g, "")) || null,
         shares,
         ...(yearCorrected ? { year_corrected_from_section: true } : {}),
       });
     }
   }
+  if (stats) Object.assign(stats, s);
   return polls.sort((a, b) => (a.fieldwork_end < b.fieldwork_end ? -1 : a.fieldwork_end > b.fieldwork_end ? 1 : a.pollster.localeCompare(b.pollster)));
 }
 
@@ -462,13 +581,16 @@ const PLAIN_MEAN_PARTIES = ["Brexit Party", "Change UK", "Conservative", "Green 
 
 /**
  * The whole output file as an object. Pages read by the plain-text path also
- * get a "counts" block (rows found, kept and dropped, and why); {{opdrts}}
- * pages get exactly the shape they always had.
+ * get a "counts" block (rows found, kept and dropped, and why). {{opdrts}}
+ * pages get exactly the shape they always had unless counts is set (the
+ * --counts flag), so files committed before the block existed regenerate
+ * unchanged. Brexit Party joins the mean only when a poll in the window has it.
  */
-export function buildExtract(wikitext, { page, revid, from, to, section = null }) {
+export function buildExtract(wikitext, { page, revid, from, to, section = null, counts = false }) {
   const stats = {};
   const polls = extractPolls(wikitext, { from, to, section, stats });
   const plain = stats.date_format === "plain text";
+  const parties = plain ? PLAIN_MEAN_PARTIES : polls.some((p) => p.shares["Brexit Party"] != null) ? [...MEAN_PARTIES, "Brexit Party"] : MEAN_PARTIES;
   return {
     source: {
       publisher: "Wikipedia",
@@ -479,8 +601,8 @@ export function buildExtract(wikitext, { page, revid, from, to, section = null }
     },
     window: { fieldwork_end_from: from, fieldwork_end_to: to, ...(section ? { section } : {}) },
     extracted_by: "scripts/extract-wikipedia-polls.mjs",
-    mean: pollsterBalancedMean(polls, plain ? PLAIN_MEAN_PARTIES : MEAN_PARTIES),
-    ...(plain ? { counts: stats } : {}),
+    mean: pollsterBalancedMean(polls, parties),
+    ...(plain || counts ? { counts: stats } : {}),
     polls,
   };
 }
@@ -488,7 +610,7 @@ export function buildExtract(wikitext, { page, revid, from, to, section = null }
 function main() {
   const args = Object.fromEntries(process.argv.slice(2).map((a) => { const m = a.match(/^--([^=]+)=(.*)$/); return m ? [m[1], m[2]] : [a.replace(/^--/, ""), true]; }));
   for (const k of ["wikitext", "page", "revid", "from", "to"]) if (!args[k]) throw new Error(`--${k} is required`);
-  const out = buildExtract(readFileSync(args.wikitext, "utf8"), { page: args.page, revid: args.revid, from: args.from, to: args.to, section: args.section || null });
+  const out = buildExtract(readFileSync(args.wikitext, "utf8"), { page: args.page, revid: args.revid, from: args.from, to: args.to, section: args.section || null, counts: Boolean(args.counts) });
   const json = JSON.stringify(out, null, 2) + "\n";
   if (args.out) writeFileSync(path.resolve(args.out), json);
   else process.stdout.write(json);
