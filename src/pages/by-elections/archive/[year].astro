@@ -12,6 +12,7 @@ const local = loadLocalContests().filter(past).sort((a,b)=>b.contest.polling_day
 const parliament = loadParliamentContests().filter(past).sort((a,b)=>b.contest.polling_day.localeCompare(a.contest.polling_day));
 const roundup = JSON.parse(readFileSync("data/results/local-byelections.json","utf8"));
 // Retain sourced roundup-only coverage without inventing detail URLs or repeating rows.
+const dayLinks = [...new Set(local.map((d:any)=>d.contest.polling_day as string))];
 const additional = roundup.dates.filter((d:any)=>d.date.startsWith(year)).map((d:any)=>({...d,contests:d.contests.filter((c:any)=>!roundupHref(d.date,c,local))})).filter((d:any)=>d.contests.length);
 ---
 <BaseLayout title={`${year} UK by-election results archive`} description={`Parliamentary and council by-election results covered by UK Elections in ${year}. Browse winners, polling dates, councils and source-linked result pages.`}
@@ -21,6 +22,7 @@ const additional = roundup.dates.filter((d:any)=>d.date.startsWith(year)).map((d
     <ul>{parliament.map(d=><li><a href={`/by-elections/${d.fileSlug}/`}>{d.contest.constituency_name}</a> · {prettyElectionDate(d.contest.polling_day)} · {isDeclared(d) ? d.result.outcome || d.result.winner_candidate || "Result declared" : "Result awaited"}</li>)}</ul>
   </section>
   <section class="section"><h2>Council by-elections</h2>
+    {dayLinks.length > 0 && <p>By polling day: {dayLinks.map((date, i) => <>{i > 0 && " · "}<a href={`/by-elections/week/${date}/`}>{prettyElectionDate(date)}</a></>)}</p>}
     <ByElectionFilters contests={local} />
     <div class="table-scroll" role="region" aria-label={`${year} council results`} tabindex="0">
       <table class="seat-table"><thead><tr><th>Polling date</th><th>Ward</th><th>Council</th><th>Winner / status</th></tr></thead>

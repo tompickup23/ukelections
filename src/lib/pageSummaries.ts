@@ -374,3 +374,59 @@ export function scoreboardSummary(board: any): string[] {
   if (!c.outside_entries) s.push("No outside forecaster's calls have been added yet.");
   return s;
 }
+
+/* ------------------------------------------------------------------ */
+/* Council by-election polling days                                    */
+/* ------------------------------------------------------------------ */
+
+const numberWords = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const nWord = (n: number) => numberWords[n] ?? String(n);
+/** "the contest", "both contests", "all six contests". */
+const allOf = (n: number, noun: string) => (n === 1 ? `the ${noun}` : n === 2 ? `both ${noun}s` : `all ${nWord(n)} ${noun}s`);
+const listAnd = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}` : xs[0] ?? "");
+
+/**
+ * The opening of /by-elections/week/<date>/, from the polling day the page
+ * renders (buildPollingDays in byElectionDays.ts). Counts of contests, seats
+ * and candidates only, each with its denominator; parties named as the
+ * contests name them, ordered by seats won. Councils are named; candidates
+ * never are.
+ */
+export function pollingDaySummary(day: any): string[] {
+  if (!day?.contests?.length) return [];
+  const n: number = day.contests.length;
+  const date = prettyDate(day.date);
+  const councils = day.councils.length > 6
+    ? `${day.councils.length} councils, among them ${listAnd(day.councils.slice(0, 4))}`
+    : listAnd(day.councils);
+  const what = `${cap(nWord(n))} council ${n === 1 ? "by-election" : "by-elections"}`;
+  const s: string[] = [];
+  if (day.phase === "upcoming") {
+    s.push(`${what} ${n === 1 ? "is" : "are"} due on ${date}, in ${councils}.`);
+    const listed = day.candidates === 0
+      ? "No candidates are listed yet"
+      : `${day.candidates} ${day.candidates === 1 ? "candidate is" : "candidates are"} listed so far`;
+    const forecast = day.forecasts === 0
+      ? "no forecast is published yet"
+      : `a forecast is published for ${day.forecasts === n ? allOf(n, "contest") : `${nWord(day.forecasts)} of the ${nWord(n)}`}`;
+    s.push(`${listed}, and ${forecast}.`);
+    return s;
+  }
+  s.push(`${what} ${n === 1 ? "was" : "were"} held on ${date}, in ${councils}.`);
+  if (day.declared === 0) {
+    s.push(`No result has been declared here yet; each contest shows its candidates and the forecast published before the poll.`);
+    return s;
+  }
+  const counts = (day.tally || []).filter((t: any) => t.won > 0).map((t: any) => `${countLabel(t.party)} ${t.won}`);
+  s.push(
+    `${day.declared === n ? (n === 1 ? "The result has been declared" : `${cap(allOf(n, "result"))} have been declared`) : `${cap(nWord(day.declared))} of the ${nWord(n)} results ${day.declared === 1 ? "has" : "have"} been declared`}. Seats won: ${listAnd(counts)}.`,
+  );
+  if (day.changeKnown) {
+    s.push(
+      `Where the previous holder is recorded, ${day.changedHands === 0 ? "no seat changed hands" : `${nWord(day.changedHands)} ${day.changedHands === 1 ? "seat" : "seats"} changed hands`} in ${day.changeKnown === day.declared ? (day.declared === 1 ? "the one contest" : day.declared === 2 ? "both contests" : `all ${nWord(day.declared)} contests`) : `${nWord(day.changeKnown)} of the ${nWord(day.declared)} declared contests`}.`,
+    );
+  } else {
+    s.push("The previous holder is not recorded for any declared contest, so no hold or gain is given.");
+  }
+  return s;
+}

@@ -9,6 +9,7 @@ import "../../../styles/by-election-details.css";
  * instead, which is the precedent set by the Clacton page.
  */
 import { localMetadata, isDeclared, candidateFieldNote } from "../../../lib/byElections";
+import { dayPathForContest } from "../../../lib/byElectionDays";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MiniMap from "../../../components/MiniMap.astro";
 import PartyBars from "../../../components/PartyBars.astro";
@@ -257,6 +258,7 @@ const breadcrumbs: Crumb[] = [
     {resultSummary.length > 0 && <p class="result-summary">{resultSummary[0]}</p>}
     <p class="meta-row journey-shortcuts">
       <a href="/by-elections/local/">All council by-elections</a>
+      {dayPathForContest(d) && <><span aria-hidden="true"> · </span><a href={dayPathForContest(d)}>All contests on {prettyDate(c.polling_day)}</a></>}
       {wardHref && <><span aria-hidden="true"> · </span><a href={wardHref}>Open the {c.ward_name} {area.one} page</a></>}
     </p>
   </section>

@@ -1,0 +1,80 @@
+---
+/**
+ * Every council by-election polling day we hold a contest for, newest first,
+ * each linking to its stable dated page.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { prettyElectionDate } from "../../../lib/byElections";
+import { loadPollingDays } from "../../../lib/byElectionDays";
+
+const days = loadPollingDays();
+const today = new Date().toISOString().slice(0, 10);
+const upcoming = days.filter((d) => d.phase === "upcoming").reverse();
+const held = days.filter((d) => d.phase !== "upcoming");
+const maxContests = Math.max(1, ...days.map((d) => d.contests.length));
+const contestsTotal = days.reduce((n, d) => n + d.contests.length, 0);
+const status = (d: (typeof days)[number]) =>
+  d.phase === "declared" ? "All declared" : d.phase === "part-declared" ? `${d.declared} of ${d.contests.length} declared` : d.phase === "awaited" ? "Results awaited" : "Upcoming";
+const councils = (list: string[]) => (list.length > 4 ? `${list.slice(0, 4).join(", ")} and ${list.length - 4} more` : list.join(", "));
+const sections = [
+  { id: "upcoming", heading: "Coming up", rows: upcoming },
+  { id: "results", heading: "Results by polling day", rows: held },
+].filter((s) => s.rows.length);
+---
+
+<BaseLayout
+  title="Council by-election results by polling day"
+  description={`Council by-election results and upcoming polls, one page per polling day: ${days.length} days and ${contestsTotal} contests, with winners, holds, gains and forecasts.`}
+  breadcrumbs={[
+    { name: "By-elections", href: "/by-elections/" },
+    { name: "Council by-elections", href: "/by-elections/local/" },
+    { name: "By polling day", href: "/by-elections/week/" },
+  ]}
+>
+  <section class="page-hero compact-hero">
+    <h1>Council by-elections by polling day</h1>
+    <p class="lede">
+      One page for every day a council by-election we track polls on, with the result of each contest once it is
+      declared and the candidates and forecast before. {days.length} polling days, {contestsTotal} contests.
+    </p>
+    <p class="note">Our coverage, not a complete register of every UK council by-election. <a href="/by-elections/this-week/">This week</a> · <a href="/by-elections/local/">All council by-elections</a> · <a href="/by-elections/archive/">Archive by year</a></p>
+  </section>
+
+  {sections.map((s) => (
+    <section id={s.id} aria-labelledby={`${s.id}-h`}>
+      <h2 id={`${s.id}-h`}>{s.heading}</h2>
+      <div class="table-scroll" role="region" aria-label={s.heading} tabindex="0">
+        <table class="day-table">
+          <thead><tr><th scope="col">Polling day</th><th scope="col">Contests</th><th scope="col">Status</th><th scope="col">Councils</th></tr></thead>
+          <tbody>
+            {s.rows.map((d) => (
+              <tr>
+                <th scope="row"><a href={d.path}>{prettyElectionDate(d.date)}</a></th>
+                <td>
+                  <span class="count-bar" aria-hidden="true"><span style={`width:${((d.contests.length / maxContests) * 100).toFixed(0)}%`}></span></span>
+                  {d.contests.length}
+                </td>
+                <td>{status(d)}</td>
+                <td class="councils">{councils(d.councils)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+  <p class="note" data-discovery-ignore>Statuses as of the build on {prettyElectionDate(today)}.</p>
+</BaseLayout>
+
+<style>
+  .compact-hero { max-width: none; padding-block: var(--space-xl) var(--space-lg); }
+  .compact-hero h1 { font-size: var(--text-h1); }
+  .compact-hero .lede { font-size: var(--text-body); max-width: 70ch; margin-top: var(--space-md); }
+  .note { color: var(--muted); font-size: var(--text-small); }
+  .day-table { width: 100%; border-collapse: collapse; margin-block: var(--space-md) var(--space-xl); }
+  .day-table th, .day-table td { text-align: left; padding: var(--space-xs); border-bottom: 1px solid var(--border); vertical-align: top; }
+  .day-table tbody th { font-weight: 600; white-space: nowrap; }
+  .count-bar { display: inline-block; width: var(--space-3xl); height: var(--space-xs); margin-right: var(--space-xs); background: var(--surface-muted); vertical-align: middle; }
+  .count-bar span { display: block; height: 100%; background: var(--accent); }
+  .councils { color: var(--muted); font-size: var(--text-small); }
+</style>
