@@ -234,7 +234,7 @@ const description = `How the council by-election projections are built: the ward
       with no code in the feature file (often new boundaries), and contests whose candidates are
       not yet published, which it retries the next week. Each forecast names the model version,
       the code commit, the polls file and the time it was written; it is written before polls
-      open at 07:00 on polling day and is frozen once they do.
+      open at 07:00 UK time on polling day and is frozen once they do.
       {wardExport.source_last_run_captured_at && ` At its latest run it forecast ${numberWord(wardForecastCount)} ${wardForecastCount === 1 ? "contest" : "contests"} and skipped ${numberWord(wardSkipped.length)}: ${numberWord(skipCount("outside_england"))} outside England, ${numberWord(skipCount("no_ward_code_in_feature_file"))} with no ward code and ${numberWord(skipCount("no_published_candidate_list"))} with no published candidates (source: data/forecasts/ward-model-byelections.json).`}
     </p>
     <h3>Its record, kept apart</h3>

@@ -11,6 +11,7 @@
  */
 import PartyBars from "./PartyBars.astro";
 import { shortPartyLabel } from "../lib/siteData";
+import { partyProse } from "../lib/pageSummaries";
 import { captureLabel, forecastsDisagreeSentence, type WardModelRecord } from "../lib/wardModelForecasts";
 
 interface Props {
@@ -36,6 +37,8 @@ const rows = Object.entries(ward.shares)
     annotation: typeof ward.win_chance[party] === "number" ? chanceIn20(ward.win_chance[party]) : null,
   }));
 
+// "A", "A and B", "A, B and C".
+const listProse = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
 const leader = ward.called_leader;
 const leaderShare = (ward.shares[leader] * 100).toFixed(1);
 const byChance = Object.entries(ward.win_chance).sort((a, b) => b[1] - a[1]);
@@ -62,7 +65,7 @@ const commitUrl = `https://github.com/tompickup23/ukelections/commit/${ward.code
   {disagree && <p class="ward-model-disagree">{disagree}</p>}
   <PartyBars rows={rows} large={true} />
   {ward.others_parties.length > 0 && (
-    <p class="ward-model-note">Others pools {ward.others_parties.join(" and ")} on this ballot.</p>
+    <p class="ward-model-note">Others pools {listProse(ward.others_parties.map((p) => partyProse(p)))} on this ballot.</p>
   )}
   <p class="ward-model-note">
     The figure beside each bar is the model's win chance. It comes from a fixed spread for each lane and has not been calibrated against results, so read it as rough.
