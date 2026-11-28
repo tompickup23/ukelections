@@ -324,6 +324,20 @@ const { constituencies: constituencyIndex, councils: councilIndex } = loadAreaLo
       }
     });
 
+    // The homepage hands a query over in the URL fragment (#q=...), which the
+    // browser never sends to the server. Run it once, then drop the fragment so
+    // the postcode is not left in the address bar or the history entry.
+    const handed = /^#q=(.+)$/.exec(window.location.hash);
+    if (handed) {
+      let value = "";
+      try { value = decodeURIComponent(handed[1]).trim().slice(0, 80); } catch { value = ""; }
+      history.replaceState(null, "", window.location.pathname);
+      if (value) {
+        input.value = value;
+        form.requestSubmit();
+      }
+    }
+
     let inputDebounce: ReturnType<typeof setTimeout> | undefined;
     input.addEventListener("input", function () {
       void loadIndex().catch(() => {});
