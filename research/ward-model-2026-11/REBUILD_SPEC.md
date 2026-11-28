@@ -85,3 +85,38 @@ The cache PR 197 used, copied read only from `research-ward-model-all-party-b40f
 `REBUILD_RESULTS.md` will give, for C0 and C2, ward leaders called and share error (mean absolute error over all lanes, percentage points) per election and pooled, old (committed `results/bridge_level_summary.json`) against corrected; whether C2 still meets the four rules of PR 197 (pooled more leaders; pooled error no higher; at least as many leaders in four of six years; no year worse by more than 1% of its wards); by-elections likewise.
 
 **What counts as moving.** A headline moves if leaders called change by more than 10 wards in any year or pooled, or share error by more than 0.05 points. Any earlier result built on the old extract (PRs 191, 193, 197, 202, 203) is then named as needing a rerun; none is rerun here.
+
+## Amendment, 28 November 2026 (before any corrected build, fit or score)
+
+Written after run 1 and before run 2. Nothing below has been run when this is committed. It changes the inputs of runs 2 and 3, not the method: the model, its settings, the cuts, the test sets, the forecastable-row rule and the scoring are as above.
+
+**Why.** Check P3 on run 1 also failed on PR 197's `bridge_level_polls_2024-07-05_to_2025-04-14.json`: 11 polls there have no area (`area` null). They are not national samples. Six are Welsh polls (each carries a Plaid Cymru share of 13 to 27%) and five are London polls (Savanta for QMUL or Centre for London). All 11 were pooled into the Great Britain anchor. The hand-over note counted them as seven Welsh and four London; reading the file gives six and five, and the total of 11 is unchanged.
+
+| Fieldwork end | Pollster | Client | Area |
+|---|---|---|---|
+| 24 Aug 2024 | Survation | YesCymru | Wales |
+| 10 Sep 2024 | YouGov | Barn Cymru | Wales |
+| 13 Sep 2024 | YouGov | ITV Cymru Wales / Cardiff University | Wales |
+| 30 Sep 2024 | More in Common | none given | Wales |
+| 4 Nov 2024 | Survation | Reform UK | Wales |
+| 10 Dec 2024 | YouGov | Cardiff University | Wales |
+| 8 Jul 2024 | Savanta | QMUL | London |
+| 7 Nov 2024 | Savanta | Centre for London | London |
+| 11 Nov 2024 | Savanta | QMUL | London |
+| 21 Dec 2024 | Savanta | QMUL | London |
+| 23 Dec 2024 | Savanta | QMUL | London |
+
+**Rule 1. Sub-national polls are excluded from the Great Britain anchor.** The 11 polls above are dropped before any anchor is computed.
+
+**Rule 2. Blank, not filled.** Any contest date whose anchor then rests on fewer than three polls carrying any lane it anchors, in the 14 day window and then the 21 day window, is left blank (no anchor, so the row neither trains nor is forecast). It is not filled from a longer window, a neighbouring date, the July 2024 general election result or any estimate. This is the existing rule, stated again because removing polls can only blank dates, never anchor new ones.
+
+**Rule 3. The area check runs on every polling file the rebuild reads**, not only the bridge file: the three PR 192 files, the 2019 to 2024 extract (old or PR 199), the bridge file and the 2025 to 2026 file. A poll is kept only if its `area` is `GB` or `UK`; every other value, null included, is excluded and listed by file in the manifest (new check P6, which fails if any excluded poll is still loaded). `data/polling/timeseries.json`, which `prepare.py` reads for 2026, has no area field, so it cannot be checked by area; P6 reports that and applies the P3 test to it (no Plaid Cymru share above 0.03, no SNP share above 0.08) as the nearest available check.
+
+**UK samples stay pooled.** The question of taking UK-sample polls out of the Great Britain series (the rule the site uses for its general election series) was raised and not adopted here: the owner's decision for this rebuild names only the sub-national polls, and the specification pools GB and UK samples on purpose. A GB-only rerun would need its own pre-registered amendment, and an area field in `timeseries.json` first.
+
+**Runs.** Two configurations, each built once, fitted once and scored once:
+
+- `rebuild.py --polls pr199`: the PR 199 extract only, the bridge file as committed (the specification's original run 2). P3 is expected to fail on the bridge file alone; any P3 fault in another file still stops the build.
+- `rebuild.py --polls corrected`: the PR 199 extract and rules 1 to 3. Every check must pass.
+
+The "old inputs" column of the results is the committed PR 197 summary, `results/bridge_level_summary.json`; run 1 showed the rebuild reproduces its dataset exactly, so it is not refitted. `rebuild_fit_score.py --polls <pr199|corrected>` writes `results/rebuild_bridge_level_summary_<polls>.json`. `REBUILD_RESULTS.md` reports the three side by side, with the contest dates and rows that went blank in each.
