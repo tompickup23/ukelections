@@ -18,6 +18,8 @@ import VoteTracker from "../../../components/VoteTracker.astro";
 import ChanceDots from "../../../components/ChanceDots.astro";
 import HistoryStrip from "../../../components/HistoryStrip.astro";
 import ForecastRecordStrip from "../../../components/ForecastRecordStrip.astro";
+import WardModelForecast from "../../../components/WardModelForecast.astro";
+import { LEAD_BYELECTION_FORECAST, wardModelFor, resultComparison } from "../../../lib/wardModelForecasts";
 import { contestFromCandidates, orderContests } from "../../../lib/wardHistory";
 import { loadHistory, loadMay7ResultForWard } from "../../../lib/predictions";
 import { partyColour } from "../../../lib/predictions";
@@ -164,6 +166,13 @@ const leader = forecast?.winner ?? null;
 const leaderProb = forecast?.leader_probability ?? null;
 const tooClose = Boolean(forecast?.too_close_to_call);
 
+// The research ward model's live forecast, where the runner wrote one before
+// polls opened (data/forecasts/ward-model-byelections.json). Null for every
+// other contest, which then renders exactly as it did without it.
+const wardModel = wardModelFor(d.slug);
+const wardModelLeads = LEAD_BYELECTION_FORECAST === "ward-model" && Boolean(wardModel);
+const bothAgainstResult = resultComparison(d, wardModel);
+
 // The stratum key is machine-readable; this is the human sentence for it.
 function stratumLabel(stratum: string): string {
   const [era, entry] = String(stratum).split("|");
@@ -242,7 +251,7 @@ const breadcrumbs: Crumb[] = [
         <MiniMap
           focalCode={c.ward_gss}
           focalKind="ward"
-          focalColour={result?.winner_party ? partyColour(result.winner_party) : leader && !tooClose ? partyColour(leader) : undefined}
+          focalColour={result?.winner_party ? partyColour(result.winner_party) : wardModelLeads && !declared ? partyColour(wardModel!.called_leader) : leader && !tooClose ? partyColour(leader) : undefined}
           ariaLabel={`Location of ${c.ward_name} ${area.one}`}
         />
       </div>
@@ -267,7 +276,7 @@ const breadcrumbs: Crumb[] = [
     {declared && <a href="#result">Result</a>}
     {!declared && pollStillToCome && voteTimetable && <a href="#your-vote">Your vote</a>}
     <a href="#candidates">Candidates{result?.declared ? " and votes" : ""}</a>
-    {!declared && forecast && <a href="#projection">Projection</a>}
+    {!declared && wardModel && wardModelLeads && <a href="#ward-model">Ward model</a>}{!declared && forecast && <a href="#projection">Projection</a>}{!declared && wardModel && !wardModelLeads && <a href="#ward-model">Ward model</a>}
     {wardHistory.length > 0 && <a href="#history">History</a>}
     {prior && <a href="#previous-result">Previous result</a>}
     <a href="#sources">Sources</a>
@@ -304,6 +313,31 @@ const breadcrumbs: Crumb[] = [
           {result.grading.graded_against !== "forecast_as_published" && " No saved pre-poll forecast is available; this is not a published forecast score."}
           {" "}Mean absolute error across the parties standing: {pp1(result.grading.mae_pp)}pp.
         </p>
+      )}{bothAgainstResult && (
+        <div class="both-forecasts">
+          <style is:inline>.both-forecasts { border-top: 1px solid var(--border); padding-top: var(--space-sm); } .both-forecasts h3 { font-size: var(--text-body); }</style>
+          <h3>Both forecasts against the result</h3>
+          <p class="note">
+            Votes pooled into six lanes, with independents and smaller parties as Others, as the
+            <a href="/by-elections/scoreboard/">by-election scoreboard</a> scores them.
+            {bothAgainstResult.site && ` This site's projection had ${bothAgainstResult.site.leader === "Others" ? "Others" : shortPartyLabel(bothAgainstResult.site.leader)} ahead, which ${bothAgainstResult.site.right ? "matched" : "did not match"} the leading lane; mean error ${pp1(bothAgainstResult.site.mae_pp)}pp across the lanes.`}
+            {` The research ward model (${wardModel!.model_version}) had ${bothAgainstResult.ward.leader === "Others" ? "Others" : shortPartyLabel(bothAgainstResult.ward.leader)} ahead, which ${bothAgainstResult.ward.right ? "matched" : "did not match"} the leading lane; mean error ${pp1(bothAgainstResult.ward.mae_pp)}pp across the lanes.`}
+          </p>
+          <div class="by-election-scroll" role="region" aria-label="Both forecasts against the result" tabindex="0"><table>
+            <caption>Share of the vote by lane: the result, this site's projection and the research ward model</caption>
+            <thead><tr><th scope="col">Lane</th><th scope="col">Result</th>{bothAgainstResult.site && <th scope="col">Site projection</th>}<th scope="col">Ward model</th></tr></thead>
+            <tbody>
+              {bothAgainstResult.rows.map((r) => (
+                <tr>
+                  <td><span class="party-chip" style={`--chip:${partyColour(r.lane)}`}>{r.lane === "Others" ? "Others" : shortPartyLabel(r.lane)}</span></td>
+                  <td>{pct1(r.actual)}%</td>
+                  {bothAgainstResult.site && <td>{pct1(r.site)}%</td>}
+                  <td>{pct1(r.ward)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table></div>
+        </div>
       )}
     </section>
   )}
@@ -374,7 +408,7 @@ const breadcrumbs: Crumb[] = [
     )}
   </section>
 
-  {forecast && !declared && (
+  {!declared && wardModel && wardModelLeads && <WardModelForecast ward={wardModel} siteForecast={forecast} />}{forecast && !declared && (
     <section class="card" id="projection">
       <h2>{tooClose ? "Too close to call" : `${shortPartyLabel(leader)} favoured`}</h2>
       <p class="lede">
@@ -464,7 +498,7 @@ const breadcrumbs: Crumb[] = [
     </section>
   )}
 
-  <ForecastRecordStrip contest={d} />
+  {!declared && wardModel && !wardModelLeads && <WardModelForecast ward={wardModel} siteForecast={forecast} />}<ForecastRecordStrip contest={d} />
 
   {wardHistory.length > 0 && (
     <section class="card" id="history">

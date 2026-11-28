@@ -9,6 +9,8 @@ import {
   SIGMA_INFLATION,
   TOO_CLOSE_TO_CALL,
 } from "../../../../scripts/lib/local-byelection-model.mjs";
+import { loadWardModelExport } from "../../../lib/wardModelForecasts";
+import { loadScoreboard, countOf } from "../../../lib/byelectionScoreboard";
 
 const ROOT = process.cwd();
 const meta = JSON.parse(
@@ -21,6 +23,15 @@ const cmp = meta.method_comparison ?? null;
 const pct = (x: number | null | undefined, dp = 0) =>
   typeof x === "number" ? (x * 100).toFixed(dp) : "n/a";
 const pp = (x: number | null | undefined) => (typeof x === "number" ? x.toFixed(1) : "n/a");
+
+// The research ward model: what the contest pages show beside this method.
+const wardExport = loadWardModelExport();
+const wardForecastCount = Object.keys(wardExport.forecasts || {}).length;
+const wardSkipped = Object.values(wardExport.skipped || {}) as string[];
+const skipCount = (reason: string) => wardSkipped.filter((r) => r === reason).length;
+const wardLive = loadScoreboard().live.find((b: any) => b.forecaster === "uk-elections-research-model-live") ?? null;
+const RESEARCH_TREE = "https://github.com/tompickup23/ukelections/blob/main/research/ward-model-2026-11";
+const numberWord = (n: number) => ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n] ?? String(n);
 
 const description = `How the council by-election projections are built: the ward's own last result, moved by swing measured only from comparable by-elections (same era, same Reform-entry condition), with the full ${rec.n}-contest record and the pooled comparison published.`;
 ---
@@ -199,6 +210,64 @@ const description = `How the council by-election projections are built: the ward
       projections are written to, so they cannot drift apart. Every contest, one page each:
       <a href="/by-elections/local/">the live list</a>.
     </p>
+
+    <h2 id="ward-model">The research ward model</h2>
+    <p>
+      Some contest pages show a second forecast beside this one, labelled as the research ward
+      model. It is research, not this site's published forecast, and the two are never blended.
+      Where they name different leading parties, the page says so in one sentence.
+    </p>
+    <p>
+      The ward model predicts every party's share in a ward at once, from the ward's latest
+      earlier result, its Census profile and deprivation, its region, which parties are standing
+      there and how widely each party is standing that day, and a national anchor: the mean of
+      Great Britain Westminster polls in the 14 days to the latest poll before the run. It is retrained on every
+      council contest dated before the day it is run. Its shares are pooled into six lanes:
+      Reform UK, Labour, Conservative, Liberal Democrats, Green Party, and Others for independents
+      and every smaller party. Its win chances come from a fixed spread for each lane and have
+      not been calibrated against results, unlike the probabilities this page describes above.
+    </p>
+    <p>
+      It runs once a week, by hand, before the coming polling day. It covers council by-elections
+      in England whose ward has an ONS code in its ward feature file and whose statement of
+      persons nominated has been published. It skips the rest: contests outside England, wards
+      with no code in the feature file (often new boundaries), and contests whose candidates are
+      not yet published, which it retries the next week. Each forecast names the model version,
+      the code commit, the polls file and the time it was written; it is written before polls
+      open at 07:00 on polling day and is frozen once they do.
+      {wardExport.source_last_run_captured_at && ` At its latest run it forecast ${numberWord(wardForecastCount)} ${wardForecastCount === 1 ? "contest" : "contests"} and skipped ${numberWord(wardSkipped.length)}: ${numberWord(skipCount("outside_england"))} outside England, ${numberWord(skipCount("no_ward_code_in_feature_file"))} with no ward code and ${numberWord(skipCount("no_published_candidate_list"))} with no published candidates (source: data/forecasts/ward-model-byelections.json).`}
+    </p>
+    <h3>Its record, kept apart</h3>
+    <p>
+      The <a href="/by-elections/scoreboard/">by-election scoreboard</a> counts a forecast as live
+      only if it was written before polls opened, and everything else as retrospective. The two
+      are never added together.
+    </p>
+    <ul>
+      <li>
+        <strong>Live.</strong>{" "}
+        {wardLive
+          ? wardLive.score.contests > 0
+            ? `Of its forecasts written before polls opened that now have a result, it called the leading lane in ${countOf(wardLive.score.called, wardLive.score.contests)}${wardLive.pending ? `; ${numberWord(wardLive.pending)} more ${wardLive.pending === 1 ? "is" : "are"} waiting for a result` : ""}.`
+            : `${numberWord(wardLive.pending).replace(/^./, (c) => c.toUpperCase())} ${wardLive.pending === 1 ? "forecast has" : "forecasts have"} been written before polls opened, and none has a result yet, so there is no live record.`
+          : "No forecast written before polls opened has been recorded yet."}
+        {" "}Source: the scoreboard ledger, data/scoreboard/byelection-forecasts.json, forecaster "UK Elections research ward model (live)".
+      </li>
+      <li>
+        <strong>Retrospective back-test.</strong> Run in November 2026 on the 107 English council
+        by-elections polled between 11 June and 19 November 2026 that have a result, each forecast from a fit on
+        contests dated before the first of that contest's month, the model (version C2) called the
+        leading lane in 68 of 107 (63.6%), with a mean share error of 6.66 points. Source:{" "}
+        <a href={`${RESEARCH_TREE}/OOT_CENSUS_REGION_RESULTS.md`}>OOT_CENSUS_REGION_RESULTS.md</a>,
+        table "Leaders called and share error", 28 November 2026. In the research note's comparison
+        on the same 107 contests, this site's by-election forecast called 58, with a share error of
+        7.54 points. Source: <a href={`${RESEARCH_TREE}/README.md`}>README.md</a>, section
+        "Results: council by-elections after 7 May 2026". These were not published before the polls
+        and are not a live record. The back-test ran on the corrected inputs of the 28 November 2026
+        rebuild; the weekly runner still reads the base dataset from before that correction, whose
+        sha256 every forecast records.
+      </li>
+    </ul>
   </section>
 </BaseLayout>
 
