@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "generated_at": "2026-11-27T04:36:03.088Z",
   "slug": "bromsgrove-marlbrook-2026-11-26",
-  "status": "polls_closed",
+  "status": "concluded",
   "contest": {
     "ballot_paper_id": "local.bromsgrove.marlbrook.by.2026-11-26",
     "polling_day": "2026-11-26",
@@ -51,37 +51,47 @@
       {
         "name": "Lockie Carbery",
         "party_name": "Green Party",
+        "votes": 16,
+        "elected": false,
         "party": "Green Party",
-        "votes": null,
-        "elected": null
+        "source": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+        "accessed_at": "2026-11-28"
       },
       {
         "name": "Geraint Wynn Lewis",
         "party_name": "Labour Party",
+        "votes": 64,
+        "elected": false,
         "party": "Labour",
-        "votes": null,
-        "elected": null
+        "source": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+        "accessed_at": "2026-11-28"
       },
       {
         "name": "Cathy Perruzza",
         "party_name": "Conservative and Unionist Party",
+        "votes": 325,
+        "elected": false,
         "party": "Conservative",
-        "votes": null,
-        "elected": null
+        "source": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+        "accessed_at": "2026-11-28"
       },
       {
         "name": "Nik Price",
         "party_name": "Reform UK",
+        "votes": 326,
+        "elected": true,
         "party": "Reform UK",
-        "votes": null,
-        "elected": null
+        "source": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+        "accessed_at": "2026-11-28"
       },
       {
         "name": "Kim Angela Routley",
         "party_name": "Liberal Democrats",
+        "votes": 228,
+        "elected": false,
         "party": "Liberal Democrats",
-        "votes": null,
-        "elected": null
+        "source": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+        "accessed_at": "2026-11-28"
       }
     ]
   },
@@ -349,9 +359,49 @@
     ]
   },
   "no_forecast_reason": null,
-  "result": null,
+  "result": {
+    "declared": true,
+    "shares": {
+      "Reform UK": 0.33993743482794575,
+      "Labour": 0.0667361835245047,
+      "Conservative": 0.33889468196037537,
+      "Liberal Democrats": 0.23774765380604795,
+      "Green Party": 0.016684045881126174,
+      "SNP": 0,
+      "Plaid Cymru": 0,
+      "Restore Britain": 0,
+      "Independent": 0,
+      "Other": 0
+    },
+    "winner_party": "Reform UK",
+    "winner_candidate": "Nik Price",
+    "winner_party_name": "Reform UK",
+    "winner_votes": 326,
+    "runner_up_party": "Conservative",
+    "majority_votes": 1,
+    "total_votes": 959,
+    "source": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+    "outcome": null,
+    "grading": {
+      "graded_against": "forecast_as_published",
+      "published_captured_at": "2026-11-14",
+      "winner_basis": "named_on_the_page",
+      "projected_winner": "Conservative",
+      "call_correct": false,
+      "mae_pp": 14.547403545359748
+    },
+    "checked_at": "2026-11-28",
+    "accessed_at": "2026-11-28",
+    "review_status": "hand_verified_declaration",
+    "note": "Bromsgrove declaration of result, read by scripts/results-morning.mjs on 2026-11-28: 5 candidate counts total 959 valid votes; 3 rejected papers make 962. Reconciled on ballot papers: 959 valid + 3 rejected = 962; issued 962; turnout: 962 of 2372 is 40.56%; printed 40.56%."
+  },
   "declaration": null,
   "sources": [
+    {
+      "label": "Returning officer declaration (verified)",
+      "url": "https://www.bromsgrove.gov.uk/media/fpkghvhj/marlbrook-notice-of-result.pdf",
+      "accessed_at": "2026-11-28"
+    },
     {
       "label": "Democracy Club, EveryElection",
       "url": "https://elections.democracyclub.org.uk/elections/local.bromsgrove.marlbrook.by.2026-11-26/"
@@ -360,5 +410,7 @@
       "label": "Democracy Club, candidates",
       "url": "https://candidates.democracyclub.org.uk/elections/local.bromsgrove.marlbrook.by.2026-11-26/"
     }
-  ]
+  ],
+  "result_updated_at": "2026-11-28",
+  "results_updated_at": "2026-11-28"
 }
