@@ -1,0 +1,3939 @@
+{
+ "run": {
+  "fit_seconds": 1938,
+  "lane_jobs": 490,
+  "cuts": 91,
+  "s1_from": "2024-08-01",
+  "c2_reproduction_max_abs_offset_difference": 0.0,
+  "input_coverage_scheduled": {
+   "2019-05-02": {
+    "rows": 1678,
+    "cou_ref_prev_off_present": 0,
+    "ge24_reform_present": 1678
+   },
+   "2021-05-06": {
+    "rows": 2255,
+    "cou_ref_prev_off_present": 0,
+    "ge24_reform_present": 2255
+   },
+   "2022-05-05": {
+    "rows": 2533,
+    "cou_ref_prev_off_present": 882,
+    "ge24_reform_present": 2511
+   },
+   "2023-05-04": {
+    "rows": 1734,
+    "cou_ref_prev_off_present": 944,
+    "ge24_reform_present": 1734
+   },
+   "2025-05-01": {
+    "rows": 1399,
+    "cou_ref_prev_off_present": 168,
+    "ge24_reform_present": 1399
+   },
+   "2026-05-07": {
+    "rows": 2576,
+    "cou_ref_prev_off_present": 1877,
+    "ge24_reform_present": 2575
+   }
+  },
+  "total_seconds": 1952
+ },
+ "sets": {
+  "may_2019": {
+   "rows": 1678,
+   "arms": {
+    "c2": {
+     "leaders_called": 1375,
+     "wards_forecast": 1678,
+     "share_mae_pp_all_lanes": 6.18,
+     "brier_common": 0.267,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": null,
+       "mae_pp": null
+      },
+      "Labour": {
+       "called_leads": 713,
+       "actual_leads": 671,
+       "signed_bias_pp": 2.13,
+       "mae_pp": 5.78
+      },
+      "Conservative": {
+       "called_leads": 593,
+       "actual_leads": 523,
+       "signed_bias_pp": 1.81,
+       "mae_pp": 6.05
+      },
+      "Liberal Democrats": {
+       "called_leads": 251,
+       "actual_leads": 274,
+       "signed_bias_pp": 0.08,
+       "mae_pp": 5.92
+      },
+      "Green Party": {
+       "called_leads": 28,
+       "actual_leads": 42,
+       "signed_bias_pp": -3.92,
+       "mae_pp": 4.67
+      },
+      "Others": {
+       "called_leads": 93,
+       "actual_leads": 168,
+       "signed_bias_pp": -2.79,
+       "mae_pp": 9.1
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 0,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0
+     }
+    },
+    "s1": {
+     "leaders_called": 1375,
+     "wards_forecast": 1678,
+     "share_mae_pp_all_lanes": 6.18,
+     "brier_common": 0.267,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": null,
+       "mae_pp": null
+      },
+      "Labour": {
+       "called_leads": 713,
+       "actual_leads": 671,
+       "signed_bias_pp": 2.13,
+       "mae_pp": 5.78
+      },
+      "Conservative": {
+       "called_leads": 593,
+       "actual_leads": 523,
+       "signed_bias_pp": 1.81,
+       "mae_pp": 6.05
+      },
+      "Liberal Democrats": {
+       "called_leads": 251,
+       "actual_leads": 274,
+       "signed_bias_pp": 0.08,
+       "mae_pp": 5.92
+      },
+      "Green Party": {
+       "called_leads": 28,
+       "actual_leads": 42,
+       "signed_bias_pp": -3.92,
+       "mae_pp": 4.67
+      },
+      "Others": {
+       "called_leads": 93,
+       "actual_leads": 168,
+       "signed_bias_pp": -2.79,
+       "mae_pp": 9.1
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 0,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0
+     }
+    },
+    "s2": {
+     "leaders_called": 1375,
+     "wards_forecast": 1678,
+     "share_mae_pp_all_lanes": 6.18,
+     "brier_common": 0.267,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": null,
+       "mae_pp": null
+      },
+      "Labour": {
+       "called_leads": 713,
+       "actual_leads": 671,
+       "signed_bias_pp": 2.13,
+       "mae_pp": 5.78
+      },
+      "Conservative": {
+       "called_leads": 593,
+       "actual_leads": 523,
+       "signed_bias_pp": 1.81,
+       "mae_pp": 6.05
+      },
+      "Liberal Democrats": {
+       "called_leads": 251,
+       "actual_leads": 274,
+       "signed_bias_pp": 0.08,
+       "mae_pp": 5.92
+      },
+      "Green Party": {
+       "called_leads": 28,
+       "actual_leads": 42,
+       "signed_bias_pp": -3.92,
+       "mae_pp": 4.67
+      },
+      "Others": {
+       "called_leads": 93,
+       "actual_leads": 168,
+       "signed_bias_pp": -2.79,
+       "mae_pp": 9.1
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 0,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0
+     }
+    }
+   },
+   "groups": {}
+  },
+  "may_2021": {
+   "rows": 2255,
+   "arms": {
+    "c2": {
+     "leaders_called": 1713,
+     "wards_forecast": 2106,
+     "share_mae_pp_all_lanes": 6.04,
+     "brier_common": 0.2752,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": null,
+       "mae_pp": null
+      },
+      "Labour": {
+       "called_leads": 799,
+       "actual_leads": 702,
+       "signed_bias_pp": 3.96,
+       "mae_pp": 6.67
+      },
+      "Conservative": {
+       "called_leads": 901,
+       "actual_leads": 1055,
+       "signed_bias_pp": -3.29,
+       "mae_pp": 6.98
+      },
+      "Liberal Democrats": {
+       "called_leads": 269,
+       "actual_leads": 303,
+       "signed_bias_pp": -0.34,
+       "mae_pp": 4.97
+      },
+      "Green Party": {
+       "called_leads": 65,
+       "actual_leads": 70,
+       "signed_bias_pp": 1.0,
+       "mae_pp": 4.12
+      },
+      "Others": {
+       "called_leads": 72,
+       "actual_leads": 125,
+       "signed_bias_pp": -2.29,
+       "mae_pp": 7.48
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 0,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0
+     }
+    },
+    "s1": {
+     "leaders_called": 1713,
+     "wards_forecast": 2106,
+     "share_mae_pp_all_lanes": 6.04,
+     "brier_common": 0.2752,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": null,
+       "mae_pp": null
+      },
+      "Labour": {
+       "called_leads": 799,
+       "actual_leads": 702,
+       "signed_bias_pp": 3.96,
+       "mae_pp": 6.67
+      },
+      "Conservative": {
+       "called_leads": 901,
+       "actual_leads": 1055,
+       "signed_bias_pp": -3.29,
+       "mae_pp": 6.98
+      },
+      "Liberal Democrats": {
+       "called_leads": 269,
+       "actual_leads": 303,
+       "signed_bias_pp": -0.34,
+       "mae_pp": 4.97
+      },
+      "Green Party": {
+       "called_leads": 65,
+       "actual_leads": 70,
+       "signed_bias_pp": 1.0,
+       "mae_pp": 4.12
+      },
+      "Others": {
+       "called_leads": 72,
+       "actual_leads": 125,
+       "signed_bias_pp": -2.29,
+       "mae_pp": 7.48
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 0,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0
+     }
+    },
+    "s2": {
+     "leaders_called": 1713,
+     "wards_forecast": 2106,
+     "share_mae_pp_all_lanes": 6.04,
+     "brier_common": 0.2752,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": null,
+       "mae_pp": null
+      },
+      "Labour": {
+       "called_leads": 799,
+       "actual_leads": 702,
+       "signed_bias_pp": 3.96,
+       "mae_pp": 6.67
+      },
+      "Conservative": {
+       "called_leads": 901,
+       "actual_leads": 1055,
+       "signed_bias_pp": -3.29,
+       "mae_pp": 6.98
+      },
+      "Liberal Democrats": {
+       "called_leads": 269,
+       "actual_leads": 303,
+       "signed_bias_pp": -0.34,
+       "mae_pp": 4.97
+      },
+      "Green Party": {
+       "called_leads": 65,
+       "actual_leads": 70,
+       "signed_bias_pp": 1.0,
+       "mae_pp": 4.12
+      },
+      "Others": {
+       "called_leads": 72,
+       "actual_leads": 125,
+       "signed_bias_pp": -2.29,
+       "mae_pp": 7.48
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 0,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0
+     }
+    }
+   },
+   "groups": {}
+  },
+  "may_2022": {
+   "rows": 2533,
+   "arms": {
+    "c2": {
+     "leaders_called": 2138,
+     "wards_forecast": 2533,
+     "share_mae_pp_all_lanes": 5.7,
+     "brier_common": 0.2313,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": -0.38,
+       "mae_pp": 1.73
+      },
+      "Labour": {
+       "called_leads": 1309,
+       "actual_leads": 1297,
+       "signed_bias_pp": -1.66,
+       "mae_pp": 6.45
+      },
+      "Conservative": {
+       "called_leads": 720,
+       "actual_leads": 624,
+       "signed_bias_pp": 0.55,
+       "mae_pp": 5.25
+      },
+      "Liberal Democrats": {
+       "called_leads": 366,
+       "actual_leads": 413,
+       "signed_bias_pp": 0.1,
+       "mae_pp": 5.64
+      },
+      "Green Party": {
+       "called_leads": 67,
+       "actual_leads": 72,
+       "signed_bias_pp": 3.19,
+       "mae_pp": 4.99
+      },
+      "Others": {
+       "called_leads": 71,
+       "actual_leads": 127,
+       "signed_bias_pp": -2.86,
+       "mae_pp": 6.73
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 97,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0,
+      "signed_error_pp": -0.38,
+      "mae_pp": 1.73,
+      "mean_forecast_pp": 3.43,
+      "mean_actual_pp": 3.81,
+      "sd_forecast_pp": 1.65,
+      "sd_actual_pp": 3.41,
+      "calibration_slope": 1.176
+     }
+    },
+    "s1": {
+     "leaders_called": 2138,
+     "wards_forecast": 2533,
+     "share_mae_pp_all_lanes": 5.7,
+     "brier_common": 0.2313,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": -0.38,
+       "mae_pp": 1.73
+      },
+      "Labour": {
+       "called_leads": 1309,
+       "actual_leads": 1297,
+       "signed_bias_pp": -1.66,
+       "mae_pp": 6.45
+      },
+      "Conservative": {
+       "called_leads": 720,
+       "actual_leads": 624,
+       "signed_bias_pp": 0.55,
+       "mae_pp": 5.25
+      },
+      "Liberal Democrats": {
+       "called_leads": 366,
+       "actual_leads": 413,
+       "signed_bias_pp": 0.1,
+       "mae_pp": 5.64
+      },
+      "Green Party": {
+       "called_leads": 67,
+       "actual_leads": 72,
+       "signed_bias_pp": 3.19,
+       "mae_pp": 4.99
+      },
+      "Others": {
+       "called_leads": 71,
+       "actual_leads": 127,
+       "signed_bias_pp": -2.86,
+       "mae_pp": 6.73
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 97,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0,
+      "signed_error_pp": -0.38,
+      "mae_pp": 1.73,
+      "mean_forecast_pp": 3.43,
+      "mean_actual_pp": 3.81,
+      "sd_forecast_pp": 1.65,
+      "sd_actual_pp": 3.41,
+      "calibration_slope": 1.176
+     }
+    },
+    "s2": {
+     "leaders_called": 2140,
+     "wards_forecast": 2533,
+     "share_mae_pp_all_lanes": 5.72,
+     "brier_common": 0.232,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": -0.36,
+       "mae_pp": 1.73
+      },
+      "Labour": {
+       "called_leads": 1296,
+       "actual_leads": 1297,
+       "signed_bias_pp": -1.83,
+       "mae_pp": 6.49
+      },
+      "Conservative": {
+       "called_leads": 727,
+       "actual_leads": 624,
+       "signed_bias_pp": 0.63,
+       "mae_pp": 5.27
+      },
+      "Liberal Democrats": {
+       "called_leads": 369,
+       "actual_leads": 413,
+       "signed_bias_pp": 0.15,
+       "mae_pp": 5.64
+      },
+      "Green Party": {
+       "called_leads": 69,
+       "actual_leads": 72,
+       "signed_bias_pp": 3.24,
+       "mae_pp": 5.01
+      },
+      "Others": {
+       "called_leads": 72,
+       "actual_leads": 127,
+       "signed_bias_pp": -2.8,
+       "mae_pp": 6.73
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 97,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0,
+      "signed_error_pp": -0.36,
+      "mae_pp": 1.73,
+      "mean_forecast_pp": 3.45,
+      "mean_actual_pp": 3.81,
+      "sd_forecast_pp": 1.67,
+      "sd_actual_pp": 3.41,
+      "calibration_slope": 1.164
+     }
+    }
+   },
+   "groups": {}
+  },
+  "may_2023": {
+   "rows": 1734,
+   "arms": {
+    "c2": {
+     "leaders_called": 1442,
+     "wards_forecast": 1734,
+     "share_mae_pp_all_lanes": 5.43,
+     "brier_common": 0.2533,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": 2.42,
+       "mae_pp": 2.95
+      },
+      "Labour": {
+       "called_leads": 834,
+       "actual_leads": 831,
+       "signed_bias_pp": -0.32,
+       "mae_pp": 5.44
+      },
+      "Conservative": {
+       "called_leads": 484,
+       "actual_leads": 364,
+       "signed_bias_pp": 2.9,
+       "mae_pp": 6.04
+      },
+      "Liberal Democrats": {
+       "called_leads": 304,
+       "actual_leads": 349,
+       "signed_bias_pp": -0.07,
+       "mae_pp": 5.64
+      },
+      "Green Party": {
+       "called_leads": 58,
+       "actual_leads": 90,
+       "signed_bias_pp": -1.32,
+       "mae_pp": 3.47
+      },
+      "Others": {
+       "called_leads": 54,
+       "actual_leads": 100,
+       "signed_bias_pp": -4.44,
+       "mae_pp": 7.59
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 190,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0,
+      "signed_error_pp": 2.42,
+      "mae_pp": 2.95,
+      "mean_forecast_pp": 7.98,
+      "mean_actual_pp": 5.56,
+      "sd_forecast_pp": 3.07,
+      "sd_actual_pp": 3.51,
+      "calibration_slope": 0.757
+     }
+    },
+    "s1": {
+     "leaders_called": 1442,
+     "wards_forecast": 1734,
+     "share_mae_pp_all_lanes": 5.43,
+     "brier_common": 0.2533,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": 2.42,
+       "mae_pp": 2.95
+      },
+      "Labour": {
+       "called_leads": 834,
+       "actual_leads": 831,
+       "signed_bias_pp": -0.32,
+       "mae_pp": 5.44
+      },
+      "Conservative": {
+       "called_leads": 484,
+       "actual_leads": 364,
+       "signed_bias_pp": 2.9,
+       "mae_pp": 6.04
+      },
+      "Liberal Democrats": {
+       "called_leads": 304,
+       "actual_leads": 349,
+       "signed_bias_pp": -0.07,
+       "mae_pp": 5.64
+      },
+      "Green Party": {
+       "called_leads": 58,
+       "actual_leads": 90,
+       "signed_bias_pp": -1.32,
+       "mae_pp": 3.47
+      },
+      "Others": {
+       "called_leads": 54,
+       "actual_leads": 100,
+       "signed_bias_pp": -4.44,
+       "mae_pp": 7.59
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 190,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0,
+      "signed_error_pp": 2.42,
+      "mae_pp": 2.95,
+      "mean_forecast_pp": 7.98,
+      "mean_actual_pp": 5.56,
+      "sd_forecast_pp": 3.07,
+      "sd_actual_pp": 3.51,
+      "calibration_slope": 0.757
+     }
+    },
+    "s2": {
+     "leaders_called": 1430,
+     "wards_forecast": 1734,
+     "share_mae_pp_all_lanes": 5.44,
+     "brier_common": 0.2525,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 0,
+       "actual_leads": 0,
+       "signed_bias_pp": 2.4,
+       "mae_pp": 2.93
+      },
+      "Labour": {
+       "called_leads": 829,
+       "actual_leads": 831,
+       "signed_bias_pp": -0.4,
+       "mae_pp": 5.48
+      },
+      "Conservative": {
+       "called_leads": 490,
+       "actual_leads": 364,
+       "signed_bias_pp": 2.89,
+       "mae_pp": 6.04
+      },
+      "Liberal Democrats": {
+       "called_leads": 307,
+       "actual_leads": 349,
+       "signed_bias_pp": 0.06,
+       "mae_pp": 5.64
+      },
+      "Green Party": {
+       "called_leads": 56,
+       "actual_leads": 90,
+       "signed_bias_pp": -1.29,
+       "mae_pp": 3.45
+      },
+      "Others": {
+       "called_leads": 52,
+       "actual_leads": 100,
+       "signed_bias_pp": -4.55,
+       "mae_pp": 7.64
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 190,
+      "wards_won": 0,
+      "wards_called_first": 0,
+      "called_first_and_won": 0,
+      "signed_error_pp": 2.4,
+      "mae_pp": 2.93,
+      "mean_forecast_pp": 7.96,
+      "mean_actual_pp": 5.56,
+      "sd_forecast_pp": 3.07,
+      "sd_actual_pp": 3.51,
+      "calibration_slope": 0.755
+     }
+    }
+   },
+   "groups": {}
+  },
+  "may_2025": {
+   "rows": 1399,
+   "arms": {
+    "c2": {
+     "leaders_called": 703,
+     "wards_forecast": 1399,
+     "share_mae_pp_all_lanes": 8.3,
+     "brier_common": 0.6518,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 447,
+       "actual_leads": 551,
+       "signed_bias_pp": -4.22,
+       "mae_pp": 7.19
+      },
+      "Labour": {
+       "called_leads": 98,
+       "actual_leads": 77,
+       "signed_bias_pp": -0.37,
+       "mae_pp": 6.25
+      },
+      "Conservative": {
+       "called_leads": 485,
+       "actual_leads": 278,
+       "signed_bias_pp": 2.71,
+       "mae_pp": 8.3
+      },
+      "Liberal Democrats": {
+       "called_leads": 337,
+       "actual_leads": 340,
+       "signed_bias_pp": 3.59,
+       "mae_pp": 11.86
+      },
+      "Green Party": {
+       "called_leads": 31,
+       "actual_leads": 71,
+       "signed_bias_pp": 2.04,
+       "mae_pp": 6.63
+      },
+      "Others": {
+       "called_leads": 1,
+       "actual_leads": 82,
+       "signed_bias_pp": -7.23,
+       "mae_pp": 10.98
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 1393,
+      "wards_won": 551,
+      "wards_called_first": 447,
+      "called_first_and_won": 299,
+      "signed_error_pp": -4.22,
+      "mae_pp": 7.19,
+      "mean_forecast_pp": 26.76,
+      "mean_actual_pp": 30.98,
+      "sd_forecast_pp": 7.01,
+      "sd_actual_pp": 11.26,
+      "calibration_slope": 1.116,
+      "won_mean_forecast_lead_pp": 0.53,
+      "won_mean_actual_lead_pp": 13.42,
+      "won_with_rival_forecast": 551
+     }
+    },
+    "s1": {
+     "leaders_called": 710,
+     "wards_forecast": 1399,
+     "share_mae_pp_all_lanes": 8.13,
+     "brier_common": 0.6455,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 318,
+       "actual_leads": 551,
+       "signed_bias_pp": -6.1,
+       "mae_pp": 7.86
+      },
+      "Labour": {
+       "called_leads": 167,
+       "actual_leads": 77,
+       "signed_bias_pp": 0.37,
+       "mae_pp": 5.62
+      },
+      "Conservative": {
+       "called_leads": 475,
+       "actual_leads": 278,
+       "signed_bias_pp": 2.7,
+       "mae_pp": 7.99
+      },
+      "Liberal Democrats": {
+       "called_leads": 409,
+       "actual_leads": 340,
+       "signed_bias_pp": 5.38,
+       "mae_pp": 11.26
+      },
+      "Green Party": {
+       "called_leads": 29,
+       "actual_leads": 71,
+       "signed_bias_pp": 1.87,
+       "mae_pp": 6.55
+      },
+      "Others": {
+       "called_leads": 1,
+       "actual_leads": 82,
+       "signed_bias_pp": -8.01,
+       "mae_pp": 10.95
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 1393,
+      "wards_won": 551,
+      "wards_called_first": 318,
+      "called_first_and_won": 246,
+      "signed_error_pp": -6.1,
+      "mae_pp": 7.86,
+      "mean_forecast_pp": 24.89,
+      "mean_actual_pp": 30.98,
+      "sd_forecast_pp": 7.79,
+      "sd_actual_pp": 11.26,
+      "calibration_slope": 1.061,
+      "won_mean_forecast_lead_pp": -1.34,
+      "won_mean_actual_lead_pp": 13.42,
+      "won_with_rival_forecast": 551
+     }
+    },
+    "s2": {
+     "leaders_called": 689,
+     "wards_forecast": 1399,
+     "share_mae_pp_all_lanes": 8.34,
+     "brier_common": 0.658,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 428,
+       "actual_leads": 551,
+       "signed_bias_pp": -4.59,
+       "mae_pp": 7.38
+      },
+      "Labour": {
+       "called_leads": 95,
+       "actual_leads": 77,
+       "signed_bias_pp": -0.44,
+       "mae_pp": 6.22
+      },
+      "Conservative": {
+       "called_leads": 496,
+       "actual_leads": 278,
+       "signed_bias_pp": 2.94,
+       "mae_pp": 8.35
+      },
+      "Liberal Democrats": {
+       "called_leads": 345,
+       "actual_leads": 340,
+       "signed_bias_pp": 3.51,
+       "mae_pp": 11.85
+      },
+      "Green Party": {
+       "called_leads": 33,
+       "actual_leads": 71,
+       "signed_bias_pp": 2.13,
+       "mae_pp": 6.69
+      },
+      "Others": {
+       "called_leads": 2,
+       "actual_leads": 82,
+       "signed_bias_pp": -6.75,
+       "mae_pp": 10.91
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 1393,
+      "wards_won": 551,
+      "wards_called_first": 428,
+      "called_first_and_won": 285,
+      "signed_error_pp": -4.59,
+      "mae_pp": 7.38,
+      "mean_forecast_pp": 26.39,
+      "mean_actual_pp": 30.98,
+      "sd_forecast_pp": 7.14,
+      "sd_actual_pp": 11.26,
+      "calibration_slope": 1.086,
+      "won_mean_forecast_lead_pp": 0.15,
+      "won_mean_actual_lead_pp": 13.42,
+      "won_with_rival_forecast": 551
+     }
+    }
+   },
+   "groups": {
+    "reform_prev": {
+     "rows": 13,
+     "arms": {
+      "c2": {
+       "leaders_called": 11,
+       "share_mae_pp_all_lanes": 3.71,
+       "reform": {
+        "rows_reform_stood_forecast": 13,
+        "wards_won": 4,
+        "wards_called_first": 2,
+        "called_first_and_won": 2,
+        "signed_error_pp": -2.13,
+        "mae_pp": 4.36,
+        "mean_forecast_pp": 22.5,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 6.55,
+        "sd_actual_pp": 8.86,
+        "calibration_slope": 1.088,
+        "won_mean_forecast_lead_pp": 0.5,
+        "won_mean_actual_lead_pp": 9.32,
+        "won_with_rival_forecast": 4
+       }
+      },
+      "s1": {
+       "leaders_called": 10,
+       "share_mae_pp_all_lanes": 3.99,
+       "reform": {
+        "rows_reform_stood_forecast": 13,
+        "wards_won": 4,
+        "wards_called_first": 1,
+        "called_first_and_won": 1,
+        "signed_error_pp": -3.74,
+        "mae_pp": 4.69,
+        "mean_forecast_pp": 20.88,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 6.59,
+        "sd_actual_pp": 8.86,
+        "calibration_slope": 1.106,
+        "won_mean_forecast_lead_pp": -1.17,
+        "won_mean_actual_lead_pp": 9.32,
+        "won_with_rival_forecast": 4
+       }
+      },
+      "s2": {
+       "leaders_called": 11,
+       "share_mae_pp_all_lanes": 3.8,
+       "reform": {
+        "rows_reform_stood_forecast": 13,
+        "wards_won": 4,
+        "wards_called_first": 2,
+        "called_first_and_won": 2,
+        "signed_error_pp": -2.37,
+        "mae_pp": 4.5,
+        "mean_forecast_pp": 22.26,
+        "mean_actual_pp": 24.63,
+        "sd_forecast_pp": 6.3,
+        "sd_actual_pp": 8.86,
+        "calibration_slope": 1.139,
+        "won_mean_forecast_lead_pp": -0.4,
+        "won_mean_actual_lead_pp": 9.32,
+        "won_with_rival_forecast": 4
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 121,
+     "arms": {
+      "c2": {
+       "leaders_called": 86,
+       "share_mae_pp_all_lanes": 5.17,
+       "reform": {
+        "rows_reform_stood_forecast": 121,
+        "wards_won": 22,
+        "wards_called_first": 3,
+        "called_first_and_won": 3,
+        "signed_error_pp": -4.36,
+        "mae_pp": 5.52,
+        "mean_forecast_pp": 21.0,
+        "mean_actual_pp": 25.36,
+        "sd_forecast_pp": 4.04,
+        "sd_actual_pp": 7.46,
+        "calibration_slope": 1.3,
+        "won_mean_forecast_lead_pp": -6.79,
+        "won_mean_actual_lead_pp": 7.85,
+        "won_with_rival_forecast": 22
+       }
+      },
+      "s1": {
+       "leaders_called": 85,
+       "share_mae_pp_all_lanes": 5.13,
+       "reform": {
+        "rows_reform_stood_forecast": 121,
+        "wards_won": 22,
+        "wards_called_first": 1,
+        "called_first_and_won": 1,
+        "signed_error_pp": -5.6,
+        "mae_pp": 6.29,
+        "mean_forecast_pp": 19.75,
+        "mean_actual_pp": 25.36,
+        "sd_forecast_pp": 4.08,
+        "sd_actual_pp": 7.46,
+        "calibration_slope": 1.328,
+        "won_mean_forecast_lead_pp": -8.35,
+        "won_mean_actual_lead_pp": 7.85,
+        "won_with_rival_forecast": 22
+       }
+      },
+      "s2": {
+       "leaders_called": 88,
+       "share_mae_pp_all_lanes": 5.13,
+       "reform": {
+        "rows_reform_stood_forecast": 121,
+        "wards_won": 22,
+        "wards_called_first": 4,
+        "called_first_and_won": 3,
+        "signed_error_pp": -4.58,
+        "mae_pp": 5.65,
+        "mean_forecast_pp": 20.78,
+        "mean_actual_pp": 25.36,
+        "sd_forecast_pp": 3.96,
+        "sd_actual_pp": 7.46,
+        "calibration_slope": 1.339,
+        "won_mean_forecast_lead_pp": -6.84,
+        "won_mean_actual_lead_pp": 7.85,
+        "won_with_rival_forecast": 22
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1259,
+     "arms": {
+      "c2": {
+       "leaders_called": 602,
+       "share_mae_pp_all_lanes": 8.68,
+       "reform": {
+        "rows_reform_stood_forecast": 1259,
+        "wards_won": 525,
+        "wards_called_first": 442,
+        "called_first_and_won": 294,
+        "signed_error_pp": -4.23,
+        "mae_pp": 7.37,
+        "mean_forecast_pp": 27.36,
+        "mean_actual_pp": 31.59,
+        "sd_forecast_pp": 6.97,
+        "sd_actual_pp": 11.41,
+        "calibration_slope": 1.119,
+        "won_mean_forecast_lead_pp": 0.84,
+        "won_mean_actual_lead_pp": 13.69,
+        "won_with_rival_forecast": 525
+       }
+      },
+      "s1": {
+       "leaders_called": 612,
+       "share_mae_pp_all_lanes": 8.49,
+       "reform": {
+        "rows_reform_stood_forecast": 1259,
+        "wards_won": 525,
+        "wards_called_first": 316,
+        "called_first_and_won": 244,
+        "signed_error_pp": -6.17,
+        "mae_pp": 8.04,
+        "mean_forecast_pp": 25.42,
+        "mean_actual_pp": 31.59,
+        "sd_forecast_pp": 7.88,
+        "sd_actual_pp": 11.41,
+        "calibration_slope": 1.05,
+        "won_mean_forecast_lead_pp": -1.05,
+        "won_mean_actual_lead_pp": 13.69,
+        "won_with_rival_forecast": 525
+       }
+      },
+      "s2": {
+       "leaders_called": 586,
+       "share_mae_pp_all_lanes": 8.73,
+       "reform": {
+        "rows_reform_stood_forecast": 1259,
+        "wards_won": 525,
+        "wards_called_first": 422,
+        "called_first_and_won": 280,
+        "signed_error_pp": -4.61,
+        "mae_pp": 7.57,
+        "mean_forecast_pp": 26.98,
+        "mean_actual_pp": 31.59,
+        "sd_forecast_pp": 7.14,
+        "sd_actual_pp": 11.41,
+        "calibration_slope": 1.082,
+        "won_mean_forecast_lead_pp": 0.45,
+        "won_mean_actual_lead_pp": 13.69,
+        "won_with_rival_forecast": 525
+       }
+      }
+     }
+    }
+   }
+  },
+  "may_2026": {
+   "rows": 2576,
+   "arms": {
+    "c2": {
+     "leaders_called": 1764,
+     "wards_forecast": 2576,
+     "share_mae_pp_all_lanes": 5.48,
+     "brier_common": 0.4367,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 641,
+       "actual_leads": 858,
+       "signed_bias_pp": -2.79,
+       "mae_pp": 5.79
+      },
+      "Labour": {
+       "called_leads": 360,
+       "actual_leads": 447,
+       "signed_bias_pp": -2.68,
+       "mae_pp": 5.12
+      },
+      "Conservative": {
+       "called_leads": 411,
+       "actual_leads": 386,
+       "signed_bias_pp": -0.03,
+       "mae_pp": 4.75
+      },
+      "Liberal Democrats": {
+       "called_leads": 532,
+       "actual_leads": 445,
+       "signed_bias_pp": 1.58,
+       "mae_pp": 4.59
+      },
+      "Green Party": {
+       "called_leads": 379,
+       "actual_leads": 295,
+       "signed_bias_pp": 2.21,
+       "mae_pp": 5.83
+      },
+      "Others": {
+       "called_leads": 253,
+       "actual_leads": 145,
+       "signed_bias_pp": 4.69,
+       "mae_pp": 8.35
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 2569,
+      "wards_won": 858,
+      "wards_called_first": 641,
+      "called_first_and_won": 527,
+      "signed_error_pp": -2.79,
+      "mae_pp": 5.79,
+      "mean_forecast_pp": 23.77,
+      "mean_actual_pp": 26.56,
+      "sd_forecast_pp": 10.27,
+      "sd_actual_pp": 14.02,
+      "calibration_slope": 1.195,
+      "won_mean_forecast_lead_pp": 2.93,
+      "won_mean_actual_lead_pp": 14.53,
+      "won_with_rival_forecast": 858
+     }
+    },
+    "s1": {
+     "leaders_called": 1782,
+     "wards_forecast": 2576,
+     "share_mae_pp_all_lanes": 5.34,
+     "brier_common": 0.4331,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 636,
+       "actual_leads": 858,
+       "signed_bias_pp": -2.93,
+       "mae_pp": 5.54
+      },
+      "Labour": {
+       "called_leads": 375,
+       "actual_leads": 447,
+       "signed_bias_pp": -2.58,
+       "mae_pp": 4.92
+      },
+      "Conservative": {
+       "called_leads": 388,
+       "actual_leads": 386,
+       "signed_bias_pp": -0.29,
+       "mae_pp": 4.63
+      },
+      "Liberal Democrats": {
+       "called_leads": 560,
+       "actual_leads": 445,
+       "signed_bias_pp": 1.66,
+       "mae_pp": 4.43
+      },
+      "Green Party": {
+       "called_leads": 379,
+       "actual_leads": 295,
+       "signed_bias_pp": 2.65,
+       "mae_pp": 5.96
+      },
+      "Others": {
+       "called_leads": 238,
+       "actual_leads": 145,
+       "signed_bias_pp": 4.21,
+       "mae_pp": 7.99
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 2569,
+      "wards_won": 858,
+      "wards_called_first": 636,
+      "called_first_and_won": 530,
+      "signed_error_pp": -2.93,
+      "mae_pp": 5.54,
+      "mean_forecast_pp": 23.63,
+      "mean_actual_pp": 26.56,
+      "sd_forecast_pp": 10.57,
+      "sd_actual_pp": 14.02,
+      "calibration_slope": 1.18,
+      "won_mean_forecast_lead_pp": 3.48,
+      "won_mean_actual_lead_pp": 14.53,
+      "won_with_rival_forecast": 858
+     }
+    },
+    "s2": {
+     "leaders_called": 1772,
+     "wards_forecast": 2576,
+     "share_mae_pp_all_lanes": 5.48,
+     "brier_common": 0.4343,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 650,
+       "actual_leads": 858,
+       "signed_bias_pp": -2.71,
+       "mae_pp": 5.77
+      },
+      "Labour": {
+       "called_leads": 345,
+       "actual_leads": 447,
+       "signed_bias_pp": -2.81,
+       "mae_pp": 5.14
+      },
+      "Conservative": {
+       "called_leads": 413,
+       "actual_leads": 386,
+       "signed_bias_pp": 0.04,
+       "mae_pp": 4.75
+      },
+      "Liberal Democrats": {
+       "called_leads": 535,
+       "actual_leads": 445,
+       "signed_bias_pp": 1.56,
+       "mae_pp": 4.57
+      },
+      "Green Party": {
+       "called_leads": 374,
+       "actual_leads": 295,
+       "signed_bias_pp": 2.19,
+       "mae_pp": 5.83
+      },
+      "Others": {
+       "called_leads": 259,
+       "actual_leads": 145,
+       "signed_bias_pp": 4.74,
+       "mae_pp": 8.36
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 2569,
+      "wards_won": 858,
+      "wards_called_first": 650,
+      "called_first_and_won": 532,
+      "signed_error_pp": -2.71,
+      "mae_pp": 5.77,
+      "mean_forecast_pp": 23.85,
+      "mean_actual_pp": 26.56,
+      "sd_forecast_pp": 10.33,
+      "sd_actual_pp": 14.02,
+      "calibration_slope": 1.186,
+      "won_mean_forecast_lead_pp": 3.26,
+      "won_mean_actual_lead_pp": 14.53,
+      "won_with_rival_forecast": 858
+     }
+    }
+   },
+   "groups": {
+    "reform_prev": {
+     "rows": 407,
+     "arms": {
+      "c2": {
+       "leaders_called": 303,
+       "share_mae_pp_all_lanes": 4.91,
+       "reform": {
+        "rows_reform_stood_forecast": 407,
+        "wards_won": 179,
+        "wards_called_first": 148,
+        "called_first_and_won": 133,
+        "signed_error_pp": -4.04,
+        "mae_pp": 5.81,
+        "mean_forecast_pp": 27.38,
+        "mean_actual_pp": 31.42,
+        "sd_forecast_pp": 10.96,
+        "sd_actual_pp": 13.41,
+        "calibration_slope": 1.084,
+        "won_mean_forecast_lead_pp": 6.89,
+        "won_mean_actual_lead_pp": 16.7,
+        "won_with_rival_forecast": 179
+       }
+      },
+      "s1": {
+       "leaders_called": 305,
+       "share_mae_pp_all_lanes": 4.81,
+       "reform": {
+        "rows_reform_stood_forecast": 407,
+        "wards_won": 179,
+        "wards_called_first": 152,
+        "called_first_and_won": 134,
+        "signed_error_pp": -3.84,
+        "mae_pp": 5.66,
+        "mean_forecast_pp": 27.58,
+        "mean_actual_pp": 31.42,
+        "sd_forecast_pp": 11.22,
+        "sd_actual_pp": 13.41,
+        "calibration_slope": 1.066,
+        "won_mean_forecast_lead_pp": 7.7,
+        "won_mean_actual_lead_pp": 16.7,
+        "won_with_rival_forecast": 179
+       }
+      },
+      "s2": {
+       "leaders_called": 303,
+       "share_mae_pp_all_lanes": 4.9,
+       "reform": {
+        "rows_reform_stood_forecast": 407,
+        "wards_won": 179,
+        "wards_called_first": 146,
+        "called_first_and_won": 131,
+        "signed_error_pp": -3.9,
+        "mae_pp": 5.76,
+        "mean_forecast_pp": 27.51,
+        "mean_actual_pp": 31.42,
+        "sd_forecast_pp": 11.06,
+        "sd_actual_pp": 13.41,
+        "calibration_slope": 1.074,
+        "won_mean_forecast_lead_pp": 7.4,
+        "won_mean_actual_lead_pp": 16.7,
+        "won_with_rival_forecast": 179
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2027,
+     "arms": {
+      "c2": {
+       "leaders_called": 1372,
+       "share_mae_pp_all_lanes": 5.52,
+       "reform": {
+        "rows_reform_stood_forecast": 2027,
+        "wards_won": 613,
+        "wards_called_first": 425,
+        "called_first_and_won": 343,
+        "signed_error_pp": -2.53,
+        "mae_pp": 5.79,
+        "mean_forecast_pp": 22.61,
+        "mean_actual_pp": 25.14,
+        "sd_forecast_pp": 9.78,
+        "sd_actual_pp": 13.9,
+        "calibration_slope": 1.24,
+        "won_mean_forecast_lead_pp": 1.0,
+        "won_mean_actual_lead_pp": 13.67,
+        "won_with_rival_forecast": 613
+       }
+      },
+      "s1": {
+       "leaders_called": 1384,
+       "share_mae_pp_all_lanes": 5.39,
+       "reform": {
+        "rows_reform_stood_forecast": 2027,
+        "wards_won": 613,
+        "wards_called_first": 416,
+        "called_first_and_won": 344,
+        "signed_error_pp": -2.81,
+        "mae_pp": 5.54,
+        "mean_forecast_pp": 22.33,
+        "mean_actual_pp": 25.14,
+        "sd_forecast_pp": 9.93,
+        "sd_actual_pp": 13.9,
+        "calibration_slope": 1.246,
+        "won_mean_forecast_lead_pp": 1.25,
+        "won_mean_actual_lead_pp": 13.67,
+        "won_with_rival_forecast": 613
+       }
+      },
+      "s2": {
+       "leaders_called": 1375,
+       "share_mae_pp_all_lanes": 5.53,
+       "reform": {
+        "rows_reform_stood_forecast": 2027,
+        "wards_won": 613,
+        "wards_called_first": 434,
+        "called_first_and_won": 348,
+        "signed_error_pp": -2.46,
+        "mae_pp": 5.77,
+        "mean_forecast_pp": 22.68,
+        "mean_actual_pp": 25.14,
+        "sd_forecast_pp": 9.82,
+        "sd_actual_pp": 13.9,
+        "calibration_slope": 1.233,
+        "won_mean_forecast_lead_pp": 1.28,
+        "won_mean_actual_lead_pp": 13.67,
+        "won_with_rival_forecast": 613
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 135,
+     "arms": {
+      "c2": {
+       "leaders_called": 83,
+       "share_mae_pp_all_lanes": 6.59,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 66,
+        "wards_called_first": 68,
+        "called_first_and_won": 51,
+        "signed_error_pp": -2.98,
+        "mae_pp": 5.82,
+        "mean_forecast_pp": 30.35,
+        "mean_actual_pp": 33.33,
+        "sd_forecast_pp": 10.39,
+        "sd_actual_pp": 12.32,
+        "calibration_slope": 0.969,
+        "won_mean_forecast_lead_pp": 10.13,
+        "won_mean_actual_lead_pp": 16.71,
+        "won_with_rival_forecast": 66
+       }
+      },
+      "s1": {
+       "leaders_called": 87,
+       "share_mae_pp_all_lanes": 6.16,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 66,
+        "wards_called_first": 68,
+        "called_first_and_won": 52,
+        "signed_error_pp": -2.09,
+        "mae_pp": 5.12,
+        "mean_forecast_pp": 31.24,
+        "mean_actual_pp": 33.33,
+        "sd_forecast_pp": 11.52,
+        "sd_actual_pp": 12.32,
+        "calibration_slope": 0.896,
+        "won_mean_forecast_lead_pp": 12.72,
+        "won_mean_actual_lead_pp": 16.71,
+        "won_with_rival_forecast": 66
+       }
+      },
+      "s2": {
+       "leaders_called": 88,
+       "share_mae_pp_all_lanes": 6.46,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 66,
+        "wards_called_first": 70,
+        "called_first_and_won": 53,
+        "signed_error_pp": -2.91,
+        "mae_pp": 5.74,
+        "mean_forecast_pp": 30.42,
+        "mean_actual_pp": 33.33,
+        "sd_forecast_pp": 10.52,
+        "sd_actual_pp": 12.32,
+        "calibration_slope": 0.958,
+        "won_mean_forecast_lead_pp": 10.44,
+        "won_mean_actual_lead_pp": 16.71,
+        "won_with_rival_forecast": 66
+       }
+      }
+     }
+    }
+   }
+  },
+  "may_pooled_six": {
+   "rows": 12175,
+   "arms": {
+    "c2": {
+     "leaders_called": 9135,
+     "wards_forecast": 12026,
+     "share_mae_pp_all_lanes": 6.08,
+     "brier_common": 0.3401,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1088,
+       "actual_leads": 1409,
+       "signed_bias_pp": -2.97,
+       "mae_pp": 6.03
+      },
+      "Labour": {
+       "called_leads": 4113,
+       "actual_leads": 4025,
+       "signed_bias_pp": -0.0,
+       "mae_pp": 5.94
+      },
+      "Conservative": {
+       "called_leads": 3594,
+       "actual_leads": 3230,
+       "signed_bias_pp": 0.52,
+       "mae_pp": 6.03
+      },
+      "Liberal Democrats": {
+       "called_leads": 2059,
+       "actual_leads": 2124,
+       "signed_bias_pp": 0.79,
+       "mae_pp": 6.14
+      },
+      "Green Party": {
+       "called_leads": 628,
+       "actual_leads": 640,
+       "signed_bias_pp": 0.98,
+       "mae_pp": 5.04
+      },
+      "Others": {
+       "called_leads": 544,
+       "actual_leads": 747,
+       "signed_bias_pp": -1.91,
+       "mae_pp": 8.24
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 4249,
+      "wards_won": 1409,
+      "wards_called_first": 1088,
+      "called_first_and_won": 826,
+      "signed_error_pp": -2.97,
+      "mae_pp": 6.03,
+      "mean_forecast_pp": 23.58,
+      "mean_actual_pp": 26.55,
+      "sd_forecast_pp": 10.19,
+      "sd_actual_pp": 14.11,
+      "calibration_slope": 1.197,
+      "won_mean_forecast_lead_pp": 1.99,
+      "won_mean_actual_lead_pp": 14.1,
+      "won_with_rival_forecast": 1409
+     }
+    },
+    "s1": {
+     "leaders_called": 9160,
+     "wards_forecast": 12026,
+     "share_mae_pp_all_lanes": 6.02,
+     "brier_common": 0.3386,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 954,
+       "actual_leads": 1409,
+       "signed_bias_pp": -3.67,
+       "mae_pp": 6.09
+      },
+      "Labour": {
+       "called_leads": 4197,
+       "actual_leads": 4025,
+       "signed_bias_pp": 0.1,
+       "mae_pp": 5.83
+      },
+      "Conservative": {
+       "called_leads": 3561,
+       "actual_leads": 3230,
+       "signed_bias_pp": 0.46,
+       "mae_pp": 5.97
+      },
+      "Liberal Democrats": {
+       "called_leads": 2159,
+       "actual_leads": 2124,
+       "signed_bias_pp": 1.05,
+       "mae_pp": 6.02
+      },
+      "Green Party": {
+       "called_leads": 626,
+       "actual_leads": 640,
+       "signed_bias_pp": 1.08,
+       "mae_pp": 5.07
+      },
+      "Others": {
+       "called_leads": 529,
+       "actual_leads": 747,
+       "signed_bias_pp": -2.1,
+       "mae_pp": 8.16
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 4249,
+      "wards_won": 1409,
+      "wards_called_first": 954,
+      "called_first_and_won": 776,
+      "signed_error_pp": -3.67,
+      "mae_pp": 6.09,
+      "mean_forecast_pp": 22.88,
+      "mean_actual_pp": 26.55,
+      "sd_forecast_pp": 10.4,
+      "sd_actual_pp": 14.11,
+      "calibration_slope": 1.185,
+      "won_mean_forecast_lead_pp": 1.6,
+      "won_mean_actual_lead_pp": 14.1,
+      "won_with_rival_forecast": 1409
+     }
+    },
+    "s2": {
+     "leaders_called": 9119,
+     "wards_forecast": 12026,
+     "share_mae_pp_all_lanes": 6.09,
+     "brier_common": 0.3403,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1078,
+       "actual_leads": 1409,
+       "signed_bias_pp": -3.05,
+       "mae_pp": 6.08
+      },
+      "Labour": {
+       "called_leads": 4077,
+       "actual_leads": 4025,
+       "signed_bias_pp": -0.09,
+       "mae_pp": 5.96
+      },
+      "Conservative": {
+       "called_leads": 3620,
+       "actual_leads": 3230,
+       "signed_bias_pp": 0.57,
+       "mae_pp": 6.04
+      },
+      "Liberal Democrats": {
+       "called_leads": 2076,
+       "actual_leads": 2124,
+       "signed_bias_pp": 0.8,
+       "mae_pp": 6.13
+      },
+      "Green Party": {
+       "called_leads": 625,
+       "actual_leads": 640,
+       "signed_bias_pp": 1.0,
+       "mae_pp": 5.05
+      },
+      "Others": {
+       "called_leads": 550,
+       "actual_leads": 747,
+       "signed_bias_pp": -1.85,
+       "mae_pp": 8.24
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 4249,
+      "wards_won": 1409,
+      "wards_called_first": 1078,
+      "called_first_and_won": 817,
+      "signed_error_pp": -3.05,
+      "mae_pp": 6.08,
+      "mean_forecast_pp": 23.51,
+      "mean_actual_pp": 26.55,
+      "sd_forecast_pp": 10.23,
+      "sd_actual_pp": 14.11,
+      "calibration_slope": 1.189,
+      "won_mean_forecast_lead_pp": 2.04,
+      "won_mean_actual_lead_pp": 14.1,
+      "won_with_rival_forecast": 1409
+     }
+    }
+   },
+   "groups": {}
+  },
+  "may_pooled_five_without_2026": {
+   "rows": 9599,
+   "arms": {
+    "c2": {
+     "leaders_called": 7371,
+     "wards_forecast": 9450,
+     "share_mae_pp_all_lanes": 6.29,
+     "brier_common": 0.3137,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 447,
+       "actual_leads": 551,
+       "signed_bias_pp": -3.25,
+       "mae_pp": 6.39
+      },
+      "Labour": {
+       "called_leads": 3753,
+       "actual_leads": 3578,
+       "signed_bias_pp": 0.72,
+       "mae_pp": 6.16
+      },
+      "Conservative": {
+       "called_leads": 3183,
+       "actual_leads": 2844,
+       "signed_bias_pp": 0.66,
+       "mae_pp": 6.38
+      },
+      "Liberal Democrats": {
+       "called_leads": 1527,
+       "actual_leads": 1679,
+       "signed_bias_pp": 0.56,
+       "mae_pp": 6.59
+      },
+      "Green Party": {
+       "called_leads": 249,
+       "actual_leads": 345,
+       "signed_bias_pp": 0.5,
+       "mae_pp": 4.74
+      },
+      "Others": {
+       "called_leads": 291,
+       "actual_leads": 602,
+       "signed_bias_pp": -3.62,
+       "mae_pp": 8.21
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 1680,
+      "wards_won": 551,
+      "wards_called_first": 447,
+      "called_first_and_won": 299,
+      "signed_error_pp": -3.25,
+      "mae_pp": 6.39,
+      "mean_forecast_pp": 23.29,
+      "mean_actual_pp": 26.54,
+      "sd_forecast_pp": 10.06,
+      "sd_actual_pp": 14.25,
+      "calibration_slope": 1.202,
+      "won_mean_forecast_lead_pp": 0.53,
+      "won_mean_actual_lead_pp": 13.42,
+      "won_with_rival_forecast": 551
+     }
+    },
+    "s1": {
+     "leaders_called": 7378,
+     "wards_forecast": 9450,
+     "share_mae_pp_all_lanes": 6.26,
+     "brier_common": 0.3128,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 318,
+       "actual_leads": 551,
+       "signed_bias_pp": -4.8,
+       "mae_pp": 6.95
+      },
+      "Labour": {
+       "called_leads": 3822,
+       "actual_leads": 3578,
+       "signed_bias_pp": 0.83,
+       "mae_pp": 6.07
+      },
+      "Conservative": {
+       "called_leads": 3173,
+       "actual_leads": 2844,
+       "signed_bias_pp": 0.66,
+       "mae_pp": 6.33
+      },
+      "Liberal Democrats": {
+       "called_leads": 1599,
+       "actual_leads": 1679,
+       "signed_bias_pp": 0.87,
+       "mae_pp": 6.49
+      },
+      "Green Party": {
+       "called_leads": 247,
+       "actual_leads": 345,
+       "signed_bias_pp": 0.47,
+       "mae_pp": 4.72
+      },
+      "Others": {
+       "called_leads": 291,
+       "actual_leads": 602,
+       "signed_bias_pp": -3.73,
+       "mae_pp": 8.21
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 1680,
+      "wards_won": 551,
+      "wards_called_first": 318,
+      "called_first_and_won": 246,
+      "signed_error_pp": -4.8,
+      "mae_pp": 6.95,
+      "mean_forecast_pp": 21.73,
+      "mean_actual_pp": 26.54,
+      "sd_forecast_pp": 10.03,
+      "sd_actual_pp": 14.25,
+      "calibration_slope": 1.22,
+      "won_mean_forecast_lead_pp": -1.34,
+      "won_mean_actual_lead_pp": 13.42,
+      "won_with_rival_forecast": 551
+     }
+    },
+    "s2": {
+     "leaders_called": 7347,
+     "wards_forecast": 9450,
+     "share_mae_pp_all_lanes": 6.31,
+     "brier_common": 0.3147,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 428,
+       "actual_leads": 551,
+       "signed_bias_pp": -3.55,
+       "mae_pp": 6.55
+      },
+      "Labour": {
+       "called_leads": 3732,
+       "actual_leads": 3578,
+       "signed_bias_pp": 0.65,
+       "mae_pp": 6.18
+      },
+      "Conservative": {
+       "called_leads": 3207,
+       "actual_leads": 2844,
+       "signed_bias_pp": 0.72,
+       "mae_pp": 6.39
+      },
+      "Liberal Democrats": {
+       "called_leads": 1541,
+       "actual_leads": 1679,
+       "signed_bias_pp": 0.58,
+       "mae_pp": 6.59
+      },
+      "Green Party": {
+       "called_leads": 251,
+       "actual_leads": 345,
+       "signed_bias_pp": 0.53,
+       "mae_pp": 4.75
+      },
+      "Others": {
+       "called_leads": 291,
+       "actual_leads": 602,
+       "signed_bias_pp": -3.56,
+       "mae_pp": 8.21
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 1680,
+      "wards_won": 551,
+      "wards_called_first": 428,
+      "called_first_and_won": 285,
+      "signed_error_pp": -3.55,
+      "mae_pp": 6.55,
+      "mean_forecast_pp": 22.98,
+      "mean_actual_pp": 26.54,
+      "sd_forecast_pp": 10.04,
+      "sd_actual_pp": 14.25,
+      "calibration_slope": 1.199,
+      "won_mean_forecast_lead_pp": 0.15,
+      "won_mean_actual_lead_pp": 13.42,
+      "won_with_rival_forecast": 551
+     }
+    }
+   },
+   "groups": {}
+  },
+  "may_2025_2026": {
+   "rows": 3975,
+   "arms": {
+    "c2": {
+     "leaders_called": 2467,
+     "wards_forecast": 3975,
+     "share_mae_pp_all_lanes": 6.46,
+     "brier_common": 0.5124,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1088,
+       "actual_leads": 1409,
+       "signed_bias_pp": -3.29,
+       "mae_pp": 6.28
+      },
+      "Labour": {
+       "called_leads": 458,
+       "actual_leads": 524,
+       "signed_bias_pp": -1.88,
+       "mae_pp": 5.51
+      },
+      "Conservative": {
+       "called_leads": 896,
+       "actual_leads": 664,
+       "signed_bias_pp": 0.95,
+       "mae_pp": 6.02
+      },
+      "Liberal Democrats": {
+       "called_leads": 869,
+       "actual_leads": 785,
+       "signed_bias_pp": 2.32,
+       "mae_pp": 7.25
+      },
+      "Green Party": {
+       "called_leads": 410,
+       "actual_leads": 366,
+       "signed_bias_pp": 2.16,
+       "mae_pp": 6.08
+      },
+      "Others": {
+       "called_leads": 254,
+       "actual_leads": 227,
+       "signed_bias_pp": 0.43,
+       "mae_pp": 9.29
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 3962,
+      "wards_won": 1409,
+      "wards_called_first": 1088,
+      "called_first_and_won": 826,
+      "signed_error_pp": -3.29,
+      "mae_pp": 6.28,
+      "mean_forecast_pp": 24.82,
+      "mean_actual_pp": 28.12,
+      "sd_forecast_pp": 9.37,
+      "sd_actual_pp": 13.29,
+      "calibration_slope": 1.186,
+      "won_mean_forecast_lead_pp": 1.99,
+      "won_mean_actual_lead_pp": 14.1,
+      "won_with_rival_forecast": 1409
+     }
+    },
+    "s1": {
+     "leaders_called": 2492,
+     "wards_forecast": 3975,
+     "share_mae_pp_all_lanes": 6.31,
+     "brier_common": 0.5079,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 954,
+       "actual_leads": 1409,
+       "signed_bias_pp": -4.05,
+       "mae_pp": 6.35
+      },
+      "Labour": {
+       "called_leads": 542,
+       "actual_leads": 524,
+       "signed_bias_pp": -1.55,
+       "mae_pp": 5.16
+      },
+      "Conservative": {
+       "called_leads": 863,
+       "actual_leads": 664,
+       "signed_bias_pp": 0.78,
+       "mae_pp": 5.83
+      },
+      "Liberal Democrats": {
+       "called_leads": 969,
+       "actual_leads": 785,
+       "signed_bias_pp": 3.02,
+       "mae_pp": 6.93
+      },
+      "Green Party": {
+       "called_leads": 408,
+       "actual_leads": 366,
+       "signed_bias_pp": 2.41,
+       "mae_pp": 6.14
+      },
+      "Others": {
+       "called_leads": 239,
+       "actual_leads": 227,
+       "signed_bias_pp": -0.16,
+       "mae_pp": 9.05
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 3962,
+      "wards_won": 1409,
+      "wards_called_first": 954,
+      "called_first_and_won": 776,
+      "signed_error_pp": -4.05,
+      "mae_pp": 6.35,
+      "mean_forecast_pp": 24.07,
+      "mean_actual_pp": 28.12,
+      "sd_forecast_pp": 9.7,
+      "sd_actual_pp": 13.29,
+      "calibration_slope": 1.162,
+      "won_mean_forecast_lead_pp": 1.6,
+      "won_mean_actual_lead_pp": 14.1,
+      "won_with_rival_forecast": 1409
+     }
+    },
+    "s2": {
+     "leaders_called": 2461,
+     "wards_forecast": 3975,
+     "share_mae_pp_all_lanes": 6.47,
+     "brier_common": 0.513,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1078,
+       "actual_leads": 1409,
+       "signed_bias_pp": -3.37,
+       "mae_pp": 6.33
+      },
+      "Labour": {
+       "called_leads": 440,
+       "actual_leads": 524,
+       "signed_bias_pp": -1.98,
+       "mae_pp": 5.52
+      },
+      "Conservative": {
+       "called_leads": 909,
+       "actual_leads": 664,
+       "signed_bias_pp": 1.08,
+       "mae_pp": 6.04
+      },
+      "Liberal Democrats": {
+       "called_leads": 880,
+       "actual_leads": 785,
+       "signed_bias_pp": 2.27,
+       "mae_pp": 7.24
+      },
+      "Green Party": {
+       "called_leads": 407,
+       "actual_leads": 366,
+       "signed_bias_pp": 2.17,
+       "mae_pp": 6.09
+      },
+      "Others": {
+       "called_leads": 261,
+       "actual_leads": 227,
+       "signed_bias_pp": 0.63,
+       "mae_pp": 9.27
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 3962,
+      "wards_won": 1409,
+      "wards_called_first": 1078,
+      "called_first_and_won": 817,
+      "signed_error_pp": -3.37,
+      "mae_pp": 6.33,
+      "mean_forecast_pp": 24.74,
+      "mean_actual_pp": 28.12,
+      "sd_forecast_pp": 9.41,
+      "sd_actual_pp": 13.29,
+      "calibration_slope": 1.175,
+      "won_mean_forecast_lead_pp": 2.04,
+      "won_mean_actual_lead_pp": 14.1,
+      "won_with_rival_forecast": 1409
+     }
+    }
+   },
+   "groups": {
+    "reform_prev": {
+     "rows": 420,
+     "arms": {
+      "c2": {
+       "leaders_called": 314,
+       "share_mae_pp_all_lanes": 4.87,
+       "reform": {
+        "rows_reform_stood_forecast": 420,
+        "wards_won": 183,
+        "wards_called_first": 150,
+        "called_first_and_won": 135,
+        "signed_error_pp": -3.98,
+        "mae_pp": 5.77,
+        "mean_forecast_pp": 27.22,
+        "mean_actual_pp": 31.21,
+        "sd_forecast_pp": 10.88,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 1.086,
+        "won_mean_forecast_lead_pp": 6.75,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      },
+      "s1": {
+       "leaders_called": 315,
+       "share_mae_pp_all_lanes": 4.78,
+       "reform": {
+        "rows_reform_stood_forecast": 420,
+        "wards_won": 183,
+        "wards_called_first": 153,
+        "called_first_and_won": 135,
+        "signed_error_pp": -3.83,
+        "mae_pp": 5.63,
+        "mean_forecast_pp": 27.37,
+        "mean_actual_pp": 31.21,
+        "sd_forecast_pp": 11.17,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 1.065,
+        "won_mean_forecast_lead_pp": 7.51,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      },
+      "s2": {
+       "leaders_called": 314,
+       "share_mae_pp_all_lanes": 4.87,
+       "reform": {
+        "rows_reform_stood_forecast": 420,
+        "wards_won": 183,
+        "wards_called_first": 148,
+        "called_first_and_won": 133,
+        "signed_error_pp": -3.86,
+        "mae_pp": 5.72,
+        "mean_forecast_pp": 27.35,
+        "mean_actual_pp": 31.21,
+        "sd_forecast_pp": 10.98,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 1.076,
+        "won_mean_forecast_lead_pp": 7.23,
+        "won_mean_actual_lead_pp": 16.54,
+        "won_with_rival_forecast": 183
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2148,
+     "arms": {
+      "c2": {
+       "leaders_called": 1458,
+       "share_mae_pp_all_lanes": 5.5,
+       "reform": {
+        "rows_reform_stood_forecast": 2148,
+        "wards_won": 635,
+        "wards_called_first": 428,
+        "called_first_and_won": 346,
+        "signed_error_pp": -2.63,
+        "mae_pp": 5.77,
+        "mean_forecast_pp": 22.52,
+        "mean_actual_pp": 25.15,
+        "sd_forecast_pp": 9.55,
+        "sd_actual_pp": 13.62,
+        "calibration_slope": 1.238,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      },
+      "s1": {
+       "leaders_called": 1469,
+       "share_mae_pp_all_lanes": 5.37,
+       "reform": {
+        "rows_reform_stood_forecast": 2148,
+        "wards_won": 635,
+        "wards_called_first": 417,
+        "called_first_and_won": 345,
+        "signed_error_pp": -2.97,
+        "mae_pp": 5.58,
+        "mean_forecast_pp": 22.19,
+        "mean_actual_pp": 25.15,
+        "sd_forecast_pp": 9.72,
+        "sd_actual_pp": 13.62,
+        "calibration_slope": 1.242,
+        "won_mean_forecast_lead_pp": 0.92,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      },
+      "s2": {
+       "leaders_called": 1463,
+       "share_mae_pp_all_lanes": 5.5,
+       "reform": {
+        "rows_reform_stood_forecast": 2148,
+        "wards_won": 635,
+        "wards_called_first": 438,
+        "called_first_and_won": 351,
+        "signed_error_pp": -2.58,
+        "mae_pp": 5.77,
+        "mean_forecast_pp": 22.57,
+        "mean_actual_pp": 25.15,
+        "sd_forecast_pp": 9.6,
+        "sd_actual_pp": 13.62,
+        "calibration_slope": 1.231,
+        "won_mean_forecast_lead_pp": 0.99,
+        "won_mean_actual_lead_pp": 13.47,
+        "won_with_rival_forecast": 635
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1394,
+     "arms": {
+      "c2": {
+       "leaders_called": 685,
+       "share_mae_pp_all_lanes": 8.48,
+       "reform": {
+        "rows_reform_stood_forecast": 1394,
+        "wards_won": 591,
+        "wards_called_first": 510,
+        "called_first_and_won": 345,
+        "signed_error_pp": -4.11,
+        "mae_pp": 7.22,
+        "mean_forecast_pp": 27.65,
+        "mean_actual_pp": 31.76,
+        "sd_forecast_pp": 7.43,
+        "sd_actual_pp": 11.51,
+        "calibration_slope": 1.083,
+        "won_mean_forecast_lead_pp": 1.88,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      },
+      "s1": {
+       "leaders_called": 699,
+       "share_mae_pp_all_lanes": 8.27,
+       "reform": {
+        "rows_reform_stood_forecast": 1394,
+        "wards_won": 591,
+        "wards_called_first": 384,
+        "called_first_and_won": 296,
+        "signed_error_pp": -5.77,
+        "mae_pp": 7.76,
+        "mean_forecast_pp": 25.98,
+        "mean_actual_pp": 31.76,
+        "sd_forecast_pp": 8.48,
+        "sd_actual_pp": 11.51,
+        "calibration_slope": 0.992,
+        "won_mean_forecast_lead_pp": 0.49,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      },
+      "s2": {
+       "leaders_called": 674,
+       "share_mae_pp_all_lanes": 8.51,
+       "reform": {
+        "rows_reform_stood_forecast": 1394,
+        "wards_won": 591,
+        "wards_called_first": 492,
+        "called_first_and_won": 333,
+        "signed_error_pp": -4.45,
+        "mae_pp": 7.39,
+        "mean_forecast_pp": 27.31,
+        "mean_actual_pp": 31.76,
+        "sd_forecast_pp": 7.6,
+        "sd_actual_pp": 11.51,
+        "calibration_slope": 1.048,
+        "won_mean_forecast_lead_pp": 1.56,
+        "won_mean_actual_lead_pp": 14.03,
+        "won_with_rival_forecast": 591
+       }
+      }
+     }
+    }
+   }
+  },
+  "by_all": {
+   "rows": 1190,
+   "arms": {
+    "c2": {
+     "leaders_called": 786,
+     "wards_forecast": 1149,
+     "share_mae_pp_all_lanes": 7.26,
+     "brier_common": 0.4303,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 147,
+       "actual_leads": 145,
+       "signed_bias_pp": -1.0,
+       "mae_pp": 6.17
+      },
+      "Labour": {
+       "called_leads": 360,
+       "actual_leads": 334,
+       "signed_bias_pp": 1.86,
+       "mae_pp": 6.68
+      },
+      "Conservative": {
+       "called_leads": 286,
+       "actual_leads": 282,
+       "signed_bias_pp": -0.1,
+       "mae_pp": 7.4
+      },
+      "Liberal Democrats": {
+       "called_leads": 229,
+       "actual_leads": 272,
+       "signed_bias_pp": -0.49,
+       "mae_pp": 8.98
+      },
+      "Green Party": {
+       "called_leads": 59,
+       "actual_leads": 71,
+       "signed_bias_pp": 0.73,
+       "mae_pp": 5.88
+      },
+      "Others": {
+       "called_leads": 68,
+       "actual_leads": 86,
+       "signed_bias_pp": -2.51,
+       "mae_pp": 8.22
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 544,
+      "wards_won": 145,
+      "wards_called_first": 147,
+      "called_first_and_won": 90,
+      "signed_error_pp": -1.0,
+      "mae_pp": 6.17,
+      "mean_forecast_pp": 24.64,
+      "mean_actual_pp": 25.64,
+      "sd_forecast_pp": 11.05,
+      "sd_actual_pp": 13.27,
+      "calibration_slope": 0.938,
+      "won_mean_forecast_lead_pp": 3.85,
+      "won_mean_actual_lead_pp": 12.86,
+      "won_with_rival_forecast": 145
+     }
+    },
+    "s1": {
+     "leaders_called": 812,
+     "wards_forecast": 1149,
+     "share_mae_pp_all_lanes": 6.92,
+     "brier_common": 0.4082,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 145,
+       "actual_leads": 145,
+       "signed_bias_pp": -1.16,
+       "mae_pp": 6.13
+      },
+      "Labour": {
+       "called_leads": 360,
+       "actual_leads": 334,
+       "signed_bias_pp": 1.8,
+       "mae_pp": 6.34
+      },
+      "Conservative": {
+       "called_leads": 289,
+       "actual_leads": 282,
+       "signed_bias_pp": 0.02,
+       "mae_pp": 7.0
+      },
+      "Liberal Democrats": {
+       "called_leads": 240,
+       "actual_leads": 272,
+       "signed_bias_pp": -0.38,
+       "mae_pp": 8.17
+      },
+      "Green Party": {
+       "called_leads": 53,
+       "actual_leads": 71,
+       "signed_bias_pp": 0.67,
+       "mae_pp": 5.73
+      },
+      "Others": {
+       "called_leads": 62,
+       "actual_leads": 86,
+       "signed_bias_pp": -2.57,
+       "mae_pp": 8.18
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 544,
+      "wards_won": 145,
+      "wards_called_first": 145,
+      "called_first_and_won": 89,
+      "signed_error_pp": -1.16,
+      "mae_pp": 6.13,
+      "mean_forecast_pp": 24.48,
+      "mean_actual_pp": 25.64,
+      "sd_forecast_pp": 11.08,
+      "sd_actual_pp": 13.27,
+      "calibration_slope": 0.948,
+      "won_mean_forecast_lead_pp": 3.64,
+      "won_mean_actual_lead_pp": 12.86,
+      "won_with_rival_forecast": 145
+     }
+    },
+    "s2": {
+     "leaders_called": 792,
+     "wards_forecast": 1149,
+     "share_mae_pp_all_lanes": 7.25,
+     "brier_common": 0.4305,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 153,
+       "actual_leads": 145,
+       "signed_bias_pp": -0.99,
+       "mae_pp": 6.18
+      },
+      "Labour": {
+       "called_leads": 358,
+       "actual_leads": 334,
+       "signed_bias_pp": 1.87,
+       "mae_pp": 6.68
+      },
+      "Conservative": {
+       "called_leads": 288,
+       "actual_leads": 282,
+       "signed_bias_pp": -0.06,
+       "mae_pp": 7.38
+      },
+      "Liberal Democrats": {
+       "called_leads": 226,
+       "actual_leads": 272,
+       "signed_bias_pp": -0.54,
+       "mae_pp": 8.97
+      },
+      "Green Party": {
+       "called_leads": 57,
+       "actual_leads": 71,
+       "signed_bias_pp": 0.73,
+       "mae_pp": 5.85
+      },
+      "Others": {
+       "called_leads": 67,
+       "actual_leads": 86,
+       "signed_bias_pp": -2.5,
+       "mae_pp": 8.16
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 544,
+      "wards_won": 145,
+      "wards_called_first": 153,
+      "called_first_and_won": 94,
+      "signed_error_pp": -0.99,
+      "mae_pp": 6.18,
+      "mean_forecast_pp": 24.65,
+      "mean_actual_pp": 25.64,
+      "sd_forecast_pp": 11.08,
+      "sd_actual_pp": 13.27,
+      "calibration_slope": 0.935,
+      "won_mean_forecast_lead_pp": 3.93,
+      "won_mean_actual_lead_pp": 12.86,
+      "won_with_rival_forecast": 145
+     }
+    }
+   },
+   "groups": {}
+  },
+  "by_before_2025-05-01": {
+   "rows": 753,
+   "arms": {
+    "c2": {
+     "leaders_called": 511,
+     "wards_forecast": 712,
+     "share_mae_pp_all_lanes": 7.53,
+     "brier_common": 0.3903,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 4,
+       "actual_leads": 15,
+       "signed_bias_pp": -1.01,
+       "mae_pp": 5.66
+      },
+      "Labour": {
+       "called_leads": 315,
+       "actual_leads": 285,
+       "signed_bias_pp": 3.19,
+       "mae_pp": 7.31
+      },
+      "Conservative": {
+       "called_leads": 215,
+       "actual_leads": 212,
+       "signed_bias_pp": -0.81,
+       "mae_pp": 7.88
+      },
+      "Liberal Democrats": {
+       "called_leads": 125,
+       "actual_leads": 155,
+       "signed_bias_pp": -0.44,
+       "mae_pp": 8.99
+      },
+      "Green Party": {
+       "called_leads": 14,
+       "actual_leads": 28,
+       "signed_bias_pp": 0.35,
+       "mae_pp": 5.55
+      },
+      "Others": {
+       "called_leads": 39,
+       "actual_leads": 58,
+       "signed_bias_pp": -3.61,
+       "mae_pp": 8.22
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 130,
+      "wards_won": 15,
+      "wards_called_first": 4,
+      "called_first_and_won": 2,
+      "signed_error_pp": -1.01,
+      "mae_pp": 5.66,
+      "mean_forecast_pp": 15.94,
+      "mean_actual_pp": 16.94,
+      "sd_forecast_pp": 7.54,
+      "sd_actual_pp": 11.5,
+      "calibration_slope": 1.096,
+      "won_mean_forecast_lead_pp": -13.96,
+      "won_mean_actual_lead_pp": 9.89,
+      "won_with_rival_forecast": 15
+     }
+    },
+    "s1": {
+     "leaders_called": 524,
+     "wards_forecast": 712,
+     "share_mae_pp_all_lanes": 7.31,
+     "brier_common": 0.3733,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 5,
+       "actual_leads": 15,
+       "signed_bias_pp": -1.04,
+       "mae_pp": 5.49
+      },
+      "Labour": {
+       "called_leads": 310,
+       "actual_leads": 285,
+       "signed_bias_pp": 3.15,
+       "mae_pp": 7.22
+      },
+      "Conservative": {
+       "called_leads": 219,
+       "actual_leads": 212,
+       "signed_bias_pp": -0.69,
+       "mae_pp": 7.52
+      },
+      "Liberal Democrats": {
+       "called_leads": 127,
+       "actual_leads": 155,
+       "signed_bias_pp": -0.46,
+       "mae_pp": 8.57
+      },
+      "Green Party": {
+       "called_leads": 15,
+       "actual_leads": 28,
+       "signed_bias_pp": 0.33,
+       "mae_pp": 5.49
+      },
+      "Others": {
+       "called_leads": 36,
+       "actual_leads": 58,
+       "signed_bias_pp": -3.69,
+       "mae_pp": 8.11
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 130,
+      "wards_won": 15,
+      "wards_called_first": 5,
+      "called_first_and_won": 2,
+      "signed_error_pp": -1.04,
+      "mae_pp": 5.49,
+      "mean_forecast_pp": 15.9,
+      "mean_actual_pp": 16.94,
+      "sd_forecast_pp": 7.71,
+      "sd_actual_pp": 11.5,
+      "calibration_slope": 1.1,
+      "won_mean_forecast_lead_pp": -12.56,
+      "won_mean_actual_lead_pp": 9.89,
+      "won_with_rival_forecast": 15
+     }
+    },
+    "s2": {
+     "leaders_called": 513,
+     "wards_forecast": 712,
+     "share_mae_pp_all_lanes": 7.51,
+     "brier_common": 0.3913,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 4,
+       "actual_leads": 15,
+       "signed_bias_pp": -1.0,
+       "mae_pp": 5.6
+      },
+      "Labour": {
+       "called_leads": 315,
+       "actual_leads": 285,
+       "signed_bias_pp": 3.22,
+       "mae_pp": 7.3
+      },
+      "Conservative": {
+       "called_leads": 218,
+       "actual_leads": 212,
+       "signed_bias_pp": -0.8,
+       "mae_pp": 7.84
+      },
+      "Liberal Democrats": {
+       "called_leads": 123,
+       "actual_leads": 155,
+       "signed_bias_pp": -0.51,
+       "mae_pp": 8.98
+      },
+      "Green Party": {
+       "called_leads": 13,
+       "actual_leads": 28,
+       "signed_bias_pp": 0.37,
+       "mae_pp": 5.54
+      },
+      "Others": {
+       "called_leads": 39,
+       "actual_leads": 58,
+       "signed_bias_pp": -3.61,
+       "mae_pp": 8.16
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 130,
+      "wards_won": 15,
+      "wards_called_first": 4,
+      "called_first_and_won": 2,
+      "signed_error_pp": -1.0,
+      "mae_pp": 5.6,
+      "mean_forecast_pp": 15.95,
+      "mean_actual_pp": 16.94,
+      "sd_forecast_pp": 7.59,
+      "sd_actual_pp": 11.5,
+      "calibration_slope": 1.086,
+      "won_mean_forecast_lead_pp": -13.68,
+      "won_mean_actual_lead_pp": 9.89,
+      "won_with_rival_forecast": 15
+     }
+    }
+   },
+   "groups": {}
+  },
+  "by_from_2025-05-01": {
+   "rows": 437,
+   "arms": {
+    "c2": {
+     "leaders_called": 275,
+     "wards_forecast": 437,
+     "share_mae_pp_all_lanes": 6.9,
+     "brier_common": 0.4956,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 143,
+       "actual_leads": 130,
+       "signed_bias_pp": -0.99,
+       "mae_pp": 6.34
+      },
+      "Labour": {
+       "called_leads": 45,
+       "actual_leads": 49,
+       "signed_bias_pp": -0.35,
+       "mae_pp": 5.62
+      },
+      "Conservative": {
+       "called_leads": 71,
+       "actual_leads": 70,
+       "signed_bias_pp": 1.04,
+       "mae_pp": 6.63
+      },
+      "Liberal Democrats": {
+       "called_leads": 104,
+       "actual_leads": 117,
+       "signed_bias_pp": -0.58,
+       "mae_pp": 8.96
+      },
+      "Green Party": {
+       "called_leads": 45,
+       "actual_leads": 43,
+       "signed_bias_pp": 1.26,
+       "mae_pp": 6.33
+      },
+      "Others": {
+       "called_leads": 29,
+       "actual_leads": 28,
+       "signed_bias_pp": -0.63,
+       "mae_pp": 8.22
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 414,
+      "wards_won": 130,
+      "wards_called_first": 143,
+      "called_first_and_won": 88,
+      "signed_error_pp": -0.99,
+      "mae_pp": 6.34,
+      "mean_forecast_pp": 27.38,
+      "mean_actual_pp": 28.37,
+      "sd_forecast_pp": 10.55,
+      "sd_actual_pp": 12.59,
+      "calibration_slope": 0.895,
+      "won_mean_forecast_lead_pp": 5.9,
+      "won_mean_actual_lead_pp": 13.2,
+      "won_with_rival_forecast": 130
+     }
+    },
+    "s1": {
+     "leaders_called": 288,
+     "wards_forecast": 437,
+     "share_mae_pp_all_lanes": 6.39,
+     "brier_common": 0.4649,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 140,
+       "actual_leads": 130,
+       "signed_bias_pp": -1.2,
+       "mae_pp": 6.33
+      },
+      "Labour": {
+       "called_leads": 50,
+       "actual_leads": 49,
+       "signed_bias_pp": -0.45,
+       "mae_pp": 4.86
+      },
+      "Conservative": {
+       "called_leads": 70,
+       "actual_leads": 70,
+       "signed_bias_pp": 1.16,
+       "mae_pp": 6.18
+      },
+      "Liberal Democrats": {
+       "called_leads": 113,
+       "actual_leads": 117,
+       "signed_bias_pp": -0.25,
+       "mae_pp": 7.5
+      },
+      "Green Party": {
+       "called_leads": 38,
+       "actual_leads": 43,
+       "signed_bias_pp": 1.16,
+       "mae_pp": 6.08
+      },
+      "Others": {
+       "called_leads": 26,
+       "actual_leads": 28,
+       "signed_bias_pp": -0.65,
+       "mae_pp": 8.31
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 414,
+      "wards_won": 130,
+      "wards_called_first": 140,
+      "called_first_and_won": 87,
+      "signed_error_pp": -1.2,
+      "mae_pp": 6.33,
+      "mean_forecast_pp": 27.17,
+      "mean_actual_pp": 28.37,
+      "sd_forecast_pp": 10.6,
+      "sd_actual_pp": 12.59,
+      "calibration_slope": 0.904,
+      "won_mean_forecast_lead_pp": 5.51,
+      "won_mean_actual_lead_pp": 13.2,
+      "won_with_rival_forecast": 130
+     }
+    },
+    "s2": {
+     "leaders_called": 279,
+     "wards_forecast": 437,
+     "share_mae_pp_all_lanes": 6.89,
+     "brier_common": 0.4944,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 149,
+       "actual_leads": 130,
+       "signed_bias_pp": -0.99,
+       "mae_pp": 6.36
+      },
+      "Labour": {
+       "called_leads": 43,
+       "actual_leads": 49,
+       "signed_bias_pp": -0.4,
+       "mae_pp": 5.63
+      },
+      "Conservative": {
+       "called_leads": 70,
+       "actual_leads": 70,
+       "signed_bias_pp": 1.12,
+       "mae_pp": 6.64
+      },
+      "Liberal Democrats": {
+       "called_leads": 103,
+       "actual_leads": 117,
+       "signed_bias_pp": -0.6,
+       "mae_pp": 8.97
+      },
+      "Green Party": {
+       "called_leads": 44,
+       "actual_leads": 43,
+       "signed_bias_pp": 1.23,
+       "mae_pp": 6.27
+      },
+      "Others": {
+       "called_leads": 28,
+       "actual_leads": 28,
+       "signed_bias_pp": -0.59,
+       "mae_pp": 8.16
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 414,
+      "wards_won": 130,
+      "wards_called_first": 149,
+      "called_first_and_won": 92,
+      "signed_error_pp": -0.99,
+      "mae_pp": 6.36,
+      "mean_forecast_pp": 27.39,
+      "mean_actual_pp": 28.37,
+      "sd_forecast_pp": 10.58,
+      "sd_actual_pp": 12.59,
+      "calibration_slope": 0.893,
+      "won_mean_forecast_lead_pp": 5.96,
+      "won_mean_actual_lead_pp": 13.2,
+      "won_with_rival_forecast": 130
+     }
+    }
+   },
+   "groups": {
+    "reform_prev": {
+     "rows": 90,
+     "arms": {
+      "c2": {
+       "leaders_called": 56,
+       "share_mae_pp_all_lanes": 5.58,
+       "reform": {
+        "rows_reform_stood_forecast": 90,
+        "wards_won": 26,
+        "wards_called_first": 33,
+        "called_first_and_won": 19,
+        "signed_error_pp": 0.69,
+        "mae_pp": 4.83,
+        "mean_forecast_pp": 27.19,
+        "mean_actual_pp": 26.51,
+        "sd_forecast_pp": 13.01,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 0.901,
+        "won_mean_forecast_lead_pp": 8.97,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      },
+      "s1": {
+       "leaders_called": 60,
+       "share_mae_pp_all_lanes": 5.35,
+       "reform": {
+        "rows_reform_stood_forecast": 90,
+        "wards_won": 26,
+        "wards_called_first": 31,
+        "called_first_and_won": 19,
+        "signed_error_pp": 0.59,
+        "mae_pp": 4.79,
+        "mean_forecast_pp": 27.1,
+        "mean_actual_pp": 26.51,
+        "sd_forecast_pp": 13.11,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 0.898,
+        "won_mean_forecast_lead_pp": 9.09,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      },
+      "s2": {
+       "leaders_called": 56,
+       "share_mae_pp_all_lanes": 5.56,
+       "reform": {
+        "rows_reform_stood_forecast": 90,
+        "wards_won": 26,
+        "wards_called_first": 32,
+        "called_first_and_won": 19,
+        "signed_error_pp": 0.65,
+        "mae_pp": 4.82,
+        "mean_forecast_pp": 27.16,
+        "mean_actual_pp": 26.51,
+        "sd_forecast_pp": 13.04,
+        "sd_actual_pp": 13.35,
+        "calibration_slope": 0.902,
+        "won_mean_forecast_lead_pp": 9.04,
+        "won_mean_actual_lead_pp": 8.87,
+        "won_with_rival_forecast": 26
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 135,
+     "arms": {
+      "c2": {
+       "leaders_called": 103,
+       "share_mae_pp_all_lanes": 5.4,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 34,
+        "wards_called_first": 22,
+        "called_first_and_won": 19,
+        "signed_error_pp": -3.23,
+        "mae_pp": 6.27,
+        "mean_forecast_pp": 23.0,
+        "mean_actual_pp": 26.23,
+        "sd_forecast_pp": 8.31,
+        "sd_actual_pp": 11.01,
+        "calibration_slope": 0.976,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 12.28,
+        "won_with_rival_forecast": 34
+       }
+      },
+      "s1": {
+       "leaders_called": 102,
+       "share_mae_pp_all_lanes": 5.28,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 34,
+        "wards_called_first": 20,
+        "called_first_and_won": 17,
+        "signed_error_pp": -3.38,
+        "mae_pp": 6.16,
+        "mean_forecast_pp": 22.85,
+        "mean_actual_pp": 26.23,
+        "sd_forecast_pp": 8.4,
+        "sd_actual_pp": 11.01,
+        "calibration_slope": 0.986,
+        "won_mean_forecast_lead_pp": 0.61,
+        "won_mean_actual_lead_pp": 12.28,
+        "won_with_rival_forecast": 34
+       }
+      },
+      "s2": {
+       "leaders_called": 106,
+       "share_mae_pp_all_lanes": 5.41,
+       "reform": {
+        "rows_reform_stood_forecast": 135,
+        "wards_won": 34,
+        "wards_called_first": 24,
+        "called_first_and_won": 21,
+        "signed_error_pp": -3.22,
+        "mae_pp": 6.27,
+        "mean_forecast_pp": 23.01,
+        "mean_actual_pp": 26.23,
+        "sd_forecast_pp": 8.43,
+        "sd_actual_pp": 11.01,
+        "calibration_slope": 0.963,
+        "won_mean_forecast_lead_pp": 1.18,
+        "won_mean_actual_lead_pp": 12.28,
+        "won_with_rival_forecast": 34
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 189,
+     "arms": {
+      "c2": {
+       "leaders_called": 103,
+       "share_mae_pp_all_lanes": 8.41,
+       "reform": {
+        "rows_reform_stood_forecast": 189,
+        "wards_won": 70,
+        "wards_called_first": 88,
+        "called_first_and_won": 50,
+        "signed_error_pp": -0.19,
+        "mae_pp": 7.1,
+        "mean_forecast_pp": 30.6,
+        "mean_actual_pp": 30.78,
+        "sd_forecast_pp": 9.48,
+        "sd_actual_pp": 12.85,
+        "calibration_slope": 0.922,
+        "won_mean_forecast_lead_pp": 7.27,
+        "won_mean_actual_lead_pp": 15.26,
+        "won_with_rival_forecast": 70
+       }
+      },
+      "s1": {
+       "leaders_called": 112,
+       "share_mae_pp_all_lanes": 7.47,
+       "reform": {
+        "rows_reform_stood_forecast": 189,
+        "wards_won": 70,
+        "wards_called_first": 89,
+        "called_first_and_won": 51,
+        "signed_error_pp": -0.5,
+        "mae_pp": 7.18,
+        "mean_forecast_pp": 30.28,
+        "mean_actual_pp": 30.78,
+        "sd_forecast_pp": 9.53,
+        "sd_actual_pp": 12.85,
+        "calibration_slope": 0.938,
+        "won_mean_forecast_lead_pp": 6.56,
+        "won_mean_actual_lead_pp": 15.26,
+        "won_with_rival_forecast": 70
+       }
+      },
+      "s2": {
+       "leaders_called": 103,
+       "share_mae_pp_all_lanes": 8.4,
+       "reform": {
+        "rows_reform_stood_forecast": 189,
+        "wards_won": 70,
+        "wards_called_first": 93,
+        "called_first_and_won": 52,
+        "signed_error_pp": -0.17,
+        "mae_pp": 7.17,
+        "mean_forecast_pp": 30.62,
+        "mean_actual_pp": 30.78,
+        "sd_forecast_pp": 9.44,
+        "sd_actual_pp": 12.85,
+        "calibration_slope": 0.923,
+        "won_mean_forecast_lead_pp": 7.13,
+        "won_mean_actual_lead_pp": 15.26,
+        "won_with_rival_forecast": 70
+       }
+      }
+     }
+    }
+   }
+  },
+  "by_after_2026-05-07": {
+   "rows": 107,
+   "arms": {
+    "c2": {
+     "leaders_called": 68,
+     "wards_forecast": 107,
+     "share_mae_pp_all_lanes": 6.66,
+     "brier_common": 0.4937,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 30,
+       "actual_leads": 22,
+       "signed_bias_pp": 1.63,
+       "mae_pp": 5.44
+      },
+      "Labour": {
+       "called_leads": 13,
+       "actual_leads": 23,
+       "signed_bias_pp": -3.3,
+       "mae_pp": 6.25
+      },
+      "Conservative": {
+       "called_leads": 28,
+       "actual_leads": 25,
+       "signed_bias_pp": 1.23,
+       "mae_pp": 6.95
+      },
+      "Liberal Democrats": {
+       "called_leads": 17,
+       "actual_leads": 19,
+       "signed_bias_pp": -1.75,
+       "mae_pp": 8.85
+      },
+      "Green Party": {
+       "called_leads": 17,
+       "actual_leads": 15,
+       "signed_bias_pp": 1.95,
+       "mae_pp": 6.0
+      },
+      "Others": {
+       "called_leads": 2,
+       "actual_leads": 3,
+       "signed_bias_pp": -0.14,
+       "mae_pp": 6.92
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 107,
+      "wards_won": 22,
+      "wards_called_first": 30,
+      "called_first_and_won": 16,
+      "signed_error_pp": 1.63,
+      "mae_pp": 5.44,
+      "mean_forecast_pp": 26.26,
+      "mean_actual_pp": 24.63,
+      "sd_forecast_pp": 11.79,
+      "sd_actual_pp": 12.92,
+      "calibration_slope": 0.924,
+      "won_mean_forecast_lead_pp": 7.34,
+      "won_mean_actual_lead_pp": 8.71,
+      "won_with_rival_forecast": 22
+     }
+    },
+    "s1": {
+     "leaders_called": 73,
+     "wards_forecast": 107,
+     "share_mae_pp_all_lanes": 6.15,
+     "brier_common": 0.4641,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 30,
+       "actual_leads": 22,
+       "signed_bias_pp": 1.53,
+       "mae_pp": 5.42
+      },
+      "Labour": {
+       "called_leads": 15,
+       "actual_leads": 23,
+       "signed_bias_pp": -2.76,
+       "mae_pp": 5.54
+      },
+      "Conservative": {
+       "called_leads": 26,
+       "actual_leads": 25,
+       "signed_bias_pp": 1.28,
+       "mae_pp": 6.39
+      },
+      "Liberal Democrats": {
+       "called_leads": 17,
+       "actual_leads": 19,
+       "signed_bias_pp": -2.17,
+       "mae_pp": 7.42
+      },
+      "Green Party": {
+       "called_leads": 17,
+       "actual_leads": 15,
+       "signed_bias_pp": 1.92,
+       "mae_pp": 5.95
+      },
+      "Others": {
+       "called_leads": 2,
+       "actual_leads": 3,
+       "signed_bias_pp": -0.35,
+       "mae_pp": 6.64
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 107,
+      "wards_won": 22,
+      "wards_called_first": 30,
+      "called_first_and_won": 17,
+      "signed_error_pp": 1.53,
+      "mae_pp": 5.42,
+      "mean_forecast_pp": 26.16,
+      "mean_actual_pp": 24.63,
+      "sd_forecast_pp": 11.61,
+      "sd_actual_pp": 12.92,
+      "calibration_slope": 0.949,
+      "won_mean_forecast_lead_pp": 6.56,
+      "won_mean_actual_lead_pp": 8.71,
+      "won_with_rival_forecast": 22
+     }
+    },
+    "s2": {
+     "leaders_called": 65,
+     "wards_forecast": 107,
+     "share_mae_pp_all_lanes": 6.62,
+     "brier_common": 0.4917,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 31,
+       "actual_leads": 22,
+       "signed_bias_pp": 1.55,
+       "mae_pp": 5.46
+      },
+      "Labour": {
+       "called_leads": 13,
+       "actual_leads": 23,
+       "signed_bias_pp": -3.33,
+       "mae_pp": 6.21
+      },
+      "Conservative": {
+       "called_leads": 30,
+       "actual_leads": 25,
+       "signed_bias_pp": 1.34,
+       "mae_pp": 6.96
+      },
+      "Liberal Democrats": {
+       "called_leads": 15,
+       "actual_leads": 19,
+       "signed_bias_pp": -1.73,
+       "mae_pp": 8.83
+      },
+      "Green Party": {
+       "called_leads": 17,
+       "actual_leads": 15,
+       "signed_bias_pp": 1.96,
+       "mae_pp": 5.96
+      },
+      "Others": {
+       "called_leads": 1,
+       "actual_leads": 3,
+       "signed_bias_pp": -0.24,
+       "mae_pp": 6.54
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 107,
+      "wards_won": 22,
+      "wards_called_first": 31,
+      "called_first_and_won": 16,
+      "signed_error_pp": 1.55,
+      "mae_pp": 5.46,
+      "mean_forecast_pp": 26.19,
+      "mean_actual_pp": 24.63,
+      "sd_forecast_pp": 11.78,
+      "sd_actual_pp": 12.92,
+      "calibration_slope": 0.921,
+      "won_mean_forecast_lead_pp": 7.08,
+      "won_mean_actual_lead_pp": 8.71,
+      "won_with_rival_forecast": 22
+     }
+    }
+   },
+   "groups": {
+    "reform_prev": {
+     "rows": 52,
+     "arms": {
+      "c2": {
+       "leaders_called": 34,
+       "share_mae_pp_all_lanes": 5.79,
+       "reform": {
+        "rows_reform_stood_forecast": 52,
+        "wards_won": 10,
+        "wards_called_first": 14,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.68,
+        "mae_pp": 4.06,
+        "mean_forecast_pp": 24.26,
+        "mean_actual_pp": 22.58,
+        "sd_forecast_pp": 13.72,
+        "sd_actual_pp": 13.37,
+        "calibration_slope": 0.903,
+        "won_mean_forecast_lead_pp": 12.16,
+        "won_mean_actual_lead_pp": 5.21,
+        "won_with_rival_forecast": 10
+       }
+      },
+      "s1": {
+       "leaders_called": 36,
+       "share_mae_pp_all_lanes": 5.58,
+       "reform": {
+        "rows_reform_stood_forecast": 52,
+        "wards_won": 10,
+        "wards_called_first": 13,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.37,
+        "mae_pp": 4.15,
+        "mean_forecast_pp": 23.96,
+        "mean_actual_pp": 22.58,
+        "sd_forecast_pp": 13.63,
+        "sd_actual_pp": 13.37,
+        "calibration_slope": 0.902,
+        "won_mean_forecast_lead_pp": 10.75,
+        "won_mean_actual_lead_pp": 5.21,
+        "won_with_rival_forecast": 10
+       }
+      },
+      "s2": {
+       "leaders_called": 34,
+       "share_mae_pp_all_lanes": 5.76,
+       "reform": {
+        "rows_reform_stood_forecast": 52,
+        "wards_won": 10,
+        "wards_called_first": 13,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.62,
+        "mae_pp": 4.06,
+        "mean_forecast_pp": 24.21,
+        "mean_actual_pp": 22.58,
+        "sd_forecast_pp": 13.76,
+        "sd_actual_pp": 13.37,
+        "calibration_slope": 0.9,
+        "won_mean_forecast_lead_pp": 12.29,
+        "won_mean_actual_lead_pp": 5.21,
+        "won_with_rival_forecast": 10
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 11,
+     "arms": {
+      "c2": {
+       "leaders_called": 8,
+       "share_mae_pp_all_lanes": 5.41,
+       "reform": {
+        "rows_reform_stood_forecast": 11,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.43,
+        "mae_pp": 6.18,
+        "mean_forecast_pp": 22.24,
+        "mean_actual_pp": 19.81,
+        "sd_forecast_pp": 5.17,
+        "sd_actual_pp": 8.14,
+        "calibration_slope": 0.962
+       }
+      },
+      "s1": {
+       "leaders_called": 8,
+       "share_mae_pp_all_lanes": 4.8,
+       "reform": {
+        "rows_reform_stood_forecast": 11,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 3.04,
+        "mae_pp": 5.8,
+        "mean_forecast_pp": 22.85,
+        "mean_actual_pp": 19.81,
+        "sd_forecast_pp": 4.95,
+        "sd_actual_pp": 8.14,
+        "calibration_slope": 1.169
+       }
+      },
+      "s2": {
+       "leaders_called": 8,
+       "share_mae_pp_all_lanes": 5.35,
+       "reform": {
+        "rows_reform_stood_forecast": 11,
+        "wards_won": 0,
+        "wards_called_first": 0,
+        "called_first_and_won": 0,
+        "signed_error_pp": 2.29,
+        "mae_pp": 5.98,
+        "mean_forecast_pp": 22.1,
+        "mean_actual_pp": 19.81,
+        "sd_forecast_pp": 5.23,
+        "sd_actual_pp": 8.14,
+        "calibration_slope": 0.977
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 44,
+     "arms": {
+      "c2": {
+       "leaders_called": 26,
+       "share_mae_pp_all_lanes": 8.11,
+       "reform": {
+        "rows_reform_stood_forecast": 44,
+        "wards_won": 12,
+        "wards_called_first": 16,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.36,
+        "mae_pp": 6.89,
+        "mean_forecast_pp": 29.62,
+        "mean_actual_pp": 28.26,
+        "sd_forecast_pp": 9.43,
+        "sd_actual_pp": 12.41,
+        "calibration_slope": 0.934,
+        "won_mean_forecast_lead_pp": 3.33,
+        "won_mean_actual_lead_pp": 11.62,
+        "won_with_rival_forecast": 12
+       }
+      },
+      "s1": {
+       "leaders_called": 29,
+       "share_mae_pp_all_lanes": 7.23,
+       "reform": {
+        "rows_reform_stood_forecast": 44,
+        "wards_won": 12,
+        "wards_called_first": 17,
+        "called_first_and_won": 9,
+        "signed_error_pp": 1.34,
+        "mae_pp": 6.82,
+        "mean_forecast_pp": 29.6,
+        "mean_actual_pp": 28.26,
+        "sd_forecast_pp": 9.06,
+        "sd_actual_pp": 12.41,
+        "calibration_slope": 1.025,
+        "won_mean_forecast_lead_pp": 3.07,
+        "won_mean_actual_lead_pp": 11.62,
+        "won_with_rival_forecast": 12
+       }
+      },
+      "s2": {
+       "leaders_called": 23,
+       "share_mae_pp_all_lanes": 8.05,
+       "reform": {
+        "rows_reform_stood_forecast": 44,
+        "wards_won": 12,
+        "wards_called_first": 18,
+        "called_first_and_won": 8,
+        "signed_error_pp": 1.29,
+        "mae_pp": 7.0,
+        "mean_forecast_pp": 29.55,
+        "mean_actual_pp": 28.26,
+        "sd_forecast_pp": 9.3,
+        "sd_actual_pp": 12.41,
+        "calibration_slope": 0.932,
+        "won_mean_forecast_lead_pp": 2.75,
+        "won_mean_actual_lead_pp": 11.62,
+        "won_with_rival_forecast": 12
+       }
+      }
+     }
+    }
+   }
+  },
+  "pooled_from_2025-05-01": {
+   "rows": 4412,
+   "arms": {
+    "c2": {
+     "leaders_called": 2742,
+     "wards_forecast": 4412,
+     "share_mae_pp_all_lanes": 6.5,
+     "brier_common": 0.5107,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1231,
+       "actual_leads": 1539,
+       "signed_bias_pp": -3.08,
+       "mae_pp": 6.29
+      },
+      "Labour": {
+       "called_leads": 503,
+       "actual_leads": 573,
+       "signed_bias_pp": -1.73,
+       "mae_pp": 5.52
+      },
+      "Conservative": {
+       "called_leads": 967,
+       "actual_leads": 734,
+       "signed_bias_pp": 0.96,
+       "mae_pp": 6.08
+      },
+      "Liberal Democrats": {
+       "called_leads": 973,
+       "actual_leads": 902,
+       "signed_bias_pp": 2.04,
+       "mae_pp": 7.42
+      },
+      "Green Party": {
+       "called_leads": 455,
+       "actual_leads": 409,
+       "signed_bias_pp": 2.08,
+       "mae_pp": 6.1
+      },
+      "Others": {
+       "called_leads": 283,
+       "actual_leads": 255,
+       "signed_bias_pp": 0.31,
+       "mae_pp": 9.16
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 4376,
+      "wards_won": 1539,
+      "wards_called_first": 1231,
+      "called_first_and_won": 914,
+      "signed_error_pp": -3.08,
+      "mae_pp": 6.29,
+      "mean_forecast_pp": 25.07,
+      "mean_actual_pp": 28.14,
+      "sd_forecast_pp": 9.51,
+      "sd_actual_pp": 13.22,
+      "calibration_slope": 1.145,
+      "won_mean_forecast_lead_pp": 2.32,
+      "won_mean_actual_lead_pp": 14.02,
+      "won_with_rival_forecast": 1539
+     }
+    },
+    "s1": {
+     "leaders_called": 2780,
+     "wards_forecast": 4412,
+     "share_mae_pp_all_lanes": 6.32,
+     "brier_common": 0.5036,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1094,
+       "actual_leads": 1539,
+       "signed_bias_pp": -3.78,
+       "mae_pp": 6.35
+      },
+      "Labour": {
+       "called_leads": 592,
+       "actual_leads": 573,
+       "signed_bias_pp": -1.45,
+       "mae_pp": 5.13
+      },
+      "Conservative": {
+       "called_leads": 933,
+       "actual_leads": 734,
+       "signed_bias_pp": 0.82,
+       "mae_pp": 5.87
+      },
+      "Liberal Democrats": {
+       "called_leads": 1082,
+       "actual_leads": 902,
+       "signed_bias_pp": 2.71,
+       "mae_pp": 6.99
+      },
+      "Green Party": {
+       "called_leads": 446,
+       "actual_leads": 409,
+       "signed_bias_pp": 2.3,
+       "mae_pp": 6.13
+      },
+      "Others": {
+       "called_leads": 265,
+       "actual_leads": 255,
+       "signed_bias_pp": -0.22,
+       "mae_pp": 8.96
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 4376,
+      "wards_won": 1539,
+      "wards_called_first": 1094,
+      "called_first_and_won": 863,
+      "signed_error_pp": -3.78,
+      "mae_pp": 6.35,
+      "mean_forecast_pp": 24.36,
+      "mean_actual_pp": 28.14,
+      "sd_forecast_pp": 9.83,
+      "sd_actual_pp": 13.22,
+      "calibration_slope": 1.124,
+      "won_mean_forecast_lead_pp": 1.93,
+      "won_mean_actual_lead_pp": 14.02,
+      "won_with_rival_forecast": 1539
+     }
+    },
+    "s2": {
+     "leaders_called": 2740,
+     "wards_forecast": 4412,
+     "share_mae_pp_all_lanes": 6.51,
+     "brier_common": 0.5112,
+     "by_party": {
+      "Reform UK": {
+       "called_leads": 1227,
+       "actual_leads": 1539,
+       "signed_bias_pp": -3.15,
+       "mae_pp": 6.34
+      },
+      "Labour": {
+       "called_leads": 483,
+       "actual_leads": 573,
+       "signed_bias_pp": -1.83,
+       "mae_pp": 5.53
+      },
+      "Conservative": {
+       "called_leads": 979,
+       "actual_leads": 734,
+       "signed_bias_pp": 1.08,
+       "mae_pp": 6.1
+      },
+      "Liberal Democrats": {
+       "called_leads": 983,
+       "actual_leads": 902,
+       "signed_bias_pp": 1.99,
+       "mae_pp": 7.4
+      },
+      "Green Party": {
+       "called_leads": 451,
+       "actual_leads": 409,
+       "signed_bias_pp": 2.08,
+       "mae_pp": 6.11
+      },
+      "Others": {
+       "called_leads": 289,
+       "actual_leads": 255,
+       "signed_bias_pp": 0.49,
+       "mae_pp": 9.14
+      }
+     },
+     "reform": {
+      "rows_reform_stood_forecast": 4376,
+      "wards_won": 1539,
+      "wards_called_first": 1227,
+      "called_first_and_won": 909,
+      "signed_error_pp": -3.15,
+      "mae_pp": 6.34,
+      "mean_forecast_pp": 24.99,
+      "mean_actual_pp": 28.14,
+      "sd_forecast_pp": 9.56,
+      "sd_actual_pp": 13.22,
+      "calibration_slope": 1.136,
+      "won_mean_forecast_lead_pp": 2.37,
+      "won_mean_actual_lead_pp": 14.02,
+      "won_with_rival_forecast": 1539
+     }
+    }
+   },
+   "groups": {
+    "reform_prev": {
+     "rows": 510,
+     "arms": {
+      "c2": {
+       "leaders_called": 370,
+       "share_mae_pp_all_lanes": 5.0,
+       "reform": {
+        "rows_reform_stood_forecast": 510,
+        "wards_won": 209,
+        "wards_called_first": 183,
+        "called_first_and_won": 154,
+        "signed_error_pp": -3.16,
+        "mae_pp": 5.6,
+        "mean_forecast_pp": 27.22,
+        "mean_actual_pp": 30.38,
+        "sd_forecast_pp": 11.29,
+        "sd_actual_pp": 13.47,
+        "calibration_slope": 1.043,
+        "won_mean_forecast_lead_pp": 7.03,
+        "won_mean_actual_lead_pp": 15.58,
+        "won_with_rival_forecast": 209
+       }
+      },
+      "s1": {
+       "leaders_called": 375,
+       "share_mae_pp_all_lanes": 4.89,
+       "reform": {
+        "rows_reform_stood_forecast": 510,
+        "wards_won": 209,
+        "wards_called_first": 184,
+        "called_first_and_won": 154,
+        "signed_error_pp": -3.05,
+        "mae_pp": 5.48,
+        "mean_forecast_pp": 27.32,
+        "mean_actual_pp": 30.38,
+        "sd_forecast_pp": 11.54,
+        "sd_actual_pp": 13.47,
+        "calibration_slope": 1.029,
+        "won_mean_forecast_lead_pp": 7.7,
+        "won_mean_actual_lead_pp": 15.58,
+        "won_with_rival_forecast": 209
+       }
+      },
+      "s2": {
+       "leaders_called": 370,
+       "share_mae_pp_all_lanes": 4.99,
+       "reform": {
+        "rows_reform_stood_forecast": 510,
+        "wards_won": 209,
+        "wards_called_first": 180,
+        "called_first_and_won": 152,
+        "signed_error_pp": -3.06,
+        "mae_pp": 5.56,
+        "mean_forecast_pp": 27.32,
+        "mean_actual_pp": 30.38,
+        "sd_forecast_pp": 11.37,
+        "sd_actual_pp": 13.47,
+        "calibration_slope": 1.037,
+        "won_mean_forecast_lead_pp": 7.45,
+        "won_mean_actual_lead_pp": 15.58,
+        "won_with_rival_forecast": 209
+       }
+      }
+     }
+    },
+    "reform_no_prev_ward_had_contest": {
+     "rows": 2283,
+     "arms": {
+      "c2": {
+       "leaders_called": 1561,
+       "share_mae_pp_all_lanes": 5.49,
+       "reform": {
+        "rows_reform_stood_forecast": 2283,
+        "wards_won": 669,
+        "wards_called_first": 450,
+        "called_first_and_won": 365,
+        "signed_error_pp": -2.67,
+        "mae_pp": 5.8,
+        "mean_forecast_pp": 22.55,
+        "mean_actual_pp": 25.21,
+        "sd_forecast_pp": 9.49,
+        "sd_actual_pp": 13.48,
+        "calibration_slope": 1.226,
+        "won_mean_forecast_lead_pp": 0.73,
+        "won_mean_actual_lead_pp": 13.41,
+        "won_with_rival_forecast": 669
+       }
+      },
+      "s1": {
+       "leaders_called": 1571,
+       "share_mae_pp_all_lanes": 5.37,
+       "reform": {
+        "rows_reform_stood_forecast": 2283,
+        "wards_won": 669,
+        "wards_called_first": 437,
+        "called_first_and_won": 362,
+        "signed_error_pp": -2.99,
+        "mae_pp": 5.62,
+        "mean_forecast_pp": 22.22,
+        "mean_actual_pp": 25.21,
+        "sd_forecast_pp": 9.64,
+        "sd_actual_pp": 13.48,
+        "calibration_slope": 1.23,
+        "won_mean_forecast_lead_pp": 0.9,
+        "won_mean_actual_lead_pp": 13.41,
+        "won_with_rival_forecast": 669
+       }
+      },
+      "s2": {
+       "leaders_called": 1569,
+       "share_mae_pp_all_lanes": 5.5,
+       "reform": {
+        "rows_reform_stood_forecast": 2283,
+        "wards_won": 669,
+        "wards_called_first": 462,
+        "called_first_and_won": 372,
+        "signed_error_pp": -2.62,
+        "mae_pp": 5.8,
+        "mean_forecast_pp": 22.6,
+        "mean_actual_pp": 25.21,
+        "sd_forecast_pp": 9.53,
+        "sd_actual_pp": 13.48,
+        "calibration_slope": 1.219,
+        "won_mean_forecast_lead_pp": 1.0,
+        "won_mean_actual_lead_pp": 13.41,
+        "won_with_rival_forecast": 669
+       }
+      }
+     }
+    },
+    "reform_no_prev_contest": {
+     "rows": 1583,
+     "arms": {
+      "c2": {
+       "leaders_called": 788,
+       "share_mae_pp_all_lanes": 8.47,
+       "reform": {
+        "rows_reform_stood_forecast": 1583,
+        "wards_won": 661,
+        "wards_called_first": 598,
+        "called_first_and_won": 395,
+        "signed_error_pp": -3.64,
+        "mae_pp": 7.21,
+        "mean_forecast_pp": 28.0,
+        "mean_actual_pp": 31.64,
+        "sd_forecast_pp": 7.76,
+        "sd_actual_pp": 11.69,
+        "calibration_slope": 1.033,
+        "won_mean_forecast_lead_pp": 2.45,
+        "won_mean_actual_lead_pp": 14.16,
+        "won_with_rival_forecast": 661
+       }
+      },
+      "s1": {
+       "leaders_called": 811,
+       "share_mae_pp_all_lanes": 8.17,
+       "reform": {
+        "rows_reform_stood_forecast": 1583,
+        "wards_won": 661,
+        "wards_called_first": 473,
+        "called_first_and_won": 347,
+        "signed_error_pp": -5.14,
+        "mae_pp": 7.69,
+        "mean_forecast_pp": 26.5,
+        "mean_actual_pp": 31.64,
+        "sd_forecast_pp": 8.72,
+        "sd_actual_pp": 11.69,
+        "calibration_slope": 0.953,
+        "won_mean_forecast_lead_pp": 1.13,
+        "won_mean_actual_lead_pp": 14.16,
+        "won_with_rival_forecast": 661
+       }
+      },
+      "s2": {
+       "leaders_called": 777,
+       "share_mae_pp_all_lanes": 8.5,
+       "reform": {
+        "rows_reform_stood_forecast": 1583,
+        "wards_won": 661,
+        "wards_called_first": 585,
+        "called_first_and_won": 385,
+        "signed_error_pp": -3.94,
+        "mae_pp": 7.37,
+        "mean_forecast_pp": 27.7,
+        "mean_actual_pp": 31.64,
+        "sd_forecast_pp": 7.92,
+        "sd_actual_pp": 11.69,
+        "calibration_slope": 1.002,
+        "won_mean_forecast_lead_pp": 2.15,
+        "won_mean_actual_lead_pp": 14.16,
+        "won_with_rival_forecast": 661
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "baseline_check": "refitted C2 reproduces REBUILD_RESULTS.md 'Both' on every May and on the by-elections",
+ "rules": {
+  "s1": {
+   "per_year": {
+    "2019": {
+     "wards": 1678,
+     "c2": 1375,
+     "s1": 1375,
+     "difference": 0,
+     "c2_mae": 6.18,
+     "s1_mae": 6.18
+    },
+    "2021": {
+     "wards": 2255,
+     "c2": 1713,
+     "s1": 1713,
+     "difference": 0,
+     "c2_mae": 6.04,
+     "s1_mae": 6.04
+    },
+    "2022": {
+     "wards": 2533,
+     "c2": 2138,
+     "s1": 2138,
+     "difference": 0,
+     "c2_mae": 5.7,
+     "s1_mae": 5.7
+    },
+    "2023": {
+     "wards": 1734,
+     "c2": 1442,
+     "s1": 1442,
+     "difference": 0,
+     "c2_mae": 5.43,
+     "s1_mae": 5.43
+    },
+    "2025": {
+     "wards": 1399,
+     "c2": 703,
+     "s1": 710,
+     "difference": 7,
+     "c2_mae": 8.3,
+     "s1_mae": 8.13
+    },
+    "2026": {
+     "wards": 2576,
+     "c2": 1764,
+     "s1": 1782,
+     "difference": 18,
+     "c2_mae": 5.48,
+     "s1_mae": 5.34
+    }
+   },
+   "pooled_six": {
+    "c2": 9135,
+    "s1": 9160,
+    "c2_mae": 6.08,
+    "s1_mae": 6.02
+   },
+   "pooled_five_without_2026": {
+    "c2": 7371,
+    "s1": 7378,
+    "c2_mae": 6.29,
+    "s1_mae": 6.26
+   },
+   "byelections": {
+    "c2": 786,
+    "s1": 812,
+    "c2_mae": 7.26,
+    "s1_mae": 6.92
+   },
+   "reform_from_2025": {
+    "c2_slope": 1.145,
+    "s1_slope": 1.124,
+    "c2_called_won": [
+     1231,
+     1539
+    ],
+    "s1_called_won": [
+     1094,
+     1539
+    ]
+   },
+   "years_at_least_as_many": [
+    "2019",
+    "2021",
+    "2022",
+    "2023",
+    "2025",
+    "2026"
+   ],
+   "years_worse_by_more_than_1pct": [],
+   "rule_1_pooled_more": true,
+   "rule_2_pooled_mae_no_higher": true,
+   "rule_3_four_of_six_years": true,
+   "rule_4_no_year_worse_than_1pct": true,
+   "rule_5_without_2026": true,
+   "rule_6_byelections": true,
+   "rule_7_reform_spread": false,
+   "supported": false
+  },
+  "s2": {
+   "per_year": {
+    "2019": {
+     "wards": 1678,
+     "c2": 1375,
+     "s2": 1375,
+     "difference": 0,
+     "c2_mae": 6.18,
+     "s2_mae": 6.18
+    },
+    "2021": {
+     "wards": 2255,
+     "c2": 1713,
+     "s2": 1713,
+     "difference": 0,
+     "c2_mae": 6.04,
+     "s2_mae": 6.04
+    },
+    "2022": {
+     "wards": 2533,
+     "c2": 2138,
+     "s2": 2140,
+     "difference": 2,
+     "c2_mae": 5.7,
+     "s2_mae": 5.72
+    },
+    "2023": {
+     "wards": 1734,
+     "c2": 1442,
+     "s2": 1430,
+     "difference": -12,
+     "c2_mae": 5.43,
+     "s2_mae": 5.44
+    },
+    "2025": {
+     "wards": 1399,
+     "c2": 703,
+     "s2": 689,
+     "difference": -14,
+     "c2_mae": 8.3,
+     "s2_mae": 8.34
+    },
+    "2026": {
+     "wards": 2576,
+     "c2": 1764,
+     "s2": 1772,
+     "difference": 8,
+     "c2_mae": 5.48,
+     "s2_mae": 5.48
+    }
+   },
+   "pooled_six": {
+    "c2": 9135,
+    "s2": 9119,
+    "c2_mae": 6.08,
+    "s2_mae": 6.09
+   },
+   "pooled_five_without_2026": {
+    "c2": 7371,
+    "s2": 7347,
+    "c2_mae": 6.29,
+    "s2_mae": 6.31
+   },
+   "byelections": {
+    "c2": 786,
+    "s2": 792,
+    "c2_mae": 7.26,
+    "s2_mae": 7.25
+   },
+   "reform_from_2025": {
+    "c2_slope": 1.145,
+    "s2_slope": 1.136,
+    "c2_called_won": [
+     1231,
+     1539
+    ],
+    "s2_called_won": [
+     1227,
+     1539
+    ]
+   },
+   "years_at_least_as_many": [
+    "2019",
+    "2021",
+    "2022",
+    "2026"
+   ],
+   "years_worse_by_more_than_1pct": [
+    "2025"
+   ],
+   "rule_1_pooled_more": false,
+   "rule_2_pooled_mae_no_higher": false,
+   "rule_3_four_of_six_years": true,
+   "rule_4_no_year_worse_than_1pct": false,
+   "rule_5_without_2026": false,
+   "rule_6_byelections": true,
+   "rule_7_reform_spread": false,
+   "supported": false
+  }
+ },
+ "named": null
+}
