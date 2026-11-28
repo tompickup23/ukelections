@@ -5,7 +5,10 @@
  * the notional previous results from cache/engine_notional.json added for the
  * bridged wards. ENGINE_NOTIONAL_SPEC.md.
  *
- * Usage: node engine_notional_history.mjs <history.json> <out.json> [--inject]
+ * With --withhold every ward's own history is withheld (BASELINE_AGE_SPEC.md), so
+ * the engine gives each ward its fallback; council and county aggregates stay.
+ *
+ * Usage: node engine_notional_history.mjs <history.json> <out.json> [--inject | --withhold]
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -39,5 +42,6 @@ if (flag === "--inject") {
     added += 1;
   }
 }
+if (flag === "--withhold") for (const k of Object.keys(byWard)) delete byWard[k];
 writeFileSync(out, JSON.stringify({ ...h, results: (h.results || []).filter((r) => r.election_date < CUT), by_ballot: byBallot, by_ward_slug: byWard }));
 console.log(`contests kept ${Object.keys(byBallot).length - added} of ${Object.keys(h.by_ballot).length}; notional results added ${added}; wards that already had history ${clash}`);
