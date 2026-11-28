@@ -9,14 +9,33 @@ import {
   loadGeHeadline,
   loadMay7Headline,
   loadHomepageContest,
+  loadDeclarationCheckedCount,
   shortPartyLabel,
 } from "../lib/siteData";
 import { PARLIAMENT_REGIONS } from "../lib/parliamentRegions";
+import { councilByElectionWeek, isDeclared, loadLocalContests } from "../lib/byElections";
+import { partyColour } from "../lib/predictions";
 
 const nextContest = loadHomepageContest();
 const ge = loadGeHeadline();
 const geSummary = loadGeSummary();
 const may7 = loadMay7Headline();
+
+// The same week the /by-elections/this-week/ page reports: polled in the seven
+// days to the build, and polling in the seven after.
+const week = councilByElectionWeek(loadLocalContests());
+const weekDeclared = week.held.filter(isDeclared).length;
+// A "too close to call" forecast named nobody, so it is not counted either way.
+const weekGraded = week.held.filter((c) => c.forecast && !c.forecast.too_close_to_call
+  && typeof c.result?.grading?.call_correct === "boolean"
+  && c.result.grading.graded_against === "forecast_as_published");
+const weekRight = weekGraded.filter((c) => c.result.grading.call_correct).length;
+const WEEK_ROWS = 6;
+const dayMonth = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+const winnerLabel = (r: any) =>
+  r.winner_party === "Other" && r.winner_party_name ? r.winner_party_name : shortPartyLabel(r.winner_party);
+const declarationChecked = loadDeclarationCheckedCount();
 
 const topNationalShares = ge.national_vote_share.slice(0, 6);
 const HALFWAY = 326;
@@ -59,16 +78,82 @@ const description = localPollingDay
         Every constituency, every council and every by-election, each with the model's
         record for that place published alongside the forecast.
       </p>
+      <form id="home-lookup" class="home-lookup" action="/your-area/" autocomplete="off">
+        <label for="home-lookup-input">Is there an election where you live?</label>
+        <div class="home-lookup-row">
+          <input id="home-lookup-input" type="search" placeholder="Postcode, e.g. BB12 6PG" autocapitalize="characters" />
+          <button type="submit">Find my elections</button>
+        </div>
+        <p class="home-lookup-note">
+          Your postcode goes from your browser to <a href="https://postcodes.io/">Postcodes.io</a> to find your ward and constituency. UK Elections does not receive or store it. <a href="/privacy/">Privacy details</a>.
+        </p>
+      </form>
     </section>
 
-    {localPollingDay && (
-      <section class="home-local-contests" aria-label="Next polling day">
-        <p class="eyebrow">Next polling day</p>
-        <h2>{localPollingDay.headline}</h2>
-        <p><a href={localPollingDay.href}>See this week's council by-elections →</a></p>
-        <p class="caption">Source: Democracy Club contest records and linked council notices.</p>
-      </section>
-    )}
+    <section class="home-week" aria-labelledby="home-week-title">
+      <p class="eyebrow">Council by-elections this week</p>
+      <h2 id="home-week-title">
+        {localPollingDay
+          ? localPollingDay.headline
+          : week.held.length > 0
+            ? `${week.held.length} council by-election${week.held.length === 1 ? "" : "s"} polled in the last seven days`
+            : "No council by-elections this week"}
+      </h2>
+      {week.held.length > 0 && (
+        <>
+          <p class="home-week-summary">
+            Polled in the last seven days: {week.held.length}, {weekDeclared} declared.
+            {weekGraded.length > 0 && ` Our pre-poll forecasts named the winner in ${weekRight} of ${weekGraded.length}.`}
+          </p>
+          <ul class="home-week-list">
+            {week.held.slice(0, WEEK_ROWS).map((c) => {
+              const r = c.result || c.declaration;
+              const g = c.result?.grading;
+              const f = c.forecast;
+              return (
+                <li>
+                  <a href={`/by-elections/local/${c.slug}/`}>
+                    <span class="ward">{c.contest.ward_name}</span>
+                    <span class="council">{c.contest.council_name}</span>
+                  </a>
+                  <span class="status">
+                    {isDeclared(c) && r ? (
+                      <span class="party-chip" style={`--chip:${partyColour(r.winner_party)}`}>{winnerLabel(r)}</span>
+                    ) : (
+                      <span class="muted">Result awaited</span>
+                    )}
+                    {f && !f.too_close_to_call && typeof g?.call_correct === "boolean" && g.graded_against === "forecast_as_published"
+                      ? <span class="call">{g.call_correct ? "Forecast called it" : "Forecast missed"}</span>
+                      : f?.too_close_to_call ? <span class="call">Forecast: too close to call</span> : null}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+      {week.next.length > 0 && (
+        <>
+          <p class="home-week-summary">Polling in the next seven days: {week.next.length}.</p>
+          <ul class="home-week-list">
+            {week.next.slice(0, WEEK_ROWS).map((c) => (
+              <li>
+                <a href={`/by-elections/local/${c.slug}/`}>
+                  <span class="ward">{c.contest.ward_name}</span>
+                  <span class="council">{c.contest.council_name}</span>
+                </a>
+                <span class="status">
+                  <span>{dayMonth(c.contest.polling_day)}</span>
+                  <span class="call">{c.field.candidate_count} candidate{c.field.candidate_count === 1 ? "" : "s"}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      <p><a href="/by-elections/this-week/">Every result and forecast this week →</a></p>
+      <p class="caption">Sources: each council's declaration where we have read it, Democracy Club contest records otherwise.</p>
+    </section>
 
     {heroContest && (
       <section class="hero hero-byelection-v2">
@@ -149,30 +234,28 @@ const description = localPollingDay
 
   <section class="section">
     <div class="section-head">
-      <p class="eyebrow">Past elections</p>
-      <h2>Every prediction we've published, scored against the actual count</h2>
+      <p class="eyebrow">Our record</p>
+      <h2>Every forecast is locked before polling day and scored afterwards, misses included</h2>
     </div>
-    <div class="accuracy-grid">
-      <article>
-        <span class="big-number">{(may7.live_winner_accuracy * 100).toFixed(1)}%</span>
-        <p class="big-number-label">winners called correctly on 7 May 2026. Our locked, sha256-witnessed forecast across {may7.contesting_councils} councils.</p>
-      </article>
-      <article>
-        <span class="big-number">{(may7.live_major_party_mae * 100).toFixed(2)}pp</span>
-        <p class="big-number-label">average gap between our predicted vote share and the actual count, per party</p>
-      </article>
-      <article>
-        <span class="big-number">{(ge.backtest_winner_accuracy * 100).toFixed(0)}%</span>
-        <p class="big-number-label">winners called when the model was run from the 2019 result to the 2024 general election (target 92 per cent)</p>
-      </article>
-    </div>
+    <p class="lede">
+      On 7 May 2026 we scored <strong>{may7.ballots_evaluated.toLocaleString("en-GB")}</strong> ward forecasts against the count.
+      The forecast locked 11 days before polling named the leading party in
+      <strong>{(may7.prereg_winner_accuracy * 100).toFixed(1)}%</strong> of them; the version on the site on polling day,
+      <strong>{(may7.live_winner_accuracy * 100).toFixed(1)}%</strong>.
+      {declarationChecked > 0 && <> Since then, <strong>{declarationChecked}</strong> council by-election results have been read from the returning officer's own declaration.</>}
+    </p>
     <p class="muted-row">
       Each constituency and council page carries its own forecast-vs-actual record so you can see exactly how the model behaved <em>for that place</em>, not just on average.
     </p>
     <p class="muted-row">
-      <a href="/past-results/">All past predictions →</a>
+      <a href="/data-quality/">The full record, with definitions →</a>
+      · <a href="/by-elections/post-mortem/">By-election forecasts scored →</a>
       · <a href="/data-quality/ge-backtest/">2024 general election backtest →</a>
       · <a href="/data-quality/2024-backtest/">2024 local backtest →</a>
+    </p>
+    <p class="caption">
+      Sources: May 2026 scorecard (<a href="/data/transparency/may-2026-postaudit-2026-05-10.json">data file</a>, generated 10 May 2026);
+      by-election results ledger, rows marked as read from a council declaration.
     </p>
   </section>
 
@@ -205,7 +288,53 @@ const description = localPollingDay
   </section>
 </BaseLayout>
 
+<script>
+  // The postcode travels in the URL fragment, which a browser never sends to
+  // the server, so it reaches no log. Without JavaScript the form opens the
+  // lookup page with nothing attached.
+  const form = document.getElementById("home-lookup") as HTMLFormElement | null;
+  const input = document.getElementById("home-lookup-input") as HTMLInputElement | null;
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const value = (input?.value || "").trim();
+    window.location.assign(value ? `/your-area/#q=${encodeURIComponent(value)}` : "/your-area/");
+  });
+</script>
+
 <style>
+  .home-lookup { margin-top: var(--space-lg); max-width: 56ch; }
+  .home-lookup label { display: block; font-weight: 700; color: var(--ink); }
+  .home-lookup-row { display: flex; gap: var(--space-sm); margin-top: var(--space-sm); }
+  .home-lookup-row input {
+    flex: 1; min-width: 0; padding: var(--space-md); font-size: var(--text-body);
+    border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--ink);
+  }
+  .home-lookup-row button {
+    padding: var(--space-md) var(--space-lg); font-weight: 600; background: var(--accent-3); color: var(--bg);
+    border: 0; border-radius: 6px; cursor: pointer;
+  }
+  .home-lookup-note { margin: var(--space-sm) 0 0; color: var(--ink-soft); font-size: var(--text-small); line-height: 1.5; }
+  .home-week { border-left: 3px solid var(--border); padding-left: var(--space-lg); }
+  .home-week h2 { font-family: var(--font-display); font-size: var(--text-h2); line-height: 1.2; margin: 0; }
+  .home-week p { margin: var(--space-sm) 0 0; }
+  .home-week-summary { color: var(--muted); font-size: var(--text-small); }
+  .home-week-list { list-style: none; padding: 0; margin: var(--space-sm) 0 0; }
+  .home-week-list li {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-md); align-items: start;
+    padding-block: var(--space-xs); border-top: 1px solid var(--border);
+  }
+  .home-week-list .council, .home-week-list .call, .home-week-list .muted { color: var(--muted); font-size: var(--text-small); }
+  .home-week-list .council, .home-week-list .call { display: block; }
+  .home-week-list .status { text-align: right; }
+  .home-week-list .ward { font-weight: 600; }
+  .home-week-list .party-chip { border-left: 4px solid var(--chip, var(--border)); padding-left: var(--space-xs); font-weight: 600; }
+  @media (max-width: 40rem) {
+    .home-lookup-row { flex-direction: column; }
+    .home-lookup-row button { width: 100%; }
+  }
+  @media (min-width: 1100px) {
+    .home-week { grid-column: 1; }
+  }
   .region-list ul {
     display: flex;
     flex-wrap: wrap;
