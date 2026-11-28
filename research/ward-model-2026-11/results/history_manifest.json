@@ -1,0 +1,809 @@
+{
+ "spec": "HISTORY_SPEC.md",
+ "output_dir": "cache/history",
+ "inputs": {
+  "research/ward-model-2026-11/cache/rebuild/corrected/dataset.pkl": "c2fa5e5272b0fcb68d8679eeb97188e576ea8b791998a2daf072905190f2408b",
+  "research/ward-model-2026-11/cache/rebuild/corrected/bridge_level_dataset.pkl": "3393cfdba3437f46ad2f2b8485e1621b8a38d4c5605ee33c4c4cd9be38de53a8",
+  "data/identity/wards-2027-baselines.json": "414b844f34ca30c592d974342f0a7b9ea58062a3bd0687ce24ce150742399534",
+  "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404",
+  "research/ward-model-2026-11/cache/v2027/bridge.pkl": "7e951349621b9e873a3dd5cd580e588f220361f3ce272802067827b02cbb80c4",
+  "data/results/may-2026/local-and-mayor.merged.json": "99ff664e6de1d2a71c5d178bb27ecbaec3b29b1548d9c10088c6a8ef4f622e74",
+  "data/identity/wards-2027.json": "d1fd913b0fc3dd7b7fd75c5dbf51d57fdeef9ec0594a9a245359af105f905e0b",
+  "research/ward-model-2026-11/cache/fit_meta.pkl": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+ },
+ "polling_files": {
+  "westminster-2017-06-08-to-2017-12-31.json": "5c186a8036c953e1cade962523fe46ef7d8c814d0312dcb82c7624001d2a4a0e",
+  "westminster-2018-01-01-to-2019-05-02.json": "7a1715c6bf357ba4210b3f2dd4ae6cf23d925f2e3ffcad45241387f190e1b384",
+  "westminster-2019-05-03-to-2019-12-12.json": "b222bc3915975b2c4332ac8875ff81a2f259a8dce2a6a2af6829b1cb298e0492",
+  "westminster-2019-12-13-to-2024-07-03.json": "d0b8ea74110526654010a89ec0c440ca26adce98a0afccbb711b09acbd67cd63",
+  "bridge_level_polls_2024-07-05_to_2025-04-14.json": "ff7dbd33f6697b7836d35c1a324efc6227e1c425b6fe562609439b3054f324a8",
+  "westminster-2025-04-15-to-2026-04-25.json": "1da7b7a373f1dee1de3fd55ce2b3e494f0a60db9ff40e56785cfa8fd014dc461"
+ },
+ "rows_added": {
+  "A": {
+   "added_2023-05-04": 2677,
+   "added_2023-06-22": 2,
+   "left_out_code_without_feature_row": 7,
+   "added_2023-06-15": 2
+  },
+  "A_joint_label_rows": [
+   "local.derby.abbey.2023-05-04",
+   "local.derby.allestree.2023-05-04",
+   "local.derby.alvaston-north.2023-05-04",
+   "local.derby.arboretum.2023-05-04",
+   "local.derby.blagreaves.2023-05-04",
+   "local.derby.chaddesden-east.2023-05-04",
+   "local.derby.chaddesden-north.2023-05-04",
+   "local.derby.chaddesden-west.2023-05-04",
+   "local.derby.darley.2023-05-04",
+   "local.derby.littleover.2023-05-04",
+   "local.derby.mackworth-new-zealand.2023-05-04",
+   "local.derby.mickleover.2023-05-04",
+   "local.derby.normanton.2023-05-04",
+   "local.derby.oakwood.2023-05-04",
+   "local.derby.spondon.2023-05-04"
+  ],
+  "B": {
+   "added": 97,
+   "already_in_dataset_under_old_code": 226,
+   "no_may2026_ballot": 6
+  },
+  "C": {
+   "pairs": 35,
+   "one_to_one_and_coded": true,
+   "rows": {
+    "local.castle-point.appleton.2024-05-02": {
+     "old": "E05004082",
+     "new": "E05015691",
+     "date": "2024-05-02"
+    },
+    "local.castle-point.canvey-island-central.2024-05-02": {
+     "old": "E05004084",
+     "new": "E05015692",
+     "date": "2024-05-02"
+    },
+    "local.castle-point.canvey-island-east.2024-05-02": {
+     "old": "E05004085",
+     "new": "E05015693",
+     "date": "2024-05-02"
+    },
+    "local.castle-point.canvey-island-north.2024-05-02": {
+     "old": "E05004086",
+     "new": "E05015694",
+     "date": "2024-05-02"
+    },
+    "local.castle-point.canvey-island-south.2024-05-02": {
+     "old": "E05004087",
+     "new": "E05015695",
+     "date": "2024-05-02"
+    },
+    "local.castle-point.st-georges.2024-05-02": {
+     "old": "E05004091",
+     "new": "E05015698",
+     "date": "2024-05-02"
+    },
+    "local.castle-point.st-marys.2024-05-02": {
+     "old": "E05004093",
+     "new": "E05015699",
+     "date": "2024-05-02"
+    },
+    "local.chelmsford.goat-hall.2023-05-04": {
+     "old": "E05004102",
+     "new": "E05015470",
+     "date": "2023-05-04"
+    },
+    "local.chelmsford.great-baddow-east.2023-05-04": {
+     "old": "E05004103",
+     "new": "E05015471",
+     "date": "2023-05-04"
+    },
+    "local.chelmsford.great-baddow-west.2023-05-04": {
+     "old": "E05004104",
+     "new": "E05015472",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.brimington-north.2023-05-04": {
+     "old": "E05003324",
+     "new": "E05015172",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.brimington-south.2023-05-04": {
+     "old": "E05003325",
+     "new": "E05015173",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.brockwell.2023-05-04": {
+     "old": "E05003326",
+     "new": "E05015174",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.dunston.2023-05-04": {
+     "old": "E05003327",
+     "new": "E05015175",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.hasland.2023-05-04": {
+     "old": "E05003328",
+     "new": "E05015176",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.linacre.2023-05-04": {
+     "old": "E05003331",
+     "new": "E05015177",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.rother.2023-05-04": {
+     "old": "E05003337",
+     "new": "E05015178",
+     "date": "2023-05-04"
+    },
+    "local.chesterfield.walton.2023-05-04": {
+     "old": "E05003340",
+     "new": "E05015183",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.bishops-stortford-all-saints.2023-05-04": {
+     "old": "E05012981",
+     "new": "E05015355",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.bishops-stortford-central.2023-05-04": {
+     "old": "E05012982",
+     "new": "E05015356",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.bishops-stortford-south.2023-05-04": {
+     "old": "E05012985",
+     "new": "E05015359",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.buntingford.2023-05-04": {
+     "old": "E05012986",
+     "new": "E05015362",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.hertford-bengeo.2023-05-04": {
+     "old": "E05004725",
+     "new": "E05015364",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.hertford-castle.2023-05-04": {
+     "old": "E05004726",
+     "new": "E05015365",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.hertford-sele.2023-05-04": {
+     "old": "E05004731",
+     "new": "E05015369",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.hunsdon.2023-05-04": {
+     "old": "E05004732",
+     "new": "E05015370",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.much-hadham.2023-05-04": {
+     "old": "E05004735",
+     "new": "E05015372",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.sawbridgeworth.2023-05-04": {
+     "old": "E05004737",
+     "new": "E05015373",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.ware-st-marys.2023-05-04": {
+     "old": "E05004743",
+     "new": "E05015377",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.ware-trinity.2023-05-04": {
+     "old": "E05004744",
+     "new": "E05015378",
+     "date": "2023-05-04"
+    },
+    "local.east-hertfordshire.watton-at-stone.2023-05-04": {
+     "old": "E05004745",
+     "new": "E05015379",
+     "date": "2023-05-04"
+    },
+    "local.west-suffolk.iceni.2023-05-04": {
+     "old": "E05012781",
+     "new": "E05015577",
+     "date": "2023-05-04"
+    },
+    "local.west-suffolk.manor.2023-05-04": {
+     "old": "E05012785",
+     "new": "E05015578",
+     "date": "2023-05-04"
+    },
+    "local.west-suffolk.moreton-hall.2023-05-04": {
+     "old": "E05012790",
+     "new": "E05015579",
+     "date": "2023-05-04"
+    },
+    "local.west-suffolk.rougham.2023-05-04": {
+     "old": "E05012796",
+     "new": "E05015580",
+     "date": "2023-05-04"
+    }
+   }
+  }
+ },
+ "row_counts": {
+  "base": {
+   "2016 scheduled": 1497,
+   "2016 by-election": 16,
+   "2017 scheduled": 721,
+   "2017 by-election": 74,
+   "2018 scheduled": 2119,
+   "2018 by-election": 60,
+   "2019 scheduled": 1678,
+   "2019 by-election": 65,
+   "2020 by-election": 12,
+   "2021 scheduled": 2257,
+   "2021 by-election": 116,
+   "2022 scheduled": 2536,
+   "2022 by-election": 66,
+   "2023 scheduled": 1737,
+   "2023 by-election": 83,
+   "2024 scheduled": 1902,
+   "2024 by-election": 310,
+   "2025 scheduled": 1406,
+   "2025 by-election": 324,
+   "2026 scheduled": 2576,
+   "2026 by-election": 168
+  },
+  "extended": {
+   "2016 scheduled": 1497,
+   "2016 by-election": 16,
+   "2017 scheduled": 721,
+   "2017 by-election": 74,
+   "2018 scheduled": 2119,
+   "2018 by-election": 60,
+   "2019 scheduled": 1678,
+   "2019 by-election": 65,
+   "2020 by-election": 12,
+   "2021 scheduled": 2257,
+   "2021 by-election": 116,
+   "2022 scheduled": 2536,
+   "2022 by-election": 66,
+   "2023 scheduled": 4418,
+   "2023 by-election": 83,
+   "2024 scheduled": 1902,
+   "2024 by-election": 310,
+   "2025 scheduled": 1406,
+   "2025 by-election": 324,
+   "2026 scheduled": 2673,
+   "2026 by-election": 168
+  }
+ },
+ "added_rows": {
+  "by_source_and_date": {
+   "history_baselines_dc2027 2023-05-04": 2677,
+   "history_baselines_dc2027 2023-06-15": 2,
+   "history_baselines_dc2027 2023-06-22": 2,
+   "history_bridge_may26 2026-05-07": 97
+  },
+  "with_previous_contest": 0,
+  "anchored": 2778
+ },
+ "has_prev_by_year": {
+  "base": {
+   "2016": 0,
+   "2017": 63,
+   "2018": 1507,
+   "2019": 1456,
+   "2020": 12,
+   "2021": 2256,
+   "2022": 2333,
+   "2023": 1693,
+   "2024": 1504,
+   "2025": 291,
+   "2026": 2539
+  },
+  "extended": {
+   "2016": 0,
+   "2017": 63,
+   "2018": 1507,
+   "2019": 1456,
+   "2020": 12,
+   "2021": 2256,
+   "2022": 2333,
+   "2023": 1667,
+   "2024": 1599,
+   "2025": 406,
+   "2026": 2597
+  }
+ },
+ "outputs": {
+  "backtest_b_anchor_report.json": "76b0099c90efd22deee98a4f2b7afb19bdf283c1071a9ad65e8b66bce6249a9f",
+  "backtest_b_dataset.pkl": "243b2bb767f57e31159451cb4e425711ec5d5b9dc29936a68605d6c9eaebe1d2",
+  "bridge_level_anchor_report.json": "3c17b3c371ffc34bf04407e726b1c26a3d830fc34be295cd3cc51d1e68c9754f",
+  "bridge_level_dataset.pkl": "f906959ce7584d979587bf21dbd6289d6a6b3a96ce5fb42004e3ab5efbf27582",
+  "dataset.pkl": "85bf18628cb7dfa4034df81eb5de9fe11b4df7f184a7c1f02cb5b4f7430b00ae",
+  "fit_meta.pkl": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+ },
+ "checks": {
+  "I1_inputs_present": {
+   "status": "pass",
+   "detail": {
+    "missing": []
+   }
+  },
+  "I2_inputs_match": {
+   "status": "pass",
+   "detail": {
+    "hash_mismatches": {},
+    "polling_files": [
+     "/Users/tompickup/ukelections/.claude/worktrees/research-history-2027-a8cb6c/research/ward-model-2026-11/cache/pr192/westminster-2017-06-08-to-2017-12-31.json",
+     "/Users/tompickup/ukelections/.claude/worktrees/research-history-2027-a8cb6c/research/ward-model-2026-11/cache/pr192/westminster-2018-01-01-to-2019-05-02.json",
+     "/Users/tompickup/ukelections/.claude/worktrees/research-history-2027-a8cb6c/research/ward-model-2026-11/cache/pr192/westminster-2019-05-03-to-2019-12-12.json",
+     "/Users/tompickup/ukelections/.claude/worktrees/research-history-2027-a8cb6c/research/ward-model-2026-11/cache/pr199/westminster-2019-12-13-to-2024-07-03.json",
+     "/Users/tompickup/ukelections/.claude/worktrees/research-history-2027-a8cb6c/research/ward-model-2026-11/cache/rebuild/corrected/polls/bridge_level_polls_2024-07-05_to_2025-04-14.json",
+     "/Users/tompickup/ukelections/.claude/worktrees/research-history-2027-a8cb6c/data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    ],
+    "polling_mismatches": {}
+   }
+  },
+  "H0_reproduces_corrected_build": {
+   "status": "pass",
+   "detail": {
+    "stage1_differences": {},
+    "final_differences": {}
+   }
+  },
+  "P1_anchored_dates_have_enough_polls": {
+   "status": "pass",
+   "detail": {
+    "violations": []
+   }
+  },
+  "P2_scheduled_days_anchored": {
+   "status": "pass",
+   "detail": {
+    "missing": [],
+    "dates_without_anchor": [
+     {
+      "date": "2016-05-05",
+      "rows": 1513
+     },
+     {
+      "date": "2017-05-04",
+      "rows": 755
+     },
+     {
+      "date": "2017-06-08",
+      "rows": 1
+     },
+     {
+      "date": "2017-08-17",
+      "rows": 1
+     },
+     {
+      "date": "2018-01-04",
+      "rows": 1
+     },
+     {
+      "date": "2019-01-10",
+      "rows": 1
+     },
+     {
+      "date": "2019-03-14",
+      "rows": 2
+     },
+     {
+      "date": "2020-01-23",
+      "rows": 3
+     },
+     {
+      "date": "2020-03-12",
+      "rows": 1
+     },
+     {
+      "date": "2024-08-29",
+      "rows": 3
+     },
+     {
+      "date": "2024-09-03",
+      "rows": 1
+     },
+     {
+      "date": "2024-09-05",
+      "rows": 7
+     },
+     {
+      "date": "2024-09-12",
+      "rows": 9
+     },
+     {
+      "date": "2024-09-16",
+      "rows": 1
+     },
+     {
+      "date": "2024-09-19",
+      "rows": 8
+     }
+    ],
+    "added_rows_by_anchor_kind": {
+     "polls_14d_stage_b": 2681,
+     "polls_14d": 97
+    }
+   }
+  },
+  "R1_row_difference_is_rows_added": {
+   "status": "pass",
+   "detail": {
+    "base": 19723,
+    "extended": 22501,
+    "added": 2778,
+    "difference_by_year_type": {
+     "2023 scheduled": 2681,
+     "2026 scheduled": 97
+    },
+    "added_by_year_type": {
+     "2023 scheduled": 2681,
+     "2026 scheduled": 97
+    }
+   }
+  },
+  "R2_only_allowed_columns_change": {
+   "status": "pass",
+   "detail": {
+    "outside_allowed": {},
+    "differing_columns": {
+     "gss": {
+      "rows_differing": 35
+     },
+     "d_asian_pct": {
+      "max_abs_difference": 0.012700000000000003,
+      "rows_differing": 20,
+      "blank_in_one_only": 0
+     },
+     "d_avg_imd_decile": {
+      "max_abs_difference": 1.75,
+      "rows_differing": 20,
+      "blank_in_one_only": 0
+     },
+     "d_black_pct": {
+      "max_abs_difference": 0.008099999999999998,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_christian_pct": {
+      "max_abs_difference": 0.03249999999999997,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_degree_pct": {
+      "max_abs_difference": 0.04600000000000004,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_eu14_born_pct": {
+      "max_abs_difference": 0.0503,
+      "rows_differing": 20,
+      "blank_in_one_only": 0
+     },
+     "d_eu8_born_pct": {
+      "max_abs_difference": 0.0165,
+      "rows_differing": 20,
+      "blank_in_one_only": 0
+     },
+     "d_ft_students_pct": {
+      "max_abs_difference": 0.003599999999999999,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_hindu_pct": {
+      "max_abs_difference": 0.0052,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_mixed_pct": {
+      "max_abs_difference": 0.0049999999999999975,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_muslim_pct": {
+      "max_abs_difference": 0.0063,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_no_quals_pct": {
+      "max_abs_difference": 0.03789999999999999,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_no_religion_pct": {
+      "max_abs_difference": 0.031299999999999994,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_other_eth_pct": {
+      "max_abs_difference": 0.004399999999999999,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_owned_mortgage_pct": {
+      "max_abs_difference": 0.06330000000000002,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_owned_outright_pct": {
+      "max_abs_difference": 0.10559999999999997,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_private_rented_pct": {
+      "max_abs_difference": 0.1372,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_retired_pct": {
+      "max_abs_difference": 0.06690000000000002,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_sikh_pct": {
+      "max_abs_difference": 0.0042,
+      "rows_differing": 20,
+      "blank_in_one_only": 0
+     },
+     "d_social_rented_pct": {
+      "max_abs_difference": 0.16060000000000002,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_total_residents": {
+      "max_abs_difference": 24922.0,
+      "rows_differing": 33,
+      "blank_in_one_only": 0
+     },
+     "d_uk_born_pct": {
+      "max_abs_difference": 0.09799999999999998,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_white_british_pct": {
+      "max_abs_difference": 0.10629999999999995,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "d_white_other_pct": {
+      "max_abs_difference": 0.08180000000000001,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "nssec_higher_mgmt": {
+      "max_abs_difference": 0.06216225213138016,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "nssec_routine": {
+      "max_abs_difference": 0.044896289114182225,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "nssec_never_worked": {
+      "max_abs_difference": 0.023444558704682344,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "age_20_34": {
+      "max_abs_difference": 0.06920845958896382,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "age_50_64": {
+      "max_abs_difference": 0.02586231201682615,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "age_65_plus": {
+      "max_abs_difference": 0.05870265018012924,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "no_car": {
+      "max_abs_difference": 0.0802478401302428,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "two_plus_cars": {
+      "max_abs_difference": 0.10642096087946706,
+      "rows_differing": 21,
+      "blank_in_one_only": 0
+     },
+     "nb_d_degree_pct": {
+      "max_abs_difference": 0.08232736013986014,
+      "rows_differing": 14,
+      "blank_in_one_only": 0
+     },
+     "nb_nssec_routine": {
+      "max_abs_difference": 0.053301858342807484,
+      "rows_differing": 15,
+      "blank_in_one_only": 0
+     },
+     "nb_no_car": {
+      "max_abs_difference": 0.026969869980143085,
+      "rows_differing": 14,
+      "blank_in_one_only": 0
+     },
+     "nb_age_65_plus": {
+      "max_abs_difference": 0.03875899841251934,
+      "rows_differing": 15,
+      "blank_in_one_only": 0
+     },
+     "nb_ge24_reform": {
+      "max_abs_difference": 0.018609575404841622,
+      "rows_differing": 10,
+      "blank_in_one_only": 0
+     },
+     "nb_d_white_british_pct": {
+      "max_abs_difference": 0.07396426282051283,
+      "rows_differing": 15,
+      "blank_in_one_only": 0
+     },
+     "ge24_reform": {
+      "max_abs_difference": 5.551115123125783e-17,
+      "rows_differing": 17,
+      "blank_in_one_only": 0
+     },
+     "ge24_labour": {
+      "max_abs_difference": 8.326672684688674e-17,
+      "rows_differing": 28,
+      "blank_in_one_only": 0
+     },
+     "ge24_con": {
+      "max_abs_difference": 1.1102230246251565e-16,
+      "rows_differing": 23,
+      "blank_in_one_only": 0
+     },
+     "mrp_reform": {
+      "max_abs_difference": 5.551115123125783e-17,
+      "rows_differing": 8,
+      "blank_in_one_only": 0
+     },
+     "mrp_labour": {
+      "max_abs_difference": 5.551115123125783e-17,
+      "rows_differing": 10,
+      "blank_in_one_only": 0
+     },
+     "ukip_council_1316": {
+      "max_abs_difference": 8.326672684688674e-17,
+      "rows_differing": 24,
+      "blank_in_one_only": 0
+     },
+     "prev_rel_ref": {
+      "max_abs_difference": 0.0025832627324752777,
+      "rows_differing": 329,
+      "blank_in_one_only": 14
+     },
+     "prev_rel_lab": {
+      "max_abs_difference": 0.04306529149821536,
+      "rows_differing": 5201,
+      "blank_in_one_only": 249
+     },
+     "prev_rel_con": {
+      "max_abs_difference": 0.04403085141517621,
+      "rows_differing": 7370,
+      "blank_in_one_only": 285
+     },
+     "prev_rel_ld": {
+      "max_abs_difference": 0.03549927886677451,
+      "rows_differing": 1448,
+      "blank_in_one_only": 192
+     },
+     "prev_rel_grn": {
+      "max_abs_difference": 0.030179452761045,
+      "rows_differing": 4987,
+      "blank_in_one_only": 143
+     },
+     "prev_rel_oth": {
+      "max_abs_difference": 0.08625804954992472,
+      "rows_differing": 715,
+      "blank_in_one_only": 123
+     },
+     "prev_gap_years": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "has_prev": {
+      "max_abs_difference": 1.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 0
+     },
+     "prev_date": {
+      "rows_differing": 294
+     },
+     "prev_anchor_kind": {
+      "rows_differing": 294
+     },
+     "prev_s_ref": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_s_lab": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_s_con": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_s_ld": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_s_grn": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_s_oth": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_a_ref": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_a_lab": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_a_con": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_a_ld": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_a_grn": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     },
+     "prev_a_oth": {
+      "max_abs_difference": 0.0,
+      "rows_differing": 294,
+      "blank_in_one_only": 294
+     }
+    },
+    "anchor_columns_identical": true
+   }
+  },
+  "S1_shares_sum_to_one": {
+   "status": "pass",
+   "detail": {
+    "max_abs_deviation": 2.0000000000575113e-06
+   }
+  },
+  "S2_forward_only_folds": {
+   "status": "pass",
+   "detail": {
+    "folds": 21,
+    "failing": []
+   }
+  },
+  "S3_previous_contest_earlier": {
+   "status": "pass",
+   "detail": {
+    "rows_with_previous": 13896
+   }
+  }
+ },
+ "failed": []
+}
