@@ -179,7 +179,11 @@ def main():
             ctl, largest = control_of({p: s.get(p, 0) for p in LANES}, T)
             entry[a] = {"seats": {p: s.get(p, 0) for p in LANES}, "control": ctl, "largest": largest}
         called[slug] = entry
-    reasons = Counter(re.sub(r"\d+", "n", v).split(":")[0] for v in uncalled.values())
+    def reason_kind(v):
+        v = re.sub(r"^\d+ of \d+ ", "", v)
+        v = re.sub(r"^composition totals \d+, chamber \d+$", "composition total differs from the chamber", v)
+        return v.split(":")[0].split(" in ")[0] if v.startswith("seats defended") else v
+    reasons = Counter(reason_kind(v) for v in uncalled.values())
     res["control"] = {"councils_verified": len(by_council), "callable": len(called), "not_callable": len(uncalled),
                       "not_callable_reasons": dict(reasons), "not_callable_by_council": uncalled,
                       "control_counts": {a: dict(Counter(v[a]["control"] for v in called.values())) for a in ARMS},

@@ -1,0 +1,3954 @@
+{
+ "source": {
+  "dry_run": "data/forecasts/research/wards-2027-dryrun.json",
+  "sha256": "9a433b9f6c2ce4b45dbd777d397ac77377e3272fec9473b0a8ef2046bccf8429",
+  "inputs": {
+   "code_commit": "b3b0e5de1dae1fb4abe71be12fc4ff5cd1654a35",
+   "code_dirty": true,
+   "captured_at": "2026-11-28T13:54:11Z",
+   "run_date": "2026-11-28",
+   "specification": "research/ward-model-2026-11/V2027_SPEC.md",
+   "dataset": {
+    "file": "research/ward-model-2026-11/cache/rebuild/corrected/bridge_level_dataset.pkl",
+    "sha256": "3393cfdba3437f46ad2f2b8485e1621b8a38d4c5605ee33c4c4cd9be38de53a8"
+   },
+   "fit_meta": {
+    "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+    "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+   },
+   "ward_features": {
+    "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+    "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+   },
+   "polls": {
+    "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+    "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+    "generated_at": "2026-11-27T04:30:03.967Z",
+    "latest_poll_date": "2026-11-23",
+    "also_read": {
+     "file": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json",
+     "sha256": "1da7b7a373f1dee1de3fd55ce2b3e494f0a60db9ff40e56785cfa8fd014dc461"
+    }
+   },
+   "contest_files": {
+    "path": "data/contests/local-byelections",
+    "commit": "ed3271588327cc0673dd8bcc141186a3cbbbdaba"
+   },
+   "wards": {
+    "file": "data/identity/wards-2027.json",
+    "sha256": "d1fd913b0fc3dd7b7fd75c5dbf51d57fdeef9ec0594a9a245359af105f905e0b"
+   },
+   "bridge": {
+    "file": "research/ward-model-2026-11/cache/v2027/bridge.pkl",
+    "sha256": "7e951349621b9e873a3dd5cd580e588f220361f3ce272802067827b02cbb80c4"
+   }
+  }
+ },
+ "status": "RESEARCH, UNPUBLISHED, DRY RUN",
+ "seats": {
+  "verified_wards": 3696,
+  "verified_seats_up_known": 6083,
+  "wards_with_blank_seats_up": 53,
+  "wards_with_forecast_and_blank_seats_up": 53,
+  "wards_counted": 3205,
+  "seats_counted": 5421,
+  "seats_up_not_covered": 662,
+  "arms": {
+   "c2": {
+    "m0": {
+     "Reform UK": 1409,
+     "Labour": 1204,
+     "Conservative": 2091,
+     "Liberal Democrats": 531,
+     "Green Party": 96,
+     "Others": 90
+    },
+    "expected": {
+     "Reform UK": 1476.1,
+     "Labour": 1161.8,
+     "Conservative": 1798.9,
+     "Liberal Democrats": 698.0,
+     "Green Party": 180.0,
+     "Others": 106.1
+    },
+    "wards_led": {
+     "Reform UK": 819,
+     "Conservative": 1274,
+     "Labour": 723,
+     "Liberal Democrats": 330,
+     "Green Party": 55,
+     "Others": 57
+    }
+   },
+   "m50": {
+    "m0": {
+     "Reform UK": 1448,
+     "Labour": 1166,
+     "Conservative": 2091,
+     "Liberal Democrats": 506,
+     "Green Party": 106,
+     "Others": 104
+    },
+    "expected": {
+     "Reform UK": 1485.2,
+     "Labour": 1159.4,
+     "Conservative": 1811.4,
+     "Liberal Democrats": 673.0,
+     "Green Party": 178.1,
+     "Others": 113.9
+    },
+    "wards_led": {
+     "Reform UK": 838,
+     "Conservative": 1274,
+     "Labour": 704,
+     "Green Party": 61,
+     "Liberal Democrats": 312,
+     "Others": 69
+    }
+   }
+  },
+  "m0_by_council_type": {
+   "district": {
+    "c2": {
+     "Reform UK": 924,
+     "Conservative": 1585,
+     "Labour": 289,
+     "Liberal Democrats": 314,
+     "Others": 56,
+     "Green Party": 41
+    },
+    "m50": {
+     "Reform UK": 945,
+     "Conservative": 1572,
+     "Labour": 274,
+     "Green Party": 54,
+     "Others": 61,
+     "Liberal Democrats": 303
+    }
+   },
+   "metropolitan borough": {
+    "c2": {
+     "Labour": 516,
+     "Liberal Democrats": 93,
+     "Reform UK": 225,
+     "Conservative": 90,
+     "Others": 34,
+     "Green Party": 20
+    },
+    "m50": {
+     "Labour": 491,
+     "Liberal Democrats": 84,
+     "Reform UK": 244,
+     "Conservative": 97,
+     "Others": 41,
+     "Green Party": 21
+    }
+   },
+   "unitary": {
+    "c2": {
+     "Liberal Democrats": 124,
+     "Conservative": 416,
+     "Green Party": 35,
+     "Reform UK": 260,
+     "Labour": 399
+    },
+    "m50": {
+     "Liberal Democrats": 119,
+     "Conservative": 422,
+     "Green Party": 31,
+     "Reform UK": 259,
+     "Labour": 401,
+     "Others": 2
+    }
+   }
+  }
+ },
+ "control": {
+  "councils_verified": 158,
+  "callable": 91,
+  "not_callable": 67,
+  "not_callable_reasons": {
+   "chamber size blank in councils-2027.json": 32,
+   "wards have blank seats up": 18,
+   "current composition blank in councils-2027.json": 6,
+   "wards have no forecast": 10,
+   "composition total differs from the chamber": 1
+  },
+  "not_callable_by_council": {
+   "arun": "chamber size blank in councils-2027.json",
+   "ashford": "chamber size blank in councils-2027.json",
+   "babergh": "chamber size blank in councils-2027.json",
+   "barnsley": "chamber size blank in councils-2027.json",
+   "basildon": "chamber size blank in councils-2027.json",
+   "bassetlaw": "chamber size blank in councils-2027.json",
+   "bath-and-north-east-somerset": "chamber size blank in councils-2027.json",
+   "bedford": "chamber size blank in councils-2027.json",
+   "blaby": "1 of 17 wards have blank seats up",
+   "bradford": "current composition blank in councils-2027.json",
+   "brentwood": "chamber size blank in councils-2027.json",
+   "bromsgrove": "chamber size blank in councils-2027.json",
+   "broxtowe": "chamber size blank in councils-2027.json",
+   "burnley": "chamber size blank in councils-2027.json",
+   "cambridge": "14 of 14 wards have blank seats up",
+   "canterbury": "24 of 24 wards have no forecast",
+   "castle-point": "current composition blank in councils-2027.json",
+   "cherwell": "chamber size blank in councils-2027.json",
+   "cheshire-east": "47 of 47 wards have no forecast",
+   "chichester": "chamber size blank in councils-2027.json",
+   "city-of-lincoln": "current composition blank in councils-2027.json",
+   "cotswold": "1 of 32 wards have blank seats up",
+   "cumberland": "55 of 55 wards have no forecast",
+   "east-riding-of-yorkshire": "28 of 28 wards have no forecast",
+   "eastleigh": "1 of 14 wards have blank seats up",
+   "havant": "current composition blank in councils-2027.json",
+   "hyndburn": "4 of 16 wards have blank seats up",
+   "ipswich": "chamber size blank in councils-2027.json",
+   "kingston-upon-hull": "2 of 21 wards have blank seats up",
+   "liverpool": "1 of 64 wards have blank seats up",
+   "luton": "1 of 20 wards have blank seats up",
+   "manchester": "composition totals 95, chamber 96",
+   "mansfield": "1 of 36 wards have blank seats up",
+   "middlesbrough": "20 of 20 wards have no forecast",
+   "north-east-derbyshire": "chamber size blank in councils-2027.json",
+   "north-kesteven": "3 of 24 wards have blank seats up",
+   "north-west-leicestershire": "2 of 38 wards have blank seats up",
+   "north-yorkshire": "87 of 87 wards have no forecast",
+   "plymouth": "1 of 20 wards have blank seats up",
+   "redditch": "current composition blank in councils-2027.json",
+   "ribble-valley": "3 of 26 wards have blank seats up",
+   "rochford": "current composition blank in councils-2027.json",
+   "solihull": "chamber size blank in councils-2027.json",
+   "somerset": "93 of 93 wards have no forecast",
+   "south-holland": "chamber size blank in councils-2027.json",
+   "south-tyneside": "chamber size blank in councils-2027.json",
+   "southampton": "chamber size blank in councils-2027.json",
+   "st-albans": "3 of 20 wards have blank seats up",
+   "stafford": "chamber size blank in councils-2027.json",
+   "staffordshire-moorlands": "1 of 27 wards have blank seats up",
+   "stockton-on-tees": "27 of 27 wards have no forecast",
+   "sunderland": "chamber size blank in councils-2027.json",
+   "tameside": "chamber size blank in councils-2027.json",
+   "tamworth": "chamber size blank in councils-2027.json",
+   "teignbridge": "chamber size blank in councils-2027.json",
+   "telford-and-wrekin": "chamber size blank in councils-2027.json",
+   "test-valley": "chamber size blank in councils-2027.json",
+   "tonbridge-and-malling": "chamber size blank in councils-2027.json",
+   "trafford": "chamber size blank in councils-2027.json",
+   "tunbridge-wells": "1 of 13 wards have blank seats up",
+   "uttlesford": "chamber size blank in councils-2027.json",
+   "walsall": "chamber size blank in councils-2027.json",
+   "west-berkshire": "chamber size blank in councils-2027.json",
+   "west-oxfordshire": "11 of 27 wards have blank seats up",
+   "westmorland-and-furness": "35 of 35 wards have no forecast",
+   "wirral": "22 of 22 wards have no forecast",
+   "worthing": "2 of 13 wards have blank seats up"
+  },
+  "control_counts": {
+   "c2": {
+    "Reform UK": 14,
+    "No overall control": 31,
+    "Conservative": 31,
+    "Labour": 12,
+    "Liberal Democrats": 3
+   },
+   "m50": {
+    "Reform UK": 15,
+    "No overall control": 32,
+    "Conservative": 30,
+    "Labour": 11,
+    "Liberal Democrats": 3
+   }
+  },
+  "arms_disagree_on_control": [
+   "chelmsford",
+   "dacorum",
+   "west-suffolk",
+   "wigan"
+  ],
+  "councils": {
+   "amber-valley": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 42,
+    "seats_up": 42,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 27,
+      "Labour": 2,
+      "Conservative": 13,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 29,
+      "Labour": 2,
+      "Conservative": 11,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "ashfield": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 35,
+    "seats_up": 35,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 32,
+      "Labour": 3,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 32,
+      "Labour": 3,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "bolton": {
+    "type": "metropolitan borough",
+    "kind": "all_out",
+    "chamber": 60,
+    "seats_up": 60,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 18,
+      "Labour": 24,
+      "Conservative": 9,
+      "Liberal Democrats": 3,
+      "Green Party": 0,
+      "Others": 6
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 24,
+      "Labour": 18,
+      "Conservative": 9,
+      "Liberal Democrats": 3,
+      "Green Party": 0,
+      "Others": 6
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "boston": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 30,
+    "seats_up": 30,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 24,
+      "Labour": 3,
+      "Conservative": 3,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 26,
+      "Labour": 3,
+      "Conservative": 1,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "bournemouth-christchurch-and-poole": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 76,
+    "seats_up": 76,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 25,
+      "Labour": 13,
+      "Conservative": 33,
+      "Liberal Democrats": 5,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 25,
+      "Labour": 13,
+      "Conservative": 36,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "bracknell-forest": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 41,
+    "seats_up": 41,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 3,
+      "Conservative": 27,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 3,
+      "Conservative": 27,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "breckland": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 49,
+    "seats_up": 49,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 2,
+      "Conservative": 30,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 2,
+      "Conservative": 30,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "brighton-and-hove": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 54,
+    "seats_up": 54,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 23,
+      "Conservative": 0,
+      "Liberal Democrats": 10,
+      "Green Party": 19,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 26,
+      "Conservative": 0,
+      "Liberal Democrats": 10,
+      "Green Party": 16,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   },
+   "broadland": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 47,
+    "seats_up": 47,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 0,
+      "Conservative": 33,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 0,
+      "Conservative": 33,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "calderdale": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 54,
+    "seats_up": 18,
+    "seats_not_up": {
+     "Reform UK": 23,
+     "Labour": 6,
+     "Conservative": 0,
+     "Liberal Democrats": 1,
+     "Green Party": 4,
+     "Others": 2
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 30,
+      "Labour": 13,
+      "Conservative": 1,
+      "Liberal Democrats": 3,
+      "Green Party": 4,
+      "Others": 3
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 31,
+      "Labour": 13,
+      "Conservative": 1,
+      "Liberal Democrats": 2,
+      "Green Party": 4,
+      "Others": 3
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "cannock-chase": {
+    "type": "district",
+    "kind": "partial",
+    "chamber": 36,
+    "seats_up": 12,
+    "seats_not_up": {
+     "Reform UK": 1,
+     "Labour": 11,
+     "Conservative": 7,
+     "Liberal Democrats": 1,
+     "Green Party": 3,
+     "Others": 1
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 11,
+      "Conservative": 7,
+      "Liberal Democrats": 1,
+      "Green Party": 3,
+      "Others": 1
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 11,
+      "Conservative": 7,
+      "Liberal Democrats": 1,
+      "Green Party": 3,
+      "Others": 1
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "central-bedfordshire": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 63,
+    "seats_up": 63,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 4,
+      "Labour": 6,
+      "Conservative": 53,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 4,
+      "Labour": 6,
+      "Conservative": 53,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "charnwood": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 52,
+    "seats_up": 52,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 10,
+      "Conservative": 37,
+      "Liberal Democrats": 0,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 10,
+      "Conservative": 37,
+      "Liberal Democrats": 0,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "chelmsford": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 57,
+    "seats_up": 57,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 30,
+      "Liberal Democrats": 25,
+      "Green Party": 0,
+      "Others": 2
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 27,
+      "Liberal Democrats": 28,
+      "Green Party": 0,
+      "Others": 2
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "cheshire-west-and-chester": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 70,
+    "seats_up": 70,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 24,
+      "Conservative": 37,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 24,
+      "Conservative": 37,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "chesterfield": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 40,
+    "seats_up": 40,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 17,
+      "Conservative": 3,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 16,
+      "Labour": 15,
+      "Conservative": 3,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "chorley": {
+    "type": "district",
+    "kind": "partial",
+    "chamber": 42,
+    "seats_up": 14,
+    "seats_not_up": {
+     "Reform UK": 6,
+     "Labour": 16,
+     "Conservative": 3,
+     "Liberal Democrats": 0,
+     "Green Party": 1,
+     "Others": 2
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 28,
+      "Conservative": 4,
+      "Liberal Democrats": 0,
+      "Green Party": 1,
+      "Others": 2
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 8,
+      "Labour": 27,
+      "Conservative": 4,
+      "Liberal Democrats": 0,
+      "Green Party": 1,
+      "Others": 2
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "coventry": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 54,
+    "seats_up": 18,
+    "seats_not_up": {
+     "Reform UK": 14,
+     "Labour": 14,
+     "Conservative": 5,
+     "Liberal Democrats": 0,
+     "Green Party": 3,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 30,
+      "Conservative": 7,
+      "Liberal Democrats": 0,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 29,
+      "Conservative": 8,
+      "Liberal Democrats": 0,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "dacorum": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 51,
+    "seats_up": 51,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 0,
+      "Conservative": 27,
+      "Liberal Democrats": 13,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 2,
+      "Conservative": 25,
+      "Liberal Democrats": 13,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "darlington": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 50,
+    "seats_up": 50,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 18,
+      "Labour": 19,
+      "Conservative": 13,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 18,
+      "Labour": 19,
+      "Conservative": 13,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   },
+   "derby": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 51,
+    "seats_up": 51,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 8,
+      "Labour": 28,
+      "Conservative": 15,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 8,
+      "Labour": 28,
+      "Conservative": 15,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "dover": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 32,
+    "seats_up": 32,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 1,
+      "Conservative": 20,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 1,
+      "Conservative": 18,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "dudley": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 72,
+    "seats_up": 24,
+    "seats_not_up": {
+     "Reform UK": 1,
+     "Labour": 14,
+     "Conservative": 25,
+     "Liberal Democrats": 4,
+     "Green Party": 0,
+     "Others": 4
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 15,
+      "Labour": 17,
+      "Conservative": 32,
+      "Liberal Democrats": 4,
+      "Green Party": 0,
+      "Others": 4
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 17,
+      "Conservative": 33,
+      "Liberal Democrats": 4,
+      "Green Party": 0,
+      "Others": 4
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "east-cambridgeshire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 28,
+    "seats_up": 28,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 3,
+      "Labour": 0,
+      "Conservative": 16,
+      "Liberal Democrats": 9,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 3,
+      "Labour": 0,
+      "Conservative": 18,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "east-devon": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 60,
+    "seats_up": 60,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 5,
+      "Labour": 0,
+      "Conservative": 37,
+      "Liberal Democrats": 15,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 5,
+      "Labour": 0,
+      "Conservative": 37,
+      "Liberal Democrats": 15,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "east-hertfordshire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 50,
+    "seats_up": 50,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 33,
+      "Liberal Democrats": 14,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 31,
+      "Liberal Democrats": 16,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "east-suffolk": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 55,
+    "seats_up": 55,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 23,
+      "Labour": 0,
+      "Conservative": 30,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 23,
+      "Labour": 0,
+      "Conservative": 30,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "eastbourne": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 27,
+    "seats_up": 27,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 3,
+      "Conservative": 6,
+      "Liberal Democrats": 9,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": null
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 3,
+      "Conservative": 6,
+      "Liberal Democrats": 9,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": null
+    }
+   },
+   "epping-forest": {
+    "type": "district",
+    "kind": "partial",
+    "chamber": 54,
+    "seats_up": 18,
+    "seats_not_up": {
+     "Reform UK": 1,
+     "Labour": 1,
+     "Conservative": 15,
+     "Liberal Democrats": 6,
+     "Green Party": 0,
+     "Others": 13
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 1,
+      "Conservative": 24,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 16
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 1,
+      "Conservative": 22,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 17
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "fenland": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 43,
+    "seats_up": 43,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 24,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 24,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "folkestone-and-hythe": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 30,
+    "seats_up": 30,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 3,
+      "Conservative": 10,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 3,
+      "Conservative": 10,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "forest-of-dean": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 38,
+    "seats_up": 38,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 19,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": null
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 19,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": null
+    }
+   },
+   "gateshead": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 66,
+    "seats_up": 22,
+    "seats_not_up": {
+     "Reform UK": 26,
+     "Labour": 8,
+     "Conservative": 0,
+     "Liberal Democrats": 7,
+     "Green Party": 2,
+     "Others": 1
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 28,
+      "Labour": 22,
+      "Conservative": 0,
+      "Liberal Democrats": 12,
+      "Green Party": 3,
+      "Others": 1
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 28,
+      "Labour": 23,
+      "Conservative": 0,
+      "Liberal Democrats": 12,
+      "Green Party": 2,
+      "Others": 1
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "gedling": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 41,
+    "seats_up": 41,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 14,
+      "Conservative": 13,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": null
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 14,
+      "Conservative": 13,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": null
+    }
+   },
+   "gravesham": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 39,
+    "seats_up": 39,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 14,
+      "Conservative": 18,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 14,
+      "Conservative": 18,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "harlow": {
+    "type": "district",
+    "kind": "partial",
+    "chamber": 33,
+    "seats_up": 11,
+    "seats_not_up": {
+     "Reform UK": 1,
+     "Labour": 10,
+     "Conservative": 11,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 1,
+      "Labour": 10,
+      "Conservative": 22,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 1,
+      "Labour": 10,
+      "Conservative": 22,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "herefordshire": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 53,
+    "seats_up": 53,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 15,
+      "Labour": 2,
+      "Conservative": 36,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 15,
+      "Labour": 2,
+      "Conservative": 36,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "hertsmere": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 39,
+    "seats_up": 39,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 11,
+      "Conservative": 22,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 8,
+      "Conservative": 25,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "high-peak": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 43,
+    "seats_up": 43,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 12,
+      "Labour": 7,
+      "Conservative": 24,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 12,
+      "Labour": 7,
+      "Conservative": 24,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "hinckley-and-bosworth": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 34,
+    "seats_up": 34,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 2,
+      "Conservative": 21,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 2,
+      "Conservative": 21,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "horsham": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 48,
+    "seats_up": 48,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 18,
+      "Liberal Democrats": 23,
+      "Green Party": 7,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 15,
+      "Liberal Democrats": 21,
+      "Green Party": 12,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "kings-lynn-and-west-norfolk": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 55,
+    "seats_up": 55,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 30,
+      "Labour": 0,
+      "Conservative": 25,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 30,
+      "Labour": 0,
+      "Conservative": 25,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "kirklees": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 69,
+    "seats_up": 23,
+    "seats_not_up": {
+     "Reform UK": 16,
+     "Labour": 0,
+     "Conservative": 7,
+     "Liberal Democrats": 4,
+     "Green Party": 8,
+     "Others": 11
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 20,
+      "Labour": 5,
+      "Conservative": 11,
+      "Liberal Democrats": 7,
+      "Green Party": 10,
+      "Others": 16
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 20,
+      "Labour": 7,
+      "Conservative": 11,
+      "Liberal Democrats": 6,
+      "Green Party": 10,
+      "Others": 15
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "lancaster": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 61,
+    "seats_up": 61,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 19,
+      "Labour": 21,
+      "Conservative": 12,
+      "Liberal Democrats": 0,
+      "Green Party": 9,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 19,
+      "Labour": 21,
+      "Conservative": 12,
+      "Liberal Democrats": 0,
+      "Green Party": 9,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   },
+   "leeds": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 99,
+    "seats_up": 33,
+    "seats_not_up": {
+     "Reform UK": 10,
+     "Labour": 26,
+     "Conservative": 10,
+     "Liberal Democrats": 4,
+     "Green Party": 10,
+     "Others": 6
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 44,
+      "Conservative": 16,
+      "Liberal Democrats": 6,
+      "Green Party": 12,
+      "Others": 8
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 42,
+      "Conservative": 16,
+      "Liberal Democrats": 6,
+      "Green Party": 13,
+      "Others": 9
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   },
+   "leicester": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 54,
+    "seats_up": 54,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 54,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 54,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "maldon": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 31,
+    "seats_up": 31,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 0,
+      "Conservative": 16,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 0,
+      "Conservative": 16,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "medway": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 59,
+    "seats_up": 59,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 25,
+      "Labour": 20,
+      "Conservative": 14,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 25,
+      "Labour": 20,
+      "Conservative": 14,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "melton": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 28,
+    "seats_up": 28,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "mid-suffolk": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 34,
+    "seats_up": 34,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 8,
+      "Labour": 0,
+      "Conservative": 24,
+      "Liberal Democrats": 0,
+      "Green Party": 2,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 0,
+      "Conservative": 24,
+      "Liberal Democrats": 0,
+      "Green Party": 4,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "milton-keynes": {
+    "type": "unitary",
+    "kind": "partial",
+    "chamber": 60,
+    "seats_up": 19,
+    "seats_not_up": {
+     "Reform UK": 6,
+     "Labour": 13,
+     "Conservative": 9,
+     "Liberal Democrats": 13,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 22,
+      "Conservative": 12,
+      "Liberal Democrats": 20,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 22,
+      "Conservative": 12,
+      "Liberal Democrats": 20,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   },
+   "new-forest": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 48,
+    "seats_up": 48,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 10,
+      "Labour": 0,
+      "Conservative": 38,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 10,
+      "Labour": 0,
+      "Conservative": 38,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "newcastle-upon-tyne": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 78,
+    "seats_up": 26,
+    "seats_not_up": {
+     "Reform UK": 14,
+     "Labour": 2,
+     "Conservative": 0,
+     "Liberal Democrats": 17,
+     "Green Party": 16,
+     "Others": 3
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 11,
+      "Conservative": 0,
+      "Liberal Democrats": 26,
+      "Green Party": 20,
+      "Others": 4
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 18,
+      "Labour": 10,
+      "Conservative": 0,
+      "Liberal Democrats": 26,
+      "Green Party": 20,
+      "Others": 4
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "north-east-lincolnshire": {
+    "type": "unitary",
+    "kind": "partial",
+    "chamber": 42,
+    "seats_up": 15,
+    "seats_not_up": {
+     "Reform UK": 13,
+     "Labour": 5,
+     "Conservative": 3,
+     "Liberal Democrats": 2,
+     "Green Party": 0,
+     "Others": 4
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 24,
+      "Labour": 7,
+      "Conservative": 4,
+      "Liberal Democrats": 3,
+      "Green Party": 0,
+      "Others": 4
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 24,
+      "Labour": 6,
+      "Conservative": 4,
+      "Liberal Democrats": 3,
+      "Green Party": 0,
+      "Others": 5
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "north-norfolk": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 40,
+    "seats_up": 40,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 0,
+      "Conservative": 23,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 11,
+      "Labour": 0,
+      "Conservative": 23,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "north-somerset": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 50,
+    "seats_up": 50,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 1,
+      "Conservative": 25,
+      "Liberal Democrats": 9,
+      "Green Party": 2,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 13,
+      "Labour": 1,
+      "Conservative": 25,
+      "Liberal Democrats": 9,
+      "Green Party": 2,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "north-tyneside": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 60,
+    "seats_up": 20,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 32,
+     "Conservative": 6,
+     "Liberal Democrats": 0,
+     "Green Party": 1,
+     "Others": 1
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 3,
+      "Labour": 47,
+      "Conservative": 7,
+      "Liberal Democrats": 0,
+      "Green Party": 1,
+      "Others": 2
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 4,
+      "Labour": 46,
+      "Conservative": 7,
+      "Liberal Democrats": 0,
+      "Green Party": 1,
+      "Others": 2
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "north-warwickshire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 35,
+    "seats_up": 35,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 27,
+      "Labour": 0,
+      "Conservative": 8,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 27,
+      "Labour": 0,
+      "Conservative": 8,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "nottingham": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 55,
+    "seats_up": 55,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 3,
+      "Labour": 49,
+      "Conservative": 3,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 3,
+      "Labour": 49,
+      "Conservative": 3,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "oldham": {
+    "type": "metropolitan borough",
+    "kind": "all_out",
+    "chamber": 60,
+    "seats_up": 60,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 21,
+      "Labour": 24,
+      "Conservative": 0,
+      "Liberal Democrats": 9,
+      "Green Party": 0,
+      "Others": 6
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 30,
+      "Labour": 21,
+      "Conservative": 0,
+      "Liberal Democrats": 3,
+      "Green Party": 0,
+      "Others": 6
+     },
+     "control": "No overall control",
+     "largest": "Reform UK"
+    }
+   },
+   "preston": {
+    "type": "district",
+    "kind": "partial",
+    "chamber": 48,
+    "seats_up": 17,
+    "seats_not_up": {
+     "Reform UK": 5,
+     "Labour": 11,
+     "Conservative": 0,
+     "Liberal Democrats": 11,
+     "Green Party": 2,
+     "Others": 2
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 18,
+      "Conservative": 2,
+      "Liberal Democrats": 18,
+      "Green Party": 2,
+      "Others": 2
+     },
+     "control": "No overall control",
+     "largest": null
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 18,
+      "Conservative": 2,
+      "Liberal Democrats": 18,
+      "Green Party": 2,
+      "Others": 2
+     },
+     "control": "No overall control",
+     "largest": null
+    }
+   },
+   "redcar-and-cleveland": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 59,
+    "seats_up": 59,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 32,
+      "Labour": 18,
+      "Conservative": 7,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 32,
+      "Labour": 18,
+      "Conservative": 7,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "rochdale": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 60,
+    "seats_up": 20,
+    "seats_not_up": {
+     "Reform UK": 15,
+     "Labour": 16,
+     "Conservative": 4,
+     "Liberal Democrats": 1,
+     "Green Party": 0,
+     "Others": 4
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 28,
+      "Conservative": 7,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 6
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 18,
+      "Labour": 27,
+      "Conservative": 7,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 6
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   },
+   "rother": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 38,
+    "seats_up": 38,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 4,
+      "Labour": 6,
+      "Conservative": 11,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 10
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 4,
+      "Conservative": 11,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 10
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "rushcliffe": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 44,
+    "seats_up": 44,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 0,
+      "Conservative": 39,
+      "Liberal Democrats": 0,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 0,
+      "Conservative": 39,
+      "Liberal Democrats": 0,
+      "Green Party": 3,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "rutland": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 27,
+    "seats_up": 27,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 27,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 27,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "salford": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 60,
+    "seats_up": 21,
+    "seats_not_up": {
+     "Reform UK": 14,
+     "Labour": 16,
+     "Conservative": 3,
+     "Liberal Democrats": 1,
+     "Green Party": 3,
+     "Others": 2
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 14,
+      "Labour": 34,
+      "Conservative": 4,
+      "Liberal Democrats": 1,
+      "Green Party": 5,
+      "Others": 2
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 16,
+      "Labour": 31,
+      "Conservative": 4,
+      "Liberal Democrats": 1,
+      "Green Party": 5,
+      "Others": 3
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "sandwell": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 72,
+    "seats_up": 24,
+    "seats_not_up": {
+     "Reform UK": 26,
+     "Labour": 19,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 2,
+     "Others": 1
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 32,
+      "Labour": 37,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 2,
+      "Others": 1
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 32,
+      "Labour": 37,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 2,
+      "Others": 1
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "sefton": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 66,
+    "seats_up": 22,
+    "seats_not_up": {
+     "Reform UK": 1,
+     "Labour": 25,
+     "Conservative": 0,
+     "Liberal Democrats": 12,
+     "Green Party": 1,
+     "Others": 5
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 40,
+      "Conservative": 0,
+      "Liberal Democrats": 18,
+      "Green Party": 1,
+      "Others": 5
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 1,
+      "Labour": 41,
+      "Conservative": 0,
+      "Liberal Democrats": 18,
+      "Green Party": 1,
+      "Others": 5
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "sevenoaks": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 54,
+    "seats_up": 54,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 5,
+      "Labour": 0,
+      "Conservative": 42,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 5,
+      "Labour": 0,
+      "Conservative": 42,
+      "Liberal Democrats": 7,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "south-derbyshire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 36,
+    "seats_up": 36,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 20,
+      "Labour": 0,
+      "Conservative": 16,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 20,
+      "Labour": 0,
+      "Conservative": 16,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "south-kesteven": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 56,
+    "seats_up": 56,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 4,
+      "Conservative": 45,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 4,
+      "Conservative": 45,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "south-oxfordshire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 36,
+    "seats_up": 36,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 16,
+      "Liberal Democrats": 20,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Liberal Democrats",
+     "largest": "Liberal Democrats"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 17,
+      "Liberal Democrats": 19,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Liberal Democrats",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "south-ribble": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 50,
+    "seats_up": 50,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 16,
+      "Conservative": 25,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 16,
+      "Conservative": 25,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "south-staffordshire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 42,
+    "seats_up": 42,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 0,
+      "Conservative": 25,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 17,
+      "Labour": 0,
+      "Conservative": 25,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "stevenage": {
+    "type": "district",
+    "kind": "partial",
+    "chamber": 39,
+    "seats_up": 13,
+    "seats_not_up": {
+     "Reform UK": 1,
+     "Labour": 19,
+     "Conservative": 1,
+     "Liberal Democrats": 4,
+     "Green Party": 0,
+     "Others": 1
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 29,
+      "Conservative": 1,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 1
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 2,
+      "Labour": 29,
+      "Conservative": 1,
+      "Liberal Democrats": 6,
+      "Green Party": 0,
+      "Others": 1
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "stockport": {
+    "type": "metropolitan borough",
+    "kind": "all_out",
+    "chamber": 63,
+    "seats_up": 63,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 18,
+      "Conservative": 3,
+      "Liberal Democrats": 33,
+      "Green Party": 3,
+      "Others": 6
+     },
+     "control": "Liberal Democrats",
+     "largest": "Liberal Democrats"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 18,
+      "Conservative": 3,
+      "Liberal Democrats": 33,
+      "Green Party": 3,
+      "Others": 6
+     },
+     "control": "Liberal Democrats",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "torbay": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 36,
+    "seats_up": 36,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 29,
+      "Labour": 0,
+      "Conservative": 5,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 29,
+      "Labour": 0,
+      "Conservative": 5,
+      "Liberal Democrats": 2,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "torridge": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 36,
+    "seats_up": 36,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 8,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 0,
+      "Conservative": 19,
+      "Liberal Democrats": 8,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "vale-of-white-horse": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 38,
+    "seats_up": 38,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 14,
+      "Liberal Democrats": 24,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Liberal Democrats",
+     "largest": "Liberal Democrats"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 0,
+      "Conservative": 14,
+      "Liberal Democrats": 24,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Liberal Democrats",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "wakefield": {
+    "type": "metropolitan borough",
+    "kind": "partial",
+    "chamber": 63,
+    "seats_up": 21,
+    "seats_not_up": {
+     "Reform UK": 36,
+     "Labour": 1,
+     "Conservative": 0,
+     "Liberal Democrats": 1,
+     "Green Party": 1,
+     "Others": 3
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 44,
+      "Labour": 14,
+      "Conservative": 0,
+      "Liberal Democrats": 1,
+      "Green Party": 1,
+      "Others": 3
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 47,
+      "Labour": 11,
+      "Conservative": 0,
+      "Liberal Democrats": 1,
+      "Green Party": 1,
+      "Others": 3
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "warwick": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 44,
+    "seats_up": 44,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 11,
+      "Conservative": 21,
+      "Liberal Democrats": 6,
+      "Green Party": 6,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 11,
+      "Conservative": 21,
+      "Liberal Democrats": 6,
+      "Green Party": 6,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    }
+   },
+   "wealden": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 45,
+    "seats_up": 45,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 12,
+      "Labour": 0,
+      "Conservative": 32,
+      "Liberal Democrats": 1,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 10,
+      "Labour": 0,
+      "Conservative": 32,
+      "Liberal Democrats": 1,
+      "Green Party": 2,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "west-lancashire": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 45,
+    "seats_up": 45,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 9,
+      "Conservative": 9,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 18
+     },
+     "control": "No overall control",
+     "largest": "Others"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 6,
+      "Labour": 12,
+      "Conservative": 9,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 18
+     },
+     "control": "No overall control",
+     "largest": "Others"
+    }
+   },
+   "west-lindsey": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 36,
+    "seats_up": 36,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 8,
+      "Labour": 0,
+      "Conservative": 28,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 8,
+      "Labour": 0,
+      "Conservative": 28,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "west-suffolk": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 64,
+    "seats_up": 64,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 3,
+      "Labour": 13,
+      "Conservative": 32,
+      "Liberal Democrats": 1,
+      "Green Party": 2,
+      "Others": 13
+     },
+     "control": "No overall control",
+     "largest": "Conservative"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 7,
+      "Labour": 7,
+      "Conservative": 33,
+      "Liberal Democrats": 1,
+      "Green Party": 2,
+      "Others": 14
+     },
+     "control": "Conservative",
+     "largest": "Conservative"
+    }
+   },
+   "wigan": {
+    "type": "metropolitan borough",
+    "kind": "all_out",
+    "chamber": 75,
+    "seats_up": 75,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 36,
+      "Labour": 39,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 39,
+      "Labour": 33,
+      "Conservative": 0,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 3
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "wokingham": {
+    "type": "unitary",
+    "kind": "partial",
+    "chamber": 54,
+    "seats_up": 18,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 4,
+     "Conservative": 14,
+     "Liberal Democrats": 17,
+     "Green Party": 1,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 5,
+      "Conservative": 22,
+      "Liberal Democrats": 26,
+      "Green Party": 1,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 5,
+      "Conservative": 23,
+      "Liberal Democrats": 25,
+      "Green Party": 1,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Liberal Democrats"
+    }
+   },
+   "wolverhampton": {
+    "type": "metropolitan borough",
+    "kind": "all_out",
+    "chamber": 60,
+    "seats_up": 60,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 42,
+      "Conservative": 9,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 9,
+      "Labour": 42,
+      "Conservative": 9,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Labour",
+     "largest": "Labour"
+    }
+   },
+   "wyre-forest": {
+    "type": "district",
+    "kind": "all_out",
+    "chamber": 33,
+    "seats_up": 33,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 25,
+      "Labour": 0,
+      "Conservative": 8,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 25,
+      "Labour": 0,
+      "Conservative": 8,
+      "Liberal Democrats": 0,
+      "Green Party": 0,
+      "Others": 0
+     },
+     "control": "Reform UK",
+     "largest": "Reform UK"
+    }
+   },
+   "york": {
+    "type": "unitary",
+    "kind": "all_out",
+    "chamber": 47,
+    "seats_up": 47,
+    "seats_not_up": {
+     "Reform UK": 0,
+     "Labour": 0,
+     "Conservative": 0,
+     "Liberal Democrats": 0,
+     "Green Party": 0,
+     "Others": 0
+    },
+    "c2": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 17,
+      "Conservative": 7,
+      "Liberal Democrats": 15,
+      "Green Party": 8,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    },
+    "m50": {
+     "seats": {
+      "Reform UK": 0,
+      "Labour": 17,
+      "Conservative": 7,
+      "Liberal Democrats": 15,
+      "Green Party": 8,
+      "Others": 0
+     },
+     "control": "No overall control",
+     "largest": "Labour"
+    }
+   }
+  }
+ },
+ "plausibility": {
+  "wards_with_may_2026_result": 1033,
+  "mean_share": {
+   "may_2026_actual": {
+    "Reform UK": 0.3279,
+    "Labour": 0.2028,
+    "Conservative": 0.1446,
+    "Liberal Democrats": 0.1167,
+    "Green Party": 0.1599,
+    "Others": 0.0482
+   },
+   "c2": {
+    "Reform UK": 0.2732,
+    "Labour": 0.2848,
+    "Conservative": 0.1719,
+    "Liberal Democrats": 0.1228,
+    "Green Party": 0.1026,
+    "Others": 0.0446
+   },
+   "m50": {
+    "Reform UK": 0.2755,
+    "Labour": 0.2911,
+    "Conservative": 0.1722,
+    "Liberal Democrats": 0.1158,
+    "Green Party": 0.0999,
+    "Others": 0.0454
+   }
+  },
+  "first_places": {
+   "may_2026_actual": {
+    "Reform UK": 510,
+    "Labour": 135,
+    "Liberal Democrats": 153,
+    "Conservative": 92,
+    "Green Party": 93,
+    "Others": 50
+   },
+   "c2": {
+    "Labour": 416,
+    "Liberal Democrats": 156,
+    "Reform UK": 260,
+    "Conservative": 144,
+    "Others": 36,
+    "Green Party": 21
+   },
+   "m50": {
+    "Labour": 404,
+    "Liberal Democrats": 143,
+    "Reform UK": 271,
+    "Conservative": 148,
+    "Others": 46,
+    "Green Party": 21
+   }
+  },
+  "same_leader_as_may_2026": {
+   "c2": 666,
+   "m50": 689
+  },
+  "wards_where_arms_disagree_on_leader": 116,
+  "top_ten_councils_arms_disagree": [
+   {
+    "council": "wakefield",
+    "wards_forecast": 21,
+    "wards_leader_differs": 5,
+    "c2_first_places": {
+     "Labour": 13,
+     "Reform UK": 8
+    },
+    "m50_first_places": {
+     "Reform UK": 11,
+     "Labour": 10
+    }
+   },
+   {
+    "council": "brentwood",
+    "wards_forecast": 13,
+    "wards_leader_differs": 4,
+    "c2_first_places": {
+     "Conservative": 8,
+     "Liberal Democrats": 5
+    },
+    "m50_first_places": {
+     "Conservative": 6,
+     "Liberal Democrats": 3,
+     "Labour": 1,
+     "Reform UK": 3
+    }
+   },
+   {
+    "council": "barnsley",
+    "wards_forecast": 21,
+    "wards_leader_differs": 4,
+    "c2_first_places": {
+     "Labour": 12,
+     "Liberal Democrats": 4,
+     "Reform UK": 5
+    },
+    "m50_first_places": {
+     "Labour": 15,
+     "Liberal Democrats": 3,
+     "Reform UK": 3
+    }
+   },
+   {
+    "council": "horsham",
+    "wards_forecast": 22,
+    "wards_leader_differs": 4,
+    "c2_first_places": {
+     "Liberal Democrats": 10,
+     "Green Party": 3,
+     "Conservative": 9
+    },
+    "m50_first_places": {
+     "Liberal Democrats": 10,
+     "Green Party": 5,
+     "Conservative": 7
+    }
+   },
+   {
+    "council": "manchester",
+    "wards_forecast": 32,
+    "wards_leader_differs": 4,
+    "c2_first_places": {
+     "Green Party": 3,
+     "Labour": 28,
+     "Liberal Democrats": 1
+    },
+    "m50_first_places": {
+     "Green Party": 3,
+     "Labour": 28,
+     "Liberal Democrats": 1
+    }
+   },
+   {
+    "council": "west-suffolk",
+    "wards_forecast": 43,
+    "wards_leader_differs": 4,
+    "c2_first_places": {
+     "Green Party": 1,
+     "Conservative": 21,
+     "Others": 10,
+     "Labour": 7,
+     "Liberal Democrats": 1,
+     "Reform UK": 3
+    },
+    "m50_first_places": {
+     "Green Party": 1,
+     "Conservative": 21,
+     "Others": 11,
+     "Labour": 4,
+     "Liberal Democrats": 1,
+     "Reform UK": 5
+    }
+   },
+   {
+    "council": "havant",
+    "wards_forecast": 12,
+    "wards_leader_differs": 3,
+    "c2_first_places": {
+     "Reform UK": 6,
+     "Conservative": 4,
+     "Labour": 2
+    },
+    "m50_first_places": {
+     "Reform UK": 9,
+     "Conservative": 2,
+     "Labour": 1
+    }
+   },
+   {
+    "council": "hyndburn",
+    "wards_forecast": 16,
+    "wards_leader_differs": 3,
+    "c2_first_places": {
+     "Labour": 9,
+     "Reform UK": 5,
+     "Conservative": 2
+    },
+    "m50_first_places": {
+     "Labour": 7,
+     "Green Party": 1,
+     "Reform UK": 5,
+     "Conservative": 3
+    }
+   },
+   {
+    "council": "epping-forest",
+    "wards_forecast": 18,
+    "wards_leader_differs": 3,
+    "c2_first_places": {
+     "Conservative": 9,
+     "Liberal Democrats": 1,
+     "Others": 3,
+     "Reform UK": 5
+    },
+    "m50_first_places": {
+     "Reform UK": 6,
+     "Conservative": 7,
+     "Liberal Democrats": 1,
+     "Others": 4
+    }
+   },
+   {
+    "council": "south-tyneside",
+    "wards_forecast": 18,
+    "wards_leader_differs": 3,
+    "c2_first_places": {
+     "Reform UK": 14,
+     "Green Party": 1,
+     "Labour": 3
+    },
+    "m50_first_places": {
+     "Green Party": 2,
+     "Reform UK": 11,
+     "Labour": 4,
+     "Others": 1
+    }
+   }
+  ]
+ },
+ "m50_benchmark": {
+  "none_m50_equals_c2": 1865,
+  "swing_from_previous_contest": 1393
+ },
+ "others_assumed_to_stand": 525
+}
