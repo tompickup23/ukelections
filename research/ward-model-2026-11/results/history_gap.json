@@ -1,0 +1,496 @@
+{
+ "inputs": {
+  "dataset_sha256": "3393cfdba3437f46ad2f2b8485e1621b8a38d4c5605ee33c4c4cd9be38de53a8",
+  "drive_csv_sha256": "ddeb3ebb6e258324a31fe4276d973e3ea2c82e24524931c32bc69764c92cf4e3",
+  "dc_history_snapshot": "dc-historic-results-5b431020aea0",
+  "baselines_sha256": "414b844f34ca30c592d974342f0a7b9ea58062a3bd0687ce24ce150742399534",
+  "dryrun_sha256": "9a433b9f6c2ce4b45dbd777d397ac77377e3272fec9473b0a8ef2046bccf8429"
+ },
+ "contests_by_group": {
+  "in_dataset": 18429,
+  "not_in_matrix_code_and_feature_row": 2681,
+  "not_in_matrix_no_ward_code_match": 690,
+  "not_in_matrix_code_without_feature_row": 308
+ },
+ "contests_by_year_type_group_votes": {
+  "2016 | London borough | in_dataset | candidate_votes": 1,
+  "2016 | district | in_dataset | candidate_votes": 621,
+  "2016 | district | not_in_matrix_no_ward_code_match | candidate_votes": 120,
+  "2016 | metropolitan borough | in_dataset | candidate_votes": 657,
+  "2016 | metropolitan borough | not_in_matrix_no_ward_code_match | candidate_votes": 58,
+  "2016 | unitary | in_dataset | candidate_votes": 218,
+  "2016 | unitary | not_in_matrix_no_ward_code_match | candidate_votes": 44,
+  "2017 | county | in_dataset | candidate_votes": 614,
+  "2017 | county | not_in_matrix_no_ward_code_match | candidate_votes": 7,
+  "2017 | unitary | in_dataset | candidate_votes": 69,
+  "2017 | unitary | not_in_matrix_no_ward_code_match | candidate_votes": 23,
+  "2017 | unknown | in_dataset | candidate_votes": 38,
+  "2017 | unknown | not_in_matrix_no_ward_code_match | candidate_votes": 34,
+  "2018 | London borough | in_dataset | candidate_votes": 477,
+  "2018 | London borough | not_in_matrix_no_ward_code_match | candidate_votes": 154,
+  "2018 | district | in_dataset | candidate_votes": 678,
+  "2018 | district | not_in_matrix_no_ward_code_match | candidate_votes": 90,
+  "2018 | metropolitan borough | in_dataset | candidate_votes": 724,
+  "2018 | metropolitan borough | not_in_matrix_no_ward_code_match | candidate_votes": 20,
+  "2018 | unitary | in_dataset | candidate_votes": 240,
+  "2018 | unitary | not_in_matrix_no_ward_code_match | candidate_votes": 12,
+  "2019 | district | in_dataset | candidate_votes": 784,
+  "2019 | district | not_in_matrix_no_ward_code_match | candidate_votes": 46,
+  "2019 | metropolitan borough | in_dataset | candidate_votes": 654,
+  "2019 | metropolitan borough | not_in_matrix_no_ward_code_match | candidate_votes": 20,
+  "2019 | unitary | in_dataset | candidate_votes": 240,
+  "2019 | unitary | not_in_matrix_no_ward_code_match | candidate_votes": 14,
+  "2021 | county | in_dataset | candidate_votes": 619,
+  "2021 | county | not_in_matrix_no_ward_code_match | candidate_votes": 6,
+  "2021 | district | in_dataset | candidate_votes": 650,
+  "2021 | district | not_in_matrix_no_ward_code_match | candidate_votes": 14,
+  "2021 | metropolitan borough | in_dataset | candidate_votes": 666,
+  "2021 | metropolitan borough | not_in_matrix_no_ward_code_match | candidate_votes": 9,
+  "2021 | unitary | in_dataset | candidate_votes": 322,
+  "2021 | unitary | not_in_matrix_no_ward_code_match | candidate_votes": 3,
+  "2022 | London borough | in_dataset | candidate_votes": 679,
+  "2022 | district | in_dataset | candidate_votes": 732,
+  "2022 | district | not_in_matrix_no_ward_code_match | candidate_votes": 1,
+  "2022 | metropolitan borough | in_dataset | candidate_votes": 745,
+  "2022 | unitary | in_dataset | candidate_votes": 307,
+  "2022 | unitary | not_in_matrix_no_ward_code_match | candidate_votes": 1,
+  "2022 | unknown | in_dataset | candidate_votes": 73,
+  "2022 | unknown | not_in_matrix_no_ward_code_match | candidate_votes": 1,
+  "2023 | district | in_dataset | candidate_votes": 822,
+  "2023 | district | not_in_matrix_code_and_feature_row | pooled_shares_only": 1928,
+  "2023 | district | not_in_matrix_code_without_feature_row | pooled_shares_only": 6,
+  "2023 | metropolitan borough | in_dataset | candidate_votes": 659,
+  "2023 | metropolitan borough | not_in_matrix_code_and_feature_row | pooled_shares_only": 63,
+  "2023 | metropolitan borough | not_in_matrix_code_without_feature_row | pooled_shares_only": 1,
+  "2023 | unitary | in_dataset | candidate_votes": 256,
+  "2023 | unitary | not_in_matrix_code_and_feature_row | pooled_shares_only": 690,
+  "2024 | district | in_dataset | candidate_votes": 854,
+  "2024 | district | not_in_matrix_no_ward_code_match | candidate_votes": 1,
+  "2024 | metropolitan borough | in_dataset | candidate_votes": 684,
+  "2024 | unitary | in_dataset | candidate_votes": 364,
+  "2024 | unknown | not_in_matrix_no_ward_code_match | candidate_votes": 3,
+  "2025 | London borough | in_dataset | candidate_votes": 5,
+  "2025 | London borough | not_in_matrix_no_ward_code_match | candidate_votes": 6,
+  "2025 | county | in_dataset | candidate_votes": 888,
+  "2025 | metropolitan borough | in_dataset | candidate_votes": 21,
+  "2025 | unitary | in_dataset | candidate_votes": 492,
+  "2025 | unknown | not_in_matrix_no_ward_code_match | candidate_votes": 2,
+  "2026 | London borough | in_dataset | candidate_votes": 636,
+  "2026 | county | in_dataset | candidate_votes": 337,
+  "2026 | county | not_in_matrix_code_without_feature_row | candidate_votes": 89,
+  "2026 | district | in_dataset | candidate_votes": 711,
+  "2026 | metropolitan borough | in_dataset | candidate_votes": 633,
+  "2026 | metropolitan borough | not_in_matrix_code_without_feature_row | candidate_votes": 85,
+  "2026 | unitary | in_dataset | candidate_votes": 259,
+  "2026 | unitary | not_in_matrix_code_without_feature_row | candidate_votes": 46,
+  "2026 | unknown | not_in_matrix_code_without_feature_row | candidate_votes": 81,
+  "2026 | unknown | not_in_matrix_no_ward_code_match | candidate_votes": 1
+ },
+ "contests_by_year_group": {
+  "2016 | in_dataset": 1497,
+  "2016 | not_in_matrix_no_ward_code_match": 222,
+  "2017 | in_dataset": 721,
+  "2017 | not_in_matrix_no_ward_code_match": 64,
+  "2018 | in_dataset": 2119,
+  "2018 | not_in_matrix_no_ward_code_match": 276,
+  "2019 | in_dataset": 1678,
+  "2019 | not_in_matrix_no_ward_code_match": 80,
+  "2021 | in_dataset": 2257,
+  "2021 | not_in_matrix_no_ward_code_match": 32,
+  "2022 | in_dataset": 2536,
+  "2022 | not_in_matrix_no_ward_code_match": 3,
+  "2023 | in_dataset": 1737,
+  "2023 | not_in_matrix_code_and_feature_row": 2681,
+  "2023 | not_in_matrix_code_without_feature_row": 7,
+  "2024 | in_dataset": 1902,
+  "2024 | not_in_matrix_no_ward_code_match": 4,
+  "2025 | in_dataset": 1406,
+  "2025 | not_in_matrix_no_ward_code_match": 8,
+  "2026 | in_dataset": 2576,
+  "2026 | not_in_matrix_code_without_feature_row": 301,
+  "2026 | not_in_matrix_no_ward_code_match": 1
+ },
+ "contests_by_year_group_votes": {
+  "2016 | in_dataset | candidate_votes": 1497,
+  "2016 | not_in_matrix_no_ward_code_match | candidate_votes": 222,
+  "2017 | in_dataset | candidate_votes": 721,
+  "2017 | not_in_matrix_no_ward_code_match | candidate_votes": 64,
+  "2018 | in_dataset | candidate_votes": 2119,
+  "2018 | not_in_matrix_no_ward_code_match | candidate_votes": 276,
+  "2019 | in_dataset | candidate_votes": 1678,
+  "2019 | not_in_matrix_no_ward_code_match | candidate_votes": 80,
+  "2021 | in_dataset | candidate_votes": 2257,
+  "2021 | not_in_matrix_no_ward_code_match | candidate_votes": 32,
+  "2022 | in_dataset | candidate_votes": 2536,
+  "2022 | not_in_matrix_no_ward_code_match | candidate_votes": 3,
+  "2023 | in_dataset | candidate_votes": 1737,
+  "2023 | not_in_matrix_code_and_feature_row | pooled_shares_only": 2681,
+  "2023 | not_in_matrix_code_without_feature_row | pooled_shares_only": 7,
+  "2024 | in_dataset | candidate_votes": 1902,
+  "2024 | not_in_matrix_no_ward_code_match | candidate_votes": 4,
+  "2025 | in_dataset | candidate_votes": 1406,
+  "2025 | not_in_matrix_no_ward_code_match | candidate_votes": 8,
+  "2026 | in_dataset | candidate_votes": 2576,
+  "2026 | not_in_matrix_code_without_feature_row | candidate_votes": 301,
+  "2026 | not_in_matrix_no_ward_code_match | candidate_votes": 1
+ },
+ "missing_by_year_type_votes": {
+  "2016 | district | candidate_votes": 120,
+  "2016 | metropolitan borough | candidate_votes": 58,
+  "2016 | unitary | candidate_votes": 44,
+  "2017 | county | candidate_votes": 7,
+  "2017 | unitary | candidate_votes": 23,
+  "2017 | unknown | candidate_votes": 34,
+  "2018 | London borough | candidate_votes": 154,
+  "2018 | district | candidate_votes": 90,
+  "2018 | metropolitan borough | candidate_votes": 20,
+  "2018 | unitary | candidate_votes": 12,
+  "2019 | district | candidate_votes": 46,
+  "2019 | metropolitan borough | candidate_votes": 20,
+  "2019 | unitary | candidate_votes": 14,
+  "2021 | county | candidate_votes": 6,
+  "2021 | district | candidate_votes": 14,
+  "2021 | metropolitan borough | candidate_votes": 9,
+  "2021 | unitary | candidate_votes": 3,
+  "2022 | district | candidate_votes": 1,
+  "2022 | unitary | candidate_votes": 1,
+  "2022 | unknown | candidate_votes": 1,
+  "2023 | district | pooled_shares_only": 1934,
+  "2023 | metropolitan borough | pooled_shares_only": 64,
+  "2023 | unitary | pooled_shares_only": 690,
+  "2024 | district | candidate_votes": 1,
+  "2024 | unknown | candidate_votes": 3,
+  "2025 | London borough | candidate_votes": 6,
+  "2025 | unknown | candidate_votes": 2,
+  "2026 | county | candidate_votes": 89,
+  "2026 | metropolitan borough | candidate_votes": 85,
+  "2026 | unitary | candidate_votes": 46,
+  "2026 | unknown | candidate_votes": 82
+ },
+ "missing_sources": {
+  "baselines_dc2027": 2688,
+  "dc_history+drive_csv": 690,
+  "may2026_merged": 204,
+  "baselines_may2026+may2026_merged": 97
+ },
+ "councils_excluded_not_england": {},
+ "dryrun_forecast_wards": 3258,
+ "dryrun_history_less_wards": 1861,
+ "history_less_by_route": {
+  "direct": 1855,
+  "bridge": 6
+ },
+ "history_less_by_baseline": {
+  "dc2027 2023-05-04": 1802,
+  "no baseline": 21,
+  "dc2027 2023-06-22": 1,
+  "dc 2023-05-04": 29,
+  "dc 2024-05-02": 7,
+  "dc2027 2023-06-15": 1
+ },
+ "history_less_given_a_previous_result_by_group": {
+  "not_in_matrix_code_and_feature_row | pooled_shares_only": 1799,
+  "not_in_matrix_code_without_feature_row | pooled_shares_only": 5
+ },
+ "history_less_given_by_group_and_year": {
+  "not_in_matrix_code_and_feature_row | pooled_shares_only": {
+   "2023": 1799
+  },
+  "not_in_matrix_code_without_feature_row | pooled_shares_only": {
+   "2023": 5
+  }
+ },
+ "history_less_given_by_any_group": 1804,
+ "history_less_given_by_a_raw_source_with_candidate_votes": 0,
+ "history_less_by_baseline_method": {
+  "same_ward": 1839,
+  "none": 21,
+  "notional": 1
+ },
+ "baselines_reproduce_dataset_targets": {
+  "may2026 | shares within 0.0005: True | stood flags equal: True": 1294,
+  "dc | shares within 0.0005: True | stood flags equal: True": 313
+ },
+ "baselines_reproduce_largest_share_difference": {
+  "may2026": 1.1452991453553274e-06,
+  "dc": 8.484848484924257e-07
+ },
+ "history_less_baseline_ballot_in_dataset_under_another_code": [
+  {
+   "ward": "castle-point/appleton",
+   "gss_2027": "E05015691",
+   "baseline_ballot": "local.castle-point.appleton.2024-05-02",
+   "dataset_gss": "E05004082",
+   "joined_by": null
+  },
+  {
+   "ward": "castle-point/canvey-island-central",
+   "gss_2027": "E05015692",
+   "baseline_ballot": "local.castle-point.canvey-island-central.2024-05-02",
+   "dataset_gss": "E05004084",
+   "joined_by": null
+  },
+  {
+   "ward": "castle-point/canvey-island-east",
+   "gss_2027": "E05015693",
+   "baseline_ballot": "local.castle-point.canvey-island-east.2024-05-02",
+   "dataset_gss": "E05004085",
+   "joined_by": null
+  },
+  {
+   "ward": "castle-point/canvey-island-north",
+   "gss_2027": "E05015694",
+   "baseline_ballot": "local.castle-point.canvey-island-north.2024-05-02",
+   "dataset_gss": "E05004086",
+   "joined_by": null
+  },
+  {
+   "ward": "castle-point/canvey-island-south",
+   "gss_2027": "E05015695",
+   "baseline_ballot": "local.castle-point.canvey-island-south.2024-05-02",
+   "dataset_gss": "E05004087",
+   "joined_by": null
+  },
+  {
+   "ward": "castle-point/st-georges",
+   "gss_2027": "E05015698",
+   "baseline_ballot": "local.castle-point.st-georges.2024-05-02",
+   "dataset_gss": "E05004091",
+   "joined_by": null
+  },
+  {
+   "ward": "castle-point/st-marys",
+   "gss_2027": "E05015699",
+   "baseline_ballot": "local.castle-point.st-marys.2024-05-02",
+   "dataset_gss": "E05004093",
+   "joined_by": null
+  },
+  {
+   "ward": "chelmsford/goat-hall",
+   "gss_2027": "E05015470",
+   "baseline_ballot": "local.chelmsford.goat-hall.2023-05-04",
+   "dataset_gss": "E05004102",
+   "joined_by": null
+  },
+  {
+   "ward": "chelmsford/great-baddow-east",
+   "gss_2027": "E05015471",
+   "baseline_ballot": "local.chelmsford.great-baddow-east.2023-05-04",
+   "dataset_gss": "E05004103",
+   "joined_by": null
+  },
+  {
+   "ward": "chelmsford/great-baddow-west",
+   "gss_2027": "E05015472",
+   "baseline_ballot": "local.chelmsford.great-baddow-west.2023-05-04",
+   "dataset_gss": "E05004104",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/brimington-north",
+   "gss_2027": "E05015172",
+   "baseline_ballot": "local.chesterfield.brimington-north.2023-05-04",
+   "dataset_gss": "E05003324",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/brimington-south",
+   "gss_2027": "E05015173",
+   "baseline_ballot": "local.chesterfield.brimington-south.2023-05-04",
+   "dataset_gss": "E05003325",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/brockwell",
+   "gss_2027": "E05015174",
+   "baseline_ballot": "local.chesterfield.brockwell.2023-05-04",
+   "dataset_gss": "E05003326",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/dunston",
+   "gss_2027": "E05015175",
+   "baseline_ballot": "local.chesterfield.dunston.2023-05-04",
+   "dataset_gss": "E05003327",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/hasland",
+   "gss_2027": "E05015176",
+   "baseline_ballot": "local.chesterfield.hasland.2023-05-04",
+   "dataset_gss": "E05003328",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/linacre",
+   "gss_2027": "E05015177",
+   "baseline_ballot": "local.chesterfield.linacre.2023-05-04",
+   "dataset_gss": "E05003331",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/rother",
+   "gss_2027": "E05015178",
+   "baseline_ballot": "local.chesterfield.rother.2023-05-04",
+   "dataset_gss": "E05003337",
+   "joined_by": null
+  },
+  {
+   "ward": "chesterfield/walton",
+   "gss_2027": "E05015183",
+   "baseline_ballot": "local.chesterfield.walton.2023-05-04",
+   "dataset_gss": "E05003340",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/bishops-stortford-all-saints",
+   "gss_2027": "E05015355",
+   "baseline_ballot": "local.east-hertfordshire.bishops-stortford-all-saints.2023-05-04",
+   "dataset_gss": "E05012981",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/bishops-stortford-central",
+   "gss_2027": "E05015356",
+   "baseline_ballot": "local.east-hertfordshire.bishops-stortford-central.2023-05-04",
+   "dataset_gss": "E05012982",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/bishops-stortford-south",
+   "gss_2027": "E05015359",
+   "baseline_ballot": "local.east-hertfordshire.bishops-stortford-south.2023-05-04",
+   "dataset_gss": "E05012985",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/buntingford",
+   "gss_2027": "E05015362",
+   "baseline_ballot": "local.east-hertfordshire.buntingford.2023-05-04",
+   "dataset_gss": "E05012986",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/hertford-bengeo",
+   "gss_2027": "E05015364",
+   "baseline_ballot": "local.east-hertfordshire.hertford-bengeo.2023-05-04",
+   "dataset_gss": "E05004725",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/hertford-castle",
+   "gss_2027": "E05015365",
+   "baseline_ballot": "local.east-hertfordshire.hertford-castle.2023-05-04",
+   "dataset_gss": "E05004726",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/hertford-sele",
+   "gss_2027": "E05015369",
+   "baseline_ballot": "local.east-hertfordshire.hertford-sele.2023-05-04",
+   "dataset_gss": "E05004731",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/hunsdon",
+   "gss_2027": "E05015370",
+   "baseline_ballot": "local.east-hertfordshire.hunsdon.2023-05-04",
+   "dataset_gss": "E05004732",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/much-hadham",
+   "gss_2027": "E05015372",
+   "baseline_ballot": "local.east-hertfordshire.much-hadham.2023-05-04",
+   "dataset_gss": "E05004735",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/sawbridgeworth",
+   "gss_2027": "E05015373",
+   "baseline_ballot": "local.east-hertfordshire.sawbridgeworth.2023-05-04",
+   "dataset_gss": "E05004737",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/ware-st-marys",
+   "gss_2027": "E05015377",
+   "baseline_ballot": "local.east-hertfordshire.ware-st-marys.2023-05-04",
+   "dataset_gss": "E05004743",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/ware-trinity",
+   "gss_2027": "E05015378",
+   "baseline_ballot": "local.east-hertfordshire.ware-trinity.2023-05-04",
+   "dataset_gss": "E05004744",
+   "joined_by": null
+  },
+  {
+   "ward": "east-hertfordshire/watton-at-stone",
+   "gss_2027": "E05015379",
+   "baseline_ballot": "local.east-hertfordshire.watton-at-stone.2023-05-04",
+   "dataset_gss": "E05004745",
+   "joined_by": null
+  },
+  {
+   "ward": "west-suffolk/iceni",
+   "gss_2027": "E05015577",
+   "baseline_ballot": "local.west-suffolk.iceni.2023-05-04",
+   "dataset_gss": "E05012781",
+   "joined_by": null
+  },
+  {
+   "ward": "west-suffolk/manor",
+   "gss_2027": "E05015578",
+   "baseline_ballot": "local.west-suffolk.manor.2023-05-04",
+   "dataset_gss": "E05012785",
+   "joined_by": null
+  },
+  {
+   "ward": "west-suffolk/moreton-hall",
+   "gss_2027": "E05015579",
+   "baseline_ballot": "local.west-suffolk.moreton-hall.2023-05-04",
+   "dataset_gss": "E05012790",
+   "joined_by": null
+  },
+  {
+   "ward": "west-suffolk/rougham",
+   "gss_2027": "E05015580",
+   "baseline_ballot": "local.west-suffolk.rougham.2023-05-04",
+   "dataset_gss": "E05012796",
+   "joined_by": null
+  }
+ ],
+ "bridged_wards": 329,
+ "bridged_wards_previous_contest_date": {
+  "2026-05-07": 323,
+  "None": 6
+ },
+ "bridged_wards_with_own_may2026_contest_missing_from_dataset": 97,
+ "bridged_wards_with_own_may2026_contest_in_dataset": 226,
+ "bridged_wards_without_a_may2026_ballot": 6,
+ "in_matrix_dropped_examples": [],
+ "no_code_examples": [
+  "local.city-of-london-alder.coleman-street.2026-02-05",
+  "local.city-of-london-alder.vintry.2025-06-19",
+  "local.isles-of-scilly.st-martins.2025-05-01",
+  "local.city-of-london.bassishaw.2025-03-20",
+  "local.city-of-london.billingsgate.2025-03-20",
+  "local.city-of-london.castle-baynard.2025-03-20",
+  "local.city-of-london.farringdon-within.2025-03-20",
+  "local.city-of-london.langbourn.2025-03-20",
+  "local.city-of-london.vintry.2025-03-20",
+  "local.city-of-london-alder.bassishaw.2024-12-19",
+  "local.city-of-london-alder.billingsgate.2024-12-19",
+  "local.city-of-london-alder.broad-street.2024-12-19",
+  "local.oxford.holywell.2024-05-02",
+  "local.oxford.holywell.2022-05-05",
+  "local.powys.llanbrynmair.2022-05-05",
+  "local.somerset.burnham-north.2022-05-05",
+  "local.bury.church.2021-05-06",
+  "local.bury.east.2021-05-06",
+  "local.bury.radcliffe-north.2021-05-06",
+  "local.gloucestershire.cirencester-beeches.2021-05-06"
+ ]
+}

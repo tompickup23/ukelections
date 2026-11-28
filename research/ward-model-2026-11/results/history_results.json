@@ -1,0 +1,526 @@
+{
+ "spec": "HISTORY_SPEC.md",
+ "inputs": {
+  "extended_predictions": {
+   "path": "cache/history/bridge_level_predictions.pkl",
+   "sha256": "6c5cac4c12fad4302c6090f08a807baac56806d9cb87e024a37b153c8ddd5d02"
+  },
+  "base_predictions": {
+   "path": "cache/rebuild/corrected/bridge_level_predictions.pkl",
+   "sha256": "bb7586ce43bded0159aa7dca8af41fbf1532a26ac7ae3a5337c363d6d8e25d8a"
+  },
+  "extended_dataset_sha256": "f906959ce7584d979587bf21dbd6289d6a6b3a96ce5fb42004e3ab5efbf27582"
+ },
+ "a": {
+  "sets": {
+   "scheduled_2019": {
+    "base_c2": {
+     "wards": 1678,
+     "wards_forecast": 1678,
+     "leader_correct": 1375,
+     "leader_accuracy": 0.8194,
+     "share_mae_pp_all_lanes": 6.18,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "extended_c2": {
+     "wards": 1678,
+     "wards_forecast": 1678,
+     "leader_correct": 1375,
+     "leader_accuracy": 0.8194,
+     "share_mae_pp_all_lanes": 6.18,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   },
+   "scheduled_2021": {
+    "base_c2": {
+     "wards": 2255,
+     "wards_forecast": 2106,
+     "leader_correct": 1713,
+     "leader_accuracy": 0.7596,
+     "share_mae_pp_all_lanes": 6.04,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "extended_c2": {
+     "wards": 2255,
+     "wards_forecast": 2106,
+     "leader_correct": 1713,
+     "leader_accuracy": 0.7596,
+     "share_mae_pp_all_lanes": 6.04,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   },
+   "scheduled_2022": {
+    "base_c2": {
+     "wards": 2533,
+     "wards_forecast": 2533,
+     "leader_correct": 2138,
+     "leader_accuracy": 0.8441,
+     "share_mae_pp_all_lanes": 5.7,
+     "reform_uk": {
+      "signed_bias_pp": -0.38,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "extended_c2": {
+     "wards": 2533,
+     "wards_forecast": 2533,
+     "leader_correct": 2138,
+     "leader_accuracy": 0.8441,
+     "share_mae_pp_all_lanes": 5.7,
+     "reform_uk": {
+      "signed_bias_pp": -0.38,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   },
+   "scheduled_2023": {
+    "base_c2": {
+     "wards": 1734,
+     "wards_forecast": 1734,
+     "leader_correct": 1442,
+     "leader_accuracy": 0.8316,
+     "share_mae_pp_all_lanes": 5.43,
+     "reform_uk": {
+      "signed_bias_pp": 2.42,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "extended_c2": {
+     "wards": 1734,
+     "wards_forecast": 1734,
+     "leader_correct": 1425,
+     "leader_accuracy": 0.8218,
+     "share_mae_pp_all_lanes": 5.85,
+     "reform_uk": {
+      "signed_bias_pp": 2.04,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   },
+   "scheduled_2025": {
+    "base_c2": {
+     "wards": 1399,
+     "wards_forecast": 1399,
+     "leader_correct": 703,
+     "leader_accuracy": 0.5025,
+     "share_mae_pp_all_lanes": 8.3,
+     "reform_uk": {
+      "signed_bias_pp": -4.22,
+      "called_leads": 447,
+      "actual_leads": 551
+     }
+    },
+    "extended_c2": {
+     "wards": 1399,
+     "wards_forecast": 1399,
+     "leader_correct": 732,
+     "leader_accuracy": 0.5232,
+     "share_mae_pp_all_lanes": 8.21,
+     "reform_uk": {
+      "signed_bias_pp": -4.61,
+      "called_leads": 484,
+      "actual_leads": 551
+     }
+    }
+   },
+   "scheduled_2026": {
+    "base_c2": {
+     "wards": 2576,
+     "wards_forecast": 2576,
+     "leader_correct": 1764,
+     "leader_accuracy": 0.6848,
+     "share_mae_pp_all_lanes": 5.48,
+     "reform_uk": {
+      "signed_bias_pp": -2.79,
+      "called_leads": 641,
+      "actual_leads": 858
+     }
+    },
+    "extended_c2": {
+     "wards": 2576,
+     "wards_forecast": 2576,
+     "leader_correct": 1721,
+     "leader_accuracy": 0.6681,
+     "share_mae_pp_all_lanes": 5.59,
+     "reform_uk": {
+      "signed_bias_pp": -4.0,
+      "called_leads": 495,
+      "actual_leads": 858
+     }
+    }
+   },
+   "scheduled_pooled_six": {
+    "base_c2": {
+     "wards": 12175,
+     "wards_forecast": 12026,
+     "leader_correct": 9135,
+     "leader_accuracy": 0.7503,
+     "share_mae_pp_all_lanes": 6.08,
+     "reform_uk": {
+      "signed_bias_pp": -2.97,
+      "called_leads": 1088,
+      "actual_leads": 1409
+     }
+    },
+    "extended_c2": {
+     "wards": 12175,
+     "wards_forecast": 12026,
+     "leader_correct": 9104,
+     "leader_accuracy": 0.7478,
+     "share_mae_pp_all_lanes": 6.15,
+     "reform_uk": {
+      "signed_bias_pp": -3.85,
+      "called_leads": 979,
+      "actual_leads": 1409
+     }
+    }
+   },
+   "scheduled_pooled_five_without_2026": {
+    "base_c2": {
+     "wards": 9599,
+     "wards_forecast": 9450,
+     "leader_correct": 7371,
+     "leader_accuracy": 0.7679,
+     "share_mae_pp_all_lanes": 6.29,
+     "reform_uk": {
+      "signed_bias_pp": -3.25,
+      "called_leads": 447,
+      "actual_leads": 551
+     }
+    },
+    "extended_c2": {
+     "wards": 9599,
+     "wards_forecast": 9450,
+     "leader_correct": 7383,
+     "leader_accuracy": 0.7691,
+     "share_mae_pp_all_lanes": 6.35,
+     "reform_uk": {
+      "signed_bias_pp": -3.61,
+      "called_leads": 484,
+      "actual_leads": 551
+     }
+    }
+   },
+   "byelections_all": {
+    "base_c2": {
+     "wards": 1190,
+     "wards_forecast": 1149,
+     "leader_correct": 786,
+     "leader_accuracy": 0.6605,
+     "share_mae_pp_all_lanes": 7.26,
+     "reform_uk": {
+      "signed_bias_pp": -1.0,
+      "called_leads": 147,
+      "actual_leads": 145
+     }
+    },
+    "extended_c2": {
+     "wards": 1190,
+     "wards_forecast": 1149,
+     "leader_correct": 809,
+     "leader_accuracy": 0.6798,
+     "share_mae_pp_all_lanes": 6.81,
+     "reform_uk": {
+      "signed_bias_pp": -1.88,
+      "called_leads": 117,
+      "actual_leads": 145
+     }
+    }
+   }
+  },
+  "per_year": {
+   "2019": {
+    "wards": 1678,
+    "base": 1375,
+    "extended": 1375,
+    "difference": 0,
+    "base_mae": 6.18,
+    "extended_mae": 6.18
+   },
+   "2021": {
+    "wards": 2255,
+    "base": 1713,
+    "extended": 1713,
+    "difference": 0,
+    "base_mae": 6.04,
+    "extended_mae": 6.04
+   },
+   "2022": {
+    "wards": 2533,
+    "base": 2138,
+    "extended": 2138,
+    "difference": 0,
+    "base_mae": 5.7,
+    "extended_mae": 5.7
+   },
+   "2023": {
+    "wards": 1734,
+    "base": 1442,
+    "extended": 1425,
+    "difference": -17,
+    "base_mae": 5.43,
+    "extended_mae": 5.85
+   },
+   "2025": {
+    "wards": 1399,
+    "base": 703,
+    "extended": 732,
+    "difference": 29,
+    "base_mae": 8.3,
+    "extended_mae": 8.21
+   },
+   "2026": {
+    "wards": 2576,
+    "base": 1764,
+    "extended": 1721,
+    "difference": -43,
+    "base_mae": 5.48,
+    "extended_mae": 5.59
+   }
+  },
+  "years_at_least_as_many": [
+   "2019",
+   "2021",
+   "2022",
+   "2025"
+  ],
+  "years_worse_by_more_than_1pct": [
+   "2026"
+  ],
+  "rules": {
+   "rule_1_pooled_at_least_as_many_leaders": false,
+   "rule_2_pooled_share_error_no_higher": false,
+   "rule_3_at_least_as_many_in_four_of_six_years": true,
+   "rule_4_no_year_worse_by_more_than_1pct": false,
+   "rule_5_rules_1_and_2_without_may_2026": false,
+   "rule_6_byelections_leaders_within_1pct_and_error_no_higher": true
+  },
+  "passes": false
+ },
+ "b": {
+  "added_2023_05_04": {
+   "rows": 2677,
+   "benchmark_cover": {
+    "both": 0,
+    "no_previous_contest": 2677,
+    "no_anchor_at_previous_contest": 0,
+    "no_anchor_now": 0
+   },
+   "c2_all_rows": {
+    "wards": 2677,
+    "wards_forecast": 2677,
+    "leader_correct": 1416,
+    "leader_accuracy": 0.529,
+    "share_mae_pp_all_lanes": 13.15,
+    "reform_uk": {
+     "signed_bias_pp": 2.65,
+     "called_leads": 0,
+     "actual_leads": 1
+    }
+   },
+   "on_b1_rows": {
+    "rows": 0,
+    "c2": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "b1_last_time": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   },
+   "on_b2_rows": {
+    "rows": 0,
+    "c2": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "b2_swing": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   }
+  },
+  "added_2026_05_07": {
+   "rows": 97,
+   "benchmark_cover": {
+    "both": 0,
+    "no_previous_contest": 97,
+    "no_anchor_at_previous_contest": 0,
+    "no_anchor_now": 0
+   },
+   "c2_all_rows": {
+    "wards": 97,
+    "wards_forecast": 97,
+    "leader_correct": 62,
+    "leader_accuracy": 0.6392,
+    "share_mae_pp_all_lanes": 7.7,
+    "reform_uk": {
+     "signed_bias_pp": -1.87,
+     "called_leads": 67,
+     "actual_leads": 46
+    }
+   },
+   "on_b1_rows": {
+    "rows": 0,
+    "c2": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "b1_last_time": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   },
+   "on_b2_rows": {
+    "rows": 0,
+    "c2": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    },
+    "b2_swing": {
+     "wards": 0,
+     "wards_forecast": 0,
+     "leader_correct": 0,
+     "leader_accuracy": null,
+     "share_mae_pp_all_lanes": null,
+     "reform_uk": {
+      "signed_bias_pp": null,
+      "called_leads": 0,
+      "actual_leads": 0
+     }
+    }
+   }
+  },
+  "code_reissue_rows_in_may_2023": {
+   "rows": 28,
+   "base_c2": {
+    "wards": 28,
+    "wards_forecast": 28,
+    "leader_correct": 21,
+    "leader_accuracy": 0.75,
+    "share_mae_pp_all_lanes": 8.19,
+    "reform_uk": {
+     "signed_bias_pp": 2.59,
+     "called_leads": 0,
+     "actual_leads": 0
+    }
+   },
+   "extended_c2": {
+    "wards": 28,
+    "wards_forecast": 28,
+    "leader_correct": 10,
+    "leader_accuracy": 0.3571,
+    "share_mae_pp_all_lanes": 13.26,
+    "reform_uk": {
+     "signed_bias_pp": 0.96,
+     "called_leads": 0,
+     "actual_leads": 0
+    }
+   }
+  },
+  "original_rows_whose_previous_contest_appeared_or_went": {
+   "rows": 294,
+   "base_c2": {
+    "wards": 294,
+    "wards_forecast": 287,
+    "leader_correct": 153,
+    "leader_accuracy": 0.5204,
+    "share_mae_pp_all_lanes": 9.3,
+    "reform_uk": {
+     "signed_bias_pp": -0.18,
+     "called_leads": 72,
+     "actual_leads": 60
+    }
+   },
+   "extended_c2": {
+    "wards": 294,
+    "wards_forecast": 287,
+    "leader_correct": 171,
+    "leader_accuracy": 0.5816,
+    "share_mae_pp_all_lanes": 7.87,
+    "reform_uk": {
+     "signed_bias_pp": -3.04,
+     "called_leads": 40,
+     "actual_leads": 60
+    }
+   }
+  }
+ }
+}
