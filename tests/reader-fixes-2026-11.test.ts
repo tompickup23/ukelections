@@ -14,7 +14,15 @@ import { matchCouncilBoundaries } from "../src/lib/wardBoundaryJoin";
 
 const load = (file: string) => JSON.parse(readFileSync(file, "utf8"));
 const huncoat = load("data/contests/local-byelections/hyndburn-huncoat-2026-11-12.json");
-const shardEnd = load("data/contests/local-byelections/birmingham-shard-end-2026-11-26.json");
+// Shard End stands in for a contest seen before polling day (TODAY is 20
+// November, polling day 26 November). The nightly moves the real file on to
+// polls_closed and then a result, so pin the pre-poll state the tests describe.
+const shardEnd = {
+  ...load("data/contests/local-byelections/birmingham-shard-end-2026-11-26.json"),
+  status: "upcoming",
+  result: null,
+  declaration: null,
+};
 const TODAY = "2026-11-20";
 const DASHES = /[–—]| - /;
 

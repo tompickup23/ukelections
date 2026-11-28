@@ -1,0 +1,6804 @@
+{
+ "spec": "ESTATE_SPEC.md",
+ "dry_run": false,
+ "rules": {
+  "min_wards": 5,
+  "min_districts": 10,
+  "permutations": 10000,
+  "bh_q": 0.1,
+  "confirmation_p": 0.05,
+  "discovery_family_size": 72
+ },
+ "rows": {
+  "scheduled_rows": 8242,
+  "by_election": {
+   "2026-05-07": 2576,
+   "2025-05-01": 1399,
+   "2022-05-05": 2533,
+   "2023-05-04": 1734
+  },
+  "unplaced": {
+   "2026-05-07": 22,
+   "2025-05-01": 0,
+   "2022-05-05": 0,
+   "2023-05-04": 0
+  },
+  "no_weight": {
+   "2026-05-07": 0,
+   "2025-05-01": 0,
+   "2022-05-05": 0,
+   "2023-05-04": 0
+  },
+  "weight_source": {
+   "may26": 2576,
+   "dc": 5666,
+   "missing": 0
+  },
+  "placement_rules": {
+   "2026-05-07": {
+    "1_wd25": 2239,
+    "3_ced26_point": 196,
+    "5_sopn_host": 119,
+    "unplaced_sopn_host:www.southnorfolkandbroadland.gov.uk": 22
+   },
+   "2025-05-01": {
+    "3_ced26_point": 887,
+    "1_wd25": 512
+   },
+   "2022-05-05": {
+    "1_wd25": 2110,
+    "4_council_slug": 423
+   },
+   "2023-05-04": {
+    "1_wd25": 1350,
+    "4_council_slug": 384
+   }
+  }
+ },
+ "districts_left_out_under_5_wards": {
+  "2026-05-07|ref": {
+   "districts_with_lane": 152,
+   "under_5_wards": 4
+  },
+  "2026-05-07|lab": {
+   "districts_with_lane": 152,
+   "under_5_wards": 4
+  },
+  "2026-05-07|con": {
+   "districts_with_lane": 152,
+   "under_5_wards": 5
+  },
+  "2026-05-07|ld": {
+   "districts_with_lane": 149,
+   "under_5_wards": 15
+  },
+  "2026-05-07|grn": {
+   "districts_with_lane": 152,
+   "under_5_wards": 5
+  },
+  "2026-05-07|oth": {
+   "districts_with_lane": 142,
+   "under_5_wards": 55
+  },
+  "2025-05-01|ref": {
+   "districts_with_lane": 115,
+   "under_5_wards": 7
+  },
+  "2025-05-01|lab": {
+   "districts_with_lane": 115,
+   "under_5_wards": 7
+  },
+  "2025-05-01|con": {
+   "districts_with_lane": 115,
+   "under_5_wards": 7
+  },
+  "2025-05-01|ld": {
+   "districts_with_lane": 112,
+   "under_5_wards": 16
+  },
+  "2025-05-01|grn": {
+   "districts_with_lane": 114,
+   "under_5_wards": 14
+  },
+  "2025-05-01|oth": {
+   "districts_with_lane": 100,
+   "under_5_wards": 62
+  },
+  "2022-05-05|ref": {
+   "districts_with_lane": 44,
+   "under_5_wards": 40
+  },
+  "2022-05-05|lab": {
+   "districts_with_lane": 131,
+   "under_5_wards": 0
+  },
+  "2022-05-05|con": {
+   "districts_with_lane": 131,
+   "under_5_wards": 1
+  },
+  "2022-05-05|ld": {
+   "districts_with_lane": 125,
+   "under_5_wards": 10
+  },
+  "2022-05-05|grn": {
+   "districts_with_lane": 120,
+   "under_5_wards": 16
+  },
+  "2022-05-05|oth": {
+   "districts_with_lane": 125,
+   "under_5_wards": 55
+  },
+  "2023-05-04|ref": {
+   "districts_with_lane": 64,
+   "under_5_wards": 53
+  },
+  "2023-05-04|lab": {
+   "districts_with_lane": 96,
+   "under_5_wards": 0
+  },
+  "2023-05-04|con": {
+   "districts_with_lane": 96,
+   "under_5_wards": 1
+  },
+  "2023-05-04|ld": {
+   "districts_with_lane": 95,
+   "under_5_wards": 9
+  },
+  "2023-05-04|grn": {
+   "districts_with_lane": 94,
+   "under_5_wards": 15
+  },
+  "2023-05-04|oth": {
+   "districts_with_lane": 92,
+   "under_5_wards": 36
+  }
+ },
+ "district_counts": {
+  "2026-05-07|ref": 148,
+  "2026-05-07|lab": 148,
+  "2026-05-07|con": 147,
+  "2026-05-07|ld": 134,
+  "2026-05-07|grn": 147,
+  "2026-05-07|oth": 87,
+  "2025-05-01|ref": 108,
+  "2025-05-01|lab": 108,
+  "2025-05-01|con": 108,
+  "2025-05-01|ld": 96,
+  "2025-05-01|grn": 100,
+  "2025-05-01|oth": 38,
+  "2022-05-05|ref": 4,
+  "2022-05-05|lab": 131,
+  "2022-05-05|con": 130,
+  "2022-05-05|ld": 115,
+  "2022-05-05|grn": 104,
+  "2022-05-05|oth": 70,
+  "2023-05-04|ref": 11,
+  "2023-05-04|lab": 96,
+  "2023-05-04|con": 95,
+  "2023-05-04|ld": 86,
+  "2023-05-04|grn": 79,
+  "2023-05-04|oth": 56
+ },
+ "measures": {
+  "pop_change_21": {
+   "label": "Population change since mid-2021, per cent",
+   "family": "tested",
+   "source": "ONS, Mid-Year Population Estimates, England and Wales, June 2025 edition (published 29 July 2026), MYE4 series mid-2011 to mid-2025 as revised; ukdemographics src/data/live/population-estimates.json. Counts: usual residents.",
+   "value_used": {
+    "2026-05-07": "mid-2021 to mid-2025 (reference 30 June 2025)",
+    "2025-05-01": "mid-2021 to mid-2024 (reference 30 June 2024)",
+    "2022-05-05": "not defined: no mid-year value after mid-2021 is dated before this polling day",
+    "2023-05-04": "mid-2021 to mid-2022 (reference 30 June 2022)"
+   }
+  },
+  "nino_rate": {
+   "label": "NINo registrations to adult overseas nationals in the calendar year before polling day, per 1,000 residents",
+   "family": "tested",
+   "source": "DWP Stat-Xplore, NINo registrations to adult overseas nationals, calendar years 2002 to 2025; ukdemographics nino-historical.json (lastUpdated 2026-04-29). Counts: new registrations (a flow, not a stock). Denominator: ONS mid-year estimate of the same year.",
+   "value_used": {
+    "2026-05-07": "calendar 2025 registrations over mid-2025 population",
+    "2025-05-01": "calendar 2024 registrations over mid-2024 population",
+    "2022-05-05": "calendar 2021 registrations over mid-2021 population",
+    "2023-05-04": "calendar 2022 registrations over mid-2022 population"
+   }
+  },
+  "nino_change_21": {
+   "label": "Change in NINo registrations per 1,000 residents since calendar 2021",
+   "family": "tested",
+   "source": "As nino_rate.",
+   "value_used": {
+    "2026-05-07": "calendar 2025 rate minus calendar 2021 rate",
+    "2025-05-01": "calendar 2024 rate minus calendar 2021 rate",
+    "2022-05-05": "not defined: base year is the year before polling day",
+    "2023-05-04": "calendar 2022 rate minus calendar 2021 rate"
+   }
+  },
+  "asylum_rate": {
+   "label": "Supported asylum seekers at the last quarter end before polling day, per 1,000 residents",
+   "family": "tested",
+   "source": "Home Office immigration system statistics, year ending June 2026 (published 27 August 2026), Asy_D11 quarterly supported asylum by local authority; asylumstats area-series.json. Counts: people in receipt of asylum support at quarter end. Denominator: ONS mid-year estimate.",
+   "value_used": {
+    "2026-05-07": "stock at 2026-03-31 over mid-2025 population",
+    "2025-05-01": "stock at 2025-03-31 over mid-2024 population",
+    "2022-05-05": "stock at 2022-03-31 over mid-2021 population",
+    "2023-05-04": "stock at 2023-03-31 over mid-2022 population"
+   }
+  },
+  "asylum_change_21": {
+   "label": "Change in supported asylum seekers per 1,000 residents since 31 March 2021",
+   "family": "tested",
+   "source": "As asylum_rate.",
+   "value_used": {
+    "2026-05-07": "rate at 2026-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+    "2025-05-01": "rate at 2025-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+    "2022-05-05": "rate at 2022-03-31 minus rate at 2021-03-31 (mid-2021 population)",
+    "2023-05-04": "rate at 2023-03-31 minus rate at 2021-03-31 (mid-2021 population)"
+   }
+  },
+  "income_median": {
+   "label": "Median income of income taxpayers, 2023 to 2024, pounds",
+   "family": "tested",
+   "source": "HMRC Personal Incomes Statistics 2023 to 2024, Table 3.14 (published 29 April 2026); ukdemographics income-taxpayers-la.json. Counts: median total income of individuals liable to income tax (sample estimate).",
+   "value_used": {
+    "2026-05-07": "tax year 6 April 2023 to 5 April 2024",
+    "2025-05-01": "tax year 6 April 2023 to 5 April 2024",
+    "2022-05-05": "excluded: the only edition held (2023 to 2024) ends after this polling day",
+    "2023-05-04": "excluded: the only edition held (2023 to 2024) ends after this polling day"
+   }
+  },
+  "band_d": {
+   "label": "Band D area council tax in force on polling day, pounds",
+   "family": "tested",
+   "source": "MHCLG, Council Tax levels set by local authorities in England 2025 to 2026 (revised 22 April 2026) and 2026 to 2027 (25 March 2026), area Band D for two adults including precepts; ukcounciltax data/council-tax/england-*.json.",
+   "value_used": {
+    "2026-05-07": "2026-27, in force from 1 April 2026",
+    "2025-05-01": "2025-26, in force from 1 April 2025",
+    "2022-05-05": "excluded: 2022-23 or 2021-22 not held",
+    "2023-05-04": "excluded: 2023-24 or 2022-23 not held"
+   }
+  },
+  "band_d_rise": {
+   "label": "Band D area council tax rise into the year in force on polling day, per cent",
+   "family": "tested",
+   "source": "As band_d, plus Council Tax levels 2024 to 2025 (updated 8 May 2024).",
+   "value_used": {
+    "2026-05-07": "2025-26 to 2026-27",
+    "2025-05-01": "2024-25 to 2025-26",
+    "2022-05-05": "excluded: 2022-23 or 2021-22 not held",
+    "2023-05-04": "excluded: 2023-24 or 2022-23 not held"
+   }
+  },
+  "hmo_rate": {
+   "label": "Houses in multiple occupation per 1,000 residents, Census 2021",
+   "family": "tested",
+   "source": "ONS Census 2021 RM192, dwellings that are houses in multiple occupation, over Census 2021 population; ukdemographics hmo-density.json (lastUpdated 2026-04-29).",
+   "value_used": {
+    "2026-05-07": "Census Day, 21 March 2021",
+    "2025-05-01": "Census Day, 21 March 2021",
+    "2022-05-05": "Census Day, 21 March 2021",
+    "2023-05-04": "Census Day, 21 March 2021"
+   }
+  },
+  "wb_change_1121": {
+   "label": "Annual change in White British share, Census 2011 to 2021, points a year",
+   "family": "tested",
+   "source": "ONS Census 2011 KS201EW and Census 2021 TS021 ethnic group, as held as the base of the UK Demographics projections (ethnic-projections.json, annualChangePp, model version as recorded in the file). Counts: change in the White British share of usual residents, points a year.",
+   "value_used": {
+    "2026-05-07": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+    "2025-05-01": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+    "2022-05-05": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)",
+    "2023-05-04": "Census 2011 and Census 2021 composition (the projections' base, not a projected value)"
+   }
+  },
+  "placebo_hash": {
+   "label": "Placebo: fixed pseudo-random number from the district code",
+   "family": "tested",
+   "source": "None: SHA-256 of a fixed salt and the district code.",
+   "value_used": {
+    "2026-05-07": "no date",
+    "2025-05-01": "no date",
+    "2022-05-05": "no date",
+    "2023-05-04": "no date"
+   }
+  },
+  "placebo_digit": {
+   "label": "Placebo: last digit of the mid-2021 population estimate",
+   "family": "tested",
+   "source": "Last digit of the ONS mid-2021 estimate (population-estimates.json).",
+   "value_used": {
+    "2026-05-07": "mid-2021 estimate",
+    "2025-05-01": "mid-2021 estimate",
+    "2022-05-05": "mid-2021 estimate",
+    "2023-05-04": "mid-2021 estimate"
+   }
+  },
+  "spd_share": {
+   "label": "Single person discount share of chargeable dwellings, 6 October 2025",
+   "family": "may2026_only",
+   "source": "MHCLG Council Taxbase 2025 in England (snapshot 6 October 2025, revised 21 January 2026); ukdemographics council-tax-spd.json. Counts: dwellings with a 25% single person discount over chargeable dwellings.",
+   "value_used": {
+    "2026-05-07": "CTB snapshot 6 October 2025",
+    "2025-05-01": "excluded: only the 6 October 2025 snapshot is held",
+    "2022-05-05": "excluded: only the 6 October 2025 snapshot is held",
+    "2023-05-04": "excluded: only the 6 October 2025 snapshot is held"
+   }
+  },
+  "ta_rate": {
+   "label": "Households in temporary accommodation at 31 March 2026, per 1,000 residents",
+   "family": "may2026_only",
+   "source": "MHCLG Statutory homelessness detailed local authority tables, January to March 2026 (13 August 2026, provisional), TA1; asylumstats housing-pressure.json. Counts: households in temporary accommodation at 31 March 2026. Denominator: ONS mid-2025.",
+   "value_used": {
+    "2026-05-07": "stock at 31 March 2026 over mid-2025 population",
+    "2025-05-01": "excluded: only the 31 March 2026 stock is held",
+    "2022-05-05": "excluded: only the 31 March 2026 stock is held",
+    "2023-05-04": "excluded: only the 31 March 2026 stock is held"
+   }
+  },
+  "births_nonuk_mother": {
+   "label": "Share of 2025 live births to mothers born outside the UK, per cent",
+   "family": "may2026_only",
+   "source": "ONS Births in England and Wales: 2025, parents' country of birth, Table 6a (27 May 2026); ukdemographics births-by-mother-cob.json. Counts: live births to mothers born outside the UK over all live births.",
+   "value_used": {
+    "2026-05-07": "calendar 2025 births",
+    "2025-05-01": "excluded: only calendar 2025 is held",
+    "2022-05-05": "excluded: only calendar 2025 is held",
+    "2023-05-04": "excluded: only calendar 2025 is held"
+   }
+  }
+ },
+ "verdicts": {
+  "pop_change_21|ref": {
+   "measure": "pop_change_21",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "pop_change_21|lab": {
+   "measure": "pop_change_21",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "pop_change_21|con": {
+   "measure": "pop_change_21",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "pop_change_21|ld": {
+   "measure": "pop_change_21",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "pop_change_21|grn": {
+   "measure": "pop_change_21",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "pop_change_21|oth": {
+   "measure": "pop_change_21",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "nino_rate|ref": {
+   "measure": "nino_rate",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": true,
+   "verdict": "lines up",
+   "within_region": "does not hold within region"
+  },
+  "nino_rate|lab": {
+   "measure": "nino_rate",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "nino_rate|con": {
+   "measure": "nino_rate",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "nino_rate|ld": {
+   "measure": "nino_rate",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "nino_rate|grn": {
+   "measure": "nino_rate",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "nino_rate|oth": {
+   "measure": "nino_rate",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "nino_change_21|ref": {
+   "measure": "nino_change_21",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "nino_change_21|lab": {
+   "measure": "nino_change_21",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "nino_change_21|con": {
+   "measure": "nino_change_21",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": true,
+   "verdict": "lines up",
+   "within_region": "does not hold within region"
+  },
+  "nino_change_21|ld": {
+   "measure": "nino_change_21",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "nino_change_21|grn": {
+   "measure": "nino_change_21",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "nino_change_21|oth": {
+   "measure": "nino_change_21",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "asylum_rate|ref": {
+   "measure": "asylum_rate",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_rate|lab": {
+   "measure": "asylum_rate",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_rate|con": {
+   "measure": "asylum_rate",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "asylum_rate|ld": {
+   "measure": "asylum_rate",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_rate|grn": {
+   "measure": "asylum_rate",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "asylum_rate|oth": {
+   "measure": "asylum_rate",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "asylum_change_21|ref": {
+   "measure": "asylum_change_21",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_change_21|lab": {
+   "measure": "asylum_change_21",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_change_21|con": {
+   "measure": "asylum_change_21",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_change_21|ld": {
+   "measure": "asylum_change_21",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_change_21|grn": {
+   "measure": "asylum_change_21",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "asylum_change_21|oth": {
+   "measure": "asylum_change_21",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "income_median|ref": {
+   "measure": "income_median",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": true,
+   "verdict": "lines up",
+   "within_region": "does not hold within region"
+  },
+  "income_median|lab": {
+   "measure": "income_median",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "income_median|con": {
+   "measure": "income_median",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "income_median|ld": {
+   "measure": "income_median",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "income_median|grn": {
+   "measure": "income_median",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "income_median|oth": {
+   "measure": "income_median",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d|ref": {
+   "measure": "band_d",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "band_d|lab": {
+   "measure": "band_d",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d|con": {
+   "measure": "band_d",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "band_d|ld": {
+   "measure": "band_d",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": true,
+   "verdict": "lines up",
+   "within_region": "does not hold within region"
+  },
+  "band_d|grn": {
+   "measure": "band_d",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d|oth": {
+   "measure": "band_d",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d_rise|ref": {
+   "measure": "band_d_rise",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d_rise|lab": {
+   "measure": "band_d_rise",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d_rise|con": {
+   "measure": "band_d_rise",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d_rise|ld": {
+   "measure": "band_d_rise",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d_rise|grn": {
+   "measure": "band_d_rise",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "band_d_rise|oth": {
+   "measure": "band_d_rise",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "hmo_rate|ref": {
+   "measure": "hmo_rate",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": true,
+   "verdict": "lines up",
+   "within_region": "holds within region"
+  },
+  "hmo_rate|lab": {
+   "measure": "hmo_rate",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "hmo_rate|con": {
+   "measure": "hmo_rate",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "hmo_rate|ld": {
+   "measure": "hmo_rate",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "hmo_rate|grn": {
+   "measure": "hmo_rate",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "hmo_rate|oth": {
+   "measure": "hmo_rate",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "wb_change_1121|ref": {
+   "measure": "wb_change_1121",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "wb_change_1121|lab": {
+   "measure": "wb_change_1121",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "wb_change_1121|con": {
+   "measure": "wb_change_1121",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "wb_change_1121|ld": {
+   "measure": "wb_change_1121",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "wb_change_1121|grn": {
+   "measure": "wb_change_1121",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": true,
+   "confirmation_pass": false,
+   "verdict": "passed discovery, not confirmed",
+   "within_region": null
+  },
+  "wb_change_1121|oth": {
+   "measure": "wb_change_1121",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_hash|ref": {
+   "measure": "placebo_hash",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_hash|lab": {
+   "measure": "placebo_hash",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_hash|con": {
+   "measure": "placebo_hash",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_hash|ld": {
+   "measure": "placebo_hash",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_hash|grn": {
+   "measure": "placebo_hash",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_hash|oth": {
+   "measure": "placebo_hash",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_digit|ref": {
+   "measure": "placebo_digit",
+   "lane": "ref",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_digit|lab": {
+   "measure": "placebo_digit",
+   "lane": "lab",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_digit|con": {
+   "measure": "placebo_digit",
+   "lane": "con",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_digit|ld": {
+   "measure": "placebo_digit",
+   "lane": "ld",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_digit|grn": {
+   "measure": "placebo_digit",
+   "lane": "grn",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "placebo_digit|oth": {
+   "measure": "placebo_digit",
+   "lane": "oth",
+   "family": "tested",
+   "discovery_pass_bh": false,
+   "confirmation_pass": null,
+   "verdict": "not supported",
+   "within_region": null
+  },
+  "spd_share|ref": {
+   "measure": "spd_share",
+   "lane": "ref",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "spd_share|lab": {
+   "measure": "spd_share",
+   "lane": "lab",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "spd_share|con": {
+   "measure": "spd_share",
+   "lane": "con",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "spd_share|ld": {
+   "measure": "spd_share",
+   "lane": "ld",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "spd_share|grn": {
+   "measure": "spd_share",
+   "lane": "grn",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "spd_share|oth": {
+   "measure": "spd_share",
+   "lane": "oth",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "ta_rate|ref": {
+   "measure": "ta_rate",
+   "lane": "ref",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "ta_rate|lab": {
+   "measure": "ta_rate",
+   "lane": "lab",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "ta_rate|con": {
+   "measure": "ta_rate",
+   "lane": "con",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "ta_rate|ld": {
+   "measure": "ta_rate",
+   "lane": "ld",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "ta_rate|grn": {
+   "measure": "ta_rate",
+   "lane": "grn",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "ta_rate|oth": {
+   "measure": "ta_rate",
+   "lane": "oth",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "births_nonuk_mother|ref": {
+   "measure": "births_nonuk_mother",
+   "lane": "ref",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "births_nonuk_mother|lab": {
+   "measure": "births_nonuk_mother",
+   "lane": "lab",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "births_nonuk_mother|con": {
+   "measure": "births_nonuk_mother",
+   "lane": "con",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "births_nonuk_mother|ld": {
+   "measure": "births_nonuk_mother",
+   "lane": "ld",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "births_nonuk_mother|grn": {
+   "measure": "births_nonuk_mother",
+   "lane": "grn",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  },
+  "births_nonuk_mother|oth": {
+   "measure": "births_nonuk_mother",
+   "lane": "oth",
+   "family": "may2026_only",
+   "discovery_pass_bh": null,
+   "confirmation_pass": null,
+   "verdict": "excluded: no value dated before May 2025 polling day, so it cannot be confirmed; discovery reported as description only",
+   "within_region": null
+  }
+ },
+ "tests": {
+  "pop_change_21|ref|2026-05-07": {
+   "measure": "pop_change_21",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.2378,
+   "p": 0.0028,
+   "bottom_fifth_mean_resid_pp": 0.067,
+   "top_fifth_mean_resid_pp": 3.87,
+   "top_minus_bottom_pp": 3.803,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.1725,
+   "within_region_p": 0.0341
+  },
+  "pop_change_21|lab|2026-05-07": {
+   "measure": "pop_change_21",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.0839,
+   "p": 0.31017,
+   "bottom_fifth_mean_resid_pp": 2.872,
+   "top_fifth_mean_resid_pp": 2.457,
+   "top_minus_bottom_pp": -0.415,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0573,
+   "within_region_p": 0.48595
+  },
+  "pop_change_21|con|2026-05-07": {
+   "measure": "pop_change_21",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.0368,
+   "p": 0.65643,
+   "bottom_fifth_mean_resid_pp": -0.483,
+   "top_fifth_mean_resid_pp": -1.61,
+   "top_minus_bottom_pp": -1.127,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0591,
+   "within_region_p": 0.48245
+  },
+  "pop_change_21|ld|2026-05-07": {
+   "measure": "pop_change_21",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": 0.0022,
+   "p": 0.9805,
+   "bottom_fifth_mean_resid_pp": -1.536,
+   "top_fifth_mean_resid_pp": -1.698,
+   "top_minus_bottom_pp": -0.162,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.034,
+   "within_region_p": 0.69243
+  },
+  "pop_change_21|grn|2026-05-07": {
+   "measure": "pop_change_21",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.0468,
+   "p": 0.57704,
+   "bottom_fifth_mean_resid_pp": -1.994,
+   "top_fifth_mean_resid_pp": -1.138,
+   "top_minus_bottom_pp": 0.856,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0269,
+   "within_region_p": 0.74693
+  },
+  "pop_change_21|oth|2026-05-07": {
+   "measure": "pop_change_21",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": -0.3234,
+   "p": 0.0022,
+   "bottom_fifth_mean_resid_pp": 0.078,
+   "top_fifth_mean_resid_pp": -6.753,
+   "top_minus_bottom_pp": -6.831,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.2178,
+   "within_region_p": 0.0398
+  },
+  "pop_change_21|ref|2025-05-01": {
+   "measure": "pop_change_21",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0089,
+   "p": 0.92691,
+   "bottom_fifth_mean_resid_pp": 5.415,
+   "top_fifth_mean_resid_pp": 6.662,
+   "top_minus_bottom_pp": 1.248,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.0208,
+   "within_region_p": 0.83122
+  },
+  "pop_change_21|lab|2025-05-01": {
+   "measure": "pop_change_21",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.1129,
+   "p": 0.24548,
+   "bottom_fifth_mean_resid_pp": -0.96,
+   "top_fifth_mean_resid_pp": 0.152,
+   "top_minus_bottom_pp": 1.112,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.1071,
+   "within_region_p": 0.26817
+  },
+  "pop_change_21|con|2025-05-01": {
+   "measure": "pop_change_21",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.0401,
+   "p": 0.68473,
+   "bottom_fifth_mean_resid_pp": -1.134,
+   "top_fifth_mean_resid_pp": -1.945,
+   "top_minus_bottom_pp": -0.811,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.0018,
+   "within_region_p": 0.986
+  },
+  "pop_change_21|ld|2025-05-01": {
+   "measure": "pop_change_21",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0246,
+   "p": 0.80962,
+   "bottom_fifth_mean_resid_pp": -3.458,
+   "top_fifth_mean_resid_pp": -3.491,
+   "top_minus_bottom_pp": -0.034,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": 0.0027,
+   "within_region_p": 0.9786
+  },
+  "pop_change_21|grn|2025-05-01": {
+   "measure": "pop_change_21",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": 0.0444,
+   "p": 0.66213,
+   "bottom_fifth_mean_resid_pp": -2.964,
+   "top_fifth_mean_resid_pp": -3.687,
+   "top_minus_bottom_pp": -0.723,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.0189,
+   "within_region_p": 0.85411
+  },
+  "pop_change_21|oth|2025-05-01": {
+   "measure": "pop_change_21",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": -0.0585,
+   "p": 0.73143,
+   "bottom_fifth_mean_resid_pp": 7.438,
+   "top_fifth_mean_resid_pp": 9.657,
+   "top_minus_bottom_pp": 2.219,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": -0.0975,
+   "within_region_p": 0.56234
+  },
+  "pop_change_21|ref|2022-05-05": {
+   "measure": "pop_change_21",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "pop_change_21|lab|2022-05-05": {
+   "measure": "pop_change_21",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "pop_change_21|con|2022-05-05": {
+   "measure": "pop_change_21",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "pop_change_21|ld|2022-05-05": {
+   "measure": "pop_change_21",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "pop_change_21|grn|2022-05-05": {
+   "measure": "pop_change_21",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "pop_change_21|oth|2022-05-05": {
+   "measure": "pop_change_21",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "pop_change_21|ref|2023-05-04": {
+   "measure": "pop_change_21",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 11,
+   "run": true,
+   "rho": -0.0545,
+   "p": 0.87961,
+   "bottom_fifth_mean_resid_pp": -0.118,
+   "top_fifth_mean_resid_pp": -1.783,
+   "top_minus_bottom_pp": -1.666,
+   "fifth_sizes": [
+    2,
+    3
+   ],
+   "within_region_rho": -0.5164,
+   "within_region_p": 0.10479
+  },
+  "pop_change_21|lab|2023-05-04": {
+   "measure": "pop_change_21",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": -0.188,
+   "p": 0.06559,
+   "bottom_fifth_mean_resid_pp": 0.26,
+   "top_fifth_mean_resid_pp": -0.882,
+   "top_minus_bottom_pp": -1.143,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.2511,
+   "within_region_p": 0.0142
+  },
+  "pop_change_21|con|2023-05-04": {
+   "measure": "pop_change_21",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 95,
+   "run": true,
+   "rho": 0.0974,
+   "p": 0.34717,
+   "bottom_fifth_mean_resid_pp": -2.261,
+   "top_fifth_mean_resid_pp": -0.971,
+   "top_minus_bottom_pp": 1.289,
+   "fifth_sizes": [
+    19,
+    19
+   ],
+   "within_region_rho": 0.1232,
+   "within_region_p": 0.23868
+  },
+  "pop_change_21|ld|2023-05-04": {
+   "measure": "pop_change_21",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 86,
+   "run": true,
+   "rho": 0.1551,
+   "p": 0.15438,
+   "bottom_fifth_mean_resid_pp": -1.015,
+   "top_fifth_mean_resid_pp": 0.385,
+   "top_minus_bottom_pp": 1.4,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.1346,
+   "within_region_p": 0.21848
+  },
+  "pop_change_21|grn|2023-05-04": {
+   "measure": "pop_change_21",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": -0.2131,
+   "p": 0.06309,
+   "bottom_fifth_mean_resid_pp": 2.135,
+   "top_fifth_mean_resid_pp": 0.564,
+   "top_minus_bottom_pp": -1.571,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": -0.2023,
+   "within_region_p": 0.07149
+  },
+  "pop_change_21|oth|2023-05-04": {
+   "measure": "pop_change_21",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 56,
+   "run": true,
+   "rho": -0.0419,
+   "p": 0.75082,
+   "bottom_fifth_mean_resid_pp": 3.309,
+   "top_fifth_mean_resid_pp": 3.455,
+   "top_minus_bottom_pp": 0.146,
+   "fifth_sizes": [
+    11,
+    12
+   ],
+   "within_region_rho": 0.017,
+   "within_region_p": 0.90421
+  },
+  "nino_rate|ref|2026-05-07": {
+   "measure": "nino_rate",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.3572,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 4.966,
+   "top_fifth_mean_resid_pp": 0.029,
+   "top_minus_bottom_pp": -4.937,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.2245,
+   "within_region_p": 0.0058
+  },
+  "nino_rate|lab|2026-05-07": {
+   "measure": "nino_rate",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.3453,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 1.872,
+   "top_fifth_mean_resid_pp": 5.256,
+   "top_minus_bottom_pp": 3.383,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.1618,
+   "within_region_p": 0.05119
+  },
+  "nino_rate|con|2026-05-07": {
+   "measure": "nino_rate",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.113,
+   "p": 0.17838,
+   "bottom_fifth_mean_resid_pp": -0.487,
+   "top_fifth_mean_resid_pp": 0.331,
+   "top_minus_bottom_pp": 0.818,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0261,
+   "within_region_p": 0.75112
+  },
+  "nino_rate|ld|2026-05-07": {
+   "measure": "nino_rate",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": -0.0991,
+   "p": 0.26137,
+   "bottom_fifth_mean_resid_pp": -1.75,
+   "top_fifth_mean_resid_pp": -2.486,
+   "top_minus_bottom_pp": -0.736,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": 0.0098,
+   "within_region_p": 0.91191
+  },
+  "nino_rate|grn|2026-05-07": {
+   "measure": "nino_rate",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.2431,
+   "p": 0.0036,
+   "bottom_fifth_mean_resid_pp": -4.087,
+   "top_fifth_mean_resid_pp": -1.214,
+   "top_minus_bottom_pp": 2.873,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.1924,
+   "within_region_p": 0.0212
+  },
+  "nino_rate|oth|2026-05-07": {
+   "measure": "nino_rate",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": -0.1303,
+   "p": 0.23108,
+   "bottom_fifth_mean_resid_pp": 0.084,
+   "top_fifth_mean_resid_pp": -5.189,
+   "top_minus_bottom_pp": -5.273,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.0427,
+   "within_region_p": 0.69643
+  },
+  "nino_rate|ref|2025-05-01": {
+   "measure": "nino_rate",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.1977,
+   "p": 0.0411,
+   "bottom_fifth_mean_resid_pp": 7.477,
+   "top_fifth_mean_resid_pp": 4.126,
+   "top_minus_bottom_pp": -3.351,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.1356,
+   "within_region_p": 0.15468
+  },
+  "nino_rate|lab|2025-05-01": {
+   "measure": "nino_rate",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0968,
+   "p": 0.32147,
+   "bottom_fifth_mean_resid_pp": 0.18,
+   "top_fifth_mean_resid_pp": -1.108,
+   "top_minus_bottom_pp": -1.287,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.0205,
+   "within_region_p": 0.83082
+  },
+  "nino_rate|con|2025-05-01": {
+   "measure": "nino_rate",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.1069,
+   "p": 0.27247,
+   "bottom_fifth_mean_resid_pp": -2.678,
+   "top_fifth_mean_resid_pp": -1.1,
+   "top_minus_bottom_pp": 1.578,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0797,
+   "within_region_p": 0.40796
+  },
+  "nino_rate|ld|2025-05-01": {
+   "measure": "nino_rate",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0318,
+   "p": 0.76022,
+   "bottom_fifth_mean_resid_pp": -2.551,
+   "top_fifth_mean_resid_pp": -2.851,
+   "top_minus_bottom_pp": -0.3,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.0245,
+   "within_region_p": 0.81262
+  },
+  "nino_rate|grn|2025-05-01": {
+   "measure": "nino_rate",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": 0.0599,
+   "p": 0.54925,
+   "bottom_fifth_mean_resid_pp": -2.904,
+   "top_fifth_mean_resid_pp": -2.067,
+   "top_minus_bottom_pp": 0.837,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.097,
+   "within_region_p": 0.33387
+  },
+  "nino_rate|oth|2025-05-01": {
+   "measure": "nino_rate",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": 0.2286,
+   "p": 0.16408,
+   "bottom_fifth_mean_resid_pp": 0.735,
+   "top_fifth_mean_resid_pp": 9.284,
+   "top_minus_bottom_pp": 8.549,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": 0.1817,
+   "within_region_p": 0.26847
+  },
+  "nino_rate|ref|2022-05-05": {
+   "measure": "nino_rate",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "nino_rate|lab|2022-05-05": {
+   "measure": "nino_rate",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 131,
+   "run": true,
+   "rho": -0.0352,
+   "p": 0.69093,
+   "bottom_fifth_mean_resid_pp": 2.559,
+   "top_fifth_mean_resid_pp": 2.7,
+   "top_minus_bottom_pp": 0.141,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.0165,
+   "within_region_p": 0.85611
+  },
+  "nino_rate|con|2022-05-05": {
+   "measure": "nino_rate",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 130,
+   "run": true,
+   "rho": 0.3902,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": -2.307,
+   "top_fifth_mean_resid_pp": 1.582,
+   "top_minus_bottom_pp": 3.889,
+   "fifth_sizes": [
+    26,
+    26
+   ],
+   "within_region_rho": 0.2429,
+   "within_region_p": 0.0055
+  },
+  "nino_rate|ld|2022-05-05": {
+   "measure": "nino_rate",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 115,
+   "run": true,
+   "rho": -0.3114,
+   "p": 0.0012,
+   "bottom_fifth_mean_resid_pp": 1.223,
+   "top_fifth_mean_resid_pp": -3.236,
+   "top_minus_bottom_pp": -4.459,
+   "fifth_sizes": [
+    23,
+    23
+   ],
+   "within_region_rho": -0.1779,
+   "within_region_p": 0.05969
+  },
+  "nino_rate|grn|2022-05-05": {
+   "measure": "nino_rate",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 104,
+   "run": true,
+   "rho": 0.0558,
+   "p": 0.56244,
+   "bottom_fifth_mean_resid_pp": -4.026,
+   "top_fifth_mean_resid_pp": -3.861,
+   "top_minus_bottom_pp": 0.165,
+   "fifth_sizes": [
+    20,
+    21
+   ],
+   "within_region_rho": 0.059,
+   "within_region_p": 0.54365
+  },
+  "nino_rate|oth|2022-05-05": {
+   "measure": "nino_rate",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 70,
+   "run": true,
+   "rho": -0.0708,
+   "p": 0.55744,
+   "bottom_fifth_mean_resid_pp": 3.313,
+   "top_fifth_mean_resid_pp": 2.104,
+   "top_minus_bottom_pp": -1.209,
+   "fifth_sizes": [
+    14,
+    14
+   ],
+   "within_region_rho": -0.102,
+   "within_region_p": 0.40796
+  },
+  "nino_rate|ref|2023-05-04": {
+   "measure": "nino_rate",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 11,
+   "run": true,
+   "rho": 0.0455,
+   "p": 0.90741,
+   "bottom_fifth_mean_resid_pp": -1.482,
+   "top_fifth_mean_resid_pp": -1.442,
+   "top_minus_bottom_pp": 0.04,
+   "fifth_sizes": [
+    2,
+    3
+   ],
+   "within_region_rho": -0.1024,
+   "within_region_p": 0.76502
+  },
+  "nino_rate|lab|2023-05-04": {
+   "measure": "nino_rate",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": -0.1063,
+   "p": 0.29967,
+   "bottom_fifth_mean_resid_pp": 0.409,
+   "top_fifth_mean_resid_pp": -0.377,
+   "top_minus_bottom_pp": -0.786,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.1167,
+   "within_region_p": 0.25807
+  },
+  "nino_rate|con|2023-05-04": {
+   "measure": "nino_rate",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 95,
+   "run": true,
+   "rho": 0.2247,
+   "p": 0.0287,
+   "bottom_fifth_mean_resid_pp": -4.125,
+   "top_fifth_mean_resid_pp": -1.993,
+   "top_minus_bottom_pp": 2.132,
+   "fifth_sizes": [
+    19,
+    19
+   ],
+   "within_region_rho": 0.2407,
+   "within_region_p": 0.0191
+  },
+  "nino_rate|ld|2023-05-04": {
+   "measure": "nino_rate",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 86,
+   "run": true,
+   "rho": 0.2093,
+   "p": 0.05269,
+   "bottom_fifth_mean_resid_pp": -0.827,
+   "top_fifth_mean_resid_pp": 1.069,
+   "top_minus_bottom_pp": 1.896,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.1924,
+   "within_region_p": 0.07629
+  },
+  "nino_rate|grn|2023-05-04": {
+   "measure": "nino_rate",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": -0.2667,
+   "p": 0.0168,
+   "bottom_fifth_mean_resid_pp": 2.176,
+   "top_fifth_mean_resid_pp": 0.568,
+   "top_minus_bottom_pp": -1.608,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": -0.3134,
+   "within_region_p": 0.0048
+  },
+  "nino_rate|oth|2023-05-04": {
+   "measure": "nino_rate",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 56,
+   "run": true,
+   "rho": -0.1569,
+   "p": 0.24428,
+   "bottom_fifth_mean_resid_pp": 2.957,
+   "top_fifth_mean_resid_pp": 2.747,
+   "top_minus_bottom_pp": -0.21,
+   "fifth_sizes": [
+    11,
+    12
+   ],
+   "within_region_rho": -0.1749,
+   "within_region_p": 0.19708
+  },
+  "nino_change_21|ref|2026-05-07": {
+   "measure": "nino_change_21",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.401,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": -0.908,
+   "top_fifth_mean_resid_pp": 4.362,
+   "top_minus_bottom_pp": 5.27,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.2595,
+   "within_region_p": 0.002
+  },
+  "nino_change_21|lab|2026-05-07": {
+   "measure": "nino_change_21",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.0064,
+   "p": 0.93841,
+   "bottom_fifth_mean_resid_pp": 2.581,
+   "top_fifth_mean_resid_pp": 2.186,
+   "top_minus_bottom_pp": -0.395,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0628,
+   "within_region_p": 0.44596
+  },
+  "nino_change_21|con|2026-05-07": {
+   "measure": "nino_change_21",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.2213,
+   "p": 0.0081,
+   "bottom_fifth_mean_resid_pp": 1.172,
+   "top_fifth_mean_resid_pp": -1.625,
+   "top_minus_bottom_pp": -2.797,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0377,
+   "within_region_p": 0.65313
+  },
+  "nino_change_21|ld|2026-05-07": {
+   "measure": "nino_change_21",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": -0.0907,
+   "p": 0.29667,
+   "bottom_fifth_mean_resid_pp": -1.224,
+   "top_fifth_mean_resid_pp": -2.309,
+   "top_minus_bottom_pp": -1.084,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.1296,
+   "within_region_p": 0.13909
+  },
+  "nino_change_21|grn|2026-05-07": {
+   "measure": "nino_change_21",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.1094,
+   "p": 0.18468,
+   "bottom_fifth_mean_resid_pp": -2.302,
+   "top_fifth_mean_resid_pp": -1.034,
+   "top_minus_bottom_pp": 1.268,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0373,
+   "within_region_p": 0.65583
+  },
+  "nino_change_21|oth|2026-05-07": {
+   "measure": "nino_change_21",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": -0.2604,
+   "p": 0.0159,
+   "bottom_fifth_mean_resid_pp": -0.477,
+   "top_fifth_mean_resid_pp": -6.319,
+   "top_minus_bottom_pp": -5.842,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.153,
+   "within_region_p": 0.15248
+  },
+  "nino_change_21|ref|2025-05-01": {
+   "measure": "nino_change_21",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0314,
+   "p": 0.74673,
+   "bottom_fifth_mean_resid_pp": 5.135,
+   "top_fifth_mean_resid_pp": 5.728,
+   "top_minus_bottom_pp": 0.593,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0744,
+   "within_region_p": 0.43386
+  },
+  "nino_change_21|lab|2025-05-01": {
+   "measure": "nino_change_21",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0774,
+   "p": 0.43036,
+   "bottom_fifth_mean_resid_pp": -1.432,
+   "top_fifth_mean_resid_pp": 0.032,
+   "top_minus_bottom_pp": 1.464,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.2504,
+   "within_region_p": 0.0091
+  },
+  "nino_change_21|con|2025-05-01": {
+   "measure": "nino_change_21",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.2598,
+   "p": 0.0071,
+   "bottom_fifth_mean_resid_pp": 0.295,
+   "top_fifth_mean_resid_pp": -3.727,
+   "top_minus_bottom_pp": -4.021,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.1815,
+   "within_region_p": 0.05809
+  },
+  "nino_change_21|ld|2025-05-01": {
+   "measure": "nino_change_21",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0035,
+   "p": 0.9738,
+   "bottom_fifth_mean_resid_pp": -4.643,
+   "top_fifth_mean_resid_pp": -4.207,
+   "top_minus_bottom_pp": 0.437,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.1713,
+   "within_region_p": 0.09639
+  },
+  "nino_change_21|grn|2025-05-01": {
+   "measure": "nino_change_21",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": 0.1921,
+   "p": 0.05619,
+   "bottom_fifth_mean_resid_pp": -3.134,
+   "top_fifth_mean_resid_pp": -2.194,
+   "top_minus_bottom_pp": 0.94,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.1449,
+   "within_region_p": 0.14979
+  },
+  "nino_change_21|oth|2025-05-01": {
+   "measure": "nino_change_21",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": 0.2478,
+   "p": 0.13329,
+   "bottom_fifth_mean_resid_pp": 0.968,
+   "top_fifth_mean_resid_pp": 9.34,
+   "top_minus_bottom_pp": 8.373,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": 0.0798,
+   "within_region_p": 0.63984
+  },
+  "nino_change_21|ref|2022-05-05": {
+   "measure": "nino_change_21",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "nino_change_21|lab|2022-05-05": {
+   "measure": "nino_change_21",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "nino_change_21|con|2022-05-05": {
+   "measure": "nino_change_21",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "nino_change_21|ld|2022-05-05": {
+   "measure": "nino_change_21",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "nino_change_21|grn|2022-05-05": {
+   "measure": "nino_change_21",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "nino_change_21|oth|2022-05-05": {
+   "measure": "nino_change_21",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "nino_change_21|ref|2023-05-04": {
+   "measure": "nino_change_21",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 11,
+   "run": true,
+   "rho": 0.0727,
+   "p": 0.84342,
+   "bottom_fifth_mean_resid_pp": -1.482,
+   "top_fifth_mean_resid_pp": -1.775,
+   "top_minus_bottom_pp": -0.293,
+   "fifth_sizes": [
+    2,
+    3
+   ],
+   "within_region_rho": -0.1721,
+   "within_region_p": 0.60624
+  },
+  "nino_change_21|lab|2023-05-04": {
+   "measure": "nino_change_21",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": -0.218,
+   "p": 0.0342,
+   "bottom_fifth_mean_resid_pp": 1.603,
+   "top_fifth_mean_resid_pp": -0.429,
+   "top_minus_bottom_pp": -2.032,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.2133,
+   "within_region_p": 0.0331
+  },
+  "nino_change_21|con|2023-05-04": {
+   "measure": "nino_change_21",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 95,
+   "run": true,
+   "rho": 0.1803,
+   "p": 0.08049,
+   "bottom_fifth_mean_resid_pp": -4.409,
+   "top_fifth_mean_resid_pp": -2.244,
+   "top_minus_bottom_pp": 2.165,
+   "fifth_sizes": [
+    19,
+    19
+   ],
+   "within_region_rho": 0.192,
+   "within_region_p": 0.06879
+  },
+  "nino_change_21|ld|2023-05-04": {
+   "measure": "nino_change_21",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 86,
+   "run": true,
+   "rho": 0.2353,
+   "p": 0.0297,
+   "bottom_fifth_mean_resid_pp": -0.745,
+   "top_fifth_mean_resid_pp": 1.057,
+   "top_minus_bottom_pp": 1.802,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.2186,
+   "within_region_p": 0.0441
+  },
+  "nino_change_21|grn|2023-05-04": {
+   "measure": "nino_change_21",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": -0.1632,
+   "p": 0.15258,
+   "bottom_fifth_mean_resid_pp": 1.962,
+   "top_fifth_mean_resid_pp": 0.494,
+   "top_minus_bottom_pp": -1.468,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": -0.2136,
+   "within_region_p": 0.06209
+  },
+  "nino_change_21|oth|2023-05-04": {
+   "measure": "nino_change_21",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 56,
+   "run": true,
+   "rho": -0.1542,
+   "p": 0.25247,
+   "bottom_fifth_mean_resid_pp": 3.662,
+   "top_fifth_mean_resid_pp": 2.26,
+   "top_minus_bottom_pp": -1.402,
+   "fifth_sizes": [
+    11,
+    12
+   ],
+   "within_region_rho": -0.1464,
+   "within_region_p": 0.27447
+  },
+  "asylum_rate|ref|2026-05-07": {
+   "measure": "asylum_rate",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 145,
+   "run": true,
+   "rho": 0.156,
+   "p": 0.06179,
+   "bottom_fifth_mean_resid_pp": 2.407,
+   "top_fifth_mean_resid_pp": 3.855,
+   "top_minus_bottom_pp": 1.448,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": 0.0165,
+   "within_region_p": 0.84332
+  },
+  "asylum_rate|lab|2026-05-07": {
+   "measure": "asylum_rate",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 145,
+   "run": true,
+   "rho": 0.0585,
+   "p": 0.48345,
+   "bottom_fifth_mean_resid_pp": 1.77,
+   "top_fifth_mean_resid_pp": 2.852,
+   "top_minus_bottom_pp": 1.082,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": 0.0589,
+   "within_region_p": 0.47415
+  },
+  "asylum_rate|con|2026-05-07": {
+   "measure": "asylum_rate",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 144,
+   "run": true,
+   "rho": -0.1977,
+   "p": 0.0164,
+   "bottom_fifth_mean_resid_pp": -0.475,
+   "top_fifth_mean_resid_pp": -1.94,
+   "top_minus_bottom_pp": -1.465,
+   "fifth_sizes": [
+    28,
+    29
+   ],
+   "within_region_rho": 0.0777,
+   "within_region_p": 0.35576
+  },
+  "asylum_rate|ld|2026-05-07": {
+   "measure": "asylum_rate",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 131,
+   "run": true,
+   "rho": -0.0481,
+   "p": 0.58704,
+   "bottom_fifth_mean_resid_pp": -0.553,
+   "top_fifth_mean_resid_pp": -1.598,
+   "top_minus_bottom_pp": -1.045,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.0068,
+   "within_region_p": 0.93921
+  },
+  "asylum_rate|grn|2026-05-07": {
+   "measure": "asylum_rate",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 144,
+   "run": true,
+   "rho": 0.3077,
+   "p": 0.0005,
+   "bottom_fifth_mean_resid_pp": -3.265,
+   "top_fifth_mean_resid_pp": -0.754,
+   "top_minus_bottom_pp": 2.511,
+   "fifth_sizes": [
+    28,
+    29
+   ],
+   "within_region_rho": 0.0966,
+   "within_region_p": 0.25287
+  },
+  "asylum_rate|oth|2026-05-07": {
+   "measure": "asylum_rate",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 85,
+   "run": true,
+   "rho": -0.3177,
+   "p": 0.0037,
+   "bottom_fifth_mean_resid_pp": 0.018,
+   "top_fifth_mean_resid_pp": -7.265,
+   "top_minus_bottom_pp": -7.283,
+   "fifth_sizes": [
+    17,
+    17
+   ],
+   "within_region_rho": -0.1437,
+   "within_region_p": 0.18998
+  },
+  "asylum_rate|ref|2025-05-01": {
+   "measure": "asylum_rate",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": 0.0776,
+   "p": 0.44016,
+   "bottom_fifth_mean_resid_pp": 4.499,
+   "top_fifth_mean_resid_pp": 6.178,
+   "top_minus_bottom_pp": 1.68,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.1351,
+   "within_region_p": 0.18218
+  },
+  "asylum_rate|lab|2025-05-01": {
+   "measure": "asylum_rate",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.1875,
+   "p": 0.06339,
+   "bottom_fifth_mean_resid_pp": 1.757,
+   "top_fifth_mean_resid_pp": -2.492,
+   "top_minus_bottom_pp": -4.248,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": -0.0789,
+   "within_region_p": 0.43716
+  },
+  "asylum_rate|con|2025-05-01": {
+   "measure": "asylum_rate",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": 0.0736,
+   "p": 0.46545,
+   "bottom_fifth_mean_resid_pp": -2.59,
+   "top_fifth_mean_resid_pp": -0.308,
+   "top_minus_bottom_pp": 2.282,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.0202,
+   "within_region_p": 0.84092
+  },
+  "asylum_rate|ld|2025-05-01": {
+   "measure": "asylum_rate",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 88,
+   "run": true,
+   "rho": 0.0045,
+   "p": 0.9648,
+   "bottom_fifth_mean_resid_pp": -4.952,
+   "top_fifth_mean_resid_pp": -3.941,
+   "top_minus_bottom_pp": 1.01,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.0426,
+   "within_region_p": 0.69683
+  },
+  "asylum_rate|grn|2025-05-01": {
+   "measure": "asylum_rate",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 93,
+   "run": true,
+   "rho": 0.0209,
+   "p": 0.85031,
+   "bottom_fifth_mean_resid_pp": -2.906,
+   "top_fifth_mean_resid_pp": -3.056,
+   "top_minus_bottom_pp": -0.15,
+   "fifth_sizes": [
+    18,
+    19
+   ],
+   "within_region_rho": 0.0537,
+   "within_region_p": 0.60784
+  },
+  "asylum_rate|oth|2025-05-01": {
+   "measure": "asylum_rate",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": -0.1951,
+   "p": 0.23248,
+   "bottom_fifth_mean_resid_pp": 8.202,
+   "top_fifth_mean_resid_pp": 1.88,
+   "top_minus_bottom_pp": -6.322,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": -0.1754,
+   "within_region_p": 0.29667
+  },
+  "asylum_rate|ref|2022-05-05": {
+   "measure": "asylum_rate",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "asylum_rate|lab|2022-05-05": {
+   "measure": "asylum_rate",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 122,
+   "run": true,
+   "rho": -0.3018,
+   "p": 0.0009,
+   "bottom_fifth_mean_resid_pp": 3.421,
+   "top_fifth_mean_resid_pp": -0.496,
+   "top_minus_bottom_pp": -3.917,
+   "fifth_sizes": [
+    24,
+    25
+   ],
+   "within_region_rho": -0.2101,
+   "within_region_p": 0.0215
+  },
+  "asylum_rate|con|2022-05-05": {
+   "measure": "asylum_rate",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 121,
+   "run": true,
+   "rho": 0.4417,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": -2.344,
+   "top_fifth_mean_resid_pp": 1.481,
+   "top_minus_bottom_pp": 3.825,
+   "fifth_sizes": [
+    24,
+    25
+   ],
+   "within_region_rho": 0.2506,
+   "within_region_p": 0.0057
+  },
+  "asylum_rate|ld|2022-05-05": {
+   "measure": "asylum_rate",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 108,
+   "run": true,
+   "rho": -0.24,
+   "p": 0.0135,
+   "bottom_fifth_mean_resid_pp": 1.179,
+   "top_fifth_mean_resid_pp": -1.245,
+   "top_minus_bottom_pp": -2.424,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.0662,
+   "within_region_p": 0.49055
+  },
+  "asylum_rate|grn|2022-05-05": {
+   "measure": "asylum_rate",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": 0.2233,
+   "p": 0.028,
+   "bottom_fifth_mean_resid_pp": -4.185,
+   "top_fifth_mean_resid_pp": -2.523,
+   "top_minus_bottom_pp": 1.662,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": 0.1763,
+   "within_region_p": 0.08529
+  },
+  "asylum_rate|oth|2022-05-05": {
+   "measure": "asylum_rate",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 66,
+   "run": true,
+   "rho": -0.1331,
+   "p": 0.28357,
+   "bottom_fifth_mean_resid_pp": 4.918,
+   "top_fifth_mean_resid_pp": 2.568,
+   "top_minus_bottom_pp": -2.35,
+   "fifth_sizes": [
+    13,
+    14
+   ],
+   "within_region_rho": -0.0803,
+   "within_region_p": 0.51685
+  },
+  "asylum_rate|ref|2023-05-04": {
+   "measure": "asylum_rate",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 10,
+   "run": true,
+   "rho": -0.503,
+   "p": 0.14139,
+   "bottom_fifth_mean_resid_pp": -0.931,
+   "top_fifth_mean_resid_pp": -2.641,
+   "top_minus_bottom_pp": -1.709,
+   "fifth_sizes": [
+    2,
+    2
+   ],
+   "within_region_rho": -0.2761,
+   "within_region_p": 0.44156
+  },
+  "asylum_rate|lab|2023-05-04": {
+   "measure": "asylum_rate",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 90,
+   "run": true,
+   "rho": -0.0832,
+   "p": 0.43196,
+   "bottom_fifth_mean_resid_pp": 1.328,
+   "top_fifth_mean_resid_pp": 0.257,
+   "top_minus_bottom_pp": -1.071,
+   "fifth_sizes": [
+    18,
+    18
+   ],
+   "within_region_rho": -0.1564,
+   "within_region_p": 0.13939
+  },
+  "asylum_rate|con|2023-05-04": {
+   "measure": "asylum_rate",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 89,
+   "run": true,
+   "rho": 0.1081,
+   "p": 0.30557,
+   "bottom_fifth_mean_resid_pp": -2.416,
+   "top_fifth_mean_resid_pp": -2.716,
+   "top_minus_bottom_pp": -0.3,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.214,
+   "within_region_p": 0.0463
+  },
+  "asylum_rate|ld|2023-05-04": {
+   "measure": "asylum_rate",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 80,
+   "run": true,
+   "rho": 0.145,
+   "p": 0.20788,
+   "bottom_fifth_mean_resid_pp": -0.889,
+   "top_fifth_mean_resid_pp": 0.298,
+   "top_minus_bottom_pp": 1.187,
+   "fifth_sizes": [
+    16,
+    16
+   ],
+   "within_region_rho": 0.023,
+   "within_region_p": 0.84502
+  },
+  "asylum_rate|grn|2023-05-04": {
+   "measure": "asylum_rate",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 74,
+   "run": true,
+   "rho": -0.0068,
+   "p": 0.9572,
+   "bottom_fifth_mean_resid_pp": 1.268,
+   "top_fifth_mean_resid_pp": 0.823,
+   "top_minus_bottom_pp": -0.445,
+   "fifth_sizes": [
+    14,
+    15
+   ],
+   "within_region_rho": 0.0579,
+   "within_region_p": 0.62314
+  },
+  "asylum_rate|oth|2023-05-04": {
+   "measure": "asylum_rate",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 52,
+   "run": true,
+   "rho": -0.1824,
+   "p": 0.18818,
+   "bottom_fifth_mean_resid_pp": 4.877,
+   "top_fifth_mean_resid_pp": 3.474,
+   "top_minus_bottom_pp": -1.402,
+   "fifth_sizes": [
+    10,
+    11
+   ],
+   "within_region_rho": -0.0523,
+   "within_region_p": 0.71223
+  },
+  "asylum_change_21|ref|2026-05-07": {
+   "measure": "asylum_change_21",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 126,
+   "run": true,
+   "rho": 0.0075,
+   "p": 0.92551,
+   "bottom_fifth_mean_resid_pp": 3.842,
+   "top_fifth_mean_resid_pp": 3.375,
+   "top_minus_bottom_pp": -0.467,
+   "fifth_sizes": [
+    25,
+    26
+   ],
+   "within_region_rho": -0.0412,
+   "within_region_p": 0.65163
+  },
+  "asylum_change_21|lab|2026-05-07": {
+   "measure": "asylum_change_21",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 126,
+   "run": true,
+   "rho": -0.0076,
+   "p": 0.92901,
+   "bottom_fifth_mean_resid_pp": 2.789,
+   "top_fifth_mean_resid_pp": 2.132,
+   "top_minus_bottom_pp": -0.658,
+   "fifth_sizes": [
+    25,
+    26
+   ],
+   "within_region_rho": 0.077,
+   "within_region_p": 0.38976
+  },
+  "asylum_change_21|con|2026-05-07": {
+   "measure": "asylum_change_21",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 125,
+   "run": true,
+   "rho": 0.0557,
+   "p": 0.53405,
+   "bottom_fifth_mean_resid_pp": -1.219,
+   "top_fifth_mean_resid_pp": -0.235,
+   "top_minus_bottom_pp": 0.984,
+   "fifth_sizes": [
+    25,
+    25
+   ],
+   "within_region_rho": 0.1671,
+   "within_region_p": 0.06209
+  },
+  "asylum_change_21|ld|2026-05-07": {
+   "measure": "asylum_change_21",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 115,
+   "run": true,
+   "rho": 0.0955,
+   "p": 0.31347,
+   "bottom_fifth_mean_resid_pp": -2.492,
+   "top_fifth_mean_resid_pp": -1.561,
+   "top_minus_bottom_pp": 0.931,
+   "fifth_sizes": [
+    23,
+    23
+   ],
+   "within_region_rho": 0.1238,
+   "within_region_p": 0.18898
+  },
+  "asylum_change_21|grn|2026-05-07": {
+   "measure": "asylum_change_21",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 126,
+   "run": true,
+   "rho": -0.0908,
+   "p": 0.32027,
+   "bottom_fifth_mean_resid_pp": -0.824,
+   "top_fifth_mean_resid_pp": -2.217,
+   "top_minus_bottom_pp": -1.393,
+   "fifth_sizes": [
+    25,
+    26
+   ],
+   "within_region_rho": -0.1273,
+   "within_region_p": 0.14969
+  },
+  "asylum_change_21|oth|2026-05-07": {
+   "measure": "asylum_change_21",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 78,
+   "run": true,
+   "rho": -0.0367,
+   "p": 0.74493,
+   "bottom_fifth_mean_resid_pp": -5.45,
+   "top_fifth_mean_resid_pp": -4.082,
+   "top_minus_bottom_pp": 1.368,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": -0.1062,
+   "within_region_p": 0.34937
+  },
+  "asylum_change_21|ref|2025-05-01": {
+   "measure": "asylum_change_21",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 66,
+   "run": true,
+   "rho": 0.0194,
+   "p": 0.87691,
+   "bottom_fifth_mean_resid_pp": 5.253,
+   "top_fifth_mean_resid_pp": 5.585,
+   "top_minus_bottom_pp": 0.332,
+   "fifth_sizes": [
+    13,
+    14
+   ],
+   "within_region_rho": 0.1353,
+   "within_region_p": 0.27797
+  },
+  "asylum_change_21|lab|2025-05-01": {
+   "measure": "asylum_change_21",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 66,
+   "run": true,
+   "rho": -0.076,
+   "p": 0.54705,
+   "bottom_fifth_mean_resid_pp": 0.859,
+   "top_fifth_mean_resid_pp": -3.197,
+   "top_minus_bottom_pp": -4.055,
+   "fifth_sizes": [
+    13,
+    14
+   ],
+   "within_region_rho": 0.0339,
+   "within_region_p": 0.79052
+  },
+  "asylum_change_21|con|2025-05-01": {
+   "measure": "asylum_change_21",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 66,
+   "run": true,
+   "rho": 0.1503,
+   "p": 0.22718,
+   "bottom_fifth_mean_resid_pp": -2.124,
+   "top_fifth_mean_resid_pp": 1.365,
+   "top_minus_bottom_pp": 3.488,
+   "fifth_sizes": [
+    13,
+    14
+   ],
+   "within_region_rho": -0.0068,
+   "within_region_p": 0.9574
+  },
+  "asylum_change_21|ld|2025-05-01": {
+   "measure": "asylum_change_21",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 58,
+   "run": true,
+   "rho": -0.1368,
+   "p": 0.30627,
+   "bottom_fifth_mean_resid_pp": -3.399,
+   "top_fifth_mean_resid_pp": -4.171,
+   "top_minus_bottom_pp": -0.772,
+   "fifth_sizes": [
+    11,
+    12
+   ],
+   "within_region_rho": -0.1773,
+   "within_region_p": 0.18438
+  },
+  "asylum_change_21|grn|2025-05-01": {
+   "measure": "asylum_change_21",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 63,
+   "run": true,
+   "rho": 0.1214,
+   "p": 0.34197,
+   "bottom_fifth_mean_resid_pp": -4.689,
+   "top_fifth_mean_resid_pp": -3.968,
+   "top_minus_bottom_pp": 0.721,
+   "fifth_sizes": [
+    12,
+    13
+   ],
+   "within_region_rho": 0.2003,
+   "within_region_p": 0.11179
+  },
+  "asylum_change_21|oth|2025-05-01": {
+   "measure": "asylum_change_21",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 26,
+   "run": true,
+   "rho": -0.3203,
+   "p": 0.10759,
+   "bottom_fifth_mean_resid_pp": 10.817,
+   "top_fifth_mean_resid_pp": 4.196,
+   "top_minus_bottom_pp": -6.621,
+   "fifth_sizes": [
+    5,
+    6
+   ],
+   "within_region_rho": -0.2882,
+   "within_region_p": 0.15728
+  },
+  "asylum_change_21|ref|2022-05-05": {
+   "measure": "asylum_change_21",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "asylum_change_21|lab|2022-05-05": {
+   "measure": "asylum_change_21",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 115,
+   "run": true,
+   "rho": 0.0506,
+   "p": 0.59304,
+   "bottom_fifth_mean_resid_pp": 0.259,
+   "top_fifth_mean_resid_pp": 1.149,
+   "top_minus_bottom_pp": 0.89,
+   "fifth_sizes": [
+    21,
+    23
+   ],
+   "within_region_rho": 0.081,
+   "within_region_p": 0.38736
+  },
+  "asylum_change_21|con|2022-05-05": {
+   "measure": "asylum_change_21",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 114,
+   "run": true,
+   "rho": 0.1361,
+   "p": 0.14459,
+   "bottom_fifth_mean_resid_pp": 0.399,
+   "top_fifth_mean_resid_pp": 0.785,
+   "top_minus_bottom_pp": 0.386,
+   "fifth_sizes": [
+    21,
+    23
+   ],
+   "within_region_rho": 0.0575,
+   "within_region_p": 0.53815
+  },
+  "asylum_change_21|ld|2022-05-05": {
+   "measure": "asylum_change_21",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 102,
+   "run": true,
+   "rho": -0.1388,
+   "p": 0.16278,
+   "bottom_fifth_mean_resid_pp": -0.824,
+   "top_fifth_mean_resid_pp": -1.069,
+   "top_minus_bottom_pp": -0.245,
+   "fifth_sizes": [
+    19,
+    21
+   ],
+   "within_region_rho": -0.0594,
+   "within_region_p": 0.55584
+  },
+  "asylum_change_21|grn|2022-05-05": {
+   "measure": "asylum_change_21",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 90,
+   "run": true,
+   "rho": 0.0366,
+   "p": 0.74023,
+   "bottom_fifth_mean_resid_pp": -3.047,
+   "top_fifth_mean_resid_pp": -3.077,
+   "top_minus_bottom_pp": -0.03,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.0047,
+   "within_region_p": 0.9663
+  },
+  "asylum_change_21|oth|2022-05-05": {
+   "measure": "asylum_change_21",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 63,
+   "run": true,
+   "rho": -0.1912,
+   "p": 0.13509,
+   "bottom_fifth_mean_resid_pp": 3.822,
+   "top_fifth_mean_resid_pp": 3.09,
+   "top_minus_bottom_pp": -0.732,
+   "fifth_sizes": [
+    12,
+    13
+   ],
+   "within_region_rho": -0.0414,
+   "within_region_p": 0.73913
+  },
+  "asylum_change_21|ref|2023-05-04": {
+   "measure": "asylum_change_21",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 10,
+   "run": true,
+   "rho": -0.2727,
+   "p": 0.44776,
+   "bottom_fifth_mean_resid_pp": -1.994,
+   "top_fifth_mean_resid_pp": -3.077,
+   "top_minus_bottom_pp": -1.083,
+   "fifth_sizes": [
+    2,
+    2
+   ],
+   "within_region_rho": -0.4479,
+   "within_region_p": 0.20058
+  },
+  "asylum_change_21|lab|2023-05-04": {
+   "measure": "asylum_change_21",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 80,
+   "run": true,
+   "rho": -0.2785,
+   "p": 0.0142,
+   "bottom_fifth_mean_resid_pp": 1.258,
+   "top_fifth_mean_resid_pp": 0.161,
+   "top_minus_bottom_pp": -1.097,
+   "fifth_sizes": [
+    16,
+    16
+   ],
+   "within_region_rho": -0.2341,
+   "within_region_p": 0.0375
+  },
+  "asylum_change_21|con|2023-05-04": {
+   "measure": "asylum_change_21",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": 0.2135,
+   "p": 0.05809,
+   "bottom_fifth_mean_resid_pp": -4.609,
+   "top_fifth_mean_resid_pp": -2.184,
+   "top_minus_bottom_pp": 2.425,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": 0.1802,
+   "within_region_p": 0.10879
+  },
+  "asylum_change_21|ld|2023-05-04": {
+   "measure": "asylum_change_21",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 72,
+   "run": true,
+   "rho": 0.0799,
+   "p": 0.50905,
+   "bottom_fifth_mean_resid_pp": -0.769,
+   "top_fifth_mean_resid_pp": 0.113,
+   "top_minus_bottom_pp": 0.882,
+   "fifth_sizes": [
+    14,
+    15
+   ],
+   "within_region_rho": 0.1019,
+   "within_region_p": 0.39006
+  },
+  "asylum_change_21|grn|2023-05-04": {
+   "measure": "asylum_change_21",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 65,
+   "run": true,
+   "rho": 0.1612,
+   "p": 0.19738,
+   "bottom_fifth_mean_resid_pp": 0.639,
+   "top_fifth_mean_resid_pp": 1.112,
+   "top_minus_bottom_pp": 0.473,
+   "fifth_sizes": [
+    13,
+    13
+   ],
+   "within_region_rho": 0.1178,
+   "within_region_p": 0.35036
+  },
+  "asylum_change_21|oth|2023-05-04": {
+   "measure": "asylum_change_21",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 48,
+   "run": true,
+   "rho": -0.0989,
+   "p": 0.50475,
+   "bottom_fifth_mean_resid_pp": 7.286,
+   "top_fifth_mean_resid_pp": 5.372,
+   "top_minus_bottom_pp": -1.914,
+   "fifth_sizes": [
+    9,
+    10
+   ],
+   "within_region_rho": -0.0263,
+   "within_region_p": 0.86251
+  },
+  "income_median|ref|2026-05-07": {
+   "measure": "income_median",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.3275,
+   "p": 0.0002,
+   "bottom_fifth_mean_resid_pp": 3.34,
+   "top_fifth_mean_resid_pp": 0.199,
+   "top_minus_bottom_pp": -3.141,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": -0.0457,
+   "within_region_p": 0.57944
+  },
+  "income_median|lab|2026-05-07": {
+   "measure": "income_median",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.095,
+   "p": 0.24558,
+   "bottom_fifth_mean_resid_pp": 2.097,
+   "top_fifth_mean_resid_pp": 4.348,
+   "top_minus_bottom_pp": 2.251,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": -0.0676,
+   "within_region_p": 0.41596
+  },
+  "income_median|con|2026-05-07": {
+   "measure": "income_median",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.5543,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": -3.511,
+   "top_fifth_mean_resid_pp": 1.342,
+   "top_minus_bottom_pp": 4.852,
+   "fifth_sizes": [
+    28,
+    29
+   ],
+   "within_region_rho": 0.1791,
+   "within_region_p": 0.0299
+  },
+  "income_median|ld|2026-05-07": {
+   "measure": "income_median",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": -0.0868,
+   "p": 0.32427,
+   "bottom_fifth_mean_resid_pp": -1.445,
+   "top_fifth_mean_resid_pp": -1.773,
+   "top_minus_bottom_pp": -0.327,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.0258,
+   "within_region_p": 0.76582
+  },
+  "income_median|grn|2026-05-07": {
+   "measure": "income_median",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.3385,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": -0.958,
+   "top_fifth_mean_resid_pp": -3.71,
+   "top_minus_bottom_pp": -2.752,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": -0.1919,
+   "within_region_p": 0.0207
+  },
+  "income_median|oth|2026-05-07": {
+   "measure": "income_median",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": 0.1046,
+   "p": 0.33407,
+   "bottom_fifth_mean_resid_pp": -2.727,
+   "top_fifth_mean_resid_pp": -3.387,
+   "top_minus_bottom_pp": -0.66,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.04,
+   "within_region_p": 0.70963
+  },
+  "income_median|ref|2025-05-01": {
+   "measure": "income_median",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.2438,
+   "p": 0.0115,
+   "bottom_fifth_mean_resid_pp": 5.897,
+   "top_fifth_mean_resid_pp": 2.527,
+   "top_minus_bottom_pp": -3.37,
+   "fifth_sizes": [
+    21,
+    23
+   ],
+   "within_region_rho": -0.2208,
+   "within_region_p": 0.0239
+  },
+  "income_median|lab|2025-05-01": {
+   "measure": "income_median",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.5176,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": -5.599,
+   "top_fifth_mean_resid_pp": 2.566,
+   "top_minus_bottom_pp": 8.165,
+   "fifth_sizes": [
+    21,
+    23
+   ],
+   "within_region_rho": 0.3552,
+   "within_region_p": 0.0003
+  },
+  "income_median|con|2025-05-01": {
+   "measure": "income_median",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.1343,
+   "p": 0.17618,
+   "bottom_fifth_mean_resid_pp": -1.126,
+   "top_fifth_mean_resid_pp": 0.549,
+   "top_minus_bottom_pp": 1.676,
+   "fifth_sizes": [
+    21,
+    23
+   ],
+   "within_region_rho": 0.1378,
+   "within_region_p": 0.15758
+  },
+  "income_median|ld|2025-05-01": {
+   "measure": "income_median",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": -0.0622,
+   "p": 0.54365,
+   "bottom_fifth_mean_resid_pp": -1.181,
+   "top_fifth_mean_resid_pp": -4.731,
+   "top_minus_bottom_pp": -3.55,
+   "fifth_sizes": [
+    18,
+    20
+   ],
+   "within_region_rho": -0.087,
+   "within_region_p": 0.39596
+  },
+  "income_median|grn|2025-05-01": {
+   "measure": "income_median",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.0477,
+   "p": 0.64004,
+   "bottom_fifth_mean_resid_pp": -3.477,
+   "top_fifth_mean_resid_pp": -3.333,
+   "top_minus_bottom_pp": 0.144,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": -0.0288,
+   "within_region_p": 0.77522
+  },
+  "income_median|oth|2025-05-01": {
+   "measure": "income_median",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": 0.1211,
+   "p": 0.45855,
+   "bottom_fifth_mean_resid_pp": 3.615,
+   "top_fifth_mean_resid_pp": 9.651,
+   "top_minus_bottom_pp": 6.036,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": 0.0767,
+   "within_region_p": 0.64424
+  },
+  "income_median|ref|2022-05-05": {
+   "measure": "income_median",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|lab|2022-05-05": {
+   "measure": "income_median",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|con|2022-05-05": {
+   "measure": "income_median",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|ld|2022-05-05": {
+   "measure": "income_median",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|grn|2022-05-05": {
+   "measure": "income_median",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|oth|2022-05-05": {
+   "measure": "income_median",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|ref|2023-05-04": {
+   "measure": "income_median",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|lab|2023-05-04": {
+   "measure": "income_median",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|con|2023-05-04": {
+   "measure": "income_median",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|ld|2023-05-04": {
+   "measure": "income_median",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|grn|2023-05-04": {
+   "measure": "income_median",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "income_median|oth|2023-05-04": {
+   "measure": "income_median",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|ref|2026-05-07": {
+   "measure": "band_d",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.2433,
+   "p": 0.0025,
+   "bottom_fifth_mean_resid_pp": 1.07,
+   "top_fifth_mean_resid_pp": 4.546,
+   "top_minus_bottom_pp": 3.476,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0574,
+   "within_region_p": 0.48905
+  },
+  "band_d|lab|2026-05-07": {
+   "measure": "band_d",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.1493,
+   "p": 0.06829,
+   "bottom_fifth_mean_resid_pp": 4.587,
+   "top_fifth_mean_resid_pp": 2.255,
+   "top_minus_bottom_pp": -2.332,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0286,
+   "within_region_p": 0.73033
+  },
+  "band_d|con|2026-05-07": {
+   "measure": "band_d",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.2746,
+   "p": 0.0008,
+   "bottom_fifth_mean_resid_pp": 0.635,
+   "top_fifth_mean_resid_pp": -2.175,
+   "top_minus_bottom_pp": -2.81,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.1511,
+   "within_region_p": 0.06629
+  },
+  "band_d|ld|2026-05-07": {
+   "measure": "band_d",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": 0.2086,
+   "p": 0.0153,
+   "bottom_fifth_mean_resid_pp": -2.048,
+   "top_fifth_mean_resid_pp": -0.979,
+   "top_minus_bottom_pp": 1.069,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": 0.0687,
+   "within_region_p": 0.43346
+  },
+  "band_d|grn|2026-05-07": {
+   "measure": "band_d",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.0659,
+   "p": 0.42426,
+   "bottom_fifth_mean_resid_pp": -2.876,
+   "top_fifth_mean_resid_pp": -2.09,
+   "top_minus_bottom_pp": 0.786,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0571,
+   "within_region_p": 0.49935
+  },
+  "band_d|oth|2026-05-07": {
+   "measure": "band_d",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": -0.0108,
+   "p": 0.92241,
+   "bottom_fifth_mean_resid_pp": -4.756,
+   "top_fifth_mean_resid_pp": -4.489,
+   "top_minus_bottom_pp": 0.267,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.0258,
+   "within_region_p": 0.80472
+  },
+  "band_d|ref|2025-05-01": {
+   "measure": "band_d",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.3529,
+   "p": 0.0003,
+   "bottom_fifth_mean_resid_pp": 9.102,
+   "top_fifth_mean_resid_pp": 1.878,
+   "top_minus_bottom_pp": -7.224,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.2026,
+   "within_region_p": 0.0383
+  },
+  "band_d|lab|2025-05-01": {
+   "measure": "band_d",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0055,
+   "p": 0.9562,
+   "bottom_fifth_mean_resid_pp": -1.467,
+   "top_fifth_mean_resid_pp": -2.835,
+   "top_minus_bottom_pp": -1.369,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0344,
+   "within_region_p": 0.72433
+  },
+  "band_d|con|2025-05-01": {
+   "measure": "band_d",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0116,
+   "p": 0.90851,
+   "bottom_fifth_mean_resid_pp": -3.083,
+   "top_fifth_mean_resid_pp": -2.31,
+   "top_minus_bottom_pp": 0.773,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.0754,
+   "within_region_p": 0.43646
+  },
+  "band_d|ld|2025-05-01": {
+   "measure": "band_d",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.242,
+   "p": 0.0175,
+   "bottom_fifth_mean_resid_pp": -5.38,
+   "top_fifth_mean_resid_pp": 1.217,
+   "top_minus_bottom_pp": 6.597,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": 0.2188,
+   "within_region_p": 0.0328
+  },
+  "band_d|grn|2025-05-01": {
+   "measure": "band_d",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.32,
+   "p": 0.0016,
+   "bottom_fifth_mean_resid_pp": -2.697,
+   "top_fifth_mean_resid_pp": -5.75,
+   "top_minus_bottom_pp": -3.053,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": -0.2091,
+   "within_region_p": 0.0344
+  },
+  "band_d|oth|2025-05-01": {
+   "measure": "band_d",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": 0.5584,
+   "p": 0.0003,
+   "bottom_fifth_mean_resid_pp": 2.562,
+   "top_fifth_mean_resid_pp": 14.061,
+   "top_minus_bottom_pp": 11.499,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": 0.3623,
+   "within_region_p": 0.0262
+  },
+  "band_d|ref|2022-05-05": {
+   "measure": "band_d",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|lab|2022-05-05": {
+   "measure": "band_d",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|con|2022-05-05": {
+   "measure": "band_d",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|ld|2022-05-05": {
+   "measure": "band_d",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|grn|2022-05-05": {
+   "measure": "band_d",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|oth|2022-05-05": {
+   "measure": "band_d",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|ref|2023-05-04": {
+   "measure": "band_d",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|lab|2023-05-04": {
+   "measure": "band_d",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|con|2023-05-04": {
+   "measure": "band_d",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|ld|2023-05-04": {
+   "measure": "band_d",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|grn|2023-05-04": {
+   "measure": "band_d",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d|oth|2023-05-04": {
+   "measure": "band_d",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|ref|2026-05-07": {
+   "measure": "band_d_rise",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.0918,
+   "p": 0.26757,
+   "bottom_fifth_mean_resid_pp": 4.758,
+   "top_fifth_mean_resid_pp": 4.779,
+   "top_minus_bottom_pp": 0.02,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0667,
+   "within_region_p": 0.42396
+  },
+  "band_d_rise|lab|2026-05-07": {
+   "measure": "band_d_rise",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.0516,
+   "p": 0.52745,
+   "bottom_fifth_mean_resid_pp": 1.294,
+   "top_fifth_mean_resid_pp": 1.651,
+   "top_minus_bottom_pp": 0.358,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0191,
+   "within_region_p": 0.81512
+  },
+  "band_d_rise|con|2026-05-07": {
+   "measure": "band_d_rise",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.0633,
+   "p": 0.45195,
+   "bottom_fifth_mean_resid_pp": -1.33,
+   "top_fifth_mean_resid_pp": -2.299,
+   "top_minus_bottom_pp": -0.969,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.1038,
+   "within_region_p": 0.20568
+  },
+  "band_d_rise|ld|2026-05-07": {
+   "measure": "band_d_rise",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": 0.154,
+   "p": 0.07989,
+   "bottom_fifth_mean_resid_pp": -1.712,
+   "top_fifth_mean_resid_pp": -0.822,
+   "top_minus_bottom_pp": 0.89,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": 0.062,
+   "within_region_p": 0.48845
+  },
+  "band_d_rise|grn|2026-05-07": {
+   "measure": "band_d_rise",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.0752,
+   "p": 0.36126,
+   "bottom_fifth_mean_resid_pp": -2.252,
+   "top_fifth_mean_resid_pp": -1.301,
+   "top_minus_bottom_pp": 0.951,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0379,
+   "within_region_p": 0.64474
+  },
+  "band_d_rise|oth|2026-05-07": {
+   "measure": "band_d_rise",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": -0.1043,
+   "p": 0.34027,
+   "bottom_fifth_mean_resid_pp": -1.713,
+   "top_fifth_mean_resid_pp": -7.302,
+   "top_minus_bottom_pp": -5.589,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.028,
+   "within_region_p": 0.79302
+  },
+  "band_d_rise|ref|2025-05-01": {
+   "measure": "band_d_rise",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0053,
+   "p": 0.9577,
+   "bottom_fifth_mean_resid_pp": 5.149,
+   "top_fifth_mean_resid_pp": 5.829,
+   "top_minus_bottom_pp": 0.68,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0453,
+   "within_region_p": 0.64464
+  },
+  "band_d_rise|lab|2025-05-01": {
+   "measure": "band_d_rise",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0267,
+   "p": 0.78542,
+   "bottom_fifth_mean_resid_pp": -1.842,
+   "top_fifth_mean_resid_pp": -0.763,
+   "top_minus_bottom_pp": 1.079,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0125,
+   "within_region_p": 0.89511
+  },
+  "band_d_rise|con|2025-05-01": {
+   "measure": "band_d_rise",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.024,
+   "p": 0.80662,
+   "bottom_fifth_mean_resid_pp": -0.765,
+   "top_fifth_mean_resid_pp": -2.08,
+   "top_minus_bottom_pp": -1.315,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0149,
+   "within_region_p": 0.87361
+  },
+  "band_d_rise|ld|2025-05-01": {
+   "measure": "band_d_rise",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.1319,
+   "p": 0.20288,
+   "bottom_fifth_mean_resid_pp": -5.912,
+   "top_fifth_mean_resid_pp": -1.738,
+   "top_minus_bottom_pp": 4.174,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": 0.1252,
+   "within_region_p": 0.22648
+  },
+  "band_d_rise|grn|2025-05-01": {
+   "measure": "band_d_rise",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.0596,
+   "p": 0.55764,
+   "bottom_fifth_mean_resid_pp": -2.434,
+   "top_fifth_mean_resid_pp": -3.791,
+   "top_minus_bottom_pp": -1.357,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": -0.1472,
+   "within_region_p": 0.14629
+  },
+  "band_d_rise|oth|2025-05-01": {
+   "measure": "band_d_rise",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": -0.0299,
+   "p": 0.85841,
+   "bottom_fifth_mean_resid_pp": 6.566,
+   "top_fifth_mean_resid_pp": 7.477,
+   "top_minus_bottom_pp": 0.911,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": -0.0968,
+   "within_region_p": 0.56824
+  },
+  "band_d_rise|ref|2022-05-05": {
+   "measure": "band_d_rise",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|lab|2022-05-05": {
+   "measure": "band_d_rise",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|con|2022-05-05": {
+   "measure": "band_d_rise",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|ld|2022-05-05": {
+   "measure": "band_d_rise",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|grn|2022-05-05": {
+   "measure": "band_d_rise",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|oth|2022-05-05": {
+   "measure": "band_d_rise",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|ref|2023-05-04": {
+   "measure": "band_d_rise",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|lab|2023-05-04": {
+   "measure": "band_d_rise",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|con|2023-05-04": {
+   "measure": "band_d_rise",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|ld|2023-05-04": {
+   "measure": "band_d_rise",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|grn|2023-05-04": {
+   "measure": "band_d_rise",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "band_d_rise|oth|2023-05-04": {
+   "measure": "band_d_rise",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "hmo_rate|ref|2026-05-07": {
+   "measure": "hmo_rate",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 146,
+   "run": true,
+   "rho": -0.4439,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 5.471,
+   "top_fifth_mean_resid_pp": -0.711,
+   "top_minus_bottom_pp": -6.183,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.2815,
+   "within_region_p": 0.0008
+  },
+  "hmo_rate|lab|2026-05-07": {
+   "measure": "hmo_rate",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 146,
+   "run": true,
+   "rho": 0.2455,
+   "p": 0.0029,
+   "bottom_fifth_mean_resid_pp": 1.648,
+   "top_fifth_mean_resid_pp": 4.898,
+   "top_minus_bottom_pp": 3.25,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.1191,
+   "within_region_p": 0.14879
+  },
+  "hmo_rate|con|2026-05-07": {
+   "measure": "hmo_rate",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 145,
+   "run": true,
+   "rho": 0.2072,
+   "p": 0.0102,
+   "bottom_fifth_mean_resid_pp": -1.573,
+   "top_fifth_mean_resid_pp": 0.016,
+   "top_minus_bottom_pp": 1.588,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": -0.0567,
+   "within_region_p": 0.50215
+  },
+  "hmo_rate|ld|2026-05-07": {
+   "measure": "hmo_rate",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 132,
+   "run": true,
+   "rho": 0.0045,
+   "p": 0.9602,
+   "bottom_fifth_mean_resid_pp": -2.163,
+   "top_fifth_mean_resid_pp": -1.464,
+   "top_minus_bottom_pp": 0.699,
+   "fifth_sizes": [
+    25,
+    27
+   ],
+   "within_region_rho": 0.0436,
+   "within_region_p": 0.62804
+  },
+  "hmo_rate|grn|2026-05-07": {
+   "measure": "hmo_rate",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 145,
+   "run": true,
+   "rho": 0.0596,
+   "p": 0.47675,
+   "bottom_fifth_mean_resid_pp": -2.397,
+   "top_fifth_mean_resid_pp": -1.811,
+   "top_minus_bottom_pp": 0.586,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": 0.1469,
+   "within_region_p": 0.07429
+  },
+  "hmo_rate|oth|2026-05-07": {
+   "measure": "hmo_rate",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 85,
+   "run": true,
+   "rho": 0.1739,
+   "p": 0.11249,
+   "bottom_fifth_mean_resid_pp": -5.906,
+   "top_fifth_mean_resid_pp": -3.585,
+   "top_minus_bottom_pp": 2.321,
+   "fifth_sizes": [
+    16,
+    17
+   ],
+   "within_region_rho": 0.1496,
+   "within_region_p": 0.16708
+  },
+  "hmo_rate|ref|2025-05-01": {
+   "measure": "hmo_rate",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.3432,
+   "p": 0.0005,
+   "bottom_fifth_mean_resid_pp": 8.95,
+   "top_fifth_mean_resid_pp": 3.389,
+   "top_minus_bottom_pp": -5.561,
+   "fifth_sizes": [
+    22,
+    22
+   ],
+   "within_region_rho": -0.2191,
+   "within_region_p": 0.0241
+  },
+  "hmo_rate|lab|2025-05-01": {
+   "measure": "hmo_rate",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.1597,
+   "p": 0.09849,
+   "bottom_fifth_mean_resid_pp": 0.945,
+   "top_fifth_mean_resid_pp": 1.765,
+   "top_minus_bottom_pp": 0.819,
+   "fifth_sizes": [
+    22,
+    22
+   ],
+   "within_region_rho": 0.0894,
+   "within_region_p": 0.35526
+  },
+  "hmo_rate|con|2025-05-01": {
+   "measure": "hmo_rate",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0991,
+   "p": 0.30667,
+   "bottom_fifth_mean_resid_pp": -3.271,
+   "top_fifth_mean_resid_pp": -1.578,
+   "top_minus_bottom_pp": 1.693,
+   "fifth_sizes": [
+    22,
+    22
+   ],
+   "within_region_rho": 0.0746,
+   "within_region_p": 0.43706
+  },
+  "hmo_rate|ld|2025-05-01": {
+   "measure": "hmo_rate",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0584,
+   "p": 0.56874,
+   "bottom_fifth_mean_resid_pp": -6.222,
+   "top_fifth_mean_resid_pp": -5.227,
+   "top_minus_bottom_pp": 0.995,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.0302,
+   "within_region_p": 0.77632
+  },
+  "hmo_rate|grn|2025-05-01": {
+   "measure": "hmo_rate",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.0699,
+   "p": 0.48415,
+   "bottom_fifth_mean_resid_pp": -1.68,
+   "top_fifth_mean_resid_pp": -2.447,
+   "top_minus_bottom_pp": -0.767,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": 0.0256,
+   "within_region_p": 0.79882
+  },
+  "hmo_rate|oth|2025-05-01": {
+   "measure": "hmo_rate",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": 0.3239,
+   "p": 0.0438,
+   "bottom_fifth_mean_resid_pp": 2.585,
+   "top_fifth_mean_resid_pp": 10.974,
+   "top_minus_bottom_pp": 8.388,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": 0.1901,
+   "within_region_p": 0.25197
+  },
+  "hmo_rate|ref|2022-05-05": {
+   "measure": "hmo_rate",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "hmo_rate|lab|2022-05-05": {
+   "measure": "hmo_rate",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 129,
+   "run": true,
+   "rho": 0.1312,
+   "p": 0.13819,
+   "bottom_fifth_mean_resid_pp": 1.56,
+   "top_fifth_mean_resid_pp": 3.079,
+   "top_minus_bottom_pp": 1.519,
+   "fifth_sizes": [
+    26,
+    26
+   ],
+   "within_region_rho": 0.1119,
+   "within_region_p": 0.21248
+  },
+  "hmo_rate|con|2022-05-05": {
+   "measure": "hmo_rate",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 128,
+   "run": true,
+   "rho": 0.2167,
+   "p": 0.0133,
+   "bottom_fifth_mean_resid_pp": -1.276,
+   "top_fifth_mean_resid_pp": 1.015,
+   "top_minus_bottom_pp": 2.291,
+   "fifth_sizes": [
+    25,
+    26
+   ],
+   "within_region_rho": 0.164,
+   "within_region_p": 0.06379
+  },
+  "hmo_rate|ld|2022-05-05": {
+   "measure": "hmo_rate",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 113,
+   "run": true,
+   "rho": -0.2749,
+   "p": 0.0025,
+   "bottom_fifth_mean_resid_pp": 0.588,
+   "top_fifth_mean_resid_pp": -3.13,
+   "top_minus_bottom_pp": -3.717,
+   "fifth_sizes": [
+    22,
+    23
+   ],
+   "within_region_rho": -0.2464,
+   "within_region_p": 0.0093
+  },
+  "hmo_rate|grn|2022-05-05": {
+   "measure": "hmo_rate",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 102,
+   "run": true,
+   "rho": 0.0814,
+   "p": 0.41486,
+   "bottom_fifth_mean_resid_pp": -3.914,
+   "top_fifth_mean_resid_pp": -3.474,
+   "top_minus_bottom_pp": 0.44,
+   "fifth_sizes": [
+    20,
+    21
+   ],
+   "within_region_rho": 0.0929,
+   "within_region_p": 0.34587
+  },
+  "hmo_rate|oth|2022-05-05": {
+   "measure": "hmo_rate",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 68,
+   "run": true,
+   "rho": -0.1713,
+   "p": 0.16438,
+   "bottom_fifth_mean_resid_pp": 4.262,
+   "top_fifth_mean_resid_pp": 3.423,
+   "top_minus_bottom_pp": -0.838,
+   "fifth_sizes": [
+    13,
+    14
+   ],
+   "within_region_rho": -0.1806,
+   "within_region_p": 0.13959
+  },
+  "hmo_rate|ref|2023-05-04": {
+   "measure": "hmo_rate",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 10,
+   "run": true,
+   "rho": 0.1515,
+   "p": 0.68033,
+   "bottom_fifth_mean_resid_pp": -2.247,
+   "top_fifth_mean_resid_pp": -2.447,
+   "top_minus_bottom_pp": -0.2,
+   "fifth_sizes": [
+    2,
+    2
+   ],
+   "within_region_rho": -0.2025,
+   "within_region_p": 0.56904
+  },
+  "hmo_rate|lab|2023-05-04": {
+   "measure": "hmo_rate",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 94,
+   "run": true,
+   "rho": -0.126,
+   "p": 0.22288,
+   "bottom_fifth_mean_resid_pp": 0.993,
+   "top_fifth_mean_resid_pp": -0.801,
+   "top_minus_bottom_pp": -1.793,
+   "fifth_sizes": [
+    18,
+    19
+   ],
+   "within_region_rho": -0.0959,
+   "within_region_p": 0.36736
+  },
+  "hmo_rate|con|2023-05-04": {
+   "measure": "hmo_rate",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 93,
+   "run": true,
+   "rho": 0.0116,
+   "p": 0.91691,
+   "bottom_fifth_mean_resid_pp": -2.847,
+   "top_fifth_mean_resid_pp": -2.696,
+   "top_minus_bottom_pp": 0.151,
+   "fifth_sizes": [
+    18,
+    19
+   ],
+   "within_region_rho": -0.0196,
+   "within_region_p": 0.85371
+  },
+  "hmo_rate|ld|2023-05-04": {
+   "measure": "hmo_rate",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 84,
+   "run": true,
+   "rho": 0.0888,
+   "p": 0.43736,
+   "bottom_fifth_mean_resid_pp": -0.331,
+   "top_fifth_mean_resid_pp": 0.583,
+   "top_minus_bottom_pp": 0.914,
+   "fifth_sizes": [
+    17,
+    17
+   ],
+   "within_region_rho": 0.1547,
+   "within_region_p": 0.15678
+  },
+  "hmo_rate|grn|2023-05-04": {
+   "measure": "hmo_rate",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 77,
+   "run": true,
+   "rho": -0.1011,
+   "p": 0.37646,
+   "bottom_fifth_mean_resid_pp": 1.776,
+   "top_fifth_mean_resid_pp": 1.207,
+   "top_minus_bottom_pp": -0.57,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": -0.1629,
+   "within_region_p": 0.15918
+  },
+  "hmo_rate|oth|2023-05-04": {
+   "measure": "hmo_rate",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 54,
+   "run": true,
+   "rho": 0.005,
+   "p": 0.9701,
+   "bottom_fifth_mean_resid_pp": 2.889,
+   "top_fifth_mean_resid_pp": 3.686,
+   "top_minus_bottom_pp": 0.797,
+   "fifth_sizes": [
+    10,
+    11
+   ],
+   "within_region_rho": -0.0425,
+   "within_region_p": 0.75712
+  },
+  "wb_change_1121|ref|2026-05-07": {
+   "measure": "wb_change_1121",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.0966,
+   "p": 0.24568,
+   "bottom_fifth_mean_resid_pp": 2.889,
+   "top_fifth_mean_resid_pp": 3.931,
+   "top_minus_bottom_pp": 1.042,
+   "fifth_sizes": [
+    29,
+    32
+   ],
+   "within_region_rho": 0.0234,
+   "within_region_p": 0.78472
+  },
+  "wb_change_1121|lab|2026-05-07": {
+   "measure": "wb_change_1121",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.0773,
+   "p": 0.35456,
+   "bottom_fifth_mean_resid_pp": 2.537,
+   "top_fifth_mean_resid_pp": 1.998,
+   "top_minus_bottom_pp": -0.539,
+   "fifth_sizes": [
+    29,
+    32
+   ],
+   "within_region_rho": 0.0203,
+   "within_region_p": 0.79842
+  },
+  "wb_change_1121|con|2026-05-07": {
+   "measure": "wb_change_1121",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.0114,
+   "p": 0.88631,
+   "bottom_fifth_mean_resid_pp": 0.505,
+   "top_fifth_mean_resid_pp": -0.481,
+   "top_minus_bottom_pp": -0.986,
+   "fifth_sizes": [
+    29,
+    32
+   ],
+   "within_region_rho": 0.0468,
+   "within_region_p": 0.57914
+  },
+  "wb_change_1121|ld|2026-05-07": {
+   "measure": "wb_change_1121",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": 0.1651,
+   "p": 0.05409,
+   "bottom_fifth_mean_resid_pp": -2.296,
+   "top_fifth_mean_resid_pp": -1.982,
+   "top_minus_bottom_pp": 0.313,
+   "fifth_sizes": [
+    26,
+    25
+   ],
+   "within_region_rho": 0.0862,
+   "within_region_p": 0.32177
+  },
+  "wb_change_1121|grn|2026-05-07": {
+   "measure": "wb_change_1121",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.2069,
+   "p": 0.014,
+   "bottom_fifth_mean_resid_pp": -1.156,
+   "top_fifth_mean_resid_pp": -2.445,
+   "top_minus_bottom_pp": -1.289,
+   "fifth_sizes": [
+    29,
+    31
+   ],
+   "within_region_rho": -0.1972,
+   "within_region_p": 0.0169
+  },
+  "wb_change_1121|oth|2026-05-07": {
+   "measure": "wb_change_1121",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": 0.2082,
+   "p": 0.05379,
+   "bottom_fifth_mean_resid_pp": -7.201,
+   "top_fifth_mean_resid_pp": -3.923,
+   "top_minus_bottom_pp": 3.278,
+   "fifth_sizes": [
+    17,
+    17
+   ],
+   "within_region_rho": 0.2037,
+   "within_region_p": 0.06489
+  },
+  "wb_change_1121|ref|2025-05-01": {
+   "measure": "wb_change_1121",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0901,
+   "p": 0.35026,
+   "bottom_fifth_mean_resid_pp": 3.866,
+   "top_fifth_mean_resid_pp": 4.501,
+   "top_minus_bottom_pp": 0.635,
+   "fifth_sizes": [
+    22,
+    22
+   ],
+   "within_region_rho": 0.0562,
+   "within_region_p": 0.56424
+  },
+  "wb_change_1121|lab|2025-05-01": {
+   "measure": "wb_change_1121",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.0357,
+   "p": 0.71183,
+   "bottom_fifth_mean_resid_pp": -1.278,
+   "top_fifth_mean_resid_pp": -0.731,
+   "top_minus_bottom_pp": 0.547,
+   "fifth_sizes": [
+    22,
+    22
+   ],
+   "within_region_rho": 0.19,
+   "within_region_p": 0.05069
+  },
+  "wb_change_1121|con|2025-05-01": {
+   "measure": "wb_change_1121",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.2067,
+   "p": 0.0341,
+   "bottom_fifth_mean_resid_pp": 0.669,
+   "top_fifth_mean_resid_pp": -1.38,
+   "top_minus_bottom_pp": -2.049,
+   "fifth_sizes": [
+    22,
+    22
+   ],
+   "within_region_rho": -0.1901,
+   "within_region_p": 0.05079
+  },
+  "wb_change_1121|ld|2025-05-01": {
+   "measure": "wb_change_1121",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0015,
+   "p": 0.9885,
+   "bottom_fifth_mean_resid_pp": -3.916,
+   "top_fifth_mean_resid_pp": -2.161,
+   "top_minus_bottom_pp": 1.755,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.0238,
+   "within_region_p": 0.81042
+  },
+  "wb_change_1121|grn|2025-05-01": {
+   "measure": "wb_change_1121",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.0019,
+   "p": 0.9829,
+   "bottom_fifth_mean_resid_pp": -3.513,
+   "top_fifth_mean_resid_pp": -2.073,
+   "top_minus_bottom_pp": 1.44,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.0381,
+   "within_region_p": 0.71283
+  },
+  "wb_change_1121|oth|2025-05-01": {
+   "measure": "wb_change_1121",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": -0.1805,
+   "p": 0.27717,
+   "bottom_fifth_mean_resid_pp": 6.199,
+   "top_fifth_mean_resid_pp": 3.596,
+   "top_minus_bottom_pp": -2.603,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": -0.2286,
+   "within_region_p": 0.16968
+  },
+  "wb_change_1121|ref|2022-05-05": {
+   "measure": "wb_change_1121",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "wb_change_1121|lab|2022-05-05": {
+   "measure": "wb_change_1121",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 131,
+   "run": true,
+   "rho": 0.0758,
+   "p": 0.38966,
+   "bottom_fifth_mean_resid_pp": 1.63,
+   "top_fifth_mean_resid_pp": 2.073,
+   "top_minus_bottom_pp": 0.444,
+   "fifth_sizes": [
+    27,
+    28
+   ],
+   "within_region_rho": 0.0882,
+   "within_region_p": 0.31637
+  },
+  "wb_change_1121|con|2022-05-05": {
+   "measure": "wb_change_1121",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 130,
+   "run": true,
+   "rho": -0.0892,
+   "p": 0.31657,
+   "bottom_fifth_mean_resid_pp": 0.214,
+   "top_fifth_mean_resid_pp": -0.855,
+   "top_minus_bottom_pp": -1.07,
+   "fifth_sizes": [
+    27,
+    25
+   ],
+   "within_region_rho": -0.1496,
+   "within_region_p": 0.09499
+  },
+  "wb_change_1121|ld|2022-05-05": {
+   "measure": "wb_change_1121",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 115,
+   "run": true,
+   "rho": 0.0414,
+   "p": 0.65663,
+   "bottom_fifth_mean_resid_pp": -1.659,
+   "top_fifth_mean_resid_pp": 0.037,
+   "top_minus_bottom_pp": 1.696,
+   "fifth_sizes": [
+    24,
+    22
+   ],
+   "within_region_rho": 0.0874,
+   "within_region_p": 0.35656
+  },
+  "wb_change_1121|grn|2022-05-05": {
+   "measure": "wb_change_1121",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 104,
+   "run": true,
+   "rho": -0.0842,
+   "p": 0.39106,
+   "bottom_fifth_mean_resid_pp": -2.972,
+   "top_fifth_mean_resid_pp": -3.525,
+   "top_minus_bottom_pp": -0.553,
+   "fifth_sizes": [
+    19,
+    22
+   ],
+   "within_region_rho": -0.0721,
+   "within_region_p": 0.46615
+  },
+  "wb_change_1121|oth|2022-05-05": {
+   "measure": "wb_change_1121",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 70,
+   "run": true,
+   "rho": -0.214,
+   "p": 0.07969,
+   "bottom_fifth_mean_resid_pp": 4.888,
+   "top_fifth_mean_resid_pp": 0.367,
+   "top_minus_bottom_pp": -4.521,
+   "fifth_sizes": [
+    14,
+    13
+   ],
+   "within_region_rho": -0.2074,
+   "within_region_p": 0.08679
+  },
+  "wb_change_1121|ref|2023-05-04": {
+   "measure": "wb_change_1121",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 11,
+   "run": true,
+   "rho": 0.0228,
+   "p": 0.951,
+   "bottom_fifth_mean_resid_pp": -1.276,
+   "top_fifth_mean_resid_pp": -1.71,
+   "top_minus_bottom_pp": -0.433,
+   "fifth_sizes": [
+    2,
+    3
+   ],
+   "within_region_rho": -0.3567,
+   "within_region_p": 0.28327
+  },
+  "wb_change_1121|lab|2023-05-04": {
+   "measure": "wb_change_1121",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0699,
+   "p": 0.50075,
+   "bottom_fifth_mean_resid_pp": 0.428,
+   "top_fifth_mean_resid_pp": 0.986,
+   "top_minus_bottom_pp": 0.558,
+   "fifth_sizes": [
+    19,
+    21
+   ],
+   "within_region_rho": 0.0401,
+   "within_region_p": 0.69703
+  },
+  "wb_change_1121|con|2023-05-04": {
+   "measure": "wb_change_1121",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 95,
+   "run": true,
+   "rho": -0.3669,
+   "p": 0.0005,
+   "bottom_fifth_mean_resid_pp": -1.545,
+   "top_fifth_mean_resid_pp": -4.627,
+   "top_minus_bottom_pp": -3.083,
+   "fifth_sizes": [
+    19,
+    21
+   ],
+   "within_region_rho": -0.3289,
+   "within_region_p": 0.0017
+  },
+  "wb_change_1121|ld|2023-05-04": {
+   "measure": "wb_change_1121",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 86,
+   "run": true,
+   "rho": -0.0618,
+   "p": 0.56494,
+   "bottom_fifth_mean_resid_pp": -0.259,
+   "top_fifth_mean_resid_pp": -0.747,
+   "top_minus_bottom_pp": -0.488,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.0661,
+   "within_region_p": 0.54155
+  },
+  "wb_change_1121|grn|2023-05-04": {
+   "measure": "wb_change_1121",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": 0.2609,
+   "p": 0.0201,
+   "bottom_fifth_mean_resid_pp": 0.81,
+   "top_fifth_mean_resid_pp": 2.336,
+   "top_minus_bottom_pp": 1.525,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": 0.3178,
+   "within_region_p": 0.0047
+  },
+  "wb_change_1121|oth|2023-05-04": {
+   "measure": "wb_change_1121",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 56,
+   "run": true,
+   "rho": 0.0429,
+   "p": 0.75422,
+   "bottom_fifth_mean_resid_pp": 5.091,
+   "top_fifth_mean_resid_pp": 3.259,
+   "top_minus_bottom_pp": -1.832,
+   "fifth_sizes": [
+    11,
+    12
+   ],
+   "within_region_rho": 0.0303,
+   "within_region_p": 0.82412
+  },
+  "placebo_hash|ref|2026-05-07": {
+   "measure": "placebo_hash",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.0301,
+   "p": 0.71083,
+   "bottom_fifth_mean_resid_pp": 2.96,
+   "top_fifth_mean_resid_pp": 2.825,
+   "top_minus_bottom_pp": -0.135,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.022,
+   "within_region_p": 0.79012
+  },
+  "placebo_hash|lab|2026-05-07": {
+   "measure": "placebo_hash",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.049,
+   "p": 0.55334,
+   "bottom_fifth_mean_resid_pp": 2.357,
+   "top_fifth_mean_resid_pp": 1.251,
+   "top_minus_bottom_pp": -1.106,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0587,
+   "within_region_p": 0.47185
+  },
+  "placebo_hash|con|2026-05-07": {
+   "measure": "placebo_hash",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.0127,
+   "p": 0.88041,
+   "bottom_fifth_mean_resid_pp": -0.584,
+   "top_fifth_mean_resid_pp": -0.459,
+   "top_minus_bottom_pp": 0.125,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.0223,
+   "within_region_p": 0.78792
+  },
+  "placebo_hash|ld|2026-05-07": {
+   "measure": "placebo_hash",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": 0.1309,
+   "p": 0.13199,
+   "bottom_fifth_mean_resid_pp": -1.413,
+   "top_fifth_mean_resid_pp": -0.977,
+   "top_minus_bottom_pp": 0.436,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": 0.1047,
+   "within_region_p": 0.22578
+  },
+  "placebo_hash|grn|2026-05-07": {
+   "measure": "placebo_hash",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.1041,
+   "p": 0.20118,
+   "bottom_fifth_mean_resid_pp": -1.27,
+   "top_fifth_mean_resid_pp": -2.908,
+   "top_minus_bottom_pp": -1.638,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.0594,
+   "within_region_p": 0.47985
+  },
+  "placebo_hash|oth|2026-05-07": {
+   "measure": "placebo_hash",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": 0.0619,
+   "p": 0.56784,
+   "bottom_fifth_mean_resid_pp": -6.231,
+   "top_fifth_mean_resid_pp": -2.239,
+   "top_minus_bottom_pp": 3.992,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": 0.1289,
+   "within_region_p": 0.23518
+  },
+  "placebo_hash|ref|2025-05-01": {
+   "measure": "placebo_hash",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.061,
+   "p": 0.53405,
+   "bottom_fifth_mean_resid_pp": 5.153,
+   "top_fifth_mean_resid_pp": 4.152,
+   "top_minus_bottom_pp": -1.001,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.006,
+   "within_region_p": 0.94601
+  },
+  "placebo_hash|lab|2025-05-01": {
+   "measure": "placebo_hash",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.0928,
+   "p": 0.34287,
+   "bottom_fifth_mean_resid_pp": 0.155,
+   "top_fifth_mean_resid_pp": -1.387,
+   "top_minus_bottom_pp": -1.542,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": -0.1166,
+   "within_region_p": 0.22608
+  },
+  "placebo_hash|con|2025-05-01": {
+   "measure": "placebo_hash",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0697,
+   "p": 0.47265,
+   "bottom_fifth_mean_resid_pp": -0.709,
+   "top_fifth_mean_resid_pp": 0.328,
+   "top_minus_bottom_pp": 1.037,
+   "fifth_sizes": [
+    21,
+    22
+   ],
+   "within_region_rho": 0.0877,
+   "within_region_p": 0.37226
+  },
+  "placebo_hash|ld|2025-05-01": {
+   "measure": "placebo_hash",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0535,
+   "p": 0.60994,
+   "bottom_fifth_mean_resid_pp": -4.572,
+   "top_fifth_mean_resid_pp": -4.179,
+   "top_minus_bottom_pp": 0.393,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.0574,
+   "within_region_p": 0.57954
+  },
+  "placebo_hash|grn|2025-05-01": {
+   "measure": "placebo_hash",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": 0.034,
+   "p": 0.73813,
+   "bottom_fifth_mean_resid_pp": -3.217,
+   "top_fifth_mean_resid_pp": -3.607,
+   "top_minus_bottom_pp": -0.39,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.0854,
+   "within_region_p": 0.39876
+  },
+  "placebo_hash|oth|2025-05-01": {
+   "measure": "placebo_hash",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": -0.2146,
+   "p": 0.19668,
+   "bottom_fifth_mean_resid_pp": 9.279,
+   "top_fifth_mean_resid_pp": 3.934,
+   "top_minus_bottom_pp": -5.345,
+   "fifth_sizes": [
+    7,
+    8
+   ],
+   "within_region_rho": -0.2483,
+   "within_region_p": 0.13279
+  },
+  "placebo_hash|ref|2022-05-05": {
+   "measure": "placebo_hash",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "placebo_hash|lab|2022-05-05": {
+   "measure": "placebo_hash",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 131,
+   "run": true,
+   "rho": -0.0933,
+   "p": 0.29107,
+   "bottom_fifth_mean_resid_pp": 2.044,
+   "top_fifth_mean_resid_pp": 0.677,
+   "top_minus_bottom_pp": -1.367,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.0796,
+   "within_region_p": 0.36796
+  },
+  "placebo_hash|con|2022-05-05": {
+   "measure": "placebo_hash",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 130,
+   "run": true,
+   "rho": -0.0074,
+   "p": 0.92961,
+   "bottom_fifth_mean_resid_pp": -0.722,
+   "top_fifth_mean_resid_pp": -0.624,
+   "top_minus_bottom_pp": 0.099,
+   "fifth_sizes": [
+    26,
+    26
+   ],
+   "within_region_rho": -0.0309,
+   "within_region_p": 0.72983
+  },
+  "placebo_hash|ld|2022-05-05": {
+   "measure": "placebo_hash",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 115,
+   "run": true,
+   "rho": 0.1678,
+   "p": 0.07299,
+   "bottom_fifth_mean_resid_pp": 0.077,
+   "top_fifth_mean_resid_pp": 2.019,
+   "top_minus_bottom_pp": 1.941,
+   "fifth_sizes": [
+    23,
+    23
+   ],
+   "within_region_rho": 0.196,
+   "within_region_p": 0.0368
+  },
+  "placebo_hash|grn|2022-05-05": {
+   "measure": "placebo_hash",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 104,
+   "run": true,
+   "rho": -0.1133,
+   "p": 0.25447,
+   "bottom_fifth_mean_resid_pp": -3.95,
+   "top_fifth_mean_resid_pp": -4.029,
+   "top_minus_bottom_pp": -0.079,
+   "fifth_sizes": [
+    20,
+    21
+   ],
+   "within_region_rho": -0.0851,
+   "within_region_p": 0.38176
+  },
+  "placebo_hash|oth|2022-05-05": {
+   "measure": "placebo_hash",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 70,
+   "run": true,
+   "rho": 0.1894,
+   "p": 0.11449,
+   "bottom_fifth_mean_resid_pp": 2.597,
+   "top_fifth_mean_resid_pp": 4.697,
+   "top_minus_bottom_pp": 2.1,
+   "fifth_sizes": [
+    14,
+    14
+   ],
+   "within_region_rho": 0.2062,
+   "within_region_p": 0.08799
+  },
+  "placebo_hash|ref|2023-05-04": {
+   "measure": "placebo_hash",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 11,
+   "run": true,
+   "rho": -0.0273,
+   "p": 0.94311,
+   "bottom_fifth_mean_resid_pp": -1.447,
+   "top_fifth_mean_resid_pp": -1.614,
+   "top_minus_bottom_pp": -0.168,
+   "fifth_sizes": [
+    2,
+    3
+   ],
+   "within_region_rho": 0.4466,
+   "within_region_p": 0.16488
+  },
+  "placebo_hash|lab|2023-05-04": {
+   "measure": "placebo_hash",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0122,
+   "p": 0.91271,
+   "bottom_fifth_mean_resid_pp": 0.034,
+   "top_fifth_mean_resid_pp": 0.448,
+   "top_minus_bottom_pp": 0.415,
+   "fifth_sizes": [
+    19,
+    20
+   ],
+   "within_region_rho": -0.0118,
+   "within_region_p": 0.90501
+  },
+  "placebo_hash|con|2023-05-04": {
+   "measure": "placebo_hash",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 95,
+   "run": true,
+   "rho": 0.0917,
+   "p": 0.37366,
+   "bottom_fifth_mean_resid_pp": -2.802,
+   "top_fifth_mean_resid_pp": -2.692,
+   "top_minus_bottom_pp": 0.11,
+   "fifth_sizes": [
+    19,
+    19
+   ],
+   "within_region_rho": 0.0636,
+   "within_region_p": 0.53955
+  },
+  "placebo_hash|ld|2023-05-04": {
+   "measure": "placebo_hash",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 86,
+   "run": true,
+   "rho": -0.0907,
+   "p": 0.40626,
+   "bottom_fifth_mean_resid_pp": -0.841,
+   "top_fifth_mean_resid_pp": -0.753,
+   "top_minus_bottom_pp": 0.088,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.0536,
+   "within_region_p": 0.62204
+  },
+  "placebo_hash|grn|2023-05-04": {
+   "measure": "placebo_hash",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": -0.1219,
+   "p": 0.28347,
+   "bottom_fifth_mean_resid_pp": 1.124,
+   "top_fifth_mean_resid_pp": -0.028,
+   "top_minus_bottom_pp": -1.152,
+   "fifth_sizes": [
+    15,
+    16
+   ],
+   "within_region_rho": -0.1242,
+   "within_region_p": 0.27887
+  },
+  "placebo_hash|oth|2023-05-04": {
+   "measure": "placebo_hash",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 56,
+   "run": true,
+   "rho": -0.0278,
+   "p": 0.84332,
+   "bottom_fifth_mean_resid_pp": 4.785,
+   "top_fifth_mean_resid_pp": 6.525,
+   "top_minus_bottom_pp": 1.74,
+   "fifth_sizes": [
+    11,
+    12
+   ],
+   "within_region_rho": -0.0661,
+   "within_region_p": 0.62514
+  },
+  "placebo_digit|ref|2026-05-07": {
+   "measure": "placebo_digit",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.0237,
+   "p": 0.78172,
+   "bottom_fifth_mean_resid_pp": 3.281,
+   "top_fifth_mean_resid_pp": 2.071,
+   "top_minus_bottom_pp": -1.211,
+   "fifth_sizes": [
+    29,
+    38
+   ],
+   "within_region_rho": -0.0017,
+   "within_region_p": 0.9838
+  },
+  "placebo_digit|lab|2026-05-07": {
+   "measure": "placebo_digit",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.0653,
+   "p": 0.42556,
+   "bottom_fifth_mean_resid_pp": 2.96,
+   "top_fifth_mean_resid_pp": 1.85,
+   "top_minus_bottom_pp": -1.11,
+   "fifth_sizes": [
+    29,
+    38
+   ],
+   "within_region_rho": -0.1315,
+   "within_region_p": 0.11209
+  },
+  "placebo_digit|con|2026-05-07": {
+   "measure": "placebo_digit",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.0259,
+   "p": 0.74923,
+   "bottom_fifth_mean_resid_pp": -0.817,
+   "top_fifth_mean_resid_pp": 0.302,
+   "top_minus_bottom_pp": 1.119,
+   "fifth_sizes": [
+    29,
+    37
+   ],
+   "within_region_rho": 0.101,
+   "within_region_p": 0.22778
+  },
+  "placebo_digit|ld|2026-05-07": {
+   "measure": "placebo_digit",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": -0.026,
+   "p": 0.76712,
+   "bottom_fifth_mean_resid_pp": -1.505,
+   "top_fifth_mean_resid_pp": -2.017,
+   "top_minus_bottom_pp": -0.512,
+   "fifth_sizes": [
+    28,
+    33
+   ],
+   "within_region_rho": -0.0625,
+   "within_region_p": 0.46515
+  },
+  "placebo_digit|grn|2026-05-07": {
+   "measure": "placebo_digit",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.0284,
+   "p": 0.74013,
+   "bottom_fifth_mean_resid_pp": -2.471,
+   "top_fifth_mean_resid_pp": -2.524,
+   "top_minus_bottom_pp": -0.053,
+   "fifth_sizes": [
+    29,
+    38
+   ],
+   "within_region_rho": -0.0612,
+   "within_region_p": 0.45955
+  },
+  "placebo_digit|oth|2026-05-07": {
+   "measure": "placebo_digit",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": 0.0571,
+   "p": 0.59164,
+   "bottom_fifth_mean_resid_pp": -4.947,
+   "top_fifth_mean_resid_pp": -1.258,
+   "top_minus_bottom_pp": 3.689,
+   "fifth_sizes": [
+    19,
+    21
+   ],
+   "within_region_rho": 0.142,
+   "within_region_p": 0.18648
+  },
+  "placebo_digit|ref|2025-05-01": {
+   "measure": "placebo_digit",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0193,
+   "p": 0.83272,
+   "bottom_fifth_mean_resid_pp": 5.686,
+   "top_fifth_mean_resid_pp": 5.3,
+   "top_minus_bottom_pp": -0.386,
+   "fifth_sizes": [
+    25,
+    25
+   ],
+   "within_region_rho": 0.0334,
+   "within_region_p": 0.73373
+  },
+  "placebo_digit|lab|2025-05-01": {
+   "measure": "placebo_digit",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": 0.0401,
+   "p": 0.67273,
+   "bottom_fifth_mean_resid_pp": -0.568,
+   "top_fifth_mean_resid_pp": 0.346,
+   "top_minus_bottom_pp": 0.914,
+   "fifth_sizes": [
+    25,
+    25
+   ],
+   "within_region_rho": 0.1124,
+   "within_region_p": 0.24298
+  },
+  "placebo_digit|con|2025-05-01": {
+   "measure": "placebo_digit",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 108,
+   "run": true,
+   "rho": -0.152,
+   "p": 0.10949,
+   "bottom_fifth_mean_resid_pp": -1.623,
+   "top_fifth_mean_resid_pp": -3.451,
+   "top_minus_bottom_pp": -1.828,
+   "fifth_sizes": [
+    25,
+    25
+   ],
+   "within_region_rho": -0.1259,
+   "within_region_p": 0.19478
+  },
+  "placebo_digit|ld|2025-05-01": {
+   "measure": "placebo_digit",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 96,
+   "run": true,
+   "rho": -0.0527,
+   "p": 0.61284,
+   "bottom_fifth_mean_resid_pp": -3.393,
+   "top_fifth_mean_resid_pp": -4.617,
+   "top_minus_bottom_pp": -1.224,
+   "fifth_sizes": [
+    23,
+    23
+   ],
+   "within_region_rho": -0.0654,
+   "within_region_p": 0.52715
+  },
+  "placebo_digit|grn|2025-05-01": {
+   "measure": "placebo_digit",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 100,
+   "run": true,
+   "rho": -0.1101,
+   "p": 0.27537,
+   "bottom_fifth_mean_resid_pp": -3.08,
+   "top_fifth_mean_resid_pp": -2.394,
+   "top_minus_bottom_pp": 0.685,
+   "fifth_sizes": [
+    24,
+    22
+   ],
+   "within_region_rho": -0.1357,
+   "within_region_p": 0.17668
+  },
+  "placebo_digit|oth|2025-05-01": {
+   "measure": "placebo_digit",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 38,
+   "run": true,
+   "rho": 0.0362,
+   "p": 0.82792,
+   "bottom_fifth_mean_resid_pp": 9.059,
+   "top_fifth_mean_resid_pp": 6.543,
+   "top_minus_bottom_pp": -2.516,
+   "fifth_sizes": [
+    8,
+    7
+   ],
+   "within_region_rho": 0.1221,
+   "within_region_p": 0.46855
+  },
+  "placebo_digit|ref|2022-05-05": {
+   "measure": "placebo_digit",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 4,
+   "run": false
+  },
+  "placebo_digit|lab|2022-05-05": {
+   "measure": "placebo_digit",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 131,
+   "run": true,
+   "rho": -0.0079,
+   "p": 0.93091,
+   "bottom_fifth_mean_resid_pp": 1.971,
+   "top_fifth_mean_resid_pp": 1.976,
+   "top_minus_bottom_pp": 0.005,
+   "fifth_sizes": [
+    27,
+    31
+   ],
+   "within_region_rho": 0.0378,
+   "within_region_p": 0.66573
+  },
+  "placebo_digit|con|2022-05-05": {
+   "measure": "placebo_digit",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 130,
+   "run": true,
+   "rho": 0.1532,
+   "p": 0.08149,
+   "bottom_fifth_mean_resid_pp": -0.932,
+   "top_fifth_mean_resid_pp": 0.775,
+   "top_minus_bottom_pp": 1.707,
+   "fifth_sizes": [
+    27,
+    30
+   ],
+   "within_region_rho": 0.0538,
+   "within_region_p": 0.53555
+  },
+  "placebo_digit|ld|2022-05-05": {
+   "measure": "placebo_digit",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 115,
+   "run": true,
+   "rho": -0.1691,
+   "p": 0.06979,
+   "bottom_fifth_mean_resid_pp": 0.436,
+   "top_fifth_mean_resid_pp": -2.023,
+   "top_minus_bottom_pp": -2.459,
+   "fifth_sizes": [
+    25,
+    26
+   ],
+   "within_region_rho": -0.1409,
+   "within_region_p": 0.13489
+  },
+  "placebo_digit|grn|2022-05-05": {
+   "measure": "placebo_digit",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 104,
+   "run": true,
+   "rho": -0.1677,
+   "p": 0.09679,
+   "bottom_fifth_mean_resid_pp": -2.829,
+   "top_fifth_mean_resid_pp": -4.207,
+   "top_minus_bottom_pp": -1.378,
+   "fifth_sizes": [
+    22,
+    26
+   ],
+   "within_region_rho": -0.221,
+   "within_region_p": 0.0265
+  },
+  "placebo_digit|oth|2022-05-05": {
+   "measure": "placebo_digit",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 70,
+   "run": true,
+   "rho": 0.1885,
+   "p": 0.11479,
+   "bottom_fifth_mean_resid_pp": 0.564,
+   "top_fifth_mean_resid_pp": 4.112,
+   "top_minus_bottom_pp": 3.548,
+   "fifth_sizes": [
+    14,
+    17
+   ],
+   "within_region_rho": 0.2969,
+   "within_region_p": 0.0131
+  },
+  "placebo_digit|ref|2023-05-04": {
+   "measure": "placebo_digit",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 11,
+   "run": true,
+   "rho": 0.1903,
+   "p": 0.57094,
+   "bottom_fifth_mean_resid_pp": -2.431,
+   "top_fifth_mean_resid_pp": -2.051,
+   "top_minus_bottom_pp": 0.38,
+   "fifth_sizes": [
+    1,
+    3
+   ],
+   "within_region_rho": 0.1283,
+   "within_region_p": 0.70593
+  },
+  "placebo_digit|lab|2023-05-04": {
+   "measure": "placebo_digit",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 96,
+   "run": true,
+   "rho": 0.0684,
+   "p": 0.51265,
+   "bottom_fifth_mean_resid_pp": 0.407,
+   "top_fifth_mean_resid_pp": 0.106,
+   "top_minus_bottom_pp": -0.301,
+   "fifth_sizes": [
+    21,
+    25
+   ],
+   "within_region_rho": 0.0127,
+   "within_region_p": 0.89931
+  },
+  "placebo_digit|con|2023-05-04": {
+   "measure": "placebo_digit",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 95,
+   "run": true,
+   "rho": -0.0635,
+   "p": 0.53975,
+   "bottom_fifth_mean_resid_pp": -2.62,
+   "top_fifth_mean_resid_pp": -3.139,
+   "top_minus_bottom_pp": -0.518,
+   "fifth_sizes": [
+    21,
+    24
+   ],
+   "within_region_rho": 0.0112,
+   "within_region_p": 0.91241
+  },
+  "placebo_digit|ld|2023-05-04": {
+   "measure": "placebo_digit",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 86,
+   "run": true,
+   "rho": -0.0335,
+   "p": 0.76382,
+   "bottom_fifth_mean_resid_pp": 0.129,
+   "top_fifth_mean_resid_pp": -0.478,
+   "top_minus_bottom_pp": -0.608,
+   "fifth_sizes": [
+    19,
+    22
+   ],
+   "within_region_rho": -0.0286,
+   "within_region_p": 0.79292
+  },
+  "placebo_digit|grn|2023-05-04": {
+   "measure": "placebo_digit",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 79,
+   "run": true,
+   "rho": -0.0433,
+   "p": 0.70713,
+   "bottom_fifth_mean_resid_pp": 1.391,
+   "top_fifth_mean_resid_pp": 0.881,
+   "top_minus_bottom_pp": -0.51,
+   "fifth_sizes": [
+    20,
+    20
+   ],
+   "within_region_rho": 0.0088,
+   "within_region_p": 0.93791
+  },
+  "placebo_digit|oth|2023-05-04": {
+   "measure": "placebo_digit",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 56,
+   "run": true,
+   "rho": -0.0291,
+   "p": 0.83142,
+   "bottom_fifth_mean_resid_pp": 4.175,
+   "top_fifth_mean_resid_pp": 4.509,
+   "top_minus_bottom_pp": 0.334,
+   "fifth_sizes": [
+    12,
+    10
+   ],
+   "within_region_rho": 0.0463,
+   "within_region_p": 0.73163
+  },
+  "spd_share|ref|2026-05-07": {
+   "measure": "spd_share",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.0883,
+   "p": 0.28077,
+   "bottom_fifth_mean_resid_pp": 2.578,
+   "top_fifth_mean_resid_pp": 2.438,
+   "top_minus_bottom_pp": -0.14,
+   "fifth_sizes": [
+    30,
+    32
+   ],
+   "within_region_rho": -0.1363,
+   "within_region_p": 0.09849
+  },
+  "spd_share|lab|2026-05-07": {
+   "measure": "spd_share",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.0254,
+   "p": 0.75692,
+   "bottom_fifth_mean_resid_pp": 2.448,
+   "top_fifth_mean_resid_pp": 2.747,
+   "top_minus_bottom_pp": 0.3,
+   "fifth_sizes": [
+    30,
+    32
+   ],
+   "within_region_rho": 0.1504,
+   "within_region_p": 0.06939
+  },
+  "spd_share|con|2026-05-07": {
+   "measure": "spd_share",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": -0.4092,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 1.6,
+   "top_fifth_mean_resid_pp": -1.634,
+   "top_minus_bottom_pp": -3.234,
+   "fifth_sizes": [
+    28,
+    31
+   ],
+   "within_region_rho": -0.1161,
+   "within_region_p": 0.16238
+  },
+  "spd_share|ld|2026-05-07": {
+   "measure": "spd_share",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": 0.0906,
+   "p": 0.30257,
+   "bottom_fifth_mean_resid_pp": -2.403,
+   "top_fifth_mean_resid_pp": -1.189,
+   "top_minus_bottom_pp": 1.213,
+   "fifth_sizes": [
+    27,
+    29
+   ],
+   "within_region_rho": 0.0587,
+   "within_region_p": 0.50325
+  },
+  "spd_share|grn|2026-05-07": {
+   "measure": "spd_share",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.2604,
+   "p": 0.0015,
+   "bottom_fifth_mean_resid_pp": -2.255,
+   "top_fifth_mean_resid_pp": -0.974,
+   "top_minus_bottom_pp": 1.281,
+   "fifth_sizes": [
+    28,
+    28
+   ],
+   "within_region_rho": 0.0932,
+   "within_region_p": 0.26427
+  },
+  "spd_share|oth|2026-05-07": {
+   "measure": "spd_share",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": 0.1141,
+   "p": 0.29447,
+   "bottom_fifth_mean_resid_pp": -5.836,
+   "top_fifth_mean_resid_pp": -3.47,
+   "top_minus_bottom_pp": 2.366,
+   "fifth_sizes": [
+    16,
+    18
+   ],
+   "within_region_rho": 0.2107,
+   "within_region_p": 0.0484
+  },
+  "spd_share|ref|2025-05-01": {
+   "measure": "spd_share",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|lab|2025-05-01": {
+   "measure": "spd_share",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|con|2025-05-01": {
+   "measure": "spd_share",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|ld|2025-05-01": {
+   "measure": "spd_share",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|grn|2025-05-01": {
+   "measure": "spd_share",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|oth|2025-05-01": {
+   "measure": "spd_share",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|ref|2022-05-05": {
+   "measure": "spd_share",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|lab|2022-05-05": {
+   "measure": "spd_share",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|con|2022-05-05": {
+   "measure": "spd_share",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|ld|2022-05-05": {
+   "measure": "spd_share",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|grn|2022-05-05": {
+   "measure": "spd_share",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|oth|2022-05-05": {
+   "measure": "spd_share",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|ref|2023-05-04": {
+   "measure": "spd_share",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|lab|2023-05-04": {
+   "measure": "spd_share",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|con|2023-05-04": {
+   "measure": "spd_share",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|ld|2023-05-04": {
+   "measure": "spd_share",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|grn|2023-05-04": {
+   "measure": "spd_share",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "spd_share|oth|2023-05-04": {
+   "measure": "spd_share",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|ref|2026-05-07": {
+   "measure": "ta_rate",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 145,
+   "run": true,
+   "rho": -0.3839,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 4.987,
+   "top_fifth_mean_resid_pp": -1.093,
+   "top_minus_bottom_pp": -6.08,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": -0.1112,
+   "within_region_p": 0.18698
+  },
+  "ta_rate|lab|2026-05-07": {
+   "measure": "ta_rate",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 145,
+   "run": true,
+   "rho": 0.3442,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 1.048,
+   "top_fifth_mean_resid_pp": 4.967,
+   "top_minus_bottom_pp": 3.919,
+   "fifth_sizes": [
+    29,
+    29
+   ],
+   "within_region_rho": 0.117,
+   "within_region_p": 0.15948
+  },
+  "ta_rate|con|2026-05-07": {
+   "measure": "ta_rate",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 144,
+   "run": true,
+   "rho": 0.2956,
+   "p": 0.0005,
+   "bottom_fifth_mean_resid_pp": -2.285,
+   "top_fifth_mean_resid_pp": 1.472,
+   "top_minus_bottom_pp": 3.756,
+   "fifth_sizes": [
+    28,
+    29
+   ],
+   "within_region_rho": -0.0642,
+   "within_region_p": 0.44436
+  },
+  "ta_rate|ld|2026-05-07": {
+   "measure": "ta_rate",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 131,
+   "run": true,
+   "rho": -0.1999,
+   "p": 0.023,
+   "bottom_fifth_mean_resid_pp": -0.915,
+   "top_fifth_mean_resid_pp": -2.657,
+   "top_minus_bottom_pp": -1.742,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.1208,
+   "within_region_p": 0.17658
+  },
+  "ta_rate|grn|2026-05-07": {
+   "measure": "ta_rate",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 144,
+   "run": true,
+   "rho": 0.0401,
+   "p": 0.63524,
+   "bottom_fifth_mean_resid_pp": -2.071,
+   "top_fifth_mean_resid_pp": -0.992,
+   "top_minus_bottom_pp": 1.079,
+   "fifth_sizes": [
+    28,
+    29
+   ],
+   "within_region_rho": 0.1154,
+   "within_region_p": 0.16748
+  },
+  "ta_rate|oth|2026-05-07": {
+   "measure": "ta_rate",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 84,
+   "run": true,
+   "rho": 0.0559,
+   "p": 0.61474,
+   "bottom_fifth_mean_resid_pp": -3.487,
+   "top_fifth_mean_resid_pp": -2.714,
+   "top_minus_bottom_pp": 0.773,
+   "fifth_sizes": [
+    16,
+    17
+   ],
+   "within_region_rho": 0.0454,
+   "within_region_p": 0.68053
+  },
+  "ta_rate|ref|2025-05-01": {
+   "measure": "ta_rate",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|lab|2025-05-01": {
+   "measure": "ta_rate",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|con|2025-05-01": {
+   "measure": "ta_rate",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|ld|2025-05-01": {
+   "measure": "ta_rate",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|grn|2025-05-01": {
+   "measure": "ta_rate",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|oth|2025-05-01": {
+   "measure": "ta_rate",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|ref|2022-05-05": {
+   "measure": "ta_rate",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|lab|2022-05-05": {
+   "measure": "ta_rate",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|con|2022-05-05": {
+   "measure": "ta_rate",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|ld|2022-05-05": {
+   "measure": "ta_rate",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|grn|2022-05-05": {
+   "measure": "ta_rate",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|oth|2022-05-05": {
+   "measure": "ta_rate",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|ref|2023-05-04": {
+   "measure": "ta_rate",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|lab|2023-05-04": {
+   "measure": "ta_rate",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|con|2023-05-04": {
+   "measure": "ta_rate",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|ld|2023-05-04": {
+   "measure": "ta_rate",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|grn|2023-05-04": {
+   "measure": "ta_rate",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "ta_rate|oth|2023-05-04": {
+   "measure": "ta_rate",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|ref|2026-05-07": {
+   "measure": "births_nonuk_mother",
+   "lane": "ref",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": -0.4343,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 5.596,
+   "top_fifth_mean_resid_pp": -0.454,
+   "top_minus_bottom_pp": -6.05,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": -0.2513,
+   "within_region_p": 0.0022
+  },
+  "births_nonuk_mother|lab|2026-05-07": {
+   "measure": "births_nonuk_mother",
+   "lane": "lab",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 148,
+   "run": true,
+   "rho": 0.3659,
+   "p": 0.0001,
+   "bottom_fifth_mean_resid_pp": 1.321,
+   "top_fifth_mean_resid_pp": 5.186,
+   "top_minus_bottom_pp": 3.864,
+   "fifth_sizes": [
+    29,
+    30
+   ],
+   "within_region_rho": 0.1542,
+   "within_region_p": 0.06099
+  },
+  "births_nonuk_mother|con|2026-05-07": {
+   "measure": "births_nonuk_mother",
+   "lane": "con",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.1748,
+   "p": 0.0345,
+   "bottom_fifth_mean_resid_pp": -0.937,
+   "top_fifth_mean_resid_pp": 1.012,
+   "top_minus_bottom_pp": 1.949,
+   "fifth_sizes": [
+    28,
+    30
+   ],
+   "within_region_rho": -0.0361,
+   "within_region_p": 0.67263
+  },
+  "births_nonuk_mother|ld|2026-05-07": {
+   "measure": "births_nonuk_mother",
+   "lane": "ld",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 134,
+   "run": true,
+   "rho": -0.1542,
+   "p": 0.07679,
+   "bottom_fifth_mean_resid_pp": -1.876,
+   "top_fifth_mean_resid_pp": -2.572,
+   "top_minus_bottom_pp": -0.697,
+   "fifth_sizes": [
+    26,
+    27
+   ],
+   "within_region_rho": -0.0324,
+   "within_region_p": 0.71213
+  },
+  "births_nonuk_mother|grn|2026-05-07": {
+   "measure": "births_nonuk_mother",
+   "lane": "grn",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 147,
+   "run": true,
+   "rho": 0.2212,
+   "p": 0.0079,
+   "bottom_fifth_mean_resid_pp": -3.402,
+   "top_fifth_mean_resid_pp": -0.901,
+   "top_minus_bottom_pp": 2.501,
+   "fifth_sizes": [
+    28,
+    30
+   ],
+   "within_region_rho": 0.2169,
+   "within_region_p": 0.0096
+  },
+  "births_nonuk_mother|oth|2026-05-07": {
+   "measure": "births_nonuk_mother",
+   "lane": "oth",
+   "election": "2026-05-07",
+   "role": "discovery",
+   "districts": 87,
+   "run": true,
+   "rho": -0.1362,
+   "p": 0.20848,
+   "bottom_fifth_mean_resid_pp": -2.881,
+   "top_fifth_mean_resid_pp": -5.158,
+   "top_minus_bottom_pp": -2.278,
+   "fifth_sizes": [
+    17,
+    18
+   ],
+   "within_region_rho": -0.0886,
+   "within_region_p": 0.40826
+  },
+  "births_nonuk_mother|ref|2025-05-01": {
+   "measure": "births_nonuk_mother",
+   "lane": "ref",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|lab|2025-05-01": {
+   "measure": "births_nonuk_mother",
+   "lane": "lab",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|con|2025-05-01": {
+   "measure": "births_nonuk_mother",
+   "lane": "con",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|ld|2025-05-01": {
+   "measure": "births_nonuk_mother",
+   "lane": "ld",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|grn|2025-05-01": {
+   "measure": "births_nonuk_mother",
+   "lane": "grn",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|oth|2025-05-01": {
+   "measure": "births_nonuk_mother",
+   "lane": "oth",
+   "election": "2025-05-01",
+   "role": "confirmation",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|ref|2022-05-05": {
+   "measure": "births_nonuk_mother",
+   "lane": "ref",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|lab|2022-05-05": {
+   "measure": "births_nonuk_mother",
+   "lane": "lab",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|con|2022-05-05": {
+   "measure": "births_nonuk_mother",
+   "lane": "con",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|ld|2022-05-05": {
+   "measure": "births_nonuk_mother",
+   "lane": "ld",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|grn|2022-05-05": {
+   "measure": "births_nonuk_mother",
+   "lane": "grn",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|oth|2022-05-05": {
+   "measure": "births_nonuk_mother",
+   "lane": "oth",
+   "election": "2022-05-05",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|ref|2023-05-04": {
+   "measure": "births_nonuk_mother",
+   "lane": "ref",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|lab|2023-05-04": {
+   "measure": "births_nonuk_mother",
+   "lane": "lab",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|con|2023-05-04": {
+   "measure": "births_nonuk_mother",
+   "lane": "con",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|ld|2023-05-04": {
+   "measure": "births_nonuk_mother",
+   "lane": "ld",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|grn|2023-05-04": {
+   "measure": "births_nonuk_mother",
+   "lane": "grn",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  },
+  "births_nonuk_mother|oth|2023-05-04": {
+   "measure": "births_nonuk_mother",
+   "lane": "oth",
+   "election": "2023-05-04",
+   "role": "check",
+   "districts": 0,
+   "run": false
+  }
+ }
+}

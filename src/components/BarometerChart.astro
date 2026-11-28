@@ -1,0 +1,231 @@
+---
+/**
+ * BarometerChart.astro: the by-election barometer's monthly line chart.
+ *
+ * Server-rendered SVG, no client JS. One line per party on the same axes, the
+ * median change in share (percentage points at the stated starting share) in
+ * months where the party met the minimum contest count. A blank month breaks
+ * the line: nothing is drawn across it, so a gap reads as a gap rather than as
+ * an interpolated value. Under the plot, a strip of bars gives the number of
+ * by-elections in each month, so the thin months are visible at a glance.
+ *
+ * Markers differ by shape as well as colour, assigned by the party's position
+ * in alphabetical order, so two similar party colours stay distinguishable and
+ * no party is treated differently from another.
+ */
+import { partyColour } from "../lib/predictions";
+import { shortPartyLabel } from "../lib/siteData";
+
+interface PartyMonth {
+  contests: number;
+  median_points_at_start: number | null;
+}
+interface Month {
+  month: string;
+  contests: number;
+  parties: Record<string, PartyMonth>;
+}
+interface Props {
+  months: Month[];
+  parties: string[];
+  startingShare: number;
+  ariaLabel: string;
+}
+
+const { months, parties: partiesIn, startingShare, ariaLabel } = Astro.props;
+const parties = [...partiesIn].sort((a, b) => a.localeCompare(b));
+
+const W = 600;
+const PLOT_H = 260;
+const STRIP_H = 54;
+const M = { top: 26, right: 14, bottom: 26, left: 44 };
+const H = M.top + PLOT_H + M.bottom + STRIP_H + 18;
+const innerW = W - M.left - M.right;
+
+const values = months.flatMap((m) => parties.map((p) => m.parties[p]?.median_points_at_start).filter((v): v is number => v !== null && v !== undefined));
+const step = 5;
+const yMin = Math.min(-step, Math.floor(Math.min(0, ...values) / step) * step);
+const yMax = Math.max(step, Math.ceil(Math.max(0, ...values) / step) * step);
+const yTickStep = yMax - yMin > 40 ? 10 : 5;
+const yTicks: number[] = [];
+for (let v = Math.ceil(yMin / yTickStep) * yTickStep; v <= yMax; v += yTickStep) yTicks.push(v);
+
+const band = innerW / Math.max(1, months.length);
+const xAt = (i: number) => M.left + band * (i + 0.5);
+const yAt = (v: number) => M.top + ((yMax - v) / (yMax - yMin)) * PLOT_H;
+
+const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthTick = (m: string) => {
+  const mm = Number(m.slice(5, 7));
+  return mm === 1 || m === months[0]?.month ? `${MONTH_SHORT[mm - 1]} ${m.slice(2, 4)}` : MONTH_SHORT[mm - 1];
+};
+const showTick = (i: number) => {
+  const mm = Number(months[i].month.slice(5, 7));
+  return [1, 4, 7, 10].includes(mm);
+};
+
+// Segments: runs of consecutive shown months.
+function segments(party: string) {
+  const runs: Array<Array<[number, number]>> = [];
+  let cur: Array<[number, number]> = [];
+  months.forEach((m, i) => {
+    const v = m.parties[party]?.median_points_at_start;
+    if (v === null || v === undefined) {
+      if (cur.length) runs.push(cur);
+      cur = [];
+    } else cur.push([xAt(i), yAt(v)]);
+  });
+  if (cur.length) runs.push(cur);
+  return runs;
+}
+
+const SHAPES = ["circle", "square", "triangle", "diamond", "triangle-down", "cross"] as const;
+function marker(shape: string, x: number, y: number) {
+  const r = 4.2;
+  switch (shape) {
+    case "square": return `M${x - r},${y - r}h${2 * r}v${2 * r}h${-2 * r}Z`;
+    case "triangle": return `M${x},${y - r * 1.2}L${x + r * 1.1},${y + r * 0.8}L${x - r * 1.1},${y + r * 0.8}Z`;
+    case "triangle-down": return `M${x},${y + r * 1.2}L${x + r * 1.1},${y - r * 0.8}L${x - r * 1.1},${y - r * 0.8}Z`;
+    case "diamond": return `M${x},${y - r * 1.3}L${x + r * 1.1},${y}L${x},${y + r * 1.3}L${x - r * 1.1},${y}Z`;
+    case "cross": return `M${x - r},${y - r * 0.35}h${r * 0.65}v${-r * 0.65}h${r * 0.7}v${r * 0.65}h${r * 0.65}v${r * 0.7}h${-r * 0.65}v${r * 0.65}h${-r * 0.7}v${-r * 0.65}h${-r * 0.65}Z`;
+    default: return `M${x - r},${y}a${r},${r} 0 1,0 ${2 * r},0a${r},${r} 0 1,0 ${-2 * r},0`;
+  }
+}
+const shapeOf = (p: string) => SHAPES[parties.indexOf(p) % SHAPES.length];
+
+const stripTop = M.top + PLOT_H + M.bottom + 14;
+const maxContests = Math.max(1, ...months.map((m) => m.contests));
+const barH = (n: number) => (n / maxContests) * (STRIP_H - 14);
+const pts = (v: number) => `${v > 0 ? "+" : ""}${v.toFixed(1)}`;
+---
+
+<figure class="barometer-chart">
+  <div class="bc-scroll" role="region" aria-label="Barometer chart, scrolls sideways on narrow screens" tabindex="0">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel} class="bc-svg">
+      <title>{ariaLabel}</title>
+      <g class="bc-grid">
+        {yTicks.map((v) => (
+          <g>
+            <line x1={M.left} x2={W - M.right} y1={yAt(v)} y2={yAt(v)} class={v === 0 ? "bc-zero" : "bc-gridline"} />
+            <text x={M.left - 6} y={yAt(v) + 4} text-anchor="end" class="bc-axis">{v > 0 ? `+${v}` : v}</text>
+          </g>
+        ))}
+        <text x={M.left - 6} y={M.top - 14} text-anchor="end" class="bc-axis bc-unit">points</text>
+      </g>
+      {months.map((m, i) => showTick(i) && (
+        <text x={xAt(i)} y={M.top + PLOT_H + 18} text-anchor="middle" class="bc-axis">{monthTick(m.month)}</text>
+      ))}
+      {parties.map((p) => (
+        <g class="bc-series" style={`color:${partyColour(p)}`}>
+          {segments(p).map((run) => run.length > 1 && (
+            <polyline points={run.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ")} class="bc-line" />
+          ))}
+          {months.map((m, i) => {
+            const v = m.parties[p]?.median_points_at_start;
+            return v === null || v === undefined ? null : (
+              <path d={marker(shapeOf(p), xAt(i), yAt(v))} class="bc-dot">
+                <title>{`${shortPartyLabel(p)}, ${m.month}: ${pts(v)} points (${m.parties[p].contests} contests)`}</title>
+              </path>
+            );
+          })}
+        </g>
+      ))}
+      <text x={M.left} y={stripTop - 4} class="bc-axis bc-strip-label">By-elections in the month</text>
+      {months.map((m, i) => (
+        <g>
+          <rect x={xAt(i) - band * 0.35} y={stripTop + (STRIP_H - 14) - barH(m.contests)} width={band * 0.7} height={Math.max(barH(m.contests), 0.5)} class="bc-bar">
+            <title>{`${m.month}: ${m.contests} by-elections`}</title>
+          </rect>
+          <text x={xAt(i)} y={stripTop + STRIP_H - 2} text-anchor="middle" class="bc-count">{m.contests}</text>
+        </g>
+      ))}
+    </svg>
+  </div>
+  <figcaption class="bc-legend">
+    {parties.map((p) => (
+      <span class="bc-legend-item">
+        <svg viewBox="0 0 22 12" width="22" height="12" aria-hidden="true" style={`color:${partyColour(p)}`}>
+          <line x1="1" x2="21" y1="6" y2="6" class="bc-line" />
+          <path d={marker(shapeOf(p), 11, 6)} class="bc-dot" />
+        </svg>
+        <span class="bc-legend-name">{shortPartyLabel(p)}</span>
+      </span>
+    ))}
+    <span class="bc-legend-note">Points of change for a party starting on {Math.round(startingShare * 100)}%. A gap is a month below the minimum.</span>
+  </figcaption>
+</figure>
+
+<style>
+  .barometer-chart {
+    margin: 0;
+    color: var(--ink);
+  }
+  .bc-scroll {
+    overflow-x: auto;
+  }
+  .bc-scroll:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .bc-svg {
+    display: block;
+    width: 100%;
+    min-width: 30rem;
+    height: auto;
+    overflow: visible;
+  }
+  .bc-gridline {
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+  .bc-zero {
+    stroke: var(--ink-soft);
+    stroke-width: 1.2;
+  }
+  .bc-axis {
+    fill: var(--muted);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .bc-strip-label {
+    font-size: 11px;
+  }
+  .bc-count {
+    fill: var(--muted);
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+  }
+  .bc-bar {
+    fill: var(--ink-soft);
+    opacity: 0.45;
+  }
+  .bc-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .bc-dot {
+    fill: currentColor;
+    stroke: var(--surface);
+    stroke-width: 1.2;
+  }
+  .bc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    margin-top: var(--space-sm);
+    font-size: var(--text-small);
+  }
+  .bc-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-weight: 600;
+  }
+  .bc-legend-note {
+    flex-basis: 100%;
+    color: var(--muted);
+  }
+</style>

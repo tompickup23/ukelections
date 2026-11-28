@@ -144,6 +144,7 @@ const STATIC_PATHS = [
   "/by-elections/",
   "/by-elections/local/",
   "/by-elections/post-mortem/",
+  "/by-elections/barometer/",
   "/by-elections/scoreboard/",
   "/by-elections/makerfield/",
   "/by-elections/aberdeen-south/",

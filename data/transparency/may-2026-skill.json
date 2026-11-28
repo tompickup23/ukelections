@@ -1,0 +1,33 @@
+{
+  "generated_by": "scripts/build-may-2026-skill.mjs",
+  "generated_at": "2026-11-27",
+  "election": "Local elections, 7 May 2026",
+  "sources": {
+    "ballot_set_and_forecast_calls": "data/transparency/may-2026-postaudit-2026-05-10.json",
+    "previous_result": "data/predictions/may-2026/local-and-mayor.prereg-2026-04-26.json (Step 1 baseline recorded per ward)",
+    "actuals": "data/results/may-2026/local-and-mayor.merged.json",
+    "yardstick": "scripts/score-may-2026-like-for-like.mjs"
+  },
+  "definitions": {
+    "ward_leader": "The top party by vote share in the ward on 7 May 2026, with Labour, Conservative, Liberal Democrats, Reform UK and Green Party kept and every other party and independent pooled as Others. In wards electing more than one councillor, every candidate's votes count.",
+    "previous_result": "The ward's most recent earlier borough result, as recorded in Step 1 of the locked forecast. Wards with no such result have none to repeat.",
+    "same_party_rule": "Name whichever pooled party topped that previous result as the 2026 leader. It is correct when that party led again. By construction it calls exactly the wards that kept the same leader.",
+    "locked_forecast": "Locked forecast, 26 April 2026: the forecast published and hash-locked before polling day (commit ab3d999).",
+    "polling_day_forecast": "Polling-day version, 7 May 2026: the forecast as it stood on polling day (commit 5e85c84).",
+    "called": "The named party was the ward leader.",
+    "why_subset": "The same party rule needs a previous result to repeat. Wards without one are left out of every count in the comparison, so all three are scored on the same wards."
+  },
+  "wards_scored": 2897,
+  "wards_without_actual": 0,
+  "wards_with_previous_result": 2532,
+  "wards_without_previous_result": 365,
+  "kept_same_leader": 1309,
+  "changed_leader": 1223,
+  "same_party_rule_called": 1309,
+  "locked_forecast_called": 1295,
+  "polling_day_forecast_called": 1462,
+  "all_wards": {
+    "locked_forecast_called": 1463,
+    "polling_day_forecast_called": 1623
+  }
+}
