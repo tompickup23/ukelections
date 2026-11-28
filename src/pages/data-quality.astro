@@ -17,6 +17,19 @@ try {
 } catch { postaudit = null; }
 const prereg = postaudit?.prereg?.summary || null;
 const live = postaudit?.live?.summary || null;
+// Against the simplest rule: "the same party as last time", on the like for
+// like yardstick, built by scripts/build-may-2026-skill.mjs.
+let skill: any = null;
+try {
+  skill = JSON.parse(readFileSync(path.join(process.cwd(), "data/transparency/may-2026-skill.json"), "utf8"));
+} catch { skill = null; }
+const n = (x: number) => x.toLocaleString("en-GB");
+const share = (a: number, b: number) => ((100 * a) / b).toFixed(1);
+const skillRows = skill ? [
+  { label: "Same party as last time", called: skill.same_party_rule_called },
+  { label: "Locked forecast, 26 April", called: skill.locked_forecast_called },
+  { label: "Polling day forecast, 7 May", called: skill.polling_day_forecast_called },
+] : [];
 ---
 
 <BaseLayout
@@ -69,6 +82,60 @@ const live = postaudit?.live?.summary || null;
       </p>
     </section>
   )}
+
+  {skill && (
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Against the simplest rule</p>
+        <h2>Did the forecast beat "same party as last time"?</h2>
+      </div>
+      <p>
+        The simplest forecast for a ward is that whoever led last time leads again. On {n(skill.wards_with_previous_result)} of
+        the {n(skill.wards_scored)} wards scored, a previous result was on record to repeat, and these bars count how many
+        of those wards each approach called correctly.
+      </p>
+      <div class="skill-bars" role="img" aria-label={`Wards called correctly out of ${n(skill.wards_with_previous_result)}: ${skillRows.map((r) => `${r.label} ${n(r.called)}`).join("; ")}`}>
+        {skillRows.map((r) => (
+          <div class="skill-row">
+            <span class="skill-label">{r.label}</span>
+            <span class="skill-track"><span class="skill-fill" style={`width:${share(r.called, skill.wards_with_previous_result)}%`}></span></span>
+            <span class="skill-value">{n(r.called)} <span class="skill-pct">({share(r.called, skill.wards_with_previous_result)}%)</span></span>
+          </div>
+        ))}
+      </div>
+      <p>
+        {n(skill.changed_leader)} of the {n(skill.wards_with_previous_result)} wards ({share(skill.changed_leader, skill.wards_with_previous_result)}%) had a different
+        leader in May 2026 from last time, and {n(skill.kept_same_leader)} kept the same one. The simple rule is right in exactly the wards that
+        kept their leader, so it can never call a ward that changed hands.
+      </p>
+      <dl class="skill-defs">
+        <dt>Same party as last time</dt>
+        <dd>{skill.definitions.same_party_rule} The previous result is {skill.definitions.previous_result.charAt(0).toLowerCase() + skill.definitions.previous_result.slice(1)}</dd>
+        <dt>Forecast called</dt>
+        <dd>The party the forecast had ahead in the ward was the ward leader. {skill.definitions.ward_leader}</dd>
+      </dl>
+      <p class="caption">
+        Only wards with a previous result are compared, because without one the simple rule has nothing to repeat and the
+        three could not be scored on the same wards. The other {n(skill.wards_without_previous_result)} wards are left out of this
+        block; across all {n(skill.wards_scored)} wards on the same yardstick the locked forecast called {n(skill.all_wards.locked_forecast_called)} and
+        the polling day forecast {n(skill.all_wards.polling_day_forecast_called)}. This yardstick pools every party outside the five largest as
+        "Others", so its totals differ slightly from the figures above. Sources: the forecast calls in the May 2026 post-audit, the previous result
+        recorded in Step 1 of the locked forecast, and the declared results. Data: <a href="https://github.com/tompickup23/ukelections/blob/main/data/transparency/may-2026-skill.json">may-2026-skill.json</a>,
+        built by <code>scripts/build-may-2026-skill.mjs</code>.
+      </p>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">Council by-elections</p>
+      <h2>The by-election record</h2>
+    </div>
+    <ul>
+      <li><a href="/by-elections/post-mortem/">How our council by-election forecasts did</a>: every published forecast graded against the result, month by month, with every miss listed.</li>
+      <li><a href="/by-elections/barometer/">The by-election barometer</a>: the median change in each party's share where it stood before, month by month, by the same rule for every party.</li>
+    </ul>
+  </section>
 
   <section class="section">
     <div class="section-head">
@@ -138,3 +205,56 @@ const live = postaudit?.live?.summary || null;
     </p>
   </section>
 </BaseLayout>
+
+<style>
+  .skill-bars {
+    display: grid;
+    gap: var(--space-xs);
+    margin: var(--space-md) 0;
+  }
+  .skill-row {
+    display: grid;
+    grid-template-columns: minmax(8rem, 14rem) 1fr auto;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-small);
+  }
+  .skill-label {
+    font-weight: 600;
+  }
+  .skill-track {
+    display: block;
+    height: var(--space-sm);
+    background: var(--surface-muted);
+    border-radius: var(--space-2xs);
+    overflow: hidden;
+  }
+  .skill-fill {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+  }
+  .skill-value {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .skill-pct {
+    color: var(--muted);
+  }
+  .skill-defs dt {
+    font-weight: 600;
+    margin-top: var(--space-xs);
+  }
+  .skill-defs dd {
+    margin: 0;
+  }
+  @media (max-width: 40rem) {
+    .skill-row {
+      grid-template-columns: 1fr auto;
+    }
+    .skill-track {
+      grid-column: 1 / -1;
+      order: 3;
+    }
+  }
+</style>

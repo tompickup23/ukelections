@@ -1,0 +1,1756 @@
+{
+  "generated_by": "scripts/build-byelection-barometer.mjs",
+  "generated_at": "2026-11-27",
+  "corpus_source": "Council by-election results from Democracy Club candidate and result records, with results checked against the council's own declaration where the review status says so (data/history/byelection-appends.json); each paired with the ward's previous ordinary result by scripts/lib/local-byelection-model.mjs (buildSwingCorpus).",
+  "rules": {
+    "contests": "A council by-election for which the corpus holds the same ward's previous ordinary result. Scottish STV contests are excluded, as in the model.",
+    "stood_before": "A party counts in a contest only if it had 2% or more of the vote both in the previous ordinary result and in the by-election.",
+    "measure": "Median, over the month's counted contests, of the change in the log-odds of the party's share between the previous ordinary result and the by-election.",
+    "points": "The same median shown as the percentage point change for a party starting on 25%.",
+    "minimum": "A party's month is blank when fewer than 5 contests count for it. Blank months are not interpolated. 5 is the model's own minimum for giving a party a swing of its own (MIN_PARTY_N).",
+    "window": "Months from 2024-07, the month of the July 2024 general election, one of the model's two party-system boundaries.",
+    "lanes": "Independent and Other are pools of unrelated candidates, so they have no line.",
+    "entrants": "A party is new to the corpus when its first appearance (as a by-election candidate or in a previous ordinary result) is on or after 2024-07-01. It qualifies when it has stood in at least 5 by-elections. Every other party on the barometer is compared in by-elections with and without it on the ballot, from its first appearance onwards; a side with fewer than 5 contests is blank.",
+    "hand_verified_declaration": "Contests whose result was checked against the returning officer's own declaration."
+  },
+  "starting_share": 0.25,
+  "min_contests": 5,
+  "window_from": "2024-07",
+  "latest_contest_date": "2026-11-19",
+  "contests_in_window": 463,
+  "parties_shown": [
+    "Reform UK",
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Green Party",
+    "Plaid Cymru"
+  ],
+  "parties_not_shown": [
+    {
+      "party": "SNP",
+      "by_elections_stood_in_window": 0,
+      "reason": "It stands in no previous ordinary result in the record, so it has no contest where it stood before."
+    },
+    {
+      "party": "Restore Britain",
+      "by_elections_stood_in_window": 26,
+      "reason": "It stands in no previous ordinary result in the record, so it has no contest where it stood before."
+    }
+  ],
+  "months": [
+    {
+      "month": "2024-07",
+      "contests": 36,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 36,
+          "median_logit_change": -0.1159,
+          "median_points_at_start": -2.1,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 36,
+          "median_logit_change": -0.0204,
+          "median_points_at_start": -0.4,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 29,
+          "median_logit_change": -0.0942,
+          "median_points_at_start": -1.7,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 26,
+          "median_logit_change": 0.368,
+          "median_points_at_start": 7.5,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2024-08",
+      "contests": 3,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 2,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2024-09",
+      "contests": 17,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 16,
+          "median_logit_change": -0.4887,
+          "median_points_at_start": -8,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 15,
+          "median_logit_change": -0.0176,
+          "median_points_at_start": -0.3,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 15,
+          "median_logit_change": -0.3391,
+          "median_points_at_start": -5.8,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 10,
+          "median_logit_change": 0.0601,
+          "median_points_at_start": 1.1,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2024-10",
+      "contests": 31,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 28,
+          "median_logit_change": -0.6377,
+          "median_points_at_start": -10,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 30,
+          "median_logit_change": -0.0011,
+          "median_points_at_start": 0,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 23,
+          "median_logit_change": -0.0977,
+          "median_points_at_start": -1.8,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 24,
+          "median_logit_change": -0.2119,
+          "median_points_at_start": -3.8,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2024-11",
+      "contests": 15,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 14,
+          "median_logit_change": -0.5747,
+          "median_points_at_start": -9.2,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 15,
+          "median_logit_change": -0.1008,
+          "median_points_at_start": -1.8,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 12,
+          "median_logit_change": 0.0804,
+          "median_points_at_start": 1.5,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 11,
+          "median_logit_change": -0.2906,
+          "median_points_at_start": -5,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2024-12",
+      "contests": 9,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 9,
+          "median_logit_change": -0.8552,
+          "median_points_at_start": -12.6,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 9,
+          "median_logit_change": -0.6929,
+          "median_points_at_start": -10.7,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 6,
+          "median_logit_change": 0.087,
+          "median_points_at_start": 1.7,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 5,
+          "median_logit_change": -1.0425,
+          "median_points_at_start": -14.5,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-01",
+      "contests": 1,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-02",
+      "contests": 10,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 10,
+          "median_logit_change": -0.8222,
+          "median_points_at_start": -12.2,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 10,
+          "median_logit_change": -0.0655,
+          "median_points_at_start": -1.2,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 7,
+          "median_logit_change": 0.0026,
+          "median_points_at_start": 0,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-03",
+      "contests": 8,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 7,
+          "median_logit_change": -0.6009,
+          "median_points_at_start": -9.5,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 8,
+          "median_logit_change": 0.0168,
+          "median_points_at_start": 0.3,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 7,
+          "median_logit_change": -0.593,
+          "median_points_at_start": -9.4,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 5,
+          "median_logit_change": -0.601,
+          "median_points_at_start": -9.5,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-04",
+      "contests": 7,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 7,
+          "median_logit_change": -0.8999,
+          "median_points_at_start": -13.1,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 6,
+          "median_logit_change": -0.7255,
+          "median_points_at_start": -11.1,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 6,
+          "median_logit_change": 0.2916,
+          "median_points_at_start": 5.9,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 6,
+          "median_logit_change": 0.178,
+          "median_points_at_start": 3.5,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-05",
+      "contests": 62,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 6,
+          "median_logit_change": 1.5351,
+          "median_points_at_start": 35.7,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 58,
+          "median_logit_change": -0.8571,
+          "median_points_at_start": -12.6,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 61,
+          "median_logit_change": -0.5183,
+          "median_points_at_start": -8.4,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 43,
+          "median_logit_change": -0.0763,
+          "median_points_at_start": -1.4,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 44,
+          "median_logit_change": -0.0867,
+          "median_points_at_start": -1.6,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-06",
+      "contests": 15,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 2,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 15,
+          "median_logit_change": -1.0922,
+          "median_points_at_start": -14.9,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 15,
+          "median_logit_change": -0.5248,
+          "median_points_at_start": -8.5,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 12,
+          "median_logit_change": -0.1992,
+          "median_points_at_start": -3.5,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 9,
+          "median_logit_change": -0.535,
+          "median_points_at_start": -8.7,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-07",
+      "contests": 20,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 5,
+          "median_logit_change": -0.0714,
+          "median_points_at_start": -1.3,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 19,
+          "median_logit_change": -0.7588,
+          "median_points_at_start": -11.5,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 19,
+          "median_logit_change": -0.5889,
+          "median_points_at_start": -9.4,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 13,
+          "median_logit_change": -0.24,
+          "median_points_at_start": -4.2,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 10,
+          "median_logit_change": -0.5077,
+          "median_points_at_start": -8.3,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-08",
+      "contests": 9,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 8,
+          "median_logit_change": -0.9237,
+          "median_points_at_start": -13.3,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 8,
+          "median_logit_change": -0.8596,
+          "median_points_at_start": -12.6,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 5,
+          "median_logit_change": 0.494,
+          "median_points_at_start": 10.3,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 5,
+          "median_logit_change": -0.036,
+          "median_points_at_start": -0.7,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-09",
+      "contests": 4,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 2,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-10",
+      "contests": 23,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 5,
+          "median_logit_change": 1.2663,
+          "median_points_at_start": 29.2,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 17,
+          "median_logit_change": -0.9211,
+          "median_points_at_start": -13.3,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 23,
+          "median_logit_change": -0.5641,
+          "median_points_at_start": -9.1,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 20,
+          "median_logit_change": 0.3334,
+          "median_points_at_start": 6.8,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 15,
+          "median_logit_change": -0.0372,
+          "median_points_at_start": -0.7,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-11",
+      "contests": 10,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 9,
+          "median_logit_change": -1.3142,
+          "median_points_at_start": -16.8,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 10,
+          "median_logit_change": -1.0997,
+          "median_points_at_start": -15,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 8,
+          "median_logit_change": 0.0196,
+          "median_points_at_start": 0.4,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2025-12",
+      "contests": 4,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 2,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-01",
+      "contests": 2,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 2,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 2,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-02",
+      "contests": 3,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-03",
+      "contests": 3,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-04",
+      "contests": 7,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 7,
+          "median_logit_change": -0.8861,
+          "median_points_at_start": -12.9,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 7,
+          "median_logit_change": -0.8435,
+          "median_points_at_start": -12.5,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 4,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-05",
+      "contests": 21,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 3,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 14,
+          "median_logit_change": -0.9702,
+          "median_points_at_start": -13.8,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 21,
+          "median_logit_change": -0.4848,
+          "median_points_at_start": -8,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 17,
+          "median_logit_change": -0.2478,
+          "median_points_at_start": -4.4,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 14,
+          "median_logit_change": -0.0543,
+          "median_points_at_start": -1,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-06",
+      "contests": 33,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 14,
+          "median_logit_change": -0.1002,
+          "median_points_at_start": -1.8,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 28,
+          "median_logit_change": -0.3784,
+          "median_points_at_start": -6.4,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 27,
+          "median_logit_change": -0.3624,
+          "median_points_at_start": -6.2,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 19,
+          "median_logit_change": -0.6067,
+          "median_points_at_start": -9.6,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 16,
+          "median_logit_change": -0.0849,
+          "median_points_at_start": -1.6,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 8,
+          "median_logit_change": 0.1178,
+          "median_points_at_start": 2.3,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-07",
+      "contests": 41,
+      "hand_verified_declaration": 0,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 16,
+          "median_logit_change": -0.3738,
+          "median_points_at_start": -6.3,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 27,
+          "median_logit_change": -0.4964,
+          "median_points_at_start": -8.1,
+          "hand_verified_declaration": 0
+        },
+        "Conservative": {
+          "contests": 34,
+          "median_logit_change": -0.4585,
+          "median_points_at_start": -7.6,
+          "hand_verified_declaration": 0
+        },
+        "Liberal Democrats": {
+          "contests": 25,
+          "median_logit_change": -0.2999,
+          "median_points_at_start": -5.2,
+          "hand_verified_declaration": 0
+        },
+        "Green Party": {
+          "contests": 22,
+          "median_logit_change": -0.484,
+          "median_points_at_start": -8,
+          "hand_verified_declaration": 0
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 5,
+          "median_logit_change": -0.1123,
+          "median_points_at_start": -2,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-08",
+      "contests": 16,
+      "hand_verified_declaration": 1,
+      "hand_verified_two_sources": 3,
+      "parties": {
+        "Reform UK": {
+          "contests": 8,
+          "median_logit_change": -0.1604,
+          "median_points_at_start": -2.9,
+          "hand_verified_declaration": 0
+        },
+        "Labour": {
+          "contests": 15,
+          "median_logit_change": -0.5984,
+          "median_points_at_start": -9.5,
+          "hand_verified_declaration": 1
+        },
+        "Conservative": {
+          "contests": 14,
+          "median_logit_change": -0.5699,
+          "median_points_at_start": -9.1,
+          "hand_verified_declaration": 1
+        },
+        "Liberal Democrats": {
+          "contests": 8,
+          "median_logit_change": -0.2635,
+          "median_points_at_start": -4.6,
+          "hand_verified_declaration": 1
+        },
+        "Green Party": {
+          "contests": 9,
+          "median_logit_change": -0.7528,
+          "median_points_at_start": -11.4,
+          "hand_verified_declaration": 1
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-09",
+      "contests": 16,
+      "hand_verified_declaration": 10,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 5,
+          "median_logit_change": -0.1896,
+          "median_points_at_start": -3.4,
+          "hand_verified_declaration": 3
+        },
+        "Labour": {
+          "contests": 13,
+          "median_logit_change": -0.6451,
+          "median_points_at_start": -10.1,
+          "hand_verified_declaration": 7
+        },
+        "Conservative": {
+          "contests": 14,
+          "median_logit_change": 0.0438,
+          "median_points_at_start": 0.8,
+          "hand_verified_declaration": 9
+        },
+        "Liberal Democrats": {
+          "contests": 8,
+          "median_logit_change": 0.1524,
+          "median_points_at_start": 3,
+          "hand_verified_declaration": 5
+        },
+        "Green Party": {
+          "contests": 10,
+          "median_logit_change": -0.7044,
+          "median_points_at_start": -10.9,
+          "hand_verified_declaration": 6
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-10",
+      "contests": 21,
+      "hand_verified_declaration": 17,
+      "hand_verified_two_sources": 0,
+      "parties": {
+        "Reform UK": {
+          "contests": 11,
+          "median_logit_change": -0.4495,
+          "median_points_at_start": -7.5,
+          "hand_verified_declaration": 9
+        },
+        "Labour": {
+          "contests": 19,
+          "median_logit_change": -0.2939,
+          "median_points_at_start": -5.1,
+          "hand_verified_declaration": 15
+        },
+        "Conservative": {
+          "contests": 19,
+          "median_logit_change": -0.1885,
+          "median_points_at_start": -3.4,
+          "hand_verified_declaration": 15
+        },
+        "Liberal Democrats": {
+          "contests": 9,
+          "median_logit_change": -0.7564,
+          "median_points_at_start": -11.5,
+          "hand_verified_declaration": 8
+        },
+        "Green Party": {
+          "contests": 8,
+          "median_logit_change": -0.3456,
+          "median_points_at_start": -5.9,
+          "hand_verified_declaration": 8
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 1
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    },
+    {
+      "month": "2026-11",
+      "contests": 16,
+      "hand_verified_declaration": 13,
+      "hand_verified_two_sources": 3,
+      "parties": {
+        "Reform UK": {
+          "contests": 9,
+          "median_logit_change": -0.5822,
+          "median_points_at_start": -9.3,
+          "hand_verified_declaration": 7
+        },
+        "Labour": {
+          "contests": 13,
+          "median_logit_change": -0.0174,
+          "median_points_at_start": -0.3,
+          "hand_verified_declaration": 11
+        },
+        "Conservative": {
+          "contests": 15,
+          "median_logit_change": -0.2916,
+          "median_points_at_start": -5.1,
+          "hand_verified_declaration": 13
+        },
+        "Liberal Democrats": {
+          "contests": 8,
+          "median_logit_change": 0.1641,
+          "median_points_at_start": 3.2,
+          "hand_verified_declaration": 6
+        },
+        "Green Party": {
+          "contests": 7,
+          "median_logit_change": -0.6781,
+          "median_points_at_start": -10.5,
+          "hand_verified_declaration": 6
+        },
+        "SNP": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Plaid Cymru": {
+          "contests": 1,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        },
+        "Restore Britain": {
+          "contests": 0,
+          "median_logit_change": null,
+          "median_points_at_start": null,
+          "hand_verified_declaration": 0
+        }
+      }
+    }
+  ],
+  "entrants": [
+    {
+      "party": "Restore Britain",
+      "first_seen": "2026-07-16",
+      "by_elections_stood": 26,
+      "by_elections_since_first_seen": 87,
+      "qualifies": true,
+      "comparisons": [
+        {
+          "party": "Conservative",
+          "with_entrant": {
+            "contests": 25,
+            "median_logit_change": -0.2916,
+            "median_points_at_start": -5.1
+          },
+          "without_entrant": {
+            "contests": 54,
+            "median_logit_change": -0.2822,
+            "median_points_at_start": -4.9
+          }
+        },
+        {
+          "party": "Green Party",
+          "with_entrant": {
+            "contests": 12,
+            "median_logit_change": -0.5883,
+            "median_points_at_start": -9.4
+          },
+          "without_entrant": {
+            "contests": 33,
+            "median_logit_change": -0.5837,
+            "median_points_at_start": -9.3
+          }
+        },
+        {
+          "party": "Labour",
+          "with_entrant": {
+            "contests": 23,
+            "median_logit_change": 0.0163,
+            "median_points_at_start": 0.3
+          },
+          "without_entrant": {
+            "contests": 48,
+            "median_logit_change": -0.5448,
+            "median_points_at_start": -8.8
+          }
+        },
+        {
+          "party": "Liberal Democrats",
+          "with_entrant": {
+            "contests": 13,
+            "median_logit_change": -0.7564,
+            "median_points_at_start": -11.5
+          },
+          "without_entrant": {
+            "contests": 27,
+            "median_logit_change": 0.0721,
+            "median_points_at_start": 1.4
+          }
+        },
+        {
+          "party": "Plaid Cymru",
+          "with_entrant": {
+            "contests": 0,
+            "median_logit_change": null,
+            "median_points_at_start": null
+          },
+          "without_entrant": {
+            "contests": 5,
+            "median_logit_change": 0.1345,
+            "median_points_at_start": 2.6
+          }
+        },
+        {
+          "party": "Reform UK",
+          "with_entrant": {
+            "contests": 17,
+            "median_logit_change": -0.5448,
+            "median_points_at_start": -8.8
+          },
+          "without_entrant": {
+            "contests": 25,
+            "median_logit_change": -0.2111,
+            "median_points_at_start": -3.7
+          }
+        }
+      ]
+    }
+  ]
+}

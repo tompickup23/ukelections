@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BarometerChart from "../../components/BarometerChart.astro";
+import { shortPartyLabel } from "../../lib/siteData";
+import bar from "../../../data/transparency/byelection-barometer.json";
+import { barometerSummary, monthName } from "../../../scripts/lib/byelection-barometer.mjs";
+
+const doc: any = bar;
+const parties: string[] = [...doc.parties_shown].sort((a, b) => a.localeCompare(b));
+const months: any[] = doc.months;
+const start = Math.round(doc.starting_share * 100);
+const min = doc.min_contests;
+const longDate = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const pts = (v: number | null) => (v === null ? "" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}`);
+const raw = (v: number | null) => (v === null ? "" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(2)}`);
+const summary = barometerSummary(doc);
+const verified = months.reduce((a, m) => a + m.hand_verified_declaration, 0);
+const qualifying = doc.entrants.filter((e: any) => e.qualifies);
+const notQualifying = doc.entrants.filter((e: any) => !e.qualifies);
+const ariaLabel = `Line chart: median change in council by-election vote share where each party stood before, by month from ${monthName(doc.window_from)} to ${monthName(months.at(-1).month)}, in percentage points for a party starting on ${start}%. Months with fewer than ${min} contests for a party are blank.`;
+const dataUrl = "https://github.com/tompickup23/ukelections/blob/main/data/transparency/byelection-barometer.json";
+---
+<BaseLayout
+  title="Council by-election barometer"
+  description="The median change in each party's share at council by-elections, month by month, measured against the same ward's previous result. Every party by the same rule, with the contest counts and the limits stated."
+  breadcrumbs={[{ name: "By-elections", href: "/by-elections/" }, { name: "Council results", href: "/by-elections/local/" }, { name: "Barometer", href: "/by-elections/barometer/" }]}
+>
+  <section class="page-hero">
+    <p class="eyebrow">Council by-elections · {monthName(doc.window_from)} to {longDate(doc.latest_contest_date)}</p>
+    <h1>By-election barometer</h1>
+    <p class="lede">{summary}</p>
+  </section>
+
+  <section class="section">
+    <h2>Change in share where the party stood before, by month</h2>
+    <BarometerChart months={months} parties={parties} startingShare={doc.starting_share} ariaLabel={ariaLabel} />
+    <p class="caption">
+      Each point is the median over that month's by-elections in which the party stood both in the ward's previous
+      ordinary election and in the by-election. Shown as the change in points for a party starting on {start}%: the
+      same change moves a party on 10% or 45% by a different number of points. A month with fewer than {min} such
+      contests for a party is left blank. {monthName(months.at(-1).month)} runs to the latest result held, on
+      {" "}{longDate(doc.latest_contest_date)}.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>The numbers behind the chart</h2>
+    <p>Change in points for a party starting on {start}%, with the number of contests counted for that party in brackets. A blank cell had fewer than {min}.</p>
+    <div class="table-scroll" role="region" aria-label="Barometer figures by month" tabindex="0">
+      <table class="seat-table barometer-table">
+        <thead>
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col">By-elections</th>
+            <th scope="col">Checked against declaration</th>
+            {parties.map((p) => <th scope="col">{shortPartyLabel(p)}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {[...months].reverse().map((m) => (
+            <tr>
+              <th scope="row">{monthName(m.month)}</th>
+              <td>{m.contests}</td>
+              <td>{m.hand_verified_declaration}</td>
+              {parties.map((p) => {
+                const c = m.parties[p];
+                return <td class="num">{c.median_points_at_start === null ? <span class="muted">({c.contests})</span> : <>{`${pts(c.median_points_at_start)} `}<span class="muted">({c.contests})</span></>}</td>;
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <details class="raw-figures">
+      <summary>The raw figures, as change in log-odds</summary>
+      <p>The barometer measures each party's change on the log-odds scale, the same scale the forecast model uses for its swing. These are the medians before conversion to points.</p>
+      <div class="table-scroll" role="region" aria-label="Raw barometer figures by month" tabindex="0">
+        <table class="seat-table barometer-table">
+          <thead><tr><th scope="col">Month</th>{parties.map((p) => <th scope="col">{shortPartyLabel(p)}</th>)}</tr></thead>
+          <tbody>
+            {[...months].reverse().map((m) => (
+              <tr><th scope="row">{monthName(m.month)}</th>{parties.map((p) => <td class="num">{raw(m.parties[p].median_logit_change)}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {doc.parties_not_shown.length > 0 && (
+      <>
+        <h3>Parties with no line</h3>
+        <ul>
+          {doc.parties_not_shown.map((p: any) => (
+            <li><strong>{p.party}</strong>{p.by_elections_stood_in_window > 0 ? ` (stood in ${p.by_elections_stood_in_window} of these by-elections)` : ""}: {p.reason}</li>
+          ))}
+          <li><strong>Independents and other candidates</strong>: each is a pool of many unrelated candidates and local groups, so a change where "the party" stood before has no single party behind it.</li>
+        </ul>
+      </>
+    )}
+  </section>
+
+  <section class="section">
+    <h2>When a party new to the by-election record stands</h2>
+    <p>
+      A party counts as new when its first appearance in the record, as a by-election candidate or in a previous ordinary
+      result, is in {monthName(doc.window_from)} or later, and it qualifies here once it has stood in at least {min} by-elections.
+      For each qualifying party, every other party on the barometer is compared in by-elections with it on the ballot and without
+      it, using only by-elections from its first appearance onwards so that both sides cover the same months.
+      {qualifying.length === 1 ? " The rule found one qualifying party." : qualifying.length === 0 ? " The rule found no qualifying party." : ` The rule found ${qualifying.length} qualifying parties, listed alphabetically.`}
+    </p>
+    {qualifying.map((e: any) => (
+      <div class="table-scroll" role="region" aria-label={`By-elections with and without ${e.party} on the ballot`} tabindex="0">
+        <table class="seat-table entrant-table">
+          <caption>
+            {e.party}: first in the record on {longDate(e.first_seen)}; stood in {e.by_elections_stood} of the {e.by_elections_since_first_seen} by-elections since.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Party that stood before</th>
+              <th scope="col">With {e.party} on the ballot</th>
+              <th scope="col">Without</th>
+            </tr>
+          </thead>
+          <tbody>
+            {e.comparisons.map((c: any) => (
+              <tr>
+                <th scope="row">{shortPartyLabel(c.party)}</th>
+                <td class="num">{c.with_entrant.median_points_at_start === null ? "" : `${pts(c.with_entrant.median_points_at_start)} `}<span class="muted">({c.with_entrant.contests})</span></td>
+                <td class="num">{c.without_entrant.median_points_at_start === null ? "" : `${pts(c.without_entrant.median_points_at_start)} `}<span class="muted">({c.without_entrant.contests})</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+    {notQualifying.length > 0 && (
+      <p class="caption">New to the record but in fewer than {min} by-elections so far: {notQualifying.map((e: any) => `${e.party} (${e.by_elections_stood})`).join(", ")}.</p>
+    )}
+    <p class="caption">
+      Points of change for a party starting on {start}%, contests in brackets, blank below {min}. This describes the two groups
+      of wards; it does not show that the new party caused the difference. A new party chooses where to stand, and the wards
+      it picks can differ from the rest in ways these figures do not capture.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>How this is worked out, and its limits</h2>
+    <ul>
+      <li><strong>Which contests count.</strong> A council by-election for which the record also holds the same ward's previous ordinary result. Scottish council by-elections use the single transferable vote and are not published with full counts, so they are left out.</li>
+      <li><strong>Which parties count.</strong> A party counts in a contest only if it had 2% or more of the vote both last time and in the by-election. That is the line the forecast model uses for "stood".</li>
+      <li><strong>The measure.</strong> The median, over the month's counted contests, of the change in the party's share on the log-odds scale, shown as points for a party starting on {start}%. The median is used so that one ward with a strong local factor cannot move the month far.</li>
+      <li><strong>The minimum.</strong> {min} contests per party per month, the same for every party. It is the forecast model's own minimum for giving a party a swing of its own, and it was fixed before any month was computed. Blank months are never filled in.</li>
+      <li><strong>The window.</strong> Months from {monthName(doc.window_from)}, the month of the general election.</li>
+      <li><strong>Not a poll.</strong> Turnout at council by-elections is low, and each result reflects local candidates and campaigns as well as national mood.</li>
+      <li><strong>Not a sample of the country.</strong> By-elections happen where a seat falls vacant. The wards that hold them are not chosen to represent Britain, and the mix of councils changes from month to month.</li>
+      <li><strong>Small months.</strong> Some months have only a handful of by-elections, which is why months below the minimum are blank rather than drawn.</li>
+      <li><strong>Descriptive only.</strong> Nothing on this page changes a forecast. The model reads the same records through its own rolling window.</li>
+    </ul>
+    <p>
+      Sources: council by-election candidates and results from Democracy Club, with {verified} of the {doc.contests_in_window} results
+      checked against the returning officer's own declaration, as the record notes for each contest; previous ordinary results from
+      Democracy Club and the Local Elections Archive Project. Data: <a href={dataUrl}>byelection-barometer.json</a>, generated
+      on {longDate(doc.generated_at)} by <code>scripts/build-byelection-barometer.mjs</code>.
+    </p>
+    <p>
+      <a href="/by-elections/this-week/">This week's by-elections</a> · <a href="/by-elections/post-mortem/">How our by-election forecasts did</a> · <a href="/by-elections/scoreboard/">Forecaster scoreboard</a> · <a href="/data-quality/">Accuracy record</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .barometer-table td.num,
+  .entrant-table td.num {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .entrant-table caption {
+    text-align: left;
+    padding-bottom: var(--space-xs);
+    color: var(--ink-soft);
+  }
+  .raw-figures {
+    margin-top: var(--space-md);
+  }
+  .raw-figures summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+</style>
