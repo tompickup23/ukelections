@@ -17,9 +17,11 @@ import {
 } from "../scripts/lib/byelection-scoreboard.mjs";
 import {
   RESEARCH,
+  RESEARCH_LIVE,
   SITE,
   addOutsideEntry,
   importResearch,
+  importResearchLive,
   loadContests,
   loadLedger,
   logSiteForecasts,
@@ -84,7 +86,7 @@ describe("the ledger", () => {
   });
 
   it("holds no outside forecaster yet", () => {
-    expect(Object.keys(ledger.forecasters).sort()).toEqual([SITE, RESEARCH].sort());
+    expect(Object.keys(ledger.forecasters).sort()).toEqual([SITE, RESEARCH, RESEARCH_LIVE].sort());
     expect(ledger.entries.filter((e) => ["hand_recorded", "supplied_by_forecaster"].includes(e.capture_method))).toEqual([]);
   });
 
@@ -240,6 +242,127 @@ describe("logging", () => {
     const doc = { by_ballot: { [d.contest.ballot_paper_id]: { model_shares: { Labour: 0.6, Others: 0.4 } } } };
     const res = importResearch(empty, doc, [d], { capturedAt: "2026-12-20", source: "x.json" });
     expect(res.ledger.entries[0]).toMatchObject({ status: "retrospective", capture_method: "research_export", called_leader: "Labour" });
+  });
+});
+
+describe("importing the live research model", () => {
+  const empty = { forecasters: ledger.forecasters, entries: [] };
+  const d = toyContest();
+  const ballot = d.contest.ballot_paper_id;
+  const record = (over = {}) => ({
+    ballot_paper_id: ballot,
+    polling_day: d.contest.polling_day,
+    status: "forecast",
+    forecaster: "uk-elections-research-model",
+    captured_at: "2026-12-04T21:00:00Z",
+    model_version: "ward-model-2026-11/C2",
+    code_commit: "abc123",
+    shares: { "Reform UK": 0.4, Labour: 0.35, Conservative: 0.25, Others: 0 },
+    called_leader: "Reform UK",
+    win_chance: { "Reform UK": 0.61, Labour: 0.3, Conservative: 0.09 },
+    inputs: { polls: { file: "p.json", latest_poll_date: "2026-11-30" }, contest_files: { commit: "def456" } },
+    ...over,
+  });
+  const doc = (...recs) => ({ records: Object.fromEntries(recs.map((r, i) => [r.ballot_paper_id ?? `x${i}`, r])) });
+  const run = (l, docu, now, cs = [d]) => importResearchLive(l, docu, cs, { source: "live.json", now: new Date(now) });
+
+  it("adds one entry per forecast under its own forecaster, with the file's capture time", () => {
+    const res = run(empty, doc(record()), "2026-12-05T10:00:00Z");
+    expect(res.added).toEqual([ballot]);
+    expect(res.ledger.entries[0]).toMatchObject({
+      forecaster: RESEARCH_LIVE,
+      captured_at: "2026-12-04T21:00:00Z",
+      status: "live",
+      called_leader: "Reform UK",
+      win_chance: 0.61,
+      capture_method: "research_live",
+      shares: { "Reform UK": 0.4, Labour: 0.35, Conservative: 0.25 },
+    });
+    expect(res.ledger.entries[0].research).toMatchObject({ model_version: "ward-model-2026-11/C2", code_commit: "abc123", polls_latest_poll_date: "2026-11-30" });
+    expect(validateLedger(res.ledger)).toEqual([]);
+  });
+
+  it("applies the one live rule unchanged: a capture after polls opened is retrospective", () => {
+    const res = run(empty, doc(record({ captured_at: "2026-12-10T07:00:00Z" })), "2026-12-11T10:00:00Z");
+    expect(res.ledger.entries[0].status).toBe("retrospective");
+    expect(validateLedger(res.ledger)).toEqual([]);
+  });
+
+  it("refuses a record whose contest is not in the contest files, or whose polling day differs", () => {
+    const res = run(empty, doc(record({ ballot_paper_id: "local.nowhere.by.2026-12-10" }), record({ polling_day: "2026-12-17" })), "2026-12-05T10:00:00Z");
+    expect(res.ledger.entries).toEqual([]);
+    expect(res.refused.map((r) => r.reason)).toEqual(["no contest file for this ballot", "polling day 2026-12-17 but the contest file says 2026-12-10"]);
+  });
+
+  it("refuses a capture time without a zone, and reads no skipped record", () => {
+    const res = run(empty, doc(record({ captured_at: "2026-12-04" })), "2026-12-05T10:00:00Z");
+    expect(res.refused).toHaveLength(1);
+    const skipped = run(empty, doc({ ballot_paper_id: ballot, status: "skipped", reason: "outside_england" }), "2026-12-05T10:00:00Z");
+    expect(skipped.ledger.entries).toEqual([]);
+    expect(skipped.skipped_records).toBe(1);
+  });
+
+  it("takes a later capture before polls open, never an earlier one", () => {
+    const first = run(empty, doc(record()), "2026-12-05T10:00:00Z").ledger;
+    const later = run(first, doc(record({ captured_at: "2026-12-09T20:00:00Z", called_leader: "Labour" })), "2026-12-09T21:00:00Z");
+    expect(later.replaced).toEqual([ballot]);
+    expect(later.ledger.entries[0]).toMatchObject({ called_leader: "Labour", captured_at: "2026-12-09T20:00:00Z" });
+    const stale = run(later.ledger, doc(record()), "2026-12-09T22:00:00Z");
+    expect(stale.replaced).toEqual([]);
+    expect(stale.ledger.entries[0].called_leader).toBe("Labour");
+  });
+
+  it("never alters an entry once polls have opened", () => {
+    const first = run(empty, doc(record()), "2026-12-05T10:00:00Z").ledger;
+    const changed = run(first, doc(record({ captured_at: "2026-12-10T06:30:00Z", called_leader: "Labour" })), "2026-12-10T07:00:00Z");
+    expect(changed.refused).toEqual([{ ballot, reason: "polls have opened; the entry is frozen" }]);
+    expect(changed.ledger.entries[0]).toEqual(first.entries[0]);
+    const same = run(first, doc(record()), "2026-12-11T10:00:00Z");
+    expect(same.unchanged).toEqual([ballot]);
+    expect(same.refused).toEqual([]);
+  });
+
+  it("never touches the back-test entries or any other forecaster's", () => {
+    const real = contests.find((x) => x.contest.ballot_paper_id === ledger.entries.find((e) => e.forecaster === RESEARCH).ballot_paper_id);
+    const res = importResearchLive(
+      ledger,
+      doc(record({ ballot_paper_id: real.contest.ballot_paper_id, polling_day: real.contest.polling_day, captured_at: "2020-01-01T00:00:00Z" })),
+      contests,
+      { source: "live.json", now: new Date("2026-12-05T10:00:00Z") },
+    );
+    const others = (l) => l.entries.filter((e) => e.forecaster !== RESEARCH_LIVE);
+    expect(others(res.ledger)).toEqual(others(ledger));
+  });
+
+  it("is refused by --add, and its capture method needs a research forecaster", () => {
+    expect(() => addOutsideEntry(empty, { forecaster: RESEARCH_LIVE, contest: d.slug, party: "Labour", captured_at: "2026-12-09", source: "x" }, [d])).toThrow();
+    const entry = run(empty, doc(record()), "2026-12-05T10:00:00Z").ledger.entries[0];
+    const bad = { forecasters: { ...ledger.forecasters, [RESEARCH_LIVE]: { ...ledger.forecasters[RESEARCH_LIVE], research: false } }, entries: [entry] };
+    expect(validateLedger(bad).join(" ")).toContain("research_live entries belong to a forecaster marked research");
+  });
+
+  it("holds exactly the forecast records of the committed live file, with their own capture times", () => {
+    const file = ledger.forecasters[RESEARCH_LIVE].export;
+    const live = JSON.parse(readFileSync(path.join(ROOT, file), "utf8"));
+    const forecasts = Object.values(live.records).filter((r) => r.status === "forecast");
+    const mine = ledger.entries.filter((e) => e.forecaster === RESEARCH_LIVE);
+    expect(mine.map((e) => e.ballot_paper_id).sort()).toEqual(forecasts.map((r) => r.ballot_paper_id).sort());
+    for (const e of mine) {
+      const r = live.records[e.ballot_paper_id];
+      expect(e.captured_at).toBe(r.captured_at);
+      expect(e.called_leader).toBe(poolParty(r.called_leader));
+      expect(e.status).toBe(entryStatus(r.captured_at, r.polling_day));
+    }
+  });
+
+  it("is named in the summary as research, with its scored count said plainly", () => {
+    const board = buildScoreboard(ledger, contests);
+    const block = board.live.find((b) => b.forecaster === RESEARCH_LIVE);
+    expect(block.research).toBe(true);
+    const text = scoreboardSummary(board).join(" ");
+    expect(text).toContain(`${block.name}, a research model and not this site's published forecast,`);
+    if (block.score.contests === 0) expect(text).toMatch(/has no result yet|none of them has a result yet/);
+    expect(text).not.toMatch(/[–—]| - /);
   });
 });
 

@@ -24,7 +24,9 @@ const brier = (b: any) => (b ? `${b.mean.toFixed(3)} (${b.n})` : "none stated");
 const shareErr = (s: any) => (s ? `${s.mae_pp.toFixed(1)} points (${s.n})` : "no shares");
 
 // The live chart: each live forecaster, then the benchmarks on that forecaster's contests.
-const liveBlock = board.live.find((b: any) => b.score.contests > 0) ?? null;
+const liveBlock = board.live.find((b: any) => b.score.contests > 0 && !b.research) ?? null;
+const researchLive = board.live.filter((b: any) => b.research);
+const RESEARCH_NOTE = "research model, not this site's published forecast";
 const chartRows = liveBlock
   ? [
       { label: liveBlock.name, called: liveBlock.score.called, contests: liveBlock.score.contests, kind: "forecaster" as const },
@@ -47,6 +49,7 @@ const methodLabel: Record<string, string> = {
   site_snapshot: "copied from the published page",
   site_rebuild: "contest file rebuilt after polling day",
   research_export: "research model run after the polls",
+  research_live: "research model run before polls opened",
   hand_recorded: "recorded by hand from a public source",
   supplied_by_forecaster: "supplied by the forecaster",
 };
@@ -131,6 +134,9 @@ const structuredData = [
     <p>
       Every entry here was captured before polls opened. Forecasters are listed alphabetically; each is followed by the two
       benchmarks, scored on that forecaster's own contests.
+      {researchLive.map((b: any) => (
+        <> {b.name} is a research model, not this site's published forecast: it is run each week on the coming council by-elections in England, and each forecast is pushed to GitHub before polls open and frozen once they do. {b.score.contests === 0 ? `It has ${b.pending} ${b.pending === 1 ? "forecast" : "forecasts"} waiting and none scored yet, so it has no record to compare until results arrive.` : `${b.score.contests} of its forecasts have a result so far.`}</>
+      ))}
     </p>
     {board.live.length === 0 ? (
       <p>The live table is empty.</p>
@@ -144,14 +150,14 @@ const structuredData = [
             {board.live.map((b: any) => (
               <>
                 <tr class="row-forecaster">
-                  <td class="row-label">{b.name}</td>
+                  <td class="row-label">{b.name}{b.research && <span class="cell-note">{RESEARCH_NOTE}</span>}</td>
                   <td>{b.score.contests}</td>
                   <td>{countOf(b.score.called, b.score.contests)}</td>
-                  <td>{brier(b.score.brier)}</td>
-                  <td>{shareErr(b.score.share_error)}</td>
+                  <td>{b.score.contests ? brier(b.score.brier) : "no result yet"}</td>
+                  <td>{b.score.contests ? shareErr(b.score.share_error) : "no result yet"}</td>
                   <td>{b.pending}</td>
                 </tr>
-                {b.benchmarks.map((x: any) => (
+                {b.score.contests > 0 && b.benchmarks.map((x: any) => (
                   <tr class="row-benchmark">
                     <td class="row-label"><span class="bench-tag">Benchmark</span> {x.name}</td>
                     <td>{x.score.contests}{x.left_out ? ` (${x.left_out} left out)` : ""}</td>
@@ -188,7 +194,7 @@ const structuredData = [
           {board.retrospective.map((b: any) => (
             <>
               <tr class="row-forecaster">
-                <td class="row-label">{b.name}{b.forecaster === "uk-elections-research-model" && <span class="cell-note">back-test, never published before a poll</span>}</td>
+                <td class="row-label">{b.name}{b.forecaster === "uk-elections-research-model" && <span class="cell-note">back-test, never published before a poll</span>}{b.research && b.forecaster !== "uk-elections-research-model" && <span class="cell-note">{RESEARCH_NOTE}</span>}</td>
                 <td>{b.score.contests}</td>
                 <td>{countOf(b.score.called, b.score.contests)}</td>
                 <td>{brier(b.score.brier)}</td>
@@ -238,7 +244,13 @@ const structuredData = [
               })),
             ]}
             label={`Head to head: ${h.a.name} and ${h.b.name}`}
-            caption="A comparison of a back-test with forecasts that were partly live. It shows how the research model would have done, not how it did."
+            caption={
+              [h.a.forecaster, h.b.forecaster].includes("uk-elections-research-model")
+                ? "A comparison of a back-test with forecasts that were partly live. It shows how the research model would have done, not how it did."
+                : h.a.mix.retrospective + h.b.mix.retrospective > 0
+                ? `Not every entry here was made before polls opened: ${h.a.name} has ${h.a.mix.retrospective} retrospective and ${h.b.name} ${h.b.mix.retrospective}. A back-test shows how a model would have done, not how it did.`
+                : "Every entry compared here was captured before polls opened."
+            }
           />
         </>
       ))}
@@ -308,6 +320,7 @@ const structuredData = [
       Ledger: <a href="https://github.com/tompickup23/ukelections/blob/main/data/scoreboard/byelection-forecasts.json">byelection-forecasts.json</a>,
       {c.entries} entries ({c.live_entries} live, {c.retrospective_entries} retrospective). Scoring:
       <code>scripts/lib/byelection-scoreboard.mjs</code>. Logging: <code>scripts/scoreboard-log.mjs</code>.
+      {researchLive.length > 0 && <>Live research forecasts as the research runner wrote them: <a href="https://github.com/tompickup23/ukelections/blob/main/data/scoreboard/research-ward-model-live.json">research-ward-model-live.json</a>.</>}
       Related: <a href="/by-elections/post-mortem/">how our published by-election forecasts did, month by month</a>,
       <a href="/by-elections/this-week/">council by-election results and forecasts this week</a>,
       <a href="/by-elections/barometer/">the by-election barometer, each party's median change month by month</a>, and

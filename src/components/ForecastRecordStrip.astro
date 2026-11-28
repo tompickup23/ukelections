@@ -33,7 +33,9 @@ const showCalls = Boolean(here?.record.scorable && here.calls.length);
 const leaderLabel = here?.record.leader ? laneLabel(here.record.leader) : "";
 const pollStillToCome = contest ? new Date().toISOString().slice(0, 10) <= contest.contest.polling_day : false;
 
-const live = board.live.filter((b: any) => b.score.contests > 0);
+const live = board.live.filter((b: any) => b.score.contests > 0 && !b.research);
+// Research models get their own rows, labelled, scored or not: never folded into this site's record.
+const researchLive = board.live.filter((b: any) => b.research);
 const retro = board.retrospective.filter((b: any) => b.score.contests > 0);
 ---
 
@@ -46,6 +48,7 @@ const retro = board.retrospective.filter((b: any) => b.score.contests > 0);
           <li>
             <span class="record-name">{x.name}</span>
             <span class={`record-chip record-chip--${x.status}`}>{x.status === "live" ? "live" : x.basis === "back_test" ? "back-test" : "retrospective"}</span>
+            {x.research && <span class="record-chip record-chip--research">research</span>}
             had {laneLabel(x.called_leader)} ahead:
             <strong class={x.right ? "record-right" : "record-wrong"}>{x.right ? "right" : "wrong"}</strong>
           </li>
@@ -86,6 +89,19 @@ const retro = board.retrospective.filter((b: any) => b.score.contests > 0);
             <span class="record-name">{x.name}</span>
             <span class="record-chip record-chip--benchmark">benchmark</span>
             <strong>{countOf(x.score.called, x.score.contests)}</strong> on the same contests
+          </li>
+        ))}
+        {researchLive.map((b: any) => (
+          <li class="record-research">
+            <span class="record-name">{b.short_name ?? b.name}</span>
+            <span class="record-chip record-chip--live">live</span>
+            <span class="record-chip record-chip--research">research</span>
+            {b.score.contests > 0 ? (
+              <>called the leading party in <strong>{countOf(b.score.called, b.score.contests)}</strong>{b.pending > 0 && `, ${b.pending} waiting`}</>
+            ) : (
+              <>{`${b.pending} ${b.pending === 1 ? "forecast" : "forecasts"} waiting for a result, none scored yet `}</>
+            )}
+            <span class="record-na">(a research model, not this site's published forecast)</span>
           </li>
         ))}
         {retro.length > 0 && (
@@ -150,6 +166,10 @@ const retro = board.retrospective.filter((b: any) => b.score.contests > 0);
   }
   .record-chip--benchmark {
     border-style: dashed;
+  }
+  .record-chip--research {
+    border-style: dotted;
+    color: var(--muted);
   }
   .record-right {
     color: var(--status-good-text);
