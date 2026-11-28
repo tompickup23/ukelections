@@ -119,6 +119,16 @@ the research caches:
    `npm test`, and commit both files. A merge after polling day still counts
    as live, because the entry carries the runner's capture time and the
    research branch's push shows it; it cannot change a frozen entry.
+3. In the same site branch, refresh the forecast block the contest pages show:
+   `node scripts/export-ward-model-byelections.mjs` reads
+   `research/ward-model-2026-11/live/live_forecasts.json` (pass
+   `--from=<file>` for the copy above) and writes
+   `data/forecasts/ward-model-byelections.json`. It refuses, writing nothing,
+   if any record was captured after its polls opened or came from uncommitted
+   code, and a rerun on the same input changes no byte. `npm test` fails if the
+   tracked file is out of date with the runner's file. Which forecast leads a
+   contest page is `LEAD_BYELECTION_FORECAST` in
+   `src/lib/wardModelForecasts.ts`, and it stays `"site"` until Tom decides.
 
 Results score themselves: once a contest file carries a declared result the
 entry is scored on the next build, with nothing to run.

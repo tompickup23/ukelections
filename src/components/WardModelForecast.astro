@@ -1,0 +1,132 @@
+---
+/**
+ * WardModelForecast.astro. The research ward model's live forecast for one
+ * council by-election, shown beside this site's own projection.
+ *
+ * Reads one record from data/forecasts/ward-model-byelections.json (see
+ * src/lib/wardModelForecasts.ts). Every figure on it comes from that record:
+ * shares, win chances, the model version, the commit and the capture time the
+ * runner wrote before polls opened. Nothing here is computed at build time
+ * except formatting.
+ */
+import PartyBars from "./PartyBars.astro";
+import { shortPartyLabel } from "../lib/siteData";
+import { partyProse } from "../lib/pageSummaries";
+import { captureLabel, forecastsDisagreeSentence, type WardModelRecord } from "../lib/wardModelForecasts";
+
+interface Props {
+  ward: WardModelRecord;
+  siteForecast?: any;
+}
+const { ward, siteForecast = null } = Astro.props;
+
+const label = (lane: string) => (lane === "Others" ? "Others" : shortPartyLabel(lane));
+// One denominator for every chance on the page, as the site's own block uses.
+function chanceIn20(p: number): string {
+  if (p < 0.025) return "under 1 in 20";
+  if (p > 0.975) return "over 19 in 20";
+  return `${Math.round(p * 20)} in 20`;
+}
+// The page's order rule: largest share first, parties below 0.05% left out.
+const rows = Object.entries(ward.shares)
+  .filter(([, v]) => v > 0.0005)
+  .sort((a, b) => b[1] - a[1])
+  .map(([party, pct]) => ({
+    party,
+    pct,
+    annotation: typeof ward.win_chance[party] === "number" ? chanceIn20(ward.win_chance[party]) : null,
+  }));
+
+// "A", "A and B", "A, B and C".
+const listProse = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+const leader = ward.called_leader;
+const leaderShare = (ward.shares[leader] * 100).toFixed(1);
+const byChance = Object.entries(ward.win_chance).sort((a, b) => b[1] - a[1]);
+const topChance = byChance[0];
+// Only said when the lane with the best win chance is not the share leader,
+// which the runner's fixed spreads can produce in a close contest.
+const chanceLeaderDiffers = topChance && topChance[0] !== leader;
+const disagree = forecastsDisagreeSentence(siteForecast, ward);
+const short = (sha: unknown) => (typeof sha === "string" ? sha.slice(0, 7) : null);
+const prettyDate = (iso: unknown) =>
+  typeof iso === "string" && iso
+    ? new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+    : null;
+const commitUrl = `https://github.com/tompickup23/ukelections/commit/${ward.code_commit}`;
+---
+
+<section class="card ward-model" id="ward-model" aria-labelledby="ward-model-heading">
+  <p class="ward-model-eyebrow"><span class="ward-model-chip">Research model</span> Not this site's published forecast</p>
+  <h2 id="ward-model-heading">Ward model: {label(leader)} ahead on vote share</h2>
+  <p class="lede">
+    {`The research ward model puts ${label(leader)} first on ${leaderShare}% of the vote, and gives it a win chance of about ${chanceIn20(ward.win_chance[leader] ?? 0)}.`}
+    {chanceLeaderDiffers && ` Its best win chance is ${label(topChance[0])}'s, about ${chanceIn20(topChance[1])}, so the two lanes are close.`}
+  </p>
+  {disagree && <p class="ward-model-disagree">{disagree}</p>}
+  <PartyBars rows={rows} large={true} />
+  {ward.others_parties.length > 0 && (
+    <p class="ward-model-note">Others pools {listProse(ward.others_parties.map((p) => partyProse(p)))} on this ballot.</p>
+  )}
+  <p class="ward-model-note">
+    The figure beside each bar is the model's win chance. It comes from a fixed spread for each lane and has not been calibrated against results, so read it as rough.
+  </p>
+  <dl class="ward-model-grid">
+    <div><dt>Model version</dt><dd>{ward.model_version}</dd></div>
+    <div><dt>Forecast written</dt><dd>{captureLabel(ward.captured_at)}</dd></div>
+    {ward.inputs.polls_latest_poll_date && <div><dt>Polls up to</dt><dd>{prettyDate(ward.inputs.polls_latest_poll_date)}{ward.inputs.polls_count ? ` (${ward.inputs.polls_count} polls)` : ""}</dd></div>}
+    <div><dt>Code</dt><dd><a href={commitUrl} rel="noopener">{short(ward.code_commit)}</a></dd></div>
+    {ward.inputs.contest_files_commit && <div><dt>Contest data</dt><dd>commit {short(ward.inputs.contest_files_commit)}</dd></div>}
+  </dl>
+  <p class="ward-model-note">
+    Written before polls opened and frozen once they open; it will be scored on the <a href="/by-elections/scoreboard/">by-election scoreboard</a> when the result is declared.
+    What the model is, what it covers and its record so far: <a href="/methodology/local-by-elections/#ward-model">the ward model method</a>.
+  </p>
+</section>
+
+<style is:inline>
+  .ward-model {
+    margin-block: var(--space-2xl);
+    border-left: 4px solid var(--border);
+    padding-left: var(--space-md);
+  }
+  .ward-model-eyebrow {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--text-small);
+    color: var(--muted);
+  }
+  .ward-model-chip {
+    display: inline-block;
+    margin-right: var(--space-2xs);
+    padding: 0 var(--space-2xs);
+    border: 1px dotted var(--border);
+    border-radius: var(--space-2xs);
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+  .ward-model-disagree {
+    border-left: 3px solid var(--accent);
+    padding-left: var(--space-sm);
+  }
+  .ward-model-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--space-md);
+    margin-block: var(--space-md);
+  }
+  .ward-model-grid dt {
+    font-size: var(--text-small);
+    color: var(--muted);
+  }
+  .ward-model-grid dd {
+    margin: 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .ward-model-note {
+    color: var(--muted);
+    font-size: var(--text-small);
+  }
+</style>
