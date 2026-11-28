@@ -1,0 +1,73 @@
+{
+ "wards_by_council_type_and_route": {
+  "all unverified": {
+   "none": 1170
+  },
+  "all verified": {
+   "direct": 2929,
+   "bridge": 329,
+   "none": 438
+  },
+  "district": {
+   "direct": 1929,
+   "none": 24,
+   "bridge": 4
+  },
+  "metropolitan borough": {
+   "bridge": 306,
+   "direct": 358,
+   "none": 22
+  },
+  "unitary": {
+   "direct": 642,
+   "none": 392,
+   "bridge": 19
+  },
+  "unverified councils": {
+   "none": 1170
+  }
+ },
+ "seats_up_by_council_type_and_route": {
+  "district": {
+   "direct": 3209,
+   "blank_seats_up_wards": 48,
+   "none": 40
+  },
+  "metropolitan borough": {
+   "bridge": 305,
+   "direct": 673,
+   "blank_seats_up_wards": 1,
+   "none": 66
+  },
+  "unitary": {
+   "direct": 1215,
+   "none": 556,
+   "blank_seats_up_wards": 4,
+   "bridge": 19
+  },
+  "unverified councils": {
+   "none": 1824,
+   "blank_seats_up_wards": 20
+  }
+ },
+ "no_forecast_reasons": {
+  "new_ward_no_ons_code": 438,
+  "unverified_council": 1170
+ },
+ "reason_text": {
+  "unverified_council": "The council's 2027 election is not verified in data/identity/councils-2027.json.",
+  "new_ward_no_ons_code": "A ward drawn by a 2027 Electoral Changes Order: no ONS code, and its boundary file cannot be redistributed, so no features.",
+  "code_not_in_boundary_file": "The ward's code is in neither the feature file nor data/geography/wd26-bgc.geojson.",
+  "bridge_no_parent_features": "None of the 2025 wards this ward was cut from is in the feature file."
+ },
+ "council_types": {
+  "district": 94,
+  "metropolitan borough": 29,
+  "unitary": 35
+ },
+ "council_type_rule": "ONS district code prefix (E06 unitary, E07 district, E08 metropolitan borough, E09 London borough), from wd26-bgc LAD26CD or lad24-bgc by council name",
+ "wards_file": {
+  "file": "data/identity/wards-2027.json",
+  "sha256": "d1fd913b0fc3dd7b7fd75c5dbf51d57fdeef9ec0594a9a245359af105f905e0b"
+ }
+}
