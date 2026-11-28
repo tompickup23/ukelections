@@ -147,6 +147,29 @@ def load_contests_at(commit):
     return contests
 
 
+def _slugkey(s: str) -> str:
+    return "-".join(t for t in s.split("-") if t != "and")
+
+
+def may26_ballot(w: dict, may: dict, baselines: dict) -> str | None:
+    """The ward's own 7 May 2026 ballot id: the slug as listed, else the baseline file's
+    ballot (wards-2027-baselines.json), else the slug without "and" when unique in the council."""
+    bid = f"local.{w['council_slug']}.{w['ward_slug']}.{MAY26}"
+    if bid in may:
+        return bid
+    b = ((baselines.get(w["id"]) or {}).get("baseline") or {}).get("ballot_paper_id") or ""
+    if b.endswith(MAY26) and b in may:
+        return b
+    pre = f"local.{w['council_slug']}."
+    hits = [k for k in may if k.startswith(pre) and k.endswith("." + MAY26) and ".by." not in k
+            and _slugkey(k[len(pre):-len(MAY26) - 1]) == _slugkey(w["ward_slug"])]
+    return hits[0] if len(hits) == 1 else None
+
+
+def load_baselines() -> dict:
+    return {b["id"]: b for b in read_json(REPO / "data/identity/wards-2027-baselines.json")["wards"]}
+
+
 def may26_slate(bid, may):
     b = may.get(bid)
     if not b or not b.get("candidates"):
@@ -169,6 +192,7 @@ def build(wards, route, bridge, polls, contests):
     base = base[base["set"] != "byelection"].copy()
     universe = {u["gss"]: u for u in pd.read_csv(UNIVERSE, dtype=str, keep_default_na=False).to_dict("records")}
     may = read_json(MAY26_ACTUALS)["by_ballot"]
+    baselines = load_baselines()
 
     rows = []
     for d in contests:  # rebuilt post-May by-elections, training only (LIVE_SPEC.md tests)
@@ -223,7 +247,7 @@ def build(wards, route, bridge, polls, contests):
             row["d_total_residents"] = b["population"]
             top = max(b["parents"], key=b["parents"].get)
             row["region"] = universe.get(top, {}).get("region_name")
-            prev = may26_slate(f"local.{w['council_slug']}.{w['ward_slug']}.{MAY26}", may)
+            prev = may26_slate(may26_ballot(w, may, baselines), may)
             info["may26"] = prev
             oth = bool(prev and prev[1]["Others"])
             info["last_scheduled"] = MAY26 if prev else None
