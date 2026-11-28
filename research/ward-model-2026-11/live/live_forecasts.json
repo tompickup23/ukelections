@@ -1,0 +1,1086 @@
+{
+ "about": "Research only. The ward model's forecasts for upcoming council by-elections, written before polls open and frozen once they do (07:00 UK time on polling day). Specification: research/ward-model-2026-11/LIVE_SPEC.md. Shares are full slate shares over six lanes; parties outside the five main lanes are pooled as Others. Win chances come from fixed lane spreads and are not calibrated.",
+ "forecaster": "uk-elections-research-model",
+ "model_version": "ward-model-2026-11/C2",
+ "last_run": {
+  "captured_at": "2026-11-27T23:19:51Z",
+  "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+  "code_dirty": false,
+  "run_date": "2026-11-27",
+  "anchor": {
+   "Reform UK": 0.2175,
+   "Labour": 0.2858,
+   "Conservative": 0.2233,
+   "Liberal Democrats": 0.095,
+   "Green Party": 0.0875,
+   "Others": 0.0908
+  },
+  "training_rows_by_lane": {
+   "Reform UK": 5269,
+   "Labour": 16814,
+   "Conservative": 17159,
+   "Liberal Democrats": 13940,
+   "Green Party": 12550,
+   "Others": 7661
+  },
+  "training_contests": 17420,
+  "rebuilt_byelections_in_training": 107,
+  "forecast": [
+   "local.bolton.westhoughton-south.by.2026-12-10",
+   "local.gosport.hardway.by.2026-12-03",
+   "local.leeds.cross-gates-whinmoor.by.2026-12-10",
+   "local.oldham.royton-north.by.2026-12-03"
+  ],
+  "skipped": {
+   "local.amber-valley.alport-south-west-parishes.by.2026-12-17": "no_published_candidate_list",
+   "local.dacorum.tring-central.by.2026-12-10": "no_published_candidate_list",
+   "local.dumfries-and-galloway.annandale-east-and-eskdale.by.2026-12-10": "outside_england",
+   "local.east-ayrshire.cumnock-and-new-cumnock.by.2026-12-10": "outside_england",
+   "local.east-surrey.dorking-rural.by.2026-12-10": "no_ward_code_in_feature_file",
+   "local.mid-sussex.haywards-heath-bentswood-heath.by.2026-12-10": "no_published_candidate_list",
+   "local.north-hertfordshire.royston-palace.by.2026-12-17": "no_published_candidate_list",
+   "local.pembrokeshire.pembroke-dock-central.by.2026-12-08": "outside_england",
+   "local.redcar-and-cleveland.hutton.by.2026-12-10": "no_published_candidate_list",
+   "local.rhondda-cynon-taf.pentre.by.2026-12-15": "outside_england",
+   "local.sefton.netherton-north.by.2026-12-10": "no_ward_code_in_feature_file",
+   "local.southend-on-sea.leigh.by.2026-12-10": "no_published_candidate_list"
+  },
+  "inputs": {
+   "contest_files": {
+    "git_ref": "origin/main",
+    "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+   },
+   "polls": {
+    "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+    "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+    "generated_at": "2026-11-27T04:30:03.967Z",
+    "latest_poll_date": "2026-11-23",
+    "polls": 284,
+    "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+    "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+   },
+   "ward_features": {
+    "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+    "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+   },
+   "base_dataset": {
+    "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+    "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+   },
+   "fit_meta": {
+    "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+    "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+   }
+  }
+ },
+ "records": {
+  "local.gosport.hardway.by.2026-12-03": {
+   "ballot_paper_id": "local.gosport.hardway.by.2026-12-03",
+   "contest": "gosport-hardway-2026-12-03",
+   "polling_day": "2026-12-03",
+   "polls_open_at": "2026-12-03T07:00:00Z",
+   "council": "Gosport",
+   "ward": "Hardway",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/gosport-hardway-2026-12-03.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.444Z",
+   "status": "forecast",
+   "shares": {
+    "Reform UK": 0.3166,
+    "Labour": 0.086,
+    "Conservative": 0.2102,
+    "Liberal Democrats": 0.2801,
+    "Green Party": 0.0629,
+    "Others": 0.0442
+   },
+   "called_leader": "Reform UK",
+   "win_chance": {
+    "Reform UK": 0.4566,
+    "Labour": 0.0024,
+    "Conservative": 0.1265,
+    "Liberal Democrats": 0.382,
+    "Green Party": 0.0037,
+    "Others": 0.0288
+   },
+   "standing_lanes": [
+    "Reform UK",
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Green Party",
+    "Others"
+   ],
+   "candidates": [
+    {
+     "party": "Liberal Democrats",
+     "lane": "Liberal Democrats"
+    },
+    {
+     "party": "Conservative",
+     "lane": "Conservative"
+    },
+    {
+     "party": "Reform UK",
+     "lane": "Reform UK"
+    },
+    {
+     "party": "Labour",
+     "lane": "Labour"
+    },
+    {
+     "party": "Green Party",
+     "lane": "Green Party"
+    },
+    {
+     "party": "Restore Britain",
+     "lane": "Others"
+    }
+   ],
+   "anchor": {
+    "Reform UK": 0.2175,
+    "Labour": 0.2858,
+    "Conservative": 0.2233,
+    "Liberal Democrats": 0.095,
+    "Green Party": 0.0875,
+    "Others": 0.0908
+   },
+   "ward_has_earlier_contest": true,
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   },
+   "reason": null
+  },
+  "local.oldham.royton-north.by.2026-12-03": {
+   "ballot_paper_id": "local.oldham.royton-north.by.2026-12-03",
+   "contest": "oldham-royton-north-2026-12-03",
+   "polling_day": "2026-12-03",
+   "polls_open_at": "2026-12-03T07:00:00Z",
+   "council": "Oldham",
+   "ward": "Royton North",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/oldham-royton-north-2026-12-03.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.434Z",
+   "status": "forecast",
+   "shares": {
+    "Reform UK": 0.4201,
+    "Labour": 0.2679,
+    "Conservative": 0.1527,
+    "Liberal Democrats": 0.0465,
+    "Green Party": 0.0441,
+    "Others": 0.0688
+   },
+   "called_leader": "Reform UK",
+   "win_chance": {
+    "Reform UK": 0.7478,
+    "Labour": 0.1774,
+    "Conservative": 0.0221,
+    "Liberal Democrats": 0.0022,
+    "Green Party": 0.0005,
+    "Others": 0.05
+   },
+   "standing_lanes": [
+    "Reform UK",
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Green Party",
+    "Others"
+   ],
+   "candidates": [
+    {
+     "party": "Conservative",
+     "lane": "Conservative"
+    },
+    {
+     "party": "Green Party",
+     "lane": "Green Party"
+    },
+    {
+     "party": "Labour",
+     "lane": "Labour"
+    },
+    {
+     "party": "Restore Britain",
+     "lane": "Others"
+    },
+    {
+     "party": "Reform UK",
+     "lane": "Reform UK"
+    },
+    {
+     "party": "Liberal Democrats",
+     "lane": "Liberal Democrats"
+    }
+   ],
+   "anchor": {
+    "Reform UK": 0.2175,
+    "Labour": 0.2858,
+    "Conservative": 0.2233,
+    "Liberal Democrats": 0.095,
+    "Green Party": 0.0875,
+    "Others": 0.0908
+   },
+   "ward_has_earlier_contest": true,
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   },
+   "reason": null
+  },
+  "local.pembrokeshire.pembroke-dock-central.by.2026-12-08": {
+   "ballot_paper_id": "local.pembrokeshire.pembroke-dock-central.by.2026-12-08",
+   "contest": "pembrokeshire-pembroke-dock-central-2026-12-08",
+   "polling_day": "2026-12-08",
+   "polls_open_at": "2026-12-08T07:00:00Z",
+   "council": "Pembrokeshire",
+   "ward": "Pembroke Dock: Central",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/pembrokeshire-pembroke-dock-central-2026-12-08.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.451Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "outside_england",
+   "reason_text": "The ward feature file covers English wards only.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.bolton.westhoughton-south.by.2026-12-10": {
+   "ballot_paper_id": "local.bolton.westhoughton-south.by.2026-12-10",
+   "contest": "bolton-westhoughton-south-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Bolton",
+   "ward": "Westhoughton South",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/bolton-westhoughton-south-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.453Z",
+   "status": "forecast",
+   "shares": {
+    "Reform UK": 0.3446,
+    "Labour": 0.1647,
+    "Conservative": 0.0536,
+    "Liberal Democrats": 0.3427,
+    "Green Party": 0.0394,
+    "Others": 0.0548
+   },
+   "called_leader": "Reform UK",
+   "win_chance": {
+    "Reform UK": 0.454,
+    "Labour": 0.0347,
+    "Conservative": 0.0002,
+    "Liberal Democrats": 0.4749,
+    "Green Party": 0.0004,
+    "Others": 0.0358
+   },
+   "standing_lanes": [
+    "Reform UK",
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Green Party",
+    "Others"
+   ],
+   "candidates": [
+    {
+     "party": "Green Party",
+     "lane": "Green Party"
+    },
+    {
+     "party": "Conservative",
+     "lane": "Conservative"
+    },
+    {
+     "party": "Independent",
+     "lane": "Others"
+    },
+    {
+     "party": "Reform UK",
+     "lane": "Reform UK"
+    },
+    {
+     "party": "Restore Britain",
+     "lane": "Others"
+    },
+    {
+     "party": "Labour",
+     "lane": "Labour"
+    },
+    {
+     "party": "Liberal Democrats",
+     "lane": "Liberal Democrats"
+    }
+   ],
+   "anchor": {
+    "Reform UK": 0.2175,
+    "Labour": 0.2858,
+    "Conservative": 0.2233,
+    "Liberal Democrats": 0.095,
+    "Green Party": 0.0875,
+    "Others": 0.0908
+   },
+   "ward_has_earlier_contest": true,
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   },
+   "reason": null
+  },
+  "local.dacorum.tring-central.by.2026-12-10": {
+   "ballot_paper_id": "local.dacorum.tring-central.by.2026-12-10",
+   "contest": "dacorum-tring-central-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Dacorum",
+   "ward": "Tring Central",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/dacorum-tring-central-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.456Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_published_candidate_list",
+   "reason_text": "No statement of persons nominated on Democracy Club yet, so who is standing is not known.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.dumfries-and-galloway.annandale-east-and-eskdale.by.2026-12-10": {
+   "ballot_paper_id": "local.dumfries-and-galloway.annandale-east-and-eskdale.by.2026-12-10",
+   "contest": "dumfries-and-galloway-annandale-east-and-eskdale-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Dumfries and Galloway",
+   "ward": "Annandale East and Eskdale",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/dumfries-and-galloway-annandale-east-and-eskdale-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.454Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "outside_england",
+   "reason_text": "The ward feature file covers English wards only.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.east-ayrshire.cumnock-and-new-cumnock.by.2026-12-10": {
+   "ballot_paper_id": "local.east-ayrshire.cumnock-and-new-cumnock.by.2026-12-10",
+   "contest": "east-ayrshire-cumnock-and-new-cumnock-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "East Ayrshire",
+   "ward": "Cumnock and New Cumnock",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/east-ayrshire-cumnock-and-new-cumnock-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.457Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "outside_england",
+   "reason_text": "The ward feature file covers English wards only.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.east-surrey.dorking-rural.by.2026-12-10": {
+   "ballot_paper_id": "local.east-surrey.dorking-rural.by.2026-12-10",
+   "contest": "east-surrey-dorking-rural-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "East Surrey",
+   "ward": "Dorking Rural",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/east-surrey-dorking-rural-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.453Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_ward_code_in_feature_file",
+   "reason_text": "The contest's ward code is missing or not in the ward feature file, so the model has no ward inputs.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.leeds.cross-gates-whinmoor.by.2026-12-10": {
+   "ballot_paper_id": "local.leeds.cross-gates-whinmoor.by.2026-12-10",
+   "contest": "leeds-cross-gates-whinmoor-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Leeds",
+   "ward": "Cross Gates & Whinmoor",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/leeds-cross-gates-whinmoor-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.454Z",
+   "status": "forecast",
+   "shares": {
+    "Reform UK": 0.3163,
+    "Labour": 0.3699,
+    "Conservative": 0.1431,
+    "Liberal Democrats": 0.0492,
+    "Green Party": 0.0612,
+    "Others": 0.0603
+   },
+   "called_leader": "Labour",
+   "win_chance": {
+    "Reform UK": 0.344,
+    "Labour": 0.5931,
+    "Conservative": 0.0182,
+    "Liberal Democrats": 0.0019,
+    "Green Party": 0.0029,
+    "Others": 0.0398
+   },
+   "standing_lanes": [
+    "Reform UK",
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Green Party",
+    "Others"
+   ],
+   "candidates": [
+    {
+     "party": "Liberal Democrats",
+     "lane": "Liberal Democrats"
+    },
+    {
+     "party": "Restore Britain",
+     "lane": "Others"
+    },
+    {
+     "party": "Other",
+     "lane": "Others"
+    },
+    {
+     "party": "Conservative",
+     "lane": "Conservative"
+    },
+    {
+     "party": "Other",
+     "lane": "Others"
+    },
+    {
+     "party": "Reform UK",
+     "lane": "Reform UK"
+    },
+    {
+     "party": "Labour",
+     "lane": "Labour"
+    },
+    {
+     "party": "Independent",
+     "lane": "Others"
+    },
+    {
+     "party": "Green Party",
+     "lane": "Green Party"
+    }
+   ],
+   "anchor": {
+    "Reform UK": 0.2175,
+    "Labour": 0.2858,
+    "Conservative": 0.2233,
+    "Liberal Democrats": 0.095,
+    "Green Party": 0.0875,
+    "Others": 0.0908
+   },
+   "ward_has_earlier_contest": true,
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   },
+   "reason": null
+  },
+  "local.mid-sussex.haywards-heath-bentswood-heath.by.2026-12-10": {
+   "ballot_paper_id": "local.mid-sussex.haywards-heath-bentswood-heath.by.2026-12-10",
+   "contest": "mid-sussex-haywards-heath-bentswood-heath-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Mid Sussex",
+   "ward": "Haywards Heath Bentswood & Heath",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/mid-sussex-haywards-heath-bentswood-heath-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.452Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_published_candidate_list",
+   "reason_text": "No statement of persons nominated on Democracy Club yet, so who is standing is not known.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.redcar-and-cleveland.hutton.by.2026-12-10": {
+   "ballot_paper_id": "local.redcar-and-cleveland.hutton.by.2026-12-10",
+   "contest": "redcar-and-cleveland-hutton-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Redcar and Cleveland",
+   "ward": "Hutton",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/redcar-and-cleveland-hutton-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.456Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_published_candidate_list",
+   "reason_text": "No statement of persons nominated on Democracy Club yet, so who is standing is not known.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.sefton.netherton-north.by.2026-12-10": {
+   "ballot_paper_id": "local.sefton.netherton-north.by.2026-12-10",
+   "contest": "sefton-netherton-north-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Sefton",
+   "ward": "Netherton North",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/sefton-netherton-north-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.455Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_ward_code_in_feature_file",
+   "reason_text": "The contest's ward code is missing or not in the ward feature file, so the model has no ward inputs.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.southend-on-sea.leigh.by.2026-12-10": {
+   "ballot_paper_id": "local.southend-on-sea.leigh.by.2026-12-10",
+   "contest": "southend-on-sea-leigh-2026-12-10",
+   "polling_day": "2026-12-10",
+   "polls_open_at": "2026-12-10T07:00:00Z",
+   "council": "Southend-on-Sea",
+   "ward": "Leigh",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/southend-on-sea-leigh-2026-12-10.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.455Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_published_candidate_list",
+   "reason_text": "No statement of persons nominated on Democracy Club yet, so who is standing is not known.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.rhondda-cynon-taf.pentre.by.2026-12-15": {
+   "ballot_paper_id": "local.rhondda-cynon-taf.pentre.by.2026-12-15",
+   "contest": "rhondda-cynon-taf-pentre-2026-12-15",
+   "polling_day": "2026-12-15",
+   "polls_open_at": "2026-12-15T07:00:00Z",
+   "council": "Rhondda Cynon Taf",
+   "ward": "Pentre",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/rhondda-cynon-taf-pentre-2026-12-15.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.457Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "outside_england",
+   "reason_text": "The ward feature file covers English wards only.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.amber-valley.alport-south-west-parishes.by.2026-12-17": {
+   "ballot_paper_id": "local.amber-valley.alport-south-west-parishes.by.2026-12-17",
+   "contest": "amber-valley-alport-south-west-parishes-2026-12-17",
+   "polling_day": "2026-12-17",
+   "polls_open_at": "2026-12-17T07:00:00Z",
+   "council": "Amber Valley",
+   "ward": "Alport & South West Parishes",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/amber-valley-alport-south-west-parishes-2026-12-17.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.458Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_published_candidate_list",
+   "reason_text": "No statement of persons nominated on Democracy Club yet, so who is standing is not known.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  },
+  "local.north-hertfordshire.royston-palace.by.2026-12-17": {
+   "ballot_paper_id": "local.north-hertfordshire.royston-palace.by.2026-12-17",
+   "contest": "north-hertfordshire-royston-palace-2026-12-17",
+   "polling_day": "2026-12-17",
+   "polls_open_at": "2026-12-17T07:00:00Z",
+   "council": "North Hertfordshire",
+   "ward": "Royston Palace",
+   "captured_at": "2026-11-27T23:19:51Z",
+   "forecaster": "uk-elections-research-model",
+   "model_version": "ward-model-2026-11/C2",
+   "code_commit": "f1b5ddc9889fdf733d43b4fb12af6d2bc9c3bb8b",
+   "code_dirty": false,
+   "contest_file": "data/contests/local-byelections/north-hertfordshire-royston-palace-2026-12-17.json",
+   "contest_file_generated_at": "2026-11-14T03:52:16.458Z",
+   "status": "skipped",
+   "shares": null,
+   "called_leader": null,
+   "win_chance": null,
+   "reason": "no_published_candidate_list",
+   "reason_text": "No statement of persons nominated on Democracy Club yet, so who is standing is not known.",
+   "inputs": {
+    "contest_files": {
+     "git_ref": "origin/main",
+     "commit": "1f53b0124934fcf1497c403e3f696d54c8ba8050"
+    },
+    "polls": {
+     "file": "research/ward-model-2026-11/live/inputs/timeseries-9588dc90eb62.json",
+     "sha256": "9588dc90eb625e01e860116d2c813526ab3374bfdfeb0725bb58bda40cf194ae",
+     "generated_at": "2026-11-27T04:30:03.967Z",
+     "latest_poll_date": "2026-11-23",
+     "polls": 284,
+     "wikipedia_wikitext_sha256": "7dedd219c37a60b70ec4cf20c7731a3882a02c1957a39e3d2e0aa7553f6b4788",
+     "also_read": "data/polling/wikipedia/westminster-2025-04-15-to-2026-04-25.json"
+    },
+    "ward_features": {
+     "file": "research/ward-model-2026-11/cache/drive07/universe_features_v2.csv",
+     "sha256": "592a5e96f447a719c61db231c93e14babacbc9d0a344c83041cf1a03b3f97404"
+    },
+    "base_dataset": {
+     "file": "research/ward-model-2026-11/cache/bridge_level_dataset.pkl",
+     "sha256": "5c602f69935f2be15ae099d4c9d53a1000d578acc885c39c5aa05ff8772b2ad6"
+    },
+    "fit_meta": {
+     "file": "research/ward-model-2026-11/cache/fit_meta.pkl",
+     "sha256": "936d07ee4d9004d1cdd811796f60dbfb1b22a723e7575789b56292c287ac67ad"
+    }
+   }
+  }
+ }
+}
